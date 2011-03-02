@@ -50,6 +50,17 @@ class optionsMan : public Singleton <optionsMan>
 		template<class T, OptionType OT>
 		static void setVar(const std::string & oName, const T & val);
 
+		static bool strToBool(const std::string & val);
+
+		static OptionType getTypeFromStr(const std::string & val);
+
+		//Helper Fxns for readability
+		static bool addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+
+
 		std::map<std::string, OptionBase* > m_options; //!< Member variable "m_options"
 };
 
