@@ -17,9 +17,6 @@ class GameObject
 		unsigned int id(){return m_id;}
 		void id(const unsigned int & ID){m_id = m_id;}
 
-		void transform(const Transform & t){ m_transform = t;}
-		Transform transform(){return m_transform;}
-
 		bool hasComponentFam(const GOC_IDType & familyID);
 
 		GOComponent * getGOC(const GOC_IDType & familyID);

@@ -1,7 +1,7 @@
 #ifndef GOCFAMILY_RENDER_H
 #define GOCFAMILY_RENDER_H
 
-#include "gocomponent.h"
+#include "gameobject/gocomponent.h"
 
 class GOCFamily_Render : public GOComponent
 {

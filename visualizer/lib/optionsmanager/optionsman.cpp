@@ -120,8 +120,9 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 }
 
 /** @brief getTypeFromStr
-  *
-  * @todo: document this function
+  * Helper function to get the enum type from a string
+  * @param val the value to attempt to get an enum from
+  * @return OT_INT, OT_FLOAT, OT_STRING, or OT_BOOL when valid. OT_NONE when not valid
   */
 OptionType optionsMan::getTypeFromStr(const std::string & val)
 {
@@ -146,8 +147,9 @@ OptionType optionsMan::getTypeFromStr(const std::string & val)
 }
 
 /** @brief strToBool
-  *
-  * @todo: document this function
+  * helper function to get the bool value from a set of possible strings
+  * @param val the value to find a bool from
+  * @return true or false if valid, will throw an exception of type std::string on failure
   */
 bool optionsMan::strToBool(const std::string & val)
 {
@@ -173,8 +175,11 @@ bool optionsMan::strToBool(const std::string & val)
 }
 
 /** @brief addBool
-  *
-  * @todo: document this function
+  *	helper function to extract a bool from a string stream and give it a name
+  * @param namebuff the name that will be given the bool
+  * @param ss the string stream to pull the bool value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
   */
 bool optionsMan::addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
@@ -201,8 +206,11 @@ bool optionsMan::addBool(const std::string & namebuff, std::stringstream & ss, c
 }
 
 /** @brief addFloat
-  *
-  * @todo: document this function
+  *	helper function to extract a float from a string stream and give it a name
+  * @param namebuff the name that will be given the float
+  * @param ss the string stream to pull the float value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
   */
 bool optionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
@@ -222,8 +230,11 @@ bool optionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, 
 }
 
 /** @brief addInt
-  *
-  * @todo: document this function
+  *	helper function to extract a int from a string stream and give it a name
+  * @param namebuff the name that will be given the int
+  * @param ss the string stream to pull the int value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
   */
 bool optionsMan::addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
@@ -244,8 +255,11 @@ bool optionsMan::addInt(const std::string & namebuff, std::stringstream & ss, co
 }
 
 /** @brief addString
-  *
-  * @todo: document this function
+  *	helper function to extract a string from a string stream and give it a name
+  * @param namebuff the name that will be given the string
+  * @param ss the string stream to pull the string value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
   */
 bool optionsMan::addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
@@ -331,24 +345,6 @@ bool optionsMan::saveOptionFile(const std::string & filename)
 	return true;
 }
 
-
-/** @brief ~optionsMan
-  * default destructor
-  * @todo get rid of or find a use for this
-  */
- optionsMan::~optionsMan()
-{
-
-}
-
-/** @brief optionsMan
-  * default constructor
-  * @todo get rid of or find a use for this
-  */
- optionsMan::optionsMan()
-{
-
-}
 
 /** @brief setStr
   * set a string option to the intended value

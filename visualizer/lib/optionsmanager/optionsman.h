@@ -2,8 +2,8 @@
 #define OPTIONSMAN_H
 
 #include "option.h"
-#include "singleton.h"
-#include "Mutex.h"
+#include "../singleton.h"
+#include "../mutex/Mutex.h"
 #include <iostream>
 #include <map>
 #include <string>
@@ -14,10 +14,6 @@
 class optionsMan : public Singleton <optionsMan>
 {
 	public:
-		/** Default constructor */
-		optionsMan();
-		/** Default destructor */
-		virtual ~optionsMan();
 
 		static bool loadOptionFile(const std::string & filename);
 		static bool saveOptionFile(const std::string & filename);
