@@ -4,17 +4,17 @@ from structures import *
 aspects = []
 
 Unit = Model('Unit',
-    data = [Variable('owner', int, 'The owner of the piece'),
-    Variable('X', int, 'The X coordinate for the pieces position'),
-    Variable('Y', int, 'The Y coordinate for the pieces position'),
+    data = [Variable('owner', int, 'The owner of the unit'),
+    Variable('X', int, 'The X coordinate of the unit'),
+    Variable('Y', int, 'The Y coordinate of the unit'),
     Variable('health', int, 'health of the unit'),
     Variable('strength', int, 'attacking strength of the unit'),
     ],
   doc = 'Generic Unit',
   functions = [
     Function('move',
-      arguments = [Variable('X', int, 'The x coordinate of where the unit is moving'), 
-	    Variable('Y', int, 'The Y coordinate of where the unit is moving')],
+      arguments = [Variable('X', int, 'The x coordinate of where to move the unit'), 
+	    Variable('Y', int, 'The Y coordinate of where to move the unit')],
       result = bool,
       doc = 'Move the unit to the designated X and Y coordinates'
     ),
@@ -23,7 +23,7 @@ Unit = Model('Unit',
       doc = 'Allows a unit to display a message to the screen.'
     ),
     Function('attack',
-      arguments = [Variable('UnitID', int, 'The ID of the unit being attacked')],
+      arguments = [Variable('UnitID', int, 'The ID of the unit to attack')],
       result = bool,
       doc = 'Attempt to attack the unit whose ID is given'
     ),
@@ -53,9 +53,9 @@ Ship = Model('Ship',
   doc = 'A generic ship',)
 
 Port = Model('Port',
-  data = [ Variable('owner', int, 'The ownder of the piece'),
-      Variable('X', int, 'The X coordinate for the pieces position'),
-      Variable('Y', int, 'The Y coordinate for the pieces position'),
+  data = [ Variable('owner', int, 'The ownder of the port'),
+      Variable('X', int, 'The X coordinate of the port'),
+      Variable('Y', int, 'The Y coordinate of the port'),
     ],
   doc = 'A generic port',
   functions = [ 
@@ -73,17 +73,17 @@ Port = Model('Port',
 )
 
 Tile = Model('Tile',
-  data = [ Variable('type', int, 'land = 0, land = 1'),
-	  Variable('X', int, 'The X coordinate for the tile'),
-      Variable('Y', int, 'The Y coordinate for the tile'),
+  data = [ Variable('type', int, 'land = 0, water = 1'),
+	  Variable('X', int, 'The X coordinate of the tile'),
+      Variable('Y', int, 'The Y coordinate of the tile'),
     ],
   doc = 'A basic tile',
 )
 
 Treasure = Model('Treasure',
   data = [ Variable('pirate', Pirate, 'The pirate carrying this treasure'),
-    Variable('X', int, 'The X coordinate for the pieces position'),
-    Variable('Y', int, 'The Y coordinate for the pieces position'),
+    Variable('X', int, 'The X coordinate of the treasure'),
+    Variable('Y', int, 'The Y coordinate of the treasure'),
     ],
   doc = 'A treasure',
 )
@@ -97,6 +97,8 @@ globals = [
 constants = [
   Variable('player0Name', str, 'Player 0\'s name'),
   Variable('player1Name', str, 'Player 1\'s name'),
+  Variable('pirateCost', int, 'The cost of a pirate'),
+  Variable('shipCost', int, 'The cost of a ship'),
   ]
 
 import timerAspect
