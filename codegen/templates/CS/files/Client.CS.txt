@@ -1,0 +1,75 @@
+public interface Client extends Library {
+  Client INSTANCE = (Client)Native.loadLibrary("client", Client.class);
+  [DllImport("client")]
+  IntPtr createConnection();
+  [DllImport("client")]
+  boolean serverConnect(IntPtr connection, String host, String port);
+
+  [DllImport("client")]
+  boolean serverLogin(IntPtr connection, String username, String password);
+  [DllImport("client")]
+  int createGame(IntPtr connection);
+  [DllImport("client")]
+  int joinGame(IntPtr connection, int id);
+
+  [DllImport("client")]
+  void endTurn(IntPtr connection);
+  [DllImport("client")]
+  void getStatus(IntPtr connection);
+
+  [DllImport("client")]
+  int networkLoop(IntPtr connection);
+
+
+    //commands
+% for  model in models:
+%   for func in model.functions:
+  [DllImport("client")]
+  int ${lowercase(model.name)}${capitalize(func.name)}(IntPtr object\
+%     for arg in func.arguments:
+, \
+${conversions[arg.type]} ${arg.name}\
+%     endfor
+);
+%   endfor
+% endfor
+
+    //accessors
+% for datum in globals:
+  [DllImport("client")]
+  ${conversions[datum.type]} get${capitalize(datum.name)}(IntPtr connection);
+% endfor
+
+% for model in models:
+%   if model.type == 'Model':
+  [DllImport("client")]
+  IntPtr get${model.name}(IntPtr connection, int num);
+  [DllImport("client")]
+  int get${model.name}Count(IntPtr connection);
+%   endif
+% endfor
+
+
+    //getters
+% for model in models:
+%   for datum in model.data:
+  [DllImport("client")]
+  ${conversions[datum.type]} ${lowercase(model.name)}Get${capitalize(datum.name)}(IntPtr ptr);
+%   endfor
+
+% endfor
+
+    //properties
+% for  model in models:
+%   for prop in model.properties:
+  [DllImport("client")]
+  ${conversions[prop.result]} ${lowercase(model.name)}${capitalize(prop.name)}(IntPtr object\
+%     for arg in prop.arguments:
+, \
+${conversions[arg.type]} ${arg.name}\
+%     endfor
+);
+%   endfor
+% endfor
+
+}

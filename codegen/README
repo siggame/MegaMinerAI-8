@@ -1,0 +1,8 @@
+This is the codegen, a scratch built meta-programing tool designed to automatically generate much of the code for the megaminer AI programing competition. In practice it does less than everything, but this tool is still invaluable in speeding up development time so we can focus more on testing and less on writing the backend. 
+
+To run the codegen, run 'python main.py'. This calls and runs everything else, and ideally should exit without error. 
+
+main.py does some prepatory work and then calls each of the individual code writers for each of the other components. 
+Each of the code writing modules takes in files in the templates folder, which list all the elements required to make up the client, and the model.txt file, which lists all the conversions required in the template files to match the syntax required by that particular language. 
+
+Each of the code writing modules takes this input and uses it to create the code required to make a working client, as well as a makefile that, when run, will compile the client for that language. It is your responsiblity, not codegen's, to run the makefile.
