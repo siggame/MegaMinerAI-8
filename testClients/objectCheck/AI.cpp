@@ -32,11 +32,11 @@ bool AI::run()
 void AI::objectCheck()
 {
   cout<<"--Object counts--"<<endl;
-  cout<<"Pirates: "<<pirates.size()<<endl;
-  cout<<"Ports  : "<<ports.size()<<endl;
-  cout<<"Ships  : "<<ships.size()<<endl;
-  cout<<"Tiles  : "<<tiles.size()<<endl;
-  cout<<"Treasur: "<<treasures.size()<<endl;
+  cout<<"Pirates : "<<pirates.size()<<endl;
+  cout<<"Ports   : "<<ports.size()<<endl;
+  cout<<"Ships   : "<<ships.size()<<endl;
+  cout<<"Tiles   : "<<tiles.size()<<endl;
+  cout<<"Treasure: "<<treasures.size()<<endl;
 }
 
 //This function is run once, after your last turn.
