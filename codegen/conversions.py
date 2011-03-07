@@ -18,6 +18,3 @@ for i in members(data):
       java[i] = 'Pointer'
       python[i] = 'c_void_p'
       server[i] = 'int'
-
-
-print c

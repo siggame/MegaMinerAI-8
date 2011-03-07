@@ -22,11 +22,6 @@ Unit = Model('Unit',
       arguments = [Variable('message', str, 'The message that the unit should say')],
       doc = 'Allows a unit to display a message to the screen.'
     ),
-    Function('attack',
-      arguments = [Variable('UnitID', int, 'The ID of the unit to attack')],
-      result = bool,
-      doc = 'Attempt to attack the unit whose ID is given'
-    ),
   ],
   type = 'virtual'
 )
@@ -34,23 +29,35 @@ Unit = Model('Unit',
 Pirate = Model('Pirate',
   parent = Unit,
   doc = 'A generic pirate',
-)
-
-Pirate.addFunctions([
-  Function('pickupTreasure',
-    arguments = [Variable('amount', int, 'The amount of gold you wish to pickup')],
-    doc = 'Allows the pirate to pickup treasure on the ground.'
-  ),
-  Function('dropTreasure',
-    arguments = [Variable('amount', int, 'The amount of gold you wish to drop')],
-    doc = 'Allows the pirate to drop treasure on the groud.'
-  ),]
+  functions = [
+    Function('pickupTreasure',
+      arguments = [Variable('amount', int, 'The amount of gold you wish to pickup')],
+      doc = 'Allows the pirate to pickup treasure on the ground.'
+    ),
+    Function('dropTreasure',
+      arguments = [Variable('amount', int, 'The amount of gold you wish to drop')],
+      doc = 'Allows the pirate to drop treasure on the groud.'
+    ),
+    Function('attack',
+      arguments = [Variable('Target', Unit, 'The unit to attack')],
+      result = bool,
+      doc = 'Attempt to attack the given unit'
+    )
+  ]
 )
 
 
 Ship = Model('Ship',
   parent = Unit,
-  doc = 'A generic ship',)
+  doc = 'A generic ship',
+  functions = [
+    Function('attack',
+      arguments = [Variable('Target', Unit, 'The unit to attack')],
+      result = bool,
+      doc = 'Attempt to attack the given unit'
+    )
+  ]
+)
 
 Port = Model('Port',
   data = [ Variable('owner', int, 'The ownder of the port'),
