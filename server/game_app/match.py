@@ -25,12 +25,20 @@ class Match(DefaultGameWorld):
     self.addPlayer(self.scribe, "spectator")
 
     #TODO: INITIALIZE THESE!
-    self.turnNumber = None
-    self.playerID = None
-    self.gameNumber = None
-    self.player0Time = None
-    self.player1Time = None
+    self.turnNumber = -1
+    self.playerID = -1
+    self.gameNumber = id
+    self.player0Time = self.startTime
+    self.player1Time = self.startTime
+    
+    cfgUnits = networking.config.config.readConfig("config/units.cfg")
+    self.startPirates(cfgUnits)
 
+  def startPirates(self, cfg):
+    for i in cfg.keys():
+      if "startpirate" in i.lower():
+        self.addObject(Pirate.fromType(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
+    
   def addPlayer(self, connection, type="player"):
     connection.type = type
     if len(self.players) >= 2 and type == "player":
@@ -63,6 +71,10 @@ class Match(DefaultGameWorld):
 
     self.turnNumber = -1
 
+    self.sendIdent(self.players + self.spectators)
+
+    self.turn = self.players[1]
+    
     self.nextTurn()
     return True
 
@@ -92,7 +104,9 @@ class Match(DefaultGameWorld):
 
   def checkWinner(self):
     #TODO: Make this check if a player won, and call declareWinner with a player if they did
-    pass
+    if self.turnNumber >= 500:
+      self.declareWinner(self.players[0], 'Test Win for Player 0')
+    #pass
 
   def declareWinner(self, winner, reason=''):
     self.winner = winner

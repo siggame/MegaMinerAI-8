@@ -71,6 +71,14 @@ class Pirate(Unit):
       ]
     return value
 
+  @staticmethod
+  def fromType(game, x, y, owner):
+    id = game.nextid
+    game.nextid += 1
+    print "fromType of Pirate"
+    # Placeholder for health and strength as 1, 1 respectively
+    return Pirate(game, id, x, y, owner, 1, 1)
+
   def nextTurn(self):
     pass
 
