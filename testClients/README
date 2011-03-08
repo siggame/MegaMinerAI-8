@@ -1,0 +1,13 @@
+This folder contains test clients to check for various things
+
+********USAGE GUIDE*************
+--To Write a C++ AI--
+Create a folder identifying what your AI does
+Copy the Makefile in testClients/ to your folder
+Grab ONLY the files you plan to change for your language from the codegen
+Edit and compile as normal
+
+--To Use an AI--
+Make sure your codegen is up to date (run "python main.py" in the codegen directory)
+Change directory to the AI you want to run
+Make and run as normal
