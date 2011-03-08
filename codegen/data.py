@@ -4,8 +4,8 @@ from structures import *
 aspects = []
 
 Mappable = Model('Mappable',
-  data = [ Variable('x', int, 'The X position of the top left corner of this object.  X is horizontal'),
-    Variable('y', int, 'The Y position of the top left corner of this object.  Y is vertical'),
+  data = [ Variable('x', int, 'The X position of this object.  X is horizontal, with 0,0 as the top left corner'),
+    Variable('y', int, 'The Y position of this object.  Y is vertical, with 0,0 as the top left corner'),
     ],
   doc = 'An object that exists on the grid',
   type = 'virtual'
