@@ -3,18 +3,25 @@ from structures import *
 
 aspects = []
 
+Mappable = Model('Mappable',
+  data = [ Variable('x', int, 'The X position of the top left corner of this object.  X is horizontal'),
+    Variable('y', int, 'The Y position of the top left corner of this object.  Y is vertical'),
+    ],
+  doc = 'An object that exists on the grid',
+  type = 'virtual'
+  )
+
 Unit = Model('Unit',
+  parent = Mappable,
     data = [Variable('owner', int, 'The owner of the unit'),
-    Variable('X', int, 'The X coordinate of the unit'),
-    Variable('Y', int, 'The Y coordinate of the unit'),
     Variable('health', int, 'health of the unit'),
     Variable('strength', int, 'attacking strength of the unit'),
     ],
   doc = 'Generic Unit',
   functions = [
     Function('move',
-      arguments = [Variable('X', int, 'The x coordinate of where to move the unit'), 
-	    Variable('Y', int, 'The Y coordinate of where to move the unit')],
+      arguments = [Variable('x', int, 'The x coordinate of where to move the unit'), 
+	    Variable('y', int, 'The Y coordinate of where to move the unit')],
       result = bool,
       doc = 'Move the unit to the designated X and Y coordinates'
     ),
@@ -60,9 +67,8 @@ Ship = Model('Ship',
 )
 
 Port = Model('Port',
+  parent = Mappable,
   data = [ Variable('owner', int, 'The ownder of the port'),
-      Variable('X', int, 'The X coordinate of the port'),
-      Variable('Y', int, 'The Y coordinate of the port'),
     ],
   doc = 'A generic port',
   functions = [ 
@@ -80,17 +86,15 @@ Port = Model('Port',
 )
 
 Tile = Model('Tile',
+  parent = Mappable,
   data = [ Variable('type', int, 'land = 0, water = 1'),
-	  Variable('X', int, 'The X coordinate of the tile'),
-      Variable('Y', int, 'The Y coordinate of the tile'),
     ],
   doc = 'A basic tile',
 )
 
 Treasure = Model('Treasure',
+  parent = Mappable,
   data = [ Variable('pirate', Pirate, 'The pirate carrying this treasure'),
-    Variable('X', int, 'The X coordinate of the treasure'),
-    Variable('Y', int, 'The Y coordinate of the treasure'),
     ],
   doc = 'A treasure',
 )
