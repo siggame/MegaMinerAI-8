@@ -17,6 +17,11 @@ public:
   virtual bool run();
   virtual void end();
   void objectCheck();
+  void displayPirates();
+  void displayPorts();
+  void displayShips();
+  void displayTreasure();
+  void displayTiles();
 };
 
 #endif
