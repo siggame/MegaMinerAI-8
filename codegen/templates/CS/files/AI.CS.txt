@@ -1,12 +1,14 @@
+using System;
+using System.Runtime.InteropServices;
 
 ///The class implementing gameplay logic.
-class AI extends BaseAI
+class AI : BaseAI
 {
-  public String username()
+  public string username()
   {
     return "Shell AI";
   }
-  public String password()
+  public string password()
   {
     return "password";
   }
@@ -26,7 +28,7 @@ class AI extends BaseAI
   public void end() {}
   
   
-  public AI(Pointer c)
+  public AI(IntPtr c)
   {
     super(c);
   }

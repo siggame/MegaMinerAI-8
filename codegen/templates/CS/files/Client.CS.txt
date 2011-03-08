@@ -1,31 +1,33 @@
-public interface Client extends Library {
-  Client INSTANCE = (Client)Native.loadLibrary("client", Client.class);
+using System;
+using System.Runtime.InteropServices;
+
+public class Client {
   [DllImport("client")]
-  IntPtr createConnection();
+  public static extern IntPtr createConnection();
   [DllImport("client")]
-  boolean serverConnect(IntPtr connection, String host, String port);
+  public static extern int serverConnect(IntPtr connection, string host, string port);
 
   [DllImport("client")]
-  boolean serverLogin(IntPtr connection, String username, String password);
+  public static extern int serverLogin(IntPtr connection, string username, string password);
   [DllImport("client")]
-  int createGame(IntPtr connection);
+  public static extern int createGame(IntPtr connection);
   [DllImport("client")]
-  int joinGame(IntPtr connection, int id);
+  public static extern int joinGame(IntPtr connection, int id);
 
   [DllImport("client")]
-  void endTurn(IntPtr connection);
+  public static extern void endTurn(IntPtr connection);
   [DllImport("client")]
-  void getStatus(IntPtr connection);
+  public static extern void getStatus(IntPtr connection);
 
   [DllImport("client")]
-  int networkLoop(IntPtr connection);
+  public static extern int networkLoop(IntPtr connection);
 
 
     //commands
 % for  model in models:
 %   for func in model.functions:
   [DllImport("client")]
-  int ${lowercase(model.name)}${capitalize(func.name)}(IntPtr object\
+  public static extern int ${lowercase(model.name)}${capitalize(func.name)}(IntPtr self\
 %     for arg in func.arguments:
 , \
 ${conversions[arg.type]} ${arg.name}\
@@ -37,15 +39,15 @@ ${conversions[arg.type]} ${arg.name}\
     //accessors
 % for datum in globals:
   [DllImport("client")]
-  ${conversions[datum.type]} get${capitalize(datum.name)}(IntPtr connection);
+  public static extern ${conversions[datum.type]} get${capitalize(datum.name)}(IntPtr connection);
 % endfor
 
 % for model in models:
 %   if model.type == 'Model':
   [DllImport("client")]
-  IntPtr get${model.name}(IntPtr connection, int num);
+  public static extern IntPtr get${model.name}(IntPtr connection, int num);
   [DllImport("client")]
-  int get${model.name}Count(IntPtr connection);
+  public static extern int get${model.name}Count(IntPtr connection);
 %   endif
 % endfor
 
@@ -54,7 +56,7 @@ ${conversions[arg.type]} ${arg.name}\
 % for model in models:
 %   for datum in model.data:
   [DllImport("client")]
-  ${conversions[datum.type]} ${lowercase(model.name)}Get${capitalize(datum.name)}(IntPtr ptr);
+  public static extern ${conversions[datum.type]} ${lowercase(model.name)}Get${capitalize(datum.name)}(IntPtr ptr);
 %   endfor
 
 % endfor
@@ -63,7 +65,7 @@ ${conversions[arg.type]} ${arg.name}\
 % for  model in models:
 %   for prop in model.properties:
   [DllImport("client")]
-  ${conversions[prop.result]} ${lowercase(model.name)}${capitalize(prop.name)}(IntPtr object\
+  public static extern ${conversions[prop.result]} ${lowercase(model.name)}${capitalize(prop.name)}(IntPtr self\
 %     for arg in prop.arguments:
 , \
 ${conversions[arg.type]} ${arg.name}\

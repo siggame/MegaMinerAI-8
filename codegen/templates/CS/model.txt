@@ -1,4 +1,6 @@
-import com.sun.jna.Pointer;
+using System;
+using System.Runtime.InteropServices;
+
 
 ///${model.doc}
 % if model.type == 'virtual':
@@ -6,14 +8,14 @@ abstract \
 % endif
 class ${model.name}\
 % if model.parent:
-: extends ${model.parent.name} \
+: ${model.parent.name} \
 % endif
 
 {
-  Pointer ptr;
+  IntPtr ptr;
   int ID;
   int iteration;
-  public ${model.name}(Pointer p)
+  public ${model.name}(IntPtr p)
   {
     ptr = p;
     ID = Client.INSTANCE.${lowercase(model.name)}GetId(ptr);
@@ -21,9 +23,9 @@ class ${model.name}\
   }
 
 % if model.type == 'virtual':
-  abstract boolean validify();
+  abstract bool validify();
 % else:
-  boolean validify()
+  bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
     for(int i = 0; i < BaseAI.${lowercase(model.plural)}.length; i++)
