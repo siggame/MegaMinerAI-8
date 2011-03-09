@@ -5,6 +5,7 @@ import networking.config.config
 from collections import defaultdict
 from networking.sexpr.sexpr import *
 import os
+import random
 import itertools
 import scribe
 
@@ -32,13 +33,45 @@ class Match(DefaultGameWorld):
     self.player1Time = self.startTime
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
+    self.startTiles()
     self.startPirates(cfgUnits)
-
+    self.startShips(cfgUnits)
+    self.startPorts()
+    self.startTreasures()
+  
+  def startTiles(self):
+    map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)]
+    
+    for y in range(0,self.boardY):
+      for x in range(0,self.boardX):
+        randomTile = random.randint(0, 1)
+        if randomTile == 0:
+          self.addObject(Tile.make(self, x, y, 'w'))
+        else:
+          self.addObject(Tile.make(self, x, y, 'l'))
+          
   def startPirates(self, cfg):
     for i in cfg.keys():
       if "startpirate" in i.lower():
-        self.addObject(Pirate.fromType(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
+        self.addObject(Pirate.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
+        
+  def startShips(self, cfg):
+    for i in cfg.keys():
+      if "startship" in i.lower():
+        self.addObject(Ship.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
+        
+  def startPorts(self):
+    #temp code that makes a port for both players and a neutral port as well (-1)
+    self.addObject(Port.make(self, 2, 2, 0))
+    self.addObject(Port.make(self, 5, 5, -1))
+    self.addObject(Port.make(self, 8, 8, 1))
+    i = 0
     
+  def startTreasures(self):
+    #temp code that makes 2 treasures
+    self.addObject(Treasure.make(self, 2, 8, -1))
+    self.addObject(Treasure.make(self, 8, 2, -1))
+          
   def addPlayer(self, connection, type="player"):
     connection.type = type
     if len(self.players) >= 2 and type == "player":

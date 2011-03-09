@@ -72,10 +72,9 @@ class Pirate(Unit):
     return value
 
   @staticmethod
-  def fromType(game, x, y, owner):
+  def make(game, x, y, owner):
     id = game.nextid
     game.nextid += 1
-    print "fromType of Pirate"
     # Placeholder for health and strength as 1, 1 respectively
     return Pirate(game, id, x, y, owner, 1, 1)
 
@@ -116,6 +115,12 @@ class Port(Mappable):
       ]
     return value
 
+  @staticmethod
+  def make(game, x, y, owner):
+    id = game.nextid
+    game.nextid += 1
+    return Port(game, id, x, y, owner)
+    
   def nextTurn(self):
     pass
 
@@ -147,7 +152,14 @@ class Ship(Unit):
       self.strength,
       ]
     return value
-
+    
+  @staticmethod
+  def make(game, x, y, owner):
+    id = game.nextid
+    game.nextid += 1
+    # Placeholder for health and strength as 1, 1 respectively
+    return Ship(game, id, x, y, owner, 1, 1)
+  
   def nextTurn(self):
     pass
 
@@ -178,7 +190,14 @@ class Tile(Mappable):
       self.type,
       ]
     return value
-
+  
+  @staticmethod
+  def make(game, x, y, type):
+    id = game.nextid
+    game.nextid += 1
+    #'w' is water, 'l' is land
+    return Tile(game, id, x, y, type)
+  
   def nextTurn(self):
     pass
 
@@ -200,7 +219,13 @@ class Treasure(Mappable):
       self.pirate,
       ]
     return value
-
+  
+  @staticmethod
+  def make(game, x, y, pirateID):
+    id = game.nextid
+    game.nextid += 1
+    return Treasure(game, id, x, y, pirateID)
+  
   def nextTurn(self):
     pass
 
