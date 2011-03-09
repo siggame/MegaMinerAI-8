@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 import random
-
+import sys
 class Tile:
   type = '.'
   
@@ -34,20 +34,23 @@ def makeMap(size, islands, growth):
   for i in xrange(islands):
     x = random.randrange(size)
     y = random.randrange(size)
-    if map[x][y].type == 'L':
+    if map[x][y].type == 'X':
       continue
     land.append( (x, y) )
-    map[x][y].type = 'L'
+    map[x][y].type = 'X'
   
   print groupNeighbors(size, land)
   for i in xrange(growth):
     borders = [i for i in groupNeighbors(size, land) if map[i[0]][i[1]].type == '.' ]
     next = random.choice(borders)
-    map[next[0]][next[1]].type = 'L'
+    map[next[0]][next[1]].type = 'X'
     land.append(next)
   
   
-  print '\n'.join([''.join([j.type for j in i]) for i in map] )
-  
-makeMap(32,5,100)
+  print '\n'.join([' '.join([j.type for j in i]) for i in map] )
+
+if len(sys.argv) < 3:
+  makeMap(40, 10, 200)
+else:  
+  makeMap(int(sys.argv[1]),int(sys.argv[2]),int(sys.argv[3]))
   
