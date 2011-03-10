@@ -69,8 +69,8 @@ class Match(DefaultGameWorld):
     
   def startTreasures(self):
     #temp code that makes 2 treasures
-    self.addObject(Treasure.make(self, 2, 8, -1))
-    self.addObject(Treasure.make(self, 8, 2, -1))
+    self.addObject(Treasure.make(self, 2, 8, -1, 100))
+    self.addObject(Treasure.make(self, 8, 2, -1, 100))
           
   def addPlayer(self, connection, type="player"):
     connection.type = type
