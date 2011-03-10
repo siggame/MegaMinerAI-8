@@ -13,7 +13,6 @@ class GOCFamily_ControlBar : public GOComponent
 		virtual ~GOCFamily_ControlBar() = 0;
 
 		virtual const GOC_IDType & familyID() const {return GOC_IDType("ControlBarFamily");}
-		virtual void renderAt(const unsigned int & turn, const unsigned int & frame) = 0;
 		/** switches the label on the play/pause button when it is pushed */
 		virtual void playPause() = 0;
 		/**

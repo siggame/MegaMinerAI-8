@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <list>
 #include "texture.h"
-#include "parser.h"
+#include "../lib/parser/parser.h"
 #include "visualizerWindow.h"
 #include "drawGLFont.h"
 
