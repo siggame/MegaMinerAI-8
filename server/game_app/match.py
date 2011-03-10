@@ -31,16 +31,16 @@ class Match(DefaultGameWorld):
     self.gameNumber = id
     self.player0Time = self.startTime
     self.player1Time = self.startTime
-    self.boardX = self.boardX
-    self.boardY = self.boardY
+    self.boardX = self.mapX
+    self.boardY = self.mapY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
-    self.startTilesAndPorts()
+    self.startMap()
     self.startPirates(cfgUnits)
     self.startShips(cfgUnits)
     self.startTreasures()
   
-  def startTilesAndPorts(self):
+  def startMap(self):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)]
     #open the map file for parsing
     f = open('maps/map1.txt', 'r')
@@ -49,6 +49,7 @@ class Match(DefaultGameWorld):
     encountered1 = 0
     encountered2 = 0
     encountered3 = 0
+    #this is where is parses through the map file and does tons of things!
     for y in range(0,self.boardY):
       for x in range(0,self.boardX):
         mapThing = f.read(1)
@@ -76,23 +77,65 @@ class Match(DefaultGameWorld):
           map[x][y] = 'X'
           if encounteredP == 1:
             self.addObject(Port.make(self, x, y, 1))
+            
+            for i in range(0,self.playersStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 1))
+              
+            for i in range(0,self.playersStartingShips):
+              self.addObject(Ship.make(self, x, y, 1))
+              
           else:
-            self.addObject(Port.make(self, x, y, 0))
             encounteredP = 0
+            self.addObject(Port.make(self, x, y, 0))
+            for i in range(0,self.playersStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 0))
+              
+            for i in range(0,self.playersStartingShips):
+              self.addObject(Ship.make(self, x, y, 0))
+              
         elif mapThing == '1':
         #if the next byte is a '1' which is a neutral AI's 1st port with land below it
           map[x][y] = 'X'
           if encountered1 == 1:
             self.addObject(Port.make(self, x, y, 3))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 3))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 3))
+              
           else:
             self.addObject(Port.make(self, x, y, 2))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 2))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 2))
+              
             encountered1 = 0
         elif mapThing == '2':
         #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
           map[x][y] = 'X'
           if encountered2 == 1:
             self.addObject(Port.make(self, x, y, 3))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 3))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 3))
+              
           else:
+            self.addObject(Port.make(self, x, y, 2))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 2))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 2))
+              
             self.addObject(Port.make(self, x, y, 2))
             encountered2 = 0
         elif mapThing == '3':
@@ -100,7 +143,22 @@ class Match(DefaultGameWorld):
           map[x][y] = 'X'
           if encountered3 == 1:
             self.addObject(Port.make(self, x, y, 3))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 3))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 3))
+              
           else:
+            self.addObject(Port.make(self, x, y, 2))
+            
+            for i in range(0,self.npcStartingPirates):
+              self.addObject(Pirate.make(self, x, y, 2))
+              
+            for i in range(0,self.npcStartingShips):
+              self.addObject(Ship.make(self, x, y, 2))
+              
             self.addObject(Port.make(self, x, y, 2))
             encountered3 = 0
       
