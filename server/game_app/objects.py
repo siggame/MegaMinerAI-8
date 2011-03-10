@@ -101,7 +101,7 @@ class Pirate(Unit):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
-    return Pirate(game, id, x, y, owner, 1, 1)
+    return Pirate(game, id, x, y, owner, 1, 1, 0, 0)
 
   def nextTurn(self):
     self.hasMoved = 0
@@ -239,7 +239,7 @@ class Ship(Unit):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
-    return Ship(game, id, x, y, owner, 1, 1)
+    return Ship(game, id, x, y, owner, 1, 1, 0, 0)
   
   def nextTurn(self):
     pass
