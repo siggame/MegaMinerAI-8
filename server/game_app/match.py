@@ -115,9 +115,9 @@ class Match(DefaultGameWorld):
         
   def startPorts(self):
     #temp code that makes a port for both players and a neutral port as well (-1)
-    self.addObject(Port.make(self, 2, 2, 0))
-    self.addObject(Port.make(self, 5, 5, -1))
-    self.addObject(Port.make(self, 8, 8, 1))
+    #self.addObject(Port.make(self, 2, 2, 0))
+    #self.addObject(Port.make(self, 5, 5, -1))
+    #self.addObject(Port.make(self, 8, 8, 1))
     i = 0
     
   def startTreasures(self):
@@ -216,27 +216,19 @@ class Match(DefaultGameWorld):
 
   @derefArgs(Unit, None, None)
   def move(self, object, x, y):
-    return object.move(x, y, )
+    return object.move(x, y)
 
   @derefArgs(Unit, None)
   def talk(self, object, message):
     return object.talk(message, )
 
-  @derefArgs(Pirate, None, None)
-  def move(self, object, x, y):
-    return object.move(x, y, )
-
-  @derefArgs(Pirate, None)
-  def talk(self, object, message):
-    return object.talk(message, )
-
   @derefArgs(Pirate, None)
   def pickupTreasure(self, object, amount):
-    return object.pickupTreasure(amount, )
+    return object.pickupTreasure(amount)
 
   @derefArgs(Pirate, None)
   def dropTreasure(self, object, amount):
-    return object.dropTreasure(amount, )
+    return object.dropTreasure(amount)
 
   @derefArgs(Pirate)
   def buildPort(self, object):
@@ -244,7 +236,7 @@ class Match(DefaultGameWorld):
 
   @derefArgs(Pirate, Unit)
   def attack(self, object, Target):
-    return object.attack(Target, )
+    return object.attack(Target)
 
   @derefArgs(Port)
   def createPirate(self, object):
@@ -254,17 +246,9 @@ class Match(DefaultGameWorld):
   def createShip(self, object):
     return object.createShip()
 
-  @derefArgs(Ship, None, None)
-  def move(self, object, x, y):
-    return object.move(x, y, )
-
-  @derefArgs(Ship, None)
-  def talk(self, object, message):
-    return object.talk(message, )
-
   @derefArgs(Ship, Unit)
   def attack(self, object, Target):
-    return object.attack(Target, )
+    return object.attack(Target)
 
 
   def sendIdent(self, players):
