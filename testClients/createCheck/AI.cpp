@@ -27,17 +27,14 @@ bool AI::run()
 {
   cout<<"Starting turn: "<<turnNumber()<<endl;
   objectCheck();
+  for(size_t i=0;i<ports.size();i++)
+  {
+    ports[i].createPirate();
+    ports[i].createShip();
+  }
   for(size_t i=0;i<pirates.size();i++)
   {
-    //pirates[i].move(rand()%boardX(), rand()%boardY());
-    pirates[i].move(rand()%40, rand()%40);
-    pirates[i].move(pirates[i].x()+xoff[rand()%4],pirates[i].y()+yoff[rand()%4]);
-  }
-  for(size_t i=0;i<ships.size();i++)
-  {
-    //ships[i].move(rand()%boardX(), rand()%boardY());
-    ships[i].move(rand()%40, rand()%40);
-    ships[i].move(ships[i].x()+xoff[rand()%4],ships[i].y()+yoff[rand()%4]);
+    pirates[i].buildPort();
   }
   return true;
 }

@@ -122,13 +122,13 @@ class Pirate(Unit):
       return "This unit has already moved this turn"
 
     #Checking to make sure the unit is in the bounds of the map
-    if self.x + x > self.game.boardX -1:
+    if x > self.game.boardX -1:
       return "Stepping off the world"
-    elif self.y + y > self.game.boardY -1:
+    elif y > self.game.boardY -1:
       return "Stepping off the world"
-    elif self.y - y < 0:
+    elif y < 0:
       return "Stepping off the world"
-    elif self.x - x < 0:
+    elif x < 0:
       return "Stepping off the world"
 
     #Check to see if the unit is moving into an enemy
@@ -136,25 +136,29 @@ class Pirate(Unit):
       if isinstance(i,Unit):
         if Unit.owner != self.owner:
           return "Enemy at that location"
-
-    #Check to see if the unit is moving into an enemy port
-    for i in self.game.objects.values():
-      if isinstance(i,Port):
+      #Check to see if the unit is moving into an enemy port
+      elif isinstance(i,Port):
         if Port.owner != self.owner:
           return "Moving into an enemy port"
-
-    #Checking if unit is on land
-    for i in self.game.objects.values():
-      if isinstance(i,Tile):
-        if Tile.x == self.x+x and Tile.y == self.y+y:
+      #Checking if unit is on land
+      elif isinstance(i,Tile):
+        if Tile.x == x and Tile.y == y:
           if Tile.type == 'w':
             return "Pirates cannot swim!"
 
     #Moves the unit and makes it unable to move until next turn
     self.hasMoved += 1
-    self.x += x
-    self.y += y
+    self.x = x
+    self.y = y
     self.game.animations.append(['move', self.id, d])
+
+    #Moves the treasure this pirate is carrying to the new location
+    for i in self.game.objects.values():
+      if isinstance(i,Treasure):
+        if self.ID == Treasure.pirateID:
+          Treasure.x = x
+          Treasure.y = y
+    
     return True
 
   def talk(self, message):
@@ -162,13 +166,38 @@ class Pirate(Unit):
 
   def pickupTreasure(self, amount):
     for i in self.game.objects.values():
-		  i = 2;
-    #  if isinstance(i,Treasure):
-     #   if Treasure.x == self.x and Treasure.y == self.y:
-      #    Treasure.
-          
+      if isinstance(i,Treasure):
+        if Treasure.x == self.x and Treasure.y == self.y and Treasure.pirateID == -1:
+          #Pirate picks up all of the treasure
+          if amount == Treasure.amount:
+            Treasure.pirateID = self.ID
+          #Pirate picks up a portion of the treasure
+          elif amount < Treasure.amount:
+            Treasure.amount -= amount
+            treasure = Treasure.make(game,self.x,self.y,self.ID,amount)
+            game.addObject(treasure)
+          #Pirate tries to pick up more treasure than allowed
+          else:
+            return "There isn't that much treasure!"
+    return True
 
   def dropTreasure(self, amount):
+    for i in self.game.objects.values():
+      if isinstance(i,Treasure):
+        if Treasure.pirateID == self.ID:
+          #If pirate tries to drop all of his treasure
+          if amount == Treasure.amount:
+            Treasure.pirateID = -1
+          #Pirate drops a portion of his treasure
+          elif amount < Treasure.amount:
+            Treasure.amount -= amount
+            treasure = Treasure.make(game,self.x,self.y,-1,amount)
+            game.addObject(treasure)
+          #Pirate tries to drop more than he has
+          else:
+            return "Not enough treasure to drop!"
+    return True
+            
     pass
 
   def buildPort(self):
@@ -250,50 +279,6 @@ class Ship(Unit):
     pass
 
   def move(self, x, y):
-
-    #Checking to see if moving a valid piece
-    if self.owner != self.game.playerID:
-      return "Tried to move a unit that is not yours"
-
-    #Checks to see if the unit has moved this turn
-    #0 if has not moved
-    if self.hasMoved > 0:
-      return "This unit has already moved this turn"
-
-    #Checking to make sure the unit is in the bounds of the map
-    if self.x + x > self.game.boardX -1:
-      return "Stepping off the world"
-    elif self.y + y > self.game.boardY -1:
-      return "Stepping off the world"
-    elif self.y - y < 0:
-      return "Stepping off the world"
-    elif self.x - x < 0:
-      return "Stepping off the world"
-
-    #Check to see if the unit is moving into an enemy
-    for i in self.game.objects.values():
-      if isinstance(i,Unit):
-        if Unit.owner != self.owner:
-          return "Enemy at that location"
-
-    #Check to see if the unit is moving into an enemy port
-    for i in self.game.objects.values():
-      if isinstance(i,Port):
-        if Port.owner != self.owner:
-          return "Moving into an enemy port"
-
-    #Checking if unit is on land
-    for i in self.game.objects.values():
-      if isinstance(i,Tile):
-        if Tile.x == self.x+x and Tile.y == self.y+y:
-          if Tile.type == 'l':
-            return "Ships cannot walk!"
-
-    #Moves the unit and makes it unable to move until next turn
-    self.hasMoved += 1
-    self.x += x
-    self.y += y
-    self.game.animations.append(['move', self.id, d])
     return True
     
 
@@ -361,6 +346,3 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     pass
-
-
-
