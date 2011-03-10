@@ -161,7 +161,11 @@ class Pirate(Unit):
     pass
 
   def pickupTreasure(self, amount):
-    pass
+    for i in self.game.objects.values():
+    #  if isinstance(i,Treasure):
+     #   if Treasure.x == self.x and Treasure.y == self.y:
+      #    Treasure.
+          
 
   def dropTreasure(self, amount):
     pass
@@ -330,27 +334,29 @@ class Tile(Mappable):
 
 
 class Treasure(Mappable):
-  def __init__(self, game, id, x, y, pirate):
+  def __init__(self, game, id, x, y, pirateID, amount):
     self.game = game
     self.id = id
     self.x = x
     self.y = y
-    self.pirate = pirate
+    self.pirateID = pirateID
+    self.amount = amount 
 
   def toList(self):
     value = [
       self.id,
       self.x,
       self.y,
-      self.pirate,
+      self.pirateID,
+      self.amount,
       ]
     return value
   
   @staticmethod
-  def make(game, x, y, pirateID):
+  def make(game, x, y, pirateID, amount):
     id = game.nextid
     game.nextid += 1
-    return Treasure(game, id, x, y, pirateID)
+    return Treasure(game, id, x, y, pirateID, amount)
   
   def nextTurn(self):
     pass
