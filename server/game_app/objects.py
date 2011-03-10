@@ -162,6 +162,7 @@ class Pirate(Unit):
 
   def pickupTreasure(self, amount):
     for i in self.game.objects.values():
+		  i = 2;
     #  if isinstance(i,Treasure):
      #   if Treasure.x == self.x and Treasure.y == self.y:
       #    Treasure.
