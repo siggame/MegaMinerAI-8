@@ -16,6 +16,8 @@ Unit = Model('Unit',
     data = [Variable('owner', int, 'The owner of the unit'),
     Variable('health', int, 'health of the unit'),
     Variable('strength', int, 'attacking strength of the unit'),
+    Variable('hasMoved', int, 'checks if the unit has moved this turn'),
+    Variable('hasAttacked', int, 'checks if the unit has moved this turn'),
     ],
   doc = 'Generic Unit',
   functions = [
@@ -119,3 +121,4 @@ constants = [
 
 import timerAspect
 timerAspect.install()
+>>>>>>> 82f7eaa04a68939d6a0e90922e9d9b5f428dd251

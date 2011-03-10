@@ -43,12 +43,59 @@ class Unit(Mappable):
     pass
 
   def move(self, x, y):
-    pass
+
+    #Checking to see if moving a valid piece
+    if self.owner != self.game.playerID:
+      return: "Tried to move a unit that is not yours"
+
+    #Checking to make sure the unit is in the bounds of the map
+    if self.x + x > self.game.boardX -1:
+      return "Stepping off the world"
+    elif self.y + y > self.game.boardY -1:
+      return "Stepping off the world"
+    elif self.y - y < 0:
+      return "Stepping off the world"
+    elif self.x - x < 0:
+      return "Stepping off the world"
+
+    #Check to see if the unit is moving into an enemy
+    for i in self.game.objects.values():
+      if isinstance(i,Unit):
+        if Unit.owner != self.owner:
+          return "Enemy at that location"
+
+    #Check to see if the unit is moving into an enemy port
+    for i in self.game.objects.values():
+      if isinstance(i,Port):
+        if Port.owner != self.owner:
+          return "Moving into an enemy port"
+    
+    self.game.animations.append(['move', self.id, d])
+    self._move(x, y)
+
+    return True
 
   def talk(self, message):
-    pass
+    self.game.animations.append(['talk', self.id, message])
+    return true
 
+  def _distance(self, target):
+    x = 0
+    y = 0
+    if self.x > target.x + target.size-1:
+      x = self.x - (target.x + target.size-1)
+    elif target.x > self.x + self.size-1:
+      x = target.x - (self.x + self.size-1)
+    if self.y > target.y + target.size-1:
+      y = self.y - (target.y + target.size-1)
+    elif target.y > self.y + self.size-1:
+      y = target.y - (self.y + self.size-1)
+    return x + y
 
+  def _takeDamage(self, damage):
+    self.health -= damage
+    if self.health < 1 and self.id in self.game.objects:
+      self.game.removeObject(self)
 
 class Pirate(Unit):
   def __init__(self, game, id, x, y, owner, health, strength):
@@ -83,6 +130,8 @@ class Pirate(Unit):
 
   def move(self, x, y):
     pass
+   
+    
 
   def talk(self, message):
     pass
