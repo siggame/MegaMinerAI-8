@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.InteropServices;
 
 /// \brief A basic AI interface.
 
@@ -6,13 +8,16 @@
 ///The provided AI class does just that.
 public abstract class BaseAI
 {
-  static Move[] moves;
-  static Piece[] pieces;
-  Pointer connection;
+  static Pirate[] pirates;
+  static Port[] ports;
+  static Ship[] ships;
+  static Tile[] tiles;
+  static Treasure[] treasures;
+  IntPtr connection;
   static int iteration;
-  boolean initialized;
+  bool initialized;
 
-  public BaseAI(Pointer c)
+  public BaseAI(IntPtr c)
   {
     connection = c;
   }
@@ -30,28 +35,46 @@ public abstract class BaseAI
   ///This is run every turn . Return true to end the turn, return false
   ///to request a status update from the server and then immediately rerun this function with the
   ///latest game status.
-  public abstract boolean run();
+  public abstract bool run();
 
   ///
   ///This is run on after your last turn.
   public abstract void end();
 
 
-  public boolean startTurn()
+  public bool startTurn()
   {
     iteration++;
     int count = 0;
-    count = Client.INSTANCE.getMoveCount(connection);
-    moves = new Move[count];
+    count = Client.INSTANCE.getPirateCount(connection);
+    pirates = new Pirate[count];
     for(int i = 0; i < count; i++)
     {
-      moves[i] = new Move(Client.INSTANCE.getMove(connection, i));
+      pirates[i] = new Pirate(Client.INSTANCE.getPirate(connection, i));
     }
-    count = Client.INSTANCE.getPieceCount(connection);
-    pieces = new Piece[count];
+    count = Client.INSTANCE.getPortCount(connection);
+    ports = new Port[count];
     for(int i = 0; i < count; i++)
     {
-      pieces[i] = new Piece(Client.INSTANCE.getPiece(connection, i));
+      ports[i] = new Port(Client.INSTANCE.getPort(connection, i));
+    }
+    count = Client.INSTANCE.getShipCount(connection);
+    ships = new Ship[count];
+    for(int i = 0; i < count; i++)
+    {
+      ships[i] = new Ship(Client.INSTANCE.getShip(connection, i));
+    }
+    count = Client.INSTANCE.getTileCount(connection);
+    tiles = new Tile[count];
+    for(int i = 0; i < count; i++)
+    {
+      tiles[i] = new Tile(Client.INSTANCE.getTile(connection, i));
+    }
+    count = Client.INSTANCE.getTreasureCount(connection);
+    treasures = new Treasure[count];
+    for(int i = 0; i < count; i++)
+    {
+      treasures[i] = new Treasure(Client.INSTANCE.getTreasure(connection, i));
     }
 
     if(!initialized)
@@ -77,11 +100,6 @@ public abstract class BaseAI
   int gameNumber()
   {
     return Client.INSTANCE.getGameNumber(connection);
-  }
-  ///How many turns until the game ends because no pawn has moved and no piece has been taken
-  int TurnsToStalemate()
-  {
-    return Client.INSTANCE.getTurnsToStalemate(connection);
   }
   ///Player 0's time remaining
   int player0Time()

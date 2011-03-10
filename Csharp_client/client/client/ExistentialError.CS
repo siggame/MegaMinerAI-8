@@ -1,4 +1,4 @@
-public class ExistentialError : Error
+public class ExistentialError : System.ApplicationException
 {
   ExistentialError()
   {

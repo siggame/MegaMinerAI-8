@@ -1,0 +1,75 @@
+using System;
+using System.Runtime.InteropServices;
+
+
+///A generic port
+class Port: Mappable 
+{
+  IntPtr ptr;
+  int ID;
+  int iteration;
+  public Port(IntPtr p)
+  {
+    ptr = p;
+    ID = Client.INSTANCE.portGetId(ptr);
+    iteration = BaseAI.iteration;
+  }
+
+  bool validify()
+  {
+    if(iteration == BaseAI.iteration) return true;
+    for(int i = 0; i < BaseAI.ports.length; i++)
+    {
+      if(BaseAI.ports[i].ID == ID)
+      {
+        ptr = BaseAI.ports[i].ptr;
+        iteration = BaseAI.iteration;
+        return true;
+      }
+    }
+    throw new ExistentialError();
+  }
+    
+    //commands
+    
+  ///Creates a Pirate at the calling Port
+  int createPirate()
+  {
+    validify();
+    return Client.INSTANCE.portCreatePirate(ptr);
+  }
+  ///Creates a Ship at the calling Port
+  int createShip()
+  {
+    validify();
+    return Client.INSTANCE.portCreateShip(ptr);
+  }
+    
+    //getters
+    
+  ///Unique Identifier
+  public int getId()
+  {
+    validify();
+    return Client.INSTANCE.portGetId(ptr);
+  }
+  ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+  public int getX()
+  {
+    validify();
+    return Client.INSTANCE.portGetX(ptr);
+  }
+  ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+  public int getY()
+  {
+    validify();
+    return Client.INSTANCE.portGetY(ptr);
+  }
+  ///The ownder of the port
+  public int getOwner()
+  {
+    validify();
+    return Client.INSTANCE.portGetOwner(ptr);
+  }
+
+}

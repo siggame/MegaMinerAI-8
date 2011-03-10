@@ -1,21 +1,23 @@
+using System;
+using System.Runtime.InteropServices;
+
 
 public class Main
 {
-  public static void main(String[] args)
+  public static void main(string[] args)
   {
-    boolean practice = false; //this must not be touched!
     if(args.length < 1)
     {
-      System.out.println("Please enter a hostname");
+      System.Console.WriteLine("Please enter a hostname");
       return;
     }
 
-    Pointer connection = Client.INSTANCE.createConnection();
+    IntPtr connection = Client.INSTANCE.createConnection();
 
     AI ai = new AI(connection);
     if(!(Client.INSTANCE.serverConnect(connection, args[0], "19000")))
     {
-      System.err.println("Unable to connect to server");
+      System.Console.WriteLine("Unable to connect to server");
       return;
     }
     if(!(Client.INSTANCE.serverLogin(connection, ai.username(), ai.password())))
