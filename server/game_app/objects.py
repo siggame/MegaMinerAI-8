@@ -19,7 +19,7 @@ class Mappable:
 
 
 class Unit(Mappable):
-  def __init__(self, game, id, x, y, owner, health, strength):
+  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
     self.game = game
     self.id = id
     self.x = x
@@ -27,6 +27,8 @@ class Unit(Mappable):
     self.owner = owner
     self.health = health
     self.strength = strength
+    self.hasMoved = hasMoved
+    self.hasAttacked = hasAttacked
 
   def toList(self):
     value = [
@@ -43,10 +45,12 @@ class Unit(Mappable):
     pass
 
   def move(self, x, y):
-
     #Checking to see if moving a valid piece
     if self.owner != self.game.playerID:
       return: "Tried to move a unit that is not yours"
+
+    #Checks to see if the unit has moved this turn
+    if self.
 
     #Checking to make sure the unit is in the bounds of the map
     if self.x + x > self.game.boardX -1:
