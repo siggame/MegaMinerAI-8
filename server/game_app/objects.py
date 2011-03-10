@@ -16,8 +16,6 @@ class Mappable:
   def nextTurn(self):
     pass
 
-
-
 class Unit(Mappable):
   def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
     self.game = game
@@ -47,7 +45,8 @@ class Unit(Mappable):
     pass
 
   def move(self, x, y):
-    pass
+    print "Wrong move"
+    return True
 
   def talk(self, message):
     self.game.animations.append(['talk', self.id, message])
@@ -111,7 +110,6 @@ class Pirate(Unit):
     pass
 
   def move(self, x, y):
-
     #Checking to see if moving a valid piece
     if self.owner != self.game.playerID:
       return "Tried to move a unit that is not yours"
@@ -120,6 +118,10 @@ class Pirate(Unit):
     #0 if has not moved
     if self.hasMoved > 0:
       return "This unit has already moved this turn"
+    
+    #Makes sure the unit is only moving one space
+    if x + y > 1:
+      return "Cannot move that far!"    
 
     #Checking to make sure the unit is in the bounds of the map
     if x > self.game.boardX -1:
@@ -134,30 +136,30 @@ class Pirate(Unit):
     #Check to see if the unit is moving into an enemy
     for i in self.game.objects.values():
       if isinstance(i,Unit):
-        if Unit.owner != self.owner:
+        if i.owner != self.owner:
           return "Enemy at that location"
       #Check to see if the unit is moving into an enemy port
       elif isinstance(i,Port):
-        if Port.owner != self.owner:
+        if i.owner != self.owner:
           return "Moving into an enemy port"
       #Checking if unit is on land
       elif isinstance(i,Tile):
-        if Tile.x == x and Tile.y == y:
-          if Tile.type == 'w':
+        if i.x == x and i.y == y:
+          if i.type == 'w':
             return "Pirates cannot swim!"
 
     #Moves the unit and makes it unable to move until next turn
     self.hasMoved += 1
     self.x = x
     self.y = y
-    self.game.animations.append(['move', self.id, d])
+    #self.game.animations.append(['move', self.id, d])
 
     #Moves the treasure this pirate is carrying to the new location
     for i in self.game.objects.values():
       if isinstance(i,Treasure):
         if self.ID == Treasure.pirateID:
-          Treasure.x = x
-          Treasure.y = y
+          i.x = x
+          i.y = y
     
     return True
 

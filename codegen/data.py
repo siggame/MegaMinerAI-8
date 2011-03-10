@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 from structures import *
 
-aspects = []
+aspects = ['timer']
 
 Mappable = Model('Mappable',
   data = [ Variable('x', int, 'The X position of this object.  X is horizontal, with 0,0 as the top left corner'),
@@ -35,6 +35,14 @@ Unit = Model('Unit',
   type = 'virtual'
 )
 
+Unit.functions.append(Function('attack',
+      arguments = [Variable('Target', Unit, 'The unit to attack')],
+      result = bool,
+      doc = 'Attempt to attack the given unit'
+      ))
+
+print Unit, Unit.functions[-1].arguments[0].type
+
 Pirate = Model('Pirate',
   parent = Unit,
   doc = 'A generic pirate',
@@ -51,11 +59,6 @@ Pirate = Model('Pirate',
       arguments = [],
       result = bool,
       doc = 'Pirate builds a port on a land tile with water tile adjacent'
-    ),
-    Function('attack',
-      arguments = [Variable('Target', Unit, 'The unit to attack')],
-      result = bool,
-      doc = 'Attempt to attack the given unit'
     )
   ]
 )
@@ -64,13 +67,6 @@ Pirate = Model('Pirate',
 Ship = Model('Ship',
   parent = Unit,
   doc = 'A generic ship',
-  functions = [
-    Function('attack',
-      arguments = [Variable('Target', Unit, 'The unit to attack')],
-      result = bool,
-      doc = 'Attempt to attack the given unit'
-    )
-  ]
 )
 
 Port = Model('Port',
@@ -121,6 +117,3 @@ constants = [
 	Variable('boardX', int, 'The boards width'),
 	Variable('boardY', int, 'the boards height')
   ]
-
-import timerAspect
-timerAspect.install()
