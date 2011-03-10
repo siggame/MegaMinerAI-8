@@ -78,9 +78,22 @@ def placeStarts(map):
 
   for i in neighbors:
     if map[i[0]][i[1]].type == 'X':
-      map[i[0]][i[1]].type = 'S'
+      map[i[0]][i[1]].type = 'P'
       break
 
+def placePorts(map, symbol = 'N', number = 5):
+  waters = sorted(findWaters(map), key=len, reverse=True)
+
+  neighbors = groupNeighbors(len(map), waters[0])
+
+  random.shuffle(neighbors)
+
+  for i in neighbors:
+    if not number:
+      return 
+    if map[i[0]][i[1]].type == 'X':
+      map[i[0]][i[1]].type = symbol
+      number -= 1
 
 
 def makeMap(size, islands, growth):
@@ -111,6 +124,7 @@ def makeMap(size, islands, growth):
     land.append(next)
  
   placeStarts(map)
+  placePorts(map)
 
   print '\n'.join([' '.join([j.type for j in i]) for i in map] )
 
