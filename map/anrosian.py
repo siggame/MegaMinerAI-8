@@ -25,9 +25,30 @@ def groupNeighbors(size, l):
 
 def makeMap(size, islands, growth):
   map = [ [Tile() for i in xrange(size) ] for j in xrange(size) ]
-  for i in xrange(size):
-    for j in xrange(i+1, size):
-      map[i][j] = map[j][i]
+  
+  #set up the symmetry
+  #this seems like it could be refactored, not sure how yet
+  if random.randint(0, 2) == 0:
+    #diagonal symmetry
+    for i in xrange(size):
+      for j in xrange(i+1, size):
+        map[i][j] = map[j][i]
+  else:
+    if random.randint(0, 1):
+      #vertical symmetry
+      for i in xrange(size):
+        for j in xrange(size/2):
+          map[i][j] = map[i][size-1-j]
+    else:
+      #rotational symmetry
+      for i in xrange(size):
+        for j in xrange(size/2):
+          map[i][j] = map[size-1-i][size-1-j]
+
+  if random.randint(0, 1):
+    #rotate the map pi/2
+    map = [ [ map[j][size-1-i] for j in xrange(size) ] for i in xrange(size) ]
+
   
   land = []
   

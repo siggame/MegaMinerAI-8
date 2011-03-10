@@ -47,6 +47,11 @@ Pirate = Model('Pirate',
       arguments = [Variable('amount', int, 'The amount of gold you wish to drop')],
       doc = 'Allows the pirate to drop treasure on the groud.'
     ),
+    Function('buildPort',
+      arguments = [],
+      result = bool,
+      doc = 'Pirate builds a port on a land tile with water tile adjacent'
+    ),
     Function('attack',
       arguments = [Variable('Target', Unit, 'The unit to attack')],
       result = bool,
@@ -116,3 +121,4 @@ constants = [
 
 import timerAspect
 timerAspect.install()
+>>>>>>> 82f7eaa04a68939d6a0e90922e9d9b5f428dd251
