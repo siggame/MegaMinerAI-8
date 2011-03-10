@@ -50,13 +50,20 @@
     <Compile Include="Client.CS" />
     <Compile Include="ExistentialError.CS" />
     <Compile Include="Main.CS" />
+    <Compile Include="Mappable.CS" />
     <Compile Include="Move.CS" />
     <Compile Include="Piece.CS" />
+    <Compile Include="Pirate.CS" />
+    <Compile Include="Port.CS" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ship.CS" />
+    <Compile Include="Tile.CS" />
+    <Compile Include="Treasure.CS" />
+    <Compile Include="Unit.CS" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
