@@ -71,7 +71,7 @@ class Match(DefaultGameWorld):
         elif mapThing == 'P':
         #if the next byte is a 'P' which is land with a player's port on top
           map[x][y] = 'X'
-          self.addObject(Port.make(self, x, y, 0))
+          #self.addObject(Port.make(self, x, y, 0))
           #need to make the tile
         elif mapThing == '0':
         #if the next byte is a '0' which is a neutral AI's 0th port with land below it
