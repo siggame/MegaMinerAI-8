@@ -31,6 +31,8 @@ class Match(DefaultGameWorld):
     self.gameNumber = id
     self.player0Time = self.startTime
     self.player1Time = self.startTime
+    self.boardX = self.boardX
+    self.boardY = self.boardY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
     self.startTiles()
@@ -69,8 +71,8 @@ class Match(DefaultGameWorld):
     
   def startTreasures(self):
     #temp code that makes 2 treasures
-    self.addObject(Treasure.make(self, 2, 8, -1))
-    self.addObject(Treasure.make(self, 8, 2, -1))
+    self.addObject(Treasure.make(self, 2, 8, -1, 100))
+    self.addObject(Treasure.make(self, 8, 2, -1, 100))
           
   def addPlayer(self, connection, type="player"):
     connection.type = type

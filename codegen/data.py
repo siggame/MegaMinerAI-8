@@ -16,6 +16,8 @@ Unit = Model('Unit',
     data = [Variable('owner', int, 'The owner of the unit'),
     Variable('health', int, 'health of the unit'),
     Variable('strength', int, 'attacking strength of the unit'),
+    Variable('hasMoved', int, 'checks if the unit has moved this turn'),
+    Variable('hasAttacked', int, 'checks if the unit has moved this turn'),
     ],
   doc = 'Generic Unit',
   functions = [
@@ -44,6 +46,11 @@ Pirate = Model('Pirate',
     Function('dropTreasure',
       arguments = [Variable('amount', int, 'The amount of gold you wish to drop')],
       doc = 'Allows the pirate to drop treasure on the groud.'
+    ),
+    Function('buildPort',
+      arguments = [],
+      result = bool,
+      doc = 'Pirate builds a port on a land tile with water tile adjacent'
     ),
     Function('attack',
       arguments = [Variable('Target', Unit, 'The unit to attack')],
@@ -94,7 +101,8 @@ Tile = Model('Tile',
 
 Treasure = Model('Treasure',
   parent = Mappable,
-  data = [ Variable('pirate', Pirate, 'The pirate carrying this treasure'),
+  data = [ Variable('pirateID', int, 'The ID of the pirate carrying this treasure'),
+  Variable('amount', int, 'The amount of gold in this treaure'),
     ],
   doc = 'A treasure',
 )
@@ -110,6 +118,8 @@ constants = [
   Variable('player1Name', str, 'Player 1\'s name'),
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),
+	Variable('boardX', int, 'The boards width'),
+	Variable('boardY', int, 'the boards height')
   ]
 
 import timerAspect

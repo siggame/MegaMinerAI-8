@@ -2,8 +2,8 @@
 #define OPTIONSMAN_H
 
 #include "option.h"
-#include "singleton.h"
-#include "Mutex.h"
+#include "../singleton.h"
+#include "../mutex/Mutex.h"
 #include <iostream>
 #include <map>
 #include <string>
@@ -14,10 +14,6 @@
 class optionsMan : public Singleton <optionsMan>
 {
 	public:
-		/** Default constructor */
-		optionsMan();
-		/** Default destructor */
-		virtual ~optionsMan();
 
 		static bool loadOptionFile(const std::string & filename);
 		static bool saveOptionFile(const std::string & filename);
@@ -49,6 +45,17 @@ class optionsMan : public Singleton <optionsMan>
 
 		template<class T, OptionType OT>
 		static void setVar(const std::string & oName, const T & val);
+
+		static bool strToBool(const std::string & val);
+
+		static OptionType getTypeFromStr(const std::string & val);
+
+		//Helper Fxns for readability
+		static bool addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+		static bool addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum);
+
 
 		std::map<std::string, OptionBase* > m_options; //!< Member variable "m_options"
 };

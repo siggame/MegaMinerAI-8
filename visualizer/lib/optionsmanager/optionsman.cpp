@@ -79,106 +79,24 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 			{
 				if (!exists(namebuff))
 				{
-					if (ss >> typebuff)
+					ss >> typebuff;
+					OptionType ot = getTypeFromStr(typebuff);
+
+					switch (ot)
 					{
-						if (typebuff == "int")
-						{
-							int val;
-
-                           if (ss >> val)
-							{
-							    get()->m_options[namebuff] = new Option<int,OT_INT>(val);
-                                if (Mutex::isInit())
-                                {
-                                    Mutex::createMutex(namebuff);
-                                }
-							}
-							else
-							{
-								std::cout << "Option Load Error Line "<< lineNum << ": Invalid integer value\n";
-							}
-						}
-						else if (typebuff == "float")
-						{
-							float val;
-							if (ss >> val)
-							{
-								get()->m_options[namebuff] = new Option<float,OT_FLOAT>(val);
-                                if (Mutex::isInit())
-                                {
-                                    Mutex::createMutex(namebuff);
-                                }
-							}
-							else
-							{
-								std::cout << "Option Load Error Line "<< lineNum << ": Invalid float value\n";
-							}
-						}
-						else if (typebuff == "string")
-						{
-							std::string val;
-							if (ss >> val)
-							{
-							    while (!ss.eof())
-							    {
-							        std::string tmp;
-							        ss>>tmp;
-							        val += std::string(" ") + tmp;
-							    }
-
-
-								get()->m_options[namebuff] = new Option<std::string,OT_STRING>(val);
-                                if (Mutex::isInit())
-                                {
-                                    Mutex::createMutex(namebuff);
-                                }
-							}
-							else
-							{
-								std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
-							}
-						}
-						else if (typebuff == "bool")
-						{
-							std::string valbuff;
-							if (ss >> valbuff)
-							{
-								// all true posibilities
-								if (valbuff == "yes" || valbuff == "Yes" || valbuff == "YES" ||
-									valbuff == "true" || valbuff == "True" || valbuff == "TRUE" ||
-									valbuff == "on" || valbuff == "On" || valbuff == "ON"||
-									valbuff == "y" ||valbuff == "Y"||valbuff == "t" ||valbuff == "T")
-								{
-									get()->m_options[namebuff] = new Option<bool,OT_BOOL>(true);
-									if (Mutex::isInit())
-									{
-									    Mutex::createMutex(namebuff);
-									}
-								}//all false posibilities
-								else if (valbuff == "no" || valbuff == "No" || valbuff == "NO" ||
-									valbuff == "false" || valbuff == "False" || valbuff == "FALSE" ||
-									valbuff == "off" || valbuff == "Off" || valbuff == "OFF"||
-									valbuff == "n" ||valbuff == "N"||valbuff == "f" ||valbuff == "F")
-								{
-									get()->m_options[namebuff] = new Option<bool,OT_BOOL>(false);
-                                    if (Mutex::isInit())
-									{
-									    Mutex::createMutex(namebuff);
-									}
-								}
-								else
-								{
-									std::cout << "Option Load Error Line "<< lineNum << ": \"" << valbuff << "\" is not a valid bool value\n";
-								}
-							}
-							else
-							{
-								std::cout << "Option Load Error Line "<< lineNum << ": Invalid bool value\n";
-							}
-						}
-					}
-					else
-					{
+						case OT_INT:
+							addInt(namebuff,ss,lineNum);
+						break;
+						case OT_FLOAT:
+							addFloat(namebuff,ss,lineNum);
+						break;
+						case OT_STRING:
+							addString(namebuff,ss,lineNum);
+						break;
+						case OT_BOOL:
+							addBool(namebuff,ss,lineNum);
+						break;
+						default:
 						std::cout << "Option Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
 					}
 				}
@@ -200,6 +118,175 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 	input.close();
 	return true;
 }
+
+/** @brief getTypeFromStr
+  * Helper function to get the enum type from a string
+  * @param val the value to attempt to get an enum from
+  * @return OT_INT, OT_FLOAT, OT_STRING, or OT_BOOL when valid. OT_NONE when not valid
+  */
+OptionType optionsMan::getTypeFromStr(const std::string & val)
+{
+	if (val == "float")
+	{
+		return OT_FLOAT;
+	}
+	if (val == "int")
+	{
+		return OT_INT;
+	}
+	if (val == "bool")
+	{
+		return OT_BOOL;
+	}
+	if (val == "string")
+	{
+		return OT_BOOL;
+	}
+
+	return OT_NONE;
+}
+
+/** @brief strToBool
+  * helper function to get the bool value from a set of possible strings
+  * @param val the value to find a bool from
+  * @return true or false if valid, will throw an exception of type std::string on failure
+  */
+bool optionsMan::strToBool(const std::string & val)
+{
+	if (val == "yes" || val == "Yes" || val == "YES" ||
+		val == "true" || val == "True" || val == "TRUE" ||
+		val == "on" || val == "On" || val == "ON"||
+		val == "y" ||val == "Y"||val == "t" ||val == "T")
+		{
+			return true;
+		}
+	else if (val == "no" || val == "No" || val == "NO" ||
+		val == "false" || val == "False" || val == "FALSE" ||
+		val == "off" || val == "Off" || val == "OFF"||
+		val == "n" ||val == "N"||val == "f" ||val == "F")
+		{
+		return false;
+		}
+
+
+
+	throw (std::string("Invalid bool value"));
+	return false;
+}
+
+/** @brief addBool
+  *	helper function to extract a bool from a string stream and give it a name
+  * @param namebuff the name that will be given the bool
+  * @param ss the string stream to pull the bool value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
+  */
+bool optionsMan::addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+{
+	std::string valbuff;
+	if (ss >> valbuff)
+	{
+		try
+		{
+			bool retval = strToBool(valbuff);
+			get()->m_options[namebuff] = new Option<bool,OT_BOOL>(retval);
+			if (Mutex::isInit())
+			{
+				Mutex::createMutex(namebuff);
+			}
+		}
+		catch (std::string s)
+		{
+			std::cout << "Option Load Error Line "<< lineNum << ": \"" << valbuff << "\" " << s <<"\n";
+		}
+		return true;
+	}
+	std::cout << "Option Load Error Line "<< lineNum << ": Invalid bool value\n";
+	return false;
+}
+
+/** @brief addFloat
+  *	helper function to extract a float from a string stream and give it a name
+  * @param namebuff the name that will be given the float
+  * @param ss the string stream to pull the float value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
+  */
+bool optionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+{
+	float val;
+	if (ss >> val)
+	{
+		get()->m_options[namebuff] = new Option<float,OT_FLOAT>(val);
+		if (Mutex::isInit())
+		{
+			Mutex::createMutex(namebuff);
+		}
+		return true;
+	}
+
+	std::cout << "Option Load Error Line "<< lineNum << ": Invalid float value\n";
+	return false;
+}
+
+/** @brief addInt
+  *	helper function to extract a int from a string stream and give it a name
+  * @param namebuff the name that will be given the int
+  * @param ss the string stream to pull the int value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
+  */
+bool optionsMan::addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+{
+	int val;
+
+	if (ss >> val)
+	{
+		get()->m_options[namebuff] = new Option<int,OT_INT>(val);
+		if (Mutex::isInit())
+		{
+			Mutex::createMutex(namebuff);
+		}
+		return true;
+	}
+
+	std::cout << "Option Load Error Line "<< lineNum << ": Invalid integer value\n";
+	return false;
+}
+
+/** @brief addString
+  *	helper function to extract a string from a string stream and give it a name
+  * @param namebuff the name that will be given the string
+  * @param ss the string stream to pull the string value from
+  * @param lineNum the number of the line this is happening on
+  * @return true on a success otherwise false
+  */
+bool optionsMan::addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+{
+	std::string val;
+	if (ss >> val)
+	{
+		while (!ss.eof())
+		{
+			std::string tmp;
+			ss>>tmp;
+			val += std::string(" ") + tmp;
+		}
+
+
+		get()->m_options[namebuff] = new Option<std::string,OT_STRING>(val);
+		if (Mutex::isInit())
+		{
+			Mutex::createMutex(namebuff);
+		}
+	}
+	else
+	{
+		std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
+	}
+}
+
+
 
 
 /** @brief saveOptionFile
@@ -258,24 +345,6 @@ bool optionsMan::saveOptionFile(const std::string & filename)
 	return true;
 }
 
-
-/** @brief ~optionsMan
-  * default destructor
-  * @todo get rid of or find a use for this
-  */
- optionsMan::~optionsMan()
-{
-
-}
-
-/** @brief optionsMan
-  * default constructor
-  * @todo get rid of or find a use for this
-  */
- optionsMan::optionsMan()
-{
-
-}
 
 /** @brief setStr
   * set a string option to the intended value
