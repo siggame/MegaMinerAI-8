@@ -346,6 +346,3 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     pass
-
-
-

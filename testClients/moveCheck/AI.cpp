@@ -16,6 +16,7 @@ const char* AI::password()
 //This function is run once, before your first turn.
 void AI::init()
 {
+  srand(time(NULL));
   cout<<"Initialization called"<<endl;
   objectCheck();
 }
@@ -26,6 +27,12 @@ bool AI::run()
 {
   cout<<"Starting turn: "<<turnNumber()<<endl;
   objectCheck();
+  for(size_t i=0;i<pirates.size();i++)
+  {
+    //pirates[i].move(rand()%boardX(), rand()%boardY());
+    pirates[i].move(rand()%40, rand()%40);
+    pirates[i].move(pirates[i].x()+xoff[rand()%4],pirates[i].y()+yoff[rand()%4]);
+  }
   return true;
 }
 
@@ -138,15 +145,15 @@ void AI::objectCheck()
   cout<<"baordY\t"<<boardY()<<endl;
   cout<<"--Object counts--"<<endl;
   cout<<"Pirates : "<<pirates.size()<<endl;
-  displayPirates();
+  //displayPirates();
   cout<<"Ports   : "<<ports.size()<<endl;
-//  displayPorts();
+  //displayPorts();
   cout<<"Ships   : "<<ships.size()<<endl;
-//  displayShips();
+  //displayShips();
   cout<<"Tiles   : "<<tiles.size()<<endl;
-//  displayTiles();
+  //displayTiles();
   cout<<"Treasure: "<<treasures.size()<<endl;
-//  displayTreasure();
+  //displayTreasure();
 }
 
 //This function is run once, after your last turn.

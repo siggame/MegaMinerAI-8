@@ -31,6 +31,8 @@ class Match(DefaultGameWorld):
     self.gameNumber = id
     self.player0Time = self.startTime
     self.player1Time = self.startTime
+    self.boardX = self.boardX
+    self.boardY = self.boardY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
     self.startTiles()
