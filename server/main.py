@@ -219,7 +219,7 @@ class GameApp(AccountsAppMixin, BaseApp):
   @errorBuffer
   @requireTurn
   @requireTypes(None, int, int)
-  def gameAttack(self, ship, Target):
+  def gameAttack(self, Target):
     """Attempt to attack the given unit"""
     if self.game.turn is not self:
       return "Not your turn."
