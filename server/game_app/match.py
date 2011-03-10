@@ -38,7 +38,6 @@ class Match(DefaultGameWorld):
     self.startTilesAndPorts()
     self.startPirates(cfgUnits)
     self.startShips(cfgUnits)
-    self.startPorts()
     self.startTreasures()
   
   def startTilesAndPorts(self):
@@ -46,6 +45,10 @@ class Match(DefaultGameWorld):
     #open the map file for parsing
     f = open('maps/map1.txt', 'r')
     #text = [i.remove(' ').remove('\n') for i in f.readlines()]
+    encounteredP = 0
+    encountered1 = 0
+    encountered2 = 0
+    encountered3 = 0
     for y in range(0,self.boardY):
       for x in range(0,self.boardX):
         mapThing = f.read(1)
@@ -71,28 +74,35 @@ class Match(DefaultGameWorld):
         elif mapThing == 'P':
         #if the next byte is a 'P' which is land with a player's port on top
           map[x][y] = 'X'
-          self.addObject(Port.make(self, x, y, 0))
-          #need to make the tile
-        elif mapThing == '0':
-        #if the next byte is a '0' which is a neutral AI's 0th port with land below it
-          map[x][y] = 'X'
-          #need to make the port
-          #need to make the tile
+          if encounteredP == 1:
+            self.addObject(Port.make(self, x, y, 1))
+          else:
+            self.addObject(Port.make(self, x, y, 0))
+            encounteredP = 0
         elif mapThing == '1':
         #if the next byte is a '1' which is a neutral AI's 1st port with land below it
           map[x][y] = 'X'
-          #need to make the port
-          #need to make the tile
+          if encountered1 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered1 = 0
         elif mapThing == '2':
         #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
           map[x][y] = 'X'
-          #need to make the port
-          #need to make the tile
+          if encountered2 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered2 = 0
         elif mapThing == '3':
-        #if the next byte is a '3' which is a neutral AI's 3rd port with land below it
+        #if the next byte is a '0' which is a neutral AI's 0th port with land below it
           map[x][y] = 'X'
-          #need to make the port
-          #need to make the tile
+          if encountered3 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered3 = 0
       
     for y in range(0,self.boardY):
       #print "\n",
@@ -112,13 +122,6 @@ class Match(DefaultGameWorld):
     for i in cfg.keys():
       if "startship" in i.lower():
         self.addObject(Ship.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
-        
-  def startPorts(self):
-    #temp code that makes a port for both players and a neutral port as well (-1)
-    #self.addObject(Port.make(self, 2, 2, 0))
-    #self.addObject(Port.make(self, 5, 5, -1))
-    #self.addObject(Port.make(self, 8, 8, 1))
-    i = 0
     
   def startTreasures(self):
     #temp code that makes 2 treasures

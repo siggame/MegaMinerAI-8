@@ -29,15 +29,11 @@ bool AI::run()
   objectCheck();
   for(size_t i=0;i<pirates.size();i++)
   {
-    //pirates[i].move(rand()%boardX(), rand()%boardY());
-    pirates[i].move(rand()%40, rand()%40);
-    pirates[i].move(pirates[i].x()+xoff[rand()%4],pirates[i].y()+yoff[rand()%4]);
+    pirates[i].attack(pirates[rand()%pirates.size()]);
   }
   for(size_t i=0;i<ships.size();i++)
   {
-    //ships[i].move(rand()%boardX(), rand()%boardY());
-    ships[i].move(rand()%40, rand()%40);
-    ships[i].move(ships[i].x()+xoff[rand()%4],ships[i].y()+yoff[rand()%4]);
+    ships[i].attack(ships[rand()%ships.size()]);
   }
   return true;
 }

@@ -12,10 +12,15 @@ def insertModel(list, model):
     list.append(model)
 
 def parseData():
+  aspects = data.aspects
+
+  if 'timer' in aspects:
+    import timerAspect
+    timerAspect.install(data)
+
   models = []
   globals = data.globals
   constants = data.constants
-  aspects = data.aspects
   animations = []
   for i in members(data):
     if isinstance(i, structures.Model):
@@ -28,6 +33,7 @@ def parseData():
 
 if __name__ == '__main__':
   objects = parseData()
+  
   import writeC
   writeC.write(copy(objects))
 
