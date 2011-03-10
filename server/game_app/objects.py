@@ -209,7 +209,7 @@ class Port(Mappable):
 
 
 class Ship(Unit):
-  def __init__(self, game, id, x, y, owner, health, strength):
+  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
     self.game = game
     self.id = id
     self.x = x

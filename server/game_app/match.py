@@ -58,7 +58,7 @@ class Match(DefaultGameWorld):
   def startShips(self, cfg):
     for i in cfg.keys():
       if "startship" in i.lower():
-        self.addObject(Ship.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"],cfg[i]["hasMoved"],cfg[i]["hasAttacked"])))
+        self.addObject(Ship.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"],cfg[i]["hasMoved"],cfg[i]["hasAttacked"]))
         
   def startPorts(self):
     #temp code that makes a port for both players and a neutral port as well (-1)
