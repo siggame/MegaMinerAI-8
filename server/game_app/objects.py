@@ -93,6 +93,9 @@ class Pirate(Unit):
   def dropTreasure(self, amount):
     pass
 
+  def buildPort(self):
+    pass
+
   def attack(self, Target):
     pass
 

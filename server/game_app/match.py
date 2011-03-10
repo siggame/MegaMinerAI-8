@@ -185,6 +185,10 @@ class Match(DefaultGameWorld):
   def dropTreasure(self, object, amount):
     return object.dropTreasure(amount, )
 
+  @derefArgs(Pirate)
+  def buildPort(self, object):
+    return object.buildPort()
+
   @derefArgs(Pirate, Unit)
   def attack(self, object, Target):
     return object.attack(Target, )
