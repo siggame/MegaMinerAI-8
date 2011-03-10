@@ -10,7 +10,7 @@
 #ifndef THREADLER_H
 #define THREADLER_H
 
-#include "singleton.h"
+#include "../singleton.h"
 
 #ifdef WIN32
 #include <windows.h>

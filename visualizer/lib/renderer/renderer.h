@@ -1,12 +1,12 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "singleton.h"
+#include "../singleton.h"
 #include <map>
 #include <GL/gl.h>
-#include "drawGLFont.h"
-#include "optionsman.h"
-#include "gocfamily_render.h"
+//#include "drawGLFont.h"
+#include "../optionsmanager/optionsman.h"
+#include "../gocfamily_render.h"
 
 //this is a place holder
 typedef  GOCFamily_Render renderObj;
