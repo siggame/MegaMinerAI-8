@@ -25,18 +25,18 @@ class Piece
     }
     throw new ExistentialError();
   }
-    
+
     //commands
-    
+
   ///
   int move(int file, int rank, int type)
   {
     validify();
     return Client.INSTANCE.pieceMove(ptr, file, rank, type);
   }
-    
+
     //getters
-    
+
   ///Unique Identifier
   public int getId()
   {

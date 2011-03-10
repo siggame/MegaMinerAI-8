@@ -25,12 +25,12 @@ class Move
     }
     throw new ExistentialError();
   }
-    
+
     //commands
-    
-    
+
+
     //getters
-    
+
   ///Unique Identifier
   public int getId()
   {
