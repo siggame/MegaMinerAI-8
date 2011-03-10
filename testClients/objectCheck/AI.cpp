@@ -134,17 +134,19 @@ void AI::objectCheck()
   cout<<"pirateCost\t"<<pirateCost()<<endl;
   ///The cost of a ship
   cout<<"shipCost\t"<<shipCost()<<endl;
+  cout<<"boardX\t"<<boardX()<<endl;
+  cout<<"baordY\t"<<boardY()<<endl;
   cout<<"--Object counts--"<<endl;
   cout<<"Pirates : "<<pirates.size()<<endl;
   displayPirates();
   cout<<"Ports   : "<<ports.size()<<endl;
-  displayPorts();
+//  displayPorts();
   cout<<"Ships   : "<<ships.size()<<endl;
-  displayShips();
+//  displayShips();
   cout<<"Tiles   : "<<tiles.size()<<endl;
-  displayTiles();
+//  displayTiles();
   cout<<"Treasure: "<<treasures.size()<<endl;
-  displayTreasure();
+//  displayTreasure();
 }
 
 //This function is run once, after your last turn.
