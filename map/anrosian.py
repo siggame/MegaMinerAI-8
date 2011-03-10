@@ -81,7 +81,7 @@ def placeStarts(map):
       map[i[0]][i[1]].type = 'P'
       break
 
-def placePorts(map, symbol = 'N', number = 5):
+def placePorts(map, number = 5):
   waters = sorted(findWaters(map), key=len, reverse=True)
 
   neighbors = groupNeighbors(len(map), waters[0])
@@ -92,7 +92,7 @@ def placePorts(map, symbol = 'N', number = 5):
     if not number:
       return 
     if map[i[0]][i[1]].type == 'X':
-      map[i[0]][i[1]].type = symbol
+      map[i[0]][i[1]].type = `number`
       number -= 1
 
 
