@@ -1,7 +1,7 @@
 #ifndef MUTEX_H
 #define MUTEX_H
 
-#include "singleton.h"
+#include "../singleton.h"
 #include <map>
 #include <string>
 #include <iostream>

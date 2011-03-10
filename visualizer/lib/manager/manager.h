@@ -1,7 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "singleton.h"
+#include "../singleton.h"
 #include <map>
 
 /**
