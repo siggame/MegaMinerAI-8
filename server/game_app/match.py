@@ -35,22 +35,73 @@ class Match(DefaultGameWorld):
     self.boardY = self.boardY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
-    self.startTiles()
+    self.startTilesAndPorts()
     self.startPirates(cfgUnits)
     self.startShips(cfgUnits)
     self.startPorts()
     self.startTreasures()
   
-  def startTiles(self):
+  def startTilesAndPorts(self):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)]
-    
+    #open the map file for parsing
+    f = open('maps/map1.txt', 'r')
+    #text = [i.remove(' ').remove('\n') for i in f.readlines()]
     for y in range(0,self.boardY):
       for x in range(0,self.boardX):
-        randomTile = random.randint(0, 1)
-        if randomTile == 0:
-          self.addObject(Tile.make(self, x, y, 'w'))
-        else:
-          self.addObject(Tile.make(self, x, y, 'l'))
+        mapThing = f.read(1)
+        #mapThing = text[x][y]
+        if mapThing == ' ':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '\r':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '\n':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '.':
+        #if the next byte is a '.' which is water
+          map[x][y] = '.'
+        elif mapThing == 'X':
+        #if the next byte is a 'X' which is land
+          map[x][y] = 'X'
+        elif mapThing == 'P':
+        #if the next byte is a 'P' which is land with a player's port on top
+          map[x][y] = 'X'
+          self.addObject(Port.make(self, x, y, 0))
+          #need to make the tile
+        elif mapThing == '0':
+        #if the next byte is a '0' which is a neutral AI's 0th port with land below it
+          map[x][y] = 'X'
+          #need to make the port
+          #need to make the tile
+        elif mapThing == '1':
+        #if the next byte is a '1' which is a neutral AI's 1st port with land below it
+          map[x][y] = 'X'
+          #need to make the port
+          #need to make the tile
+        elif mapThing == '2':
+        #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
+          map[x][y] = 'X'
+          #need to make the port
+          #need to make the tile
+        elif mapThing == '3':
+        #if the next byte is a '3' which is a neutral AI's 3rd port with land below it
+          map[x][y] = 'X'
+          #need to make the port
+          #need to make the tile
+      
+    for y in range(0,self.boardY):
+      #print "\n",
+      for x in range(0,self.boardX):
+        #print x,
+        #print ",",
+        #print y,
+        #print (map[x][y]),
+        self.addObject(Tile.make(self, x, y, map[x][y]))
           
   def startPirates(self, cfg):
     for i in cfg.keys():
