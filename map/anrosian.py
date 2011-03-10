@@ -116,7 +116,6 @@ def makeMap(size, islands, growth):
     land.append( (x, y) )
     map[x][y].type = 'X'
   
-  print groupNeighbors(size, land)
   for i in xrange(growth):
     borders = [i for i in groupNeighbors(size, land) if map[i[0]][i[1]].type == '.' ]
     next = random.choice(borders)
