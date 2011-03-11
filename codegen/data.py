@@ -41,7 +41,6 @@ Unit.functions.append(Function('attack',
       doc = 'Attempt to attack the given unit'
       ))
 
-print Unit, Unit.functions[-1].arguments[0].type
 
 Pirate = Model('Pirate',
   parent = Unit,
