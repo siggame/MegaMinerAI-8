@@ -148,6 +148,7 @@ void AI::objectCheck()
   cout<<"pirateCost\t"<<pirateCost()<<endl;
   ///The cost of a ship
   cout<<"shipCost\t"<<shipCost()<<endl;
+  cout<<"portCost\t"<<portCost()<<endl;
   cout<<"boardX\t"<<boardX()<<endl;
   cout<<"baordY\t"<<boardY()<<endl;
   cout<<"--Object counts--"<<endl;
@@ -156,7 +157,7 @@ void AI::objectCheck()
   cout<<"Ports   : "<<ports.size()<<endl;
   displayPorts();
   cout<<"Ships   : "<<ships.size()<<endl;
-//  displayShips();
+  displayShips();
   cout<<"Tiles   : "<<tiles.size()<<endl;
   displayTiles();
   cout<<"Treasure: "<<treasures.size()<<endl;
