@@ -86,8 +86,10 @@ void AI::displayShips()
 
 void AI::displayTiles()
 {
+  vector<int> count(2,0);
   for(size_t i=0;i<tiles.size();i++)
   {
+    /*
     ///Unique Identifier
     cout<<"\tID\t"<<tiles[i].id()<<endl;
     ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
@@ -97,7 +99,19 @@ void AI::displayTiles()
     ///land = 0, water = 1
     cout<<"\tType\t"<<tiles[i].type()<<endl;
     cout<<endl;
+    */
+    if(tiles[i].type()>count.size())
+    {
+      count.resize(tiles[i].type());
+    }
+    count[tiles[i].type()]++;
   }
+  cout<<"\ttype\tnumber"<<endl;
+  for(size_t i=0;i<count.size();i++)
+  {
+    cout<<"\t"<<i<<")\t"<<count[i]<<endl;
+  }
+  cout<<endl;
 }
 
 void AI::displayTreasure()
@@ -140,11 +154,11 @@ void AI::objectCheck()
   cout<<"Pirates : "<<pirates.size()<<endl;
   displayPirates();
   cout<<"Ports   : "<<ports.size()<<endl;
-//  displayPorts();
+  displayPorts();
   cout<<"Ships   : "<<ships.size()<<endl;
 //  displayShips();
   cout<<"Tiles   : "<<tiles.size()<<endl;
-//  displayTiles();
+  displayTiles();
   cout<<"Treasure: "<<treasures.size()<<endl;
 //  displayTreasure();
 }
