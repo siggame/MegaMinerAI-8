@@ -3,22 +3,22 @@ using System.Runtime.InteropServices;
 
 
 ///A basic tile
-class Tile: Mappable 
+public class Tile: Mappable 
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
   public Tile(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.tileGetId(ptr);
+    ID = Client.tileGetId(ptr);
     iteration = BaseAI.iteration;
   }
 
-  bool validify()
+public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.tiles.length; i++)
+    for(int i = 0; i < BaseAI.tiles.Length; i++)
     {
       if(BaseAI.tiles[i].ID == ID)
       {
@@ -39,25 +39,25 @@ class Tile: Mappable
   public int getId()
   {
     validify();
-    return Client.INSTANCE.tileGetId(ptr);
+    return Client.tileGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
   public int getX()
   {
     validify();
-    return Client.INSTANCE.tileGetX(ptr);
+    return Client.tileGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   public int getY()
   {
     validify();
-    return Client.INSTANCE.tileGetY(ptr);
+    return Client.tileGetY(ptr);
   }
   ///land = 0, water = 1
   public int getType()
   {
     validify();
-    return Client.INSTANCE.tileGetType(ptr);
+    return Client.tileGetType(ptr);
   }
 
 }

@@ -37,6 +37,8 @@ public class Client {
   [DllImport("client")]
   public static extern int pirateDropTreasure(IntPtr self, int amount);
   [DllImport("client")]
+  public static extern int pirateBuildPort(IntPtr self);
+  [DllImport("client")]
   public static extern int pirateAttack(IntPtr self, IntPtr Target);
   [DllImport("client")]
   public static extern int portCreatePirate(IntPtr self);
@@ -103,6 +105,10 @@ public class Client {
   public static extern int unitGetHealth(IntPtr ptr);
   [DllImport("client")]
   public static extern int unitGetStrength(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int unitGetHasMoved(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int unitGetHasAttacked(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int pirateGetId(IntPtr ptr);
@@ -116,6 +122,10 @@ public class Client {
   public static extern int pirateGetHealth(IntPtr ptr);
   [DllImport("client")]
   public static extern int pirateGetStrength(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int pirateGetHasMoved(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int pirateGetHasAttacked(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int portGetId(IntPtr ptr);
@@ -138,6 +148,10 @@ public class Client {
   public static extern int shipGetHealth(IntPtr ptr);
   [DllImport("client")]
   public static extern int shipGetStrength(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int shipGetHasMoved(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int shipGetHasAttacked(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int tileGetId(IntPtr ptr);
@@ -155,7 +169,9 @@ public class Client {
   [DllImport("client")]
   public static extern int treasureGetY(IntPtr ptr);
   [DllImport("client")]
-  public static extern IntPtr treasureGetPirate(IntPtr ptr);
+  public static extern int treasureGetPirateID(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int treasureGetAmount(IntPtr ptr);
 
 
     //properties

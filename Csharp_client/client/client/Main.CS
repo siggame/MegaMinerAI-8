@@ -6,46 +6,46 @@ public class Main
 {
   public static void main(string[] args)
   {
-    if(args.length < 1)
+    if(args.Length < 1)
     {
       System.Console.WriteLine("Please enter a hostname");
       return;
     }
 
-    IntPtr connection = Client.INSTANCE.createConnection();
+    IntPtr connection = Client.createConnection();
 
     AI ai = new AI(connection);
-    if(!(Client.INSTANCE.serverConnect(connection, args[0], "19000")))
+    if((Client.serverConnect(connection, args[0], "19000")) == 0)
     {
       System.Console.WriteLine("Unable to connect to server");
       return;
     }
-    if(!(Client.INSTANCE.serverLogin(connection, ai.username(), ai.password())))
+    if((Client.serverLogin(connection, ai.username(), ai.password())) == 0)
     {
       return;
     }
 
-    if(args.length < 2)
+    if(args.Length < 2)
     {
-      Client.INSTANCE.createGame(connection);
+      Client.createGame(connection);
     }
     else
     {
-      Client.INSTANCE.joinGame(connection, Integer.parseInt(args[1]));
+      Client.joinGame(connection, Int32.Parse(args[1]));
     }
-    while(Client.INSTANCE.networkLoop(connection) != 0)
+    while(Client.networkLoop(connection) != 0)
     {
       if(ai.startTurn())
       {
-        Client.INSTANCE.endTurn(connection);
+        Client.endTurn(connection);
       }
       else
       {
-        Client.INSTANCE.getStatus(connection);
+        Client.getStatus(connection);
       }
     }
-    Client.INSTANCE.networkLoop(connection); //Grab end game state
-    Client.INSTANCE.networkLoop(connection); //Grab log
+    Client.networkLoop(connection); //Grab end game state
+    Client.networkLoop(connection); //Grab log
     ai.end();
     return;
   }

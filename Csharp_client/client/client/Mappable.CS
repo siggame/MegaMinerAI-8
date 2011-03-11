@@ -3,19 +3,19 @@ using System.Runtime.InteropServices;
 
 
 ///An object that exists on the grid
-abstract class Mappable
+public abstract class Mappable
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
   public Mappable(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.mappableGetId(ptr);
+    ID = Client.mappableGetId(ptr);
     iteration = BaseAI.iteration;
   }
 
-  abstract bool validify();
+public abstract bool validify();
     
     //commands
     
@@ -26,19 +26,19 @@ abstract class Mappable
   public int getId()
   {
     validify();
-    return Client.INSTANCE.mappableGetId(ptr);
+    return Client.mappableGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
   public int getX()
   {
     validify();
-    return Client.INSTANCE.mappableGetX(ptr);
+    return Client.mappableGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   public int getY()
   {
     validify();
-    return Client.INSTANCE.mappableGetY(ptr);
+    return Client.mappableGetY(ptr);
   }
 
 }

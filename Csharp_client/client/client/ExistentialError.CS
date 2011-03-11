@@ -1,7 +1,5 @@
 public class ExistentialError : System.ApplicationException
 {
-  ExistentialError()
-  {
-    super("Object does not exist anymore.");
-  }
+  public ExistentialError() : base("Object does not exist anymore.")
+  {}
 }

@@ -3,22 +3,22 @@ using System.Runtime.InteropServices;
 
 
 ///A treasure
-class Treasure: Mappable 
+public class Treasure: Mappable 
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
   public Treasure(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.treasureGetId(ptr);
+    ID = Client.treasureGetId(ptr);
     iteration = BaseAI.iteration;
   }
 
-  bool validify()
+public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.treasures.length; i++)
+    for(int i = 0; i < BaseAI.treasures.Length; i++)
     {
       if(BaseAI.treasures[i].ID == ID)
       {
@@ -39,25 +39,31 @@ class Treasure: Mappable
   public int getId()
   {
     validify();
-    return Client.INSTANCE.treasureGetId(ptr);
+    return Client.treasureGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
   public int getX()
   {
     validify();
-    return Client.INSTANCE.treasureGetX(ptr);
+    return Client.treasureGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   public int getY()
   {
     validify();
-    return Client.INSTANCE.treasureGetY(ptr);
+    return Client.treasureGetY(ptr);
   }
-  ///The pirate carrying this treasure
-  public IntPtr getPirate()
+  ///The ID of the pirate carrying this treasure
+  public int getPirateID()
   {
     validify();
-    return Client.INSTANCE.treasureGetPirate(ptr);
+    return Client.treasureGetPirateID(ptr);
+  }
+  ///The amount of gold in this treaure
+  public int getAmount()
+  {
+    validify();
+    return Client.treasureGetAmount(ptr);
   }
 
 }

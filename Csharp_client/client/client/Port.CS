@@ -3,22 +3,22 @@ using System.Runtime.InteropServices;
 
 
 ///A generic port
-class Port: Mappable 
+public class Port: Mappable 
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
   public Port(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.portGetId(ptr);
+    ID = Client.portGetId(ptr);
     iteration = BaseAI.iteration;
   }
 
-  bool validify()
+public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.ports.length; i++)
+    for(int i = 0; i < BaseAI.ports.Length; i++)
     {
       if(BaseAI.ports[i].ID == ID)
       {
@@ -36,13 +36,13 @@ class Port: Mappable
   int createPirate()
   {
     validify();
-    return Client.INSTANCE.portCreatePirate(ptr);
+    return Client.portCreatePirate(ptr);
   }
   ///Creates a Ship at the calling Port
   int createShip()
   {
     validify();
-    return Client.INSTANCE.portCreateShip(ptr);
+    return Client.portCreateShip(ptr);
   }
     
     //getters
@@ -51,25 +51,25 @@ class Port: Mappable
   public int getId()
   {
     validify();
-    return Client.INSTANCE.portGetId(ptr);
+    return Client.portGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
   public int getX()
   {
     validify();
-    return Client.INSTANCE.portGetX(ptr);
+    return Client.portGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   public int getY()
   {
     validify();
-    return Client.INSTANCE.portGetY(ptr);
+    return Client.portGetY(ptr);
   }
   ///The ownder of the port
   public int getOwner()
   {
     validify();
-    return Client.INSTANCE.portGetOwner(ptr);
+    return Client.portGetOwner(ptr);
   }
 
 }

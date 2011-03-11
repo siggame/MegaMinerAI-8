@@ -3,19 +3,19 @@ using System.Runtime.InteropServices;
 
 
 ///Generic Unit
-abstract class Unit: Mappable 
+public abstract class Unit: Mappable 
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
   public Unit(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.unitGetId(ptr);
+    ID = Client.unitGetId(ptr);
     iteration = BaseAI.iteration;
   }
 
-  abstract bool validify();
+public abstract override bool validify();
     
     //commands
     
@@ -23,13 +23,13 @@ abstract class Unit: Mappable
   int move(int x, int y)
   {
     validify();
-    return Client.INSTANCE.unitMove(ptr, x, y);
+    return Client.unitMove(ptr, x, y);
   }
   ///Allows a unit to display a message to the screen.
   int talk(string message)
   {
     validify();
-    return Client.INSTANCE.unitTalk(ptr, message);
+    return Client.unitTalk(ptr, message);
   }
     
     //getters
@@ -38,37 +38,49 @@ abstract class Unit: Mappable
   public int getId()
   {
     validify();
-    return Client.INSTANCE.unitGetId(ptr);
+    return Client.unitGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
   public int getX()
   {
     validify();
-    return Client.INSTANCE.unitGetX(ptr);
+    return Client.unitGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   public int getY()
   {
     validify();
-    return Client.INSTANCE.unitGetY(ptr);
+    return Client.unitGetY(ptr);
   }
   ///The owner of the unit
   public int getOwner()
   {
     validify();
-    return Client.INSTANCE.unitGetOwner(ptr);
+    return Client.unitGetOwner(ptr);
   }
   ///health of the unit
   public int getHealth()
   {
     validify();
-    return Client.INSTANCE.unitGetHealth(ptr);
+    return Client.unitGetHealth(ptr);
   }
   ///attacking strength of the unit
   public int getStrength()
   {
     validify();
-    return Client.INSTANCE.unitGetStrength(ptr);
+    return Client.unitGetStrength(ptr);
+  }
+  ///checks if the unit has moved this turn
+  public int getHasMoved()
+  {
+    validify();
+    return Client.unitGetHasMoved(ptr);
+  }
+  ///checks if the unit has moved this turn
+  public int getHasAttacked()
+  {
+    validify();
+    return Client.unitGetHasAttacked(ptr);
   }
 
 }
