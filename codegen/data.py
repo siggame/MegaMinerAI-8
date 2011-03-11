@@ -41,7 +41,6 @@ Unit.functions.append(Function('attack',
       doc = 'Attempt to attack the given unit'
       ))
 
-print Unit, Unit.functions[-1].arguments[0].type
 
 Pirate = Model('Pirate',
   parent = Unit,
@@ -114,6 +113,7 @@ constants = [
   Variable('player1Name', str, 'Player 1\'s name'),
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),
+  Variable('portCost', int, 'The cost to build a new port'),
 	Variable('boardX', int, 'The boards width'),
 	Variable('boardY', int, 'the boards height')
   ]

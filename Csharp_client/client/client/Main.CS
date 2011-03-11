@@ -2,9 +2,9 @@ using System;
 using System.Runtime.InteropServices;
 
 
-public class main
+public class Main
 {
-  public static void Main(string[] args)
+  public static void main(string[] args)
   {
     if(args.Length < 1)
     {

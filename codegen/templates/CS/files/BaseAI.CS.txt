@@ -10,11 +10,11 @@ public abstract class BaseAI
 {
 % for model in models:
 %   if model.type == 'Model':
-  static ${model.name}[] ${lowercase(model.plural)};
+  public static ${model.name}[] ${lowercase(model.plural)};
 %   endif
 % endfor
   IntPtr connection;
-  static int iteration;
+  public static int iteration;
   bool initialized;
 
   public BaseAI(IntPtr c)
@@ -48,11 +48,11 @@ public abstract class BaseAI
     int count = 0;
 % for model in models:
 %   if model.type == 'Model':
-    count = Client.INSTANCE.get${model.name}Count(connection);
+    count = Client.get${model.name}Count(connection);
     ${lowercase(model.plural)} = new ${model.name}[count];
     for(int i = 0; i < count; i++)
     {
-      ${lowercase(model.plural)}[i] = new ${model.name}(Client.INSTANCE.get${model.name}(connection, i));
+      ${lowercase(model.plural)}[i] = new ${model.name}(Client.get${model.name}(connection, i));
     }
 %   endif
 % endfor
@@ -70,7 +70,7 @@ public abstract class BaseAI
   ///${datum.doc}
   ${conversions[datum.type]} ${datum.name}()
   {
-    return Client.INSTANCE.get${capitalize(datum.name)}(connection);
+    return Client.get${capitalize(datum.name)}(connection);
   }
 % endfor
 }

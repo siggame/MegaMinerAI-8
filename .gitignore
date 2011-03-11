@@ -6,10 +6,35 @@ codegen/output
 *.gamelog
 
 #Visual studio files don't go in the repository
-*.suo
-*.user
-*.ncb
+#Visual Studio files
+*.[Oo]bj
+[Bb]in
 [Dd]ebug*/
+[Rr]elease*/
+*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*.vssscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.[Cc]ache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+ipch/
+obj/
+Ankh.NoLoad
+
 
 #Windows thumbnail files don't go in the repository
 Thumbs.db

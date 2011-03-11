@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 
 
 ///${model.doc}
+public \
 % if model.type == 'virtual':
 abstract \
 % endif
@@ -12,23 +13,36 @@ class ${model.name}\
 % endif
 
 {
-  IntPtr ptr;
+  public IntPtr ptr;
   int ID;
   int iteration;
+  
+  public ${model.name}()
+  {
+      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
+  }
+  
   public ${model.name}(IntPtr p)
   {
     ptr = p;
-    ID = Client.INSTANCE.${lowercase(model.name)}GetId(ptr);
+    ID = Client.${lowercase(model.name)}GetId(ptr);
     iteration = BaseAI.iteration;
   }
 
+public \
 % if model.type == 'virtual':
-  abstract bool validify();
-% else:
-  bool validify()
+abstract \
+%endif
+% if model.parent:
+override \
+% endif
+% if model.type == 'virtual':
+bool validify();
+%else:
+bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.${lowercase(model.plural)}.length; i++)
+    for(int i = 0; i < BaseAI.${lowercase(model.plural)}.Length; i++)
     {
       if(BaseAI.${lowercase(model.plural)}[i].ID == ID)
       {
@@ -64,7 +78,7 @@ ${conversions[arg.type]} ${arg.name}\
     ${arg.name}.validify();
 %     endif
 %   endfor
-    return Client.INSTANCE.${lowercase(model.name)}${capitalize(func.name)}(ptr\
+    return Client.${lowercase(model.name)}${capitalize(func.name)}(ptr\
 %   for arg in func.arguments:
 , \
 %     if isinstance(arg.type, Model):
@@ -84,7 +98,7 @@ ${arg.name}\
   public ${conversions[datum.type]} get${capitalize(datum.name)}()
   {
     validify();
-    return Client.INSTANCE.${lowercase(model.name)}Get${capitalize(datum.name)}(ptr);
+    return Client.${lowercase(model.name)}Get${capitalize(datum.name)}(ptr);
   }
 % endfor
 
@@ -109,7 +123,7 @@ ${conversions[arg.type]} ${arg.name}\
 )
   {
     validify();
-    return Client.INSTANCE.${model.name.lower()}${capitalize(prop.name)}(ptr\
+    return Client.${model.name.lower()}${capitalize(prop.name)}(ptr\
 %   for arg in prop.arguments:
 %     if isinstance(arg.type, Model):
 , (_${arg.type.name}*) ${arg.name}.ptr\
