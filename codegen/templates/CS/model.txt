@@ -16,6 +16,12 @@ class ${model.name}\
   public IntPtr ptr;
   int ID;
   int iteration;
+  
+  public ${model.name}()
+  {
+      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
+  }
+  
   public ${model.name}(IntPtr p)
   {
     ptr = p;
