@@ -9,7 +9,7 @@
 #include <QLabel>
 
 #include "gameboardWidget.h"
-#include "parser.h"
+#include "../lib/parser/parser.h"
 #include "statsDialog.h"
 
 

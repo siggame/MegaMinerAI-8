@@ -31,7 +31,7 @@ class GameObject
 	protected:
 		/** @todo make timeline object for quicker accessing*/
 		//for easy access
-		typedef std::map < GOC_IDType /*id*/,GOComponent*/*value*/>
+		typedef std::map < GOC_IDType /*id*/,GOComponent* /*value*/>
 				ComponentTable_t;
 
 		unsigned int m_id;

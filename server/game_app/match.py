@@ -35,22 +35,83 @@ class Match(DefaultGameWorld):
     self.boardY = self.boardY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
-    self.startTiles()
+    self.startTilesAndPorts()
     self.startPirates(cfgUnits)
     self.startShips(cfgUnits)
-    self.startPorts()
     self.startTreasures()
   
-  def startTiles(self):
+  def startTilesAndPorts(self):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)]
-    
+    #open the map file for parsing
+    f = open('maps/map1.txt', 'r')
+    #text = [i.remove(' ').remove('\n') for i in f.readlines()]
+    encounteredP = 0
+    encountered1 = 0
+    encountered2 = 0
+    encountered3 = 0
     for y in range(0,self.boardY):
       for x in range(0,self.boardX):
-        randomTile = random.randint(0, 1)
-        if randomTile == 0:
-          self.addObject(Tile.make(self, x, y, 'w'))
-        else:
-          self.addObject(Tile.make(self, x, y, 'l'))
+        mapThing = f.read(1)
+        #mapThing = text[x][y]
+        if mapThing == ' ':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '\r':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '\n':
+        #if the next byte is a '.' which is water
+          mapThing = f.read(1)
+          
+        if mapThing == '.':
+        #if the next byte is a '.' which is water
+          map[x][y] = '.'
+        elif mapThing == 'X':
+        #if the next byte is a 'X' which is land
+          map[x][y] = 'X'
+        elif mapThing == 'P':
+        #if the next byte is a 'P' which is land with a player's port on top
+          map[x][y] = 'X'
+          if encounteredP == 1:
+            self.addObject(Port.make(self, x, y, 1))
+          else:
+            self.addObject(Port.make(self, x, y, 0))
+            encounteredP = 0
+        elif mapThing == '1':
+        #if the next byte is a '1' which is a neutral AI's 1st port with land below it
+          map[x][y] = 'X'
+          if encountered1 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered1 = 0
+        elif mapThing == '2':
+        #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
+          map[x][y] = 'X'
+          if encountered2 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered2 = 0
+        elif mapThing == '3':
+        #if the next byte is a '0' which is a neutral AI's 0th port with land below it
+          map[x][y] = 'X'
+          if encountered3 == 1:
+            self.addObject(Port.make(self, x, y, 3))
+          else:
+            self.addObject(Port.make(self, x, y, 2))
+            encountered3 = 0
+      
+    for y in range(0,self.boardY):
+      #print "\n",
+      for x in range(0,self.boardX):
+        #print x,
+        #print ",",
+        #print y,
+        #print (map[x][y]),
+        self.addObject(Tile.make(self, x, y, map[x][y]))
           
   def startPirates(self, cfg):
     for i in cfg.keys():
@@ -61,13 +122,6 @@ class Match(DefaultGameWorld):
     for i in cfg.keys():
       if "startship" in i.lower():
         self.addObject(Ship.make(self, cfg[i]["x"], cfg[i]["y"], cfg[i]["owner"]))
-        
-  def startPorts(self):
-    #temp code that makes a port for both players and a neutral port as well (-1)
-    self.addObject(Port.make(self, 2, 2, 0))
-    self.addObject(Port.make(self, 5, 5, -1))
-    self.addObject(Port.make(self, 8, 8, 1))
-    i = 0
     
   def startTreasures(self):
     #temp code that makes 2 treasures
@@ -165,27 +219,19 @@ class Match(DefaultGameWorld):
 
   @derefArgs(Unit, None, None)
   def move(self, object, x, y):
-    return object.move(x, y, )
+    return object.move(x, y)
 
   @derefArgs(Unit, None)
   def talk(self, object, message):
     return object.talk(message, )
 
-  @derefArgs(Pirate, None, None)
-  def move(self, object, x, y):
-    return object.move(x, y, )
-
-  @derefArgs(Pirate, None)
-  def talk(self, object, message):
-    return object.talk(message, )
-
   @derefArgs(Pirate, None)
   def pickupTreasure(self, object, amount):
-    return object.pickupTreasure(amount, )
+    return object.pickupTreasure(amount)
 
   @derefArgs(Pirate, None)
   def dropTreasure(self, object, amount):
-    return object.dropTreasure(amount, )
+    return object.dropTreasure(amount)
 
   @derefArgs(Pirate)
   def buildPort(self, object):
@@ -193,7 +239,7 @@ class Match(DefaultGameWorld):
 
   @derefArgs(Pirate, Unit)
   def attack(self, object, Target):
-    return object.attack(Target, )
+    return object.attack(Target)
 
   @derefArgs(Port)
   def createPirate(self, object):
@@ -203,17 +249,9 @@ class Match(DefaultGameWorld):
   def createShip(self, object):
     return object.createShip()
 
-  @derefArgs(Ship, None, None)
-  def move(self, object, x, y):
-    return object.move(x, y, )
-
-  @derefArgs(Ship, None)
-  def talk(self, object, message):
-    return object.talk(message, )
-
   @derefArgs(Ship, Unit)
   def attack(self, object, Target):
-    return object.attack(Target, )
+    return object.attack(Target)
 
 
   def sendIdent(self, players):
