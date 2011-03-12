@@ -13,9 +13,11 @@ class ${model.name}\
 % endif
 
 {
+% if not model.parent:
   public IntPtr ptr;
-  int ID;
-  int iteration;
+  protected int ID;
+  protected int iteration;
+%endif
   
   public ${model.name}()
   {
@@ -28,7 +30,7 @@ class ${model.name}\
     iteration = BaseAI.iteration;
   }
 
-public \
+  public \
 % if model.type == 'virtual':
 abstract \
 %endif
@@ -58,7 +60,11 @@ bool validify()
     
 % for func in model.functions:
   ///${func.doc}
-  int ${func.name}(\
+%   if model.parent and func in model.parent.functions:
+  public new int ${func.name}(\
+%   else:
+  public int ${func.name}(\
+%   endif
 %   for arg in func.arguments:
 %     if func.arguments[0] is not arg:
 , \
@@ -94,7 +100,11 @@ ${arg.name}\
     
 % for datum in model.data:
   ///${datum.doc}
-  public ${conversions[datum.type]} get${capitalize(datum.name)}()
+  public \
+%   if model.parent and datum in model.parent.data:
+new \
+%   endif
+${conversions[datum.type]} get${capitalize(datum.name)}()
   {
     validify();
     return Client.${lowercase(model.name)}Get${capitalize(datum.name)}(ptr);
