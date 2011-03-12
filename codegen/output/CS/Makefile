@@ -11,7 +11,7 @@ libclient.so: ../c/*.cpp ../c/*.h
 	cp -f ../c/libclient.so libclient.so
 
 client.exe: $(CSFILES) libclient.so
-	mcs -o client.exe  $(CSFILES)
+	mcs -out:client.exe  $(CSFILES)
 
 clean:
 	rm -f client.exe
