@@ -298,7 +298,7 @@ class Tile(Mappable):
     self.id = id
     self.x = x
     self.y = y
-    self.type = type #'w' for water, 'l' for land
+    self.type = type #1 for water, 0 for land
 
   def toList(self):
     value = [
@@ -313,7 +313,7 @@ class Tile(Mappable):
   def make(game, x, y, type):
     id = game.nextid
     game.nextid += 1
-    #'w' is water, 'l' is land
+    #1 is water, 0 is land
     return Tile(game, id, x, y, type)
   
   def nextTurn(self):

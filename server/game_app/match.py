@@ -43,6 +43,9 @@ class Match(DefaultGameWorld):
   
   def startMap(self):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)]
+    #map = [] 
+    #for i in range(self.boardX): 
+      #map.append([2] * self.boardY) 
     #open the map file for parsing
     f = open('maps/map1.txt', 'r')
     #text = [i.remove(' ').remove('\n') for i in f.readlines()]
@@ -56,26 +59,29 @@ class Match(DefaultGameWorld):
         mapThing = f.read(1)
         #mapThing = text[x][y]
         if mapThing == ' ':
-        #if the next byte is a '.' which is water
+        #if the next byte is a ' ', it is nothing so read the next character
           mapThing = f.read(1)
           
         if mapThing == '\r':
-        #if the next byte is a '.' which is water
+        #if the next byte is a '\r' (carrier return) it is nothing so read the next character
           mapThing = f.read(1)
           
         if mapThing == '\n':
-        #if the next byte is a '.' which is water
+        #if the next byte is a '\n' (newline) it is nothing so read the next character
           mapThing = f.read(1)
           
         if mapThing == '.':
         #if the next byte is a '.' which is water
-          map[x][y] = '.'
+          #map[x][y] = 1
+          self.addObject(Tile.make(self, x, y, 1))
         elif mapThing == 'X':
         #if the next byte is a 'X' which is land
-          map[x][y] = 'X'
+          #map[x][y] = 0
+          self.addObject(Tile.make(self, x, y, 0))
         elif mapThing == 'P':
         #if the next byte is a 'P' which is land with a player's port on top
-          map[x][y] = 'X'
+          #map[x][y] = 0
+          self.addObject(Tile.make(self, x, y, 0))
           if encounteredP == 1:
             self.addObject(Port.make(self, x, y, 1))
             
@@ -96,7 +102,8 @@ class Match(DefaultGameWorld):
               
         elif mapThing == '1':
         #if the next byte is a '1' which is a neutral AI's 1st port with land below it
-          map[x][y] = 'X'
+          #map[x][y] = 0
+          self.addObject(Tile.make(self, x, y, 0))
           if encountered1 == 1:
             self.addObject(Port.make(self, x, y, 3))
             
@@ -118,7 +125,8 @@ class Match(DefaultGameWorld):
             encountered1 = 0
         elif mapThing == '2':
         #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
-          map[x][y] = 'X'
+          #map[x][y] = 0
+          self.addObject(Tile.make(self, x, y, 0))
           if encountered2 == 1:
             self.addObject(Port.make(self, x, y, 3))
             
@@ -141,7 +149,8 @@ class Match(DefaultGameWorld):
             encountered2 = 0
         elif mapThing == '3':
         #if the next byte is a '0' which is a neutral AI's 0th port with land below it
-          map[x][y] = 'X'
+          #map[x][y] = 0
+          self.addObject(Tile.make(self, x, y, 0))
           if encountered3 == 1:
             self.addObject(Port.make(self, x, y, 3))
             
@@ -163,15 +172,11 @@ class Match(DefaultGameWorld):
             self.addObject(Port.make(self, x, y, 2))
             encountered3 = 0
       
-    for y in range(0,self.boardY):
+    #for y in range(0,self.boardY):
       #print "\n",
-      for x in range(0,self.boardX):
-        #print x,
-        #print ",",
-        #print y,
+      #for x in range(0,self.boardX):
         #print (map[x][y]),
-        self.addObject(Tile.make(self, x, y, map[x][y]))
-          
+        #self.addObject(Tile.make(self, x, y, map[x][y]))
   def startPirates(self, cfg):
     for i in cfg.keys():
       if "startpirate" in i.lower():
