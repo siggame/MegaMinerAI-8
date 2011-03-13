@@ -96,11 +96,11 @@ class Pirate(Unit):
     return value
 
   @staticmethod
-  def make(game, x, y, owner):
+  def make(game, x, y, owner, health, strength):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
-    return Pirate(game, id, x, y, owner, 1, 1, 0, 0)
+    return Pirate(game, id, x, y, owner, health, strength, 0, 0)
 
   def nextTurn(self):
     self.hasMoved = 0
@@ -271,11 +271,11 @@ class Ship(Unit):
     return value
     
   @staticmethod
-  def make(game, x, y, owner):
+  def make(game, x, y, owner, health, strength):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
-    return Ship(game, id, x, y, owner, 1, 1, 0, 0)
+    return Ship(game, id, x, y, owner, health, strength, 0, 0)
   
   def nextTurn(self):
     pass
