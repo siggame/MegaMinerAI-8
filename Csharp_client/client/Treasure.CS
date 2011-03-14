@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 ///A treasure
 public class Treasure: Mappable 
 {
-  public IntPtr ptr;
-  int ID;
-  int iteration;
   
   public Treasure()
   {
-      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
   }
   
   public Treasure(IntPtr p)
@@ -21,7 +17,7 @@ public class Treasure: Mappable
     iteration = BaseAI.iteration;
   }
 
-public override bool validify()
+  public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
     for(int i = 0; i < BaseAI.treasures.Length; i++)
@@ -42,19 +38,19 @@ public override bool validify()
     //getters
     
   ///Unique Identifier
-  public int getId()
+  public new int getId()
   {
     validify();
     return Client.treasureGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
-  public int getX()
+  public new int getX()
   {
     validify();
     return Client.treasureGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
-  public int getY()
+  public new int getY()
   {
     validify();
     return Client.treasureGetY(ptr);

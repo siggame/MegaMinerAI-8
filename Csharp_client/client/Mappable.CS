@@ -6,12 +6,11 @@ using System.Runtime.InteropServices;
 public abstract class Mappable
 {
   public IntPtr ptr;
-  int ID;
-  int iteration;
+  protected int ID;
+  protected int iteration;
   
   public Mappable()
   {
-      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
   }
   
   public Mappable(IntPtr p)
@@ -21,7 +20,7 @@ public abstract class Mappable
     iteration = BaseAI.iteration;
   }
 
-public abstract bool validify();
+  public abstract bool validify();
     
     //commands
     

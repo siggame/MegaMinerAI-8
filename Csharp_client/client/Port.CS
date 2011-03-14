@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 ///A generic port
 public class Port: Mappable 
 {
-  public IntPtr ptr;
-  int ID;
-  int iteration;
   
   public Port()
   {
-      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
   }
   
   public Port(IntPtr p)
@@ -21,7 +17,7 @@ public class Port: Mappable
     iteration = BaseAI.iteration;
   }
 
-public override bool validify()
+  public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
     for(int i = 0; i < BaseAI.ports.Length; i++)
@@ -39,13 +35,13 @@ public override bool validify()
     //commands
     
   ///Creates a Pirate at the calling Port
-  int createPirate()
+  public int createPirate()
   {
     validify();
     return Client.portCreatePirate(ptr);
   }
   ///Creates a Ship at the calling Port
-  int createShip()
+  public int createShip()
   {
     validify();
     return Client.portCreateShip(ptr);
@@ -54,19 +50,19 @@ public override bool validify()
     //getters
     
   ///Unique Identifier
-  public int getId()
+  public new int getId()
   {
     validify();
     return Client.portGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
-  public int getX()
+  public new int getX()
   {
     validify();
     return Client.portGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
-  public int getY()
+  public new int getY()
   {
     validify();
     return Client.portGetY(ptr);
