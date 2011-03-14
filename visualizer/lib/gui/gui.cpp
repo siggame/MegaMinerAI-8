@@ -84,15 +84,27 @@ bool GUI::isSetup()
 
   return get()->m_isSetup;
 }
-
-#include<iostream>
+#include <iostream>
 using namespace std;
+
+void GUI::resizeEvent( QResizeEvent* evt )
+{
+  QMainWindow::resizeEvent( evt );
+
+}
+
 bool GUI::doSetup()
 {
-  setWindowState( windowState() | Qt::WindowActive | Qt::WindowMaximized );
 
-  cout << isVisible() << endl;
+  m_centralWidget = new CentralWidget( this );
+  setCentralWidget( m_centralWidget );
+
+  setWindowState( 
+      windowState() 
+      | Qt::WindowActive 
+      | Qt::WindowMaximized 
+      );
+
   show();
-  cout << isVisible() << endl;
   return true;
 }

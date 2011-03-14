@@ -28,11 +28,16 @@ public:
 
   static bool isSetup();
 
+  void resizeEvent( QResizeEvent* evt );
+
 private slots:
 
 private:
   std::map<unsigned int, guiObj*> m_objects;
   bool m_isSetup;
+
+  CentralWidget *m_centralWidget;
+
 
   bool doSetup();
 };

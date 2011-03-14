@@ -11,6 +11,7 @@ public:
   RenderWidget( QWidget *parent );
   void initializeGL();
 
+  void resizeEvent( QResizeEvent *evt );
 
 };
 

@@ -31,7 +31,7 @@ class Renderer : public Singleton<Renderer>
 
 
 		static bool refresh();
-		static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth);
+		static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 10);
 
 		static unsigned int numObjects();
 

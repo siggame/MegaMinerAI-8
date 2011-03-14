@@ -18,7 +18,7 @@ unsigned int Renderer::numObjects()
   * @param depth the z depth of the render area. default 10
   * @return true if successful resize
   */
-bool Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 10)
+bool Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
 {
 	if (!isInit())
 		return false;
