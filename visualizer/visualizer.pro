@@ -22,7 +22,7 @@ SOURCES += *.cpp\
   ./lib/renderer/*.cpp\
   ./lib/gui/*.cpp
 
-
+MOC = moc
 
 HEADERS += *.h\
   ./lib/manager/*.h\
