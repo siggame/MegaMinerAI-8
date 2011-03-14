@@ -163,6 +163,9 @@ public:
 
   static bool isSetup();
 
+  /// EVENTS
+  void dragEnterEvent( QDragEnterEvent *evt );
+  void dropEvent( QDropEvent* evt );
   void resizeEvent( QResizeEvent* evt );
 
 private slots:

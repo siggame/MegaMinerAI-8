@@ -1,6 +1,11 @@
 #include "gui.h"
 #include <QDesktopServices>
 
+#include <iostream>
+#include <string>
+using namespace std;
+
+
 bool GUI::reg( const std::string& id, guiObj *obj )
 {
   if( !isInit() )
@@ -85,14 +90,28 @@ bool GUI::isSetup()
 
   return get()->m_isSetup;
 }
+void GUI::dragEnterEvent( QDragEnterEvent* evt )
+{
+  // We may want to filter what's dropped on the window at some point
+  evt->acceptProposedAction();
+}
+
+void GUI::dropEvent( QDropEvent* evt )
+{
+
+  evt->mimeData()->text();
+  string data = evt->mimeData()->text().toAscii().constData();
+  cout << data << endl;
+
+  // TODO: Open the gamelog with the appropriate plugins
+
+}
 
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );
 
 }
-#include <iostream>
-using namespace std;
 
 void GUI::helpContents()
 {
@@ -108,6 +127,8 @@ void GUI::helpContents()
 
 bool GUI::doSetup()
 {
+
+  setAcceptDrops( true );
 
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
