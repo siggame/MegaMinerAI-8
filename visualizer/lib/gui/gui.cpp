@@ -1,6 +1,6 @@
 #include "gui.h"
 
-bool GUI::reg( const unsigned int& id, guiObj *obj )
+bool GUI::reg( const std::string& id, guiObj *obj )
 {
   if( !isInit() )
     return false;
@@ -12,7 +12,7 @@ bool GUI::reg( const unsigned int& id, guiObj *obj )
   return true;
 }
 
-bool GUI::del( const unsigned int& id )
+bool GUI::del( const std::string& id )
 {
   if( !isInit() )
     return false;
@@ -41,7 +41,7 @@ bool GUI::clear()
   return true;
 }
 
-guiObj* GUI::getGUIObject( const unsigned int id )
+guiObj* GUI::getGUIObject( const std::string& id )
 {
   if( !isInit() )
     return NULL;

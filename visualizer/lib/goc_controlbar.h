@@ -3,9 +3,10 @@
 #ifndef GOC_CONTROLBAR_H
 #define GOC_CONTROLBAR_H
 
-#include "GOCFamily_ControlBar.h"
+#include "gocfamily_controlbar.h"
+#include <QWidget>
 
-class GOC_ControlBar : public GOCFamily_ControlBar
+class GOC_ControlBar : public GOCFamily_ControlBar, public QWidget
 {
 	public:
 		/** Default constructor */

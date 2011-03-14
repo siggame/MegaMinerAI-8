@@ -3,9 +3,8 @@
 #define GOCFAMILY_CONTROLBAR_H
 
 #include "gameobject/gocomponent.h"
-#include <QWidget>
 
-class GOCFamily_ControlBar : public GOComponent, public QWidget
+class GOCFamily_ControlBar : public GOComponent
 {
 	public:
 		/** Default constructor */

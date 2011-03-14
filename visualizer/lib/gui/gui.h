@@ -1,25 +1,26 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "centralwidget.h"
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
-#include "centralwidget.h"
 #include <QtGui>
 #include <QMainWindow>
 #include <map>
+#include <string>
 
 typedef GOCFamily_GUI guiObj;
 
 class GUI : public QMainWindow, public Singleton<GUI>
 {
 public:
-  static bool reg( const unsigned int& id, guiObj *obj );
-  static bool del( const unsigned int& id );
+  static bool reg( const std::string& id, guiObj *obj );
+  static bool del( const std::string& id );
 
   static bool setup();
   static bool clear();
 
-  static guiObj *getGUIObject( const unsigned int id );
+  static guiObj *getGUIObject( const std::string& id );
 
   static bool create();
   static bool destroy();
@@ -33,11 +34,10 @@ public:
 private slots:
 
 private:
-  std::map<unsigned int, guiObj*> m_objects;
+  std::map<std::string, guiObj*> m_objects;
   bool m_isSetup;
 
   CentralWidget *m_centralWidget;
-
 
   bool doSetup();
 };
