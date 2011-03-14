@@ -1,9 +1,11 @@
-INCLUDEPATH += ./parser \
-    ./parser/sexp
-win32:LIBS += ./parser/sexp/sexpXP.a
-else:LIBS += ./parser/sexp/sexp.a
+INCLUDEPATH += ./lib/parser \
+    ./lib/parser/sexp
+win32:LIBS += ./lib/parser/sexp/sexpXP.a
+else:LIBS += ./lib/parser/sexp/sexp.a
 
-LPATHS +=./lib/gameobject/\
+MOC_DIR = moc
+
+PPATHS +=./lib/gameobject/\
 		./lib/manager/\
 		./lib/mutex/\
 		./lib/threadler/\
@@ -14,13 +16,11 @@ LPATHS +=./lib/gameobject/\
 		./oldstuff/
 
 
-SOURCES += *.cpp\
-			$$LPATHS/*.cpp
-
-SOURCES -= moc_*.cpp
+SOURCES += *.cpp
 
 HEADERS += *.h\
-	*.hpp
+  $$PPATHS/*.h
+
 
 CONFIG += debug
 QT += opengl
