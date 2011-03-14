@@ -9,6 +9,7 @@ codegen/output
 #Visual Studio files
 *.[Oo]bj
 [Bb]in
+[Bb]in/
 [Dd]ebug*/
 [Rr]elease*/
 *.exe
