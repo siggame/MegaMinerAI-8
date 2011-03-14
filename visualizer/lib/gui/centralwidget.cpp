@@ -10,7 +10,18 @@ CentralWidget::CentralWidget( QWidget *parent )
 
   m_widgetLayout->addWidget( m_renderWidget );
   if( m_controlBarWidget )
+  {
+    if( 
+        optionsMan::isInit() && 
+        optionsMan::exists("maxControlHeight") 
+      )
+    {
+      m_controlBarWidget->setMaximumHeight( 
+          optionsMan::getInt( "maxControlHeight" )
+          );
+    }
     m_widgetLayout->addWidget( m_controlBarWidget );
+  }
   
   setLayout( m_widgetLayout );
 
