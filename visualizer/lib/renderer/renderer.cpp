@@ -146,6 +146,17 @@ bool Renderer::setup()
 		}
 	}
 
+  /// @TODO: Move this to the appropriate spot
+  glShadeModel( GL_SMOOTH );
+  glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+  glClearDepth( 1.0f );
+
+  glEnable( GL_DEPTH_TEST );
+  glDepthFunc( GL_LEQUAL );
+
+
+  glEnable( GL_TEXTURE_2D );
+
 
 	return true;
 }
