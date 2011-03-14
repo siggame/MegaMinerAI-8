@@ -1,6 +1,7 @@
 #ifndef GOCOMPONENT_H
 #define GOCOMPONENT_H
 
+#include <string>
 //to make changing the id type easy
 typedef std::string GOC_IDType ;
 class GameObject;

@@ -12,7 +12,8 @@ PPATHS +=./lib/gameobject/\
 		./lib/optionsmanager/\
 		./lib/renderer/\
 		./lib/timemanager/\
-		./lib/gameobject/
+		./lib/gameobject/\
+    ./lib/gui/
 
 
 SOURCES += *.cpp\
@@ -21,7 +22,7 @@ SOURCES += *.cpp\
   ./lib/threadler/*.cpp\
   ./lib/optionsmanager/*.cpp\
   ./lib/renderer/*.cpp\
-  ./lib/gameobject/*.cpp
+  ./lib/gui/*.cpp
 
 
 
