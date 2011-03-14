@@ -12,15 +12,22 @@ PPATHS +=./lib/gameobject/\
 		./lib/optionsmanager/\
 		./lib/renderer/\
 		./lib/timemanager/\
-		./lib/gameobject/\
-		./oldstuff/
+		./lib/gameobject/
 
 
-SOURCES += *.cpp
+SOURCES += *.cpp\
+  ./lib/gameobject/*.cpp\
+  ./lib/mutex/*.cpp\
+  ./lib/threadler/*.cpp\
+  ./lib/optionsmanager/*.cpp\
+  ./lib/renderer/*.cpp\
+  ./lib/gameobject/*.cpp
+
+
 
 HEADERS += *.h\
-  $$PPATHS/*.h
-
+  ./lib/manager/*.h\
+  ./lib/timemanager/*.h
 
 CONFIG += debug
 QT += opengl
