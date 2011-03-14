@@ -1,10 +1,6 @@
 #include "gui.h"
 #include <QDesktopServices>
 
-GUI::GUI()
-{
-}
-
 bool GUI::reg( const std::string& id, guiObj *obj )
 {
   if( !isInit() )
@@ -100,7 +96,14 @@ using namespace std;
 
 void GUI::helpContents()
 {
-  QDesktopServices::openUrl( QUrl( "http://megaminerai.com" ) );
+  if( optionsMan::isInit() &&
+      optionsMan::exists( "helpURL" ) )
+  {
+    QDesktopServices::openUrl( QUrl( optionsMan::getStr( "helpURL" ).c_str() ) );
+  } else
+  {
+    QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
+  }
 }
 
 bool GUI::doSetup()
