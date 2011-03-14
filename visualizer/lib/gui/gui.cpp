@@ -1,4 +1,9 @@
 #include "gui.h"
+#include <QDesktopServices>
+
+GUI::GUI()
+{
+}
 
 bool GUI::reg( const std::string& id, guiObj *obj )
 {
@@ -84,13 +89,18 @@ bool GUI::isSetup()
 
   return get()->m_isSetup;
 }
-#include <iostream>
-using namespace std;
 
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );
 
+}
+#include <iostream>
+using namespace std;
+
+void GUI::helpContents()
+{
+  QDesktopServices::openUrl( QUrl( "http://megaminerai.com" ) );
 }
 
 bool GUI::doSetup()
@@ -98,6 +108,8 @@ bool GUI::doSetup()
 
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
+  createActions();
+  createMenus();
 
   setWindowState( 
       windowState() 
@@ -107,4 +119,31 @@ bool GUI::doSetup()
 
   show();
   return true;
+}
+
+void GUI::createActions()
+{
+  m_helpContents = new QAction( tr( "&Contents" ), this );
+  m_helpContents->setShortcut( tr( "F1" ) );
+  m_helpContents->setStatusTip( 
+      tr( "Open Online Help For This Game" ) 
+      );
+
+  connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
+
+
+}
+
+void GUI::createMenus()
+{
+  QMenu *menu;
+  menu = menuBar()->addMenu( tr( "&File" ) );
+
+  menu = menuBar()->addMenu( tr( "&Edit" ) );
+
+  menu = menuBar()->addMenu( tr( "&View" ) );
+
+  menu = menuBar()->addMenu( tr( "&Help" ) );
+  menu->addAction( m_helpContents );
+  
 }

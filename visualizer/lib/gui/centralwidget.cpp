@@ -1,5 +1,6 @@
 #include "centralwidget.h"
 #include "gui.h"
+#include <QLabel>
 
 CentralWidget::CentralWidget( QWidget *parent )
 {

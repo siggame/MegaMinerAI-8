@@ -3,8 +3,6 @@ INCLUDEPATH += ./lib/parser \
 win32:LIBS += ./lib/parser/sexp/sexpXP.a
 else:LIBS += ./lib/parser/sexp/sexp.a
 
-MOC_DIR = moc
-
 PPATHS +=./lib/gameobject/\
 		./lib/manager/\
 		./lib/mutex/\
@@ -28,7 +26,14 @@ SOURCES += *.cpp\
 
 HEADERS += *.h\
   ./lib/manager/*.h\
-  ./lib/timemanager/*.h
+  ./lib/timemanager/*.h\
+  ./lib/gameobject/*.h\
+  ./lib/mutex/*.h\
+  ./lib/threadler/*.h\
+  ./lib/optionsmanager/*.h\
+  ./lib/renderer/*.h\
+  ./lib/gui/*.h
+
 
 CONFIG += debug
 QT += opengl

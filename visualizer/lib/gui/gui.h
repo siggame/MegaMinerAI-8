@@ -13,7 +13,9 @@ typedef GOCFamily_GUI guiObj;
 
 class GUI : public QMainWindow, public Singleton<GUI>
 {
+  Q_OBJECT
 public:
+  GUI();
   static bool reg( const std::string& id, guiObj *obj );
   static bool del( const std::string& id );
 
@@ -32,6 +34,7 @@ public:
   void resizeEvent( QResizeEvent* evt );
 
 private slots:
+  void helpContents();
 
 private:
   std::map<std::string, guiObj*> m_objects;
@@ -40,6 +43,11 @@ private:
   CentralWidget *m_centralWidget;
 
   bool doSetup();
+  void createActions();
+  void createMenus();
+
+  // Actions
+  QAction *m_helpContents;
 };
 
 #endif
