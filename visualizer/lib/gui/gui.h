@@ -3,7 +3,7 @@
 
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
-#include "renderwidget.h"
+#include "centralwidget.h"
 #include <QtGui>
 #include <QMainWindow>
 #include <map>
