@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 ///Generic Unit
 public abstract class Unit: Mappable 
 {
-  public IntPtr ptr;
-  int ID;
-  int iteration;
   
   public Unit()
   {
-      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
   }
   
   public Unit(IntPtr p)
@@ -21,24 +17,24 @@ public abstract class Unit: Mappable
     iteration = BaseAI.iteration;
   }
 
-public abstract override bool validify();
+  public abstract override bool validify();
     
     //commands
     
   ///Move the unit to the designated X and Y coordinates
-  int move(int x, int y)
+  public int move(int x, int y)
   {
     validify();
     return Client.unitMove(ptr, x, y);
   }
   ///Allows a unit to display a message to the screen.
-  int talk(string message)
+  public int talk(string message)
   {
     validify();
     return Client.unitTalk(ptr, message);
   }
   ///Attempt to attack the given unit
-  int attack(Unit Target)
+  public int attack(Unit Target)
   {
     validify();
     Target.validify();
@@ -48,19 +44,19 @@ public abstract override bool validify();
     //getters
     
   ///Unique Identifier
-  public int getId()
+  public new int getId()
   {
     validify();
     return Client.unitGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
-  public int getX()
+  public new int getX()
   {
     validify();
     return Client.unitGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
-  public int getY()
+  public new int getY()
   {
     validify();
     return Client.unitGetY(ptr);

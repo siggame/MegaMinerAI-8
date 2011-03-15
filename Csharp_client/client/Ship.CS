@@ -5,13 +5,9 @@ using System.Runtime.InteropServices;
 ///A generic ship
 public class Ship: Unit 
 {
-  public IntPtr ptr;
-  int ID;
-  int iteration;
   
   public Ship()
   {
-      throw new System.ArgumentException("Default constructor is required by C# but not appropriate for use in this context.");
   }
   
   public Ship(IntPtr p)
@@ -21,7 +17,7 @@ public class Ship: Unit
     iteration = BaseAI.iteration;
   }
 
-public override bool validify()
+  public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
     for(int i = 0; i < BaseAI.ships.Length; i++)
@@ -39,19 +35,19 @@ public override bool validify()
     //commands
     
   ///Move the unit to the designated X and Y coordinates
-  int move(int x, int y)
+  public new int move(int x, int y)
   {
     validify();
     return Client.shipMove(ptr, x, y);
   }
   ///Allows a unit to display a message to the screen.
-  int talk(string message)
+  public new int talk(string message)
   {
     validify();
     return Client.shipTalk(ptr, message);
   }
   ///Attempt to attack the given unit
-  int attack(Unit Target)
+  public new int attack(Unit Target)
   {
     validify();
     Target.validify();
@@ -61,49 +57,49 @@ public override bool validify()
     //getters
     
   ///Unique Identifier
-  public int getId()
+  public new int getId()
   {
     validify();
     return Client.shipGetId(ptr);
   }
   ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
-  public int getX()
+  public new int getX()
   {
     validify();
     return Client.shipGetX(ptr);
   }
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
-  public int getY()
+  public new int getY()
   {
     validify();
     return Client.shipGetY(ptr);
   }
   ///The owner of the unit
-  public int getOwner()
+  public new int getOwner()
   {
     validify();
     return Client.shipGetOwner(ptr);
   }
   ///health of the unit
-  public int getHealth()
+  public new int getHealth()
   {
     validify();
     return Client.shipGetHealth(ptr);
   }
   ///attacking strength of the unit
-  public int getStrength()
+  public new int getStrength()
   {
     validify();
     return Client.shipGetStrength(ptr);
   }
   ///checks if the unit has moved this turn
-  public int getHasMoved()
+  public new int getHasMoved()
   {
     validify();
     return Client.shipGetHasMoved(ptr);
   }
   ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  public new int getHasAttacked()
   {
     validify();
     return Client.shipGetHasAttacked(ptr);
