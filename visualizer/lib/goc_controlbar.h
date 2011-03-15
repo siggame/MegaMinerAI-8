@@ -4,9 +4,8 @@
 #define GOC_CONTROLBAR_H
 
 #include "gocfamily_controlbar.h"
-#include <QWidget>
 
-class GOC_ControlBar : public GOCFamily_ControlBar, public QWidget
+class GOC_ControlBar : public GOCFamily_ControlBar
 {
 	public:
 		/** Default constructor */

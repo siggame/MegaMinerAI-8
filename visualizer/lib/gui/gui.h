@@ -6,6 +6,7 @@
 #include "../gocfamily_gui.h"
 #include <QtGui>
 #include <QMainWindow>
+#include <QTextEdit>
 #include <map>
 #include <string>
 
@@ -148,6 +149,7 @@ class GUI : public QMainWindow, public Singleton<GUI>
 {
   Q_OBJECT
 public:
+  ~GUI();
   static bool reg( const std::string& id, guiObj *obj );
   static bool del( const std::string& id );
 
@@ -180,9 +182,25 @@ private:
   /// Main widget for this window
   CentralWidget *m_centralWidget; 
 
+  /// Dock Widget For Debugging Info
+  QDockWidget *m_dockWidget;
+
+  /// Frame used to hold layout for widgets in dock
+  QFrame *m_dockLayoutFrame; 
+
+  /// Layout For the Dock Widget
+  QHBoxLayout *m_dockLayout;
+
+  /// Console Area
+  QTextEdit *m_consoleArea;
+
+  /// Debugging Toolset Widget Within the Dock
+  GOCFamily_GUIToolSet *m_toolSetWidget;
+
   bool doSetup();
   void createActions();
   void createMenus();
+  void buildToolSet();
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

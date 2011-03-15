@@ -3,17 +3,25 @@
 
 #include <QWidget>
 #include "renderwidget.h"
-#include "../goc_controlbar.h"
+#include "../gocfamily_controlbar.h"
+#include "../gocfamily_guitoolset.h"
 
 class CentralWidget: public QWidget
 {
 public:
   CentralWidget( QWidget *parent = 0 );
+  ~CentralWidget();
 
 private:
-  GOC_ControlBar *m_controlBarWidget;
+  // Important Widgets
+  GOCFamily_ControlBar *m_controlBarWidget;
   RenderWidget *m_renderWidget;
+
+  // Layout Widgets
   QVBoxLayout *m_widgetLayout;
+
+  // Build the Control Bar Widget at the Bottom
+  void buildControlBar();
 
 };
 

@@ -37,6 +37,7 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
 	get()->m_height = _height;
 	get()->m_width = width;
 	get()->m_depth = depth;
+  refresh();
 	return true;
 }
 
@@ -50,6 +51,8 @@ bool Renderer::refresh()
 		return false;
 	if (!isSetup())
 		return false;
+
+  glClear( GL_COLOR_BUFFER_BIT );
 
 	/** @todo change this to the proper accessors */
 	//get time (turn, frame)
@@ -156,9 +159,11 @@ bool Renderer::setup()
 
 
   glEnable( GL_TEXTURE_2D );
+  get()->m_isSetup = true;
 
 
-	return true;
+  refresh();
+	return get()->m_isSetup;
 }
 
 /** @brief del
