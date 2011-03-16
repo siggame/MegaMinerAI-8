@@ -9,6 +9,10 @@ RenderWidget::RenderWidget( QWidget *parent )
 
 }
 
+RenderWidget::~RenderWidget()
+{
+}
+
 void RenderWidget::initializeGL()
 {
 
