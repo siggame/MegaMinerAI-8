@@ -14,7 +14,7 @@ PPATHS +=./lib/gameobject/\
     ./lib/gui/
 
 
-SOURCES += *.cpp\
+SOURCES += main.cpp\
   ./lib/gameobject/*.cpp\
   ./lib/mutex/*.cpp\
   ./lib/threadler/*.cpp\
