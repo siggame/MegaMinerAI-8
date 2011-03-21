@@ -174,7 +174,8 @@ class Pirate(Unit):
     return True
 
   def talk(self, message):
-    pass
+    self.game.animations.append(['talk', self.id, message])
+    return True
 
 
   def pickupTreasure(self, amount):
@@ -225,8 +226,49 @@ class Pirate(Unit):
     pass
 
   def attack(self, Target):
-    pass
-
+    if isinstance(Target,Unit) and self.hasAttacked is 0 and (abs(self.x - Target.x)+abs(self.y  - Target.y) <= 1):
+      Target.health -= self.strength
+      self.hasAttacked = 1
+      #Optional Ally Pirate Auto Kill
+      if isinstance(Target,Pirate) and Target.owner is self.owner:
+        target.health = 0
+      
+      #if they die
+      if Target.health <= 0:
+        #picks up their money if they were a pirate
+        if isinstance(Target,Pirate):
+          iHasTreasure = False
+          for i in self.game.objects.values():
+            if isinstance(i,Treasure):
+              if i.pirateID is Target.id:
+                #If the dead pirate had treasure, it is added to the attacking pirates treasure if they had treasure or given to the attacking pirate if they did not
+                for j in self.game.objects.values():
+                  if isinstance(j,Treasure):
+                    if j.pirateID is self.id:
+                      j.amount += i.amount
+                      i.amount = 0
+                      self.game.removeObject(i)
+                      iHasTreasure = True
+                if not iHasTreasure:
+                  i.pirateId = self.id
+                  i.x = self.x
+                  i.y = self.y
+          self.game.removeObject(Target)
+        #kills all pirates and Treasure on the ship if it was a ship
+        if isinstance(Target,Ship):
+          for i in self.game.objects.values():
+            if i.x is Target.x and i.y is Target.y:
+              self.game.removeObject(i)
+      return True
+    else:
+      if self.hasAttacked is not 0:
+        return "That unit has already attacked"
+      else if abs(self.x - Target.x)+abs(self.y  - Target.y) >= 1:
+        return "That Target is out of range"
+      else:
+        return "You can't attack that target"
+      
+        
 
 
 class Port(Mappable):
