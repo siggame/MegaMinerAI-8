@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -6,7 +5,6 @@ import networking.config.config
 from collections import defaultdict
 from networking.sexpr.sexpr import *
 import os
-import random
 import itertools
 import scribe
 
@@ -30,17 +28,11 @@ class Match(DefaultGameWorld):
     self.turnNumber = -1
     self.playerID = -1
     self.gameNumber = id
-    self.player0Gold = 0
-    self.player1Gold = 0
-    self.player0Time = self.startTime
-    self.player1Time = self.startTime
-    self.boardX = self.mapX
-    self.boardY = self.mapY
     
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
     self.startMap(cfgUnits)
     self.startTreasures()
-  
+    
   def startMap(self, cfgUnits):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)] 
     #open the map file for parsing
@@ -56,10 +48,16 @@ class Match(DefaultGameWorld):
     PirateHealth = 1
     PirateStrength = 1
     PirateSteps = 1
+    PirateCost = 1
     
     ShipsHealth = 1
     ShipsStength = 1
     ShipsSteps = 1
+    ShipCost = 1
+    
+    #creates the players data
+    for i in self.players:
+      Player.make(self,i.screenName,self.playersStartingGold,self.startTime)
     
     #now we actually parse the units.cfg file
     for i in cfgUnits.keys():
@@ -67,10 +65,12 @@ class Match(DefaultGameWorld):
         PirateHealth = cfgUnits[i]["health"]
         PirateStrength = cfgUnits[i]["strength"]
         PirateSteps = cfgUnits[i]["steps"]
+        PirateCost = cfgUnits[i]["cost"]
       elif "ship" in i.lower():
         ShipHealth = cfgUnits[i]["health"]
         ShipStrength = cfgUnits[i]["strength"]
         ShipSteps = cfgUnits[i]["steps"]
+        ShipCost = cfgUnits[i]["cost"]
     
     #this is where is parses through the map file and does tons of things!
     for y in range(0,self.boardY):
@@ -202,7 +202,7 @@ class Match(DefaultGameWorld):
     #temp code that makes 2 treasures
     self.addObject(Treasure.make(self, 2, 8, -1, 100))
     self.addObject(Treasure.make(self, 8, 2, -1, 100))
-          
+
   def addPlayer(self, connection, type="player"):
     connection.type = type
     if len(self.players) >= 2 and type == "player":
@@ -234,11 +234,11 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
 
     self.turnNumber = -1
-
+    
     self.sendIdent(self.players + self.spectators)
 
     self.turn = self.players[1]
-    
+
     self.nextTurn()
     return True
 
@@ -294,27 +294,27 @@ class Match(DefaultGameWorld):
 
   @derefArgs(Unit, None, None)
   def move(self, object, x, y):
-    return object.move(x, y)
+    return object.move(x, y, )
 
   @derefArgs(Unit, None)
   def talk(self, object, message):
     return object.talk(message, )
 
+  @derefArgs(Unit, Unit)
+  def attack(self, object, Target):
+    return object.attack(Target, )
+
   @derefArgs(Pirate, None)
   def pickupTreasure(self, object, amount):
-    return object.pickupTreasure(amount)
+    return object.pickupTreasure(amount, )
 
   @derefArgs(Pirate, None)
   def dropTreasure(self, object, amount):
-    return object.dropTreasure(amount)
+    return object.dropTreasure(amount, )
 
   @derefArgs(Pirate)
   def buildPort(self, object):
     return object.buildPort()
-
-  @derefArgs(Pirate, Unit)
-  def attack(self, object, Target):
-    return object.attack(Target)
 
   @derefArgs(Port)
   def createPirate(self, object):
@@ -323,10 +323,6 @@ class Match(DefaultGameWorld):
   @derefArgs(Port)
   def createShip(self, object):
     return object.createShip()
-
-  @derefArgs(Ship, Unit)
-  def attack(self, object, Target):
-    return object.attack(Target)
 
 
   def sendIdent(self, players):
@@ -355,14 +351,14 @@ class Match(DefaultGameWorld):
   def status(self):
     msg = ["status"]
 
-    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.player0Time, self.player1Time])
+    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber])
 
     typeLists = []
     typeLists.append(["Pirate"] + [i.toList() for i in self.objects.values() if i.__class__ is Pirate])
+    typeLists.append(["Player"] + [i.toList() for i in self.objects.values() if i.__class__ is Player])
     typeLists.append(["Port"] + [i.toList() for i in self.objects.values() if i.__class__ is Port])
     typeLists.append(["Ship"] + [i.toList() for i in self.objects.values() if i.__class__ is Ship])
-    if self.turnNumber < 2:
-      typeLists.append(["Tile"] + [i.toList() for i in self.objects.values() if i.__class__ is Tile])
+    typeLists.append(["Tile"] + [i.toList() for i in self.objects.values() if i.__class__ is Tile])
     typeLists.append(["Treasure"] + [i.toList() for i in self.objects.values() if i.__class__ is Treasure])
 
     msg.extend(typeLists)

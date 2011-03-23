@@ -16,6 +16,8 @@ class Mappable:
   def nextTurn(self):
     pass
 
+
+
 class Unit(Mappable):
   def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
     self.game = game
@@ -52,7 +54,10 @@ class Unit(Mappable):
     self.game.animations.append(['talk', self.id, message])
     return true
 
-  def _distance(self, x, y):
+  def attack(self, Target):
+    pass
+  
+    def _distance(self, x, y):
     distance = 0
     if self.x > x:
       distance += self.x - x
@@ -68,6 +73,8 @@ class Unit(Mappable):
     self.health -= damage
     if self.health < 1 and self.id in self.game.objects:
       self.game.removeObject(self)
+
+
 
 class Pirate(Unit):
   def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
@@ -176,7 +183,6 @@ class Pirate(Unit):
   def talk(self, message):
     self.game.animations.append(['talk', self.id, message])
     return True
-
 
   def pickupTreasure(self, amount):
     for i in self.game.objects.values():
@@ -291,8 +297,36 @@ class Pirate(Unit):
         return "That Target is out of range"
       else:
         return "You can't attack that target"
-      
-        
+
+
+
+
+class Player:
+  def __init__(self, game, id, playerName, gold, time):
+    self.game = game
+    self.id = id
+    self.playerName = playerName
+    self.gold = gold
+    self.time = time
+
+  def toList(self):
+    value = [
+      self.id,
+      self.playerName,
+      self.gold,
+      self.time,
+      ]
+    return value
+
+  def nextTurn(self):
+    pass
+  
+  @staticmethod
+  def make(game, playerName, gold, time):
+    id = game.nextid
+    game.nextid += 1
+    return Port(game, id, x, y, owner)
+
 
 
 class Port(Mappable):
@@ -356,7 +390,6 @@ class Ship(Unit):
     self.hasMoved = hasMoved
     self.hasAttacked = hasAttacked
 
-
   def toList(self):
     value = [
       self.id,
@@ -369,20 +402,19 @@ class Ship(Unit):
       self.hasAttacked,
       ]
     return value
-    
+
   @staticmethod
   def make(game, x, y, owner, health, strength):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
     return Ship(game, id, x, y, owner, health, strength, 0, 0)
-  
+
   def nextTurn(self):
     pass
 
   def move(self, x, y):
-    return True
-    
+    pass
 
   def talk(self, message):
     pass
@@ -398,7 +430,7 @@ class Tile(Mappable):
     self.id = id
     self.x = x
     self.y = y
-    self.type = type #1 for water, 0 for land
+    self.type = type
 
   def toList(self):
     value = [
@@ -408,7 +440,7 @@ class Tile(Mappable):
       self.type,
       ]
     return value
-  
+
   def _distance(self, x, y):
     distance = 0
     if self.x > x:
@@ -440,7 +472,7 @@ class Treasure(Mappable):
     self.x = x
     self.y = y
     self.pirateID = pirateID
-    self.amount = amount 
+    self.amount = amount
 
   def toList(self):
     value = [
@@ -451,7 +483,7 @@ class Treasure(Mappable):
       self.amount,
       ]
     return value
-  
+
   @staticmethod
   def make(game, x, y, pirateID, amount):
     id = game.nextid
@@ -460,3 +492,6 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     pass
+
+
+
