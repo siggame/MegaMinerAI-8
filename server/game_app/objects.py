@@ -16,6 +16,8 @@ class Mappable:
   def nextTurn(self):
     pass
 
+
+
 class Unit(Mappable):
   def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
     self.game = game
@@ -52,7 +54,10 @@ class Unit(Mappable):
     self.game.animations.append(['talk', self.id, message])
     return true
 
-  def _distance(self, x, y):
+  def attack(self, Target):
+    pass
+  
+    def _distance(self, x, y):
     distance = 0
     if self.x > x:
       distance += self.x - x
@@ -68,6 +73,8 @@ class Unit(Mappable):
     self.health -= damage
     if self.health < 1 and self.id in self.game.objects:
       self.game.removeObject(self)
+
+
 
 class Pirate(Unit):
   def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
@@ -210,8 +217,8 @@ class Pirate(Unit):
     return True
 
   def talk(self, message):
-    pass
-
+    self.game.animations.append(['talk', self.id, message])
+    return True
 
   def pickupTreasure(self, amount):
     for i in self.game.objects.values():
@@ -306,23 +313,77 @@ class Pirate(Unit):
   #TODO: Test and review this logic
 
   def attack(self, Target):
-    #Make sure you own the attacking unit
-    if self.owner != self.game.playerID:
-      return "This be not yarr ship, ye swine!"
-     
-    #Checks to see that the target is in range     
-    if self._distance(Target.x,Target.y) > 1:
-      return "That target is not in your range"      
+    if isinstance(Target,Unit) and self.hasAttacked is 0 and (abs(self.x - Target.x)+abs(self.y  - Target.y) <= 1):
+      Target.health -= self.strength
+      self.hasAttacked = 1
+      #Optional Ally Pirate Auto Kill
+      if isinstance(Target,Pirate) and Target.owner is self.owner:
+        target.health = 0
       
-    #Makes sure the opponent's type is ship
-    if isinstance(Target,Pirate) == false:
-      return "You may only attack pirates with your pirates"
-      
-    #Meets all conditions for attack
-    self.hasAttacked += 1    
-    Target.takeDamage(self)
-    return True
-    
+      #if they die
+      if Target.health <= 0:
+        #picks up their money if they were a pirate
+        if isinstance(Target,Pirate):
+          iHasTreasure = False
+          for i in self.game.objects.values():
+            if isinstance(i,Treasure):
+              if i.pirateID is Target.id:
+                #If the dead pirate had treasure, it is added to the attacking pirates treasure if they had treasure or given to the attacking pirate if they did not
+                for j in self.game.objects.values():
+                  if isinstance(j,Treasure):
+                    if j.pirateID is self.id:
+                      j.amount += i.amount
+                      i.amount = 0
+                      self.game.removeObject(i)
+                      iHasTreasure = True
+                if not iHasTreasure:
+                  i.pirateId = self.id
+                  i.x = self.x
+                  i.y = self.y
+          self.game.removeObject(Target)
+        #kills all pirates and Treasure on the ship if it was a ship
+        if isinstance(Target,Ship):
+          for i in self.game.objects.values():
+            if i.x is Target.x and i.y is Target.y:
+              self.game.removeObject(i)
+      return True
+    else:
+      if self.hasAttacked is not 0:
+        return "That unit has already attacked"
+      else if abs(self.x - Target.x)+abs(self.y  - Target.y) >= 1:
+        return "That Target is out of range"
+      else:
+        return "You can't attack that target"
+
+
+
+
+class Player:
+  def __init__(self, game, id, playerName, gold, time):
+    self.game = game
+    self.id = id
+    self.playerName = playerName
+    self.gold = gold
+    self.time = time
+
+  def toList(self):
+    value = [
+      self.id,
+      self.playerName,
+      self.gold,
+      self.time,
+      ]
+    return value
+
+  def nextTurn(self):
+    pass
+  
+  @staticmethod
+  def make(game, playerName, gold, time):
+    id = game.nextid
+    game.nextid += 1
+    return Port(game, id, x, y, owner)
+
 class Port(Mappable):
   def __init__(self, game, id, x, y, owner):
     self.game = game
@@ -405,7 +466,6 @@ class Ship(Unit):
     self.hasMoved = hasMoved
     self.hasAttacked = hasAttacked
 
-
   def toList(self):
     value = [
       self.id,
@@ -418,18 +478,19 @@ class Ship(Unit):
       self.hasAttacked,
       ]
     return value
-    
+
   @staticmethod
   def make(game, x, y, owner, health, strength):
     id = game.nextid
     game.nextid += 1
     # Placeholder for health and strength as 1, 1 respectively
     return Ship(game, id, x, y, owner, health, strength, 0, 0)
-  
+
   def nextTurn(self):
     pass
 
   def move(self, x, y):
+<<<<<<< HEAD
     #Check the owner of the ship before moving
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
@@ -463,7 +524,7 @@ class Ship(Unit):
     for i in self.game.objects.values():
       if isinstance(i,Unit):
         if i.x == x and i.y == y:
-          return "There is already a unit at that location"  
+          return "There is already a unit at that location" 
 
     #Ship has passed all checks and it ready to move
     self.hasMoved += 1
@@ -519,7 +580,7 @@ class Tile(Mappable):
     self.id = id
     self.x = x
     self.y = y
-    self.type = type #1 for water, 0 for land
+    self.type = type
 
   def toList(self):
     value = [
@@ -529,7 +590,7 @@ class Tile(Mappable):
       self.type,
       ]
     return value
-  
+
   def _distance(self, x, y):
     distance = 0
     if self.x > x:
@@ -561,7 +622,7 @@ class Treasure(Mappable):
     self.x = x
     self.y = y
     self.pirateID = pirateID
-    self.amount = amount 
+    self.amount = amount
 
   def toList(self):
     value = [
@@ -572,7 +633,7 @@ class Treasure(Mappable):
       self.amount,
       ]
     return value
-  
+
   @staticmethod
   def make(game, x, y, pirateID, amount):
     id = game.nextid
@@ -581,3 +642,6 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     pass
+
+
+

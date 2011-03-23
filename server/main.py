@@ -128,22 +128,12 @@ class GameApp(AccountsAppMixin, BaseApp):
   @protocolmethod
   @errorBuffer
   @requireTurn
-  @requireTypes(None, int, int, int)
-  def gameMove(self, pirate, x, y):
-    """Move the unit to the designated X and Y coordinates"""
+  @requireTypes(None, int, int)
+  def gameAttack(self, unit, Target):
+    """Attempt to attack the given unit"""
     if self.game.turn is not self:
       return "Not your turn."
-    return self.game.move(pirate, x, y)
-
-  @protocolmethod
-  @errorBuffer
-  @requireTurn
-  @requireTypes(None, int, str)
-  def gameTalk(self, pirate, message):
-    """Allows a unit to display a message to the screen."""
-    if self.game.turn is not self:
-      return "Not your turn."
-    return self.game.talk(pirate, message)
+    return self.game.attack(unit, Target)
 
   @protocolmethod
   @errorBuffer
@@ -168,12 +158,12 @@ class GameApp(AccountsAppMixin, BaseApp):
   @protocolmethod
   @errorBuffer
   @requireTurn
-  @requireTypes(None, int, int)
-  def gameAttack(self, pirate, Target):
-    """Attempt to attack the given unit"""
+  @requireTypes(None, int)
+  def gameBuildPort(self, pirate):
+    """Pirate builds a port on a land tile with water tile adjacent"""
     if self.game.turn is not self:
       return "Not your turn."
-    return self.game.attack(pirate, Target)
+    return self.game.buildPort(pirate)
 
   @protocolmethod
   @errorBuffer
@@ -194,36 +184,6 @@ class GameApp(AccountsAppMixin, BaseApp):
     if self.game.turn is not self:
       return "Not your turn."
     return self.game.createShip(port)
-
-  @protocolmethod
-  @errorBuffer
-  @requireTurn
-  @requireTypes(None, int, int, int)
-  def gameMove(self, ship, x, y):
-    """Move the unit to the designated X and Y coordinates"""
-    if self.game.turn is not self:
-      return "Not your turn."
-    return self.game.move(ship, x, y)
-
-  @protocolmethod
-  @errorBuffer
-  @requireTurn
-  @requireTypes(None, int, str)
-  def gameTalk(self, ship, message):
-    """Allows a unit to display a message to the screen."""
-    if self.game.turn is not self:
-      return "Not your turn."
-    return self.game.talk(ship, message)
-
-  @protocolmethod
-  @errorBuffer
-  @requireTurn
-  @requireTypes(None, int, int)
-  def gameAttack(self, Target):
-    """Attempt to attack the given unit"""
-    if self.game.turn is not self:
-      return "Not your turn."
-    return self.game.attack(ship, Target)
 
 
   @protocolmethod
