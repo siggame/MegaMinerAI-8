@@ -205,10 +205,14 @@ class Pirate(Unit):
             for j in self.game.objects.values():
               if isinstance(j,Port):
                 if i.x == j.x and i.y == j.y:
-                  self.game.removeObject(self.game.objects[i])
-                  return True      
+                  if self.owner == 0:
+                    self.game.player0Gold += i.amount
+                  else:
+                    self.game.player1Gold += i.amount
+                    self.game.removeObject(self.game.objects[i])
+                  return True
                   #TODO: Increases a players total gold amount by i.amount
-            i.pirateID = -1    
+            i.pirateID = -1
             
           #Pirate drops a portion of his treasure
           elif amount < i.amount:
@@ -220,9 +224,29 @@ class Pirate(Unit):
             return "Not enough treasure to drop!"
     return True
             
-
   def buildPort(self):
-    pass
+    for i in self.game.objects.values():
+      if isinstance(i, Tile):
+        if i._distance(self.x,self.y): #Not sure about this
+          if i.type == 1:
+            if self.onwer == 0:
+              if game.self.player0Gold >= portCost:
+                game.self.player0Gold -= portCost
+                port = i.make(game,self.x,self.y,self.owner)
+                game.addObject(port)
+                return True
+              else:
+                return "Not enough gold to make this purchase"
+            else:
+              if game.self.player1Gold >= portCost:
+                game.self.player1Gold -= portCost
+                port = i.make(game,self.x,self.y,self.owner)
+                game.addObject(port)
+                return True
+              else:
+                return "Not enough gold to make this purchase"
+          else:
+           return "No water connected to this location"
 
   def attack(self, Target):
     pass
@@ -256,7 +280,22 @@ class Port(Mappable):
     pass
 
   def createPirate(self):
-    pass
+    if self.owner == 0:
+      if player0Gold >= pirateCost:
+        player0Gold -= pirateCost
+        pirate = pirate.make(game, self.x, self.y, self.owner, 10, 2) #placeholder values
+        game.addObject(pirate)
+        return True
+      else:
+        return "Not enough gold for that unit"
+    else:
+      if player1Gold >= pirateCost:
+        player1Gold -= pirateCost
+        pirate = pirate.make(game, self.x, self.y, self.owner, 10, 2) #placeholder values
+        game.addObject(pirate)
+        return True
+      else:
+        return "Not enough gold for that unit"
 
   def createShip(self):
     pass
@@ -328,6 +367,18 @@ class Tile(Mappable):
       ]
     return value
   
+  def _distance(self, x, y):
+    distance = 0
+    if self.x > x:
+      distance += self.x - x
+    elif  x > self.x:
+      distance += x - self.x
+    if self.y > y:
+      distance += self.y - y
+    elif y > self.y:
+      distance += y - self.y
+    return distance
+
   @staticmethod
   def make(game, x, y, type):
     id = game.nextid

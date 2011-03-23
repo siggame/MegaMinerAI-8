@@ -30,6 +30,8 @@ class Match(DefaultGameWorld):
     self.turnNumber = -1
     self.playerID = -1
     self.gameNumber = id
+    self.player0Gold = 0
+    self.player1Gold = 0
     self.player0Time = self.startTime
     self.player1Time = self.startTime
     self.boardX = self.mapX
