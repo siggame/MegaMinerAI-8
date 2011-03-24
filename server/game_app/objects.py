@@ -57,7 +57,7 @@ class Unit(Mappable):
   def attack(self, Target):
     pass
   
-    def _distance(self, x, y):
+  def _distance(self, x, y):
     distance = 0
     if self.x > x:
       distance += self.x - x
@@ -350,7 +350,7 @@ class Pirate(Unit):
     else:
       if self.hasAttacked is not 0:
         return "That unit has already attacked"
-      else if abs(self.x - Target.x)+abs(self.y  - Target.y) >= 1:
+      elif abs(self.x - Target.x)+abs(self.y  - Target.y) >= 1:
         return "That Target is out of range"
       else:
         return "You can't attack that target"
@@ -490,7 +490,6 @@ class Ship(Unit):
     pass
 
   def move(self, x, y):
-<<<<<<< HEAD
     #Check the owner of the ship before moving
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"

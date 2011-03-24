@@ -35,8 +35,19 @@ class Match(DefaultGameWorld):
     
   def startMap(self, cfgUnits):
     map = [ [' ' for i in xrange(self.boardY)] for j in xrange(self.boardX)] 
+    
     #open the map file for parsing
-    f = open('maps/map1.txt', 'r')
+    
+    #first we will look for all the .map files in the maps/ folder
+    mapFilenames = []
+    #look through entire maps directory
+    for filename in os.listdir("maps/"):
+      #and if the filename ends in .map
+      if ".map" in filename:
+        mapFilenames.append(filename)
+    
+    #now we can open the map by randomly choosing a filename in that list
+    f = open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames) - 1)]), 'r')
     
     #these are basically booleans for when the map parser encounters special characters in the map files
     encounteredP = 0
