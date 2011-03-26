@@ -63,5 +63,6 @@ int main(int argc, char** argv)
   networkLoop(c);
   //Grab the end game status
   networkLoop(c);
+  destroyConnection(c);
   return 0;
 }
