@@ -1,5 +1,0 @@
-\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\Csharp_client\client\client\obj\Debug\ResolveAssemblyReference.cache
-\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\Csharp_client\client\client\bin\Debug\client.exe
-\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\Csharp_client\client\client\bin\Debug\client.pdb
-\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\Csharp_client\client\client\obj\Debug\client.exe
-\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\Csharp_client\client\client\obj\Debug\client.pdb
