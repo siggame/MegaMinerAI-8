@@ -29,6 +29,19 @@ class Match(DefaultGameWorld):
     self.playerID = -1
     self.gameNumber = id
     
+    self.PirateHealth = 1
+    self.PirateStrength = 1
+    self.PirateSteps = 1
+    self.PirateCost = 1
+    
+    self.ShipsHealth = 1
+    self.ShipsStength = 1
+    self.ShipsSteps = 1
+    self.ShipCost = 1
+    self.ShipRange = 1
+    
+    self.PortCost = 1
+    
     cfgUnits = networking.config.config.readConfig("config/units.cfg")
     self.startMap(cfgUnits)
     self.startTreasures()
@@ -56,15 +69,7 @@ class Match(DefaultGameWorld):
     encountered3 = 0
     
     #before we parse the map we will get the attributes for the Pirates, and Ships from the units.cfg file
-    PirateHealth = 1
-    PirateStrength = 1
-    PirateSteps = 1
-    PirateCost = 1
-    
-    ShipsHealth = 1
-    ShipsStength = 1
-    ShipsSteps = 1
-    ShipCost = 1
+
     
     #creates the players data
     for i in self.players:
@@ -73,15 +78,18 @@ class Match(DefaultGameWorld):
     #now we actually parse the units.cfg file
     for i in cfgUnits.keys():
       if "pirate" in i.lower():
-        PirateHealth = cfgUnits[i]["health"]
-        PirateStrength = cfgUnits[i]["strength"]
-        PirateSteps = cfgUnits[i]["steps"]
-        PirateCost = cfgUnits[i]["cost"]
+        self.PirateHealth = cfgUnits[i]["health"]
+        self.PirateStrength = cfgUnits[i]["strength"]
+        self.PirateSteps = cfgUnits[i]["steps"]
+        self.PirateCost = cfgUnits[i]["cost"]
       elif "ship" in i.lower():
-        ShipHealth = cfgUnits[i]["health"]
-        ShipStrength = cfgUnits[i]["strength"]
-        ShipSteps = cfgUnits[i]["steps"]
-        ShipCost = cfgUnits[i]["cost"]
+        self.ShipHealth = cfgUnits[i]["health"]
+        self.ShipStrength = cfgUnits[i]["strength"]
+        self.ShipSteps = cfgUnits[i]["steps"]
+        self.ShipCost = cfgUnits[i]["cost"]
+        self.ShipRange = cfgUnits[i]["range"]
+      elif "port" in i.lower():
+        self.PortCost = cfgUnits[i]["cost"]
     
     #this is where is parses through the map file and does tons of things!
     for y in range(0,self.boardY):
