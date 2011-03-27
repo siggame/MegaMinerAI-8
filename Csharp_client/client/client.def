@@ -1,0 +1,10 @@
+EXPORTS
+createConnection
+createGame
+destroyConnection
+endTurn
+getStatus
+joinGame
+networkLoop
+serverConnect
+serverLogin
