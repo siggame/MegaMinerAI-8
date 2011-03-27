@@ -61,6 +61,30 @@ DLLEXPORT Connection* createConnection()
   return c;
 }
 
+DLLEXPORT void destroyConnection(Connection* c)
+{
+  #ifdef ENABLE_THREADS 
+  pthread_mutex_destroy(&c->mutex);
+  #endif 
+% for model in models:
+%   if model.type == 'Model':
+  if(c->${model.plural})
+  {
+    for(int i = 0; i < c->${model.name}Count; i++)
+    {
+%   for datum in model.data:
+%     if datum.type == str:
+      delete[] c->${model.plural}[i].${datum.name};
+%       endif
+%     endfor
+    }
+    delete[] c->${model.plural};
+  }
+%   endif
+% endfor
+  delete c;
+}
+
 DLLEXPORT int serverConnect(Connection* c, const char* host, const char* port)
 {
   c->socket = open_server_connection(host, port);

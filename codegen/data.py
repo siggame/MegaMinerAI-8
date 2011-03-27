@@ -3,6 +3,8 @@ from structures import *
 
 aspects = ['timer']
 
+Player = Model('Player', data= [Variable('playerName',str, "Player's Name"),Variable('gold',int, "Player's Gold")])
+
 Mappable = Model('Mappable',
   data = [ Variable('x', int, 'The X position of this object.  X is horizontal, with 0,0 as the top left corner'),
     Variable('y', int, 'The Y position of this object.  Y is vertical, with 0,0 as the top left corner'),
@@ -109,8 +111,6 @@ globals = [
   ]
 
 constants = [
-  Variable('player0Name', str, 'Player 0\'s name'),
-  Variable('player1Name', str, 'Player 1\'s name'),
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),
   Variable('portCost', int, 'The cost to build a new port'),
