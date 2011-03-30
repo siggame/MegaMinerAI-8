@@ -1,38 +1,43 @@
 import aspects
 
 from game_app.match import Match
-
+from game_app.objects import Player
 from twisted.internet import reactor
 
 games = []
 
 def install():
   def wrapNextTurn(self):
-    if self not in games:
-      games.append(self)
-    if self.turn == self.players[0]:
-      self.player1Time += self.timeInc
-    elif self.turn == self.players[1]:
-      self.player0Time += self.timeInc
-    retval = yield aspects.proceed
+    pass
+    #if self not in games:
+      #games.append(self)
+   # if self.turn == self.players[0]:
+    #  p = [i for i in self.objects.values() if isinstance(i,Player)]
+    #  p[1].time += self.timeInc
+    #elif self.turn == self.players[1]:
+    #  p = [i for i in self.objects.values() if #isinstance(i,Player)]
+    #  p[0].time += self.timeInc
+    #retval = yield aspects.proceed
 
-  aspects.with_wrap(wrapNextTurn, Match.nextTurn)
+  #aspects.with_wrap(wrapNextTurn, Match.nextTurn)
 
   def tick():
-    import main
-    for i in games:
-      if i.turn == i.players[0]:
-        i.player0Time -= 1
-        if i.player0Time < 0:
-          i.declareWinner(i.players[1], 'Laaaaaag')
-      elif i.turn == i.players[1]:
-        i.player1Time -= 1
-        if i.player1Time < 0:
-          i.declareWinner(i.players[0], 'Laaaaaag')
-      else:
-        games.remove(i)
+    pass
+    #import main
+    #for i in games:
+     # p = [j for j in i.objects.values() if isinstance(j,Player)]
+     # if i.turn == i.players[0]:
+     #   p[0].time -= 1
+     #   if p[0].time < 0:
+     #     i.declareWinner(i.players[1], 'Laaaaaag')
+     # elif i.turn == i.players[1]:
+     #   p[1].time -= 1
+     #   if p[1].time < 0:
+     #     i.declareWinner(i.players[0], 'Laaaaaag')
+     # else:
+     #   games.remove(i)
 
-    reactor.callLater(1, tick)
+    #reactor.callLater(1, tick)
 
-  reactor.callWhenRunning(reactor.callLater, 1, tick)
+  #reactor.callWhenRunning(reactor.callLater, 1, tick)
         

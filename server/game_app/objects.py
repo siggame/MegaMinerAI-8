@@ -324,10 +324,9 @@ class Pirate(Unit):
 
   def attack(self, Target):
     #Ensures that you own the attacking unit
-    elif self.owner != self.game.playerID:
+    if self.owner != self.game.playerID:
       return "That isn't your pirate!"
       
-        
     elif not isinstance(Target,Unit):
       return "That isn't attackable!"
     
@@ -373,7 +372,7 @@ class Player:
   def make(game, playerName, gold, time):
     id = game.nextid
     game.nextid += 1
-    return Port(game, id, x, y, owner)
+    return Player(game, id, playerName, gold, time)
 
 class Port(Mappable):
   def __init__(self, game, id, x, y, owner):

@@ -49,9 +49,6 @@ class Match(DefaultGameWorld):
     self.startTreasures()
     
   def startMap(self, cfgUnits):
-    #creates the players data
-    for i in self.players:
-      Player.make(self,i.screenName,self.playersStartingGold,self.startTime)
     map = [ [' ' for i in xrange(self.mapY)] for j in xrange(self.mapX)] 
     
     #open the map file for parsing
@@ -254,6 +251,11 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
 
     self.turnNumber = -1
+    #creates the players data
+    for i in self.players:
+      self.addObject(Player.make(self,i.screenName,self.playersStartingGold,self.startTime))
+    print self.objects.values()
+    print [i for i in self.objects.values() if isinstance(i,Player)]
     
     self.sendIdent(self.players + self.spectators)
 
