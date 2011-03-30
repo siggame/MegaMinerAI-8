@@ -160,9 +160,9 @@ class Pirate(Unit):
       return "Already at that location"  
 
     #Checking to make sure the unit is in the bounds of the map
-    if x > self.game.boardX -1:
+    if x > self.game.mapX -1:
       return "Stepping off the world"
-    elif y > self.game.boardY -1:
+    elif y > self.game.mapY -1:
       return "Stepping off the world"
     elif y < 0:
       return "Stepping off the world"
@@ -261,9 +261,11 @@ class Pirate(Unit):
               if i.x == j.x and i.y == j.y:
                 #Increase gold of owner
                 if self.owner == 0:
-                  self.game.objects[0].gold += i.amount
+                  p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+                  p[0].gold += i.amount
                 else:
-                  self.game.objects[1].gold += i.amount
+                  p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+                  p[1].gold += i.amount
                 #Decrement gold if only partially dropped
                 if amount < i.amount:
                   i.amount -= amount
@@ -301,17 +303,19 @@ class Pirate(Unit):
       if isinstance(i, Tile):
         if i._distance(self.x,self.y) == 1: #Not sure about this
           if i.type == 1:
-            if self.onwer == 0:
-              if self.game.objects[0].gold >= self.game.PortCost:
-                self.game.objects[0].gold -= self.game.PortCost
+            if self.owner == 0:
+              p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+              if p[0].gold >= self.game.PortCost:
+                p[0].gold -= self.game.PortCost
                 port = i.make(game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
               else:
                 return "Not enough gold to make this purchase"
             else:
-              if self.game.objects[1].gold >= self.game.PortCost:
-                self.game.objects[1].gold -= self.game.PortCost
+              p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+              if p[1].gold >= self.game.PortCost:
+                p[1].gold -= self.game.PortCost
                 port = i.make(game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
@@ -407,38 +411,42 @@ class Port(Mappable):
   def createPirate(self):
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      if self.game.objects[0].gold >= self.game.PirateCost:
-        self.game.objects[0].gold -= self.game.PirateCost
+      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      if p[0].gold >= self.game.PirateCost:
+        p[0].gold -= self.game.PirateCost
       else:
         return "Not enough gold for that unit"
     else:
-      if self.game.objects[1].gold >= self.game.PirateCost:
-        self.game.objects[1].gold -= self.game.PirateCost
+      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      if p[1].gold >= self.game.PirateCost:
+        p[1].gold -= self.game.PirateCost
       else:
         return "Not enough gold for that unit"
-    pirate = pirate.make(game, self.x, self.y, self.owner, 10, 2) #placeholder values
-    game.addObject(pirate)
+    pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.PirateHealth, self.game.PirateStrength) #placeholder values
+    self.game.addObject(pirate)
     return True
   #TODO: Test and review this logic
 
   def createShip(self):
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      if self.game.objects[0].gold >= self.game.ShipCost:
-        self.game.objects[0].gold -= self.game.ShipCost
+      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      if p[0].gold >= self.game.ShipCost:
+        p[0].gold -= self.game.ShipCost
       else:
         return "Not enough gold for that unit"
     else:
-      if self.game.objects[1].gold >= self.game.ShipCost:
-        self.game.objects[1].gold -= self.game.ShipCost
+      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      if p[1].gold >= self.game.ShipCost:
+        p[1].gold -= self.game.ShipCost
       else:
         return "Not enough gold for that unit"
     #Checks to make sure there is no other ships in the port
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         return "There is already a ship in the port"      
-    pirate = pirate.make(game, self.x, self.y, self.owner, 10, 2) #placeholder values
-    game.addObject(pirate)
+    ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.ShipHealth, self.game.ShipStrength) #placeholder values
+    self.game.addObject(ship)
     return True    
     pass
 
@@ -494,9 +502,9 @@ class Ship(Unit):
       return "Already at that location"
     
     #Checking the bounds of the map
-    if x > self.game.boardX -1:
+    if x > self.game.mapX -1:
       return "Stepping off the world"
-    elif y > self.game.boardY -1:
+    elif y > self.game.mapY -1:
       return "Stepping off the world"
     elif y < 0:
       return "Stepping off the world"

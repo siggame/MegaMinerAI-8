@@ -36,9 +36,9 @@ class Match(DefaultGameWorld):
     self.PirateSteps = 1
     self.PirateCost = 1
     
-    self.ShipsHealth = 1
-    self.ShipsStength = 1
-    self.ShipsSteps = 1
+    self.ShipHealth = 1
+    self.ShipStength = 1
+    self.ShipSteps = 1
     self.ShipCost = 1
     self.ShipRange = 1
     
@@ -254,8 +254,8 @@ class Match(DefaultGameWorld):
     #creates the players data
     for i in self.players:
       self.addObject(Player.make(self,i.screenName,self.playersStartingGold,self.startTime))
-    print self.objects.values()
-    print [i for i in self.objects.values() if isinstance(i,Player)]
+    #print self.objects.values()
+    #print [i for i in self.objects.values() if isinstance(i,Player)]
     
     self.sendIdent(self.players + self.spectators)
 
