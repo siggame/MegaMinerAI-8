@@ -137,13 +137,13 @@ void AI::objectCheck()
   ///What number game this is for the server
   cout<<"gameNumber\t"<<gameNumber()<<endl;
   ///Player 0's time remaining
-  cout<<"player0Time\t"<<player0Time()<<endl;
+  cout<<"player0Time\t"<<players[0].time()<<endl;
   ///Player 1's time remaining
-  cout<<"player1Time\t"<<player1Time()<<endl;
+  cout<<"player1Time\t"<<players[1].time()<<endl;
   ///Player 0's name
-  cout<<"player0Name\t"<<player0Name()<<endl;
+  cout<<"player0Name\t"<<players[0].playerName()<<endl;
   ///Player 1's name
-  cout<<"player1Name\t"<<player1Name()<<endl;
+  cout<<"player1Name\t"<<players[1].playerName()<<endl;
   ///The cost of a pirate
   cout<<"pirateCost\t"<<pirateCost()<<endl;
   ///The cost of a ship
