@@ -3,10 +3,13 @@
 #include <string>
 #include <map>
 #include <vector>
+
 #include "gocomponent.h"
 
 class Transform{};
 class GOComponent;
+typedef std::string GOC_IDType ;
+
 
 class GameObject
 {
@@ -14,8 +17,8 @@ class GameObject
 		/** Default constructor */
 		GameObject(const unsigned int & id);
 
-		unsigned int id(){return m_id;}
-		void id(const unsigned int & ID){m_id = m_id;}
+		unsigned int id();
+    void id(const unsigned int & ID);
 
 		bool hasComponentFam(const GOC_IDType & familyID);
 

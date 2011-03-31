@@ -41,6 +41,9 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
 	return true;
 }
 
+#include <iostream>
+using namespace std;
+
 /** @brief refresh
   *	draw objects on screen
   * @return true if successful
@@ -58,12 +61,31 @@ bool Renderer::refresh()
 	//get time (turn, frame)
 	unsigned int turn = 0; // = timeManager::turn();
 	unsigned int frame = 0; // = timeManager::frame();
+    
+  cout << "DRAW" << endl;
+
+  glBegin( GL_QUADS );
+  glColor4f( 1, 1, 1, 1 );
+  glVertex3f( 0, 0, 0 );
+  glVertex3f( 20, 0, 0 );
+  glVertex3f( 20, 20, 0 );
+  glVertex3f( 0, 20, 0 );
+  glEnd();
+
+  cout << "OBJECTS: " << get()->m_objects.size() << endl;
 
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
 	for (it; it != get()->m_objects.end(); it++)
 	{
 		/** @todo fill this in */
-		it->second->renderAt(turn,frame);
+    cout << "DRAW OBJECTS" << endl;
+
+    GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
+    if( r )
+    {
+      cout << "FOUNDSIES" << endl;
+      r->renderAt(turn,frame);
+    }
 	}
 	return true;
 }

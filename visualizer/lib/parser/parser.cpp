@@ -12,7 +12,7 @@
 using namespace std;
 
 
-static bool parseMove(Move& object, sexp_t* expression)
+static bool parseMappable(Mappable& object, sexp_t* expression)
 {
   sexp_t* sub;
   if ( !expression ) return false;
@@ -25,36 +25,21 @@ static bool parseMove(Move& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.fromFile = atoi(sub->val);
+  object.x = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.fromRank = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.toFile = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.toRank = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.promoteType = atoi(sub->val);
+  object.y = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
   ERROR:
-  cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+  cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
   return false;
 }
-static bool parsePiece(Piece& object, sexp_t* expression)
+static bool parseUnit(Unit& object, sexp_t* expression)
 {
   sexp_t* sub;
   if ( !expression ) return false;
@@ -63,6 +48,16 @@ static bool parsePiece(Piece& object, sexp_t* expression)
   if ( !sub ) goto ERROR;
 
   object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
@@ -72,17 +67,219 @@ static bool parsePiece(Piece& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.file = atoi(sub->val);
+  object.health = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.rank = atoi(sub->val);
+  object.strength = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
   object.hasMoved = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.hasAttacked = atoi(sub->val);
+  sub = sub->next;
+
+  return true;
+
+  ERROR:
+  cerr << "Error in parseUnit.\n Parsing: " << *expression << endl;
+  return false;
+}
+static bool parsePirate(Pirate& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.owner = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.health = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.strength = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.hasMoved = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.hasAttacked = atoi(sub->val);
+  sub = sub->next;
+
+  return true;
+
+  ERROR:
+  cerr << "Error in parsePirate.\n Parsing: " << *expression << endl;
+  return false;
+}
+static bool parsePlayer(Player& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.playerName = new char[strlen(sub->val)+1];
+  strncpy(object.playerName, sub->val, strlen(sub->val));
+  object.playerName[strlen(sub->val)] = 0;
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.gold = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.time = atoi(sub->val);
+  sub = sub->next;
+
+  return true;
+
+  ERROR:
+  cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+  return false;
+}
+static bool parsePort(Port& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.owner = atoi(sub->val);
+  sub = sub->next;
+
+  return true;
+
+  ERROR:
+  cerr << "Error in parsePort.\n Parsing: " << *expression << endl;
+  return false;
+}
+static bool parseShip(Ship& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.owner = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.health = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.strength = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.hasMoved = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.hasAttacked = atoi(sub->val);
+  sub = sub->next;
+
+  return true;
+
+  ERROR:
+  cerr << "Error in parseShip.\n Parsing: " << *expression << endl;
+  return false;
+}
+static bool parseTile(Tile& object, sexp_t* expression)
+{
+  sexp_t* sub;
+  if ( !expression ) return false;
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
@@ -93,38 +290,47 @@ static bool parsePiece(Piece& object, sexp_t* expression)
   return true;
 
   ERROR:
-  cerr << "Error in parsePiece.\n Parsing: " << *expression << endl;
+  cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
   return false;
 }
-
-static bool parseMove(move& object, sexp_t* expression)
+static bool parseTreasure(Treasure& object, sexp_t* expression)
 {
   sexp_t* sub;
   if ( !expression ) return false;
-  object.type = MOVE;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.fromFile = atoi(sub->val);
+  sub = expression->list;
+
+  if ( !sub ) goto ERROR;
+
+  object.id = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.fromRank = atoi(sub->val);
+
+  if ( !sub ) goto ERROR;
+
+  object.x = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.toFile = atoi(sub->val);
+
+  if ( !sub ) goto ERROR;
+
+  object.y = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.toRank = atoi(sub->val);
+
+  if ( !sub ) goto ERROR;
+
+  object.pirateID = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.promoteType = atoi(sub->val);
+
+  if ( !sub ) goto ERROR;
+
+  object.amount = atoi(sub->val);
   sub = sub->next;
+
   return true;
 
-
   ERROR:
-  cerr << "Error in parsemove.\n Parsing: " << *expression << endl;
+  cerr << "Error in parseTreasure.\n Parsing: " << *expression << endl;
   return false;
 }
+
 
 static bool parseSexp(Game& game, sexp_t* expression)
 {
@@ -153,37 +359,118 @@ static bool parseSexp(Game& game, sexp_t* expression)
           gs.gameNumber = atoi(sub->val);
           sub = sub->next;
           if ( !sub ) return false;
-          gs.TurnsToStalemate = atoi(sub->val);
+          gs.pirateCost = atoi(sub->val);
           sub = sub->next;
           if ( !sub ) return false;
-          gs.player0Time = atoi(sub->val);
+          gs.shipCost = atoi(sub->val);
           sub = sub->next;
           if ( !sub ) return false;
-          gs.player1Time = atoi(sub->val);
+          gs.portCost = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.mapSize = atoi(sub->val);
           sub = sub->next;
       }
-      else if(string(sub->val) == "Move")
+      else if(string(sub->val) == "Mappable")
       {
         sub = sub->next;
         bool flag = true;
         while(sub && flag)
         {
-          Move object;
-          flag = parseMove(object, sub);
-          gs.moves[object.id] = object;
+          Mappable object;
+          flag = parseMappable(object, sub);
+          gs.mappables[object.id] = object;
           sub = sub->next;
         }
         if ( !flag ) return false;
       }
-      else if(string(sub->val) == "Piece")
+      else if(string(sub->val) == "Unit")
       {
         sub = sub->next;
         bool flag = true;
         while(sub && flag)
         {
-          Piece object;
-          flag = parsePiece(object, sub);
-          gs.pieces[object.id] = object;
+          Unit object;
+          flag = parseUnit(object, sub);
+          gs.units[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Pirate")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Pirate object;
+          flag = parsePirate(object, sub);
+          gs.pirates[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Player")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Player object;
+          flag = parsePlayer(object, sub);
+          gs.players[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Port")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Port object;
+          flag = parsePort(object, sub);
+          gs.ports[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Ship")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Ship object;
+          flag = parseShip(object, sub);
+          gs.ships[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Tile")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Tile object;
+          flag = parseTile(object, sub);
+          gs.tiles[object.id] = object;
+          sub = sub->next;
+        }
+        if ( !flag ) return false;
+      }
+      else if(string(sub->val) == "Treasure")
+      {
+        sub = sub->next;
+        bool flag = true;
+        while(sub && flag)
+        {
+          Treasure object;
+          flag = parseTreasure(object, sub);
+          gs.treasures[object.id] = object;
           sub = sub->next;
         }
         if ( !flag ) return false;
@@ -199,13 +486,6 @@ static bool parseSexp(Game& game, sexp_t* expression)
       expression = expression->next;
       sub = expression->list;
       if ( !sub ) return false;
-      if(string(sub->val) == "move")
-      {
-        move* animation = new move;
-        if ( !parseMove(*animation, expression) )
-          return false;
-        animations.push_back(animation);
-      }
     }
     game.states[game.states.size()-1].animations = animations;
   }

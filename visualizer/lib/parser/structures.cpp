@@ -5,41 +5,97 @@
 #include <iostream>
 
 
-std::ostream& operator<<(std::ostream& stream, Move ob)
+std::ostream& operator<<(std::ostream& stream, Mappable ob)
 {
   stream << "id: " << ob.id  <<'\n';
-  stream << "fromFile: " << ob.fromFile  <<'\n';
-  stream << "fromRank: " << ob.fromRank  <<'\n';
-  stream << "toFile: " << ob.toFile  <<'\n';
-  stream << "toRank: " << ob.toRank  <<'\n';
-  stream << "promoteType: " << ob.promoteType  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
   return stream;
 }
 
 
-std::ostream& operator<<(std::ostream& stream, Piece ob)
+std::ostream& operator<<(std::ostream& stream, Unit ob)
 {
   stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
   stream << "owner: " << ob.owner  <<'\n';
-  stream << "file: " << ob.file  <<'\n';
-  stream << "rank: " << ob.rank  <<'\n';
+  stream << "health: " << ob.health  <<'\n';
+  stream << "strength: " << ob.strength  <<'\n';
   stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Pirate ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
+  stream << "owner: " << ob.owner  <<'\n';
+  stream << "health: " << ob.health  <<'\n';
+  stream << "strength: " << ob.strength  <<'\n';
+  stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Player ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "playerName: " << ob.playerName  <<'\n';
+  stream << "gold: " << ob.gold  <<'\n';
+  stream << "time: " << ob.time  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Port ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
+  stream << "owner: " << ob.owner  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Ship ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
+  stream << "owner: " << ob.owner  <<'\n';
+  stream << "health: " << ob.health  <<'\n';
+  stream << "strength: " << ob.strength  <<'\n';
+  stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Tile ob)
+{
+  stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
   stream << "type: " << ob.type  <<'\n';
   return stream;
 }
 
 
-
-std::ostream& operator<<(std::ostream& stream, move ob)
+std::ostream& operator<<(std::ostream& stream, Treasure ob)
 {
-  stream << "move" << "\n";
-  stream << "fromFile: " << ob.fromFile  <<'\n';
-  stream << "fromRank: " << ob.fromRank  <<'\n';
-  stream << "toFile: " << ob.toFile  <<'\n';
-  stream << "toRank: " << ob.toRank  <<'\n';
-  stream << "promoteType: " << ob.promoteType  <<'\n';
+  stream << "id: " << ob.id  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
+  stream << "pirateID: " << ob.pirateID  <<'\n';
+  stream << "amount: " << ob.amount  <<'\n';
   return stream;
 }
+
 
 
 std::ostream& operator<<(std::ostream& stream, GameState ob)
@@ -47,21 +103,38 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "turnNumber: " << ob.turnNumber  <<'\n';
   stream << "playerID: " << ob.playerID  <<'\n';
   stream << "gameNumber: " << ob.gameNumber  <<'\n';
-  stream << "TurnsToStalemate: " << ob.TurnsToStalemate  <<'\n';
-  stream << "player0Time: " << ob.player0Time  <<'\n';
-  stream << "player1Time: " << ob.player1Time  <<'\n';
+  stream << "pirateCost: " << ob.pirateCost  <<'\n';
+  stream << "shipCost: " << ob.shipCost  <<'\n';
+  stream << "portCost: " << ob.portCost  <<'\n';
+  stream << "mapSize: " << ob.mapSize  <<'\n';
 
-  stream << "\n\nMoves:\n";
-  for(std::map<int,Move>::iterator i = ob.moves.begin(); i != ob.moves.end(); i++)
+  stream << "\n\nMappables:\n";
+  for(std::map<int,Mappable>::iterator i = ob.mappables.begin(); i != ob.mappables.end(); i++)
     stream << i->second << '\n';
-  stream << "\n\nPieces:\n";
-  for(std::map<int,Piece>::iterator i = ob.pieces.begin(); i != ob.pieces.end(); i++)
+  stream << "\n\nUnits:\n";
+  for(std::map<int,Unit>::iterator i = ob.units.begin(); i != ob.units.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nPirates:\n";
+  for(std::map<int,Pirate>::iterator i = ob.pirates.begin(); i != ob.pirates.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nPlayers:\n";
+  for(std::map<int,Player>::iterator i = ob.players.begin(); i != ob.players.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nPorts:\n";
+  for(std::map<int,Port>::iterator i = ob.ports.begin(); i != ob.ports.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nShips:\n";
+  for(std::map<int,Ship>::iterator i = ob.ships.begin(); i != ob.ships.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nTiles:\n";
+  for(std::map<int,Tile>::iterator i = ob.tiles.begin(); i != ob.tiles.end(); i++)
+    stream << i->second << '\n';
+  stream << "\n\nTreasures:\n";
+  for(std::map<int,Treasure>::iterator i = ob.treasures.begin(); i != ob.treasures.end(); i++)
     stream << i->second << '\n';
   stream << "\nAnimation\n";
   for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
   {
-    if((**i).type == MOVE)
-      stream << *((move*)*i) << "\n";
   }
 }
 

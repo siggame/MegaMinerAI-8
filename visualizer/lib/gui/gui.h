@@ -170,8 +170,12 @@ public:
   void dropEvent( QDropEvent* evt );
   void resizeEvent( QResizeEvent* evt );
 
+  /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE>
+  static void loadGamelog( std::string gamelog );
+
 private slots:
   void helpContents();
+  void fileOpen();
 
 private:
   /// Container for the objects in the GUI
@@ -204,6 +208,9 @@ private:
 
   // Actions
   QAction *m_helpContents; /// Help->Contents
+
+  QAction *m_fileOpen; /// File->Open
+  QAction *m_fileExit; /// File->Exit
 };
 
 #endif

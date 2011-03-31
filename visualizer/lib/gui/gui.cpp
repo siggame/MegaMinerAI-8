@@ -1,5 +1,9 @@
 #include "gui.h"
+#include "../renderer/renderer.h"
+#include "../parser/parser.h"
 #include <QDesktopServices>
+#include "../../piracy/boatdata.h"
+#include "../../piracy/boatrender.h"
 
 #include <iostream>
 #include <string>
@@ -101,12 +105,53 @@ void GUI::dragEnterEvent( QDragEnterEvent* evt )
   evt->acceptProposedAction();
 }
 
+#include <iostream>
+using namespace std;
+void GUI::loadGamelog( std::string gamelog )
+{
+  Game g;
+  parseFile( g, gamelog.c_str() );
+  // Gamespecific stuff which need a removing
+
+  int boatId = 0;
+  int boats = 0;
+  cout << "Number of Turns: " << g.states.size() << endl;
+  for( int i = 0; i < g.states.size(); i++ )
+  {
+    cout << "Number of Pieces on turn " << i << " is: " << g.states[i].ships.size() << endl;
+    for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
+        s != g.states[i].ships.end();
+        s++ )
+    {
+      if( s->second.id > boatId )
+      {
+        boatId = s->second.id;
+        GameObject *go  = new GameObject( boatId );
+        BoatData *bd = new BoatData();
+        bd->parseBoat( g, boatId );
+        BoatRender *br = new BoatRender();
+        
+        go->setGOC( bd );
+        go->setGOC( br );
+
+        Renderer::reg( boatId, go );     
+        boats++;
+      }
+
+    }
+
+  }
+
+  cout << "Boats: " << boats << endl;
+
+}
+
 void GUI::dropEvent( QDropEvent* evt )
 {
 
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
-  cout << data << endl;
+  loadGamelog( data );
 
   // TODO: Open the gamelog with the appropriate plugins
 
@@ -128,6 +173,22 @@ void GUI::helpContents()
   {
     QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
   }
+}
+
+void GUI::fileOpen()
+{
+
+  string filename = QFileDialog::getOpenFileName( 
+      this, 
+      tr( "Open Gamelog" ),
+      QDir::currentPath(),
+      tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+
+  if( filename.size() > 0 )
+  {
+    loadGamelog( filename );
+  }
+
 }
 
 bool GUI::doSetup()
@@ -159,9 +220,21 @@ void GUI::createActions()
   m_helpContents->setStatusTip( 
       tr( "Open Online Help For This Game" ) 
       );
-
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
+  m_fileOpen = new QAction( tr( "&Open" ), this );
+  m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
+  m_fileOpen->setStatusTip( 
+      tr( "Open A Gamelog" )
+      );
+  connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
+
+  m_fileExit = new QAction( tr( "E&xit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
+  m_fileExit->setStatusTip( 
+      tr( "Close the Visualizer" )
+      );
+  connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
 }
 
@@ -169,6 +242,9 @@ void GUI::createMenus()
 {
   QMenu *menu;
   menu = menuBar()->addMenu( tr( "&File" ) );
+  menu->addAction( m_fileOpen );
+  menu->addSeparator();
+  menu->addAction( m_fileExit );
 
   menu = menuBar()->addMenu( tr( "&Edit" ) );
 

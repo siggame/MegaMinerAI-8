@@ -9,7 +9,7 @@
 #include "../gocfamily_render.h"
 
 //this is a place holder
-typedef  GOCFamily_Render renderObj;
+typedef GameObject renderObj;
 
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"

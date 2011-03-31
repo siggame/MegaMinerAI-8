@@ -1,5 +1,17 @@
 #include "gameobject.h"
 
+unsigned int GameObject::id()
+{
+  return m_id;
+}
+
+void GameObject::id( const unsigned int& ID ) 
+{
+  m_id = ID;
+}
+
+
+
 /** @brief ~GameObject
   *
   * @todo: document this function
