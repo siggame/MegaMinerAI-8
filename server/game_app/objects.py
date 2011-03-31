@@ -180,19 +180,17 @@ class Pirate(Unit):
       elif isinstance(i,Port):
         if i.owner != self.owner and i.x == x and i.y == y: 
           return "Moving into an enemy port"
-      #Checking if unit is on land 
-      elif isinstance(i,Tile):
-        if i.x == x and i.y == y:
-          isShip = False
-          for j in self.game.objects.values():
-            if isinstance(j,Ship):
-  
-              #-1 is placeholder value for neutral shop. May need to be changed
-              if j.owner == self.owner or -1:
-                isShip = True
+      #Checking if unit is moving onto water
+      elif isinstance(i,Tile) and i.x is x and i.y is y and i.type is 1:
+        isShip = False
+        for j in self.game.objects.values():
+          if isinstance(j,Ship) and j.x is x and j.y is y:
+            #-1 is placeholder value for neutral shop. May need to be changed
+            if j.owner is self.owner or j.owner is -1:
+              isShip = True
 
-          if i.type == 'w' and isShip != True:
-            return "Pirates cannot swim!"
+        if not isShip:
+          return "Pirates cannot swim!"
 
     #Lose control of ship if this is your last pirate leaving
     for i in self.game.objects.values():
