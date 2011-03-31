@@ -136,7 +136,9 @@ class Pirate(Unit):
               i.y = pirate.y
       #Otherwise the treasure becomes free game
       else:
-        i.pirateID = -1
+        for i in self.game.objects.values():
+          if isinstance(i,Treasure) and i.pirateID == self.id:
+            i.pirateID = -1
       self.game.removeObject(self)
     return True
           
@@ -344,7 +346,7 @@ class Pirate(Unit):
       self.hasAttacked += 1
       #Optional Ally Pirate Auto Kill
       if isinstance(Target,Pirate) and Target.owner is self.owner:
-        target.health = 0
+        Target.health = 0
       
       Target.takeDamage(self)
       return True
@@ -431,14 +433,14 @@ class Port(Mappable):
     #Decrememnting gold of corresponding player
     if self.owner == 0:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-      if p[0].gold >= self.game.ShipCost:
-        p[0].gold -= self.game.ShipCost
+      if p[0].gold >= self.game.shipCost:
+        p[0].gold -= self.game.shipCost
       else:
         return "Not enough gold for that unit"
     else:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-      if p[1].gold >= self.game.ShipCost:
-        p[1].gold -= self.game.ShipCost
+      if p[1].gold >= self.game.shipCost:
+        p[1].gold -= self.game.shipCost
       else:
         return "Not enough gold for that unit"
     #Checks to make sure there is no other ships in the port
@@ -553,7 +555,7 @@ class Ship(Unit):
       return "That target is not in your range"      
       
     #Makes sure the opponent's type is ship
-    if isinstance(Target,Ship) == false:
+    if isinstance(Target,Ship) == False:
       return "You may only attack ships with your ship"
       
     #Meets all conditions for attack
