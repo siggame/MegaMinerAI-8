@@ -160,9 +160,9 @@ class Pirate(Unit):
       return "Already at that location"  
 
     #Checking to make sure the unit is in the bounds of the map
-    if x > self.game.mapX -1:
+    if x > self.game.mapSize -1:
       return "Stepping off the world"
-    elif y > self.game.mapY -1:
+    elif y > self.game.mapSize -1:
       return "Stepping off the world"
     elif y < 0:
       return "Stepping off the world"
@@ -305,8 +305,8 @@ class Pirate(Unit):
           if i.type == 1:
             if self.owner == 0:
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-              if p[0].gold >= self.game.PortCost:
-                p[0].gold -= self.game.PortCost
+              if p[0].gold >= self.game.portCost:
+                p[0].gold -= self.game.portCost
                 port = i.make(game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
@@ -314,8 +314,8 @@ class Pirate(Unit):
                 return "Not enough gold to make this purchase"
             else:
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-              if p[1].gold >= self.game.PortCost:
-                p[1].gold -= self.game.PortCost
+              if p[1].gold >= self.game.portCost:
+                p[1].gold -= self.game.portCost
                 port = i.make(game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
@@ -412,17 +412,17 @@ class Port(Mappable):
     #Decrememnting gold of corresponding player
     if self.owner == 0:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-      if p[0].gold >= self.game.PirateCost:
-        p[0].gold -= self.game.PirateCost
+      if p[0].gold >= self.game.pirateCost:
+        p[0].gold -= self.game.pirateCost
       else:
         return "Not enough gold for that unit"
     else:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-      if p[1].gold >= self.game.PirateCost:
-        p[1].gold -= self.game.PirateCost
+      if p[1].gold >= self.game.pirateCost:
+        p[1].gold -= self.game.pirateCost
       else:
         return "Not enough gold for that unit"
-    pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.PirateHealth, self.game.PirateStrength) #placeholder values
+    pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.pirateHealth, self.game.pirateStrength) #placeholder values
     self.game.addObject(pirate)
     return True
   #TODO: Test and review this logic
@@ -445,7 +445,7 @@ class Port(Mappable):
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         return "There is already a ship in the port"      
-    ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.ShipHealth, self.game.ShipStrength) #placeholder values
+    ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
     self.game.addObject(ship)
     return True    
     pass
@@ -502,9 +502,9 @@ class Ship(Unit):
       return "Already at that location"
     
     #Checking the bounds of the map
-    if x > self.game.mapX -1:
+    if x > self.game.mapSize -1:
       return "Stepping off the world"
-    elif y > self.game.mapY -1:
+    elif y > self.game.mapSize -1:
       return "Stepping off the world"
     elif y < 0:
       return "Stepping off the world"
@@ -549,7 +549,7 @@ class Ship(Unit):
       return "This be not yarr ship, ye swine!"
      
     #Checks to see that the target is in range     
-    if self._distance(Target.x,Target.y) > self.game.ShipRange:
+    if self._distance(Target.x,Target.y) > self.game.shipRange:
       return "That target is not in your range"      
       
     #Makes sure the opponent's type is ship

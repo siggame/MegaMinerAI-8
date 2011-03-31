@@ -29,13 +29,13 @@ bool AI::run()
   objectCheck();
   for(size_t i=0;i<pirates.size();i++)
   {
-    //pirates[i].move(rand()%boardX(), rand()%boardY());
+    //pirates[i].move(rand()%mapSize(), rand()%mapSize());
     pirates[i].move(rand()%40, rand()%40);
     pirates[i].move(pirates[i].x()+xoff[rand()%4],pirates[i].y()+yoff[rand()%4]);
   }
   for(size_t i=0;i<ships.size();i++)
   {
-    //ships[i].move(rand()%boardX(), rand()%boardY());
+    //ships[i].move(rand()%mapSize(), rand()%mapSize());
     ships[i].move(rand()%40, rand()%40);
     ships[i].move(ships[i].x()+xoff[rand()%4],ships[i].y()+yoff[rand()%4]);
   }
@@ -144,9 +144,9 @@ void AI::objectCheck()
   ///Player 1's name
   cout<<"player1Name\t"<<players[1].playerName()<<endl;
   ///The cost of a ship
-  cout<<"shipCost\t"<<shipCost()<<endl;
-  cout<<"boardX\t"<<boardX()<<endl;
-  cout<<"baordY\t"<<boardY()<<endl;
+  cout<<"ShipCost\t"<<shipCost()<<endl;
+  cout<<"boardX\t"<<mapSize()<<endl;
+  cout<<"baordY\t"<<mapSize()<<endl;
   cout<<"--Object counts--"<<endl;
   cout<<"Pirates : "<<pirates.size()<<endl;
   //displayPirates();

@@ -144,8 +144,8 @@ void AI::objectCheck()
   cout<<"pirateCost\t"<<pirateCost()<<endl;
   ///The cost of a ship
   cout<<"shipCost\t"<<shipCost()<<endl;
-  cout<<"boardX\t"<<boardX()<<endl;
-  cout<<"baordY\t"<<boardY()<<endl;
+  cout<<"mapSize\t"<<mapSize()<<endl;
+  cout<<"baordY\t"<<mapSize()<<endl;
   cout<<"--Object counts--"<<endl;
   cout<<"Pirates : "<<pirates.size()<<endl;
   //displayPirates();
