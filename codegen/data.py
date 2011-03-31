@@ -108,12 +108,11 @@ globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
   Variable('playerID', int, 'Player Number; either 0 or 1'),
   Variable('gameNumber', int, 'What number game this is for the server'),
-  ]
-
-constants = [
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),
   Variable('portCost', int, 'The cost to build a new port'),
-	Variable('boardX', int, 'The boards width'),
-	Variable('boardY', int, 'the boards height')
+  Variable('mapSize', int, 'The boards width and height'),
+  ]
+
+constants = [
   ]
