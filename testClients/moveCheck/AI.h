@@ -10,7 +10,7 @@ using std::endl;
 using std::vector;
 
 const int xoff[] = {0, 1, 0, -1};
-const int yoff[] = {0, 1, 0, -1};
+const int yoff[] = {1, 0, -1, 0};
 ///The class implementing gameplay logic.
 class AI: public BaseAI
 {
@@ -27,6 +27,7 @@ public:
   void displayShips();
   void displayTreasure();
   void displayTiles();
+  vector<vector<bool> > land;
 };
 
 #endif

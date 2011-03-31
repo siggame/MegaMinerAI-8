@@ -1,6 +1,8 @@
 #include "AI.h"
 #include "util.h"
 
+#include <iostream>
+using namespace std;
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
 const char* AI::username()
@@ -19,6 +21,29 @@ void AI::init()
   srand(time(NULL));
   cout<<"Initialization called"<<endl;
   objectCheck();
+  land = vector<vector<bool> >(mapSize(),vector<bool>(mapSize(),false));
+  for(size_t i=0;i<tiles.size();i++)
+  {
+    land[tiles[i].x()][tiles[i].y()]= tiles[i].type()==0;
+  }
+  for(size_t i=0;i<ports.size();i++)
+  {
+    if(!land[ports[i].x()][ports[i].y()])
+    {
+      cout<<"A port isn't land!"<<endl;
+      string trash;
+      cin>>trash;
+      land[ports[i].x()][ports[i].y()]=true;
+    }
+  }
+  for(size_t i=0;i<land.size();i++)
+  {
+    for(size_t j=0;j<land[i].size();j++)
+    {
+      cout<<(land[i][j]?"X":".")<<" ";
+    }
+    cout<<endl;
+  }
 }
 
 //This function is called each time it is your turn.
@@ -26,19 +51,52 @@ void AI::init()
 bool AI::run()
 {
   cout<<"Starting turn: "<<turnNumber()<<endl;
-  objectCheck();
+  string trash;
+  
+//  objectCheck();
   for(size_t i=0;i<pirates.size();i++)
   {
     //pirates[i].move(rand()%mapSize(), rand()%mapSize());
-    pirates[i].move(rand()%40, rand()%40);
-    pirates[i].move(pirates[i].x()+xoff[rand()%4],pirates[i].y()+yoff[rand()%4]);
+    if(pirates[i].owner() == playerID())
+    {
+      if(!land[pirates[i].x()][pirates[i].y()])
+      {
+        cout<<"A pirate is in the water!"<<endl;
+        cin>>trash;
+      }
+      //pirates[i].move(rand()%40, rand()%40);
+      //int dir=rand()%4;
+      //pirates[i].move(pirates[i].x()+xoff[dir],pirates[i].y()+yoff[dir]);
+      bool moved=false;
+      for(size_t dir=0;dir<4&&!moved; dir++)
+      {
+        int x=pirates[i].x()+xoff[dir];
+        int y=pirates[i].y()+yoff[dir];
+        if(!land[x][y])
+        {
+          cout<<"Pirate: "<<pirates[i].id()<<" moving onto water"<<endl;
+          pirates[i].move(x,y);
+          moved=true;
+        }
+      }
+      if(!moved)
+      {
+        int dir=rand()%4;
+        pirates[i].move(pirates[i].x()+xoff[dir],pirates[i].y()+yoff[dir]);
+      }
+    }
   }
+  displayPirates();
+  /*
   for(size_t i=0;i<ships.size();i++)
   {
     //ships[i].move(rand()%mapSize(), rand()%mapSize());
     ships[i].move(rand()%40, rand()%40);
     ships[i].move(ships[i].x()+xoff[rand()%4],ships[i].y()+yoff[rand()%4]);
   }
+  */
+  
+ // cin>>trash;
   return true;
 }
 
@@ -46,6 +104,8 @@ void AI::displayPirates()
 {
   for(size_t i=0;i<pirates.size();i++)
   {
+    if(pirates[i].owner()==playerID())
+    {
     ///Unique Identifier
     cout<<"\tID\t"<<pirates[i].id()<<endl;
     ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
@@ -59,6 +119,7 @@ void AI::displayPirates()
     ///attacking strength of the unit
     cout<<"\tStrength\t"<<pirates[i].strength()<<endl;
     cout<<endl;
+    }
   }
 }
 void AI::displayPorts()
