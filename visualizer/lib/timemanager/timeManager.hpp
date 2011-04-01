@@ -1,20 +1,21 @@
-timeManager::getTurn()
+TimeManager::getTurn()
 {
   return m_turn;
 }
 
-timeManager::getFrame()
+TimeManager::getFrame()
 {
   return m_frame;
 }
 
-timeManager::setTurn(input_turn)
+TimeManager::setTurn(input_turn)
 {
   m_turn = input_turn;
   m_frame = 0;
 }
 
-timeManager::operator++
+#if 0
+TimeManager::operator++ (int)
 {
   m_turn++;
   m_frame = 0;
@@ -22,12 +23,12 @@ timeManager::operator++
   return * this;
 }
 
-timeManager::operator++
+TimeManager::operator++ ()
 {
   return ++(*this);
 }
 
-timeManager::operator--
+TimeManager::operator-- (int)
 {
   m_turn--;
   m_frame = 0;
@@ -35,7 +36,8 @@ timeManager::operator--
   return * this;
 }
 
-timeManager::operator--
+TimeManager::operator-- ()
 {
   return --(*this);
 }
+#endif

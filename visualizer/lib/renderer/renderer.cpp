@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "../timemanager/timeManager.h"
 
 /** @brief numObjects
   * the number of objects registered
@@ -59,8 +60,8 @@ bool Renderer::refresh()
 
 	/** @todo change this to the proper accessors */
 	//get time (turn, frame)
-	unsigned int turn = 0; // = timeManager::turn();
-	unsigned int frame = 0; // = timeManager::frame();
+	unsigned int turn = 0;//TimeManager::getTurn();
+	unsigned int frame = 0;//TimeManager::getFrame();
     
 #if 0
 

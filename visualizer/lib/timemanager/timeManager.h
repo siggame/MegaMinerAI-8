@@ -1,15 +1,20 @@
+#ifndef TIMEMANAGER_H
+#define TIMEMANAGER_H
+
 #include "../singleton.h"
 
-class timeManager
+class TimeManager : public Singleton<TimeManager>
 {
   public:
     int getTurn();
     int getFrame();
     void setTurn(int);
-    /*operator++;
+#if 0
+    operator++();
     operator++ (int);
-    operator--;
-    operator-- (int);*/
+    operator--();
+    operator-- (int);
+#endif
 
   private:
     int m_turn;
@@ -17,6 +22,7 @@ class timeManager
     //const float m_turnRate = 2; // turns per second
 };
 
+#if 0
 class timeManagerSingleton : public Singleton <timeManager>
 {
   public:
@@ -29,3 +35,6 @@ class timeManagerSingleton : public Singleton <timeManager>
 			return 0;
 		}
 };
+#endif
+
+#endif
