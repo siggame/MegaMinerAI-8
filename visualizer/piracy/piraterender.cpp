@@ -1,6 +1,8 @@
 #include "piraterender.h"
 #include "piratedata.h"
 #include <GL/gl.h>
+#include <iostream>
+using namespace std;
 
 PirateRender::PirateRender()
 {
@@ -24,6 +26,7 @@ void PirateRender::renderAt(
     const unsigned int& turn,
     const unsigned int& frame )
 {
+  return;
   if( getOwner() )
   {
     PirateData *d = ((PirateData*)getOwner()->getGOC( "DataFamily" ));
@@ -32,13 +35,15 @@ void PirateRender::renderAt(
       PirateDataInfo* t = d->getDataAt( turn, frame );
       if( t )
       {
+        //cout << "X: " << t->x << ", Y: " << t->y << endl;
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
+        glColor4f( 0, 1, 0, 0.01 );
         glBegin( GL_QUADS );
-        glVertex2f( 0, 0 );
-        glVertex2f( 1, 0 );
-        glVertex2f( 1, 1 );
-        glVertex2f( 0, 1 );
+        glVertex3f( 0, 0, -2 );
+        glVertex3f( 1, 0, -2 );
+        glVertex3f( 1, 1, -2 );
+        glVertex3f( 0, 1, -2 );
         glEnd();
         glPopMatrix();
       }

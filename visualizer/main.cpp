@@ -19,5 +19,7 @@ int main(int argc, char *argv[])
     std::cerr << "Could Not Load options.cfg" << std::endl;
   }
 
+  Renderer::refresh();
+
 	return app.exec();
 }
