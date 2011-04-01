@@ -80,7 +80,16 @@ bool Renderer::refresh()
 
     glPopMatrix();
 	}
+  if( get()->m_parent )
+  {
+    get()->m_parent->swapBuffers();
+  }
 	return true;
+}
+
+void Renderer::setParent( RenderWidget *parent )
+{
+  get()->m_parent = parent;
 }
 
 /** @brief destroy
@@ -105,6 +114,7 @@ bool Renderer::create()
 {
 	if (!Singleton<Renderer>::create())
 		return false;
+  get()->m_parent = 0;
 	return setup();
 }
 

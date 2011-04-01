@@ -7,6 +7,7 @@
 //#include "drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
 #include "../gocfamily_render.h"
+#include "../gui/renderwidget.h"
 
 //this is a place holder
 typedef GameObject renderObj;
@@ -14,6 +15,8 @@ typedef GameObject renderObj;
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"
 #define renderDepthName "renderDepth"
+
+class RenderWidget;
 
 class Renderer : public Singleton<Renderer>
 {
@@ -29,6 +32,7 @@ class Renderer : public Singleton<Renderer>
 		static bool create(/**@todo make options similar to setup*/);
 		static bool destroy();
 
+    static void setParent( RenderWidget *parent );
 
 		static bool refresh();
 		static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 10);
@@ -48,6 +52,8 @@ class Renderer : public Singleton<Renderer>
 		unsigned int m_width;
 		unsigned int m_depth;
 		bool m_isSetup;
+
+    RenderWidget *m_parent;
 };
 
 #endif // RENDERER_H

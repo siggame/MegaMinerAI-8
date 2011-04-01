@@ -26,7 +26,6 @@ void PirateRender::renderAt(
     const unsigned int& turn,
     const unsigned int& frame )
 {
-  return;
   if( getOwner() )
   {
     PirateData *d = ((PirateData*)getOwner()->getGOC( "DataFamily" ));

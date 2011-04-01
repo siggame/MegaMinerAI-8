@@ -112,7 +112,11 @@ using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
   Game g;
-  parseFile( g, gamelog.c_str() );
+  if( !parseFile( g, gamelog.c_str() ) )
+  {
+    throw "Cannot Load Gamelog";
+  }
+
   // Gamespecific stuff which need a removing
 
   if( !Renderer::isSetup() )
@@ -125,8 +129,22 @@ void GUI::loadGamelog( std::string gamelog )
   int boats = 0;
   int pirates = 0;
   //cout << "Number of Turns: " << g.states.size() << endl;
+  
+
+  
+
   for( int i = 0; i < g.states.size(); i++ )
   {
+#if 0
+    cout << "Turn: " << i << endl;
+    cout << " -Mapp: " << g.states[i].mappables.size() << endl;
+    cout << " -Unit: " << g.states[i].units.size() << endl;
+    cout << " -Pyrt: " << g.states[i].pirates.size() << endl;
+    cout << " -Plyr: " << g.states[i].players.size() << endl;
+    cout << " -Ship: " << g.states[i].ships.size() << endl;
+    cout << " -Tile: " << g.states[i].tiles.size() << endl;
+    cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
+#else
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
         p != g.states[i].pirates.end();
         p++
@@ -173,6 +191,7 @@ void GUI::loadGamelog( std::string gamelog )
       }
 
     }
+#endif
 
   }
 

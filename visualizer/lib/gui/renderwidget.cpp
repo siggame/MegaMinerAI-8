@@ -17,6 +17,7 @@ void RenderWidget::initializeGL()
 {
 
   Renderer::create();
+  Renderer::setParent( this );
 
 }
 

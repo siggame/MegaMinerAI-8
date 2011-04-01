@@ -29,7 +29,6 @@ void BoatRender::renderAt(
     const unsigned int& turn,
     const unsigned int& frame )
 {
-
   if( getOwner() )
   {
     BoatData *d = ((BoatData*)getOwner()->getGOC( "DataFamily" ));
