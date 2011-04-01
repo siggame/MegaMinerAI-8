@@ -1,11 +1,13 @@
 #ifndef TIMEMANAGER_H
 #define TIMEMANAGER_H
 
+#include <QTimer>
 #include <time.h>
 #include "../singleton.h"
 
-class TimeManager : public Singleton<TimeManager>
+class TimeManager : public QObject, public Singleton<TimeManager>
 {
+  Q_OBJECT
   public:
     static const int& getTurn();
     static const int& getFrame();
@@ -15,6 +17,7 @@ class TimeManager : public Singleton<TimeManager>
     static void setSpeed( const int& speed );
 
     static void create();
+    void setup();
 
     void updateFrames();
 
@@ -25,6 +28,8 @@ class TimeManager : public Singleton<TimeManager>
       Stop = 1, // Don't feel the need to differentiate at this point
       Rewind = 2
     };
+  private slots:
+    void timerUpdate();
 
   private:
     int m_turn;
@@ -32,8 +37,10 @@ class TimeManager : public Singleton<TimeManager>
     int m_framesPerTurn;
     mode m_mode;
 
+    QTimer *timer;
+
     int m_speed;
-    clock_t m_lastTime;
+    int m_lastTime;
 };
 
 
