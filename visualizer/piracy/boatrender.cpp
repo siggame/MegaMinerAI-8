@@ -34,11 +34,8 @@ void BoatRender::renderAt(
     if( d )
     {
       BoatDataInfo* t = d->getDataAt( turn, frame );
-      cout << "Boat Data Exist" << endl;
-
       if( t )
       {
-        cout << "DRAW THIS" << endl;
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
 

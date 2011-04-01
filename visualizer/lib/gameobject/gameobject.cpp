@@ -61,8 +61,6 @@ void GameObject::setGOC(GOComponent * newComp)
 		{
 			delete it->second;
 		}
-
-    cout << newComp->familyID() << endl;
 		m_components[newComp->familyID()] = newComp;
 	}
 }
