@@ -28,6 +28,7 @@ public:
   void displayTreasure();
   void displayTiles();
   vector<vector<bool> > land;
+  vector<vector<int> > port;
 };
 
 #endif
