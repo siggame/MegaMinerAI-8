@@ -129,9 +129,6 @@ void GUI::loadGamelog( std::string gamelog )
   int boats = 0;
   int pirates = 0;
   //cout << "Number of Turns: " << g.states.size() << endl;
-  
-
-  
 
   for( int i = 0; i < g.states.size(); i++ )
   {

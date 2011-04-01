@@ -37,7 +37,7 @@ void PirateRender::renderAt(
         //cout << "X: " << t->x << ", Y: " << t->y << endl;
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
-        glColor4f( 0, 1, 0, 0.01 );
+        glColor4f( 0, 1, 0, 1 );
         glBegin( GL_QUADS );
         glVertex3f( 0, 0, -2 );
         glVertex3f( 1, 0, -2 );
