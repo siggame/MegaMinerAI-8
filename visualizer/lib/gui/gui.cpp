@@ -4,6 +4,8 @@
 #include <QDesktopServices>
 #include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
+#include "../../piracy/piratedata.h"
+#include "../../piracy/piraterender.h"
 
 #include <iostream>
 #include <string>
@@ -110,7 +112,11 @@ using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
   Game g;
-  parseFile( g, gamelog.c_str() );
+  if( !parseFile( g, gamelog.c_str() ) )
+  {
+    throw "Cannot Load Gamelog";
+  }
+
   // Gamespecific stuff which need a removing
 
   if( !Renderer::isSetup() )
@@ -118,12 +124,47 @@ void GUI::loadGamelog( std::string gamelog )
     Renderer::create();
   }
 
+  int pirateId = 0;
   int boatId = 0;
   int boats = 0;
+  int pirates = 0;
   //cout << "Number of Turns: " << g.states.size() << endl;
+
   for( int i = 0; i < g.states.size(); i++ )
   {
-    //cout << "Number of Pieces on turn " << i << " is: " << g.states[i].ships.size() << endl;
+#if 0
+    cout << "Turn: " << i << endl;
+    cout << " -Mapp: " << g.states[i].mappables.size() << endl;
+    cout << " -Unit: " << g.states[i].units.size() << endl;
+    cout << " -Pyrt: " << g.states[i].pirates.size() << endl;
+    cout << " -Plyr: " << g.states[i].players.size() << endl;
+    cout << " -Ship: " << g.states[i].ships.size() << endl;
+    cout << " -Tile: " << g.states[i].tiles.size() << endl;
+    cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
+#else
+    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
+        p != g.states[i].pirates.end();
+        p++
+       )
+    {
+      if( p->second.id > pirateId )
+      {
+        pirateId = p->second.id;
+        GameObject *go = new GameObject( pirateId );
+        PirateData *pd = new PirateData();
+        pd->parsePirate( g, pirateId );
+        PirateRender *pr = new PirateRender();
+        pd->setOwner( go );
+        pr->setOwner( go );
+        go->setGOC( pd );
+        go->setGOC( pr );
+        Renderer::reg( pirateId, go );
+
+        pirates++;
+
+      }
+    }
+
     for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
         s != g.states[i].ships.end();
         s++ )
@@ -141,17 +182,17 @@ void GUI::loadGamelog( std::string gamelog )
         go->setGOC( bd );
         go->setGOC( br );
 
-
         Renderer::reg( boatId, go );
 
         boats++;
       }
 
     }
+#endif
 
   }
 
-  cout << "Boats: " << boats << endl;
+  cout << "Boats: " << boats << ", Pirates: " << pirates << endl;
 
 }
 

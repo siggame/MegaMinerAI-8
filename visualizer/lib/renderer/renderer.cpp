@@ -63,18 +63,7 @@ bool Renderer::refresh()
 	unsigned int turn = TimeManager::getTurn();
 	unsigned int frame = TimeManager::getFrame();
     
-#if 0
-
-  glBegin( GL_QUADS );
-  glColor4f( 1, 1, 1, 1 );
-  glVertex3f( 0, 0, 0 );
-  glVertex3f( 20, 0, 0 );
-  glVertex3f( 20, 20, 0 );
-  glVertex3f( 0, 20, 0 );
-  glEnd();
-#endif
-
-
+  float depth = 0;
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
 	for (it; it != get()->m_objects.end(); it++)
 	{
@@ -91,7 +80,16 @@ bool Renderer::refresh()
 
     glPopMatrix();
 	}
+  if( get()->m_parent )
+  {
+    get()->m_parent->swapBuffers();
+  }
 	return true;
+}
+
+void Renderer::setParent( RenderWidget *parent )
+{
+  get()->m_parent = parent;
 }
 
 /** @brief destroy
@@ -116,6 +114,7 @@ bool Renderer::create()
 {
 	if (!Singleton<Renderer>::create())
 		return false;
+  get()->m_parent = 0;
 	return setup();
 }
 
@@ -183,8 +182,10 @@ bool Renderer::setup()
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
 
+  glDisable( GL_TEXTURE_2D );
+  glEnable( GL_BLEND );
+  glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  glEnable( GL_TEXTURE_2D );
   get()->m_isSetup = true;
 
 

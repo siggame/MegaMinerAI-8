@@ -1,6 +1,12 @@
 #include "boatrender.h"
 #include "boatdata.h"
-#include "GL/gl.h"
+#include <GL/gl.h>
+
+// DEBUG LIBS
+#include <iostream>
+#include <string>
+using namespace std;
+
 
 BoatRender::BoatRender()
 {
@@ -19,15 +25,10 @@ const GOC_IDType BoatRender::componentID() const
   return GOC_IDType( "GOCRenderBoat" );
 }
 
-#include <iostream>
-#include <string>
-using namespace std;
-
 void BoatRender::renderAt( 
     const unsigned int& turn,
     const unsigned int& frame )
 {
-
   if( getOwner() )
   {
     BoatData *d = ((BoatData*)getOwner()->getGOC( "DataFamily" ));
@@ -36,15 +37,16 @@ void BoatRender::renderAt(
       BoatDataInfo* t = d->getDataAt( turn, frame );
       if( t )
       {
+        glColor4f( 0, 0, 1, 0.01 );
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
 
         glBegin( GL_QUADS );
 
-        glVertex2f( 0, 0 );
-        glVertex2f( 1, 0 );
-        glVertex2f( 1, 1 );
-        glVertex2f( 0, 1 );
+        glVertex3f( 0, 0, -1 );
+        glVertex3f( 1, 0, -1 );
+        glVertex3f( 1, 1, -1 );
+        glVertex3f( 0, 1, -1 );
 
         glEnd();
 

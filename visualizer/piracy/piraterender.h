@@ -1,22 +1,20 @@
-#ifndef BOATRENDER_H
-#define BOATRENDER_H
+#ifndef PIRATERENDER_H
+#define PIRATERENDER_H
 
 #include "../lib/gocfamily_render.h"
 
-class BoatRender : public GOCFamily_Render
+class PirateRender : public GOCFamily_Render
 {
 public:
-  BoatRender();
-  ~BoatRender();
+  PirateRender();
+  ~PirateRender();
+
   virtual const GOC_IDType componentID() const;
 
   void update();
-
   virtual void renderAt( 
-      const unsigned int& turn, 
+      const unsigned int& turn,
       const unsigned int& frame );
-
 };
-
 
 #endif
