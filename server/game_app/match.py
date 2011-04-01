@@ -128,7 +128,7 @@ class Match(DefaultGameWorld):
               self.addObject(Ship.make(self, x, y, 1, self.shipHealth, self.shipStrength))
               
           else:
-            encounteredP = 0
+            encounteredP = 1
             self.addObject(Port.make(self, x, y, 0))
             
             for i in range(0,self.playersStartingPirates):
@@ -158,8 +158,8 @@ class Match(DefaultGameWorld):
               
             for i in range(0,self.npcStartingShips):
               self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
-              
-            encountered1 = 0
+            encountered1 = 1
+            
         elif mapThing == '2':
         #if the next byte is a '2' which is a neutral AI's 2nd port with land below it
           #map[x][y] = 0
@@ -181,9 +181,8 @@ class Match(DefaultGameWorld):
               
             for i in range(0,self.npcStartingShips):
               self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
-              
-            self.addObject(Port.make(self, x, y, 2))
-            encountered2 = 0
+            
+            encountered2 = 1
         elif mapThing == '3':
         #if the next byte is a '0' which is a neutral AI's 0th port with land below it
           #map[x][y] = 0
@@ -205,9 +204,7 @@ class Match(DefaultGameWorld):
               
             for i in range(0,self.npcStartingShips):
               self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
-              
-            self.addObject(Port.make(self, x, y, 2))
-            encountered3 = 0
+            encountered3 = 1
       
     #for y in range(0,self.mapSize):
       #print "\n",
