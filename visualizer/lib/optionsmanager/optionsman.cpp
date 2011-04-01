@@ -41,8 +41,12 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 {
 	if (!isInit())
 	{
-		return false;
+    if( !Singleton<optionsMan>::create() )
+      return false;
 	}
+
+#include <iostream>
+  using namespace std;
 
 	/* if we allow multiple loading we can combine files easily
 	if (get()->m_options.size())
@@ -91,6 +95,7 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 							addFloat(namebuff,ss,lineNum);
 						break;
 						case OT_STRING:
+              cout << namebuff << endl;
 							addString(namebuff,ss,lineNum);
 						break;
 						case OT_BOOL:
@@ -140,7 +145,7 @@ OptionType optionsMan::getTypeFromStr(const std::string & val)
 	}
 	if (val == "string")
 	{
-		return OT_BOOL;
+		return OT_STRING;
 	}
 
 	return OT_NONE;
