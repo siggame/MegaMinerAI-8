@@ -2,11 +2,13 @@
 #include <iostream>
 #include "lib/gui/gui.h"
 #include "lib/optionsmanager/optionsman.h"
+#include "lib/timemanager/timeManager.h"
 
 int main(int argc, char *argv[])
 {
 
   QApplication app( argc, argv );
+  TimeManager::create();
   GUI::create();
   if( argc > 1 )
     GUI::loadGamelog( argv[1] );

@@ -22,6 +22,7 @@ SOURCES += main.cpp\
   ./lib/optionsmanager/*.cpp\
   ./lib/renderer/*.cpp\
   ./lib/gui/*.cpp\
+  ./lib/timemanager/*.cpp\
   ./lib/parser/parser.cpp\
   ./lib/parser/structures.cpp\
   ./lib/*.cpp\

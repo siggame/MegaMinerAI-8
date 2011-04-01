@@ -60,8 +60,8 @@ bool Renderer::refresh()
 
 	/** @todo change this to the proper accessors */
 	//get time (turn, frame)
-	unsigned int turn = 0;//TimeManager::getTurn();
-	unsigned int frame = 0;//TimeManager::getFrame();
+	unsigned int turn = TimeManager::getTurn();
+	unsigned int frame = TimeManager::getFrame();
     
 #if 0
 

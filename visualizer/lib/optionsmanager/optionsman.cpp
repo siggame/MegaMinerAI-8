@@ -95,7 +95,6 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 							addFloat(namebuff,ss,lineNum);
 						break;
 						case OT_STRING:
-              cout << namebuff << endl;
 							addString(namebuff,ss,lineNum);
 						break;
 						case OT_BOOL:
