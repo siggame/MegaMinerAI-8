@@ -62,6 +62,7 @@ bool Renderer::refresh()
 	unsigned int turn = 0; // = timeManager::turn();
 	unsigned int frame = 0; // = timeManager::frame();
     
+#if 0
 
   glBegin( GL_QUADS );
   glColor4f( 1, 1, 1, 1 );
@@ -70,6 +71,7 @@ bool Renderer::refresh()
   glVertex3f( 20, 20, 0 );
   glVertex3f( 0, 20, 0 );
   glEnd();
+#endif
 
 
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
@@ -77,8 +79,8 @@ bool Renderer::refresh()
 	{
 		/** @todo fill this in */
 
-    //glPushMatrix();
-    //glScalef( 1, 1, 1 );
+    glPushMatrix();
+    glScalef( 20, 20, 1 );
 
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
@@ -86,7 +88,7 @@ bool Renderer::refresh()
       r->renderAt(turn,frame);
     }
 
-    //glPopMatrix();
+    glPopMatrix();
 	}
 	return true;
 }

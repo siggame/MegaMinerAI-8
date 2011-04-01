@@ -18,7 +18,7 @@ class GOCFamily_Data : public GOComponent
 
 		const GOC_IDType familyID() const
     {
-      return GOC_IDType( "DATAFamily" );
+      return GOC_IDType( "DataFamily" );
     };		
 
     T * getDataAt(const unsigned int & turn, const unsigned int & frame)
