@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -377,7 +378,8 @@ class Match(DefaultGameWorld):
     typeLists.append(["Player"] + [i.toList() for i in self.objects.values() if i.__class__ is Player])
     typeLists.append(["Port"] + [i.toList() for i in self.objects.values() if i.__class__ is Port])
     typeLists.append(["Ship"] + [i.toList() for i in self.objects.values() if i.__class__ is Ship])
-    typeLists.append(["Tile"] + [i.toList() for i in self.objects.values() if i.__class__ is Tile])
+    if self.turnNumber < 4:
+      typeLists.append(["Tile"] + [i.toList() for i in self.objects.values() if i.__class__ is Tile])
     typeLists.append(["Treasure"] + [i.toList() for i in self.objects.values() if i.__class__ is Treasure])
 
     msg.extend(typeLists)
