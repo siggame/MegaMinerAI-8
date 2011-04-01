@@ -1,5 +1,5 @@
-#ifndef PIRACY_H
-#define PIRACY_H
+#ifndef BOATDATA_H
+#define BOATDATA_H
 
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"

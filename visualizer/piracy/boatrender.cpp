@@ -1,6 +1,12 @@
 #include "boatrender.h"
 #include "boatdata.h"
-#include "GL/gl.h"
+#include <GL/gl.h>
+
+// DEBUG LIBS
+#include <iostream>
+#include <string>
+using namespace std;
+
 
 BoatRender::BoatRender()
 {
@@ -18,11 +24,6 @@ const GOC_IDType BoatRender::componentID() const
 {
   return GOC_IDType( "GOCRenderBoat" );
 }
-
-#include <iostream>
-#include <string>
-using namespace std;
-
 void BoatRender::renderAt( 
     const unsigned int& turn,
     const unsigned int& frame )
