@@ -26,8 +26,8 @@ class GameObject
 		void setGOC(GOComponent * newComp);
 		void clearGOCs();
 
-		std::vector<GOC_IDType> & listComponents();
-		std::vector<GOC_IDType> & listComponentFamilies();
+		std::vector<GOC_IDType> listComponents();
+		std::vector<GOC_IDType> listComponentFamilies();
 
 		/** Default destructor */
 		virtual ~GameObject();

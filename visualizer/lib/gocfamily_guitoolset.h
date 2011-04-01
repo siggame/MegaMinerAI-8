@@ -14,7 +14,7 @@ class GOCFamily_GUIToolSet : public GOComponent, public QWidget
 		/** Default destructor */
 		virtual ~GOCFamily_GUIToolSet() = 0;
 
-		virtual const GOC_IDType & familyID() const {return GOC_IDType("GUIToolSetFamily");}
+		virtual const GOC_IDType familyID() const {return GOC_IDType("GUIToolSetFamily");}
 
 	protected:
 	private:

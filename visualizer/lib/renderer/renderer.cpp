@@ -81,6 +81,8 @@ bool Renderer::refresh()
     cout << "DRAW OBJECTS" << endl;
 
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
+    cout << "PNTR: " << (long int) r << endl;
+    cout << r->componentID() << endl;
     if( r )
     {
       cout << "FOUNDSIES" << endl;

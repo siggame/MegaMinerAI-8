@@ -113,12 +113,17 @@ void GUI::loadGamelog( std::string gamelog )
   parseFile( g, gamelog.c_str() );
   // Gamespecific stuff which need a removing
 
+  if( !Renderer::isSetup() )
+  {
+    Renderer::create();
+  }
+
   int boatId = 0;
   int boats = 0;
-  cout << "Number of Turns: " << g.states.size() << endl;
+  //cout << "Number of Turns: " << g.states.size() << endl;
   for( int i = 0; i < g.states.size(); i++ )
   {
-    cout << "Number of Pieces on turn " << i << " is: " << g.states[i].ships.size() << endl;
+    //cout << "Number of Pieces on turn " << i << " is: " << g.states[i].ships.size() << endl;
     for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
         s != g.states[i].ships.end();
         s++ )
@@ -131,10 +136,14 @@ void GUI::loadGamelog( std::string gamelog )
         bd->parseBoat( g, boatId );
         BoatRender *br = new BoatRender();
         
+        bd->setOwner( go );
+        br->setOwner( go );
         go->setGOC( bd );
         go->setGOC( br );
 
-        Renderer::reg( boatId, go );     
+
+        Renderer::reg( boatId, go );
+
         boats++;
       }
 

@@ -10,7 +10,7 @@ public:
 
   virtual ~GOCFamily_GUI() = 0;
 
-  virtual const GOC_IDType& familyID() const
+  virtual const GOC_IDType familyID() const
   {
     return GOC_IDType( "GUIFamily" );
   }

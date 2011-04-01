@@ -16,10 +16,9 @@ class GOCFamily_Data : public GOComponent
 		virtual ~GOCFamily_Data() = 0;
 #endif
 
-		const GOC_IDType & familyID() const
+		const GOC_IDType familyID() const
     {
-      return GOC_IDType( "DATAFamilie" );
-
+      return GOC_IDType( "DATAFamily" );
     };		
 
     T * getDataAt(const unsigned int & turn, const unsigned int & frame)

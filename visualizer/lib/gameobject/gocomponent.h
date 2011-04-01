@@ -19,8 +19,8 @@ class GOComponent
 		virtual ~GOComponent() = 0;
 #endif
 
-		virtual const GOC_IDType & componentID() const = 0;
-		virtual const GOC_IDType & familyID() const = 0;
+		virtual const GOC_IDType componentID() const = 0;
+		virtual const GOC_IDType familyID() const = 0;
 
 		virtual void update() = 0;
 
