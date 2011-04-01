@@ -18,7 +18,9 @@ const GOC_IDType BoatRender::componentID() const
 {
   return GOC_IDType( "GOCRenderBoat" );
 }
+
 #include <iostream>
+#include <string>
 using namespace std;
 
 void BoatRender::renderAt( 
@@ -26,26 +28,31 @@ void BoatRender::renderAt(
     const unsigned int& frame )
 {
 
-  std::string goc = "GOC";
   if( getOwner() )
   {
-    BoatDataInfo* t = ((BoatData*)getOwner()->getGOC( "GOCDataBoat" ))->getDataAt( turn, frame );
-
-    if( t )
+    BoatData *d = ((BoatData*)getOwner()->getGOC( "DataFamily" ));
+    if( d )
     {
-      glPushMatrix();
-      glTranslatef( t->x, t->y, 0 );
+      BoatDataInfo* t = d->getDataAt( turn, frame );
+      cout << "Boat Data Exist" << endl;
 
-      glBegin( GL_QUADS );
+      if( t )
+      {
+        cout << "DRAW THIS" << endl;
+        glPushMatrix();
+        glTranslatef( t->x, t->y, 0 );
 
-      glVertex2f( 0, 0 );
-      glVertex2f( 1, 0 );
-      glVertex2f( 1, 1 );
-      glVertex2f( 0, 1 );
+        glBegin( GL_QUADS );
 
-      glEnd();
+        glVertex2f( 0, 0 );
+        glVertex2f( 1, 0 );
+        glVertex2f( 1, 1 );
+        glVertex2f( 0, 1 );
 
-      glPopMatrix();
+        glEnd();
+
+        glPopMatrix();
+      }
     }
 
   }

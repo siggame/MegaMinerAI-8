@@ -62,7 +62,6 @@ bool Renderer::refresh()
 	unsigned int turn = 0; // = timeManager::turn();
 	unsigned int frame = 0; // = timeManager::frame();
     
-  cout << "DRAW" << endl;
 
   glBegin( GL_QUADS );
   glColor4f( 1, 1, 1, 1 );
@@ -72,22 +71,22 @@ bool Renderer::refresh()
   glVertex3f( 0, 20, 0 );
   glEnd();
 
-  cout << "OBJECTS: " << get()->m_objects.size() << endl;
 
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
 	for (it; it != get()->m_objects.end(); it++)
 	{
 		/** @todo fill this in */
-    cout << "DRAW OBJECTS" << endl;
+
+    //glPushMatrix();
+    //glScalef( 1, 1, 1 );
 
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
-    cout << "PNTR: " << (long int) r << endl;
-    cout << r->componentID() << endl;
     if( r )
     {
-      cout << "FOUNDSIES" << endl;
       r->renderAt(turn,frame);
     }
+
+    //glPopMatrix();
 	}
 	return true;
 }

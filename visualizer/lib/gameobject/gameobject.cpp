@@ -62,6 +62,7 @@ void GameObject::setGOC(GOComponent * newComp)
 			delete it->second;
 		}
 
+    cout << newComp->familyID() << endl;
 		m_components[newComp->familyID()] = newComp;
 	}
 }
@@ -72,24 +73,13 @@ void GameObject::setGOC(GOComponent * newComp)
   */
 GOComponent* GameObject::getGOC(const GOC_IDType & familyID)
 {
-  cout << "F1: " << familyID << endl;
-  cout << "SOMETHIN ELSE" << endl;
-  cout << "SIZE: " << m_components.size() << endl;
-  ComponentTable_t::iterator it;
 
-  it = m_components.find( familyID );
+  ComponentTable_t::iterator it = m_components.find( familyID );
   if( it != m_components.end() )
   {
     // This is returning junk for some reason.
     return it->second;
   }
-#if 0
-	ComponentTable_t::iterator it = m_components.find(familyID);
-	if( it != m_components.end())
-	{
-		return it->second;
-	}
-#endif
 	return NULL;
 }
 
