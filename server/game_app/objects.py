@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 class Mappable:
   def __init__(self, game, id, x, y):
     self.game = game
@@ -409,6 +410,8 @@ class Port(Mappable):
     
 
   def createPirate(self):
+    if self.owner != self.game.playerID:
+      return "That isn't your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
@@ -428,6 +431,8 @@ class Port(Mappable):
   #TODO: Test and review this logic
 
   def createShip(self):
+    if self.owner != self.game.playerID:
+      return "That isn't your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
       p = [i for i in self.game.objects.values() if isinstance(i,Player)]
@@ -485,7 +490,8 @@ class Ship(Unit):
     return Ship(game, id, x, y, owner, health, strength, 0, 0)
 
   def nextTurn(self):
-    pass
+    self.hasMoved = 0
+    self.hasAttacked = 0
 
   def move(self, x, y):
     #Check the owner of the ship before moving
