@@ -1,0 +1,34 @@
+Welcome to Piracy!
+
+Avast! You be in charge of a bunch of pirates. With them you will commandeer ships, attack unassuming merchant vessels, and try to become the RICHEST pirate that ever sailed the Seven Seas!
+
+BASIC STEPS TO GET YOUR TEAM STARTED
+1) Point your browser to http://r99acm.device.mst.edu
+1a) Register youself if you have not already
+1b) Create or join a team if you have not already
+
+###
+1c) TODO: where is the documentation?
+###
+
+2) Open PuTTY with your given account username and password. You will want at least 3 instances open to run the clients and server for local testing.
+
+3) Find AI.<language>
+3a) Edit the username and password fields to YOUR username and password.
+
+4) Find the submit script
+4a) Edit the username and password fields to YOUR username and password.
+
+5) Run the command 'make' in your AI's folder
+
+6) Play versus yourself:
+6a) Run the server in the server folder (main.py)
+6b) Connect one client with your AI to the server at localhost, taking note of the game number ( ./client localhost )
+6c) Connect the other client with your AI to the server at localhost with the same game number ( ./client localhost number)
+
+7) Watch the gamelog the server generated with the visualizer.
+7a) Run the visualizer.
+7b) Go to File -> Open Game Log...  and browse to the gamelog to play.
+7c) Watch the gamelog.
+
+8) To get started coding, read the webserver docs and/or go to the manual.txt file for API information. (API -- Application Programming Interface: the commands you need to use to make your AI go.)
