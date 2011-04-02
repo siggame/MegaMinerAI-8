@@ -112,7 +112,7 @@ class Pirate(Unit):
   def nextTurn(self):
     self.hasMoved = 0
     self.hasAttacked = 0
-    if self.game.playerID != self.owner:
+    if self.game.playerID is not self.owner:
       return True
     pass
     
@@ -121,7 +121,7 @@ class Pirate(Unit):
     #If pirate is killed by the attack
     if self.health <= 0:
       #If the pirate did not kill himself, transfer gold to killing pirate... if it was a pirate that killed him
-      if pirate.id != self.id and isinstance(pirate,Pirate):
+      if pirate.id is not self.id and isinstance(pirate,Pirate):
         for i in self.game.objects.values():
           if isinstance(i,Treasure) and i.pirateID == self.id:
             iHasTreasure = False
@@ -147,7 +147,7 @@ class Pirate(Unit):
 
   def move(self, x, y):
     #Checking to see if moving a valid piece
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "Tried to move a unit that is not yours"  
  
     #Checks to see if the unit has moved this turn
@@ -175,11 +175,11 @@ class Pirate(Unit):
     #Check to see if the unit is moving into an enemy
     for i in self.game.objects.values():
       if isinstance(i,Unit):
-        if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
+        if i.owner is not -1 and i.owner is not self.owner and i.x == x and i.y == y:
           return "Enemy at that location"
       #Check to see if the unit is moving into an enemy port
       elif isinstance(i,Port):
-        if i.owner != self.owner and i.x == x and i.y == y: 
+        if i.owner is not self.owner and i.x == x and i.y == y: 
           return "Moving into an enemy port"
       #Checking if unit is moving onto water
       elif isinstance(i,Tile) and i.x is x and i.y is y and i.type is 1:
@@ -276,7 +276,7 @@ class Pirate(Unit):
                 return True
             #If there is already treasure at this location
             elif isinstance(j,Treasure):
-              if i.x == j.x and i.y == j.y and i.id != j.id:
+              if i.x == j.x and i.y == j.y and i.id is not j.id:
                 #If they drop all of their treasure, remove the original
                 #from the game
                 #Else, simply increment the treasure on the ground and 
@@ -329,7 +329,7 @@ class Pirate(Unit):
 
   def attack(self, Target):
     #Ensures that you own the attacking unit
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "That isn't your pirate!"
       
     elif not isinstance(Target,Unit):
@@ -410,7 +410,7 @@ class Port(Mappable):
     
 
   def createPirate(self):
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "That isn't your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
@@ -431,7 +431,7 @@ class Port(Mappable):
   #TODO: Test and review this logic
 
   def createShip(self):
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "That isn't your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
@@ -495,10 +495,10 @@ class Ship(Unit):
 
   def move(self, x, y):
     #Check the owner of the ship before moving
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "This be not yarr ship, ye swine!"
       
-    if self.hasMoved != 0:
+    if self.hasMoved is not 0:
       return "This ship has already moved this turn" 
      
     if self._distance(x,y) > 1:
@@ -520,7 +520,7 @@ class Ship(Unit):
     #Makes sure the ship stays on water
     for i in self.game.objects.values():
       if isinstance(i,Tile) and i.x == x and i.y == y:
-        if i.type != 1:
+        if i.type is not 1:
           return "Ships cannot walk!"
       
     #Makes sure there is no units at target location
@@ -551,7 +551,7 @@ class Ship(Unit):
 
   def attack(self, Target):
     #Make sure you own the attacking unit
-    if self.owner != self.game.playerID:
+    if self.owner is not self.game.playerID:
       return "This be not yarr ship, ye swine!"
      
     #Checks to see that the target is in range     
