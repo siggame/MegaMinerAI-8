@@ -535,15 +535,14 @@ class Ship(Unit):
     #Moving all treasure,pirates on the ship to the new location
     #Also moves the ship to the new location
     for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.x == x and i.y == y:
+      if isinstance(i,Pirate) and i.x == self.x and i.y == self.y:
         i.x = x
         i.y = y
-      elif isinstance(i,Treasure) and i.x == x and i.y == y:
+      elif isinstance(i,Treasure) and i.x == self.x and i.y == self.y:
         i.x = x
         i.y = y
-      elif isinstance(i,Ship) and i.x == x and i.y == y:
-        i.x = x
-        i.y = y
+    self.x = x
+    self.y = y
     return True
     
   def talk(self, message):
