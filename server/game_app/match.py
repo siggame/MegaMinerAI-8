@@ -45,10 +45,6 @@ class Match(DefaultGameWorld):
     
     self.portCost = 1
     
-    cfgUnits = networking.config.config.readConfig("config/units.cfg")
-    self.startMap(cfgUnits)
-    self.startTreasures()
-    
   def startMap(self, cfgUnits):
     map = [ [' ' for i in xrange(self.mapSize)] for j in xrange(self.mapSize)] 
     
@@ -252,6 +248,10 @@ class Match(DefaultGameWorld):
     #creates the players data
     for i in self.players:
       self.addObject(Player.make(self,i.screenName,self.playersStartingGold,self.startTime))
+    
+    cfgUnits = networking.config.config.readConfig("config/units.cfg")
+    self.startMap(cfgUnits)
+    self.startTreasures()
     #print self.objects.values()
     #print [i for i in self.objects.values() if isinstance(i,Player)]
     
