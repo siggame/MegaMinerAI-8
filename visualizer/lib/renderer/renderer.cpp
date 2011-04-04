@@ -1,4 +1,7 @@
 #include "renderer.h"
+#include "../timemanager/timeManager.h"
+#include "../../piracy/piratemap.h"
+#include "../gui/gui.h"
 
 /** @brief numObjects
   * the number of objects registered
@@ -41,6 +44,9 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
 	return true;
 }
 
+#include <iostream>
+using namespace std;
+
 /** @brief refresh
   *	draw objects on screen
   * @return true if successful
@@ -52,20 +58,45 @@ bool Renderer::refresh()
 	if (!isSetup())
 		return false;
 
-  glClear( GL_COLOR_BUFFER_BIT );
+  GUI::update();
+
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	/** @todo change this to the proper accessors */
 	//get time (turn, frame)
-	unsigned int turn = 0; // = timeManager::turn();
-	unsigned int frame = 0; // = timeManager::frame();
-
+	unsigned int turn = TimeManager::getTurn();
+	unsigned int frame = TimeManager::getFrame();
+    
+  float depth = 0;
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
 	for (it; it != get()->m_objects.end(); it++)
 	{
 		/** @todo fill this in */
-		it->second->renderAt(turn,frame);
+
+    glPushMatrix();
+    glScalef( 20, 20, 1 );
+
+    GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
+    if( r )
+    {
+      r->renderAt(turn,frame);
+    }
+
+    glPopMatrix();
 	}
+  if( get()->m_parent )
+  {
+    get()->m_parent->swapBuffers();
+  }
+
+  static int p = 0;
+
 	return true;
+}
+
+void Renderer::setParent( RenderWidget *parent )
+{
+  get()->m_parent = parent;
 }
 
 /** @brief destroy
@@ -90,6 +121,7 @@ bool Renderer::create()
 {
 	if (!Singleton<Renderer>::create())
 		return false;
+  get()->m_parent = 0;
 	return setup();
 }
 
@@ -156,13 +188,16 @@ bool Renderer::setup()
 
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
-
-
-  glEnable( GL_TEXTURE_2D );
   get()->m_isSetup = true;
 
 
   refresh();
+
+  glDisable( GL_TEXTURE_2D );
+  glEnable( GL_BLEND );
+  glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+
 	return get()->m_isSetup;
 }
 

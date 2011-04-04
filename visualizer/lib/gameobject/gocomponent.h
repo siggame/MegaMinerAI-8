@@ -2,25 +2,30 @@
 #define GOCOMPONENT_H
 
 #include <string>
+#include "gameobject.h"
 //to make changing the id type easy
-typedef std::string GOC_IDType ;
+
 class GameObject;
+typedef std::string GOC_IDType ;
 
 class GOComponent
 {
 	public:
 		/** Default constructor */
-		GOComponent():m_owner(NULL){}
+		GOComponent();
+    GOComponent( GameObject* owner );
+#if 0
 		/** Default destructor */
 		virtual ~GOComponent() = 0;
+#endif
 
-		virtual const GOC_IDType & componentID() const = 0;
-		virtual const GOC_IDType & familyID() const = 0;
+		virtual const GOC_IDType componentID() const = 0;
+		virtual const GOC_IDType familyID() const = 0;
 
-		virtual void update();
+		virtual void update() = 0;
 
-		void setOwner( GameObject * owner){m_owner = owner;}
-		GameObject * getOwner(){return m_owner;}
+		void setOwner( GameObject * owner);
+		GameObject * getOwner();
 
 	protected:
 	private:

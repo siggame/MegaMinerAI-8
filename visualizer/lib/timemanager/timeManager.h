@@ -1,31 +1,47 @@
+#ifndef TIMEMANAGER_H
+#define TIMEMANAGER_H
+
+#include <QTimer>
+#include <time.h>
 #include "../singleton.h"
 
-class timeManager
+class TimeManager : public QObject, public Singleton<TimeManager>
 {
+  Q_OBJECT
   public:
-    int getTurn();
-    int getFrame();
-    void setTurn(int);
-    /*operator++;
-    operator++ (int);
-    operator--;
-    operator-- (int);*/
+    static const int& getTurn();
+    static const int& getFrame();
+    static void setTurn( const int& turn );
+
+    static const int& getSpeed();
+    static void setSpeed( const int& speed );
+
+    static void create();
+    void setup();
+
+    void updateFrames();
+
+    enum mode
+    {
+      Play = 0,
+      Pause = 1,
+      Stop = 1, // Don't feel the need to differentiate at this point
+      Rewind = 2
+    };
+  private slots:
+    void timerUpdate();
 
   private:
     int m_turn;
     int m_frame;
-    //const float m_turnRate = 2; // turns per second
+    int m_framesPerTurn;
+    mode m_mode;
+
+    QTimer *timer;
+
+    int m_speed;
+    int m_lastTime;
 };
 
-class timeManagerSingleton : public Singleton <timeManager>
-{
-  public:
-		int intAccessor()
-		{
-			if (isInit())
-			{
-				//return get()->m_intVar;
-			}
-			return 0;
-		}
-};
+
+#endif

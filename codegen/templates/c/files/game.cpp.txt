@@ -61,6 +61,30 @@ DLLEXPORT Connection* createConnection()
   return c;
 }
 
+DLLEXPORT void destroyConnection(Connection* c)
+{
+  #ifdef ENABLE_THREADS 
+  pthread_mutex_destroy(&c->mutex);
+  #endif 
+% for model in models:
+%   if model.type == 'Model':
+  if(c->${model.plural})
+  {
+    for(int i = 0; i < c->${model.name}Count; i++)
+    {
+%   for datum in model.data:
+%     if datum.type == str:
+      delete[] c->${model.plural}[i].${datum.name};
+%       endif
+%     endfor
+    }
+    delete[] c->${model.plural};
+  }
+%   endif
+% endfor
+  delete c;
+}
+
 DLLEXPORT int serverConnect(Connection* c, const char* host, const char* port)
 {
   c->socket = open_server_connection(host, port);
@@ -278,23 +302,6 @@ DLLEXPORT int networkLoop(Connection* c)
       strcpy(gameID, expression->val);
       cout << "Created game " << gameID << endl;
     }
-    else if(expression->val != NULL && strcmp(expression->val, "ident")==0)
-    {
-      if(c->player0Name)
-        delete[] c->player0Name;
-      int length = strlen(expression->next->list->list->next->next->val)+1;
-      c->player0Name = new char[length];
-      strcpy(c->player0Name, expression->next->list->list->next->next->val);
-      c->player0Name[length-1] = 0;
-
-      if(c->player1Name)
-        delete[] c->player1Name;
-      length = strlen(expression->next->list->next->list->next->next->val)+1;
-      c->player1Name = new char[length];
-      strcpy(c->player1Name, expression->next->list->next->list->next->next->val);
-      c->player1Name[length-1] = 0;
-    }
-
     else if(expression->val != NULL && strstr(expression->val, "denied"))
     {
       cout << expression->val << endl;

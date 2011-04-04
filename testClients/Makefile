@@ -1,4 +1,4 @@
-GENDIR=../../codegen/output/c
+GENDIR=../codegen/output/c/
 TOCOPY=$(wildcard *.h *.cpp)
 all:
 	cp $(TOCOPY) $(GENDIR)

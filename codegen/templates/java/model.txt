@@ -6,10 +6,11 @@ abstract \
 % endif
 class ${model.name}\
 % if model.parent:
-: extends ${model.parent.name} \
+ extends ${model.parent.name} \
 % endif
 
 {
+% if not model.parent:
   Pointer ptr;
   int ID;
   int iteration;
@@ -19,7 +20,12 @@ class ${model.name}\
     ID = Client.INSTANCE.${lowercase(model.name)}GetId(ptr);
     iteration = BaseAI.iteration;
   }
-
+% else:
+  public ${model.name}(Pointer p)
+  {
+    super(p);
+  }
+% endif
 % if model.type == 'virtual':
   abstract boolean validify();
 % else:

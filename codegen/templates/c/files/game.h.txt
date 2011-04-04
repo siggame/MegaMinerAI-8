@@ -48,6 +48,7 @@ extern "C"
 {
 #endif
   DLLEXPORT Connection* createConnection();
+  DLLEXPORT void destroyConnection(Connection* c);
   DLLEXPORT int serverConnect(Connection* c, const char* host, const char* port);
 
   DLLEXPORT int serverLogin(Connection* c, const char* username, const char* password);

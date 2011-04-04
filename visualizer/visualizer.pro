@@ -11,7 +11,8 @@ PPATHS +=./lib/gameobject/\
 		./lib/renderer/\
 		./lib/timemanager/\
 		./lib/gameobject/\
-    ./lib/gui/
+    ./lib/gui/\
+    ./lib/parser/
 
 
 SOURCES += main.cpp\
@@ -20,7 +21,12 @@ SOURCES += main.cpp\
   ./lib/threadler/*.cpp\
   ./lib/optionsmanager/*.cpp\
   ./lib/renderer/*.cpp\
-  ./lib/gui/*.cpp
+  ./lib/gui/*.cpp\
+  ./lib/timemanager/*.cpp\
+  ./lib/parser/parser.cpp\
+  ./lib/parser/structures.cpp\
+  ./lib/*.cpp\
+  ./piracy/*.cpp
 
 MOC = moc
 
@@ -32,9 +38,11 @@ HEADERS += *.h\
   ./lib/threadler/*.h\
   ./lib/optionsmanager/*.h\
   ./lib/renderer/*.h\
-  ./lib/gui/*.h
+  ./lib/parser/*.h\
+  ./lib/gui/*.h\
+  ./piracy/*.h
 
 
 CONFIG += debug
 QT += opengl
-SUBDIRS += parser
+SUBDIRS += parser tools

@@ -1,5 +1,12 @@
 #include "gui.h"
+#include "../renderer/renderer.h"
+#include "../parser/parser.h"
 #include <QDesktopServices>
+#include "../../piracy/boatdata.h"
+#include "../../piracy/boatrender.h"
+#include "../../piracy/piratedata.h"
+#include "../../piracy/piraterender.h"
+#include "../../piracy/piratemap.h"
 
 #include <iostream>
 #include <string>
@@ -101,12 +108,117 @@ void GUI::dragEnterEvent( QDragEnterEvent* evt )
   evt->acceptProposedAction();
 }
 
+#include <iostream>
+using namespace std;
+void GUI::loadGamelog( std::string gamelog )
+{
+  Game g;
+  if( !parseFile( g, gamelog.c_str() ) )
+  {
+    throw "Cannot Load Gamelog";
+  }
+
+  // Gamespecific stuff which need a removing
+
+  if( !Renderer::isSetup() )
+  {
+    Renderer::create();
+  }
+
+  int pirateId = 0;
+  int boatId = 0;
+  int boats = 0;
+  int pirates = 0;
+
+  GameObject *go = new GameObject( -1 );
+  PirateMap *pm = new PirateMap();
+  pm->generateMap( g );
+  pm->setOwner( go );
+  go->setGOC( pm );
+  Renderer::reg( -1, go );
+
+  optionsMan::setInt( "numTurns", g.states.size() );
+
+
+  //cout << "Number of Turns: " << g.states.size() << endl;
+
+  for( int i = 0; i < g.states.size(); i++ )
+  {
+#if 0
+    cout << "Turn: " << i << endl;
+    cout << " -Mapp: " << g.states[i].mappables.size() << endl;
+    cout << " -Unit: " << g.states[i].units.size() << endl;
+    cout << " -Pyrt: " << g.states[i].pirates.size() << endl;
+    cout << " -Plyr: " << g.states[i].players.size() << endl;
+    cout << " -Ship: " << g.states[i].ships.size() << endl;
+    cout << " -Tile: " << g.states[i].tiles.size() << endl;
+    cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
+#else
+    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
+        p != g.states[i].pirates.end();
+        p++
+       )
+    {
+      if( p->second.id > pirateId )
+      {
+        pirateId = p->second.id;
+        go = new GameObject( pirateId );
+        PirateData *pd = new PirateData();
+        pd->parsePirate( g, pirateId );
+        PirateRender *pr = new PirateRender();
+        pd->setOwner( go );
+        pr->setOwner( go );
+        go->setGOC( pd );
+        go->setGOC( pr );
+        Renderer::reg( pirateId, go );
+
+        pirates++;
+
+      }
+    }
+
+    for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
+        s != g.states[i].ships.end();
+        s++ )
+    {
+      if( s->second.id > boatId )
+      {
+        boatId = s->second.id;
+        go  = new GameObject( boatId );
+        BoatData *bd = new BoatData();
+        bd->parseBoat( g, boatId );
+        BoatRender *br = new BoatRender();
+        
+        bd->setOwner( go );
+        br->setOwner( go );
+        go->setGOC( bd );
+        go->setGOC( br );
+
+        Renderer::reg( boatId, go );
+
+        boats++;
+      }
+
+    }
+#endif
+
+  }
+
+  cout << "Boats: " << boats << ", Pirates: " << pirates << endl;
+
+}
+
+void GUI::update()
+{
+  get()->m_controlBar->update();
+}
+
 void GUI::dropEvent( QDropEvent* evt )
 {
 
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
-  cout << data << endl;
+  loadGamelog( data );
 
   // TODO: Open the gamelog with the appropriate plugins
 
@@ -115,7 +227,6 @@ void GUI::dropEvent( QDropEvent* evt )
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );
-
 }
 
 void GUI::helpContents()
@@ -130,6 +241,22 @@ void GUI::helpContents()
   }
 }
 
+void GUI::fileOpen()
+{
+
+  string filename = QFileDialog::getOpenFileName( 
+      this, 
+      tr( "Open Gamelog" ),
+      QDir::currentPath(),
+      tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+
+  if( filename.size() > 0 )
+  {
+    loadGamelog( filename );
+  }
+
+}
+
 bool GUI::doSetup()
 {
 
@@ -141,6 +268,7 @@ bool GUI::doSetup()
   createMenus();
 
   buildToolSet();
+  buildControlBar();
 
   setWindowState( 
       windowState() 
@@ -152,6 +280,15 @@ bool GUI::doSetup()
   return true;
 }
 
+void GUI::buildControlBar()
+{
+  m_statusBar = statusBar();
+  m_controlBar = new ControlBar( this );
+
+  m_statusBar->addPermanentWidget( m_controlBar, 100 );
+
+}
+
 void GUI::createActions()
 {
   m_helpContents = new QAction( tr( "&Contents" ), this );
@@ -159,9 +296,21 @@ void GUI::createActions()
   m_helpContents->setStatusTip( 
       tr( "Open Online Help For This Game" ) 
       );
-
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
+  m_fileOpen = new QAction( tr( "&Open" ), this );
+  m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
+  m_fileOpen->setStatusTip( 
+      tr( "Open A Gamelog" )
+      );
+  connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
+
+  m_fileExit = new QAction( tr( "E&xit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
+  m_fileExit->setStatusTip( 
+      tr( "Close the Visualizer" )
+      );
+  connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
 }
 
@@ -169,6 +318,9 @@ void GUI::createMenus()
 {
   QMenu *menu;
   menu = menuBar()->addMenu( tr( "&File" ) );
+  menu->addAction( m_fileOpen );
+  menu->addSeparator();
+  menu->addAction( m_fileExit );
 
   menu = menuBar()->addMenu( tr( "&Edit" ) );
 

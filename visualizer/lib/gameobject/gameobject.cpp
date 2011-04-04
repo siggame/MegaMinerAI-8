@@ -1,5 +1,17 @@
 #include "gameobject.h"
 
+unsigned int GameObject::id()
+{
+  return m_id;
+}
+
+void GameObject::id( const unsigned int& ID ) 
+{
+  m_id = ID;
+}
+
+
+
 /** @brief ~GameObject
   *
   * @todo: document this function
@@ -33,6 +45,9 @@ void GameObject::clearGOCs()
 	m_components.clear();
 }
 
+#include <iostream>
+using namespace std;
+
 /** @brief setGOC
   *
   * @todo: document this function
@@ -46,7 +61,6 @@ void GameObject::setGOC(GOComponent * newComp)
 		{
 			delete it->second;
 		}
-
 		m_components[newComp->familyID()] = newComp;
 	}
 }
@@ -57,11 +71,13 @@ void GameObject::setGOC(GOComponent * newComp)
   */
 GOComponent* GameObject::getGOC(const GOC_IDType & familyID)
 {
-	ComponentTable_t::iterator it = m_components.find(familyID);
-	if( it != m_components.end())
-	{
-		return it->second;
-	}
+
+  ComponentTable_t::iterator it = m_components.find( familyID );
+  if( it != m_components.end() )
+  {
+    // This is returning junk for some reason.
+    return it->second;
+  }
 	return NULL;
 }
 
@@ -78,7 +94,7 @@ GOComponent* GameObject::getGOC(const GOC_IDType & familyID)
   *
   * @todo: document this function
   */
-std::vector<GOC_IDType> & GameObject::listComponentFamilies()
+std::vector<GOC_IDType> GameObject::listComponentFamilies()
 {
 	ComponentTable_t::iterator it = m_components.begin();
 	std::vector<GOC_IDType> vect;
@@ -93,7 +109,7 @@ std::vector<GOC_IDType> & GameObject::listComponentFamilies()
   *
   * @todo: document this function
   */
-std::vector<GOC_IDType> & GameObject::listComponents()
+std::vector<GOC_IDType> GameObject::listComponents()
 {
 	ComponentTable_t::iterator it = m_components.begin();
 	std::vector<GOC_IDType> vect;
