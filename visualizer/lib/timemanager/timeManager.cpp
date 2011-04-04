@@ -66,6 +66,16 @@ using namespace std;
 
 void TimeManager::updateFrames()
 {
+  if( !optionsMan::exists( "sliderDragging" ) )
+    optionsMan::setBool( "sliderDragging", false );
+
+  if( optionsMan::getBool( "sliderDragging" ) )
+  {
+    m_turn = optionsMan::getInt( "currentTurn" );
+    m_frame = 0;
+  } else {
+    optionsMan::setInt( "currentTurn", m_turn );
+  }
   int t = 0;
   int frames;
   if( t > m_lastTime+m_speed )
@@ -80,7 +90,6 @@ void TimeManager::updateFrames()
     m_turn++;
     m_frame -= m_framesPerTurn;
   }
-  //cout << m_turn << endl;
 }
 
 void TimeManager::timerUpdate()

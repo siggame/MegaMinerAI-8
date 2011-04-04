@@ -10,7 +10,9 @@ int main(int argc, char *argv[])
   QApplication app( argc, argv );
   TimeManager::create();
   TimeManager::setSpeed( 200 );
+
   GUI::create();
+
   if( argc > 1 )
     GUI::loadGamelog( argv[1] );
 

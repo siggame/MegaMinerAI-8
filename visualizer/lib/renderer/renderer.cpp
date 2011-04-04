@@ -1,5 +1,7 @@
 #include "renderer.h"
 #include "../timemanager/timeManager.h"
+#include "../../piracy/piratemap.h"
+#include "../gui/gui.h"
 
 /** @brief numObjects
   * the number of objects registered
@@ -56,7 +58,9 @@ bool Renderer::refresh()
 	if (!isSetup())
 		return false;
 
-  glClear( GL_COLOR_BUFFER_BIT );
+  GUI::update();
+
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	/** @todo change this to the proper accessors */
 	//get time (turn, frame)
@@ -84,6 +88,9 @@ bool Renderer::refresh()
   {
     get()->m_parent->swapBuffers();
   }
+
+  static int p = 0;
+
 	return true;
 }
 
@@ -181,15 +188,16 @@ bool Renderer::setup()
 
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
+  get()->m_isSetup = true;
+
+
+  refresh();
 
   glDisable( GL_TEXTURE_2D );
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  get()->m_isSetup = true;
 
-
-  refresh();
 	return get()->m_isSetup;
 }
 

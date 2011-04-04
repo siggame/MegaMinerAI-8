@@ -3,6 +3,8 @@
 
 #include "../lib/gocfamily_render.h"
 #include "../lib/parser/parser.h"
+#include <string>
+#include <fstream>
 
 class PirateMap : public GOCFamily_Render
 {
@@ -13,6 +15,8 @@ public:
   virtual const GOC_IDType componentID() const;
 
   void generateMap( Game& g );
+
+  static void drawTGA( std::string filename );
 
   void update();
   virtual void renderAt(

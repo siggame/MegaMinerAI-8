@@ -45,4 +45,4 @@ HEADERS += *.h\
 
 CONFIG += debug
 QT += opengl
-SUBDIRS += parser
+SUBDIRS += parser tools

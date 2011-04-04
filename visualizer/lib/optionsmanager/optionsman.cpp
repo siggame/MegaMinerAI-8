@@ -503,8 +503,23 @@ void optionsMan::setVar(const std::string & oName, const T & val)
 {
 	if (!exists(oName))
 	{
+    if( !isInit() )
+    {
+      if( !Singleton<optionsMan>::create() )
+        return;
+    }
+
+    get()->m_options[oName] = new Option<T,OT>(val);
+    if( !Mutex::isInit() )
+      if( !Singleton<Mutex>::create() )
+        return;
+    Mutex::createMutex( oName );
+#if 0
 		std::cout << "Setting invalid float option \"" << oName << "\"\n";
 		return;
+#endif
+
+    return;
 	}
 
 	if (optionType(oName) != OT)

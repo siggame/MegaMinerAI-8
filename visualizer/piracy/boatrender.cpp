@@ -37,7 +37,7 @@ void BoatRender::renderAt(
       BoatDataInfo* t = d->getDataAt( turn, frame );
       if( t )
       {
-        glColor4f( 0, 0, 1, 0.01 );
+        glColor4f( 0, 0, 1, 0.25 );
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
 

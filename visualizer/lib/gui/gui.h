@@ -2,6 +2,7 @@
 #define GUI_H
 
 #include "centralwidget.h"
+#include "controlbar.h"
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
 #include <QtGui>
@@ -173,6 +174,8 @@ public:
   /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE>
   static void loadGamelog( std::string gamelog );
 
+  static void update();
+
 private slots:
   void helpContents();
   void fileOpen();
@@ -198,10 +201,17 @@ private:
   /// Console Area
   QTextEdit *m_consoleArea;
 
+  /// Status Bar
+  QStatusBar *m_statusBar;
+
+  /// Control Bar
+  ControlBar *m_controlBar;
+
   /// Debugging Toolset Widget Within the Dock
   GOCFamily_GUIToolSet *m_toolSetWidget;
 
   bool doSetup();
+  void buildControlBar();
   void createActions();
   void createMenus();
   void buildToolSet();

@@ -35,9 +35,11 @@ void PirateRender::renderAt(
       if( t )
       {
         //cout << "X: " << t->x << ", Y: " << t->y << endl;
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
         glPushMatrix();
         glTranslatef( t->x, t->y, 0 );
-        glColor4f( 0, 1, 0, 1 );
+        glColor4f( 0, 1, 0, 0.25 );
         glBegin( GL_QUADS );
         glVertex3f( 0, 0, -2 );
         glVertex3f( 1, 0, -2 );

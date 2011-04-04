@@ -6,6 +6,7 @@
 #include "../../piracy/boatrender.h"
 #include "../../piracy/piratedata.h"
 #include "../../piracy/piraterender.h"
+#include "../../piracy/piratemap.h"
 
 #include <iostream>
 #include <string>
@@ -128,6 +129,17 @@ void GUI::loadGamelog( std::string gamelog )
   int boatId = 0;
   int boats = 0;
   int pirates = 0;
+
+  GameObject *go = new GameObject( -1 );
+  PirateMap *pm = new PirateMap();
+  pm->generateMap( g );
+  pm->setOwner( go );
+  go->setGOC( pm );
+  Renderer::reg( -1, go );
+
+  optionsMan::setInt( "numTurns", g.states.size() );
+
+
   //cout << "Number of Turns: " << g.states.size() << endl;
 
   for( int i = 0; i < g.states.size(); i++ )
@@ -150,7 +162,7 @@ void GUI::loadGamelog( std::string gamelog )
       if( p->second.id > pirateId )
       {
         pirateId = p->second.id;
-        GameObject *go = new GameObject( pirateId );
+        go = new GameObject( pirateId );
         PirateData *pd = new PirateData();
         pd->parsePirate( g, pirateId );
         PirateRender *pr = new PirateRender();
@@ -172,7 +184,7 @@ void GUI::loadGamelog( std::string gamelog )
       if( s->second.id > boatId )
       {
         boatId = s->second.id;
-        GameObject *go  = new GameObject( boatId );
+        go  = new GameObject( boatId );
         BoatData *bd = new BoatData();
         bd->parseBoat( g, boatId );
         BoatRender *br = new BoatRender();
@@ -196,6 +208,11 @@ void GUI::loadGamelog( std::string gamelog )
 
 }
 
+void GUI::update()
+{
+  get()->m_controlBar->update();
+}
+
 void GUI::dropEvent( QDropEvent* evt )
 {
 
@@ -210,7 +227,6 @@ void GUI::dropEvent( QDropEvent* evt )
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );
-
 }
 
 void GUI::helpContents()
@@ -252,6 +268,7 @@ bool GUI::doSetup()
   createMenus();
 
   buildToolSet();
+  buildControlBar();
 
   setWindowState( 
       windowState() 
@@ -261,6 +278,15 @@ bool GUI::doSetup()
 
   show();
   return true;
+}
+
+void GUI::buildControlBar()
+{
+  m_statusBar = statusBar();
+  m_controlBar = new ControlBar( this );
+
+  m_statusBar->addPermanentWidget( m_controlBar, 100 );
+
 }
 
 void GUI::createActions()
