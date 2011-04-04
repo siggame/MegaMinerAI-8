@@ -67,6 +67,17 @@ void AI::init()
   displayPorts();
 }
 
+bool AI::shipAt(int x, int y)
+{
+/*
+  for(size_t i=0;i<ships.size();i++)
+  {
+    ships[i].
+  }
+  return false;
+*/
+}
+
 //This function is called each time it is your turn.
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
@@ -122,14 +133,40 @@ bool AI::run()
       * /
     }
   }
-  //displayPirates();
+  
   //*/
+  displayPirates();
   //*
   displayShips();
   for(size_t i=0;i<ships.size();i++)
   {
+    for(size_t j=i+1;j<ships.size();j++)
+    {
+      if(ships[i].x()==ships[j].x() && ships[i].y() == ships[j].y() && port[ships[i].x()][ships[i].y()] == -1)
+      {
+        cout<<"SHIT, ships at the same location"<<endl;
+        throw "Shit fit";
+      }
+    }
+  }
+  cout<<"Check done"<<endl;
+  for(size_t i=0;i<ships.size();i++)
+  {
     //ships[i].move(rand()%mapSize(), rand()%mapSize());
-    //ships[i].move(rand()%40, rand()%40);
+
+    if(ships[i].owner() == playerID())
+    {
+      int x,y;
+      do
+      {
+        int dir = rand()%4;
+        x=ships[i].x()+xoff[dir];
+        y=ships[i].y()+yoff[dir];
+      }while( !(x >=0 && y>=0 && x<mapSize() && y < mapSize()) || land[x][y]);
+      cout<<"Tried to move to "<<x<<", "<<y<<" Map Size: "<<mapSize()<<endl;
+      ships[i].move(x,y);
+    }
+    /*
     if(ships[i].owner()==playerID())
     {
       int dir=rand()%4;
@@ -138,11 +175,14 @@ bool AI::run()
       {
         int x=ships[i].x()+xoff[dir];
         int y=ships[i].y()+yoff[dir];
-        if(!land[x][y])
+        if(x >=0 && y>=0 && x<mapSize() && y < mapSize())
         {
-          ships[i].move(x,y);
-          cout<<"Tried to move to "<<x<<", "<<y<<endl;
-          moved=true;
+          if(!land[x][y])
+          {
+            ships[i].move(x,y);
+            cout<<"Tried to move to "<<x<<", "<<y<<endl;
+            moved=true;
+          }
         }
       }
       if(!moved)
@@ -150,6 +190,7 @@ bool AI::run()
         cout<<"No water found"<<endl;
       }
     }
+    */
   }
   
   //*/
@@ -160,22 +201,23 @@ bool AI::run()
 
 void AI::displayPirates()
 {
+  cout<<"Pirates"<<endl;
   for(size_t i=0;i<pirates.size();i++)
   {
     if(pirates[i].owner()==playerID())
     {
     ///Unique Identifier
-    cout<<"\tID\t"<<pirates[i].id()<<endl;
+    cout<<"\tID\t"<<pirates[i].id();
     ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
-    cout<<"\tX\t"<<pirates[i].x()<<endl;
+    cout<<"\tX\t"<<pirates[i].x();
     ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
-    cout<<"\tY\t"<<pirates[i].y()<<endl;
+    cout<<"\tY\t"<<pirates[i].y();
     ///The owner of the unit
-    cout<<"\tOwner\t"<<pirates[i].owner()<<endl;
+    cout<<"\tOwner\t"<<pirates[i].owner();
     ///health of the unit
-    cout<<"\tHealth\t"<<pirates[i].health()<<endl;
+    cout<<"\tHealth\t"<<pirates[i].health();
     ///attacking strength of the unit
-    cout<<"\tStrength\t"<<pirates[i].strength()<<endl;
+    cout<<"\tStrength\t"<<pirates[i].strength();
     cout<<endl;
     }
   }
@@ -200,6 +242,7 @@ void AI::displayPorts()
 
 void AI::displayShips()
 {
+  cout<<"Ships"<<endl;
   for(size_t i=0;i<ships.size();i++)
   {
     if(playerID()==ships[i].owner())

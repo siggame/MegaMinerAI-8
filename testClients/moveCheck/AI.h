@@ -27,6 +27,7 @@ public:
   void displayShips();
   void displayTreasure();
   void displayTiles();
+  bool shipAt(int x, int y);
   vector<vector<bool> > land;
   vector<vector<int> > port;
 };
