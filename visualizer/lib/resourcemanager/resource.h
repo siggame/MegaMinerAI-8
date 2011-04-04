@@ -9,7 +9,7 @@
 
 enum ResourceType
 {
-	RT_NONE
+	RT_NONE, RT_TEXTURE
 };
 
 class Resource
