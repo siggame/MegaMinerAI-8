@@ -22,6 +22,32 @@ void PirateMap::update()
 
 }
 
+void PirateMap::findClosest( 
+    int **map, 
+    const int& width, 
+    const int& height, 
+    const int& xc, 
+    const int& yc, 
+    const int& rad )
+{
+  for( int x = xc-rad; x <= xc+rad; x++ )
+  {
+    for( int y = yc-rad; y <= yc+rad; y++ )
+    {
+      if( x == -rad || x == rad || y == -rad || y == rad )
+      {
+        if( x >= 0 && x < width && y >= 0 && y < height )
+        {
+
+        }
+      } 
+    }
+  }
+}
+
+const int small = -99999;
+const int big = 99999;
+
 void PirateMap::generateMap( Game& g )
 {
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
@@ -46,7 +72,7 @@ void PirateMap::generateMap( Game& g )
       {
         tx = g.states[0].tiles[i].x;
         ty = g.states[0].tiles[i].y;
-        depthMap[tx*pixels+x][ty*pixels+y] = g.states[0].tiles[i].type == 0 ? -99999 : 99999;
+        depthMap[tx*pixels+x][ty*pixels+y] = g.states[0].tiles[i].type == 0 ? small : big;
       }
     }
   }
@@ -55,24 +81,31 @@ void PirateMap::generateMap( Game& g )
   int smaller = 0;
   int t;
 
+  bool neg;
+
+#if 1
   for( int y = mHeight-1; y >= 0; y-- )
   {
     for( int x = mWidth-1; x >= 0; x-- )
     {
-      for( int s = 1; x+s < mWidth && y+s < mHeight; s++ )
+      neg = depthMap[x][y] < 0 ? true : false;
+      for( int rad = 1; rad < mWidth-x && rad < mHeight-y; rad++ )
       {
-        if( x+s < mWidth )
-        {
-
-        } 
-
-        if( y+s < mHeight )
-        {
-
-        }
       }
     }
   }
+
+  cout << "Larger: " << larger << endl;
+  cout << "Smaller: " << smaller << endl;
+
+  for( int x = 0; x < mWidth; x++ )
+  {
+    for( int y = 0; y < mHeight; y++ )
+    {
+      depthMap[x][y] = (depthMap[x][y] - smaller) * 255 /(larger-smaller);
+    }
+  }
+#endif
 
 #if 0
   int mWidth = 40*20;
@@ -87,10 +120,15 @@ void PirateMap::generateMap( Game& g )
 
   out.write( (const char*)TGAheader, 12 );
   out.write( (const char*)header, 6 );
+#if 0
   for( int x = 0; x < mWidth; x++ )
   {
-    out.write( (const char*)depthMap[x], mHeight );
+    for( int y = 0; y < mHeight; y++ )
+    {
+      out.write( (const char*)&depthMap[x][y], 1 );
+    }
   }
+#endif
   //out.write( (const char*)pixels, nSize );
 
 

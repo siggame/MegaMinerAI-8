@@ -501,6 +501,7 @@ T optionsMan::getVar(const std::string & oName)
 template<class T, OptionType OT>
 void optionsMan::setVar(const std::string & oName, const T & val)
 {
+  /// TODO: Throw Error Here or Something.
 	if (!exists(oName))
 	{
     if( !isInit() )
@@ -514,10 +515,6 @@ void optionsMan::setVar(const std::string & oName, const T & val)
       if( !Singleton<Mutex>::create() )
         return;
     Mutex::createMutex( oName );
-#if 0
-		std::cout << "Setting invalid float option \"" << oName << "\"\n";
-		return;
-#endif
 
     return;
 	}

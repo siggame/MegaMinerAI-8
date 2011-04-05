@@ -18,6 +18,14 @@ public:
 
   static void drawTGA( std::string filename );
 
+  void findClosest( 
+      int **map, 
+      const int& width, 
+      const int& height, 
+      const int& xc, 
+      const int& yc, 
+      const int& rad );
+
   void update();
   virtual void renderAt(
       const unsigned int& turn,
