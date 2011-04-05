@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\bin\Debug"
+			OutputDirectory="bin\Debug"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -89,7 +89,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\bin\Release"
+			OutputDirectory="bin\Release"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -171,35 +171,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\c\game.cpp"
+				RelativePath="..\c\game.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\getters.cpp"
+				RelativePath="..\c\getters.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\lex.yy.cpp"
+				RelativePath="..\c\sexp\lex.yy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\network.cpp"
+				RelativePath="..\c\network.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\parser.cpp"
+				RelativePath="..\c\sexp\parser.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\sexp.cpp"
+				RelativePath="..\c\sexp\sexp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\sfcompat.cpp"
+				RelativePath="..\c\sexp\sfcompat.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\util.cpp"
+				RelativePath="..\c\util.cpp"
 				>
 			</File>
 		</Filter>
@@ -209,39 +209,39 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\c\game.h"
+				RelativePath="..\c\game.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\getters.h"
+				RelativePath="..\c\getters.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\lex.yy.h"
+				RelativePath="..\c\sexp\lex.yy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\network.h"
+				RelativePath="..\c\network.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\parser.h"
+				RelativePath="..\c\sexp\parser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\sexp.h"
+				RelativePath="..\c\sexp\sexp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\sexp\sfcompat.h"
+				RelativePath="..\c\sexp\sfcompat.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\structures.h"
+				RelativePath="..\c\structures.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\c\util.h"
+				RelativePath="..\c\util.h"
 				>
 			</File>
 		</Filter>
