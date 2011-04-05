@@ -7,8 +7,12 @@
 struct PirateDataInfo
 {
   int owner;
-  float x;
-  float y;
+  int x;
+  int y;
+  int health;
+  int strength;
+  int hasMoved;
+  int hasAttacked;
 };
 
 class PirateData : public GOCFamily_Data<PirateDataInfo>
