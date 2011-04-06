@@ -1,5 +1,6 @@
 #include "piratemap.h"
 #include <GL/gl.h>
+#include <GL/glext.h>
 
 #include <iostream>
 using namespace std;

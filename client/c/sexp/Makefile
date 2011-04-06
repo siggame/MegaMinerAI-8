@@ -5,16 +5,6 @@ libclient_objects = $(sources:%.cpp=libclient_%.o)
 CFLAGS = -g
 CXXFLAGS= -g
 
-ifeq ($(TARGET),mingw)
-CXX:=i586-mingw32-g++
-CC:=i586-mingw32-gcc
-AR:=i586-mingw32-ar
-RANLIB:=i586-mingw32-ranlib
-else
-AR:=ar
-RANLIB:=ranlib
-endif
-
 all: sexp.a libclient_sexp.a
 
 clean:
@@ -34,10 +24,10 @@ libclient_%.o: %.cpp
 .PHONY: clean all
 
 libclient_sexp.a: ${libclient_objects}
-	$(AR) cr $@ $^
-	$(RANLIB) $@
+	ar cr $@ $^
+	ranlib $@
 
 sexp.a: ${objects}
-	$(AR) cr $@ $^
-	$(RANLIB) $@
+	ar cr $@ $^
+	ranlib $@
 
