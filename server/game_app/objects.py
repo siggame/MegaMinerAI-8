@@ -300,6 +300,11 @@ class Pirate(Unit):
     return True
                       
   def buildPort(self):
+    #checks for distance to nearest port
+    for i in self.game.objects.values():
+      if isinstance(i,Port):
+        if self._distance(i.x,i.y) <= 3:
+          return "Too close to another port!"
     for i in self.game.objects.values():
       if isinstance(i, Tile):
         if i._distance(self.x,self.y) == 1: #Not sure about this
