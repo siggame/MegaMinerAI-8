@@ -7,6 +7,11 @@ CXXFLAGS += -g
 CPPFLAGS = -DSHOW_NETWORK
 override CPPFLAGS += -Isexp
 
+ifeq ($(TARGET), mingw)
+CXX:=i586-mingw32-g++
+CC:=i587-mingw32-gcc
+endif
+
 all: $(objects) sexp/libclient_sexp.a visualizer
 
 %.d: %.cpp
