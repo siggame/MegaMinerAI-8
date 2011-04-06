@@ -13,6 +13,28 @@ On ubuntu, you'll be running:
 
 == Compiling ==
 
+The visualizer will build on both linux and windows.  Mac is not yet 
+supported.  The visualizer is mostly supported on windows through cross-
+compiling.  We don't have it set up for easy windows compiling on windows
+yet.  Ironic.  Use the following scripts to build (assuming you have
+cross-compiling appropriately set up.  See www.jacobvgardner.com for 
+an article on getting qt cross compiling working).
+
+To build on linux:
+./linuxBuild
+
+To build on Window:
+./windowBuild [debug]
+
+
+Windows binaries are put into ./release or ./debug depending on how you built
+it.
+
+Linux binaries are in the root directory.
+
+- The following Instructions Are Deprecated,  Use the Build Scripts Mentioned
+Above Instead:
+
 If you have just pulled from the repository for the first time you will have
 to run qmake-qt4 on campus machines and qmake at home.
 
