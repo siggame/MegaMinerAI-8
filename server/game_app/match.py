@@ -113,28 +113,18 @@ class Match(DefaultGameWorld):
           self.addObject(Tile.make(self, x, y, 0))
           if 'P' in encountered:
             self.addObject(Port.make(self, x, y, 1))
-            
-            for i in range(0,self.playersStartingPirates):
-              self.addObject(Pirate.make(self, x, y, 1, self.pirateHealth, self.pirateStrength))
-              
-            for i in range(0,self.playersStartingShips):
-              self.addObject(Ship.make(self, x, y, 1, self.shipHealth, self.shipStrength))
+           
               
           else:
             encountered.add('P')
             self.addObject(Port.make(self, x, y, 0))
             
-            for i in range(0,self.playersStartingPirates):
-              self.addObject(Pirate.make(self, x, y, 0, self.pirateHealth, self.pirateStrength))
-              
-            for i in range(0,self.playersStartingShips):
-              self.addObject(Ship.make(self, x, y, 0, self.shipHealth, self.shipStrength))
               
         else:
         #if the next byte is a '1' which is a neutral AI's 1st port with land below it
           #map[x][y] = 0
           self.addObject(Tile.make(self, x, y, 0))
-          if mapThing in encountered == 1:
+          if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
             for i in range(0,self.npcStartingPirates):
@@ -153,7 +143,30 @@ class Match(DefaultGameWorld):
             for i in range(0,self.npcStartingShips):
               self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
 
-      
+    for p in self.objects.values():
+      if isinstance(p,Port) and (p.owner == 1 or p.owner == 0):
+        for i in range(0,self.playersStartingPirates):
+          self.addObject(Pirate.make(self, p.x, p.y, p.owner, self.pirateHealth, self.pirateStrength))
+        
+        #Finds empty water tiles, puts their locations in a list along with their modified distances from each player (modified such that one builds clockwise while the other builds counterclockwise)
+        emptyWaterTiles = []
+        for i in self.objects.values():
+          if isinstance(i,Tile):
+            if i.type == 1:
+              empty = True
+              for j in self.objects.values():
+                if isinstance(j,Ship):
+                  if j.x == i.x and j.y == i.y:
+                    empty = False
+              if empty:
+                emptyWaterTiles += [[modDistance(i,p),i.x,i.y]]
+        
+        emptyWaterTiles.sort()
+        for i in range(0,self.playersStartingShips):
+          if len(emptyWaterTiles) >= 1:
+            self.addObject(Ship.make(self, emptyWaterTiles[0][1], emptyWaterTiles[0][2], p.owner, self.shipHealth, self.shipStrength))
+            emptyWaterTiles.pop(0)
+    
     #for y in range(0,self.mapSize):
       #print "\n",
       #for x in range(0,self.mapSize):
@@ -337,6 +350,34 @@ class Match(DefaultGameWorld):
 
     return msg
 
+#returns a value that when sorted will result in a counterclockwise or clockwise sort order
+def modDistance(tile,port):
+  runningTotal = 0.0
+  runningTotal += 10000*(abs(port.x-tile.x) + abs(port.y-tile.y))
+  if port.owner == 0:
+    if port.y > tile.y:
+      runningTotal += .0001*(port.x-tile.x)
+    elif port.y == tile.y:
+      if port.x > tile.x:
+        runningTotal += 1
+      else:
+        runningTotal += 1000
+    elif port.y < tile.y:
+      runningTotal += 100+(tile.x-port.x)
+      
+  if port.owner == 1:
+    if port.y < tile.y:
+      runningTotal += .0001*(tile.x-port.x)
+    elif port.y == tile.y:
+      if port.x < tile.x:
+        runningTotal += 1
+      else:
+        runningTotal += 1000
+    elif port.y > tile.y:
+      runningTotal += 100+(port.x-tile.x)      
+  
+  return runningTotal
+  
 
 loadClassDefaults()
 
