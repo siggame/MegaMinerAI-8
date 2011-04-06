@@ -24,8 +24,8 @@ void TreasureData::parseTreasure( const Game& game, int treasureId )
 {
   for( int i = 0; i < game.states.size(); i++ )
   {
-    std::map<int,Treasure>::const_iterator j = game.states[i].treasure.find( treasureId );
-    if( j != game.states[i].treasure.end() )
+    std::map<int,Treasure>::const_iterator j = game.states[i].treasures.find( treasureId );
+    if( j != game.states[i].treasures.end() )
     {
       TreasureDataInfo t;
       t.x = j->second.x;

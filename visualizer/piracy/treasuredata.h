@@ -4,7 +4,7 @@
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
 
-struct TreasDataInfo
+struct TreasureDataInfo
 {
   int x;
   int y;
@@ -12,7 +12,7 @@ struct TreasDataInfo
   int amount; 
 };
 
-class TreasureData : public GOCFamily_Data<PirateDataInfo>
+class TreasureData : public GOCFamily_Data<TreasureDataInfo>
 {
 public:
   TreasureData();
