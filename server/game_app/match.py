@@ -149,7 +149,8 @@ class Match(DefaultGameWorld):
           self.addObject(Pirate.make(self, p.x, p.y, p.owner, self.pirateHealth, self.pirateStrength))
         
         #Finds empty water tiles, puts their locations in a list along with their modified distances from each player (modified such that one builds clockwise while the other builds counterclockwise)
-        emptyWaterTiles = []
+        emptyWaterTiles = [[0,p.x,p.y]]
+            
         for i in self.objects.values():
           if isinstance(i,Tile):
             if i.type == 1:
@@ -160,6 +161,8 @@ class Match(DefaultGameWorld):
                     empty = False
               if empty:
                 emptyWaterTiles += [[modDistance(i,p),i.x,i.y]]
+          if len(emptyWaterTiles) > self.playersStartingShips:
+            break
         
         emptyWaterTiles.sort()
         for i in range(0,self.playersStartingShips):
