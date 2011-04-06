@@ -7,6 +7,8 @@
 #include "../../piracy/piratedata.h"
 #include "../../piracy/piraterender.h"
 #include "../../piracy/piratemap.h"
+#include "../../piracy/treasuredata.h"
+#include "../../piracy/treasurerender.h"
 
 #include <iostream>
 #include <string>
@@ -127,8 +129,10 @@ void GUI::loadGamelog( std::string gamelog )
 
   int pirateId = 0;
   int boatId = 0;
+  int treasureId = 0;
   int boats = 0;
   int pirates = 0;
+  int treasures = 0;
 
   GameObject *go = new GameObject( -1 );
   PirateMap *pm = new PirateMap();
@@ -198,7 +202,29 @@ void GUI::loadGamelog( std::string gamelog )
 
         boats++;
       }
+    }
+      
+  for( std::map<int,Treasure>::iterator t = g.states[i].treasures.begin();
+        t != g.states[i].treasures.end();
+        t++ )
+    {
+      if( t->second.id > treasureId )
+      {
+        treasureId = t->second.id;
+        go  = new GameObject( treasureId );
+        TreasureData *td = new TreasureData();
+        td->parseTreasure( g, treasureId );
+        TreasureRender *tr = new TreasureRender();
+        
+        td->setOwner( go );
+        tr->setOwner( go );
+        go->setGOC( td );
+        go->setGOC( tr );
 
+        Renderer::reg( treasureId, go );
+
+        treasures++;
+      }
     }
 #endif
 
