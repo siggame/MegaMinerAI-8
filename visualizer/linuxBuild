@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# First compile parser for linux
+# Get to Parser directory:
+cd ./lib/parser
+
+# We want to remove all linux binaries and helper files
+make clean
+
+# Build Parser for linux:
+make
+
+# Congrats, a linux parser has now been built for you.
+
+# Back to the root directory:
+cd ../../
+
+# Build Makefiles for linux:
+qmake 
+
+# Leave off release if you want a debug build
+make 
+
+# Congrats, you're done
