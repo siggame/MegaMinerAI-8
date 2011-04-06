@@ -28,7 +28,6 @@ To build on linux:
 To build on Window:
 ./windowBuild [debug]
 
-
 Windows binaries are put into ./release or ./debug depending on how you built
 it.
 
