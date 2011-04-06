@@ -5,6 +5,8 @@
 #include "BaseAI.h"
 #include "game.h"
 
+#include "util.h"
+
 int BaseAI::turnNumber()
 {
   return getTurnNumber(c);
@@ -96,3 +98,15 @@ bool BaseAI::startTurn()
 
 BaseAI::BaseAI(Connection* conn) : c(conn) {}
 BaseAI::~BaseAI() {}
+
+std::vector<Tile*> BaseAI::path(Tile& start, Tile& end)
+{
+  findPath((_Tile*)start.ptr, (_Tile*)end.ptr);
+  int size = getPathSize();
+  std::vector<Tile*> path(size);
+  for(int i = 0; i < size; i++)
+    path.push_back(&(tiles[getPathStep(i)]));
+
+  return path;
+}
+

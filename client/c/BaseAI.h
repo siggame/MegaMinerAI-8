@@ -69,6 +69,10 @@ public:
 
 
   bool startTurn();
+
+  ///
+  ///Finds a path between two tiles
+  std::vector<Tile*> path(Tile& start, Tile& end);
 };
 
 #endif
