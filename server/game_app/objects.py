@@ -1,3 +1,4 @@
+from math import sqrt
 # -*- coding: iso-8859-1 -*-
 class Mappable:
   def __init__(self, game, id, x, y):
@@ -654,7 +655,13 @@ class Treasure(Mappable):
     return Treasure(game, id, x, y, pirateID, amount)
   
   def nextTurn(self):
-    pass
+    if self.pirateID == -1:
+      closest = self.game.mapSize*3
+      for p in self.game.objects.values():
+        if isinstance(p,Pirate):
+          if p._distance(self.x,self.y) < closest:
+            closest = p._distance(self.x,self.y)
+      self.amount += (self.amount * sqrt(closest))/100
 
 
 
