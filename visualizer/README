@@ -7,7 +7,7 @@ have to do anything.  If you're installing at home you will need to install
 these.
 
 On ubuntu, you'll be running:
-<todo>ADD APTITUDE COMMAND FOR INSTALLING QT</todo>
+sudo aptitude install build-essential flex qt4-designer qt4-qmake 
 
 == Compiling ==
 
