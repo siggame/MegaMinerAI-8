@@ -9,7 +9,7 @@ cd ../codegen/
 python main.py templates
 
 # Copy the appropriate files over
-cp -f -r ./output/visualizer/ ../visualizer/lib/parser/
+cp -f -r ./output/visualizer/* ../visualizer/lib/parser/
 
 # First compile parser for linux
 # Get to Parser directory:
