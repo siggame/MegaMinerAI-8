@@ -1,4 +1,4 @@
-SUBDIRS = pathCheck objectCheck fightCheck moveCheck createCheck
+SUBDIRS = pathCheck objectCheck fightCheck moveCheck createCheck brawler
 
 
 all: 
