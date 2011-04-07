@@ -8,6 +8,10 @@ these.
 
 On ubuntu, you'll be running:
 sudo aptitude install build-essential flex qt4-designer qt4-qmake 
+On gentoo:
+sudo emerge flex qt 
+OR smaller package:
+sudo emerge flex qt-core qt-gui qt-opengl qt-script
 
 == Compiling ==
 
