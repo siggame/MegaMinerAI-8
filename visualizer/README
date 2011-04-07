@@ -74,4 +74,3 @@ unix {
   SOURCES += unixExample.cpp
   HEADERS += unixExample.h
 }
-
