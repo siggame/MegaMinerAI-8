@@ -18,6 +18,9 @@ cd ../../
 # Build Makefiles for linux:
 qmake 
 
+# clean up for a full build
+make clean
+
 # Leave off release if you want a debug build
 make 
 
