@@ -1,8 +1,5 @@
 == Visualizer 2 == 
 
-=======
-VISUALIZER 2.0
-
 == Dependencies ==
 To compile and run this you will need qt and the OpenGL libraries for Qt.
 These dependencies are already satisfied by campus computers so you don't
