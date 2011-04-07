@@ -21,6 +21,9 @@ qmake -spec win32-x-g++
 # Leave off release if you want a debug build
 make release
 
+# Clean up windows mess
+make clean
+
 # Your visualizer.exe executable will now be in ./release or ./debug
  
 # Now reset everything so that it compiles appropriately in linux
