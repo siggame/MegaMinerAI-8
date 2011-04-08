@@ -2,15 +2,13 @@
 #define RESOURCE_H
 #include <set>
 #include <string>
+#include "typedefs.h"
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-enum ResourceType
-{
-	RT_NONE, RT_TEXTURE
-};
+
 
 class Resource
 {
@@ -94,9 +92,11 @@ class Resource
             return false;
         }
 
+
 	protected:
 	ResourceType m_type;
 	std::set<std::string> m_references;
+	std::string filename;
 	private:
 };
 

@@ -5,13 +5,20 @@ class texture
 {
 	private:
 		QImage texture;
-		unsigned int texId;
 	public:
 		bool loadImage( QString path );
 
-		int getWidth();
-		int getHeight();
+		int getWidth()
+		{
+			return;
+		}
+		int getHeight()
+		{
+			return;
+		}
 
-		int getTexture();
-
+		int getTexture()
+		{
+			return;
+		}
 };

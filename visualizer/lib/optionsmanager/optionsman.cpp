@@ -187,6 +187,9 @@ bool optionsMan::strToBool(const std::string & val)
   */
 bool optionsMan::addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
+	if (!isInit())
+		return false;
+
 	std::string valbuff;
 	if (ss >> valbuff)
 	{
@@ -218,6 +221,9 @@ bool optionsMan::addBool(const std::string & namebuff, std::stringstream & ss, c
   */
 bool optionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
+	if (!isInit())
+		return false;
+
 	float val;
 	if (ss >> val)
 	{
@@ -242,6 +248,9 @@ bool optionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, 
   */
 bool optionsMan::addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
+	if (!isInit())
+		return false;
+
 	int val;
 
 	if (ss >> val)
@@ -267,6 +276,9 @@ bool optionsMan::addInt(const std::string & namebuff, std::stringstream & ss, co
   */
 bool optionsMan::addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
+	if (!isInit())
+		return false;
+
 	std::string val;
 	if (ss >> val)
 	{
@@ -283,11 +295,11 @@ bool optionsMan::addString(const std::string & namebuff, std::stringstream & ss,
 		{
 			Mutex::createMutex(namebuff);
 		}
+		return true;
 	}
-	else
-	{
 		std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
-	}
+
+	return false;
 }
 
 
@@ -342,6 +354,8 @@ bool optionsMan::saveOptionFile(const std::string & filename)
 				output << "No\n";
 			}
 			break;
+			default: //shouldn't happen, this is for the warnings
+			std::cout << "ERROR IN SAVING OPTIONS!!: a variable has no type!\n";
 		}
 
 	}
@@ -458,7 +472,7 @@ bool optionsMan::destroy()
 
 	std::map<std::string, OptionBase*>::iterator it = get()->m_options.begin();
 
-	for (it; it != get()->m_options.end(); it++)
+	for (; it != get()->m_options.end(); it++)
 	{
 		delete it->second;
 	}
@@ -501,24 +515,12 @@ T optionsMan::getVar(const std::string & oName)
 template<class T, OptionType OT>
 void optionsMan::setVar(const std::string & oName, const T & val)
 {
-  /// TODO: Throw Error Here or Something.
 	if (!exists(oName))
 	{
-    if( !isInit() )
-    {
-      if( !Singleton<optionsMan>::create() )
+		std::cout << "Object: \"" << oName << "\" doesn't exist\n";
         return;
     }
-
-    get()->m_options[oName] = new Option<T,OT>(val);
-    if( !Mutex::isInit() )
-      if( !Singleton<Mutex>::create() )
-        return;
-    Mutex::createMutex( oName );
-
-    return;
-	}
-
+	
 	if (optionType(oName) != OT)
 	{
 		std::cout << "Setting option \"" << oName << "\" to wrong type\n";
