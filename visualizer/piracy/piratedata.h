@@ -22,7 +22,7 @@ struct PirateDataInfo
 	  y = 0;
 	  totalHealth = 0; 
   	numPirates = 0;
-    strength = 0;
+    totalStrength = 0;
   	hasMoved = 0;
   	hasAttacked = 0;
   }

@@ -175,7 +175,7 @@ void GUI::loadGamelog( std::string gamelog )
     vector<vector<vector< PirateData> > >  piVec = 
       vector<vector<vector<PirateData> > >(5, 
 	    vector<vector<PirateData> >(g.states[0].mapSize, 
-      vector<PirateData> (g.states[0].mapSize);
+      vector<PirateData> (g.states[0].mapSize) ) );
 
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
         p != g.states[i].pirates.end();
@@ -184,6 +184,8 @@ void GUI::loadGamelog( std::string gamelog )
        {
        	//TODO:calculate dir by compairing the previous state to the current state.
 
+// Commented out so wallace can compile his visualizer
+#if 0
       	PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].x = p.x;
       	PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].y = p.y;
 				PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].owner = p.owner;
@@ -192,6 +194,7 @@ void GUI::loadGamelog( std::string gamelog )
 				PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].totalStrength += p.strength;
 				PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].hasMoved = p.hasMoved;
 				PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].hasAttacked = p.hasAttacked;
+#endif
 					
        }
 
