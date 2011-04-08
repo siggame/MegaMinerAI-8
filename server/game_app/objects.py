@@ -251,7 +251,9 @@ class Pirate(Unit):
     return True
 
 
-  def dropTreasure(self, amount):   
+  def dropTreasure(self, amount):
+    if self.owner != self.game.playerID:
+      return "Yarr!  Ye cannot trick me into dropin me treasure!  Yer not me captain!" 
     for i in self.game.objects.values():
       if isinstance(i,Treasure):
         #Locates the treasure being modified
