@@ -7,6 +7,10 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   setContentsMargins( 0, 0, 0, 0 );
   QHBoxLayout *layout = new QHBoxLayout;
 
+  rewindButton = new QPushButton("<", this);
+  playButton = new QPushButton("||", this);
+  fastForwardButton = new QPushButton("->", this);
+
   m_slider = new QSlider( Qt::Horizontal, this );
   m_slider->setMinimum( 0 );
   m_slider->setTickInterval( 50 ); 
@@ -36,7 +40,14 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   connect( m_slider, SIGNAL(sliderReleased()), this, SLOT(sliderRelease()) );
   connect( m_slider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)) );
 
+  connect( rewindButton, SIGNAL(clicked()), this, SLOT( rewind()) );
+  connect( playButton, SIGNAL(clicked()), this, SLOT( play()) );
+  connect( fastForwardButton, SIGNAL(clicked()), this, SLOT( fastForward()) );
+
   layout->addWidget( m_slider );
+  layout->addWidget( rewindButton );
+  layout->addWidget( playButton );
+  layout->addWidget( fastForwardButton );
 
   setLayout( layout );
 
@@ -65,4 +76,66 @@ void ControlBar::update()
   m_slider->setSliderPosition( TimeManager::getTurn() );
   m_slider->setMaximum( TimeManager::getNumTurns() );
 
+}
+
+void ControlBar::rewind()
+{
+  if(TimeManager::getSpeed() >= 0)
+  {
+    TimeManager::setSpeed(-1);
+    rewindButton->setText("<-");
+    playButton->setText(">");
+    fastForwardButton->setText("->");
+  }
+  else
+  {
+    int speed = TimeManager::getSpeed();
+    speed = (speed > -64 ? speed * 2 : -128);
+    QString symbol = "<-";
+    for(int i = -1; i != speed; i*=2)
+    {
+      symbol += "-";
+    }
+    TimeManager::setSpeed(speed);
+    rewindButton->setText(symbol);
+  }
+}
+
+void ControlBar::play()
+{
+  if(TimeManager::getSpeed() == 1)
+  {
+    TimeManager::setSpeed(0);
+    playButton->setText(">");
+  }
+  else
+  {
+    rewindButton->setText("<");
+    playButton->setText("||");
+    fastForwardButton->setText("->");
+    TimeManager::setSpeed(1);
+  }
+}
+
+void ControlBar::fastForward()
+{
+  if(TimeManager::getSpeed() < 2)
+  {
+    TimeManager::setSpeed(2);
+    rewindButton->setText("<");
+    playButton->setText(">");
+    fastForwardButton->setText("-->");
+  }
+  else
+  {
+    int speed = TimeManager::getSpeed();
+    speed = (speed < 64 ? speed * 2 : 128);
+    QString symbol = "-";
+    for(int i = 1; i != speed; i*=2)
+    {
+      symbol += "-";
+    }
+    TimeManager::setSpeed(speed);
+    fastForwardButton->setText(symbol + ">");
+  }
 }
