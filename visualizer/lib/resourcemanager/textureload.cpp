@@ -58,7 +58,7 @@ bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture)
 
 	if (!buffer.load( path ))
 	{
-		std::cout << "Load Texture Error: File would not load\n";
+		std::cout << "Load Texture Error: TIFF File would not load\n";
 		return false;
 	}
 
@@ -92,7 +92,7 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 
 	if (!buffer.load( path ))
 	{
-		std::cout << "Load Texture Error: File would not load\n";
+		std::cout << "Load Texture Error: PNG File would not load\n";
 		return false;
 	}
 
@@ -124,11 +124,13 @@ bool loadTGA(const QString & path, unsigned int & texId, QImage & texture)
 {
 		QImage buffer;
 
+
 	if (!buffer.load( path ))
 	{
-		std::cout << "Load Texture Error: File would not load\n";
+		std::cout << "Load Texture Error: TGA File would not load\n";
 		return false;
 	}
+
 
 	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
 	QPainter painter(&fixed);
@@ -160,7 +162,7 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 
 	if (!buffer.load( path ))
 	{
-		std::cout << "Load Texture Error: File would not load\n";
+		std::cout << "Load Texture Error: BMP File would not load\n";
 		return false;
 	}
 

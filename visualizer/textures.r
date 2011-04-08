@@ -1,0 +1,9 @@
+texture portRed			./piracy/textures/CastleRed.png
+texture portGreen		./piracy/textures/CastleGreen.png
+texture pirateGreen		./piracy/textures/piratered.png
+texture pirateRed		./piracy/textures/pirategreen.png
+texture forest			./piracy/textures/Forest.png
+texture hills			./piracy/textures/Hills.png
+texture grass			./piracy/textures/Grass.png
+texture mountains		./piracy/textures/Mountains.png
+texture water			./piracy/textures/water.png

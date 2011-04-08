@@ -77,7 +77,8 @@ bool GUI::create()
 {
   if( !Singleton<GUI>::create() )
     return false;
-  return setup();
+
+  return true;
 }
 
 bool GUI::destroy()
@@ -172,10 +173,10 @@ void GUI::loadGamelog( std::string gamelog )
     int xoff[] = {0, 1, 0, -1, 0};
     int yoff[] = {0, 0, 1, 0, -1};
     dir direction = STOP;
-    
-    vector<vector<vector< PirateData> > >  piVec = 
-      vector<vector<vector<PirateData> > >(5, 
-      vector<vector<PirateData> >(g.states[0].mapSize, 
+
+    vector<vector<vector< PirateData> > >  piVec =
+      vector<vector<vector<PirateData> > >(5,
+      vector<vector<PirateData> >(g.states[0].mapSize,
       vector<PirateData> (g.states[0].mapSize) ) );
 
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
@@ -185,28 +186,28 @@ void GUI::loadGamelog( std::string gamelog )
        {
 // Commented out so wallace can compile his visualizer
 #if 0
-        //We're past turn 0, so movement from the last turn should happen 
+        //We're past turn 0, so movement from the last turn should happen
         // AND pirate exists
-        if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end()) 
+        if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end())
         {
           //Find direction enum
           int delta;
           delta = p.x - g.states[i-1].pirates[p->first].x;
-          
+
           switch(delta)
           {
             case -1:
               direction = LEFT;
               break;
             case 1:
-              direction = RIGHT;            
+              direction = RIGHT;
               break;
-            
+
             default:
               direction = STOP;
               break;
           }
-          
+
           delta = p.y - g.states[i-1].pirates[p->first].y;
           if (delta != 0)//There was any vertical motion
           {
@@ -216,7 +217,7 @@ void GUI::loadGamelog( std::string gamelog )
                 direction = UP;
                 break;
               case 1:
-                direction = DOWN;            
+                direction = DOWN;
                 break;
             }
           }
@@ -229,8 +230,8 @@ void GUI::loadGamelog( std::string gamelog )
         PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
         PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
         PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;         
-#endif          
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
+#endif
        }
 
 
@@ -245,9 +246,9 @@ void GUI::loadGamelog( std::string gamelog )
         go = new GameObject( pirateId );
         PirateData *pd = new PirateData();
         pd->parsePirate( g, pirateId );
-        
 
-        
+
+
         PirateRender *pr = new PirateRender();
         pd->setOwner( go );
         pr->setOwner( go );
@@ -271,7 +272,7 @@ void GUI::loadGamelog( std::string gamelog )
         BoatData *bd = new BoatData();
         bd->parseBoat( g, boatId );
         BoatRender *br = new BoatRender();
-        
+
         bd->setOwner( go );
         br->setOwner( go );
         go->setGOC( bd );
@@ -282,7 +283,7 @@ void GUI::loadGamelog( std::string gamelog )
         boats++;
       }
     }
-      
+
   for( std::map<int,Treasure>::iterator t = g.states[i].treasures.begin();
         t != g.states[i].treasures.end();
         t++ )
@@ -294,7 +295,7 @@ void GUI::loadGamelog( std::string gamelog )
         TreasureData *td = new TreasureData();
         td->parseTreasure( g, treasureId );
         TreasureRender *tr = new TreasureRender();
-        
+
         td->setOwner( go );
         tr->setOwner( go );
         go->setGOC( td );
@@ -349,8 +350,8 @@ void GUI::helpContents()
 void GUI::fileOpen()
 {
 
-  string filename = QFileDialog::getOpenFileName( 
-      this, 
+  string filename = QFileDialog::getOpenFileName(
+      this,
       tr( "Open Gamelog" ),
       QDir::currentPath(),
       tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
@@ -375,10 +376,10 @@ bool GUI::doSetup()
   buildToolSet();
   buildControlBar();
 
-  setWindowState( 
-      windowState() 
-      | Qt::WindowActive 
-      | Qt::WindowMaximized 
+  setWindowState(
+      windowState()
+      | Qt::WindowActive
+      | Qt::WindowMaximized
       );
 
   show();
@@ -398,21 +399,21 @@ void GUI::createActions()
 {
   m_helpContents = new QAction( tr( "&Contents" ), this );
   m_helpContents->setShortcut( tr( "F1" ) );
-  m_helpContents->setStatusTip( 
-      tr( "Open Online Help For This Game" ) 
+  m_helpContents->setStatusTip(
+      tr( "Open Online Help For This Game" )
       );
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
   m_fileOpen = new QAction( tr( "&Open" ), this );
   m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
-  m_fileOpen->setStatusTip( 
+  m_fileOpen->setStatusTip(
       tr( "Open A Gamelog" )
       );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
   m_fileExit = new QAction( tr( "E&xit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+X" ) );
-  m_fileExit->setStatusTip( 
+  m_fileExit->setStatusTip(
       tr( "Close the Visualizer" )
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
@@ -433,21 +434,21 @@ void GUI::createMenus()
 
   menu = menuBar()->addMenu( tr( "&Help" ) );
   menu->addAction( m_helpContents );
-  
+
 }
 
 void GUI::buildToolSet()
 {
-  // Get the toolset widget if it exists 
+  // Get the toolset widget if it exists
   m_toolSetWidget =
     (GOCFamily_GUIToolSet*)GUI::getGUIObject( "ToolSet" );
 
-  // If we're in arenaMode, don't even bother setting this up 
-  if( 
-      !optionsMan::isInit() || 
+  // If we're in arenaMode, don't even bother setting this up
+  if(
+      !optionsMan::isInit() ||
       !optionsMan::exists( "arenaMode" ) ||
       !optionsMan::getBool( "arenaMode" )
-    )  
+    )
   {
     // Create the dock
     m_dockWidget = new QDockWidget( this );

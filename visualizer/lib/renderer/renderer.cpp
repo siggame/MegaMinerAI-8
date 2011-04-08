@@ -66,7 +66,7 @@ bool Renderer::refresh()
 	//get time (turn, frame)
 	unsigned int turn = TimeManager::getTurn();
 	unsigned int frame = TimeManager::getFrame();
-    
+
   //float depth = 0;
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
 	for (; it != get()->m_objects.end(); it++)
@@ -121,8 +121,13 @@ bool Renderer::create()
 {
 	if (!Singleton<Renderer>::create())
 		return false;
-  get()->m_parent = 0;
-	return setup();
+
+	get()->m_parent = 0;
+	get()->m_height = 0;
+	get()->m_width  = 0;
+	get()->m_depth  = 0;
+
+	return true;
 }
 
 /** @brief getRenderObject
