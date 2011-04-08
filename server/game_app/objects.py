@@ -1,5 +1,5 @@
 # -*- coding: iso-8859-1 -*-
-from merchants import *
+#from merchants import *
 from math import sqrt
 class Mappable:
   def __init__(self, game, id, x, y):
