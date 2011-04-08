@@ -1,4 +1,5 @@
 #include "controlbar.h"
+#include "../timemanager/timeManager.h"
 #include <QHBoxLayout>
 
 ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
@@ -45,33 +46,23 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
 void ControlBar::sliderDrag()
 {
-  optionsMan::setBool( "sliderDragging", true );
+  TimeManager::setSpeed(0);
 }
 
 void ControlBar::sliderRelease()
 {
-  optionsMan::setBool( "sliderDragging", false );
+  TimeManager::setSpeed(1);
 }
 
 void ControlBar::sliderChanged( int value )
 {
-  optionsMan::setInt( "currentTurn", value );
+  TimeManager::setTurn(value);
 
 }
 
 void ControlBar::update()
 {
-  if( !optionsMan::exists( "numTurns" ) )
-  {
-    optionsMan::setInt( "numTurns", 0 );
-  }
-
-  if( !optionsMan::exists( "currentTurn" ) )
-  {
-    optionsMan::setInt( "currentTurn", 0 );
-  }
-
-  m_slider->setSliderPosition( optionsMan::getInt( "currentTurn" ) );
-  m_slider->setMaximum( optionsMan::getInt( "numTurns" ) );
+  m_slider->setSliderPosition( TimeManager::getTurn() );
+  m_slider->setMaximum( TimeManager::getNumTurns() );
 
 }
