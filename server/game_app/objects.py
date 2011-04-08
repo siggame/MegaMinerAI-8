@@ -225,8 +225,7 @@ class Pirate(Unit):
       if isinstance(i,Treasure):
         if self.id == i.pirateID:
           i.x = x
-          i.y = y
-    
+          i.y = y   
     return True
 
   def talk(self, message):
@@ -234,6 +233,8 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
+    if self.owner != self.game.playerID:
+      return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
     for i in self.game.objects.values():       
@@ -350,6 +351,8 @@ class Pirate(Unit):
     return True
                       
   def buildPort(self):
+    if self.owner != self.game.playerID:
+      return "Yarr, ye can't make me build a port! Ye are not my captain!"  
     #checks for distance to nearest port
     for i in self.game.objects.values():
       if isinstance(i,Port):
@@ -385,7 +388,7 @@ class Pirate(Unit):
   def attack(self, Target):
     #Ensures that you own the attacking unit
     if self.owner != self.game.playerID:
-      return "That isn't your pirate!"
+      return "I do not take orders from you! You be not my captain"
       
     elif not isinstance(Target,Unit):
       return "That isn't attackable!"
@@ -458,9 +461,6 @@ class Port(Mappable):
     return Port(game, id, x, y, owner)
     
   def nextTurn(self):
-    #TODO: Hits every enemy unit round the port for half of its max health
-    #Since we don't want being next to two ports simultaneously to be instant death, we should do this in match.py
-
     pass
     
 
