@@ -173,6 +173,8 @@ void GUI::loadGamelog( std::string gamelog )
     int yoff[] = {0, 0, 1, 0, -1};
     dir direction = STOP;
     
+    PirateDataInfo pdi;
+    
     vector<vector<vector< PirateData> > >  piVec = 
       vector<vector<vector<PirateData> > >(5, 
       vector<vector<PirateData> >(g.states[0].mapSize, 
@@ -183,15 +185,14 @@ void GUI::loadGamelog( std::string gamelog )
         p++
        )
        {
-// Commented out so wallace can compile his visualizer
-#if 0
+
         //We're past turn 0, so movement from the last turn should happen 
         // AND pirate exists
         if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end()) 
         {
           //Find direction enum
           int delta;
-          delta = p.x - g.states[i-1].pirates[p->first].x;
+          delta = p -> second.x - g.states[i-1].pirates[p->first].x;
           
           switch(delta)
           {
@@ -207,7 +208,7 @@ void GUI::loadGamelog( std::string gamelog )
               break;
           }
           
-          delta = p.y - g.states[i-1].pirates[p->first].y;
+          delta = p->second.y - g.states[i-1].pirates[p->first].y;
           if (delta != 0)//There was any vertical motion
           {
             switch(delta)
@@ -221,17 +222,21 @@ void GUI::loadGamelog( std::string gamelog )
             }
           }
         }
-
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
-        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].piratesInStack.push_front(p.id); 
-#endif          
+      
+        pdi.x = p->second.x;
+        pdi.y = p->second.y;
+        pdi.owner = p->second.owner;
+        pdi.totalHealth += p->second.health;
+        pdi.numPirates++;
+        pdi.totalStrength += p->second.strength;
+        pdi.hasMoved = p->second.hasMoved;
+        pdi.hasAttacked = p->second.hasAttacked;
+        pdi.piratesInStack.push_front(p->second.id); 
+        
+        int frame = (direction == STOP) ? 0 : 50;
+        
+        piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
+        
        }
 
 
@@ -245,11 +250,13 @@ void GUI::loadGamelog( std::string gamelog )
         {
           go = new GameObject( stackId );
           PirateRender *pr = new PirateRender();
-          
-          piVec[z][x][y]->setOwner( go );
+          PirateData *pd = new PirateData();
+          *pd = piVec[z][x][y];
+          pd->setOwner( go );
+         
           pr->setOwner( go );
           
-          go->setGOC( piVec[z][x][y] );
+          go->setGOC( pd );
           go->setGOC( pr );
           Renderer::reg( stackId, go );
           

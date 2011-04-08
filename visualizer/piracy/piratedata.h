@@ -15,7 +15,7 @@ struct PirateDataInfo
   int totalStrength;
   int hasMoved;
   int hasAttacked;
-  list<int> piratesInStack;
+  std::list<int> piratesInStack;
   
   PirateDataInfo()
   {
@@ -37,6 +37,7 @@ class PirateData : public GOCFamily_Data<PirateDataInfo>
 public:
   PirateData();
   ~PirateData();
+  void addPirateStack(const PirateDataInfo &, const int &, const int &);
 
   void update();
   const GOC_IDType componentID() const;
