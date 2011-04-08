@@ -1,4 +1,4 @@
-GENDIR=../../codegen/output/c
+GENDIR=../../client/c
 TOCOPY=$(wildcard *.h *.cpp *.java *.python *.cs)
 all:
 	cp $(TOCOPY) $(GENDIR)

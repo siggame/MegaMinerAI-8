@@ -1,5 +1,5 @@
 #include "AI.h"
-#include "util.h"
+//#include "util.h"
 
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
@@ -30,8 +30,44 @@ void AI::init()
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
+  int target=0;
   cout<<"Starting turn: "<<turnNumber()<<endl;
-  objectCheck();
+//  objectCheck();
+  displayShips();
+  for(size_t i=0;i<ships.size();i++)
+  {
+    if(ships[i].owner()==playerID())
+    {
+      vector<MoveHelper<Ship> > options;
+      sortNearest(ships[i].x(),ships[i].y(),ships,options,1);
+      size_t nearest=0;
+      // find the nearest enemy ship
+      while(nearest<options.size() && options[nearest].goal->owner() == playerID()){nearest++;}
+      // if you found a ship
+      if(nearest < options.size())
+      {
+        cout<<"Target: "<<options[nearest].goal->id()<<" Path size: "<<options[nearest].path.size()<<endl;
+        if(options[nearest].path.size()<3)
+        {
+          cout<<"FIRE!"<<endl;
+          ships[i].attack(*options[nearest].goal);
+        }
+        else 
+        {
+          if(options[nearest].path[0]->x() == ships[i].x(), options[nearest].path[0]->y() == ships[i].y())
+          {
+            cout<<"ITS AT YOUR PO!"<<endl;
+          }
+          ships[i].move(options[nearest].path[0]->x(),options[nearest].path[0]->y());
+        }
+      }
+      else
+      {
+        cout<<"NO PATHS!"<<endl;
+      }
+    }
+  }
+
   return true;
 }
 
@@ -65,7 +101,7 @@ void AI::displayPorts()
     ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
     cout<<"\tY\t"<<ports[i].y();
     ///The ownder of the port
-    cout<<"\tOwner\t"<<ports[i].owner()<<endl;
+    cout<<"\tOwner\t"<<ports[i].owner();
     cout<<endl;
   }
 }
