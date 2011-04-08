@@ -1,4 +1,5 @@
 #include "optionsman.h"
+#include <iostream>
 
 /** @brief exists
   * check to see if the string is a valid option name
@@ -41,12 +42,9 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 {
 	if (!isInit())
 	{
-    if( !Singleton<optionsMan>::create() )
-      return false;
+		return false;
 	}
 
-#include <iostream>
-  using namespace std;
 
 	/* if we allow multiple loading we can combine files easily
 	if (get()->m_options.size())

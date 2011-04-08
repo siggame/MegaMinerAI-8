@@ -20,9 +20,9 @@ class Resource
 		}
 
 		/** Default destructor */
-		virtual ~Resource();
+		virtual ~Resource(){}
 
-		virtual bool load() = 0;
+		virtual bool load(const std::string & filename) = 0;
 		virtual bool unload()
 		{
 			return true;

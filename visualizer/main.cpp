@@ -22,9 +22,21 @@ int main(int argc, char *argv[])
 
 
 
+
 	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
+		TimeManager::destroy();
+		optionsMan::destroy();
+		ResourceMan::destroy();
+		Mutex::destroy();
+		Threadler::destroy();
+		return 1;
+	}
+
+	if ( !ResourceMan::loadResourceFile("./textures.r") )
+	{
+		std::cerr << "Could Not Load resource.cfg" << std::endl;
 		TimeManager::destroy();
 		optionsMan::destroy();
 		ResourceMan::destroy();
