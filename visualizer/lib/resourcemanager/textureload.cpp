@@ -1,0 +1,190 @@
+/**************
+*This file may change between projects
+* ~Shep
+**************/
+
+#include "texture.h"
+#include <qgl.h>
+#include <iostream>
+
+enum IMAGE_TYPE
+{
+	IMG_NONE, IMG_TIFF, IMG_PNG, IMG_TGA, IMG_BMP
+};
+
+
+IMAGE_TYPE getImageType(const QString & path)
+{
+	if ( path.endsWith(".tif"))
+		return IMG_TIFF;
+	if ( path.endsWith(".png"))
+		return IMG_PNG;
+	if ( path.endsWith(".tga"))
+		return IMG_TGA;
+	if ( path.endsWith(".bmp"))
+		return IMG_BMP;
+
+	return IMG_NONE;
+}
+
+
+//prototypes
+bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
+bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
+bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
+bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
+
+
+bool ResTexture::loadImage( const QString & path )
+{
+	switch (getImageType(path))
+	{
+		case IMG_TIFF:
+		return loadTIFF(path,texId,texture);
+		case IMG_PNG:
+		return loadPNG(path,texId,texture);
+		case IMG_TGA:
+		return loadTGA(path,texId,texture);
+		case IMG_BMP:
+		return loadBMP(path,texId,texture);
+		default:
+		return false;
+	}
+}
+
+bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture)
+{
+	QImage buffer;
+
+	if (!buffer.load( path ))
+	{
+		std::cout << "Load Texture Error: File would not load\n";
+		return false;
+	}
+
+	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+	QPainter painter(&fixed);
+
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.fillRect( fixed.rect(), Qt::transparent );
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.drawImage( 0, 0, buffer );
+	painter.end();
+
+	texture = QGLWidget::convertToGLFormat( fixed );
+	glGenTextures( 1, &texId );
+
+	glBindTexture( GL_TEXTURE_2D, texId );
+	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+
+	return true;
+}
+
+bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
+{
+	QImage buffer;
+
+	if (!buffer.load( path ))
+	{
+		std::cout << "Load Texture Error: File would not load\n";
+		return false;
+	}
+
+	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+	QPainter painter(&fixed);
+
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.fillRect( fixed.rect(), Qt::transparent );
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.drawImage( 0, 0, buffer );
+	painter.end();
+
+	texture = QGLWidget::convertToGLFormat( fixed );
+	glGenTextures( 1, &texId );
+
+	glBindTexture( GL_TEXTURE_2D, texId );
+	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+
+	return true;
+}
+
+bool loadTGA(const QString & path, unsigned int & texId, QImage & texture)
+{
+		QImage buffer;
+
+	if (!buffer.load( path ))
+	{
+		std::cout << "Load Texture Error: File would not load\n";
+		return false;
+	}
+
+	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+	QPainter painter(&fixed);
+
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.fillRect( fixed.rect(), Qt::transparent );
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.drawImage( 0, 0, buffer );
+	painter.end();
+
+	texture = QGLWidget::convertToGLFormat( fixed );
+	glGenTextures( 1, &texId );
+
+	glBindTexture( GL_TEXTURE_2D, texId );
+	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+
+	return true;
+}
+
+bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
+{
+	QImage buffer;
+
+	if (!buffer.load( path ))
+	{
+		std::cout << "Load Texture Error: File would not load\n";
+		return false;
+	}
+
+	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+	QPainter painter(&fixed);
+
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.fillRect( fixed.rect(), Qt::transparent );
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.drawImage( 0, 0, buffer );
+	painter.end();
+
+	texture = QGLWidget::convertToGLFormat( fixed );
+	glGenTextures( 1, &texId );
+
+	glBindTexture( GL_TEXTURE_2D, texId );
+	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+
+	return true;
+}
+
