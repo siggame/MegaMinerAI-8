@@ -45,22 +45,22 @@ void PirateMap::blur(
       {
         case horizontal:
           for( 
-              i = (x-radius) < 0 ? 0 : x-radius;
+              i = ((x-radius) < 0 ? 0 : x-radius);
               i < ((x+radius+1) > width ? width : x+radius+1); 
               i++ )
           {
-            map[x][y] += map[x+i][y+1];
+            map[x][y] += map[i][y+1];
             c++;
           }
           map[x][y] /= c;
           break;
         case vertical:
           for( 
-              i = (y-radius) < 0 ? 0 : y-radius;
-              i < ((y+radius+1) > height ? height : x+radius+1); 
+              i = ((y-radius) < 0 ? 0 : y-radius);
+              i < ((y+radius+1) > height ? height : y+radius+1); 
               i++ )
           {
-            map[x][y] += map[x+1][y+i];
+            map[x][y] += map[x+1][i];
             c++;
           }
           map[x][y] /= c;
@@ -116,7 +116,7 @@ void PirateMap::generateMap( Game& g )
   int mWidth = mapSize*pixels;
   int mHeight = mapSize*pixels;
 
-  int **depthMap = new int*[mHeight];
+  int **depthMap = new int*[mWidth];
   int tx = 0;
   int ty = 0;
 
@@ -141,8 +141,8 @@ void PirateMap::generateMap( Game& g )
   boxBlur( depthMap, mWidth, mHeight, pixels/2 );
 
   bool neg = false;
-  int larger = 0;
-  int smaller = 0;
+  int larger = 1000;
+  int smaller = -1000;
   int t;
 
 
