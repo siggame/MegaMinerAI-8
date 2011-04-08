@@ -234,20 +234,66 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
-    for i in self.game.objects.values():
-      if isinstance(i,Treasure):
-        if i.x == self.x and i.y == self.y and i.pirateID == -1:
-          #Pirate picks up all of the treasure
-          if amount == i.amount:
-            i.pirateID = self.ID
-          #Pirate picks up a portion of the treasure
-          elif amount < i.amount:
-            i.amount -= amount
-            treasure = i.make(game,self.x,self.y,self.ID,amount)
-            game.addObject(treasure)
-          #Pirate tries to pick up more treasure than allowed
+    #If trying to use pickup treasure and standing on a port  
+    portPickup = False
+    for i in self.game.objects.values():       
+      if isinstance(i,Port):
+        if i.x == self.x and i.y == self.y:
+          portPickup = True
+          p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+          #Sets the owner of the pirate to eaither player 0 or 1
+          if self.owner == 0:
+            owner = 0
           else:
-            return "There isn't that much treasure!"
+            owner = 1
+          #Checks to make sure amount being withdrawn is less than that player has
+          if amount <= p[owner].gold:          
+            hasTreasure = False
+            #check to see if the pirate already has treasure
+            for j in self.game.objects.values():
+              if isinstance(j,Treasure):
+                #If the pirate does have treasure add it to that and deduct player's total
+                if j.x == self.x and j.y == self.y and j.pirateID == self.ID:
+                  j.amount += amount
+                  p[owner].gold -= amount
+                  hasTreasure = True
+            #If the pirate did not have treasure we create a new thing of treasure for them
+            if hasTreasure == False:
+              treasure = i.make(game,self.x,self.y,self.ID,amount)
+              game.addObject(treasure)
+              p[owner].gold -= amount
+              
+    #If the pirate is not on a port and is trying to pickup Treasure
+    if portPickup == False:
+      for i in self.game.objects.values():
+        if isinstance(i,Treasure):
+          if i.x == self.x and i.y == self.y and i.pirateID == -1:
+            #Check to make sure the amount being picked up isn't greater than its value
+            if amount > i.amount:
+              return "There isn't that much treasure!"
+            #Checks to see if the pirate has treasure
+            hasTreasure = False
+            for j in self.game.objects.values():
+              if isinstance(j,Treasure):
+                #If the pirate has treasure, increase the value of the current trasure by amount and reduce from other treasure
+                if j.pirateID == self.pirateID:
+                  j.amount += amount
+                  i.amount -= amount
+                  #If that treasure has no value left, remove it
+                  if i.amount <= 0:
+                    self.game.removeObject(i)
+                  hasTreasure = True
+            #If the pirate does not have treasure
+            if hasTreasure == False:     
+              #If the pirate tries to pick up all of the treasure          
+              if amount == i.amount:
+                i.pirateID = self.ID        
+            #Pirate picks up a portion of the treasure
+            elif amount < i.amount:
+              i.amount -= amount
+              treasure = i.make(game,self.x,self.y,self.ID,amount)
+              game.addObject(treasure)
+            #Pirate tries to pick up more treasure than allowed                                              
     return True
 
 
