@@ -143,6 +143,7 @@ void GUI::loadGamelog( std::string gamelog )
   Renderer::reg( -1, go );
 
   optionsMan::setInt( "numTurns", g.states.size() );
+  TimeManager::setNumTurns(g.states.size() );
 
 
   //cout << "Number of Turns: " << g.states.size() << endl;
