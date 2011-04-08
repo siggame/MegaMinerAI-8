@@ -12,12 +12,22 @@ class ResTexture : public Resource
 		QImage texture;
 		unsigned int texId;
 	public:
-		bool loadImage( QString path );
+		bool loadImage( const QString & path );
 
-		int getWidth();
-		int getHeight();
+		int getWidth()
+		{
+			return texture.width();
+		}
 
-		int getTexture();
+		int getHeight()
+		{
+			return texture.height();
+		}
+
+		int getTexture()
+		{
+			return texId;
+		}
 };
 
 
