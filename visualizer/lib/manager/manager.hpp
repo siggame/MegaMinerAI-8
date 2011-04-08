@@ -7,8 +7,8 @@
 template < typename IdType, typename DataType >
 unsigned int Manager<IdType,DataType>::size()
 {
-	if (ManagerSingleton::isInit())
-		ManagerSingleton::get()->m_data.size();
+	if (Manager::isInit())
+		Manager::get()->m_data.size();
 
 	return 0;
 }
@@ -20,8 +20,8 @@ unsigned int Manager<IdType,DataType>::size()
 template < typename IdType, typename DataType >
 void Manager<IdType,DataType>::clear()
 {
-	if (ManagerSingleton::isInit())
-		ManagerSingleton::get()->m_data.clear();
+	if (Manager::isInit())
+		Manager::get()->m_data.clear();
 }
 
 /** @brief exists
@@ -32,10 +32,10 @@ void Manager<IdType,DataType>::clear()
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::exists(const IdType & id)
 {
-	if (!ManagerSingleton::isInit())
+	if (!Manager::isInit())
 		return false;
 
-	if (ManagerSingleton::get()->m_data.find(id) != ManagerSingleton::get()->m_data.end())
+	if (Manager::get()->m_data.find(id) != Manager::get()->m_data.end())
 		return true;
 
 	return false;
@@ -50,14 +50,14 @@ bool Manager<IdType,DataType>::exists(const IdType & id)
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::del(const IdType & id)
 {
-	if (!ManagerSingleton::isInit())
+	if (!Manager::isInit())
 		return false;
 
-	typename DataTable::iterator it = ManagerSingleton::get()->m_data.find(id);
-	if (it == ManagerSingleton::get()->m_data.end())
+	typename DataTable::iterator it = Manager::get()->m_data.find(id);
+	if (it == Manager::get()->m_data.end())
 		return false;
 
-	ManagerSingleton::get()->m_data.erase(it);
+	Manager::get()->m_data.erase(it);
 
 	return true;
 }
@@ -71,13 +71,13 @@ bool Manager<IdType,DataType>::del(const IdType & id)
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::reg(const IdType & id, const DataType & data)
 {
-	if (!ManagerSingleton::isInit())
+	if (!Manager::isInit())
 		return false;
-	typename DataTable::iterator it = ManagerSingleton::get()->m_data.find(id);
-	if (it != ManagerSingleton::get()->m_data.end())
+	typename DataTable::iterator it = Manager::get()->m_data.find(id);
+	if (it != Manager::get()->m_data.end())
 		return false;
 
-	ManagerSingleton::get()->m_data[id] = data;
+	Manager::get()->m_data[id] = data;
 	return true;
 }
 
@@ -90,8 +90,8 @@ template < typename IdType, typename DataType >
 DataType * Manager<IdType,DataType>::getItem(const IdType & id)
 {
 
-	typename DataTable::iterator it = ManagerSingleton::get()->m_data.find(id);
-	if (it == ManagerSingleton::get()->m_data.end())
+	typename DataTable::iterator it = Manager::get()->m_data.find(id);
+	if (it == Manager::get()->m_data.end())
 		return NULL;
 
 	return &it->second;
@@ -107,17 +107,17 @@ DataType * Manager<IdType,DataType>::getItem(const IdType & id)
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::delPointer(const IdType & id)
 {
-	if (!ManagerSingleton::isInit())
+	if (!Manager::isInit())
 		return false;
 
-	typename DataTable::iterator it = ManagerSingleton::get()->m_data.find(id);
-	if (it == ManagerSingleton::get()->m_data.end())
+	typename DataTable::iterator it = Manager::get()->m_data.find(id);
+	if (it == Manager::get()->m_data.end())
 		return false;
 
 	if (it->second != NULL)
 		delete it->second;
 
-	ManagerSingleton::get()->m_data.erase(it);
+	Manager::get()->m_data.erase(it);
 
 	return true;
 }
@@ -130,16 +130,16 @@ bool Manager<IdType,DataType>::delPointer(const IdType & id)
 template < typename IdType, typename DataType >
 void Manager< IdType,DataType >::clearPointers()
 {
-	if (!ManagerSingleton::isInit())
+	if (!Manager::isInit())
 		return false;
 
-	typename DataTable::iterator it = ManagerSingleton::get()->m_data.begin();
-	for (;it != ManagerSingleton::get()->m_data.end(); it = ManagerSingleton::get()->m_data.begin())
+	typename DataTable::iterator it = Manager::get()->m_data.begin();
+	for (;it != Manager::get()->m_data.end(); it = Manager::get()->m_data.begin())
 	{
 		if (it->second)
 			delete it->second;
 
-		ManagerSingleton::get()->m_data.erase(it);
+		Manager::get()->m_data.erase(it);
 	}
 
 	return true;

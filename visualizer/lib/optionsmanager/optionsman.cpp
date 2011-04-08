@@ -520,7 +520,7 @@ void optionsMan::setVar(const std::string & oName, const T & val)
 		std::cout << "Object: \"" << oName << "\" doesn't exist\n";
         return;
     }
-	
+
 	if (optionType(oName) != OT)
 	{
 		std::cout << "Setting option \"" << oName << "\" to wrong type\n";
@@ -533,3 +533,79 @@ void optionsMan::setVar(const std::string & oName, const T & val)
 }
 
 
+bool optionsMan::addString(const OptID_t & oName, const std::string & val)
+{
+	if (!isInit())
+		return false;
+
+	if (exists(oName))
+		return false;
+
+	get()->m_options[oName] = new Option<std::string,OT_STRING>(val);
+	if (Mutex::isInit())
+	{
+		Mutex::createMutex(oName);
+	}
+
+	setStr(oName,val);
+
+	return true;
+}
+
+
+bool optionsMan::addInt(const OptID_t & oName, const int & val)
+{
+	if (!isInit())
+		return false;
+
+	if (exists(oName))
+		return false;
+
+	get()->m_options[oName] = new Option<int,OT_INT>(val);
+	if (Mutex::isInit())
+	{
+		Mutex::createMutex(oName);
+	}
+
+	setInt(oName,val);
+
+	return true;
+}
+
+bool optionsMan::addFloat(const OptID_t & oName, const float & val)
+{
+	if (!isInit())
+		return false;
+
+	if (exists(oName))
+		return false;
+
+	get()->m_options[oName] = new Option<float,OT_FLOAT>(val);
+	if (Mutex::isInit())
+	{
+		Mutex::createMutex(oName);
+	}
+
+	setFloat(oName,val);
+
+	return true;
+}
+
+bool optionsMan::addBool(const OptID_t & oName, const bool & val)
+{
+	if (!isInit())
+		return false;
+
+	if (exists(oName))
+		return false;
+
+	get()->m_options[oName] = new Option<bool,OT_BOOL>(val);
+	if (Mutex::isInit())
+	{
+		Mutex::createMutex(oName);
+	}
+
+	setBool(oName,val);
+
+	return true;
+}

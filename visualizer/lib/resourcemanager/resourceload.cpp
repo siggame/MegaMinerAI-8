@@ -6,6 +6,12 @@
 
 #include "resourceman.h"
 #include "texture.h"
+#include <QString>
+
+ResourceType getResTypeFromExt(const std::string & filename)
+{
+	//QString 
+}
 
 
 /** @brief loadResourceFile
@@ -15,6 +21,8 @@
   */
 bool ResourceMan::loadResourceFile(const std::string & filename)
 {
+	
+	
 }
 
 
@@ -29,7 +37,7 @@ bool ResourceMan::regFile(const ResID_t & rName, const std::string & filename)
     if (!exists(rName))
     {
         //load File
-
+		
 
         return true;
     }
