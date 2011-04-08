@@ -111,7 +111,7 @@ const int big = 1000;
 void PirateMap::generateMap( Game& g )
 {
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
-  int pixels = 20;
+  int pixels = 15;
   int mapSize = g.states[0].mapSize;
   int mWidth = mapSize*pixels;
   int mHeight = mapSize*pixels;
@@ -147,16 +147,6 @@ void PirateMap::generateMap( Game& g )
 
 
 #if 1
-  for( int y = mHeight-1; y >= 0; y-- )
-  {
-    for( int x = mWidth-1; x >= 0; x-- )
-    {
-      neg = depthMap[x][y] < 0 ? true : false;
-      for( int rad = 1; rad < mWidth-x && rad < mHeight-y; rad++ )
-      {
-      }
-    }
-  }
 
   cout << "Larger: " << larger << endl;
   cout << "Smaller: " << smaller << endl;
@@ -183,7 +173,7 @@ void PirateMap::generateMap( Game& g )
 
   out.write( (const char*)TGAheader, 12 );
   out.write( (const char*)header, 6 );
-#if 0
+#if 1
   for( int x = 0; x < mWidth; x++ )
   {
     for( int y = 0; y < mHeight; y++ )

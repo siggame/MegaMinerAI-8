@@ -40,3 +40,8 @@ void PirateData::parsePirate( const Game& game, int pirateId )
     }
   }
 }
+
+void PirateData::addPirateStack(const PirateDataInfo & info, const int & turn, const int & frame)
+{
+  m_timeline.add(turn, frame, info);
+}

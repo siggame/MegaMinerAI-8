@@ -2,6 +2,7 @@
 #define CONTROLBAR_H
 
 #include <QSlider>
+#include <QPushButton>
 #include "../optionsmanager/optionsman.h"
 
 class ControlBar : public QWidget
@@ -16,10 +17,16 @@ private slots:
   void sliderDrag();
   void sliderRelease();
   void sliderChanged(int value);
+  void rewind();
+  void play();
+  void fastForward();
 
 private:
 
   QSlider *m_slider;
+  QPushButton* rewindButton;
+  QPushButton* playButton;
+  QPushButton* fastForwardButton;
 };
 
 #endif
