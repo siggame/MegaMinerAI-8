@@ -251,7 +251,9 @@ class Pirate(Unit):
     return True
 
 
-  def dropTreasure(self, amount):   
+  def dropTreasure(self, amount):
+    if self.owner != self.game.playerID:
+      return "Yarr!  Ye cannot trick me into dropin me treasure!  Yer not me captain!" 
     for i in self.game.objects.values():
       if isinstance(i,Treasure):
         #Locates the treasure being modified
@@ -260,7 +262,7 @@ class Pirate(Unit):
              return "Not that much gold to drop"
           for j in self.game.objects.values():
             #if the treasure is being dropped on a port
-            if isinstance(j,Port):
+            if isinstance(j,Port) and (j.owner == 0 or j.owner == 1):
               if i.x == j.x and i.y == j.y:
                 #Increase gold of owner
                 if self.owner == 0:
@@ -505,8 +507,8 @@ class Ship(Unit):
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
       
-    if self.hasMoved != 0:
-      return "This ship has already moved this turn" 
+    if self.hasMoved >= self.game.shipSteps:
+      return "This ship has already expended all of its moves this turn" 
      
     if self._distance(x,y) > 1:
       return "Cannot move that far!"

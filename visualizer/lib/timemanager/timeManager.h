@@ -13,8 +13,12 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     static const int& getFrame();
     static void setTurn( const int& turn );
 
+    static const int& getNumTurns();
+    static void setNumTurns( const int& numTurns );
+
     static const int& getSpeed();
     static void setSpeed( const int& speed );
+
 
     static void create();
     void setup();
@@ -33,6 +37,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
 
   private:
     int m_turn;
+    int m_numTurns;
     int m_frame;
     int m_framesPerTurn;
     mode m_mode;

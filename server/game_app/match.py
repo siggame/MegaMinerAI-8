@@ -127,21 +127,21 @@ class Match(DefaultGameWorld):
           if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
-            for i in range(0,self.npcStartingPirates):
-              self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
+            #for i in range(0,self.npcStartingPirates):
+            #  self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
               
-            for i in range(0,self.npcStartingShips):
-              self.addObject(Ship.make(self, x, y, 3, self.shipHealth, self.shipStrength))
+            #for i in range(0,self.npcStartingShips):
+            #  self.addObject(Ship.make(self, x, y, 3, self.shipHealth, self.shipStrength))
               
           else:
             encountered.add(mapThing)
             self.addObject(Port.make(self, x, y, 2))
             
-            for i in range(0,self.npcStartingPirates):
-              self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
+            #for i in range(0,self.npcStartingPirates):
+            #  self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
               
-            for i in range(0,self.npcStartingShips):
-              self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
+            #for i in range(0,self.npcStartingShips):
+            #  self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
 
     for p in self.objects.values():
       if isinstance(p,Port) and (p.owner == 1 or p.owner == 0):
