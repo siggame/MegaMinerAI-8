@@ -222,41 +222,39 @@ void GUI::loadGamelog( std::string gamelog )
           }
         }
 
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;         
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
+        piVec[direction][p.x + xoff[direction]][p.y + yoff[direction]].piratesInStack.push_front(p.id); 
 #endif          
        }
 
 
-    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
-        p != g.states[i].pirates.end();
-        p++
-       )
+    //Step through moving stacks
+    int stackId = 0;
+    for(int z = 0; z < 5; z++)
     {
-      if( p->second.id > pirateId )
+      for(int x = 0; x < g.states[0].mapSize; x++)
       {
-        pirateId = p->second.id;
-        go = new GameObject( pirateId );
-        PirateData *pd = new PirateData();
-        pd->parsePirate( g, pirateId );
-        
-
-        
-        PirateRender *pr = new PirateRender();
-        pd->setOwner( go );
-        pr->setOwner( go );
-        go->setGOC( pd );
-        go->setGOC( pr );
-        Renderer::reg( pirateId, go );
-
-        pirates++;
-
+        for(int y = 0; y < g.states[0].mapSize; y++)
+        {
+          go = new GameObject( stackId );
+          PirateRender *pr = new PirateRender();
+          
+          piVec[z][x][y]->setOwner( go );
+          pr->setOwner( go );
+          
+          go->setGOC( piVec[z][x][y] );
+          go->setGOC( pr );
+          Renderer::reg( stackId, go );
+          
+          stackId++;
+        }
       }
     }
 

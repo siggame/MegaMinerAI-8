@@ -3,6 +3,7 @@
 
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
+#include <list>
 
 struct PirateDataInfo
 {
@@ -14,6 +15,7 @@ struct PirateDataInfo
   int totalStrength;
   int hasMoved;
   int hasAttacked;
+  list<int> piratesInStack;
   
   PirateDataInfo()
   {
