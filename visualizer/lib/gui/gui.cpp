@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 GUI::~GUI()
@@ -158,6 +159,47 @@ void GUI::loadGamelog( std::string gamelog )
     cout << " -Tile: " << g.states[i].tiles.size() << endl;
     cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
 #else
+
+		enum dir
+		{
+			STOP,
+			RIGHT,
+			UP,
+			LEFT,
+			DOWN
+		};
+
+		int xoff[] = {0, 1, 0, -1, 0};
+		int yoff[] = {0, 0, 1, 0, -1};
+
+    vector<vector<vector< PirateData> > >  piVec = 
+      vector<vector<vector<PirateData> > >(5, 
+	    vector<vector<PirateData> >(g.states[0].mapSize, 
+      vector<PirateData> (g.states[0].mapSize);
+
+    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
+        p != g.states[i].pirates.end();
+        p++
+       )
+       {
+       	//TODO:calculate dir by compairing the previous state to the current state.
+        //TODO: Find if pirateId is needed
+	       if( p->second.id > pirateId )
+	      {
+	      	PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].x = p.x;
+	      	PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].y = p.y;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].owner = p.owner;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].totalHealth += p.health;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].numPirates++;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].totalStrength += p.strength;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].hasMoved = p.hasMoved;
+					PirateData[dir][p.x + xoff[dir]][p.y + yoff[dir]].hasAttacked = p.hasAttacked;
+					
+					pirateId = p->second.id;
+	      }
+       }
+
+
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
         p != g.states[i].pirates.end();
         p++
@@ -169,6 +211,9 @@ void GUI::loadGamelog( std::string gamelog )
         go = new GameObject( pirateId );
         PirateData *pd = new PirateData();
         pd->parsePirate( g, pirateId );
+        
+
+        
         PirateRender *pr = new PirateRender();
         pd->setOwner( go );
         pr->setOwner( go );
