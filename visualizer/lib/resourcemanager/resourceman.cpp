@@ -30,44 +30,6 @@ bool ResourceMan::exists(const ResID_t & rName)
     return ManagerType::exists(rName);
 }
 
-/** @brief saveResourceFile
-  * save the resources to a file
-  * @param filename the name of the file to save to
-  * @return true if it is successful
-  */
-bool ResourceMan::saveResourceFile(const std::string & filename)
-{
-
-}
-
-
-/** @brief reg
-  * register a value within the resource manager
-  * @param rName the name to regster the value at
-  * @param value the value to register
-  * @return true if the value didnt previously exist
-  */
-template<class T, ResourceType RT>
-bool ResourceMan::reg(const ResID_t & rName, const T & value)
-{
-	if (!exists(rName))
-    {
-        //load File
-
-
-        return true;
-    }
-
-	#ifdef DEBUG
-    std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
-    #endif
-    return false;
-}
-
-
-
-
-
 
 
 /** @brief del
@@ -110,7 +72,7 @@ bool ResourceMan::destroy()
 	DataTable::iterator it = get()->data()->begin();
     for (; it != get()->data()->end(); )
     {
-        
+
         if (it->second->numReferences())
         {
 			#ifdef DEBUG
@@ -119,11 +81,11 @@ bool ResourceMan::destroy()
 			#endif
             return false;
         }
-        
+
 
 		if (!it->second->unload())
 			return false;
-		
+
 		delete it->second;
 
     }

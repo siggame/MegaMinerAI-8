@@ -23,6 +23,64 @@ void PirateMap::update()
 
 }
 
+void PirateMap::blur( 
+    int **map, 
+    const int& width,
+    const int& height,
+    const int& radius,
+    Orientation orient )
+{  
+  int x;
+  int y;
+  int i;
+  int c;
+  for( x = 0; x < width-1; x++ )
+  {
+    for( y = 0; y < height-1; y++ )
+    {
+      map[x][y] = 0;
+      c = 0;
+
+      switch( orient )
+      {
+        case horizontal:
+          for( 
+              i = (x-radius) < 0 ? 0 : x-radius;
+              i < ((x+radius+1) > width ? width : x+radius+1); 
+              i++ )
+          {
+            map[x][y] += map[x+i][y+1];
+            c++;
+          }
+          map[x][y] /= c;
+          break;
+        case vertical:
+          for( 
+              i = (y-radius) < 0 ? 0 : y-radius;
+              i < ((y+radius+1) > height ? height : x+radius+1); 
+              i++ )
+          {
+            map[x][y] += map[x+1][y+i];
+            c++;
+          }
+          map[x][y] /= c;
+          break;
+      }
+    }
+  }
+}
+
+void PirateMap::boxBlur( 
+    int **map,
+    const int& width,
+    const int& height,
+    const int& radius )
+{
+  blur( map, width, height, radius, horizontal );
+  blur( map, width, height, radius, vertical );
+}
+
+#if 0
 void PirateMap::findClosest( 
     int **map, 
     const int& width, 
@@ -45,9 +103,10 @@ void PirateMap::findClosest(
     }
   }
 }
+#endif
 
-const int small = -99999;
-const int big = 99999;
+const int small = -1000;
+const int big = 1000;
 
 void PirateMap::generateMap( Game& g )
 {
