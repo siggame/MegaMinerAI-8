@@ -18,6 +18,26 @@ public:
 
   static void drawTGA( std::string filename );
 
+  enum Orientation
+  {
+    horizontal,
+    vertical
+  };
+
+  void boxBlur( 
+      int **map,
+      const int& width,
+      const int& height,
+      const int& radius );
+
+  void blur(
+      int **map,
+      const int& width,
+      const int& height,
+      const int& radius,
+      Orientation orient );
+
+#if 0
   void findClosest( 
       int **map, 
       const int& width, 
@@ -25,6 +45,7 @@ public:
       const int& xc, 
       const int& yc, 
       const int& rad );
+#endif
 
   void update();
   virtual void renderAt(

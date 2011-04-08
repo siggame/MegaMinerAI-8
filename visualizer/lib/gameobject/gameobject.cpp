@@ -19,7 +19,7 @@ void GameObject::id( const unsigned int& ID )
  GameObject::~GameObject()
 {
 	ComponentTable_t::iterator it = m_components.begin();
-	for (it; it != m_components.end(); it++)
+	for (; it != m_components.end(); it++)
 	{
 		if (it->second)
 		{
@@ -35,7 +35,7 @@ void GameObject::id( const unsigned int& ID )
 void GameObject::clearGOCs()
 {
 	ComponentTable_t::iterator it = m_components.begin();
-	for (it; it != m_components.end(); it++)
+	for (; it != m_components.end(); it++)
 	{
 		if (it->second)
 		{
@@ -98,7 +98,7 @@ std::vector<GOC_IDType> GameObject::listComponentFamilies()
 {
 	ComponentTable_t::iterator it = m_components.begin();
 	std::vector<GOC_IDType> vect;
-	for (it; it != m_components.end(); it++)
+	for (; it != m_components.end(); it++)
 	{
 		vect.push_back(it->first);
 	}
@@ -113,7 +113,7 @@ std::vector<GOC_IDType> GameObject::listComponents()
 {
 	ComponentTable_t::iterator it = m_components.begin();
 	std::vector<GOC_IDType> vect;
-	for (it; it != m_components.end(); it++)
+	for (; it != m_components.end(); it++)
 	{
 		vect.push_back(it->second->componentID());
 	}

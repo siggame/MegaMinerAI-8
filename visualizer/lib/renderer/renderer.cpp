@@ -67,9 +67,9 @@ bool Renderer::refresh()
 	unsigned int turn = TimeManager::getTurn();
 	unsigned int frame = TimeManager::getFrame();
     
-  float depth = 0;
+  //float depth = 0;
 	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
-	for (it; it != get()->m_objects.end(); it++)
+	for (; it != get()->m_objects.end(); it++)
 	{
 		/** @todo fill this in */
 
@@ -89,7 +89,7 @@ bool Renderer::refresh()
     get()->m_parent->swapBuffers();
   }
 
-  static int p = 0;
+ // static int p = 0;
 
 	return true;
 }

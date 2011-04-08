@@ -9,6 +9,7 @@ PPATHS +=./lib/gameobject/\
 		./lib/threadler/\
 		./lib/optionsmanager/\
 		./lib/renderer/\
+		./lib/resourcemanager/\
 		./lib/timemanager/\
 		./lib/gameobject/\
     ./lib/gui/\
@@ -26,6 +27,7 @@ SOURCES += main.cpp\
   ./lib/parser/parser.cpp\
   ./lib/parser/structures.cpp\
   ./lib/*.cpp\
+  ./lib/resourcemanager/*.cpp\
   ./piracy/*.cpp
 
 MOC = moc

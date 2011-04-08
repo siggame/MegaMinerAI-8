@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 GUI::~GUI()
@@ -158,6 +159,82 @@ void GUI::loadGamelog( std::string gamelog )
     cout << " -Tile: " << g.states[i].tiles.size() << endl;
     cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
 #else
+
+    enum dir
+    {
+      STOP,
+      RIGHT,
+      UP,
+      LEFT,
+      DOWN
+    };
+
+    int xoff[] = {0, 1, 0, -1, 0};
+    int yoff[] = {0, 0, 1, 0, -1};
+    dir direction = 0;
+    
+    vector<vector<vector< PirateData> > >  piVec = 
+      vector<vector<vector<PirateData> > >(5, 
+      vector<vector<PirateData> >(g.states[0].mapSize, 
+      vector<PirateData> (g.states[0].mapSize) ) );
+
+    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
+        p != g.states[i].pirates.end();
+        p++
+       )
+       {
+// Commented out so wallace can compile his visualizer
+#if 0
+        //We're past turn 0, so movement from the last turn should happen 
+        // AND pirate exists
+        if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end()) 
+        {
+          //Find direction enum
+          int delta;
+          delta = p.x - g.states[i-1].pirates[p->first].x;
+          
+          switch(delta)
+          {
+            case -1:
+              direction = LEFT;
+              break;
+            case 1:
+              direction = RIGHT;            
+              break;
+            
+            default:
+              direction = STOP;
+              break;
+          }
+          
+          delta = p.y - g.states[i-1].pirates[p->first].y;
+          if (delta != 0)//There was any vertical motion
+          {
+            switch(delta)
+            {
+              case -1:
+                direction = UP;
+                break;
+              case 1:
+                direction = DOWN;            
+                break;
+            }
+          }
+        
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
+          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
+        }
+#endif
+          
+       }
+
+
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
         p != g.states[i].pirates.end();
         p++
@@ -169,6 +246,9 @@ void GUI::loadGamelog( std::string gamelog )
         go = new GameObject( pirateId );
         PirateData *pd = new PirateData();
         pd->parsePirate( g, pirateId );
+        
+
+        
         PirateRender *pr = new PirateRender();
         pd->setOwner( go );
         pr->setOwner( go );

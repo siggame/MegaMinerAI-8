@@ -1,5 +1,6 @@
-from math import sqrt
 # -*- coding: iso-8859-1 -*-
+#from merchants import *
+from math import sqrt
 class Mappable:
   def __init__(self, game, id, x, y):
     self.game = game
@@ -573,7 +574,7 @@ class Ship(Unit):
     return True
     
   def takeDamage(self, attacker):
-    self.health -= attacker.strength   
+    self.health -= attacker.strength
     #If the ship is killed by the attack
     #Destroy everything that was on it
     #If it was not at a port
@@ -584,8 +585,9 @@ class Ship(Unit):
           atPort = True
       if not atPort:
         for i in self.game.objects.values():
-          if i.x == self.x and i.y == self.y and (  isinstance(i,Ship) or isinstance(i,Pirate)):
-            self.game.removeObject(self)
+          if i.x == self.x and i.y == self.y and isinstance(i,Pirate):
+            self.game.removeObject(i)
+      self.game.removeObject(self)
     return True          
 
 class Tile(Mappable):
