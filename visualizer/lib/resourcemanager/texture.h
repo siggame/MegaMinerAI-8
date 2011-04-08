@@ -3,6 +3,7 @@
 
 #include "resource.h"
 #include <QImage>
+#include <QPainter>
 #include <QString>
 
 
