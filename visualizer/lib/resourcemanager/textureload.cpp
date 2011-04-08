@@ -35,18 +35,18 @@ bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
 bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
 
 
-bool ResTexture::loadImage( const QString & path )
+bool ResTexture::load( const std::string & path )
 {
-	switch (getImageType(path))
+	switch (getImageType(path.c_str()))
 	{
 		case IMG_TIFF:
-		return loadTIFF(path,texId,texture);
+		return loadTIFF(path.c_str(),texId,texture);
 		case IMG_PNG:
-		return loadPNG(path,texId,texture);
+		return loadPNG(path.c_str(),texId,texture);
 		case IMG_TGA:
-		return loadTGA(path,texId,texture);
+		return loadTGA(path.c_str(),texId,texture);
 		case IMG_BMP:
-		return loadBMP(path,texId,texture);
+		return loadBMP(path.c_str(),texId,texture);
 		default:
 		return false;
 	}
