@@ -10,3 +10,4 @@ enum ResourceType
 typedef std::string ResID_t;
 
 #endif
+

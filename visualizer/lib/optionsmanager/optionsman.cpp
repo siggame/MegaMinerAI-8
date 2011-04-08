@@ -79,13 +79,15 @@ bool optionsMan::loadOptionFile(const std::string & filename)
 			std::string typebuff;
 			std::string namebuff;
 
+
+			ss >> typebuff;
+			OptionType ot = getTypeFromStr(typebuff);
+
+
 			if (ss >> namebuff)
 			{
 				if (!exists(namebuff))
 				{
-					ss >> typebuff;
-					OptionType ot = getTypeFromStr(typebuff);
-
 					switch (ot)
 					{
 						case OT_INT:
