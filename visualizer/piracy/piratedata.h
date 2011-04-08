@@ -3,6 +3,7 @@
 
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
+#include <list>
 
 struct PirateDataInfo
 {
@@ -14,6 +15,7 @@ struct PirateDataInfo
   int totalStrength;
   int hasMoved;
   int hasAttacked;
+  std::list<int> piratesInStack;
   
   PirateDataInfo()
   {
@@ -35,6 +37,7 @@ class PirateData : public GOCFamily_Data<PirateDataInfo>
 public:
   PirateData();
   ~PirateData();
+  void addPirateStack(const PirateDataInfo &, const int &, const int &);
 
   void update();
   const GOC_IDType componentID() const;

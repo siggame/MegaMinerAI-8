@@ -553,8 +553,8 @@ class Ship(Unit):
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
       
-    if self.hasMoved != 0:
-      return "This ship has already moved this turn" 
+    if self.hasMoved >= self.game.shipSteps:
+      return "This ship has already expended all of its moves this turn" 
      
     if self._distance(x,y) > 1:
       return "Cannot move that far!"

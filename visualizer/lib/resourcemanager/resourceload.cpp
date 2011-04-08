@@ -77,18 +77,20 @@ bool ResourceMan::loadResourceFile(const std::string & filename)
 					ss >> pathBuff;
 					Resource * res = NULL;
 
+
 					switch (rt)
 					{
 						case RT_TEXTURE:
 						res = (Resource*)(new ResTexture());
+
 						if (res->load(pathBuff.c_str()))
 						{
 							ManagerType::reg(namebuff,(Resource*)res);
 						}
 						else
 						{
-							std::cout << "Resource Load Error: Texture \"" << namebuff << "\" at path \"" << pathBuff << "\" didn't load right.\n";
-
+							delete res;
+							std::cout << "Resource Load Error Line " << lineNum << ": Texture \"" << namebuff << "\" at path \"" << pathBuff << "\" didn't load right.\n";
 						}
 
 						break;
