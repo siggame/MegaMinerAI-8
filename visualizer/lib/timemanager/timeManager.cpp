@@ -1,6 +1,8 @@
 #include "timeManager.h" 
 #include "../renderer/renderer.h"
 
+#include <ctime>
+
 const int& TimeManager::getTurn()
 {
   if( !isInit() )
@@ -39,6 +41,21 @@ void TimeManager::setSpeed( const int& speed )
   get()->m_speed = speed;
 }
 
+const int& TimeManager::getNumTurns()
+{
+  if( !isInit() )
+    throw 0;
+  return get()->m_numTurns;
+}
+
+void TimeManager::setNumTurns( const int& numTurns )
+{
+  if( !isInit() )
+    throw 0;
+  get()->m_numTurns = numTurns;
+}
+
+
 void TimeManager::create()
 {
   if( !isInit() )
@@ -51,8 +68,8 @@ void TimeManager::create()
 
 void TimeManager::setup()
 {
-  m_lastTime = 0;
-  m_framesPerTurn = 100;
+  m_lastTime = clock();
+  m_framesPerTurn = 10000;
   m_turn = 0;
   m_frame = 0;
 
@@ -66,35 +83,26 @@ using namespace std;
 
 void TimeManager::updateFrames()
 {
-  if( !optionsMan::exists( "sliderDragging" ) )
-    optionsMan::setBool( "sliderDragging", false );
+  m_turn += m_frame / m_framesPerTurn;
+  m_frame %= m_framesPerTurn;
 
-  if( optionsMan::getBool( "sliderDragging" ) )
+  if (m_turn < 0)
   {
-    m_turn = optionsMan::getInt( "currentTurn" );
+    m_turn = 0;
     m_frame = 0;
-  } else {
-    optionsMan::setInt( "currentTurn", m_turn );
-  }
-  int t = 0;
-  int frames;
-  if( t > m_lastTime+m_speed )
-  {
-    frames = (t-m_lastTime)%m_speed;
-    m_lastTime = t;
-    m_frame += frames;
   }
 
-  while( m_frame > m_framesPerTurn )
+  if (m_turn >= m_numTurns)
   {
-    m_turn++;
-    m_frame -= m_framesPerTurn;
+    m_turn = m_numTurns-1;
+    m_frame = m_framesPerTurn-1;
   }
 }
 
 void TimeManager::timerUpdate()
 {
-  m_lastTime -= 100;
+  int milliseconds = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_frame += milliseconds * m_speed;
   updateFrames();
   Renderer::refresh();
 }

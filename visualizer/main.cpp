@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
 	QApplication app( argc, argv );
 	TimeManager::create();
-	TimeManager::setSpeed( 200 );
+	TimeManager::setSpeed( 1 );
 
 	optionsMan::create();
 	ResourceMan::create();

@@ -5,6 +5,8 @@ class MerchantAI:
     self.id = id
     self.numPirates = game.npcStartingPirates
     self.destinationPort = None
+    self.inTransit = False
+    self.treasureThreshold = self.game.treasureThreshold
     
   def chooseRichestPort(self,merchant):
     richestPort = None
@@ -31,5 +33,13 @@ class MerchantAI:
     
   def pirateArrived(self,pirate):
     for i in self.game.objects.values() if isinstance(i,Treasure) and i.pirateID == pirate.id:
-      #Still working!
-      
+      pirate.dropTreasure(i.amount)
+    self.game.removeObject(pirate)
+  
+  def shipArrived(self,ship):
+    for i in self.game.objects.values() if (isinstance(i,Treasure) or isinstance(i,Pirate)):
+      i.x = self.destinationPort.x
+      i.y = self.destinationPort.y
+    self.game.removeObject(ship)
+
+  def play(self):
