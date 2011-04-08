@@ -27,7 +27,7 @@ make
 cd ../../
 
 # Build Makefiles for linux:
-qmake 
+qmake-qt4
 
 # clean up for a full build
 make clean

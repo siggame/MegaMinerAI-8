@@ -171,7 +171,7 @@ void GUI::loadGamelog( std::string gamelog )
 
     int xoff[] = {0, 1, 0, -1, 0};
     int yoff[] = {0, 0, 1, 0, -1};
-    dir direction = 0;
+    dir direction = STOP;
     
     vector<vector<vector< PirateData> > >  piVec = 
       vector<vector<vector<PirateData> > >(5, 
@@ -220,18 +220,17 @@ void GUI::loadGamelog( std::string gamelog )
                 break;
             }
           }
-        
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
-          PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
         }
-#endif
-          
+
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
+        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;         
+#endif          
        }
 
 
