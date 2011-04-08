@@ -18,6 +18,9 @@ cd ../visualizer/lib/parser
 # We want to remove all linux binaries and helper files
 make clean
 
+#Update timestamps for flex because flex cares for some reason.
+touch sexp/lex.yy.*
+
 # Build Parser for linux:
 make
 
@@ -27,7 +30,7 @@ make
 cd ../../
 
 # Build Makefiles for linux:
-qmake 
+qmake-qt4
 
 # clean up for a full build
 make clean

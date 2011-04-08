@@ -112,8 +112,9 @@ void PirateMap::generateMap( Game& g )
 {
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
   int pixels = 20;
-  int mWidth = 40*pixels;
-  int mHeight = 40*pixels;
+  int mapSize = g.states[0].mapSize;
+  int mWidth = mapSize*pixels;
+  int mHeight = mapSize*pixels;
 
   int **depthMap = new int*[mHeight];
   int tx = 0;
@@ -137,11 +138,13 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
+  boxBlur( depthMap, mWidth, mHeight, pixels/2 );
+
+  bool neg = false;
   int larger = 0;
   int smaller = 0;
   int t;
 
-  bool neg;
 
 #if 1
   for( int y = mHeight-1; y >= 0; y-- )
