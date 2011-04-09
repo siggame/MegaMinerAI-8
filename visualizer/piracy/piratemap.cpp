@@ -2,6 +2,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
+#include "../lib/optionsmanager/optionsman.h"
 #include <iostream>
 #include <queue>
 #include <math.h>
@@ -54,7 +55,7 @@ void PirateMap::blur(
             map[x][y] += map[i][y+1];
             c++;
           }
-
+#if 0
           if( map[x][y+1] > 0 && map[x][y] < 0 )
           {
             map[x][y] = 0;
@@ -64,6 +65,8 @@ void PirateMap::blur(
           } else {
             map[x][y] /= c;
           }
+#endif
+          map[x][y] /= c;
 
           break;
         case vertical:
@@ -76,6 +79,7 @@ void PirateMap::blur(
             c++;
           }
 
+#if 0
           if( map[x+1][y] > 0 && map[x][y] < 0 )
           {
             map[x][y] = 0;
@@ -85,6 +89,8 @@ void PirateMap::blur(
           } else {
             map[x][y] /= c;
           }
+#endif
+          map[x][y] /= c;
           break;
       }
     }
@@ -249,7 +255,7 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  boxBlur( depthMap, mWidth, mHeight, pixels/3);
+  boxBlur( depthMap, mWidth, mHeight, optionsMan::getInt( "blurRadius" ) );
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -270,23 +276,39 @@ void PirateMap::generateMap( Game& g )
 
   ResTexture r;
 
-  QImage textures[5];
-#if 1
-  r.load( "./piracy/textures/water.png" );
-  textures[0] = r.getQImage();
+  QImage textures[10];
+  std::string textureNames[10] = 
+  {
+    optionsMan::getStr( "proc1" ),
+    optionsMan::getStr( "proc2" ),
+    optionsMan::getStr( "proc3" ),
+    optionsMan::getStr( "proc4" ),
+    optionsMan::getStr( "proc5" ),
+    optionsMan::getStr( "proc6" ),
+    optionsMan::getStr( "proc7" ),
+    optionsMan::getStr( "proc8" ),
+    optionsMan::getStr( "proc9" ),
+    optionsMan::getStr( "proc10" )
+  };
+  int depths[10] = {
+    optionsMan::getInt( "depth1" ),
+    optionsMan::getInt( "depth2" ),
+    optionsMan::getInt( "depth3" ),
+    optionsMan::getInt( "depth4" ),
+    optionsMan::getInt( "depth5" ),
+    optionsMan::getInt( "depth6" ),
+    optionsMan::getInt( "depth7" ),
+    optionsMan::getInt( "depth8" ),
+    optionsMan::getInt( "depth9" ),
+    optionsMan::getInt( "depth10" )
+  };
 
-  textures[1] = r.getQImage();
+  for( int i = 0; i < 10; i++ )
+  {
+    r.load( textureNames[i] );
+    textures[i] = r.getQImage();
+  }
 
-  r.load( "./piracy/textures/sand.png" );
-  textures[2] = r.getQImage();
-
-  r.load( "./piracy/textures/grass.png" );
-  textures[3] = r.getQImage();
-
-  textures[4] = r.getQImage();
-#endif
-
-  int depths[5] = {0, 127, 150, 158, 255};
 
   QImage result( mWidth, mHeight, QImage::Format_RGB32 );
 
@@ -297,13 +319,13 @@ void PirateMap::generateMap( Game& g )
       //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
       
       //result.setPixel( x, y, textures[0].pixel( x, y ) );
-      result.setPixel( x, y, interpolate( x, y, 5, textures, depths, depthMap[x][y] ) );
+      result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
     }
   }
 
   result.save( "output.png", "PNG" );
 
-#if 0
+#if 1
   std::ofstream out( "depth.tga" );
 
   unsigned char TGAheader[12] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0};
