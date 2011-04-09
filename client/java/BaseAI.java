@@ -127,4 +127,20 @@ public abstract class BaseAI
   {
     return Client.INSTANCE.getMapSize(connection);
   }
+
+  Tile[] getPath(int startx, int starty, int endx, int endy, int type)
+  {
+    Pointer start = tiles[starty * mapSize() + startx].ptr;
+    Pointer end = tiles[endy * mapSize() + endx].ptr;
+
+    Client.INSTANCE.findPath(start, end, type);
+    int size = Client.INSTANCE.getPathSize();
+
+    Tile[] path = new Tile[size];
+    for(int i = 0; i < size; i++)
+    {
+      path[i] = tiles[Client.INSTANCE.getPathStep(i)];
+    }
+    return path;
+  }
 }

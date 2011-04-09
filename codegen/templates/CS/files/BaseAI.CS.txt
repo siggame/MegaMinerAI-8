@@ -68,7 +68,7 @@ public abstract class BaseAI
 
 % for datum in globals:
   ///${datum.doc}
-  ${conversions[datum.type]} ${datum.name}()
+  public ${conversions[datum.type]} ${datum.name}()
   {
     return Client.get${capitalize(datum.name)}(connection);
   }

@@ -110,6 +110,8 @@ public interface Client extends Library {
   int treasureGetAmount(Pointer ptr);
 
 
-    //properties
-
+  //utilities
+  int getPathSize();
+  int getPathStep(int i);
+  int findPath(Pointer start, Pointer end, int type);
 }
