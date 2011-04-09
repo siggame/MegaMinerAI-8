@@ -61,15 +61,7 @@ class Unit(Mappable):
     pass
   
   def _distance(self, x, y):
-    distance = 0
-    if self.x > x:
-      distance += self.x - x
-    elif  x > self.x:
-      distance += x - self.x
-    if self.y > y:
-      distance += self.y - y
-    elif y > self.y:
-      distance += y - self.y
+    distance = abs(self.x-x)+abs(self.y-y)
     return distance
 
   def _takeDamage(self, damage):
@@ -213,11 +205,10 @@ class Pirate(Unit):
             i.owner = -1          
             
     #Moves the unit and makes it unable to move until next turn
+    self.game.animations.append(['move', self.id,x,y])
     self.hasMoved += 1
     self.x = x
     self.y = y
-    #self.game.animations.append(['move', self.id, d])
-    
     #Take control of a ship if you are the first one on it
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == x and i.y == y:
@@ -238,12 +229,14 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
+    wasTreasure = None
     for i in self.game.objects.values():
       if isinstance(i,Treasure):
         if i.x == self.x and i.y == self.y and i.pirateID == -1:
           #Pirate picks up all of the treasure
           if amount == i.amount:
             i.pirateID = self.ID
+            wasTreasure = i
           #Pirate picks up a portion of the treasure
           elif amount < i.amount:
             i.amount -= amount
@@ -252,6 +245,9 @@ class Pirate(Unit):
           #Pirate tries to pick up more treasure than allowed
           else:
             return "There isn't that much treasure!"
+          wasTreasure = True
+    if wasTreasure:
+      self.game.animations.append(['pickup',self.id,
     return True
 
 
@@ -668,12 +664,12 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     if self.pirateID == -1:
-      closest = self.game.mapSize*3
+      closest = self.game.mapSize*2
       for p in self.game.objects.values():
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += (self.amount * sqrt(closest))/100
+      self.amount += (self.amount * sqrt(closest)/100)
 
 
 
