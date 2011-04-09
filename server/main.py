@@ -215,7 +215,7 @@ class TestGameServer(SexpProtocol):
 if __name__ == "__main__":
   import timer
   timer.install()
-  if '-arena' in sys.argv:
-    import arena
-    arena.install()
-  TestGameServer.main(19000)
+  defaultPort = 19000
+  if len(sys.argv) > 1:
+    defaultPort = int(sys.argv[1])
+  TestGameServer.main(defaultPort)
