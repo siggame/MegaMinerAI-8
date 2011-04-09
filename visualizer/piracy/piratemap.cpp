@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <queue>
+#include <math.h>
 using namespace std;
 
 PirateMap::PirateMap()
@@ -106,8 +107,7 @@ void PirateMap::findClosest(
 }
 #endif
 
-const int small = -50;
-const int big = 50;
+const int big = 30;
 
 #define SQ(x) (x)*(x)
 
@@ -118,24 +118,38 @@ int PirateMap::distToTile(
     const TileType& type, 
     const std::map<int, Tile>& tiles )
 {
-  priority_queue<float> distances;
+  int count = 0;
+
+  double smallest = 9999;
+  int ty;
+  int tx;
 
   for( 
       std::map<int, Tile>::const_iterator i = tiles.begin();
       i != tiles.end();
       i++ )
   {
+
     if( 
         (type == land && i->second.type > 0)  || 
         (type == water && i->second.type <= 0)
       )
-        //(TileType)i->second.type == type )
     {
-      distances.push( -(SQ(i->second.x-x) + SQ(i->second.y-y)) );
+      count++;
+      int pusher = SQ(i->second.x-x) + SQ(i->second.y-y);
+      if( pusher < smallest )
+      {
+        smallest = pusher;
+        tx = i->second.x;
+        ty = i->second.y;
+      }
+
     }
   }
 
-  return -distances.top();
+  cout << "Other: " << tx << ", " << ty << endl;
+
+  return smallest;
 }
 
 void PirateMap::generateMap( Game& g )
@@ -155,12 +169,14 @@ void PirateMap::generateMap( Game& g )
     depthMap[x] = new int[mHeight];
   }
 
+#if 1 
   for( 
       std::map<int,Tile>::iterator i = g.states[0].tiles.begin();
       i != g.states[0].tiles.end();
       i++ )
   {
     ty = ((TileType)i->second.type == water ? -1 : 1);
+    cout << "TYPE: " << i->second.type << endl;
 
     i->second.type = distToTile( 
         i->second.x, 
@@ -168,8 +184,9 @@ void PirateMap::generateMap( Game& g )
         mapSize, 
         (TileType)(1-i->second.type),
         g.states[0].tiles ) * ty;
-    cout << i->second.type << endl;
+    cout << "Dist: " << i->second.type << endl;
   }
+#endif
 
   for( int i = 0; i < g.states[0].tiles.size(); i++ )
   {
@@ -186,11 +203,32 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  boxBlur( depthMap, mWidth, mHeight, pixels/2 );
+  boxBlur( depthMap, mWidth, mHeight, pixels );
+
+  int larger = 0;
+  int smaller = 0;
+
+#if 1
+  for( int x = 0; x < mWidth; x++ )
+  {
+    for( int y = 0; y < mHeight; y++ )
+    {
+      larger = (depthMap[x][y] > larger) ? depthMap[x][y] : larger;
+      smaller = (depthMap[x][y] < smaller) ? depthMap[x][y] : smaller;
+    }
+  }
+#endif
+
+#if 0
+  for( int i = 0; i < g.states[0].tiles.size(); i++ )
+  {
+    larger = (g.states[0].tiles[i].type > larger ? g.states[0].tiles[i].type : larger);
+    smaller = (g.states[0].tiles[i].type < smaller ? g.states[0].tiles[i].type : smaller);
+  }
+#endif
 
   bool neg = false;
-  int larger = 100;
-  int smaller = -100;
+
   int t;
 
 #if 1
@@ -202,7 +240,7 @@ void PirateMap::generateMap( Game& g )
   {
     for( int y = 0; y < mHeight; y++ )
     {
-      depthMap[x][y] = (depthMap[x][y] - smaller) * 255 /(larger-smaller);
+      depthMap[x][y] = (depthMap[x][y] - larger) * 255 /(smaller-larger);
     }
   }
 #endif
