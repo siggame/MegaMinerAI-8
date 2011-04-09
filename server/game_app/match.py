@@ -203,7 +203,7 @@ class Match(DefaultGameWorld):
     return True
 
   def removePlayer(self, connection):
-    traceback.print_stack()
+    #traceback.print_stack()
     if connection in self.players:
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
