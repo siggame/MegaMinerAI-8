@@ -193,6 +193,12 @@ public class Client {
   public static extern int treasureGetAmount(IntPtr ptr);
 
 
-    //properties
+  //utilities
+  DllImport("client")]
+  public static extern int getPathSize();
+  DllImport("client")]
+  public static extern int getPathSize();
+  DllImport("client")]
+  public static extern int findPath(IntPtr start, IntPtr end, int type);
 
 }

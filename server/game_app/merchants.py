@@ -1,5 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 from objects import *
+import customastar
 class ShipAndDestination:
   def __init__(self,ship,port):
     self.ship = ship
@@ -32,7 +33,7 @@ class MerchantAI:
     for p in self.game.objects.values():
       if isinstance(p,Port) and (p.owner == 2 or p.owner == 3):
         if p is not port:
-          destiDensity[index] = [0,p] 
+          destiDensity+= [[0,p]]
           alreadyDestination = False
           for i in self.inTransit:
             if i.port is p:
@@ -51,7 +52,8 @@ class MerchantAI:
     return richestPort
   
   def makeTradeShip(self,portNum):
-    destination = self.chooseRichestPort(self.thePorts[portNum].port)
+    port = self.thePorts[portNum].port
+    destination = self.chooseRichestPort(port)
     newShip = Ship.make(self.game,port.x,port.y,port.owner,self.game.shipHealth,self.game.shipStrength)
     self.game.addObject(newShip)
     for i in range(0,self.thePorts[portNum].number):
@@ -65,7 +67,7 @@ class MerchantAI:
     for i in self.game.objects.values(): 
       if isinstance(i,Pirate) and i.x == port.x and i.y == port.y and i.owner == port.owner:
         i.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
-    self.inTransit += ShipAndDestination(newShip,destination)
+    self.inTransit += [ShipAndDestination(newShip,destination)]
   
   def pirateDied(self,homePort):
     self.thePorts[homePort].number += 1
@@ -111,7 +113,7 @@ class MerchantAI:
           self.shipArrived(i.ship,i.port)
           self.inTransit.remove(i)
         else:
-          direction = aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+          direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
           #Right
           if direction == 0:
             i.ship.move(self.x+1,self.y)
@@ -133,4 +135,4 @@ class MerchantAI:
         if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
       if isWorthy and not foundAShip:
-        self.makeTradeShip(p.index())
+        self.makeTradeShip(self.thePorts.index(p))
