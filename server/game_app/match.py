@@ -175,6 +175,8 @@ class Match(DefaultGameWorld):
       #for x in range(0,self.mapSize):
         #print (map[x][y]),
         #self.addObject(Tile.make(self, x, y, map[x][y]))
+    self.Merchant2 = MerchantAI(self,2)
+    self.Merchant3 = MerchantAI(self,3)
     
   def startTreasures(self):
     #temp code that makes 2 treasures
@@ -234,9 +236,13 @@ class Match(DefaultGameWorld):
     self.turnNumber += 1
     if self.turn == self.players[0]:
       self.turn = self.players[1]
+      self.playerID = 2
+      self.Merchant2.play()
       self.playerID = 1
     elif self.turn == self.players[1]:
       self.turn = self.players[0]
+      self.playerID = 3
+      self.Merchant3.play()
       self.playerID = 0
 
     else:
