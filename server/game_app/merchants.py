@@ -133,4 +133,4 @@ class MerchantAI:
         if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
       if isWorthy and not foundAShip:
-        self.makeTradeShip(p.index())
+        self.makeTradeShip(self.thePorts.index(p))

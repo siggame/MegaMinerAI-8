@@ -247,7 +247,7 @@ class Pirate(Unit):
             return "There isn't that much treasure!"
           wasTreasure = True
     if wasTreasure:
-      self.game.animations.append(['pickup',self.id,
+      self.game.animations.append(['pickup',self.id])
     return True
 
 
