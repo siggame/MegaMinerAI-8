@@ -234,7 +234,7 @@ class Pirate(Unit):
     portPickup = False
     for i in self.game.objects.values():       
       if isinstance(i,Port):
-        if i.x == self.x and i.y == self.y:
+        if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
           portPickup = True
           p = [i for i in self.game.objects.values() if isinstance(i,Player)]
           #Sets the owner of the pirate to eaither player 0 or 1
@@ -272,7 +272,7 @@ class Pirate(Unit):
             for j in self.game.objects.values():
               if isinstance(j,Treasure):
                 #If the pirate has treasure, increase the value of the current trasure by amount and reduce from other treasure
-                if j.pirateID == self.pirateID:
+                if j.pirateID == self.id:
                   j.amount += amount
                   i.amount -= amount
                   #If that treasure has no value left, remove it
