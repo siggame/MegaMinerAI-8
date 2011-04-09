@@ -141,6 +141,17 @@ def aStar(game, safeTile, startX, startY, endX, endY):
   #    2 = Left
   #    3 = Up
   
+  print "params: "
+  print "startX",
+  print startX
+  print "startY",
+  print startY
+  print "endX",
+  print endX
+  print "endY",
+  print endY
+  
+  
   #let's get all the tiles in the game!
   tiles = [i for i in game.objects.values() if isinstance(i,objects.Tile)]
   
@@ -176,6 +187,11 @@ def aStar(game, safeTile, startX, startY, endX, endY):
   
   #this finds the route through aStar!
   route = pathFind(the_map, n, m, dirs, dx, dy, startX, startY, endX, endY)
+  
+  if len(route) == 0:
+    print "returning an empty route"
+  else:
+    print "returning a NON empty list"
   
   return route
     
