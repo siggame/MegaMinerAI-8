@@ -2,7 +2,8 @@
 //#include "util.h"
 
 AI::AI(Connection* conn) : BaseAI(conn) {}
-
+bool lowHigh(const Objective& lhs, const Objective& rhs){return lhs.priority < rhs.priority;}
+bool highLow(const Objective& lhs, const Objective& rhs){return lhs.priority > rhs.priority;}
 const char* AI::username()
 {
   return "Shell AI";
@@ -30,45 +31,154 @@ void AI::init()
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
-  int target=0;
-  cout<<"Starting turn: "<<turnNumber()<<endl;
-//  objectCheck();
-  displayShips();
-  for(size_t i=0;i<ships.size();i++)
+  cout<<"Turn Number: "<<turnNumber()<<endl;
+  displayPirates();
+  vector<vector<Objective> > grid(mapSize(),vector<Objective>(mapSize()));
+  list<Pirate*> actors;
+  map<int, bool> myPirate;
+  // initialize the map
+  for(size_t x=0;x<mapSize();x++)
   {
-    if(ships[i].owner()==playerID())
+    for(size_t y=0;y<mapSize();y++)
     {
-      vector<MoveHelper<Ship> > options;
-      sortNearest(ships[i].x(),ships[i].y(),ships,options,1);
-      size_t nearest=0;
-      // find the nearest enemy ship
-      while(nearest<options.size() && options[nearest].goal->owner() == playerID()){nearest++;}
-      // if you found a ship
-      if(nearest < options.size())
+      grid[x][y].X=x;
+      grid[x][y].Y=y;
+    }
+  }
+  // Creates a map for pirates to who owns them
+  for(size_t i=0; i<pirates.size();i++)
+  {
+    myPirate[pirates[i].id()]=pirates[i].owner()==playerID();
+  }
+  int x, y;
+  // Rate the treasures
+  for(size_t i=0;i<treasures.size();i++)
+  {
+    x= treasures[i].x();
+    y= treasures[i].y();
+    // No one holding it
+    if(treasures[i].pirateID() != 0)
+    {
+      grid[x][y].priority += treasures[i].amount();
+      grid[x][y].needs += 1;
+    }
+    // Not me has it
+    else if(!myPirate[treasures[i].pirateID()])
+    {
+      grid[x][y].priority += treasures[i].amount()*2;
+      grid[x][y].needs += 2;
+    }
+    // if I have it, no one cares
+  }
+  for(size_t i=0; i<pirates.size();i++)
+  {
+    x = pirates[i].x();
+    y = pirates[i].y();
+    // if I don't own it
+    if(pirates[i].owner() != playerID())
+    {
+      grid[x][y].priority++;
+      grid[x][y].needs++;
+      grid[x][y].pToAttack = &pirates[i];
+    }
+    else
+    {
+      actors.push_back(&pirates[i]);
+    }
+  }
+  for(size_t i=0; i<ships.size();i++)
+  {
+    x=ships[i].x();
+    y=ships[i].y();
+    if(ships[i].owner() != playerID())
+    {
+      grid[x][y].priority++;
+      grid[x][y].needs++;
+    }
+  }
+  vector<Objective> objectives;
+  for(size_t x=0;x<mapSize();x++)
+  {
+    for(size_t y=0;y<mapSize();y++)
+    {
+      if(grid[x][y].priority > 0)
       {
-        cout<<"Target: "<<options[nearest].goal->id()<<" Path size: "<<options[nearest].path.size()<<endl;
-        if(options[nearest].path.size()<3)
-        {
-          cout<<"FIRE!"<<endl;
-          ships[i].attack(*options[nearest].goal);
-        }
-        else 
-        {
-          if(options[nearest].path[0]->x() == ships[i].x(), options[nearest].path[0]->y() == ships[i].y())
-          {
-            cout<<"ITS AT YOUR PO!"<<endl;
-          }
-          ships[i].move(options[nearest].path[0]->x(),options[nearest].path[0]->y());
-        }
-      }
-      else
-      {
-        cout<<"NO PATHS!"<<endl;
+        objectives.push_back(grid[x][y]);
       }
     }
   }
-
+  // sorts the objectives based on priority
+  sort(objectives.begin(),objectives.end(),highLow);
+  
+  int spawn=0;
+  // for each objective
+  for(size_t o=0;o<objectives.size();o++)
+  {
+    vector<MoveHelper<Pirate*> > usable;
+    sortNearest(objectives[o].x(),objectives[o].y(),actors,usable,0);
+    // for the nearest guys, until you got all you need or you are out of guys
+    for(size_t i=0;i<usable.size() && objectives[o].needs > 0;i++)
+    {
+      // remove that this is needed
+      objectives[o].needs--;
+      if(usable[i].path.size()>1)
+      {
+        (*usable[i].it)->move(usable[i].path[0]->x(),usable[i].path[0]->y());
+      }
+      else
+      {
+        if(objectives[o].pToAttack != NULL)
+        {
+          (*usable[i].it)->attack(*objectives[o].pToAttack);
+        }
+      }
+      //objectives[o].workers.push_back(*usable[i].it);
+      actors.erase(usable[i].it);      
+    }
+    /*
+    // if you got all you need
+    if(objectives[o].needs==0)
+    {
+      // cause them to go
+      execute(objectives[o]);
+    }
+    else
+    {
+      // spawn some more guys
+      spawn+=objectives[o].needs;
+      // put the guys back into actors
+      for(size_t i=0;i<objectives[o].workers.size();i++)
+      {
+        actors.push_back(objectives[o].workers[i]);
+      }
+    }
+    */
+  }
+  for(size_t i=0;i<ports.size();i++)
+  {
+    if(ports[i].owner()==playerID())
+    {
+      for(size_t p=0;p<spawn;p++)
+      {
+        ports[i].createPirate();
+      }
+    }
+  }
   return true;
+}
+
+void AI::execute(Objective& obj)
+{
+/*
+  for(size_t i=0;i<obj.workers.size();i++)
+  {
+    // if the next space is the target
+    if(obj.path[0]->x()==obj.pAttackTarget->x() && obj.path[0]->y()==obj.pAttackTarget->y())
+    {
+      obj.workers[i]->attack(*obj.pAttackTarget);
+    }
+  }
+*/
 }
 
 void AI::displayPirates()
