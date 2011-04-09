@@ -228,7 +228,6 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
-<<<<<<< HEAD
     if self.owner != self.game.playerID:
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
