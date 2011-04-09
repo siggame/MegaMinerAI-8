@@ -275,7 +275,7 @@ class Match(DefaultGameWorld):
           self.declareWinner(self.players[1], 'Victory Through Wealth!')
           print "2 Wins!"
         elif player1.gold == player2.gold:
-        #currently living ships * ship cost + currently living pirates * pirate cost
+        #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
         #Victory through strength
           player1Total = 0
           player2Total = 0
@@ -290,6 +290,11 @@ class Match(DefaultGameWorld):
                 player1Total += self.pirateCost
               elif i.owner == 1:
                 player2Total += self.pirateCost
+            elif isinstance(i,Port):
+              if i.owner == 0:
+                player1Total += self.portCost
+              elif i.owner == 1:
+                player2Total += self.portCost
           if player1Total > player2Total:
             self.declareWinner(self.players[0], 'Victory Through Strength!')
             print "1 Wins!"

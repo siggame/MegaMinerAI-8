@@ -633,8 +633,9 @@ class Ship(Unit):
           atPort = True
       if not atPort:
         for i in self.game.objects.values():
-          if i.x == self.x and i.y == self.y and isinstance(i,Pirate):
-            self.game.removeObject(i)
+          if isinstance(i,Pirate):
+           if i.x == self.x and i.y == self.y:
+              self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
 
