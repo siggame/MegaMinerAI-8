@@ -142,9 +142,9 @@ class Pirate(Unit):
         for i in self.game.objects.values():
           if isinstance(i,Treasure) and i.pirateID == self.id:
             i.pirateID = -1
-      if i.owner == 2:
+      if i.pirateID == 2:
         self.game.Merchant2.pirateDied(self.homeBase)
-      if i.owner == 3:
+      if i.pirateID == 3:
         self.game.Merchant3.pirateDied(self.homeBase)
       self.game.removeObject(self)
     return True
@@ -640,11 +640,12 @@ class Ship(Unit):
           if isinstance(i,Pirate):
            if i.x == self.x and i.y == self.y:
               self.game.removeObject(i)
-          if i.x == self.x and i.y == self.y and isinstance(i,Pirate):
-            if i.owner == 2:
-              self.game.Merchant2.pirateDied()
-            if i.owner == 3:
-              self.game.Merchant3.pirateDied()
+          if isinstance(i,Pirate):
+            if i.x == self.x and i.y == self.y: 
+              if i.owner == 2:
+                self.game.Merchant2.pirateDied()
+              if i.owner == 3:
+                self.game.Merchant3.pirateDied()
             self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
