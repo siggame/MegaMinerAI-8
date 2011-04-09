@@ -143,13 +143,51 @@ int PirateMap::distToTile(
   return smallest;
 }
 
+float PirateMap::interp( float x,  float x0, float x1, float y0, float y1  )
+{
+
+  return y0 + (x-x0)*((y1-y0)/(x1-x0));
+
+}
+
+QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths, int depth )
+{
+  int i;
+  for( i = 0; i < size; i++ )
+  {
+    if( depth > depths[i] )
+    {
+      break;
+    }
+  }
+
+  float r0, g0, b0;
+  r0 = qRed( images[i].color( images[i].pixel( x, y ) ) );
+  g0= qGreen( images[i].color( images[i].pixel( x, y ) ) );
+  b0= qBlue( images[i].color( images[i].pixel( x, y ) ) );
+  float r1, g1, b1;
+  r1 = qRed( images[i+1].color( images[i].pixel( x, y ) ) );
+  g1 = qGreen( images[i+1].color( images[i].pixel( x,y ) ) );
+  b1 = qBlue( images[i+1].color( images[i].pixel( x, y ) ) );
+
+  QRgb color = qRgb( 
+      interp( depth, depths[i], depths[i+1], r0, r1 ), 
+      interp( depth, depths[i], depths[i+1], g0, g1 ), 
+      interp( depth, depths[i], depths[i+1], b0, b1 )  );
+  
+
+  return color;
+
+}
+
 void PirateMap::generateMap( Game& g )
 {
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
   int pixels = 15;
   int mapSize = g.states[0].mapSize;
-  int mWidth = mapSize*pixels;
-  int mHeight = mapSize*pixels;
+  int mWidth = 1024; //mapSize*pixels;
+  int mHeight = 1024; //mapSize*pixels;
+  pixels = 1024/mapSize;
 
   int **depthMap = new int*[mWidth];
   int tx = 0;
@@ -191,7 +229,6 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-
   int larger = 0;
   int smaller = 0;
 
@@ -222,7 +259,34 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
+  ResTexture r;
 
+  QImage textures[4];
+  r.load( "./piracy/textures/water.png" );
+  textures[0] = r.getQImage();
+
+  r.load( "./piracy/textures/sand.png" );
+  textures[1] = r.getQImage();
+
+  r.load( "./piracy/textures/grass.png" );
+  textures[2] = r.getQImage();
+
+  r.load( "./piracy/textures/grass.png" );
+  textures[3] = r.getQImage();
+
+  int depths[4] = {0, 127, 150, 256};
+
+  QImage result( mWidth, mHeight, QImage::Format_RGB32 );
+
+  for( int x = 0; x < mWidth; x++ )
+  {
+    for( int y = 0; y < mHeight; y++ )
+    {
+      result.setPixel( x, y, interpolate( x, y, 4, textures, depths, depthMap[x][y] ) );
+    }
+  }
+
+  result.save( "output.png", "PNG" );
 
 #if 0
   std::ofstream out( "depth.tga" );

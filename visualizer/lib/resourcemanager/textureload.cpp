@@ -35,6 +35,20 @@ bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
 bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
 
 
+bool ResTexture::load( const QImage& img )
+{
+	QImage texture = QGLWidget::convertToGLFormat( img );
+
+	glGenTextures( 1, &texId );
+
+	glBindTexture( GL_TEXTURE_2D, texId );
+
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+}
+
 bool ResTexture::load( const std::string & path )
 {
 	switch (getImageType(path.c_str()))

@@ -31,6 +31,9 @@ public:
     land 
   };
 
+  float interp( float x,  float x0, float x1, float y0, float y1  );
+  QRgb interpolate( int x, int y, int size, QImage *images, int *depths, int depth );
+
   int distToTile( 
       const int& x, 
       const int& y, 
