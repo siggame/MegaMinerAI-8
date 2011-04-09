@@ -61,15 +61,7 @@ class Unit(Mappable):
     pass
   
   def _distance(self, x, y):
-    distance = 0
-    if self.x > x:
-      distance += self.x - x
-    elif  x > self.x:
-      distance += x - self.x
-    if self.y > y:
-      distance += self.y - y
-    elif y > self.y:
-      distance += y - self.y
+    distance = abs(self.x-x)+abs(self.y-y)
     return distance
 
   def _takeDamage(self, damage):
@@ -213,11 +205,10 @@ class Pirate(Unit):
             i.owner = -1          
             
     #Moves the unit and makes it unable to move until next turn
+    self.game.animations.append(['move', self.id,x,y])
     self.hasMoved += 1
     self.x = x
     self.y = y
-    #self.game.animations.append(['move', self.id, d])
-    
     #Take control of a ship if you are the first one on it
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == x and i.y == y:
@@ -237,6 +228,7 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
+<<<<<<< HEAD
     if self.owner != self.game.playerID:
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
@@ -718,12 +710,12 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     if self.pirateID == -1:
-      closest = self.game.mapSize*3
+      closest = self.game.mapSize*2
       for p in self.game.objects.values():
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += (self.amount * sqrt(closest))/100
+      self.amount += (self.amount * sqrt(closest)/100)
 
 
 

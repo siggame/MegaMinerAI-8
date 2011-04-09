@@ -27,7 +27,7 @@ class MerchantAI:
   def chooseRichestPort(self,port):
     richestPort = None
     richness = 0
-    destiDensity = []
+    destiDensity = [None*len(destiDensity)]
     index = 0
     for p in self.game.objects.values():
       if isinstance(p,Port) and (p.owner == 2 or p.owner == 3):
@@ -133,4 +133,4 @@ class MerchantAI:
         if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
       if isWorthy and not foundAShip:
-        self.makeTradeShip(p.index())
+        self.makeTradeShip(self.thePorts.index(p))

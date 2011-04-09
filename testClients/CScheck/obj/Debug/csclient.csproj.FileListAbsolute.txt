@@ -6,3 +6,5 @@
 \\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.exe
 \\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.pdb
 \\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\ResolveAssemblyReference.cache
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.exe
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.pdb
