@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+exit# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -116,7 +116,6 @@ class Match(DefaultGameWorld):
           if 'P' in encountered:
             self.addObject(Port.make(self, x, y, 1))
            
-              
           else:
             encountered.add('P')
             self.addObject(Port.make(self, x, y, 0))
@@ -129,6 +128,7 @@ class Match(DefaultGameWorld):
           if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
+            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
               
@@ -139,6 +139,7 @@ class Match(DefaultGameWorld):
             encountered.add(mapThing)
             self.addObject(Port.make(self, x, y, 2))
             
+            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
               
@@ -182,8 +183,9 @@ class Match(DefaultGameWorld):
     
   def startTreasures(self):
     #temp code that makes 2 treasures
-    self.addObject(Treasure.make(self, 2, 8, -1, 100))
-    self.addObject(Treasure.make(self, 8, 2, -1, 100))
+    i = 1
+    #self.addObject(Treasure.make(self, 2, 8, -1, 100))
+    #self.addObject(Treasure.make(self, 8, 2, -1, 100))
 
   def addPlayer(self, connection, type="player"):
     connection.type = type
