@@ -10,7 +10,7 @@ import itertools
 import scribe
 import random
 import customastar
-import merchants
+from merchants import *
 
 Scribe = scribe.Scribe
 
