@@ -1,4 +1,5 @@
-import com.sun.jna.Pointer;
+using System;
+using System.Runtime.InteropServices;
 
 /// \brief A basic AI interface.
 
@@ -7,17 +8,17 @@ import com.sun.jna.Pointer;
 ///The provided AI class does just that.
 public abstract class BaseAI
 {
-  static Pirate[] pirates;
-  static Player[] players;
-  static Port[] ports;
-  static Ship[] ships;
-  static Tile[] tiles;
-  static Treasure[] treasures;
-  Pointer connection;
-  static int iteration;
-  boolean initialized;
+  public static Pirate[] pirates;
+  public static Player[] players;
+  public static Port[] ports;
+  public static Ship[] ships;
+  public static Tile[] tiles;
+  public static Treasure[] treasures;
+  IntPtr connection;
+  public static int iteration;
+  bool initialized;
 
-  public BaseAI(Pointer c)
+  public BaseAI(IntPtr c)
   {
     connection = c;
   }
@@ -35,52 +36,52 @@ public abstract class BaseAI
   ///This is run every turn . Return true to end the turn, return false
   ///to request a status update from the server and then immediately rerun this function with the
   ///latest game status.
-  public abstract boolean run();
+  public abstract bool run();
 
   ///
   ///This is run on after your last turn.
   public abstract void end();
 
 
-  public boolean startTurn()
+  public bool startTurn()
   {
     iteration++;
     int count = 0;
-    count = Client.INSTANCE.getPirateCount(connection);
+    count = Client.getPirateCount(connection);
     pirates = new Pirate[count];
     for(int i = 0; i < count; i++)
     {
-      pirates[i] = new Pirate(Client.INSTANCE.getPirate(connection, i));
+      pirates[i] = new Pirate(Client.getPirate(connection, i));
     }
-    count = Client.INSTANCE.getPlayerCount(connection);
+    count = Client.getPlayerCount(connection);
     players = new Player[count];
     for(int i = 0; i < count; i++)
     {
-      players[i] = new Player(Client.INSTANCE.getPlayer(connection, i));
+      players[i] = new Player(Client.getPlayer(connection, i));
     }
-    count = Client.INSTANCE.getPortCount(connection);
+    count = Client.getPortCount(connection);
     ports = new Port[count];
     for(int i = 0; i < count; i++)
     {
-      ports[i] = new Port(Client.INSTANCE.getPort(connection, i));
+      ports[i] = new Port(Client.getPort(connection, i));
     }
-    count = Client.INSTANCE.getShipCount(connection);
+    count = Client.getShipCount(connection);
     ships = new Ship[count];
     for(int i = 0; i < count; i++)
     {
-      ships[i] = new Ship(Client.INSTANCE.getShip(connection, i));
+      ships[i] = new Ship(Client.getShip(connection, i));
     }
-    count = Client.INSTANCE.getTileCount(connection);
+    count = Client.getTileCount(connection);
     tiles = new Tile[count];
     for(int i = 0; i < count; i++)
     {
-      tiles[i] = new Tile(Client.INSTANCE.getTile(connection, i));
+      tiles[i] = new Tile(Client.getTile(connection, i));
     }
-    count = Client.INSTANCE.getTreasureCount(connection);
+    count = Client.getTreasureCount(connection);
     treasures = new Treasure[count];
     for(int i = 0; i < count; i++)
     {
-      treasures[i] = new Treasure(Client.INSTANCE.getTreasure(connection, i));
+      treasures[i] = new Treasure(Client.getTreasure(connection, i));
     }
 
     if(!initialized)
@@ -95,52 +96,36 @@ public abstract class BaseAI
   ///How many turns it has been since the beginning of the game
   int turnNumber()
   {
-    return Client.INSTANCE.getTurnNumber(connection);
+    return Client.getTurnNumber(connection);
   }
   ///Player Number; either 0 or 1
   int playerID()
   {
-    return Client.INSTANCE.getPlayerID(connection);
+    return Client.getPlayerID(connection);
   }
   ///What number game this is for the server
   int gameNumber()
   {
-    return Client.INSTANCE.getGameNumber(connection);
+    return Client.getGameNumber(connection);
   }
   ///The cost of a pirate
   int pirateCost()
   {
-    return Client.INSTANCE.getPirateCost(connection);
+    return Client.getPirateCost(connection);
   }
   ///The cost of a ship
   int shipCost()
   {
-    return Client.INSTANCE.getShipCost(connection);
+    return Client.getShipCost(connection);
   }
   ///The cost to build a new port
   int portCost()
   {
-    return Client.INSTANCE.getPortCost(connection);
+    return Client.getPortCost(connection);
   }
   ///The boards width and height
   int mapSize()
   {
-    return Client.INSTANCE.getMapSize(connection);
-  }
-
-  Tile[] getPath(int startx, int starty, int endx, int endy, int type)
-  {
-    Pointer start = tiles[starty * mapSize() + startx].ptr;
-    Pointer end = tiles[endy * mapSize() + endx].ptr;
-
-    Client.INSTANCE.findPath(start, end, type);
-    int size = Client.INSTANCE.getPathSize();
-
-    Tile[] path = new Tile[size];
-    for(int i = 0; i < size; i++)
-    {
-      path[i] = tiles[Client.INSTANCE.getPathStep(i)];
-    }
-    return path;
+    return Client.getMapSize(connection);
   }
 }

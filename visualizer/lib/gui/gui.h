@@ -222,6 +222,8 @@ private:
 
   QAction *m_fileOpen; /// File->Open
   QAction *m_fileExit; /// File->Exit
+  
+  QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
 };
 
 #endif

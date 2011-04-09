@@ -43,11 +43,20 @@ DLLEXPORT int open_server_connection(const char* host, const char* port)
         return -1;
     }
 
+    char* address = strdup(host);
+
+    if(strchr(address, ':'))
+    {
+      port = strchr(address, ':') + 1;
+      *strchr(address, ':') = 0;
+    }
+
     // cover our DNS lookup stuff:
     struct hostent *h;
-    if((h = gethostbyname( host )) == NULL)
+    if((h = gethostbyname( address )) == NULL)
     {
         cerr << "Unable to lookup host: " << host << endl;
+        free(address);
         return -1;
     }
 
@@ -55,6 +64,8 @@ DLLEXPORT int open_server_connection(const char* host, const char* port)
     addr.sin_port = htons(atoi(port));
     addr.sin_addr = *((struct in_addr *)h->h_addr);
     memset(addr.sin_zero, '\0', sizeof(addr.sin_zero) );
+
+    free(address);
 
     if( connect(sock_server, (struct sockaddr *)&addr, sizeof(addr) ) == SOCKET_ERROR)
     {

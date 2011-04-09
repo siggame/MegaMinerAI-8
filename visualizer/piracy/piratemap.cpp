@@ -3,6 +3,7 @@
 #include <GL/glext.h>
 
 #include <iostream>
+#include <queue>
 using namespace std;
 
 PirateMap::PirateMap()
@@ -105,8 +106,37 @@ void PirateMap::findClosest(
 }
 #endif
 
-const int small = -1000;
-const int big = 1000;
+const int small = -50;
+const int big = 50;
+
+#define SQ(x) (x)*(x)
+
+int PirateMap::distToTile( 
+    const int& x, 
+    const int& y, 
+    const int& mapsize,
+    const TileType& type, 
+    const std::map<int, Tile>& tiles )
+{
+  priority_queue<float> distances;
+
+  for( 
+      std::map<int, Tile>::const_iterator i = tiles.begin();
+      i != tiles.end();
+      i++ )
+  {
+    if( 
+        (type == land && i->second.type > 0)  || 
+        (type == water && i->second.type <= 0)
+      )
+        //(TileType)i->second.type == type )
+    {
+      distances.push( -(SQ(i->second.x-x) + SQ(i->second.y-y)) );
+    }
+  }
+
+  return -distances.top();
+}
 
 void PirateMap::generateMap( Game& g )
 {
@@ -125,6 +155,22 @@ void PirateMap::generateMap( Game& g )
     depthMap[x] = new int[mHeight];
   }
 
+  for( 
+      std::map<int,Tile>::iterator i = g.states[0].tiles.begin();
+      i != g.states[0].tiles.end();
+      i++ )
+  {
+    ty = ((TileType)i->second.type == water ? -1 : 1);
+
+    i->second.type = distToTile( 
+        i->second.x, 
+        i->second.y, 
+        mapSize, 
+        (TileType)(1-i->second.type),
+        g.states[0].tiles ) * ty;
+    cout << i->second.type << endl;
+  }
+
   for( int i = 0; i < g.states[0].tiles.size(); i++ )
   {
     for( int x = 0; x < pixels; x++ )
@@ -133,7 +179,9 @@ void PirateMap::generateMap( Game& g )
       {
         tx = g.states[0].tiles[i].x;
         ty = g.states[0].tiles[i].y;
-        depthMap[tx*pixels+x][ty*pixels+y] = g.states[0].tiles[i].type == 0 ? small : big;
+        
+        depthMap[tx*pixels+x][ty*pixels+y] = g.states[0].tiles[i].type*big;
+
       }
     }
   }
@@ -141,10 +189,9 @@ void PirateMap::generateMap( Game& g )
   boxBlur( depthMap, mWidth, mHeight, pixels/2 );
 
   bool neg = false;
-  int larger = 1000;
-  int smaller = -1000;
+  int larger = 100;
+  int smaller = -100;
   int t;
-
 
 #if 1
 

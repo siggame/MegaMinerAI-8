@@ -417,6 +417,11 @@ void GUI::createActions()
       );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
+	toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
+	toggleFullScreenAct->setShortcut( tr("F11" ) );
+	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
+	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
+
   m_fileExit = new QAction( tr( "E&xit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+X" ) );
   m_fileExit->setStatusTip(
@@ -437,6 +442,7 @@ void GUI::createMenus()
   menu = menuBar()->addMenu( tr( "&Edit" ) );
 
   menu = menuBar()->addMenu( tr( "&View" ) );
+  menu->addAction(toggleFullScreenAct);
 
   menu = menuBar()->addMenu( tr( "&Help" ) );
   menu->addAction( m_helpContents );
