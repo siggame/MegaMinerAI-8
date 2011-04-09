@@ -275,5 +275,12 @@ library.treasureGetPirateID.argtypes = [c_void_p]
 library.treasureGetAmount.restype = c_int
 library.treasureGetAmount.argtypes = [c_void_p]
 
+#utils
+library.getPathSize.restype = c_int
+library.getPathSize.argtypes = []
 
-#Properties
+library.getPathStep.restype = c_int
+library.getPathStep.argtypes = [c_int]
+
+library.findPath.restype = c_int
+library.getPathStep.argtypes = [c_void_p, c_void_p, c_int]
