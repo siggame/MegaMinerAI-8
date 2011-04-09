@@ -75,7 +75,7 @@ void TimeManager::setup()
 
   timer = new QTimer( this );
   connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-  timer->start( 10 );
+  timer->start( 35 );
 }
 
 #include <iostream>

@@ -143,7 +143,7 @@ void GUI::loadGamelog( std::string gamelog )
   go->setGOC( pm );
   Renderer::reg( -1, go );
 
-  optionsMan::setInt( "numTurns", g.states.size() );
+  TimeManager::setTurn(0);
   TimeManager::setNumTurns(g.states.size() );
 
 
@@ -174,19 +174,12 @@ void GUI::loadGamelog( std::string gamelog )
     int xoff[] = {0, 1, 0, -1, 0};
     int yoff[] = {0, 0, 1, 0, -1};
     dir direction = STOP;
-<<<<<<< HEAD
-
-    vector<vector<vector< PirateData> > >  piVec =
-      vector<vector<vector<PirateData> > >(5,
-      vector<vector<PirateData> >(g.states[0].mapSize,
-=======
     
     PirateDataInfo pdi;
     
     vector<vector<vector< PirateData> > >  piVec = 
       vector<vector<vector<PirateData> > >(5, 
       vector<vector<PirateData> >(g.states[0].mapSize, 
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
       vector<PirateData> (g.states[0].mapSize) ) );
 
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
@@ -194,26 +187,15 @@ void GUI::loadGamelog( std::string gamelog )
         p++
        )
        {
-<<<<<<< HEAD
-// Commented out so wallace can compile his visualizer
-#if 0
-        //We're past turn 0, so movement from the last turn should happen
-=======
 
         //We're past turn 0, so movement from the last turn should happen 
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
         // AND pirate exists
         if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end())
         {
           //Find direction enum
           int delta;
-<<<<<<< HEAD
-          delta = p.x - g.states[i-1].pirates[p->first].x;
-
-=======
           delta = p -> second.x - g.states[i-1].pirates[p->first].x;
           
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
           switch(delta)
           {
             case -1:
@@ -227,13 +209,8 @@ void GUI::loadGamelog( std::string gamelog )
               direction = STOP;
               break;
           }
-<<<<<<< HEAD
-
-          delta = p.y - g.states[i-1].pirates[p->first].y;
-=======
           
           delta = p->second.y - g.states[i-1].pirates[p->first].y;
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
           if (delta != 0)//There was any vertical motion
           {
             switch(delta)
@@ -247,18 +224,6 @@ void GUI::loadGamelog( std::string gamelog )
             }
           }
         }
-<<<<<<< HEAD
-
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].x = p.x;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].y = p.y;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].owner = p.owner;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalHealth += p.health;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].numPirates++;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].totalStrength += p.strength;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasMoved = p.hasMoved;
-        PirateData[direction][p.x + xoff[direction]][p.y + yoff[direction]].hasAttacked = p.hasAttacked;
-#endif
-=======
       
         pdi.x = p->second.x;
         pdi.y = p->second.y;
@@ -274,7 +239,6 @@ void GUI::loadGamelog( std::string gamelog )
         
         piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
         
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
        }
 
 
@@ -284,24 +248,6 @@ void GUI::loadGamelog( std::string gamelog )
     {
       for(int x = 0; x < g.states[0].mapSize; x++)
       {
-<<<<<<< HEAD
-        pirateId = p->second.id;
-        go = new GameObject( pirateId );
-        PirateData *pd = new PirateData();
-        pd->parsePirate( g, pirateId );
-
-
-
-        PirateRender *pr = new PirateRender();
-        pd->setOwner( go );
-        pr->setOwner( go );
-        go->setGOC( pd );
-        go->setGOC( pr );
-        Renderer::reg( pirateId, go );
-
-        pirates++;
-
-=======
         for(int y = 0; y < g.states[0].mapSize; y++)
         {
           go = new GameObject( stackId );
@@ -318,7 +264,6 @@ void GUI::loadGamelog( std::string gamelog )
           
           stackId++;
         }
->>>>>>> c2b302c0b3ebfd674b601540b045d536811d4add
       }
     }
 
