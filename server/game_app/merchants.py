@@ -113,4 +113,13 @@ class MerchantAI:
           #Up
           if direction == 3:
             i.ship.move(self.x,self.y+1)
-            
+    for p in thePorts:
+      foundAShip = False
+      isWorthy = False
+      for i in self.game.objects.values():
+        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.pirateID == -1 and i.amount > self.treasureThreshold:
+          isWorthy = True
+        if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
+          foundAShip = True
+      if isWorty and not foundAShip:
+        self.makeTradeShip(p.index())
