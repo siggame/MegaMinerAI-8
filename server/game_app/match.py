@@ -246,8 +246,7 @@ class Match(DefaultGameWorld):
     #here is how a star works
     #this goes over water from (0,0) to (39,39) return a list of directions to move to get there
     #route = customastar.aStar(self, 1, 0, 0, 39, 39)
-    
-    print route
+    #print route
     
     for obj in self.objects.values():
       obj.nextTurn()
