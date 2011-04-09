@@ -351,9 +351,9 @@ class Match(DefaultGameWorld):
             player1Loss = False
           elif i.owner == 1:
             player2Loss = False
-            print "Does not lose"
+            #print "Does not lose"
           else :
-            print i.owner
+            #print i.owner
          
       #If a player has less gold than required for a pirate
       if player1Loss == True or player2Loss == True:   
