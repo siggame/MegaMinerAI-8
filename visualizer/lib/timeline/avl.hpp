@@ -96,6 +96,9 @@ void Avl<T>::rotateLeft(node * n)
 template<class T>
 bool Avl<T>::exists(const unsigned int & i)
 {
+	if (m_root)
+		return false;
+
 	node * temp = back(i);
 
 	if (temp)
@@ -113,7 +116,7 @@ template<class T>
 void Avl<T>::erase(const unsigned int & i)
 {
 	node * erasable = back(i);
-	
+
 	if (erasable)
 	{
 		if (erasable->m_index == i)
@@ -121,14 +124,14 @@ void Avl<T>::erase(const unsigned int & i)
 	}
 }
 
-template <class T> 
+template <class T>
 void Avl<T>::swap(node * n1, node * n2)
 {
-	T t_temp = n1->m_data; 
+	T t_temp = n1->m_data;
 	unsigned int i_temp = n1->m_index;
 	n1->m_data = n2->m_data;
 	n1->m_index = n2->m_index;
-	
+
 	n2->m_data = t_temp;
 	n2->m_index = i_temp;
 }
@@ -156,10 +159,10 @@ void Avl<T>::removeNode(node * n)
 			}
 		}
 		else
-		{		
+		{
 			m_root = NULL;
 		}
-		
+
 		delete n;
 	}
 	else if (n->m_left != NULL)
@@ -172,10 +175,10 @@ void Avl<T>::removeNode(node * n)
 			delable = temp;
 			temp = temp->m_right;
 		}
-		
+
 		//swap values
 		swap(delable,n);
-		
+
 		//recall
 		removeNode(delable);
 	}
@@ -189,10 +192,10 @@ void Avl<T>::removeNode(node * n)
 			delable = temp;
 			temp = temp->m_left;
 		}
-		
+
 		//swap values
 		swap(delable,n);
-		
+
 		//recall
 		removeNode(delable);
 	}
@@ -274,7 +277,7 @@ T * Avl<T>::operator[](const unsigned int & i)
 	}
 
 	node * temp = back(i);
-	
+
 
 	if (temp)
 		return &temp->m_data;

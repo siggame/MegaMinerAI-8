@@ -39,13 +39,17 @@ class Avl
 		void rotateLeft(node * n);
 		void rotateRight(node * n);
 		void updateCosts(node * n);
-		
+
 		void removeNode(node * n);
 
 		void delBranch(node * n);
-		
-		void swap(node * n1, node * n2);
 
+		void swap(node * n1, node * n2);
+		/**
+		  *
+		  * @param i
+		  * @return
+		  */
 		node * back(const unsigned int & i)
 		{
 			node * temp, * n;

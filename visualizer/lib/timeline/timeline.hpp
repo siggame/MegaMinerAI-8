@@ -70,6 +70,7 @@ void Timeline<T>::rem(const unsigned int & turnNum)
 template<class T>
 void Timeline<T>::add(const unsigned int & turnNum, const unsigned int & frameNum, const T & frame)
 {
+
 	if (!Avl< TimelineTurnNode<T> >::exists(turnNum))
 		Avl< TimelineTurnNode<T> >::insert(turnNum,TimelineTurnNode<T>());
 
