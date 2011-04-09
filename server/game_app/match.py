@@ -9,6 +9,7 @@ import os
 import itertools
 import scribe
 import random
+import customastar
 
 Scribe = scribe.Scribe
 
@@ -247,7 +248,12 @@ class Match(DefaultGameWorld):
 
     else:
       return "Game is over."
-
+    
+    #here is how a star works
+    #this goes over water from (0,0) to (39,39) return a list of directions to move to get there
+    #route = customastar.aStar(self, 1, 0, 0, 39, 39)
+    #print route
+    
     for obj in self.objects.values():
       obj.nextTurn()
 
