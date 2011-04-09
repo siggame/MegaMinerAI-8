@@ -155,11 +155,12 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
   int i;
   for( i = 0; i < size; i++ )
   {
-    if( depth > depths[i] )
+    if( depth <  depths[i] )
     {
       break;
     }
   }
+  i--;
 
   float r0, g0, b0;
   r0 = qRed( images[i].color( images[i].pixel( x, y ) ) );
