@@ -261,112 +261,111 @@ class Match(DefaultGameWorld):
 
   def checkWinner(self):
     #TODO: Make this check if a player won, and call declareWinner with a player if they did
-    if self.turnNumber > 1:
-      firstFound = False
-      player1 = Player
-      player2 = Player
-      for i in self.objects.values():
-        if isinstance(i,Player):
-          if firstFound == False:
-            player1 = i
-            firstFound = True
-          else:
-            player2 = i
-      if self.turnNumber >= 500:
-        #Check for victory through wealth
-        if player2.gold > player1.gold:
-          self.declareWinner(self.players[0], 'Victory Through Wealth!')
+    firstFound = False
+    player1 = Player
+    player2 = Player
+    for i in self.objects.values():
+      if isinstance(i,Player):
+        if firstFound == False:
+          player1 = i
+          firstFound = True
+        else:
+          player2 = i
+    if self.turnNumber >= 500:
+      #Check for victory through wealth
+      if player2.gold > player1.gold:
+        self.declareWinner(self.players[0], 'Victory Through Wealth!')
+        print "1 Wins!"
+      elif player1.gold > player2.gold:
+        self.declareWinner(self.players[1], 'Victory Through Wealth!')
+        print "2 Wins!"
+      elif player1.gold == player2.gold:
+      #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
+      #Victory through strength
+        player1Total = 0
+        player2Total = 0
+        for i in self.objects.values():
+          if isinstance(i,Ship):
+            if i.owner == 0:
+              player1Total += self.shipCost
+            elif i.owner == 1:
+              player2Total += self.shipCost
+          elif isinstance(i,Pirate):
+            if i.owner == 0:
+              player1Total += self.pirateCost
+            elif i.owner == 1:
+              player2Total += self.pirateCost
+          elif isinstance(i,Port):
+            if i.owner == 0:
+              player1Total += self.portCost
+            elif i.owner == 1:
+              player2Total += self.portCost
+        if player1Total > player2Total:
+          self.declareWinner(self.players[0], 'Victory Through Strength!')
           print "1 Wins!"
-        elif player1.gold > player2.gold:
-          self.declareWinner(self.players[1], 'Victory Through Wealth!')
+        elif player1Total < player2Total:
+          self.declareWinner(self.players[1], 'Victory Through Strength!')
           print "2 Wins!"
-        elif player1.gold == player2.gold:
-        #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
-        #Victory through strength
+        elif player1Total == player2Total:
+          #Victory Through Hardiness
           player1Total = 0
           player2Total = 0
           for i in self.objects.values():
             if isinstance(i,Ship):
               if i.owner == 0:
-                player1Total += self.shipCost
+                player1Total += i.health
               elif i.owner == 1:
-                player2Total += self.shipCost
+                player2Total += i.health
             elif isinstance(i,Pirate):
               if i.owner == 0:
-                player1Total += self.pirateCost
+                player1Total += i.health
               elif i.owner == 1:
-                player2Total += self.pirateCost
-            elif isinstance(i,Port):
-              if i.owner == 0:
-                player1Total += self.portCost
-              elif i.owner == 1:
-                player2Total += self.portCost
-          if player1Total > player2Total:
-            self.declareWinner(self.players[0], 'Victory Through Strength!')
-            print "1 Wins!"
-          elif player1Total < player2Total:
-            self.declareWinner(self.players[1], 'Victory Through Strength!')
-            print "2 Wins!"
-          elif player1Total == player2Total:
-            #Victory Through Hardiness
-            player1Total = 0
-            player2Total = 0
-            for i in self.objects.values():
-              if isinstance(i,Ship):
-                if i.owner == 0:
-                  player1Total += i.health
-                elif i.owner == 1:
-                  player2Total += i.health
-              elif isinstance(i,Pirate):
-                if i.owner == 0:
-                  player1Total += i.health
-                elif i.owner == 1:
-                  player2Total += i.health
-          if player1Total > player2Total:
-            self.declareWinner(self.players[0], 'Victory Through Hardiness!')
-            print "1 Wins!"
-          elif player1Total < player2Total:
-            self.declareWinner(self.players[1], 'Victory Through Hardiness!')
-            print "2 Wins!"
-          elif player1Total == player2Total: 
-            self.declareWinner(self.players[1], 'The Match is a Draw!')  
-            print "Tie game!"          
-      #Victory through annihilation
-      #Checks to see if opponent has less gold than that required to buy a pirate first    
-      elif player1.gold < self.pirateCost or player2.gold < self.pirateCost:
-        player1Loss = True
-        player2Loss = True
-        #This checks to see if they have any pirates
-        for i in self.objects.values():
-          if isinstance(i,Pirate):
-            if i.owner == 0:              
-              player1Loss = False
-            elif i.owner == 1:
-              player2Loss = False
-              print "Does not lose"
-            else :
-              print i.owner
-           
-        #If a player has less gold than required for a pirate
-        if player1Loss == True or player2Loss == True:   
-          print "In loss loop"
-          print player1Loss       
-          print player2Loss 
-          print player1.gold        
-          print player2.gold  
-          if player1Loss == True and player2Loss == False:
-            self.declareWinner(self.players[1], 'Victory Through Annihilation') 
-          elif player1Loss == False and player2Loss == True:
-            self.declareWinner(self.players[1], 'Victory Through Annihilation')             
-          elif player1Loss == True and player2Loss == True and player1.gold < player2.gold:
-            self.declareWinner(self.players[1], 'Victory Through Annihilation') 
-            print "2 Wins!"
-          elif player2Loss == True and player1Loss == True and player2.gold < player1.gold:
-            self.declareWinner(self.players[0], 'Victory Through Annihilation') 
-            print "1 Wins!"
-          elif player1Loss == True and player2Loss == True and player1.gold == player2.gold:
-            self.declareWinner(self.players[1], 'The Match is a Draw')    
-            print "Tie game!"              
+                player2Total += i.health
+        if player1Total > player2Total:
+          self.declareWinner(self.players[0], 'Victory Through Hardiness!')
+          print "1 Wins!"
+        elif player1Total < player2Total:
+          self.declareWinner(self.players[1], 'Victory Through Hardiness!')
+          print "2 Wins!"
+        elif player1Total == player2Total: 
+          self.declareWinner(self.players[1], 'The Match is a Draw!')  
+          print "Tie game!"          
+    #Victory through annihilation
+    #Checks to see if opponent has less gold than that required to buy a pirate first    
+    elif player1.gold < self.pirateCost or player2.gold < self.pirateCost:
+      player1Loss = True
+      player2Loss = True
+      #This checks to see if they have any pirates
+      for i in self.objects.values():
+        if isinstance(i,Pirate):
+          if i.owner == 0:              
+            player1Loss = False
+          elif i.owner == 1:
+            player2Loss = False
+            print "Does not lose"
+          else :
+            print i.owner
+         
+      #If a player has less gold than required for a pirate
+      if player1Loss == True or player2Loss == True:   
+        print "In loss loop"
+        print player1Loss       
+        print player2Loss 
+        print player1.gold        
+        print player2.gold  
+        if player1Loss == True and player2Loss == False:
+          self.declareWinner(self.players[1], 'Victory Through Annihilation') 
+        elif player1Loss == False and player2Loss == True:
+          self.declareWinner(self.players[1], 'Victory Through Annihilation')             
+        elif player1Loss == True and player2Loss == True and player1.gold < player2.gold:
+          self.declareWinner(self.players[1], 'Victory Through Annihilation') 
+          print "2 Wins!"
+        elif player2Loss == True and player1Loss == True and player2.gold < player1.gold:
+          self.declareWinner(self.players[0], 'Victory Through Annihilation') 
+          print "1 Wins!"
+        elif player1Loss == True and player2Loss == True and player1.gold == player2.gold:
+          self.declareWinner(self.players[1], 'The Match is a Draw')    
+          print "Tie game!"              
     return
 
   def declareWinner(self, winner, reason=''):
