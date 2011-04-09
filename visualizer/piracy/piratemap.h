@@ -24,6 +24,21 @@ public:
     vertical
   };
 
+  enum TileType
+  {
+    water,
+    land 
+  };
+
+  int distToTile( 
+      const int& x, 
+      const int& y, 
+      const int& mapsize,
+      const TileType& type, 
+      const std::map<int, Tile>& tiles
+      );
+
+
   void boxBlur( 
       int **map,
       const int& width,
