@@ -22,6 +22,7 @@ bool AI::run()
 {
   displayShips();
   list<Ship*> npcs;
+  vector<Crew> fleets;
   for(size_t i=0;i<ships.size();i++)
   {
     if(ships[i].owner() >1)
@@ -30,9 +31,14 @@ bool AI::run()
     }
     if(ships[i].owner()==playerID())
     {
+      Crew working;
+      working.ship = &ships[i];
       for(size_t p=0;p<pirates.size();p++)
       {
-        if(pirates[i].x()==pirates[i].y());
+        if(pirates[i].x()==ships[i].x() && pirates[i].y()== ships[i].y())
+        {
+          working.mates.push_back(&pirates[i]);
+        }
       }
     }
   }
@@ -50,6 +56,11 @@ bool AI::run()
       if(options[0].path.size()>1)
       {
         ships[i].move(options[0].path[0]->x(),options[0].path[0]->y());
+        if(options[0].path.size()>2)
+        {
+          cout<<"Moving twice!"<<endl;
+          ships[i].move(options[0].path[1]->x(),options[0].path[1]->y());
+        }
       }
       //*
       else
