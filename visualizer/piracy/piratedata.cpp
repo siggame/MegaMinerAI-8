@@ -43,5 +43,6 @@ void PirateData::parsePirate( const Game& game, int pirateId )
 
 void PirateData::addPirateStack(const PirateDataInfo & info, const int & turn, const int & frame)
 {
+	std::cout << "turn: " << turn << " frame: " << frame <<'\n';
   m_timeline.add(turn, frame, info);
 }

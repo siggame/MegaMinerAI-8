@@ -1,0 +1,3 @@
+#!/bin/bash
+cd ../../client/java
+java -cp jna.jar:. Main $1 $2
