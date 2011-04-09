@@ -630,9 +630,9 @@ class Ship(Unit):
           if isinstance(i,Pirate):
             if i.x == self.x and i.y == self.y: 
               if i.owner == 2:
-                self.game.Merchant2.pirateDied(self.homeBase)
+                self.game.Merchant2.pirateDied(i.homeBase)
               if i.owner == 3:
-                self.game.Merchant3.pirateDied(self.homeBase)
+                self.game.Merchant3.pirateDied(i.homeBase)
               self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
