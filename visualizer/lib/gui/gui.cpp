@@ -143,7 +143,7 @@ void GUI::loadGamelog( std::string gamelog )
   go->setGOC( pm );
   Renderer::reg( -1, go );
 
-  optionsMan::setInt( "numTurns", g.states.size() );
+  TimeManager::setTurn(0);
   TimeManager::setNumTurns(g.states.size() );
 
 
