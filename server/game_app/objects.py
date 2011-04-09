@@ -134,9 +134,9 @@ class Pirate(Unit):
         for i in self.game.objects.values():
           if isinstance(i,Treasure) and i.pirateID == self.id:
             i.pirateID = -1
-      if i.owner == 2:
+      if self.pirateID == 2:
         self.game.Merchant2.pirateDied(self.homeBase)
-      if i.owner == 3:
+      if self.pirateID == 3:
         self.game.Merchant3.pirateDied(self.homeBase)
       self.game.removeObject(self)
     return True
@@ -220,8 +220,7 @@ class Pirate(Unit):
       if isinstance(i,Treasure):
         if self.id == i.pirateID:
           i.x = x
-          i.y = y
-    
+          i.y = y   
     return True
 
   def talk(self, message):
@@ -229,25 +228,68 @@ class Pirate(Unit):
     return True
 
   def pickupTreasure(self, amount):
-    wasTreasure = None
-    for i in self.game.objects.values():
-      if isinstance(i,Treasure):
-        if i.x == self.x and i.y == self.y and i.pirateID == -1:
-          #Pirate picks up all of the treasure
-          if amount == i.amount:
-            i.pirateID = self.ID
-            wasTreasure = i
-          #Pirate picks up a portion of the treasure
-          elif amount < i.amount:
-            i.amount -= amount
-            treasure = i.make(game,self.x,self.y,self.ID,amount)
-            game.addObject(treasure)
-          #Pirate tries to pick up more treasure than allowed
+    if self.owner != self.game.playerID:
+      return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
+    #If trying to use pickup treasure and standing on a port  
+    portPickup = False
+    for i in self.game.objects.values():       
+      if isinstance(i,Port):
+        if i.x == self.x and i.y == self.y:
+          portPickup = True
+          p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+          #Sets the owner of the pirate to eaither player 0 or 1
+          if self.owner == 0:
+            owner = 0
           else:
-            return "There isn't that much treasure!"
-          wasTreasure = True
-    if wasTreasure:
-      self.game.animations.append(['pickup',self.id])
+            owner = 1
+          #Checks to make sure amount being withdrawn is less than that player has
+          if amount <= p[owner].gold:          
+            hasTreasure = False
+            #check to see if the pirate already has treasure
+            for j in self.game.objects.values():
+              if isinstance(j,Treasure):
+                #If the pirate does have treasure add it to that and deduct player's total
+                if j.x == self.x and j.y == self.y and j.pirateID == self.ID:
+                  j.amount += amount
+                  p[owner].gold -= amount
+                  hasTreasure = True
+            #If the pirate did not have treasure we create a new thing of treasure for them
+            if hasTreasure == False:
+              treasure = i.make(game,self.x,self.y,self.ID,amount)
+              game.addObject(treasure)
+              p[owner].gold -= amount
+              
+    #If the pirate is not on a port and is trying to pickup Treasure
+    if portPickup == False:
+      for i in self.game.objects.values():
+        if isinstance(i,Treasure):
+          if i.x == self.x and i.y == self.y and i.pirateID == -1:
+            #Check to make sure the amount being picked up isn't greater than its value
+            if amount > i.amount:
+              return "There isn't that much treasure!"
+            #Checks to see if the pirate has treasure
+            hasTreasure = False
+            for j in self.game.objects.values():
+              if isinstance(j,Treasure):
+                #If the pirate has treasure, increase the value of the current trasure by amount and reduce from other treasure
+                if j.pirateID == self.pirateID:
+                  j.amount += amount
+                  i.amount -= amount
+                  #If that treasure has no value left, remove it
+                  if i.amount <= 0:
+                    self.game.removeObject(i)
+                  hasTreasure = True
+            #If the pirate does not have treasure
+            if hasTreasure == False:     
+              #If the pirate tries to pick up all of the treasure          
+              if amount == i.amount:
+                i.pirateID = self.ID        
+            #Pirate picks up a portion of the treasure
+            elif amount < i.amount:
+              i.amount -= amount
+              treasure = i.make(game,self.x,self.y,self.ID,amount)
+              game.addObject(treasure)
+            #Pirate tries to pick up more treasure than allowed                                              
     return True
 
 
@@ -304,6 +346,8 @@ class Pirate(Unit):
     return True
                       
   def buildPort(self):
+    if self.owner != self.game.playerID:
+      return "Yarr, ye can't make me build a port! Ye are not my captain!"  
     #checks for distance to nearest port
     for i in self.game.objects.values():
       if isinstance(i,Port):
@@ -339,7 +383,7 @@ class Pirate(Unit):
   def attack(self, Target):
     #Ensures that you own the attacking unit
     if self.owner != self.game.playerID:
-      return "That isn't your pirate!"
+      return "I do not take orders from you! You be not my captain"
       
     elif not isinstance(Target,Unit):
       return "That isn't attackable!"
@@ -412,9 +456,6 @@ class Port(Mappable):
     return Port(game, id, x, y, owner)
     
   def nextTurn(self):
-    #TODO: Hits every enemy unit round the port for half of its max health
-    #Since we don't want being next to two ports simultaneously to be instant death, we should do this in match.py
-
     pass
     
 
@@ -587,11 +628,15 @@ class Ship(Unit):
           atPort = True
       if not atPort:
         for i in self.game.objects.values():
-          if i.x == self.x and i.y == self.y and isinstance(i,Pirate):
-            if i.owner == 2:
-              self.game.Merchant2.pirateDied()
-            if i.owner == 3:
-              self.game.Merchant3.pirateDied()
+          if isinstance(i,Pirate):
+           if i.x == self.x and i.y == self.y:
+              self.game.removeObject(i)
+          if isinstance(i,Pirate):
+            if i.x == self.x and i.y == self.y: 
+              if i.owner == 2:
+                self.game.Merchant2.pirateDied()
+              if i.owner == 3:
+                self.game.Merchant3.pirateDied()
             self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
