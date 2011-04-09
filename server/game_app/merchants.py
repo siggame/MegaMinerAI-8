@@ -118,14 +118,16 @@ class MerchantAI:
           if direction == 0:
             i.ship.move(self.x+1,self.y)
           #Down
-          if direction == 1:
+          elif direction == 1:
             i.ship.move(self.x,self.y-1)
           #Left
-          if direction == 2:
+          elif direction == 2:
             i.ship.move(self.x-1,self.y)
           #Up
-          if direction == 3:
+          elif direction == 3:
             i.ship.move(self.x,self.y+1)
+          else:
+            print "There is no path!"
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
