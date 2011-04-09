@@ -24,29 +24,29 @@ class AI : BaseAI
       ///What number game this is for the server
       Console.Write("gameNumber\t"); Console.Write(gameNumber()); Console.WriteLine("");
       ///Player 0's time remaining
-      Console.Write("player0Time\t"); Console.Write(players[0].time()); Console.WriteLine("");
+      Console.Write("player0Time\t"); Console.Write(players[0].getTime()); Console.WriteLine("");
       ///Player 1's time remaining
-      Console.Write("player1Time\t"); Console.Write(players[1].time()); Console.WriteLine("");
-      /////Player 0's name
-      //Console.Write("player0Name\t") << players[0].playerName() Console.WriteLine("");
-      /////Player 1's name
-      //Console.Write("player1Name\t") << players[1].playerName() Console.WriteLine("");
+      Console.Write("player1Time\t"); Console.Write(players[1].getTime()); Console.WriteLine("");
+      ///Player 0's name
+      Console.Write("player0Name\t"); Console.Write(players[0].getPlayerName()); Console.WriteLine("");
+      ///Player 1's name
+      Console.Write("player1Name\t"); Console.Write(players[1].getPlayerName()); Console.WriteLine("");
       /////The cost of a pirate
-      //Console.Write("pirateCost\t" << pirateCost() Console.WriteLine("");
+      Console.Write("pirateCost\t"); Console.Write(pirateCost()); Console.WriteLine("");
       /////The cost of a ship
-      //Console.Write("shipCost\t" << shipCost() Console.WriteLine("");
-      //Console.Write("mapSize\t" << mapSize() Console.WriteLine("");
-      //Console.Write("baordY\t" << mapSize() Console.WriteLine("");
-      //Console.Write("--Object counts--" Console.WriteLine("");
-      //Console.Write("Pirates : " << pirates.size() << endl;
+      Console.Write("shipCost\t"); Console.Write(shipCost()); Console.WriteLine("");
+      Console.Write("mapSize\t"); Console.Write(mapSize()); Console.WriteLine("");
+      Console.Write("baordY\t"); Console.Write(mapSize()); Console.WriteLine("");
+      Console.Write("--Object counts--"); Console.WriteLine("");
+      Console.Write("Pirates : "); Console.WriteLine(pirates.Length); Console.WriteLine("");
       ////displayPirates();
-      //Console.Write("Ports   : " << ports.size() << endl;
+      Console.Write("Ports   : "); Console.Write(ports.Length); Console.WriteLine("");
       ////displayPorts();
-      //Console.Write("Ships   : " << ships.size() << endl;
+      Console.Write("Ships   : "); Console.Write(ships.Length); Console.WriteLine("");
       ////displayShips();
-      //Console.Write("Tiles   : " << tiles.size() << endl;
+      Console.Write("Tiles   : "); Console.Write(tiles.Length); Console.WriteLine("");
       ////displayTiles();
-      //Console.Write("Treasure: " << treasures.size() << endl;
+      Console.Write("Treasure: "); Console.Write(treasures.Length); Console.WriteLine("");
       ////displayTreasure();
   }
 
