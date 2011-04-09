@@ -86,7 +86,11 @@ class MerchantAI:
   
   def shipArrived(self,ship,destinationPort):
     for i in self.game.objects.values():
-      if (isinstance(i,Treasure) or isinstance(i,Pirate)) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
+      if isinstance(i,Treasure) and i.x == ship.x and i.y == ship.y:
+        i.x = destinationPort.x
+        i.y = destinationPort.y
+    for i in self.game.objects.values():
+      if isinstance(i,Pirate) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
         i.x = destinationPort.x
         i.y = destinationPort.y
         if isinstance(i,Pirate):
@@ -115,9 +119,10 @@ class MerchantAI:
         else:
           direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
           #Right
-          #if len(direction) == 0:
+          if len(direction) == 0:
+            continue 
             #print "There is no path!"
-          if direction[0] == '0':
+          elif direction[0] == '0':
             print "right"
             print i.ship.move(i.ship.x+1,i.ship.y)
           #Down
