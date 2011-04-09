@@ -628,9 +628,6 @@ class Ship(Unit):
       if not atPort:
         for i in self.game.objects.values():
           if isinstance(i,Pirate):
-           if i.x == self.x and i.y == self.y:
-              self.game.removeObject(i)
-          if isinstance(i,Pirate):
             if i.x == self.x and i.y == self.y: 
               if i.owner == 2:
                 self.game.Merchant2.pirateDied()
