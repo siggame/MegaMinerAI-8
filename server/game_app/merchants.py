@@ -123,20 +123,20 @@ class MerchantAI:
             continue 
             #print "There is no path!"
           elif direction[0] == '0':
-            print "right"
-            print i.ship.move(i.ship.x+1,i.ship.y)
+            #print "right"
+            i.ship.move(i.ship.x+1,i.ship.y)
           #Down
           elif direction[0] == '1':
-            print "down"
-            print i.ship.move(i.ship.x,i.ship.y+1)
+            #print "down"
+            i.ship.move(i.ship.x,i.ship.y+1)
           #Left
           elif direction[0] == '2':
-            print "left"
-            print i.ship.move(i.ship.x-1,i.ship.y)
+            #print "left"
+            i.ship.move(i.ship.x-1,i.ship.y)
           #Up
           elif direction[0] == '3':
-            print "up"
-            print i.ship.move(i.ship.x,i.ship.y-1)
+            #print "up"
+            i.ship.move(i.ship.x,i.ship.y-1)
           #else:
             #print direction
             #print direction[0]
