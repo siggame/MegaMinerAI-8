@@ -160,22 +160,28 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
       break;
     }
   }
-  i--;
+
+  --i;
 
   float r0, g0, b0;
-  r0 = qRed( images[i].color( images[i].pixel( x, y ) ) );
-  g0= qGreen( images[i].color( images[i].pixel( x, y ) ) );
-  b0= qBlue( images[i].color( images[i].pixel( x, y ) ) );
+  r0 = qRed( images[i].pixel( x, y ) );
+  g0= qGreen( images[i].pixel( x, y ) );
+  b0= qBlue( images[i].pixel( x, y ) );
   float r1, g1, b1;
-  r1 = qRed( images[i+1].color( images[i].pixel( x, y ) ) );
-  g1 = qGreen( images[i+1].color( images[i].pixel( x,y ) ) );
-  b1 = qBlue( images[i+1].color( images[i].pixel( x, y ) ) );
+  r1 = qRed(  images[i+1].pixel( x, y ) );
+  g1 = qGreen(  images[i+1].pixel( x,y ) );
+  b1 = qBlue(  images[i+1].pixel( x, y ) );
+
 
   QRgb color = qRgb( 
-      interp( depth, depths[i], depths[i+1], r0, r1 ), 
-      interp( depth, depths[i], depths[i+1], g0, g1 ), 
-      interp( depth, depths[i], depths[i+1], b0, b1 )  );
+      (int)interp( depth, depths[i], depths[i+1], b0, b1 ),
+      (int)interp( depth, depths[i], depths[i+1], g0, g1 ),
+      (int)interp( depth, depths[i], depths[i+1], r0, r1 ) );
   
+#if 0
+  if( depth > 150 )
+    cout << i << ": " << depths[i] << ", " << depth << ", " << depths[i+1] << endl;
+#endif
 
   return color;
 
@@ -197,6 +203,7 @@ void PirateMap::generateMap( Game& g )
   for( int x = 0; x < mWidth; x++ )
   {
     depthMap[x] = new int[mHeight];
+    memset( depthMap[x], 0, sizeof( int ) * mHeight );
   }
 
   for( 
@@ -242,7 +249,7 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  boxBlur( depthMap, mWidth, mHeight, pixels );
+  boxBlur( depthMap, mWidth, mHeight, pixels/3);
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -257,25 +264,29 @@ void PirateMap::generateMap( Game& g )
       }
 
       depthMap[x][y] += 127;
+      depthMap[x][y] = 255-depthMap[x][y];
     }
   }
 
   ResTexture r;
 
-  QImage textures[4];
+  QImage textures[5];
+#if 1
   r.load( "./piracy/textures/water.png" );
   textures[0] = r.getQImage();
 
-  r.load( "./piracy/textures/sand.png" );
   textures[1] = r.getQImage();
 
-  r.load( "./piracy/textures/grass.png" );
+  r.load( "./piracy/textures/sand.png" );
   textures[2] = r.getQImage();
 
   r.load( "./piracy/textures/grass.png" );
   textures[3] = r.getQImage();
 
-  int depths[4] = {0, 127, 150, 256};
+  textures[4] = r.getQImage();
+#endif
+
+  int depths[5] = {0, 127, 150, 158, 255};
 
   QImage result( mWidth, mHeight, QImage::Format_RGB32 );
 
@@ -283,7 +294,10 @@ void PirateMap::generateMap( Game& g )
   {
     for( int y = 0; y < mHeight; y++ )
     {
-      result.setPixel( x, y, interpolate( x, y, 4, textures, depths, depthMap[x][y] ) );
+      //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
+      
+      //result.setPixel( x, y, textures[0].pixel( x, y ) );
+      result.setPixel( x, y, interpolate( x, y, 5, textures, depths, depthMap[x][y] ) );
     }
   }
 
