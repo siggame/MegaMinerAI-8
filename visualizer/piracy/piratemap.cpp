@@ -231,11 +231,6 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-#if 0
-  int mWidth = 40*20;
-  int mHeight = 40*20;
-  int nSize = mWidth*mHeight*3;
-#endif
   std::ofstream out( "depth.tga" );
 
   unsigned char TGAheader[12] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0};
