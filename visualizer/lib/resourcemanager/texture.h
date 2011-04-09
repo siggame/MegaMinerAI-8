@@ -13,6 +13,9 @@ class ResTexture : public Resource
 		QImage texture;
 		unsigned int texId;
 	public:
+
+    const QImage& getQImage() const { return texture; }
+
 		bool load( const std::string & path );
 		ResTexture():Resource(RT_TEXTURE){}
 		ResTexture(const std::string & path):Resource(RT_TEXTURE){load(path);}

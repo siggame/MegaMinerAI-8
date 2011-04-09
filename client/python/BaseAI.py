@@ -71,5 +71,15 @@ class BaseAI:
   def mapSize(self):
     return library.getMapSize(self.connection)
 
+  def getPath(self, startx, starty, endx, endy, type):
+    start = self.tiles[starty * self.mapSize() + startx].ptr
+    end = self.tiles[endy * self.mapSize() + endx].ptr
+
+    library.findPath(start, end, type)
+    size = library.getPathSize()
+    path = [tiles[getPathStep(i)] for i in xrange(size) ]
+
+    return path
+
   def __init__(self, connection):
     self.connection = connection
