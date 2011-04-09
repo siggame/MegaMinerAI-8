@@ -9,6 +9,7 @@ import os
 import itertools
 import scribe
 import random
+import customastar
 
 Scribe = scribe.Scribe
 
@@ -175,6 +176,8 @@ class Match(DefaultGameWorld):
       #for x in range(0,self.mapSize):
         #print (map[x][y]),
         #self.addObject(Tile.make(self, x, y, map[x][y]))
+    self.Merchant2 = MerchantAI(self,2)
+    self.Merchant3 = MerchantAI(self,3)
     
   def startTreasures(self):
     #temp code that makes 2 treasures
@@ -234,14 +237,23 @@ class Match(DefaultGameWorld):
     self.turnNumber += 1
     if self.turn == self.players[0]:
       self.turn = self.players[1]
+      self.playerID = 2
+      self.Merchant2.play()
       self.playerID = 1
     elif self.turn == self.players[1]:
       self.turn = self.players[0]
+      self.playerID = 3
+      self.Merchant3.play()
       self.playerID = 0
 
     else:
       return "Game is over."
-
+    
+    #here is how a star works
+    #this goes over water from (0,0) to (39,39) return a list of directions to move to get there
+    #route = customastar.aStar(self, 1, 0, 0, 39, 39)
+    #print route
+    
     for obj in self.objects.values():
       obj.nextTurn()
 
