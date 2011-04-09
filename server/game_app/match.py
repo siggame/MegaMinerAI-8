@@ -12,6 +12,8 @@ import random
 import customastar
 from merchants import *
 
+import traceback
+
 Scribe = scribe.Scribe
 
 def loadClassDefaults(cfgFile = "config/defaults.cfg"):
@@ -201,6 +203,7 @@ class Match(DefaultGameWorld):
     return True
 
   def removePlayer(self, connection):
+    traceback.print_stack()
     if connection in self.players:
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
@@ -330,15 +333,15 @@ class Match(DefaultGameWorld):
                 player1Total += i.health
               elif i.owner == 1:
                 player2Total += i.health
-        if player1Total > player2Total:
-          self.declareWinner(self.players[0], 'Victory Through Hardiness!')
-          print "1 Wins!"
-        elif player1Total < player2Total:
-          self.declareWinner(self.players[1], 'Victory Through Hardiness!')
-          print "2 Wins!"
-        elif player1Total == player2Total: 
-          self.declareWinner(self.players[1], 'The Match is a Draw!')  
-          print "Tie game!"          
+          if player1Total > player2Total:
+            self.declareWinner(self.players[0], 'Victory Through Hardiness!')
+            print "1 Wins!"
+          elif player1Total < player2Total:
+            self.declareWinner(self.players[1], 'Victory Through Hardiness!')
+            print "2 Wins!"
+          elif player1Total == player2Total: 
+            self.declareWinner(self.players[1], 'The Match is a Draw!')  
+            print "Tie game!"          
     #Victory through annihilation
     #Checks to see if opponent has less gold than that required to buy a pirate first    
     elif player1.gold < self.pirateCost or player2.gold < self.pirateCost:
@@ -352,7 +355,7 @@ class Match(DefaultGameWorld):
           elif i.owner == 1:
             player2Loss = False
             #print "Does not lose"
-          else :
+          #else :
             #print i.owner
          
       #If a player has less gold than required for a pirate
