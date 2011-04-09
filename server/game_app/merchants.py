@@ -115,21 +115,27 @@ class MerchantAI:
         else:
           direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
           #Right
-          if len(direction) == 0:
-            print "There is no path!"
-          elif direction[0] == 0:
-            i.ship.move(self.x+1,self.y)
+          #if len(direction) == 0:
+            #print "There is no path!"
+          if direction[0] == '0':
+            print "right"
+            print i.ship.move(i.ship.x+1,i.ship.y)
           #Down
-          elif direction[0] == 1:
-            i.ship.move(self.x,self.y-1)
+          elif direction[0] == '1':
+            print "down"
+            print i.ship.move(i.ship.x,i.ship.y+1)
           #Left
-          elif direction[0] == 2:
-            i.ship.move(self.x-1,self.y)
+          elif direction[0] == '2':
+            print "left"
+            print i.ship.move(i.ship.x-1,i.ship.y)
           #Up
-          elif direction[0] == 3:
-            i.ship.move(self.x,self.y+1)
-          else:
-            print direction
+          elif direction[0] == '3':
+            print "up"
+            print i.ship.move(i.ship.x,i.ship.y-1)
+          #else:
+            #print direction
+            #print direction[0]
+            #print `direction[0] == '0'`
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False

@@ -134,9 +134,9 @@ class Pirate(Unit):
         for i in self.game.objects.values():
           if isinstance(i,Treasure) and i.pirateID == self.id:
             i.pirateID = -1
-      if self.pirateID == 2:
+      if self.owner == 2:
         self.game.Merchant2.pirateDied(self.homeBase)
-      if self.pirateID == 3:
+      if self.owner == 3:
         self.game.Merchant3.pirateDied(self.homeBase)
       self.game.removeObject(self)
     return True
