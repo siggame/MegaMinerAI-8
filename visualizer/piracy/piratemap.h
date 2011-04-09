@@ -3,6 +3,7 @@
 
 #include "../lib/gocfamily_render.h"
 #include "../lib/parser/parser.h"
+#include "../lib/resourcemanager/texture.h"
 #include <string>
 #include <fstream>
 

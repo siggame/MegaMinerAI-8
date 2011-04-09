@@ -166,7 +166,6 @@ void PirateMap::generateMap( Game& g )
       i++ )
   {
     ty = ((TileType)i->second.type == water ? -1 : 1);
-    cout << "TYPE: " << i->second.type << endl;
 
     i->second.type = distToTile( 
         i->second.x, 
@@ -174,7 +173,6 @@ void PirateMap::generateMap( Game& g )
         mapSize, 
         (TileType)(1-i->second.type),
         g.states[0].tiles ) * ty;
-    cout << "Dist: " << i->second.type << endl;
   }
 
   const int big = 100;
@@ -208,13 +206,6 @@ void PirateMap::generateMap( Game& g )
 
   boxBlur( depthMap, mWidth, mHeight, pixels );
 
-  bool neg = false;
-
-  int t;
-
-  cout << "Larger: " << larger << endl;
-  cout << "Smaller: " << smaller << endl;
-
   for( int x = 0; x < mWidth; x++ )
   {
     for( int y = 0; y < mHeight; y++ )
@@ -231,6 +222,9 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
+
+
+#if 0
   std::ofstream out( "depth.tga" );
 
   unsigned char TGAheader[12] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -248,6 +242,7 @@ void PirateMap::generateMap( Game& g )
   }
 
   out.close();
+#endif
 
   for( int x = 0; x < mWidth; x++ )
   {
