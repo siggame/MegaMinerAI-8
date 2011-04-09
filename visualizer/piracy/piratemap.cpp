@@ -54,7 +54,17 @@ void PirateMap::blur(
             map[x][y] += map[i][y+1];
             c++;
           }
-          map[x][y] /= c;
+
+          if( map[x][y+1] > 0 && map[x][y] < 0 )
+          {
+            map[x][y] = 0;
+          } else if( map[x][y+1] < 0 && map[x][y] > 0 )
+          {
+            map[x][y] = 0;
+          } else {
+            map[x][y] /= c;
+          }
+
           break;
         case vertical:
           for( 
@@ -65,7 +75,16 @@ void PirateMap::blur(
             map[x][y] += map[x+1][i];
             c++;
           }
-          map[x][y] /= c;
+
+          if( map[x+1][y] > 0 && map[x][y] < 0 )
+          {
+            map[x][y] = 0;
+          } else if( map[x+1][y] < 0 && map[x][y] > 0 )
+          {
+            map[x][y] = 0;
+          } else {
+            map[x][y] /= c;
+          }
           break;
       }
     }
@@ -82,32 +101,6 @@ void PirateMap::boxBlur(
   blur( map, width, height, radius, vertical );
 }
 
-#if 0
-void PirateMap::findClosest( 
-    int **map, 
-    const int& width, 
-    const int& height, 
-    const int& xc, 
-    const int& yc, 
-    const int& rad )
-{
-  for( int x = xc-rad; x <= xc+rad; x++ )
-  {
-    for( int y = yc-rad; y <= yc+rad; y++ )
-    {
-      if( x == -rad || x == rad || y == -rad || y == rad )
-      {
-        if( x >= 0 && x < width && y >= 0 && y < height )
-        {
-
-        }
-      } 
-    }
-  }
-}
-#endif
-
-const int big = 30;
 
 #define SQ(x) (x)*(x)
 
@@ -147,8 +140,6 @@ int PirateMap::distToTile(
     }
   }
 
-  cout << "Other: " << tx << ", " << ty << endl;
-
   return smallest;
 }
 
@@ -169,7 +160,6 @@ void PirateMap::generateMap( Game& g )
     depthMap[x] = new int[mHeight];
   }
 
-#if 1 
   for( 
       std::map<int,Tile>::iterator i = g.states[0].tiles.begin();
       i != g.states[0].tiles.end();
@@ -186,8 +176,8 @@ void PirateMap::generateMap( Game& g )
         g.states[0].tiles ) * ty;
     cout << "Dist: " << i->second.type << endl;
   }
-#endif
 
+  const int big = 100;
   for( int i = 0; i < g.states[0].tiles.size(); i++ )
   {
     for( int x = 0; x < pixels; x++ )
@@ -203,12 +193,10 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  boxBlur( depthMap, mWidth, mHeight, pixels );
 
   int larger = 0;
   int smaller = 0;
 
-#if 1
   for( int x = 0; x < mWidth; x++ )
   {
     for( int y = 0; y < mHeight; y++ )
@@ -217,21 +205,12 @@ void PirateMap::generateMap( Game& g )
       smaller = (depthMap[x][y] < smaller) ? depthMap[x][y] : smaller;
     }
   }
-#endif
 
-#if 0
-  for( int i = 0; i < g.states[0].tiles.size(); i++ )
-  {
-    larger = (g.states[0].tiles[i].type > larger ? g.states[0].tiles[i].type : larger);
-    smaller = (g.states[0].tiles[i].type < smaller ? g.states[0].tiles[i].type : smaller);
-  }
-#endif
+  boxBlur( depthMap, mWidth, mHeight, pixels );
 
   bool neg = false;
 
   int t;
-
-#if 1
 
   cout << "Larger: " << larger << endl;
   cout << "Smaller: " << smaller << endl;
@@ -240,17 +219,18 @@ void PirateMap::generateMap( Game& g )
   {
     for( int y = 0; y < mHeight; y++ )
     {
-      depthMap[x][y] = (depthMap[x][y] - larger) * 255 /(smaller-larger);
+      if( depthMap[x][y] > 0 )
+      {
+        depthMap[x][y] = (depthMap[x][y]*127)/larger;
+      } else
+      {
+        depthMap[x][y] = -(depthMap[x][y]*127)/smaller;
+      }
+
+      depthMap[x][y] += 127;
     }
   }
-#endif
 
-#if 0
-  int mWidth = 40*20;
-  int mHeight = 40*20;
-  int nSize = mWidth*mHeight*3;
-#endif
-  //unsigned char *pixels = new unsigned char[nSize];
   std::ofstream out( "depth.tga" );
 
   unsigned char TGAheader[12] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -258,7 +238,7 @@ void PirateMap::generateMap( Game& g )
 
   out.write( (const char*)TGAheader, 12 );
   out.write( (const char*)header, 6 );
-#if 1
+
   for( int x = 0; x < mWidth; x++ )
   {
     for( int y = 0; y < mHeight; y++ )
@@ -266,12 +246,8 @@ void PirateMap::generateMap( Game& g )
       out.write( (const char*)&depthMap[x][y], 1 );
     }
   }
-#endif
-  //out.write( (const char*)pixels, nSize );
-
 
   out.close();
-
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -280,36 +256,6 @@ void PirateMap::generateMap( Game& g )
 
   delete [] depthMap;
 
-#if 0
-  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-  for( int i = 0; i < g.states[0].tiles.size(); i++ )
-  {
-    glPushMatrix();
-#if 0
-    switch( g.states[0].tiles[i].type )
-    {
-      case 0:
-        glColor4f( 0, 0, 0, 1 );
-        break;
-      case 1:
-        glColor4f( 1, 1, 1, 1 );
-        break;
-    }
-#endif
-    glColor4f( 1, 1, 1, 1 );
-    glTranslatef( g.states[0].tiles[i].x, g.states[0].tiles[i].y, 0 );
-    glScalef( 20, 20, 1 );
-    glBegin( GL_QUADS );
-    glVertex2f( 0, 0 );
-    glVertex2f( 1, 0 );
-    glVertex2f( 1, 1 );
-    glVertex2f( 0, 1 );
-    glEnd();
-    glPopMatrix();
-  }
-  glReadBuffer( GL_BACK );
-  drawTGA( "output.tga" );
-#endif
 }
 
 void PirateMap::drawTGA( std::string filename )
