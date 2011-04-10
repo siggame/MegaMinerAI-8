@@ -398,7 +398,7 @@ class Pirate(Unit):
       #Optional Ally Pirate Auto Kill
       if isinstance(Target,Pirate) and Target.owner is self.owner:
         Target.health = 0
-      
+      self.game.animations.append(['PirateAttack', self.id,Target.x,Target.y])
       Target.takeDamage(self)
       return True
 
@@ -611,7 +611,10 @@ class Ship(Unit):
       return "You may only attack ships with your ship"
       
     #Meets all conditions for attack
-    self.hasAttacked += 1    
+    if self.hasAttacked != 0:
+      return "You may only attack once with a ship each turn"
+    self.hasAttacked += 1   
+    self.game.animations.append(['ShipAttack', self.id,Target.x,Target.y])
     Target.takeDamage(self)
     return True
     
@@ -633,6 +636,9 @@ class Ship(Unit):
                 self.game.Merchant2.pirateDied(i.homeBase)
               if i.owner == 3:
                 self.game.Merchant3.pirateDied(i.homeBase)
+              self.game.removeObject(i)
+          if isinstance(i,Treasure):
+            if i.x == self.x and i.y == self.y:
               self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
