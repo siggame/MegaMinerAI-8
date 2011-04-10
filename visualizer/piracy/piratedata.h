@@ -4,8 +4,9 @@
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
 #include <list>
+#include "renderdata.h"
 
-struct PirateDataInfo
+struct PirateDataInfo : public RenderDataInfo
 {
   int owner;
   int x;
@@ -16,17 +17,24 @@ struct PirateDataInfo
   int hasMoved;
   int hasAttacked;
   std::list<int> piratesInStack;
-  
-  PirateDataInfo()
+
+  void clear()
   {
-  	owner = 0;
+   	owner = 0;
 	  x = 0;
 	  y = 0;
 	  totalHealth = 0; 
   	numPirates = 0;
     totalStrength = 0;
   	hasMoved = 0;
-  	hasAttacked = 0;
+  	hasAttacked = 0; 
+    piratesInStack.clear();
+  }
+  
+  PirateDataInfo()
+  {
+    clear();
+
   }
 };
 

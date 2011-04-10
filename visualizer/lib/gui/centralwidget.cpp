@@ -10,7 +10,7 @@ CentralWidget::~CentralWidget()
 
 }
 
-CentralWidget::CentralWidget( QWidget *parent )
+CentralWidget::CentralWidget( QWidget* /*parent*/ )
 {
   m_renderWidget = new RenderWidget( this );
   m_widgetLayout = new QVBoxLayout( this );

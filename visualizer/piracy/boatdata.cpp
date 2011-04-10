@@ -19,7 +19,7 @@ void BoatData::update()
 
 void BoatData::parseBoat( const Game& game, int boatId )
 {
-  for( int i = 0; i < game.states.size(); i++ )
+  for( int i = 0; i < (signed int)game.states.size(); i++ )
   {
     std::map<int,Ship>::const_iterator j = game.states[i].ships.find(boatId);
     if( j != game.states[i].ships.end() )

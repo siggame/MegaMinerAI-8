@@ -9,6 +9,15 @@ class TimeManager : public QObject, public Singleton<TimeManager>
 {
   Q_OBJECT
   public:
+ 
+    enum mode
+    {
+      Play = 0,
+      Pause = 1,
+      Stop = 1, // Don't feel the need to differentiate at this point
+      Rewind = 2
+    };   
+    
     static const int& getTurn();
     static const int& getFrame();
     static void setTurn( const int& turn );
@@ -19,19 +28,14 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     static const int& getSpeed();
     static void setSpeed( const int& speed );
 
+    static int timeHash();
+    static mode getMode();
 
     static void create();
     void setup();
 
     void updateFrames();
 
-    enum mode
-    {
-      Play = 0,
-      Pause = 1,
-      Stop = 1, // Don't feel the need to differentiate at this point
-      Rewind = 2
-    };
   private slots:
     void timerUpdate();
 

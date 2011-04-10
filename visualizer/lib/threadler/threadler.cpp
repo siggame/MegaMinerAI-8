@@ -4,7 +4,7 @@
   *
   * @todo: document this function
   */
-bool Threadler::wakeThread(const ThreadID_t & index)
+bool Threadler::wakeThread(const ThreadID_t& /*index*/)
 {
 	/** @todo: fill in this function **/
 	return false;
@@ -15,7 +15,7 @@ bool Threadler::wakeThread(const ThreadID_t & index)
   *
   * @todo: document this function
   */
-bool Threadler::snoozeThread(const ThreadID_t & index)
+bool Threadler::snoozeThread(const ThreadID_t& /*index*/)
 {
 	/** @todo: fill in this function **/
 	return false;
