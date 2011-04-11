@@ -43,7 +43,7 @@ void TimeManager::setSpeed( const int& speed )
 
 int TimeManager::timeHash() 
 {
-  return getTurn()*getFrame();
+  return get()->m_hash;
 }
 
 TimeManager::mode TimeManager::getMode()
@@ -114,6 +114,7 @@ void TimeManager::updateFrames()
 void TimeManager::timerUpdate()
 {
   int milliseconds = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_hash++;
   m_frame += milliseconds * m_speed;
   updateFrames();
   Renderer::refresh();

@@ -16,7 +16,11 @@ const GOC_IDType PirateData::componentID() const
 
 void PirateData::update()
 {
+
+
 }
+
+
 #include <iostream>
 using namespace std;
 
