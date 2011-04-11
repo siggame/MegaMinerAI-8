@@ -67,4 +67,5 @@ class LookupTable
 	private:
 };
 
+#include "lookuptable.hpp"
 #endif // LOOKUPTABLE_H

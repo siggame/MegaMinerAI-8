@@ -126,6 +126,8 @@ bool Renderer::create()
 	get()->m_height = 0;
 	get()->m_width  = 0;
 	get()->m_depth  = 0;
+	get()->m_dupListDirs = 0;
+	get()-> m_duplicateList = NULL;
 
 	return true;
 }
@@ -184,6 +186,74 @@ bool Renderer::setup()
 						optionsMan::getInt(renderHeightName) );
 			}
 		}
+	}
+
+	if (get()->m_duplicateList)
+	{
+		for (unsigned int x = 0; x < width(); x++)
+		{
+			for (unsigned int y = 0; y < height(); y++)
+			{
+				for (unsigned int z = 0; z < depth(); z++)
+				{
+					delete [] get()->m_duplicateList[x][y][z];
+				}
+				delete [] get()->m_duplicateList[x][y];
+			}
+			delete [] get()->m_duplicateList[x];
+		}
+		delete [] get()->m_duplicateList;
+	}
+
+	if (get()->m_dupListDirs)
+	{
+		get()->m_duplicateList = new DupObj***[width()];
+		for (unsigned int x = 0; x < width(); x++)
+		{
+			get()->m_duplicateList[x] = new DupObj**[height()];
+			for (unsigned int y = 0; y < height(); y++)
+			{
+				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				for (unsigned int z = 0; z < depth(); z++)
+				{
+					get()->m_duplicateList[x][y][z] = new DupObj[get()->m_dupListDirs];
+				}
+			}
+		}
+	}
+	else if (optionsMan::exists(renderDirsName) && optionsMan::optionType(renderDirsName) == OT_INT)
+	{
+		get()->m_dupListDirs = optionsMan::getInt(renderDirsName);
+		get()->m_duplicateList = new DupObj***[width()];
+		for (unsigned int x = 0; x < width(); x++)
+		{
+			get()->m_duplicateList[x] = new DupObj**[height()];
+			for (unsigned int y = 0; y < height(); y++)
+			{
+				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				for (unsigned int z = 0; z < depth(); z++)
+				{
+					get()->m_duplicateList[x][y][z] = new DupObj[get()->m_dupListDirs];
+				}
+			}
+		}
+	}
+	else
+	{
+		get()->m_duplicateList = new DupObj***[width()];
+		for (unsigned int x = 0; x < width(); x++)
+		{
+			get()->m_duplicateList[x] = new DupObj**[height()];
+			for (unsigned int y = 0; y < height(); y++)
+			{
+				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				for (unsigned int z = 0; z < depth(); z++)
+				{
+					get()->m_duplicateList[x][y][z] = new DupObj[1];
+				}
+			}
+		}
+		get()->m_dupListDirs = 1;
 	}
 
   /// @TODO: Move this to the appropriate spot
@@ -278,6 +348,27 @@ bool Renderer::clear()
 	get()->m_objects.clear();
 
 	return true;
+}
+
+/** @brief updateLocation
+  *
+  * @todo: document this function
+  */
+void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObj obj)
+{
+	if (!isInit())
+		return;
+
+	if (!isSetup())
+		return;
+
+	if (x > width() || y > height() || z > depth() || dir > get()->m_dupListDirs)
+		return; //! @todo throw an error
+
+
+	obj.time = time;
+	get()->m_duplicateList[x][y][z][dir] +=  obj;
+
 }
 
 

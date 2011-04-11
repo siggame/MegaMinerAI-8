@@ -1,8 +1,7 @@
 #include "lookuptable.h"
 
 /** @brief ~LookupTable
-  *
-  * @todo: document this function
+  * destructor!
   */
 template <typename T, typename idtype>
  LookupTable<T,idtype>::~LookupTable()
@@ -11,8 +10,12 @@ template <typename T, typename idtype>
 }
 
 /** @brief node
-  *
-  * @todo: document this function
+  *	get a pointer to a node
+  * @param turn the turn you are looking for
+  * @param frame the frame you are looking for
+  * @param id the id of the object you are looking for
+  * @return a pointer to the node of the object or NULL if the requested
+	object is out of range or doesn't exist
   */
 template <typename T, typename idtype>
 LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, const unsigned int & frame, const idtype & id)
@@ -32,8 +35,11 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, co
 }
 
 /** @brief add
-  *
-  * @todo: document this function
+  *	add a node to the structure
+  * @param turn the turn to add at
+  * @param frame the frame to add at
+  * @param id the id of the object
+  * @param input the value to input in
   */
 template <typename T, typename idtype>
 void LookupTable<T,idtype>::add(const unsigned int & turn, const unsigned int & frame, const idtype & id , const Node & input)
@@ -45,8 +51,7 @@ void LookupTable<T,idtype>::add(const unsigned int & turn, const unsigned int & 
 }
 
 /** @brief clear
-  *
-  * @todo: document this function
+  *	clear all data from the container
   */
 template <typename T, typename idtype>
 void LookupTable<T,idtype>::clear()
@@ -61,8 +66,8 @@ void LookupTable<T,idtype>::clear()
 }
 
 /** @brief getFrames
-  *
-  * @todo: document this function
+  *	get the number of frames in the object
+  * @return the number of frames
   */
 template <typename T, typename idtype>
 int LookupTable<T,idtype>::getFrames()
@@ -71,8 +76,8 @@ int LookupTable<T,idtype>::getFrames()
 }
 
 /** @brief getTurns
-  *
-  * @todo: document this function
+  * get the number of turns per frame
+  * @return the number of frames
   */
 template <typename T, typename idtype>
 int LookupTable<T,idtype>::getTurns()
@@ -81,8 +86,10 @@ int LookupTable<T,idtype>::getTurns()
 }
 
 /** @brief setSize
-  *
-  * @todo: document this function
+  *	set the size of the structure
+  * clears the structure first
+  * @param turns the number of turns the structure is to have
+  * @param frames the number of frames the structure is to have
   */
 template <typename T, typename idtype>
 void LookupTable<T,idtype>::setSize(const unsigned int & turns, const unsigned int & frames)
@@ -95,8 +102,8 @@ void LookupTable<T,idtype>::setSize(const unsigned int & turns, const unsigned i
 }
 
 /** @brief LookupTable
-  *
-  * @todo: document this function
+  *	constructor
+  * frames and turns are 0
   */
 template <typename T, typename idtype>
  LookupTable<T,idtype>::LookupTable()
@@ -106,7 +113,7 @@ template <typename T, typename idtype>
 }
 
 /** @brief LookupTable
-  *
+  * constructor
   * @todo: document this function
   */
 template <typename T, typename idtype>
