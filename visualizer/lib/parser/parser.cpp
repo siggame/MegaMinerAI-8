@@ -530,9 +530,9 @@ static bool parseSexp(Game& game, sexp_t* expression)
 
 bool parseFile(Game& game, const char* filename)
 {
-  bool value;
+  //bool value;
   FILE* in = fopen(filename, "r");
-  int size;
+  //int size;
   if(!in)
     return false;
 
@@ -540,7 +540,7 @@ bool parseFile(Game& game, const char* filename)
 
   sexp_t* st = NULL;
 
-  while(st = parse())
+  while((st = parse()))
   {
     if( !parseSexp(game, st) )
     {

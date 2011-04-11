@@ -3,7 +3,7 @@
 
 #include <ctime>
 
-const int& TimeManager::getTurn()
+const int& TimeManager::getTurn() 
 {
   if( !isInit() )
     throw 0;
@@ -27,7 +27,7 @@ void TimeManager::setTurn( const int& turn )
   get()->m_frame = 0;
 }
 
-const int& TimeManager::getSpeed()
+const int& TimeManager::getSpeed() 
 {
   if( !isInit() )
     throw 0;
@@ -41,7 +41,19 @@ void TimeManager::setSpeed( const int& speed )
   get()->m_speed = speed;
 }
 
-const int& TimeManager::getNumTurns()
+int TimeManager::timeHash() 
+{
+  return getTurn()*getFrame();
+}
+
+TimeManager::mode TimeManager::getMode()
+{
+  if( !isInit() )
+    throw 0;
+  return get()->m_mode;
+}
+
+const int& TimeManager::getNumTurns() 
 {
   if( !isInit() )
     throw 0;

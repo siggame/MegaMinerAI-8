@@ -136,6 +136,8 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
   {
   }
+  
+  return stream;
 }
 
 Game::Game()

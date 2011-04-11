@@ -141,19 +141,21 @@ def aStar(game, safeTile, startX, startY, endX, endY):
   #    2 = Left
   #    3 = Up
   
-  print "params: "
-  print "startX",
-  print startX
-  print "startY",
-  print startY
-  print "endX",
-  print endX
-  print "endY",
-  print endY
+  #print "params: "
+  #print "startX",
+  #print startX
+  #print "startY",
+  #print startY
+  #print "endX",
+  #print endX
+  #print "endY",
+  #print endY
   
   
   #let's get all the tiles in the game!
   tiles = [i for i in game.objects.values() if isinstance(i,objects.Tile)]
+  
+  ships = [i for i in game.objects.values() if isinstance(i,objects.Ship)]
   
   n = int(math.sqrt(len(tiles)))    # horizontal size of the map
   m = n     # vertical size of the map (right now we are assuming maps are sqaure
@@ -169,6 +171,10 @@ def aStar(game, safeTile, startX, startY, endX, endY):
     #if the tile we are looking at is the safe tile we need to make it safe, change it to a 0
     if tile.type == safeTile:
       the_map[tile.y][tile.x] = 0
+  
+  #mark all the ships as land tiles...
+  for ship in ships:
+    the_map[ship.y][ship.x] = 1
   
   #also set the starting and ending positions to valid tiles!
   the_map[startY][startX] = 0;
@@ -188,10 +194,10 @@ def aStar(game, safeTile, startX, startY, endX, endY):
   #this finds the route through aStar!
   route = pathFind(the_map, n, m, dirs, dx, dy, startX, startY, endX, endY)
   
-  if len(route) == 0:
-    print "returning an empty route"
-  else:
-    print "returning a NON empty list"
+  #if len(route) == 0:
+  #  print "returning an empty route"
+  #else:
+  #  print "returning a NON empty list"
   
   return route
     

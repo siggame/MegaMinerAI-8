@@ -8,17 +8,18 @@ games = []
 
 def install():
   def wrapNextTurn(self):
-    if self not in games:
-      games.append(self)
-    if self.turn == self.players[0]:
-      p = [i for i in self.objects.values() if isinstance(i,Player)]
-      p[1].time += self.timeInc
-    elif self.turn == self.players[1]:
-      p = [i for i in self.objects.values() if isinstance(i,Player)]
-      p[0].time += self.timeInc
-    retval = yield aspects.proceed
+    pass
+#    if self not in games:
+#      games.append(self)
+#    if self.turn == self.players[0]:
+#      p = [i for i in self.objects.values() if isinstance(i,Player)]
+#      p[1].time += self.timeInc
+#    elif self.turn == self.players[1]:
+#      p = [i for i in self.objects.values() if isinstance(i,Player)]
+#      p[0].time += self.timeInc
+#    retval = yield aspects.proceed
 
-  aspects.with_wrap(wrapNextTurn, Match.nextTurn)
+  #aspects.with_wrap(wrapNextTurn, Match.nextTurn)
 
   def tick():
     import main

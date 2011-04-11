@@ -126,7 +126,7 @@ bool ResourceMan::loadResourceFile(const std::string & filename)
   * @param filename the value exists at (ex: mypic.png)
   * @return true if the file load was successful and the id didnt exist
   */
-bool ResourceMan::regFile(const ResID_t & rName, const std::string & filename)
+bool ResourceMan::regFile(const ResID_t& rName, const std::string& /*filename*/)
 {
     if (!exists(rName))
     {
@@ -148,7 +148,7 @@ bool ResourceMan::regFile(const ResID_t & rName, const std::string & filename)
   * @param filename the name of the file to save to
   * @return true if it is successful
   */
-bool ResourceMan::saveResourceFile(const std::string & filename)
+bool ResourceMan::saveResourceFile(const std::string& /*filename*/)
 {
 
 	return false;

@@ -129,7 +129,7 @@ void GUI::loadGamelog( std::string gamelog )
     Renderer::create();
   }
 
-  int pirateId = 0;
+  //int pirateId = 0;
   int boatId = 0;
   int treasureId = 0;
   int boats = 0;
@@ -149,7 +149,7 @@ void GUI::loadGamelog( std::string gamelog )
 
   //cout << "Number of Turns: " << g.states.size() << endl;
 
-  for( int i = 0; i < g.states.size(); i++ )
+  for( int i = 0; i < (signed int)g.states.size(); i++ )
   {
 #if 0
     cout << "Turn: " << i << endl;

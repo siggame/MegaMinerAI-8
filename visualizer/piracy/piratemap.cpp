@@ -2,6 +2,7 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
+#include "../lib/optionsmanager/optionsman.h"
 #include <iostream>
 #include <queue>
 #include <math.h>
@@ -25,17 +26,21 @@ void PirateMap::update()
 
 }
 
+#define PI 3.141592653589793238462
+
 void PirateMap::blur( 
     int **map, 
     const int& width,
     const int& height,
     const int& radius,
+    const float* /*gaussian*/,
     Orientation orient )
 {  
   int x;
   int y;
   int i;
   int c;
+  int index;
   for( x = 0; x < width-1; x++ )
   {
     for( y = 0; y < height-1; y++ )
@@ -51,10 +56,19 @@ void PirateMap::blur(
               i < ((x+radius+1) > width ? width : x+radius+1); 
               i++ )
           {
-            map[x][y] += map[i][y+1];
-            c++;
-          }
+            index = i-x+radius;
 
+            if( 
+                (map[x][y+1] > 0 && map[i][y+1] > 0) ||  
+                (map[x][y+1] <= 0 && map[i][y+1] <= 0)
+                )
+            {
+              map[x][y] += map[i][y+1];
+              c++;
+            }
+          }
+          map[x][y] /= c;
+#if 0
           if( map[x][y+1] > 0 && map[x][y] < 0 )
           {
             map[x][y] = 0;
@@ -62,9 +76,10 @@ void PirateMap::blur(
           {
             map[x][y] = 0;
           } else {
-            map[x][y] /= c;
+            if( c > 0 )
+              map[x][y] /= c;
           }
-
+#endif
           break;
         case vertical:
           for( 
@@ -72,10 +87,19 @@ void PirateMap::blur(
               i < ((y+radius+1) > height ? height : y+radius+1); 
               i++ )
           {
-            map[x][y] += map[x+1][i];
-            c++;
+            index = i-x+radius;
+            if( 
+                (map[x+1][y] > 0 && map[x+1][i] > 0) ||
+                (map[x+1][y] <= 0 && map[x+1][i] <= 0 )
+              )
+            {
+              map[x][y] += map[x+1][i];
+              c++;
+            }
           }
+          map[x][y] /= c;
 
+#if 0
           if( map[x+1][y] > 0 && map[x][y] < 0 )
           {
             map[x][y] = 0;
@@ -85,6 +109,7 @@ void PirateMap::blur(
           } else {
             map[x][y] /= c;
           }
+#endif
           break;
       }
     }
@@ -97,8 +122,26 @@ void PirateMap::boxBlur(
     const int& height,
     const int& radius )
 {
-  blur( map, width, height, radius, horizontal );
-  blur( map, width, height, radius, vertical );
+
+  float *gaussian = new float[radius*2+1];
+  //float sigma = optionsMan::getFloat( "sigma" );
+
+#if 0
+  for( int i = -radius; i < radius+1; i++ )
+  {
+    gaussian[i+radius] = (exp( -(i*i)/(2*sigma*sigma ) )/(2*PI*sigma*sigma));
+    gaussian[i+radius] = (float)1/11;
+    cout << gaussian[i+radius] << ", " << endl;
+    //cout << (2*PI*sigma*sigma) << endl;
+  }
+#endif
+
+#if 1
+  blur( map, width, height, radius, gaussian, horizontal );
+  blur( map, width, height, radius, gaussian, vertical );
+#endif
+
+  delete [] gaussian;
 }
 
 
@@ -107,7 +150,7 @@ void PirateMap::boxBlur(
 int PirateMap::distToTile( 
     const int& x, 
     const int& y, 
-    const int& mapsize,
+    const int& /*mapsize*/,
     const TileType& type, 
     const std::map<int, Tile>& tiles )
 {
@@ -143,13 +186,59 @@ int PirateMap::distToTile(
   return smallest;
 }
 
+float PirateMap::interp( float x,  float x0, float x1, float y0, float y1  )
+{
+
+  return y0 + (x-x0)*((y1-y0)/(x1-x0));
+
+}
+
+QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths, int depth )
+{
+  int i;
+  for( i = 0; i < size; i++ )
+  {
+    if( depth <  depths[i] )
+    {
+      break;
+    }
+  }
+
+  --i;
+
+  float r0, g0, b0;
+  r0 = qRed( images[i].pixel( x, y ) );
+  g0= qGreen( images[i].pixel( x, y ) );
+  b0= qBlue( images[i].pixel( x, y ) );
+  float r1, g1, b1;
+  r1 = qRed(  images[i+1].pixel( x, y ) );
+  g1 = qGreen(  images[i+1].pixel( x,y ) );
+  b1 = qBlue(  images[i+1].pixel( x, y ) );
+
+
+  QRgb color = qRgb( 
+      (int)interp( depth, depths[i], depths[i+1], b0, b1 ),
+      (int)interp( depth, depths[i], depths[i+1], g0, g1 ),
+      (int)interp( depth, depths[i], depths[i+1], r0, r1 ) );
+  
+#if 0
+  if( depth > 150 )
+    cout << i << ": " << depths[i] << ", " << depth << ", " << depths[i+1] << endl;
+#endif
+
+  return color;
+
+}
+
 void PirateMap::generateMap( Game& g )
 {
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
-  int pixels = 15;
+  int pixels;
   int mapSize = g.states[0].mapSize;
-  int mWidth = mapSize*pixels;
-  int mHeight = mapSize*pixels;
+  int mWidth = 1024; //mapSize*pixels;
+  int mHeight = 1024; //mapSize*pixels;
+  pixels = (int)1001/mapSize;
+  cout << "Pixels: " << pixels << endl;
 
   int **depthMap = new int*[mWidth];
   int tx = 0;
@@ -158,6 +247,7 @@ void PirateMap::generateMap( Game& g )
   for( int x = 0; x < mWidth; x++ )
   {
     depthMap[x] = new int[mHeight];
+    memset( depthMap[x], 0, sizeof( int ) * mHeight );
   }
 
   for( 
@@ -175,22 +265,24 @@ void PirateMap::generateMap( Game& g )
         g.states[0].tiles ) * ty;
   }
 
-  const int big = 100;
-  for( int i = 0; i < g.states[0].tiles.size(); i++ )
+  const int big = 1000;
+  for( int i = 0; i < (signed int)g.states[0].tiles.size(); i++ )
   {
-    for( int x = 0; x < pixels; x++ )
+    for( int x = 0; x < (int)pixels; x++ )
     {
-      for( int y = 0; y < pixels; y++ )
+      for( int y = 0; y < (int)pixels; y++ )
       {
         tx = g.states[0].tiles[i].x;
         ty = g.states[0].tiles[i].y;
         
-        depthMap[tx*pixels+x][ty*pixels+y] = g.states[0].tiles[i].type*big;
+        depthMap
+          [(int)((float)(tx)*pixels)+x]
+          [(int)((float)(ty)*pixels)+y] 
+          = g.states[0].tiles[i].type*big;
 
       }
     }
   }
-
 
   int larger = 0;
   int smaller = 0;
@@ -204,7 +296,7 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  boxBlur( depthMap, mWidth, mHeight, pixels );
+  boxBlur( depthMap, mWidth, mHeight, optionsMan::getInt( "blurRadius" ) );
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -219,10 +311,60 @@ void PirateMap::generateMap( Game& g )
       }
 
       depthMap[x][y] += 127;
+      depthMap[x][y] = 255-depthMap[x][y];
     }
   }
 
+  ResTexture r;
 
+  QImage textures[10];
+  std::string textureNames[10] = 
+  {
+    optionsMan::getStr( "proc1" ),
+    optionsMan::getStr( "proc2" ),
+    optionsMan::getStr( "proc3" ),
+    optionsMan::getStr( "proc4" ),
+    optionsMan::getStr( "proc5" ),
+    optionsMan::getStr( "proc6" ),
+    optionsMan::getStr( "proc7" ),
+    optionsMan::getStr( "proc8" ),
+    optionsMan::getStr( "proc9" ),
+    optionsMan::getStr( "proc10" )
+  };
+  int depths[10] = {
+    optionsMan::getInt( "depth1" ),
+    optionsMan::getInt( "depth2" ),
+    optionsMan::getInt( "depth3" ),
+    optionsMan::getInt( "depth4" ),
+    optionsMan::getInt( "depth5" ),
+    optionsMan::getInt( "depth6" ),
+    optionsMan::getInt( "depth7" ),
+    optionsMan::getInt( "depth8" ),
+    optionsMan::getInt( "depth9" ),
+    optionsMan::getInt( "depth10" )
+  };
+
+  for( int i = 0; i < 10; i++ )
+  {
+    r.load( textureNames[i] );
+    textures[i] = r.getQImage();
+  }
+
+
+  QImage result( mWidth, mHeight, QImage::Format_RGB32 );
+
+  for( int x = 0; x < mWidth; x++ )
+  {
+    for( int y = 0; y < mHeight; y++ )
+    {
+      //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
+      
+      //result.setPixel( x, y, textures[0].pixel( x, y ) );
+      result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
+    }
+  }
+
+  result.save( "output.png", "PNG" );
 
 #if 0
   std::ofstream out( "depth.tga" );
@@ -281,8 +423,8 @@ void PirateMap::drawTGA( std::string filename )
 }
 
 void PirateMap::renderAt(
-    const unsigned int& turn,
-    const unsigned int& frame
+    const unsigned int& /*turn*/,
+    const unsigned int& /*frame*/
     )
 {
   glPushMatrix();

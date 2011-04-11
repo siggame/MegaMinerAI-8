@@ -22,7 +22,7 @@ using namespace std;
 
 void PirateData::parsePirate( const Game& game, int pirateId )
 {
-  for( int i = 0; i < game.states.size(); i++ )
+  for( int i = 0; i < (signed int)game.states.size(); i++ )
   {
     std::map<int,Pirate>::const_iterator j = game.states[i].pirates.find( pirateId );
     if( j != game.states[i].pirates.end() )

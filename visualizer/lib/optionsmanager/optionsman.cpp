@@ -323,7 +323,7 @@ bool optionsMan::saveOptionFile(const std::string & filename)
 
 	std::map<std::string,OptionBase*>::iterator it = get()->m_options.begin();
 
-	for (it; it != get()->m_options.end(); it++)
+	for (; it != get()->m_options.end(); it++)
 	{
 		OptionType optType = it->second->type();
 
