@@ -353,8 +353,12 @@ class Match(DefaultGameWorld):
     #Victory through annihilation
     #Checks to see if opponent has less gold than that required to buy a pirate first    
     elif player1.gold < self.pirateCost or player2.gold < self.pirateCost:
-      player1Loss = True
-      player2Loss = True
+      player1Loss = False
+      player2Loss = False
+      if player1.gold < self.pirateCost:
+        player1Loss = True
+      if player2.gold < self.pirateCost:
+        player2Loss = True
       #This checks to see if they have any pirates
       for i in self.objects.values():
         if isinstance(i,Pirate):

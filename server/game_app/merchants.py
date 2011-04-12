@@ -1,6 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 from objects import *
 import customastar
+import random
 class ShipAndDestination:
   def __init__(self,ship,port):
     self.ship = ship
@@ -121,7 +122,7 @@ class MerchantAI:
         direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
         #Right
         if len(direction) == 0:
-          dir = randint(0,3)
+          dir = random.randint(0,3)
           if dir == 0:
             direction = ['0']
           elif dir == 1:
