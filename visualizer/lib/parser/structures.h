@@ -24,8 +24,8 @@ struct Unit: public Mappable
   int owner;
   int health;
   int strength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
 
   friend std::ostream& operator<<(std::ostream& stream, Unit obj);
 };

@@ -37,8 +37,8 @@ void PirateData::parsePirate( const Game& game, int pirateId )
       t.y = j->second.y;
       t.totalHealth += j->second.health;
       t.totalStrength += j->second.strength;
-      t.hasMoved = j->second.hasMoved;
-      t.hasAttacked = j->second.hasAttacked;
+      t.movesLeft = j->second.movesLeft;
+      t.attacksLeft = j->second.attacksLeft;
       //cout << "Turn: " << i << ", X: " << t.x << ", Y: " << t.y << endl;
       m_timeline.add( i, 0, t );
     }
