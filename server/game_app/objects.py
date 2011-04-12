@@ -126,7 +126,7 @@ class Pirate(Unit):
                 self.game.removeObject(i)
                 iHasTreasure = True
             if not iHasTreasure:
-              i.pirateId = pirate.id
+              i.pirateID = pirate.id
               i.x = pirate.x
               i.y = pirate.y
       #Otherwise the treasure becomes free game, or falls in your port, whichever
