@@ -231,8 +231,8 @@ void GUI::loadGamelog( std::string gamelog )
         pdi.totalHealth += p->second.health;
         pdi.numPirates++;
         pdi.totalStrength += p->second.strength;
-        pdi.hasMoved = p->second.hasMoved;
-        pdi.hasAttacked = p->second.hasAttacked;
+        pdi.movesLeft = p->second.movesLeft;
+        pdi.attacksLeft = p->second.attacksLeft;
         pdi.piratesInStack.push_front(p->second.id); 
         
         int frame = (direction == STOP) ? 0 : 50;
@@ -495,5 +495,5 @@ void GUI::buildToolSet()
 
 void GUI::closeGUI()
 {
-  connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
+  GUI::get() -> close();
 }

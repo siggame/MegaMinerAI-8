@@ -176,7 +176,7 @@ public:
   static void loadGamelog( std::string gamelog );
 
   static void update();
-  void closeGUI();
+  static void closeGUI();
 
 private slots:
   void helpContents();
