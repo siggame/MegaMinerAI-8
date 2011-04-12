@@ -22,7 +22,7 @@ class Mappable:
 
 
 class Unit(Mappable):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
+  def __init__(self, game, id, x, y, owner, health, strength, movesLeft, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -30,7 +30,7 @@ class Unit(Mappable):
     self.owner = owner
     self.health = health
     self.strength = strength
-    self.hasMoved = hasMoved
+    self.movesLeft = movesLeft
     self.attacksLeft = attacksLeft
 
   def toList(self):
@@ -41,7 +41,7 @@ class Unit(Mappable):
       self.owner,
       self.health,
       self.strength,
-      self.hasMoved,
+      self.movesLeft,
       self.attacksLeft,
       ]
     return value
@@ -72,7 +72,7 @@ class Unit(Mappable):
 
 
 class Pirate(Unit):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
+  def __init__(self, game, id, x, y, owner, health, strength, movesLeft, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -80,7 +80,7 @@ class Pirate(Unit):
     self.owner = owner
     self.health = health
     self.strength = strength
-    self.hasMoved = hasMoved
+    self.movesLeft = movesLeft
     self.attacksLeft = attacksLeft
 
   def toList(self):
@@ -91,7 +91,7 @@ class Pirate(Unit):
       self.owner,
       self.health,
       self.strength,
-      self.hasMoved,
+      self.movesLeft,
       self.attacksLeft,
       ]
     return value
@@ -129,11 +129,11 @@ class Pirate(Unit):
               i.pirateId = pirate.id
               i.x = pirate.x
               i.y = pirate.y
-      #Otherwise the treasure becomes free game
+      #Otherwise the treasure becomes free game, or falls in your port, whichever
       else:
         for i in self.game.objects.values():
           if isinstance(i,Treasure) and i.pirateID == self.id:
-            i.pirateID = -1
+            self.reallyDropTreasure(i.amount)
       if self.owner == 2:
         self.game.Merchant2.pirateDied(self.homeBase)
       if self.owner == 3:
@@ -296,10 +296,14 @@ class Pirate(Unit):
                 self.game.addObject(treasure)
               #Pirate tries to pick up more treasure than allowed                                              
     return True
-
+  
   def dropTreasure(self, amount):
     if self.owner != self.game.playerID:
       return "Yarr!  Ye cannot trick me into dropin me treasure!  Yer not me captain!" 
+    return self.reallyDropTreasure(amount)
+  
+  #added this so I can call the drop treasure function without it checking wether or not it is that unit's turn, should make the killing of oneself easier.
+  def reallyDropTreasure(self,amount):
     for i in self.game.objects.values():
       if isinstance(i,Treasure):
         #Locates the treasure being modified
@@ -349,6 +353,9 @@ class Pirate(Unit):
             i.amount -= amount
             treasure = i.make(self.game,self.x,self.y,-1,amount)
             game.addObject(treasure)
+    #playa = [i for i in self.game.objects.values() if isinstance(i,Player)]
+    #print playa[0].gold
+    #print playa[1].gold
     return True
                       
   def buildPort(self):
@@ -514,7 +521,7 @@ class Port(Mappable):
 
 
 class Ship(Unit):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
+  def __init__(self, game, id, x, y, owner, health, strength, movesLeft, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -522,7 +529,7 @@ class Ship(Unit):
     self.owner = owner
     self.health = health
     self.strength = strength
-    self.hasMoved = hasMoved
+    self.movesLeft = movesLeft
     self.attacksLeft = attacksLeft
 
   def toList(self):
@@ -533,7 +540,7 @@ class Ship(Unit):
       self.owner,
       self.health,
       self.strength,
-      self.hasMoved,
+      self.movesLeft,
       self.attacksLeft,
       ]
     return value
