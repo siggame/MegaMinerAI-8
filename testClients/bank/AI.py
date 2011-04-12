@@ -58,12 +58,11 @@ class AI(BaseAI):
       for i in self.treasures:
         if i.getX() == myUnits[0].getX() and i.getY() == myUnits[0].getY():
           amount = i.getAmount()
+          print "I'm picking up: ", amount
           myUnits[0].pickupTreasure(amount)
           myUnits[0].dropTreasure(amount)
       
-      print "Turn: ", self.turnNumber()
-      print amount
-      
+      yield 1
       #gloat
       while True:
         print "Turn: ", self.turnNumber()
