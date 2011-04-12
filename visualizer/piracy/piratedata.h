@@ -52,7 +52,7 @@ public:
 
 private:
 
-  RenderData *m_renderData;
+  RenderData<PirateDataInfo> *m_renderData;
 };
 
 #endif
