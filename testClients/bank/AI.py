@@ -39,16 +39,17 @@ class AI(BaseAI):
       
       while self.turnNumber() < 400:
         print "Turn: ", self.turnNumber()
-        print max([i.getAmount() for i in self.treasures])
+        print "Gold: ", max([i.getAmount() for i in self.treasures])
         yield 1
         
-        
+      print "Turn: ", self.turnNumber()
       print "I'm building a pirate!"
-      print len(self.pirates)
       
       myPorts[0].createPirate()
       
       yield 1
+      print "Turn: ", self.turnNumber()
+      print "I'm makin' a deposit!"
       
       myUnits = [i for i in self.pirates if i.getOwner() == self.playerID()]
       
@@ -57,11 +58,15 @@ class AI(BaseAI):
       for i in self.treasures:
         if i.getX() == myUnits[0].getX() and i.getY() == myUnits[0].getY():
           amount = i.getAmount()
+          print "I'm picking up: ", amount
           myUnits[0].pickupTreasure(amount)
           myUnits[0].dropTreasure(amount)
       
+      yield 1
       #gloat
       while True:
+        print "Turn: ", self.turnNumber()
+        print "Gold: ", self.players[self.playerID()].getGold()
         yield 1
       
       
