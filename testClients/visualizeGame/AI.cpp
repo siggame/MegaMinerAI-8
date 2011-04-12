@@ -19,19 +19,23 @@ const char* AI::password()
 //This function is run once, before your first turn.
 void AI::init()
 {
-  cout<<"Initialization called"<<endl;
-  objectCheck();
+  //cout<<"Initialization called"<<endl;
+  //objectCheck();
+  
+  //clear the screen when we begin
+  cout << "\033[2J\033[1;1H";
 }
 
 //This function is called each time it is your turn.
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
-  cout<<"Starting turn: "<<turnNumber()<<endl;
+  //cout<<"Starting turn: "<<turnNumber()<<endl;
   //objectCheck();
   
   //clears the screen
-  cout << "\033[2J\033[1;1H";
+  //cout << "\033[2J\033[1;1H";
+  cout << "\033[f";
   displayCurrentMatch();
   return true;
 }
@@ -49,6 +53,14 @@ void AI::displayCurrentMatch()
   int mapTiles[mapSize()][mapSize()];
   int mapObjects[mapSize()][mapSize()];
   int mapOwners[mapSize()][mapSize()];
+  
+  //first we display red team
+  cout << "\033[22;35m";
+  cout << "Player 0: " << players[0].playerName() << " Gold: " << players[0].gold() << "       ";
+  cout << "\033[0;37m";
+  cout<<"turn: "<< turnNumber() << "        ";
+   cout << "\033[01;36m";
+  cout << "Player 1: " << players[1].playerName() << " Gold: " << players[1].gold();
   
   for(int i = 0; i < tiles.size(); i++)
   {
@@ -100,7 +112,7 @@ void AI::displayCurrentMatch()
         //sets background color to blue
         cout << "\033[7;32m";
       }
-      else if(mapTiles[x][y] == PORT) //land
+      else if(mapTiles[x][y] == PORT) //port
       {
         cout << "\033[7;35m";
       }
@@ -279,6 +291,6 @@ void AI::objectCheck()
 //This function is run once, after your last turn.
 void AI::end()
 {
-  cout<<"End Called"<<endl;
+  //cout<<"End Called"<<endl;
   //objectCheck();
 }
