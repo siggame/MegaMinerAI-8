@@ -730,12 +730,15 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     if self.pirateID == -1:
+      total = 0
       closest = self.game.mapSize*2
       for p in self.game.objects.values():
+        if isinstance(p,Treasure):
+          total += p.amount
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += (self.amount * sqrt(closest)/100)
+      self.amount += (self.amount * sqrt(closest)/100)*(total - self.amount)/total
 
 
 
