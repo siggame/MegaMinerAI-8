@@ -258,7 +258,7 @@ class Pirate(Unit):
                   hasTreasure = True
             #If the pirate did not have treasure we create a new thing of treasure for them
             if hasTreasure == False:
-              treasure = i.make(self.game,self.x,self.y,self.id,amount)
+              treasure = Treasure.make(self.game,self.x,self.y,self.id,amount)
               self.game.addObject(treasure)
               p[owner].gold -= amount
               
@@ -610,7 +610,7 @@ class Ship(Unit):
         i.y = y
     self.x = x
     self.y = y
-    print self.movesLeft
+    #print self.movesLeft
     return True
     
   def talk(self, message):
