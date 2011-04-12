@@ -430,9 +430,9 @@ void parseUnit(Connection* c, _Unit* object, sexp_t* expression)
   sub = sub->next;
   object->strength = atoi(sub->val);
   sub = sub->next;
-  object->hasMoved = atoi(sub->val);
+  object->movesLeft = atoi(sub->val);
   sub = sub->next;
-  object->hasAttacked = atoi(sub->val);
+  object->attacksLeft = atoi(sub->val);
   sub = sub->next;
   
 }
@@ -455,9 +455,9 @@ void parsePirate(Connection* c, _Pirate* object, sexp_t* expression)
   sub = sub->next;
   object->strength = atoi(sub->val);
   sub = sub->next;
-  object->hasMoved = atoi(sub->val);
+  object->movesLeft = atoi(sub->val);
   sub = sub->next;
-  object->hasAttacked = atoi(sub->val);
+  object->attacksLeft = atoi(sub->val);
   sub = sub->next;
   
 }
@@ -516,9 +516,9 @@ void parseShip(Connection* c, _Ship* object, sexp_t* expression)
   sub = sub->next;
   object->strength = atoi(sub->val);
   sub = sub->next;
-  object->hasMoved = atoi(sub->val);
+  object->movesLeft = atoi(sub->val);
   sub = sub->next;
-  object->hasAttacked = atoi(sub->val);
+  object->attacksLeft = atoi(sub->val);
   sub = sub->next;
   
 }

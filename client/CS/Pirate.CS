@@ -98,29 +98,29 @@ public class Pirate: Unit
     validify();
     return Client.pirateGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public new int getHealth()
   {
     validify();
     return Client.pirateGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public new int getStrength()
   {
     validify();
     return Client.pirateGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public new int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public new int getMovesLeft()
   {
     validify();
-    return Client.pirateGetHasMoved(ptr);
+    return Client.pirateGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public new int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public new int getAttacksLeft()
   {
     validify();
-    return Client.pirateGetHasAttacked(ptr);
+    return Client.pirateGetAttacksLeft(ptr);
   }
 
 }

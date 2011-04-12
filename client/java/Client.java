@@ -67,8 +67,8 @@ public interface Client extends Library {
   int unitGetOwner(Pointer ptr);
   int unitGetHealth(Pointer ptr);
   int unitGetStrength(Pointer ptr);
-  int unitGetHasMoved(Pointer ptr);
-  int unitGetHasAttacked(Pointer ptr);
+  int unitGetMovesLeft(Pointer ptr);
+  int unitGetAttacksLeft(Pointer ptr);
 
   int pirateGetId(Pointer ptr);
   int pirateGetX(Pointer ptr);
@@ -76,8 +76,8 @@ public interface Client extends Library {
   int pirateGetOwner(Pointer ptr);
   int pirateGetHealth(Pointer ptr);
   int pirateGetStrength(Pointer ptr);
-  int pirateGetHasMoved(Pointer ptr);
-  int pirateGetHasAttacked(Pointer ptr);
+  int pirateGetMovesLeft(Pointer ptr);
+  int pirateGetAttacksLeft(Pointer ptr);
 
   int playerGetId(Pointer ptr);
   String playerGetPlayerName(Pointer ptr);
@@ -95,8 +95,8 @@ public interface Client extends Library {
   int shipGetOwner(Pointer ptr);
   int shipGetHealth(Pointer ptr);
   int shipGetStrength(Pointer ptr);
-  int shipGetHasMoved(Pointer ptr);
-  int shipGetHasAttacked(Pointer ptr);
+  int shipGetMovesLeft(Pointer ptr);
+  int shipGetAttacksLeft(Pointer ptr);
 
   int tileGetId(Pointer ptr);
   int tileGetX(Pointer ptr);

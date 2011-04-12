@@ -116,9 +116,9 @@ public class Client {
   [DllImport("client")]
   public static extern int unitGetStrength(IntPtr ptr);
   [DllImport("client")]
-  public static extern int unitGetHasMoved(IntPtr ptr);
+  public static extern int unitGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
-  public static extern int unitGetHasAttacked(IntPtr ptr);
+  public static extern int unitGetAttacksLeft(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int pirateGetId(IntPtr ptr);
@@ -133,9 +133,9 @@ public class Client {
   [DllImport("client")]
   public static extern int pirateGetStrength(IntPtr ptr);
   [DllImport("client")]
-  public static extern int pirateGetHasMoved(IntPtr ptr);
+  public static extern int pirateGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
-  public static extern int pirateGetHasAttacked(IntPtr ptr);
+  public static extern int pirateGetAttacksLeft(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int playerGetId(IntPtr ptr);
@@ -168,9 +168,9 @@ public class Client {
   [DllImport("client")]
   public static extern int shipGetStrength(IntPtr ptr);
   [DllImport("client")]
-  public static extern int shipGetHasMoved(IntPtr ptr);
+  public static extern int shipGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
-  public static extern int shipGetHasAttacked(IntPtr ptr);
+  public static extern int shipGetAttacksLeft(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int tileGetId(IntPtr ptr);
@@ -200,5 +200,4 @@ public class Client {
   public static extern int getPathSize();
   DllImport("client")]
   public static extern int findPath(IntPtr start, IntPtr end, int type);
-
 }

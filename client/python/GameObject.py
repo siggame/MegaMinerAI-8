@@ -91,25 +91,25 @@ class Unit(Mappable):
     self.validify()
     return library.unitGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Health of the unit
   def getHealth(self):
     self.validify()
     return library.unitGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit
   def getStrength(self):
     self.validify()
     return library.unitGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.unitGetHasMoved(self.ptr)
+    return library.unitGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.unitGetHasAttacked(self.ptr)
+    return library.unitGetAttacksLeft(self.ptr)
 
 
   def __str__(self):
@@ -121,8 +121,8 @@ class Unit(Mappable):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
     return ret
 
 ##A generic pirate
@@ -199,25 +199,25 @@ class Pirate(Unit):
     self.validify()
     return library.pirateGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Health of the unit
   def getHealth(self):
     self.validify()
     return library.pirateGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit
   def getStrength(self):
     self.validify()
     return library.pirateGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.pirateGetHasMoved(self.ptr)
+    return library.pirateGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.pirateGetHasAttacked(self.ptr)
+    return library.pirateGetAttacksLeft(self.ptr)
 
 
   def __str__(self):
@@ -229,8 +229,8 @@ class Pirate(Unit):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
     return ret
 
 ##
@@ -404,25 +404,25 @@ class Ship(Unit):
     self.validify()
     return library.shipGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Health of the unit
   def getHealth(self):
     self.validify()
     return library.shipGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit
   def getStrength(self):
     self.validify()
     return library.shipGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.shipGetHasMoved(self.ptr)
+    return library.shipGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.shipGetHasAttacked(self.ptr)
+    return library.shipGetAttacksLeft(self.ptr)
 
 
   def __str__(self):
@@ -434,8 +434,8 @@ class Ship(Unit):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
     return ret
 
 ##A basic tile
