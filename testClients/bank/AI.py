@@ -24,11 +24,15 @@ class AI(BaseAI):
       myUnits[0].pickupTreasure(self.players[self.playerID()].getGold() - self.pirateCost())
       myPorts = [i for i in self.ports if i.getOwner() == self.playerID()]
       
-      """for i in self.tiles:
+      x = myUnits[0].getX()
+      y = myUnits[0].getY()
+      print x, y
+      for i in self.tiles:
         if abs(i.getX() - myUnits[0].getX()) + abs(i.getY() - myUnits[0].getY()) == 1 and i.getType() == 0:
+          x, y = i.getX(), i.getY()
           myUnits[0].move(i.getX(), i.getY())
-          break"""
-      
+          break
+      print x, y
       for i in myUnits:
         i.attack(i)
       
@@ -49,20 +53,27 @@ class AI(BaseAI):
       
       yield 1
       print "Turn: ", self.turnNumber()
-      print "I'm makin' a deposit!"
+      print "I'm gettin' mah money!"
       
       myUnits = [i for i in self.pirates if i.getOwner() == self.playerID()]
+      myUnits[0].move(x, y)
       
       amount = 0
       
       for i in self.treasures:
-        if i.getX() == myUnits[0].getX() and i.getY() == myUnits[0].getY():
+        if i.getX() == x and i.getY() == y:
           amount = i.getAmount()
           print "I'm picking up: ", amount
           myUnits[0].pickupTreasure(amount)
-          myUnits[0].dropTreasure(amount)
       
       yield 1
+      
+      print "Turn: ", self.turnNumber()
+      print "I'm makin' a deposit!"
+      myUnits[0].move(myPorts[0].getX(), myPorts[0].getY())
+      myUnits[0].dropTreasure(amount)
+      
+      
       #gloat
       while True:
         print "Turn: ", self.turnNumber()

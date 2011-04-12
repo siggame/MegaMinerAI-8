@@ -736,4 +736,4 @@ class Treasure(Mappable):
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += (self.amount * sqrt(closest)/100)
+      self.amount += closest
