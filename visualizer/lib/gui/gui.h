@@ -176,6 +176,7 @@ public:
   static void loadGamelog( std::string gamelog );
 
   static void update();
+  void closeGUI();
 
 private slots:
   void helpContents();
@@ -216,6 +217,7 @@ private:
   void createActions();
   void createMenus();
   void buildToolSet();
+
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

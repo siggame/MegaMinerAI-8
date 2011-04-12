@@ -492,3 +492,8 @@ void GUI::buildToolSet()
 
   }
 }
+
+void GUI::closeGUI()
+{
+  connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
+}
