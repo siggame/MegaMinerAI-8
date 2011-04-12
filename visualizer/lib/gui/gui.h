@@ -182,6 +182,7 @@ private slots:
   void helpContents();
   void fileOpen();
   void toggleFullScreen();
+  void togglePlayPause();
 
 private:
   /// Container for the objects in the GUI
@@ -230,6 +231,8 @@ private:
   QAction *m_fileExit; /// File->Exit
   
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
+  
+  QAction *togglePlayPauseAct; /// Spacebar toggles play/pause
 };
 
 #endif

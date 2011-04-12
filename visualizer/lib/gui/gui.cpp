@@ -2,6 +2,7 @@
 #include "../renderer/renderer.h"
 #include "../parser/parser.h"
 #include <QDesktopServices>
+#include <Qt>
 #include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
 #include "../../piracy/piratedata.h"
@@ -429,6 +430,10 @@ void GUI::createActions()
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
+  togglePlayPauseAct = new QAction( tr("Play/Pause"), this );
+  togglePlayPauseAct->setShortcut( tr( "Ctrl+P" ) );
+  togglePlayPauseAct->setStatusTip( tr("Toggle Playback") );
+  connect( togglePlayPauseAct, SIGNAL(triggered()), this, SLOT(togglePlayPause()) );
 }
 
 void GUI::createMenus()
@@ -470,6 +475,7 @@ void GUI::buildToolSet()
     m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
+    m_consoleArea -> setReadOnly(1);
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
 
@@ -506,4 +512,9 @@ void GUI::toggleFullScreen()
 		showNormal();
 	fullScreen = !fullScreen;
 	show();
+}
+
+void GUI::togglePlayPause()
+{
+  m_controlBar -> play();
 }
