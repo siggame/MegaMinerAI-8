@@ -16,9 +16,7 @@ class AI : BaseAI
   }
 
   
- public List<List<bool>> land = new List<List<bool>>();
- public List<List<bool>> port = new List<List<bool>>();
-
+ 
   
 
   public void objectCheck()
@@ -145,6 +143,55 @@ public void displayTreasure()
   }
 }
 
+public void moveCheck()
+{
+    const Int32 SIZEOFMAP = mapSize();
+    bool[,] land = new bool[SIZEOFMAP, SIZEOFMAP];
+    bool[,] tile = new bool[SIZEOFMAP, SIZEOFMAP];
+    //port = vector<vector<int> >(mapSize(),vector<int>(mapSize(),-1));
+    //for(Int32 i=0;i<tiles.size();i++)
+    //{
+    //  land[tiles[i].x()][tiles[i].y()]= tiles[i].type()==0;
+    //  tile[tiles[i].x()][tiles[i].y()]= true;
+    //}
+    //for(size_t i=0;i<ports.size();i++)
+    //{
+    //  if(!land[ports[i].x()][ports[i].y()])
+    //  {
+    //    cout<<"A port isn't land!"<<endl;
+    //    string trash;
+    //    cin>>trash;
+    //    land[ports[i].x()][ports[i].y()]=true;
+    //  }
+    //  port[ports[i].x()][ports[i].y()]=ports[i].owner();
+    //}
+    //for(size_t i=0;i<land.size();i++)
+    //{
+    //  for(size_t j=0;j<land[i].size();j++)
+    //  {
+    //    if(!tile[i][j])
+    //    {
+    //      cout<<"TILE MISSING!"<<endl;
+    //      throw "SHIT FIT";
+    //    }
+    //    cout<<(land[i][j]?"X":".")<<" ";
+    //  }
+    //  cout<<endl;
+    //}
+    //for(size_t i=0;i<pirates.size();i++)
+    //{
+    //  if(port[pirates[i].x()][pirates[i].y()]==-1)
+    //  {
+    //    cout<<"A pirate did start not on a port!"<<endl;
+    //  }
+    //  else if(port[pirates[i].x()][pirates[i].y()]!=pirates[i].owner())
+    //  {
+    //    cout<<"A pirate owned by player: "<<pirates[i].owner()<<" Started on port owned by player: "<<port[pirates[i].x()][pirates[i].y()]<<endl;
+    //  }
+    //}
+    //displayPorts();
+}
+
   //This function is called each time it is your turn
   //Return true to end your turn, return false to ask the server for updated information
   public override bool run()
@@ -165,50 +212,7 @@ public void displayTreasure()
       Random rand = new Random();
       Console.WriteLine("Initialization called");
       objectCheck();
-      //land = vector<vector<bool> >(mapSize(),vector<bool>(mapSize(),false));
-  //vector<vector<bool> > tile(mapSize(),vector<bool>(mapSize(),false));
-  //port = vector<vector<int> >(mapSize(),vector<int>(mapSize(),-1));
-  //for(Int32 i=0;i<tiles.size();i++)
-  //{
-  //  land[tiles[i].x()][tiles[i].y()]= tiles[i].type()==0;
-  //  tile[tiles[i].x()][tiles[i].y()]= true;
-  //}
-  //for(size_t i=0;i<ports.size();i++)
-  //{
-  //  if(!land[ports[i].x()][ports[i].y()])
-  //  {
-  //    cout<<"A port isn't land!"<<endl;
-  //    string trash;
-  //    cin>>trash;
-  //    land[ports[i].x()][ports[i].y()]=true;
-  //  }
-  //  port[ports[i].x()][ports[i].y()]=ports[i].owner();
-  //}
-  //for(size_t i=0;i<land.size();i++)
-  //{
-  //  for(size_t j=0;j<land[i].size();j++)
-  //  {
-  //    if(!tile[i][j])
-  //    {
-  //      cout<<"TILE MISSING!"<<endl;
-  //      throw "SHIT FIT";
-  //    }
-  //    cout<<(land[i][j]?"X":".")<<" ";
-  //  }
-  //  cout<<endl;
-  //}
-  //for(size_t i=0;i<pirates.size();i++)
-  //{
-  //  if(port[pirates[i].x()][pirates[i].y()]==-1)
-  //  {
-  //    cout<<"A pirate did start not on a port!"<<endl;
-  //  }
-  //  else if(port[pirates[i].x()][pirates[i].y()]!=pirates[i].owner())
-  //  {
-  //    cout<<"A pirate owned by player: "<<pirates[i].owner()<<" Started on port owned by player: "<<port[pirates[i].x()][pirates[i].y()]<<endl;
-  //  }
-  //}
-  //displayPorts();
+ 
   }
 
   //This function is called once, after your last turn
