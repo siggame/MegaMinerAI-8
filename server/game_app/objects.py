@@ -233,7 +233,7 @@ class Pirate(Unit):
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
-    if amount < 0:
+    if amount < 1:
       return "Your must pickup more than nothing"
     for i in self.game.objects.values():       
       if isinstance(i,Port):
@@ -255,12 +255,14 @@ class Pirate(Unit):
                 if j.x == self.x and j.y == self.y and j.pirateID == self.id:
                   j.amount += amount
                   p[owner].gold -= amount
-                  hasTreasure = True
+                  hasTreasure = True                  
             #If the pirate did not have treasure we create a new thing of treasure for them
             if hasTreasure == False:
               treasure = Treasure.make(self.game,self.x,self.y,self.id,amount)
               self.game.addObject(treasure)
               p[owner].gold -= amount
+          else:
+            return "You do not have that much gold!"
               
     #If the pirate is not on a port and is trying to pickup Treasure
     if portPickup == False:
@@ -312,17 +314,17 @@ class Pirate(Unit):
               if i.x == j.x and i.y == j.y:
                 #Increase gold of owner
                 if self.owner == 0:
-                  p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+                  p = [k for k in self.game.objects.values() if isinstance(k,Player)]
                   p[0].gold += i.amount
                 else:
-                  p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+                  p = [k for k in self.game.objects.values() if isinstance(k,Player)]
                   p[1].gold += i.amount
                 #Decrement gold if only partially dropped
                 if amount < i.amount:
                   i.amount -= amount
                 #Remove if all dropped
                 else:
-                  self.game.removeObject(self.game.objects[i])
+                  self.game.removeObject(i)
                 return True
             #If there is already treasure at this location
             elif isinstance(j,Treasure):
@@ -345,7 +347,7 @@ class Pirate(Unit):
           #at this location          
           else:
             i.amount -= amount
-            treasure = i.make(game,self.x,self.y,-1,amount)
+            treasure = i.make(self.game,self.x,self.y,-1,amount)
             game.addObject(treasure)
     return True
                       
@@ -365,7 +367,7 @@ class Pirate(Unit):
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
               if p[0].gold >= self.game.portCost:
                 p[0].gold -= self.game.portCost
-                port = i.make(game,self.x,self.y,self.owner)
+                port = i.make(self.game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
               else:
@@ -374,7 +376,7 @@ class Pirate(Unit):
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
               if p[1].gold >= self.game.portCost:
                 p[1].gold -= self.game.portCost
-                port = i.make(game,self.x,self.y,self.owner)
+                port = i.make(self.game,self.x,self.y,self.owner)
                 game.addObject(port)
                 return True
               else:
@@ -610,7 +612,6 @@ class Ship(Unit):
         i.y = y
     self.x = x
     self.y = y
-    #print self.movesLeft
     return True
     
   def talk(self, message):
@@ -730,15 +731,9 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     if self.pirateID == -1:
-      total = 0
       closest = self.game.mapSize*2
       for p in self.game.objects.values():
-        if isinstance(p,Treasure):
-          total += p.amount
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += (self.amount * sqrt(closest)/100)*(total - self.amount)/total
-
-
-
+      self.amount += (self.amount * sqrt(closest)/100)
