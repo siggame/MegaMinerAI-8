@@ -497,3 +497,8 @@ void GUI::closeGUI()
 {
   GUI::get() -> close();
 }
+
+void GUI::toggleFullScreen()
+{
+  QWidget::showFullScreen();
+}

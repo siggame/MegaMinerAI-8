@@ -181,6 +181,7 @@ public:
 private slots:
   void helpContents();
   void fileOpen();
+  void toggleFullScreen();
 
 private:
   /// Container for the objects in the GUI
