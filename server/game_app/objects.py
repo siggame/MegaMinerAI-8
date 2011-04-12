@@ -319,10 +319,10 @@ class Pirate(Unit):
                 #Increase gold of owner
                 if self.owner == 0:
                   p = [k for k in self.game.objects.values() if isinstance(k,Player)]
-                  p[0].gold += i.amount
+                  p[0].gold += amount
                 else:
                   p = [k for k in self.game.objects.values() if isinstance(k,Player)]
-                  p[1].gold += i.amount
+                  p[1].gold += amount
                 #Decrement gold if only partially dropped
                 if amount < i.amount:
                   i.amount -= amount
