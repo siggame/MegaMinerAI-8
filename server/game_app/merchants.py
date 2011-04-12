@@ -103,17 +103,17 @@ class MerchantAI:
       if isinstance(i,Pirate) and i.id == self.id:
         for j in self.game.objects.values():
           if isinstance(j,Pirate) and j.id != 2 and j.id != 3:
-            if i.hasAttacked == 0:
+            if i.attacksLeft > 0:
               i.attack(j)
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.id == self.id:
         for j in self.game.objects.values():
           if isinstance(j,Ship) and j.id != 2 and j.id != 3:
-            if i.hasAttacked == 0:
+            if i.attacksLeft > 0:
               i.attack(j)
     #Ships arrive at ports!
     for i in self.inTransit:
-      if i.ship.hasAttacked != 0:
+      if i.ship.attacksLeft <= 0:
         continue
       if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 1:
         self.shipArrived(i.ship,i.port)

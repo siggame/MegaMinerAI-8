@@ -22,11 +22,12 @@ class AI(BaseAI):
   def run(self):
       myUnits = [i for i in self.pirates if i.getOwner() == self.playerID()]
       myUnits[0].pickupTreasure(self.players[self.playerID()].getGold() - self.pirateCost())
+      myPorts = [i for i in self.ports if i.getOwner() == self.playerID()]
       
-      for i in self.tiles:
+      """for i in self.tiles:
         if abs(i.getX() - myUnits[0].getX()) + abs(i.getY() - myUnits[0].getY()) == 1 and i.getType() == 0:
           myUnits[0].move(i.getX(), i.getY())
-          break
+          break"""
       
       for i in myUnits:
         i.attack(i)
@@ -36,10 +37,34 @@ class AI(BaseAI):
           i.attack(i)
       yield 1
       
-      while True:
+      while self.turnNumber() < 400:
         print "Turn: ", self.turnNumber()
         print max([i.getAmount() for i in self.treasures])
         yield 1
+        
+        
+      print "I'm building a pirate!"
+      print len(self.pirates)
+      
+      myPorts[0].createPirate()
+      
+      yield 1
+      
+      myUnits = [i for i in self.pirates if i.getOwner() == self.playerID()]
+      
+      amount = 0
+      
+      for i in self.treasures:
+        if i.getX() == myUnits[0].getX() and i.getY() == myUnits[0].getY():
+          amount = i.getAmount()
+          myUnits[0].pickupTreasure(amount)
+          myUnits[0].dropTreasure(amount)
+      
+      #gloat
+      while True:
+        yield 1
+      
+      
 
   def __init__(self, conn):
       BaseAI.__init__(self, conn)

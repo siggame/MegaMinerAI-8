@@ -22,7 +22,7 @@ class Mappable:
 
 
 class Unit(Mappable):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
+  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -31,7 +31,7 @@ class Unit(Mappable):
     self.health = health
     self.strength = strength
     self.hasMoved = hasMoved
-    self.hasAttacked = hasAttacked
+    self.attacksLeft = attacksLeft
 
   def toList(self):
     value = [
@@ -42,7 +42,7 @@ class Unit(Mappable):
       self.health,
       self.strength,
       self.hasMoved,
-      self.hasAttacked,
+      self.attacksLeft,
       ]
     return value
 
@@ -72,7 +72,7 @@ class Unit(Mappable):
 
 
 class Pirate(Unit):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
+  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -81,7 +81,7 @@ class Pirate(Unit):
     self.health = health
     self.strength = strength
     self.hasMoved = hasMoved
-    self.hasAttacked = hasAttacked
+    self.attacksLeft = attacksLeft
 
   def toList(self):
     value = [
@@ -92,7 +92,7 @@ class Pirate(Unit):
       self.health,
       self.strength,
       self.hasMoved,
-      self.hasAttacked,
+      self.attacksLeft,
       ]
     return value
 
@@ -120,7 +120,7 @@ class Pirate(Unit):
           if isinstance(i,Treasure) and i.pirateID == self.id:
             iHasTreasure = False
             for j in self.game.objects.values():
-              if isinstance(j,Treasure) and j.pirateID is pirate.id:
+              if isinstance(j,Treasure) and j.pirateID == pirate.id:
                 j.amount += i.amount
                 i.amount = 0
                 self.game.removeObject(i)
@@ -401,7 +401,7 @@ class Pirate(Unit):
       return "That is too far away!"
     
     else:
-      self.hasAttacked += 1
+      self.attacksLeft -= 1
       #Optional Ally Pirate Auto Kill
       if isinstance(Target,Pirate) and Target.owner is self.owner:
         Target.health = 0
@@ -514,7 +514,7 @@ class Port(Mappable):
 
 
 class Ship(Unit):
-  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, hasAttacked):
+  def __init__(self, game, id, x, y, owner, health, strength, hasMoved, attacksLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -523,7 +523,7 @@ class Ship(Unit):
     self.health = health
     self.strength = strength
     self.hasMoved = hasMoved
-    self.hasAttacked = hasAttacked
+    self.attacksLeft = attacksLeft
 
   def toList(self):
     value = [
@@ -534,7 +534,7 @@ class Ship(Unit):
       self.health,
       self.strength,
       self.hasMoved,
-      self.hasAttacked,
+      self.attacksLeft,
       ]
     return value
 
