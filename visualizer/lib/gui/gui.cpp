@@ -500,5 +500,10 @@ void GUI::closeGUI()
 
 void GUI::toggleFullScreen()
 {
-  QWidget::showFullScreen();
+	if( !fullScreen )
+		showFullScreen();
+	else
+		showNormal();
+	fullScreen = !fullScreen;
+	show();
 }

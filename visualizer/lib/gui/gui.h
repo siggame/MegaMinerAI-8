@@ -188,6 +188,9 @@ private:
   std::map<std::string, guiObj*> m_objects;
   /// Setup?
   bool m_isSetup;
+  
+  //In full screen mode or not?
+	bool fullScreen;
 
   /// Main widget for this window
   CentralWidget *m_centralWidget; 
