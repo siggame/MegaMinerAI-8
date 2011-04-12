@@ -110,37 +110,46 @@ class MerchantAI:
           if isinstance(j,Ship) and j.id != 2 and j.id != 3:
             if i.hasAttacked == 0:
               i.attack(j)
-    for x in range(0,self.game.shipSteps):
-      #Ships arrive at ports!
-      for i in self.inTransit:
-        if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 1:
-          self.shipArrived(i.ship,i.port)
-          self.inTransit.remove(i)
-        else:
-          direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
-          #Right
-          if len(direction) == 0:
-            continue 
-            #print "There is no path!"
-          elif direction[0] == '0':
-            #print "right"
-            i.ship.move(i.ship.x+1,i.ship.y)
-          #Down
-          elif direction[0] == '1':
-            #print "down"
-            i.ship.move(i.ship.x,i.ship.y+1)
-          #Left
-          elif direction[0] == '2':
-            #print "left"
-            i.ship.move(i.ship.x-1,i.ship.y)
-          #Up
-          elif direction[0] == '3':
-            #print "up"
-            i.ship.move(i.ship.x,i.ship.y-1)
-          #else:
-            #print direction
-            #print direction[0]
-            #print `direction[0] == '0'`
+    #Ships arrive at ports!
+    for i in self.inTransit:
+      if i.ship.hasAttacked != 0:
+        continue
+      if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 1:
+        self.shipArrived(i.ship,i.port)
+        self.inTransit.remove(i)
+      else:
+        direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+        #Right
+        if len(direction) == 0:
+          dir = randint(0,3)
+          if dir == 0:
+            direction = ['0']
+          elif dir == 1:
+            direction = ['1']
+          elif dir == 2:
+            direction = ['2']
+          elif dir == 3:
+            direction = ['3']
+          #print "There is no path!"
+        if direction[0] == '0':
+          #print "right"
+          i.ship.move(i.ship.x+1,i.ship.y)
+        #Down
+        elif direction[0] == '1': 
+        #print "down"
+          i.ship.move(i.ship.x,i.ship.y+1)
+        #Left
+        elif direction[0] == '2':
+          #print "left"
+          i.ship.move(i.ship.x-1,i.ship.y)
+        #Up
+        elif direction[0] == '3':
+          #print "up"
+          i.ship.move(i.ship.x,i.ship.y-1)
+        #else:
+          #print direction
+          #print direction[0]
+          #print `direction[0] == '0'`
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
