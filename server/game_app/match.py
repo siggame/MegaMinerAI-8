@@ -40,12 +40,16 @@ class Match(DefaultGameWorld):
     self.pirateStrength = 1
     self.pirateSteps = 1
     self.pirateCost = 1
+    self.pirateMoves = 1
+    self.pirateAttacks = 1
     
     self.shipHealth = 1
     self.shipStrength = 1
     self.shipSteps = 1
     self.shipCost = 1
     self.shipRange = 1
+    self.shipMoves = 1
+    self.shipAttacks = 1
     
     self.portCost = 1
     
@@ -77,12 +81,16 @@ class Match(DefaultGameWorld):
         self.pirateStrength = cfgUnits[i]["strength"]
         self.pirateSteps = cfgUnits[i]["steps"]
         self.pirateCost = cfgUnits[i]["cost"]
+        self.pirateMoves = cfgUnits[i]["totalMoves"]
+        self.pirateAttacks = cfgUnits[i]["totalAttacks"]
       elif "ship" in i.lower():
         self.shipHealth = cfgUnits[i]["health"]
         self.shipStrength = cfgUnits[i]["strength"]
         self.shipSteps = cfgUnits[i]["steps"]
         self.shipCost = cfgUnits[i]["cost"]
         self.shipRange = cfgUnits[i]["range"]
+        self.shipMoves = cfgUnits[i]["totalMoves"]
+        self.shipAttacks = cfgUnits[i]["totalAttacks"]
       elif "port" in i.lower():
         self.portCost = cfgUnits[i]["cost"]
     

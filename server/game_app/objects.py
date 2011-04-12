@@ -104,8 +104,8 @@ class Pirate(Unit):
     return Pirate(game, id, x, y, owner, health, strength, 0, 0)
 
   def nextTurn(self):
-    self.hasMoved = 0
-    self.hasAttacked = 0
+    self.movesLeft = self.game.pirateMoves
+    self.attacksLeft = self.game.pirateAttacks
     if self.game.playerID != self.owner:
       return True
     pass
@@ -150,7 +150,7 @@ class Pirate(Unit):
  
     #Checks to see if the unit has moved this turn
     #0 if has not moved
-    if self.hasMoved > 0:
+    if self.movesLeft <= 0:
       return "This unit has already moved this turn"
     
     #Makes sure the unit is only moving one space
@@ -198,7 +198,7 @@ class Pirate(Unit):
           counter = 0
           #if the pirate was on a ship, count how many pirates are on it
           for j in self.game.objects.values():
-            if isinstance(j,Pirate) and j.x == x and j.y ==y:
+            if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
               counter+=1
           #If this was the last pirate on board, the ship becomes neutral.
           if counter == 1:
@@ -206,9 +206,10 @@ class Pirate(Unit):
             
     #Moves the unit and makes it unable to move until next turn
     self.game.animations.append(['move', self.id,x,y])
-    self.hasMoved += 1
+    self.movesLeft -= 1
     self.x = x
     self.y = y
+    
     #Take control of a ship if you are the first one on it
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == x and i.y == y:
@@ -232,6 +233,8 @@ class Pirate(Unit):
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
+    if amount < 0:
+      return "Your must pickup more than nothing"
     for i in self.game.objects.values():       
       if isinstance(i,Port):
         if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
@@ -300,7 +303,9 @@ class Pirate(Unit):
         #Locates the treasure being modified
         if i.pirateID == self.id:
           if amount > i.amount:
-             return "Not that much gold to drop"
+            return "Not that much gold to drop"
+          if amount < 1:
+            return "You need to drop gold!"
           for j in self.game.objects.values():
             #if the treasure is being dropped on a port
             if isinstance(j,Port) and (j.owner == 0 or j.owner == 1):
@@ -387,7 +392,7 @@ class Pirate(Unit):
     elif not isinstance(Target,Unit):
       return "That isn't attackable!"
     
-    elif self.hasAttacked is not 0:
+    elif self.attacksLeft <= 0:
       return "You've already attacked!"
     
     elif not (abs(self.x - Target.x)+abs(self.y  - Target.y) <= 1):
@@ -539,15 +544,15 @@ class Ship(Unit):
     return Ship(game, id, x, y, owner, health, strength, 0, 0)
 
   def nextTurn(self):
-    self.hasMoved = 0
-    self.hasAttacked = 0
+    self.movesLeft = self.game.shipMoves
+    self.attacksLeft = self.game.shipAttacks
 
   def move(self, x, y):
     #Check the owner of the ship before moving
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
       
-    if self.hasMoved >= self.game.shipSteps:
+    if self.movesLeft <= 0:
       return "This ship has already expended all of its moves this turn" 
      
     if self._distance(x,y) > 1:
@@ -569,17 +574,30 @@ class Ship(Unit):
     #Makes sure the ship stays on water
     for i in self.game.objects.values():
       if isinstance(i,Tile) and i.x == x and i.y == y:
+        #If the ship is attempting to move onto a land tile
         if i.type != 1:
-          return "Ships cannot walk!"
+          #This variable checks whether or not the ship is trying to move onto a port
+          portTile = False
+          for j in self.game.objects.values():
+            if isinstance(j,Port):
+              if j.x == x and j.y == y:
+                #True if we find a port at desired location
+                portTile = True
+                #If the port does not belong to you, throw an error
+                if j.owner != self.game.playerID:
+                  return "You cannot move into enemy ports!"
+          #If the player is simply trying to move a ship onto land
+          if portTile == False:
+            return "Ships cannot walk!"
       
     #Makes sure there is no units at target location
     for i in self.game.objects.values():
-      if isinstance(i,Unit):
+      if isinstance(i,Ship):
         if i.x == x and i.y == y:
-          return "There is already a unit at that location" 
+          return "There is already a ship at that location" 
 
     #Ship has passed all checks and it ready to move
-    self.hasMoved += 1
+    self.movesLeft -= 1
     
     #Moving all treasure,pirates on the ship to the new location
     #Also moves the ship to the new location
@@ -592,6 +610,7 @@ class Ship(Unit):
         i.y = y
     self.x = x
     self.y = y
+    print self.movesLeft
     return True
     
   def talk(self, message):
@@ -611,9 +630,9 @@ class Ship(Unit):
       return "You may only attack ships with your ship"
       
     #Meets all conditions for attack
-    if self.hasAttacked != 0:
+    if self.attacksLeft <= 0:
       return "You may only attack once with a ship each turn"
-    self.hasAttacked += 1   
+    self.attacksLeft -= 1   
     self.game.animations.append(['ShipAttack', self.id,Target.x,Target.y])
     Target.takeDamage(self)
     return True
