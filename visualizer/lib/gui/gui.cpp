@@ -422,8 +422,8 @@ void GUI::createActions()
 	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
 	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
 
-  m_fileExit = new QAction( tr( "E&xit" ), this );
-  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
+  m_fileExit = new QAction( tr( "&Quit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
   m_fileExit->setStatusTip(
       tr( "Close the Visualizer" )
       );
