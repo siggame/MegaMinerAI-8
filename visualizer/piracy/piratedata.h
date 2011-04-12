@@ -34,7 +34,6 @@ struct PirateDataInfo : public RenderDataInfo
   PirateDataInfo()
   {
     clear();
-
   }
 };
 
@@ -50,7 +49,10 @@ public:
   void update();
   const GOC_IDType componentID() const;
   void parsePirate( const Game& game, int pirateId );
+
 private:
+
+  RenderData *m_renderData;
 };
 
 #endif

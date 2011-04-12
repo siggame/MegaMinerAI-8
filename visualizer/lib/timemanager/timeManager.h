@@ -50,6 +50,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
 
     int m_speed;
     int m_lastTime;
+    int m_hash;
 };
 
 

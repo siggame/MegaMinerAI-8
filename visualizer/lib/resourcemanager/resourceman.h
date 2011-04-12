@@ -19,8 +19,8 @@ class ResourceMan : protected Manager <ResID_t,Resource*>
 		/** Default destructor */
 		virtual ~ResourceMan();
 
-        static Resource * reference(const std::string & rName, const std::string & referencer);
-        static bool release(const std::string & rName, const std::string & referencer);
+    static Resource * reference(const std::string & rName, const std::string & referencer);
+    static bool release(const std::string & rName, const std::string & referencer);
 
 		template<class T, ResourceType RT>
 		static bool reg(const ResID_t & rName, const T & value);
