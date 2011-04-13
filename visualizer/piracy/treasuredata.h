@@ -8,8 +8,7 @@ struct TreasureDataInfo
 {
   int x;
   int y;
-  int pirateID; //Pirate carrying treasure, 0 if not carried (lying on ground)
-  int amount; 
+  int gold; 
 };
 
 class TreasureData : public GOCFamily_Data<TreasureDataInfo>
