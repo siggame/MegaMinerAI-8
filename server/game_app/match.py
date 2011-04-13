@@ -138,7 +138,7 @@ class Match(DefaultGameWorld):
           if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
-            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
               
@@ -149,7 +149,7 @@ class Match(DefaultGameWorld):
             encountered.add(mapThing)
             self.addObject(Port.make(self, x, y, 2))
             
-            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
               
@@ -294,11 +294,9 @@ class Match(DefaultGameWorld):
     if self.turnNumber >= 500:
       #Check for victory through wealth
       if player2.gold > player1.gold:
-        self.declareWinner(self.players[0], 'Victory Through Wealth!')
-        print "1 Wins!"
-      elif player1.gold > player2.gold:
         self.declareWinner(self.players[1], 'Victory Through Wealth!')
-        print "2 Wins!"
+      elif player1.gold > player2.gold:
+        self.declareWinner(self.players[0], 'Victory Through Wealth!')
       elif player1.gold == player2.gold:
       #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
       #Victory through strength

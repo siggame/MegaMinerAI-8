@@ -193,13 +193,17 @@ class Pirate(Unit):
           return "Moving into an enemy port"
       #Checking if unit is moving onto water
       elif isinstance(i,Tile) and i.x == x and i.y == y and i.type == 1:
-        isShip = False
+        freeShip = False
+        opponentShip = False
         for j in self.game.objects.values():
           if isinstance(j,Ship) and j.x == x and j.y == y:
-            #-1 is placeholder value for neutral shop. May need to be changed
+            #-1 is placeholder value for neutral ship. May need to be changed
             if j.owner == self.owner or j.owner == -1:
-              isShip = True
-
+              freeShip = True
+            elif j.owner != self and j.owner != -1:
+              opponentShip = True
+        if opponentShip == True:
+          return "You cannot board enemy ships. Kill all of their pirates first!"        
         if not isShip:
           return "Pirates cannot swim!"
 
