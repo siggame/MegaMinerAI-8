@@ -1,9 +1,10 @@
 #include "timeManager.h" 
 #include "../renderer/renderer.h"
+#include "../gui/gui.h"
 
 #include <ctime>
 
-const int& TimeManager::getTurn()
+const int& TimeManager::getTurn() 
 {
   if( !isInit() )
     throw 0;
@@ -27,7 +28,7 @@ void TimeManager::setTurn( const int& turn )
   get()->m_frame = 0;
 }
 
-const int& TimeManager::getSpeed()
+const int& TimeManager::getSpeed() 
 {
   if( !isInit() )
     throw 0;
@@ -41,7 +42,19 @@ void TimeManager::setSpeed( const int& speed )
   get()->m_speed = speed;
 }
 
-const int& TimeManager::getNumTurns()
+int TimeManager::timeHash() 
+{
+  return get()->m_hash;
+}
+
+TimeManager::mode TimeManager::getMode()
+{
+  if( !isInit() )
+    throw 0;
+  return get()->m_mode;
+}
+
+const int& TimeManager::getNumTurns() 
 {
   if( !isInit() )
     throw 0;
@@ -86,22 +99,32 @@ void TimeManager::updateFrames()
   m_turn += m_frame / m_framesPerTurn;
   m_frame %= m_framesPerTurn;
 
+  //Idiot check low
   if (m_turn < 0)
   {
     m_turn = 0;
     m_frame = 0;
   }
 
+  //Idiot check high
   if (m_turn >= m_numTurns)
   {
     m_turn = m_numTurns-1;
     m_frame = m_framesPerTurn-1;
+  }
+  
+  //If in arena mode, show winner for a few secs at end
+  if (optionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
+  {
+    sleep(3);
+    GUI::closeGUI();
   }
 }
 
 void TimeManager::timerUpdate()
 {
   int milliseconds = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_hash++;
   m_frame += milliseconds * m_speed;
   updateFrames();
   Renderer::refresh();

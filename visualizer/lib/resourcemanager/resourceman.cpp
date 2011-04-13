@@ -13,7 +13,7 @@ std::vector<ResID_t> ResourceMan::listResourceNames()
 
     std::vector<ResID_t> names;
     DataTable::iterator it = get()->data()->begin();
-    for (it; it != get()->data()->end(); it++)
+    for (; it != get()->data()->end(); it++)
     {
         names.push_back(it->first);
     }

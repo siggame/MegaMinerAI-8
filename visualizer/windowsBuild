@@ -49,3 +49,8 @@ cd ./lib/parser
 make clean
 
 # Congrats, you're done
+cd ../..
+
+mkdir release/piracy
+cp -r ./piracy/textures ./release/piracy
+cp ./options.cfg ./release/

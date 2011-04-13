@@ -77,12 +77,12 @@ static bool parseUnit(Unit& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.hasMoved = atoi(sub->val);
+  object.movesLeft = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.hasAttacked = atoi(sub->val);
+  object.attacksLeft = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -129,12 +129,12 @@ static bool parsePirate(Pirate& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.hasMoved = atoi(sub->val);
+  object.movesLeft = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.hasAttacked = atoi(sub->val);
+  object.attacksLeft = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -247,12 +247,12 @@ static bool parseShip(Ship& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.hasMoved = atoi(sub->val);
+  object.movesLeft = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.hasAttacked = atoi(sub->val);
+  object.attacksLeft = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -530,9 +530,9 @@ static bool parseSexp(Game& game, sexp_t* expression)
 
 bool parseFile(Game& game, const char* filename)
 {
-  bool value;
+  //bool value;
   FILE* in = fopen(filename, "r");
-  int size;
+  //int size;
   if(!in)
     return false;
 
@@ -540,7 +540,7 @@ bool parseFile(Game& game, const char* filename)
 
   sexp_t* st = NULL;
 
-  while(st = parse())
+  while((st = parse()))
   {
     if( !parseSexp(game, st) )
     {

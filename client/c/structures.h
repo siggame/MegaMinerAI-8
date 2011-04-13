@@ -31,8 +31,8 @@ struct _Unit
   int owner;
   int health;
   int strength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
 };
 struct _Pirate
 {
@@ -43,8 +43,8 @@ struct _Pirate
   int owner;
   int health;
   int strength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
 };
 struct _Player
 {
@@ -71,8 +71,8 @@ struct _Ship
   int owner;
   int health;
   int strength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
 };
 struct _Tile
 {

@@ -4,8 +4,9 @@
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
 #include <list>
+#include "renderdata.h"
 
-struct PirateDataInfo
+struct PirateDataInfo : public RenderDataInfo
 {
   int owner;
   int x;
@@ -13,20 +14,26 @@ struct PirateDataInfo
   int totalHealth; 
   int numPirates;
   int totalStrength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
   std::list<int> piratesInStack;
-  
-  PirateDataInfo()
+
+  void clear()
   {
-  	owner = 0;
+   	owner = 0;
 	  x = 0;
 	  y = 0;
 	  totalHealth = 0; 
   	numPirates = 0;
     totalStrength = 0;
-  	hasMoved = 0;
-  	hasAttacked = 0;
+  	movesLeft = 0;
+  	attacksLeft = 0; 
+    piratesInStack.clear();
+  }
+  
+  PirateDataInfo()
+  {
+    clear();
   }
 };
 
@@ -42,7 +49,10 @@ public:
   void update();
   const GOC_IDType componentID() const;
   void parsePirate( const Game& game, int pirateId );
+
 private:
+
+  RenderData<PirateDataInfo> *m_renderData;
 };
 
 #endif

@@ -48,6 +48,8 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
       stream << *((${animation.name}*)*i) << "\n";
 % endfor
   }
+  
+  return stream;
 }
 
 Game::Game()

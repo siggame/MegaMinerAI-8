@@ -22,8 +22,8 @@ std::ostream& operator<<(std::ostream& stream, Unit ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "hasMoved: " << ob.hasMoved  <<'\n';
-  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  stream << "movesLeft: " << ob.movesLeft  <<'\n';
+  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
   return stream;
 }
 
@@ -36,8 +36,8 @@ std::ostream& operator<<(std::ostream& stream, Pirate ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "hasMoved: " << ob.hasMoved  <<'\n';
-  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  stream << "movesLeft: " << ob.movesLeft  <<'\n';
+  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
   return stream;
 }
 
@@ -70,8 +70,8 @@ std::ostream& operator<<(std::ostream& stream, Ship ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "hasMoved: " << ob.hasMoved  <<'\n';
-  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
+  stream << "movesLeft: " << ob.movesLeft  <<'\n';
+  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
   return stream;
 }
 
@@ -136,6 +136,8 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
   {
   }
+  
+  return stream;
 }
 
 Game::Game()

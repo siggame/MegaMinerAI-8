@@ -255,7 +255,7 @@ void Avl<T>::insert(const unsigned int & i, const T & data)
 }
 
 template<class T>
-T * interpolate(T*t1,T*t2)
+T * interpolate(T* /*t1*/,T* /*t2*/)
 {
 	return new T();
 }

@@ -47,6 +47,8 @@ bool ResTexture::load( const QImage& img )
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+
+  return false;
 }
 
 bool ResTexture::load( const std::string & path )

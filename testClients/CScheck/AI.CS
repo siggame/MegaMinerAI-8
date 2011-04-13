@@ -1,9 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 ///The class implementing gameplay logic.
 class AI : BaseAI
 {
+   
   public override string username()
   {
     return "Shell AI";
@@ -12,6 +14,10 @@ class AI : BaseAI
   {
     return "password";
   }
+
+  
+ 
+  
 
   public void objectCheck()
   {
@@ -50,10 +56,153 @@ class AI : BaseAI
       ////displayTreasure();
   }
 
+public void displayPirates()
+{
+  for(Int32 i=0;i<pirates.Length;i++)
+  {
+    ///Unique Identifier
+    Console.Write("\tPirate ID\t"); Console.Write(pirates[i].getId() ); 
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    Console.Write("\tX\t"); Console.Write(pirates[i].getX() ); 
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    Console.Write("\tY\t"); Console.Write(pirates[i].getY() ); 
+    ///The owner of the unit
+    Console.Write("\tOwner\t"); Console.Write(pirates[i].getOwner() ); 
+    ///health of the unit
+    Console.Write("\tHealth\t"); Console.Write(pirates[i].getHealth() ); 
+    ///attacking strength of the unit
+    Console.Write("\tStrength\t"); Console.Write(pirates[i].getStrength());
+    Console.WriteLine("");
+  }
+}
+
+public void displayPorts()
+{
+  for(Int32 i=0; i<ports.Length; i++)
+  {
+    ///Unique Identifier
+    Console.Write("\tPortID\t"); Console.Write(ports[i].getId());
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    Console.Write("\tX\t"); Console.Write(ports[i].getX());
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    Console.Write("\tY\t"); Console.Write(ports[i].getY());
+    ///The ownder of the port
+    Console.Write("\tOwner\t"); Console.Write(ports[i].getOwner());
+    Console.WriteLine("");
+  }
+}
+
+public void displayShips()
+{
+  for(Int32 i=0; i<ships.Length; i++)
+  {
+    ///Unique Identifier
+    Console.Write("\tShip ID\t"); Console.Write(ships[i].getId());
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    Console.Write("\tX\t"); Console.Write(ships[i].getX());
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    Console.Write("\tY\t"); Console.Write(ships[i].getY());
+    ///The owner of the unit
+    Console.Write("\tOwner\t"); Console.Write(ships[i].getOwner());
+    ///health of the unit
+    Console.Write("\tHealth\t"); Console.Write(ships[i].getHealth());
+    ///attacking strength of the unit
+    Console.Write("\tStrength\t"); Console.Write(ships[i].getStrength());
+    Console.WriteLine("");
+  }
+}
+
+public void displayTiles()
+{
+  for(Int32 i=0; i<tiles.Length; i++)
+  {
+    ///Unique Identifier
+    Console.Write("\tTile ID\t"); Console.Write(tiles[i].getId());
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    Console.Write("\tX\t"); Console.Write(tiles[i].getX());
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    Console.Write("\tY\t"); Console.Write(tiles[i].getY());
+    ///land = 0, water = 1
+    Console.Write("\tType\t"); Console.Write(tiles[i].getType());
+    Console.WriteLine("");
+  }
+}
+
+public void displayTreasure()
+{
+  for(Int32 i=0; i<treasures.Length; i++)
+  {
+    ///Unique Identifier
+    Console.Write("\tTreas ID\t"); Console.Write(treasures[i].getId());
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    Console.Write("\tX\t"); Console.Write(treasures[i].getX());
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    Console.Write("\tY\t"); Console.Write(treasures[i].getY());
+    //TODO Pirate carring treasure
+    Console.WriteLine("");
+  }
+}
+
+public void moveCheck()
+{
+    const Int32 SIZEOFMAP = mapSize();
+    bool[,] land = new bool[SIZEOFMAP, SIZEOFMAP];
+    bool[,] tile = new bool[SIZEOFMAP, SIZEOFMAP];
+    bool[,] port = new bool[SIZEOFMAP, SIZEOFMAP];
+    for (Int32 i = 0; i < tiles.size(); i++)
+    {
+        land[tiles[i].x()][tiles[i].y()] = tiles[i].type() == 0;
+        tile[tiles[i].x()][tiles[i].y()] = true;
+    }
+    //for(size_t i=0;i<ports.size();i++)
+    //{
+    //  if(!land[ports[i].x()][ports[i].y()])
+    //  {
+    //    cout<<"A port isn't land!"<<endl;
+    //    string trash;
+    //    cin>>trash;
+    //    land[ports[i].x()][ports[i].y()]=true;
+    //  }
+    //  port[ports[i].x()][ports[i].y()]=ports[i].owner();
+    //}
+    //for(size_t i=0;i<land.size();i++)
+    //{
+    //  for(size_t j=0;j<land[i].size();j++)
+    //  {
+    //    if(!tile[i][j])
+    //    {
+    //      cout<<"TILE MISSING!"<<endl;
+    //      throw "SHIT FIT";
+    //    }
+    //    cout<<(land[i][j]?"X":".")<<" ";
+    //  }
+    //  cout<<endl;
+    //}
+    //for(size_t i=0;i<pirates.size();i++)
+    //{
+    //  if(port[pirates[i].x()][pirates[i].y()]==-1)
+    //  {
+    //    cout<<"A pirate did start not on a port!"<<endl;
+    //  }
+    //  else if(port[pirates[i].x()][pirates[i].y()]!=pirates[i].owner())
+    //  {
+    //    cout<<"A pirate owned by player: "<<pirates[i].owner()<<" Started on port owned by player: "<<port[pirates[i].x()][pirates[i].y()]<<endl;
+    //  }
+    //}
+    //displayPorts();
+}
+
   //This function is called each time it is your turn
   //Return true to end your turn, return false to ask the server for updated information
   public override bool run()
   {
+    Console.Write("Starting turn: "); Console.Write(turnNumber()); Console.WriteLine("");
+    //objectCheck();
+    //displayPirates();
+    //displayPorts();
+    //displayShips();
+    //displayTiles();
+    //displayTreasure();
     return true;
   }
 
@@ -63,10 +212,14 @@ class AI : BaseAI
       Random rand = new Random();
       Console.WriteLine("Initialization called");
       objectCheck();
+ 
   }
 
   //This function is called once, after your last turn
-  public override void end() {}
+  public override void end() 
+  {
+      Console.ReadLine();
+  }
   
   
   public AI(IntPtr c) : base(c)
