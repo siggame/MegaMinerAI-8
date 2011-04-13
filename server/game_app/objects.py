@@ -346,7 +346,7 @@ class Pirate(Unit):
                 for j in self.game.objects.values():
                   if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
                     p[0].gold += j.gold
-                    game.removeObject(j)
+                    self.game.removeObject(j)
                 p[0].gold -= self.game.portCost
                 port = i.make(self.game,self.x,self.y,self.owner)
                 self.game.addObject(port)
@@ -360,10 +360,10 @@ class Pirate(Unit):
                 for j in self.game.objects.values():
                   if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
                     p[1].gold += j.gold
-                    game.removeObject(j)
+                    self.game.removeObject(j)
                 p[1].gold -= self.game.portCost
                 port = i.make(self.game,self.x,self.y,self.owner)
-                game.addObject(port)
+                self.game.addObject(port)
                 return True
               else:
                 return "Not enough gold to make this purchase"
