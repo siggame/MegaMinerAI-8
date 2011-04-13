@@ -268,6 +268,12 @@ DLLEXPORT int pirateMove(_Pirate* object, int x, int y)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  
+  // Game state changes
+  object->x = x;
+  object->y = y;
+  object->movesLeft--;
+  
   return 1;
 }
 
@@ -280,11 +286,6 @@ DLLEXPORT int pirateTalk(_Pirate* object, char* message)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
-  
-  // Game state changes
-  object->x = x;
-  object->y = y;
-  object->movesLeft--;
   
   return 1;
 }
@@ -299,12 +300,13 @@ DLLEXPORT int pirateAttack(_Pirate* object, _Unit* Target)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
-  if(target->health > 0 && (target->health-=object->strength)<0)
+  if(Target->health > 0 && (Target->health-=object->strength)<=0)
   {
     // get their gold
-    object->gold+=target->gold;
-    target->gold=0;
+    object->gold+=Target->gold;
+    Target->gold=0;
   }
+  object->attacksLeft--;
   return 1;
 }
 
@@ -318,7 +320,40 @@ DLLEXPORT int piratePickupTreasure(_Pirate* object, int amount)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
+  Connection * c = object->_c;
+
   object->gold+=amount;
+  bool found = false;
+  // Look through the treasures for one that is at this location
+  for(int i=0;!found && i<c->ShipCount;i++)
+  {
+    // if that Ship is at this spot
+    if(c->Ships[i].x == object->x && c->Ships[i].y == object->y)
+    {
+      c->Ships[i].gold-=amount;
+      found = true;
+    }
+  }
+  // Look through the ports
+  for(int i=0;!found && i<c->PortCount;i++)
+  {
+    // if that Port is at this spot
+    if(c->Ports[i].x == object->x && c->Ports[i].y == object->y)
+    {
+      c->Players[c->playerID].gold-=amount;
+      found = true;
+    }
+  }
+  // Look through the Treasures
+  for(int i=0;!found && i<c->TreasureCount;i++)
+  {
+    // if that treasure is at this spot
+    if(c->Treasures[i].x == object->x && c->Treasures[i].y == object->y)
+    {
+      c->Treasures[i].gold-=amount;
+      found = true;
+    }
+  }
   return 1;
 }
 
@@ -332,7 +367,40 @@ DLLEXPORT int pirateDropTreasure(_Pirate* object, int amount)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
+  Connection * c = object->_c;
+
   object->gold-=amount;
+  bool found = false;
+  // Look through the treasures for one that is at this location
+  for(int i=0;!found && i<c->ShipCount;i++)
+  {
+    // if that Ship is at this spot
+    if(c->Ships[i].x == object->x && c->Ships[i].y == object->y)
+    {
+      c->Ships[i].gold+=amount;
+      found = true;
+    }
+  }
+  // Look through the ports
+  for(int i=0;!found && i<c->PortCount;i++)
+  {
+    // if that Port is at this spot
+    if(c->Ports[i].x == object->x && c->Ports[i].y == object->y)
+    {
+      c->Players[c->playerID].gold+=amount;
+      found = true;
+    }
+  }
+  // Look through the Treasures
+  for(int i=0;!found && i<c->TreasureCount;i++)
+  {
+    // if that treasure is at this spot
+    if(c->Treasures[i].x == object->x && c->Treasures[i].y == object->y)
+    {
+      c->Treasures[i].gold+=amount;
+      found = true;
+    }
+  }
   return 1;
 }
 
@@ -345,8 +413,8 @@ DLLEXPORT int pirateBuildPort(_Pirate* object)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
-  Connection* c = object->c;
-  c->Players[c->PlayerID()].gold-=c->portCost;
+  Connection* c = object->_c;
+  c->Players[c->playerID].gold-=c->portCost;
   return 1;
 }
 
@@ -361,7 +429,8 @@ DLLEXPORT int portCreatePirate(_Port* object)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
-  //TODO
+  Connection* c = object->_c;
+  c->Players[c->playerID].gold-=c->pirateCost;
   return 1;
 }
 
@@ -374,6 +443,8 @@ DLLEXPORT int portCreateShip(_Port* object)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
+  Connection* c = object->_c;
+  c->Players[c->playerID].gold-=c->shipCost;
   return 1;
 }
 
@@ -389,6 +460,20 @@ DLLEXPORT int shipMove(_Ship* object, int x, int y)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
+  Connection * c = object->_c;
+  
+  for(int i=0;i<c->PirateCount;i++)
+  {
+    // move the pirate standing on this dude
+    if(c->Pirates[i].x == object->x && c->Pirates[i].y == object->y)
+    {
+      c->Pirates[i].x = x;
+      c->Pirates[i].y = y;
+    }
+  }
+  object->x = x;
+  object->y = y;
+  object->movesLeft--;
   return 1;
 }
 
@@ -415,6 +500,8 @@ DLLEXPORT int shipAttack(_Ship* object, _Unit* Target)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
   // Game state changes
+  Target->health-=object->strength;
+  object->attacksLeft--;
   return 1;
 }
 
