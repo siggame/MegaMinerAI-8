@@ -301,7 +301,6 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  result.save( "output.png", "PNG" );
 
 #if 0
   std::ofstream out( "depth.tga" );
