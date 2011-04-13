@@ -10,6 +10,10 @@ class TimeManager : public QObject, public Singleton<TimeManager>
   Q_OBJECT
   public:
  
+    TimeManager()
+    {
+      m_sleepTime = -1;
+    }
     enum mode
     {
       Play = 0,
@@ -51,6 +55,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     int m_speed;
     int m_lastTime;
     int m_hash;
+    int m_sleepTime;
+    int m_time;
 };
 
 

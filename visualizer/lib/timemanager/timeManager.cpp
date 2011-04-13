@@ -116,16 +116,26 @@ void TimeManager::updateFrames()
   //If in arena mode, show winner for a few secs at end
   if (optionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
   {
-    sleep(3);
-    GUI::closeGUI();
+    if( m_sleepTime == -1 )
+      m_sleepTime = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+    else
+    {
+      if( m_time - m_sleepTime > 3000 )
+      {
+        GUI::closeGUI();
+      }
+
+    }
+
   }
+
 }
 
 void TimeManager::timerUpdate()
 {
-  int milliseconds = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
   m_hash++;
-  m_frame += milliseconds * m_speed;
+  m_frame += m_time * m_speed;
   updateFrames();
   Renderer::refresh();
 }
