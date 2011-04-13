@@ -527,3 +527,8 @@ void GUI::rewindShortcut()
 {
   m_controlBar -> rewind();
 }
+
+void GUI::turnPercentageShortcut(int value)
+{
+  TimeManager::setTurn(value);
+}

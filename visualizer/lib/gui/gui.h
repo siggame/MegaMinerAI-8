@@ -185,6 +185,7 @@ private slots:
   void togglePlayPause();
   void fastForwardShortcut();
   void rewindShortcut();
+  void turnPercentageShortcut(int);
 
 private:
   /// Container for the objects in the GUI
