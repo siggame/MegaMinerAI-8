@@ -147,6 +147,8 @@ void GUI::loadGamelog( std::string gamelog )
   TimeManager::setTurn(0);
   TimeManager::setNumTurns(g.states.size() );
 
+  return;
+
 
   //cout << "Number of Turns: " << g.states.size() << endl;
 
@@ -238,7 +240,7 @@ void GUI::loadGamelog( std::string gamelog )
         
         int frame = (direction == STOP) ? 0 : 50;
         
-        piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
+        //piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
         
        }
 
