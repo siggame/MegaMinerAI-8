@@ -54,14 +54,7 @@ bool AI::run()
   map<int, size_t> hasTreasure;
   for(size_t t=0;t<treasures.size();t++)
   {
-    if(treasures[t].pirateID()==0)
-    {
-      gold[treasures[t].x()][treasures[t].y()]+= treasures[t].amount();
-    }
-    else
-    {
-      hasTreasure[treasures[t].pirateID()] = treasures[t].amount();
-    }
+    gold[treasures[t].x()][treasures[t].y()]+= treasures[t].gold();
   }
   list<target> empty, growing;
   for(size_t x=0;x<mapSize();x++)
@@ -86,6 +79,7 @@ bool AI::run()
     if(pirates[i].owner() == playerID())
     {
       // if he has treasure
+      hasTreasure[pirates[i].id()] = pirates[i].gold();
       if(hasTreasure.find(pirates[i].id())!= hasTreasure.end() && turnNumber()<400)
       {
 //        cout<<"Spreading the seed"<<endl;
