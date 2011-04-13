@@ -233,36 +233,37 @@ class Pirate(Unit):
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
-    if amount < 1:
-      return "Your must pickup more than nothing"
     for i in self.game.objects.values():       
       if isinstance(i,Port):
         if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
-          portPickup = True
-          p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-          #Sets the owner of the pirate to eaither player 0 or 1
-          if self.owner == 0:
-            owner = 0
-          else:
-            owner = 1
-          #Checks to make sure amount being withdrawn is less than that player has
-          if amount <= p[owner].gold:          
-            hasTreasure = False
-            #check to see if the pirate already has treasure
-            for j in self.game.objects.values():
-              if isinstance(j,Treasure):
-                #If the pirate does have treasure add it to that and deduct player's total
-                if j.x == self.x and j.y == self.y and j.pirateID == self.id:
-                  j.amount += amount
-                  p[owner].gold -= amount
-                  hasTreasure = True                  
-            #If the pirate did not have treasure we create a new thing of treasure for them
-            if hasTreasure == False:
-              treasure = Treasure.make(self.game,self.x,self.y,self.id,amount)
-              self.game.addObject(treasure)
+          portPickup = True    
+    if amount < 1:
+      return "Your must pickup more than nothing"
+    if portPickup == True:
+      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      #Sets the owner of the pirate to eaither player 0 or 1
+      if self.owner == 0:
+        owner = 0
+      else:
+        owner = 1
+      #Checks to make sure amount being withdrawn is less than that player has
+      if amount <= p[owner].gold:          
+        hasTreasure = False
+        #check to see if the pirate already has treasure
+        for j in self.game.objects.values():
+          if isinstance(j,Treasure):
+            #If the pirate does have treasure add it to that and deduct player's total
+            if j.x == self.x and j.y == self.y and j.pirateID == self.id:
+              j.amount += amount
               p[owner].gold -= amount
-          else:
-            return "You do not have that much gold!"
+              hasTreasure = True                  
+        #If the pirate did not have treasure we create a new thing of treasure for them
+        if hasTreasure == False:
+          treasure = Treasure.make(self.game,self.x,self.y,self.id,amount)
+          self.game.addObject(treasure)
+          p[owner].gold -= amount
+      else:
+        return "You do not have that much gold!"
               
     #If the pirate is not on a port and is trying to pickup Treasure
     if portPickup == False:
@@ -373,6 +374,11 @@ class Pirate(Unit):
             if self.owner == 0:
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
               if p[0].gold >= self.game.portCost:
+                #Checks to see if there is treasure on the loaction of the new port
+                for j in self.game.objects.values():
+                  if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
+                    p[0].gold += j.amount
+                    game.removeObject(j)
                 p[0].gold -= self.game.portCost
                 port = i.make(self.game,self.x,self.y,self.owner)
                 game.addObject(port)
@@ -382,6 +388,11 @@ class Pirate(Unit):
             else:
               p = [i for i in self.game.objects.values() if isinstance(i,Player)]
               if p[1].gold >= self.game.portCost:
+                #Checks to see if there is treasure on the loaction of the new port
+                for j in self.game.objects.values():
+                  if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
+                    p[1].gold += j.amount
+                    game.removeObject(j)
                 p[1].gold -= self.game.portCost
                 port = i.make(self.game,self.x,self.y,self.owner)
                 game.addObject(port)
