@@ -2,6 +2,7 @@
 #include "../renderer/renderer.h"
 #include "../parser/parser.h"
 #include <QDesktopServices>
+#include <Qt>
 #include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
 #include "../../piracy/piratedata.h"
@@ -231,8 +232,8 @@ void GUI::loadGamelog( std::string gamelog )
         pdi.totalHealth += p->second.health;
         pdi.numPirates++;
         pdi.totalStrength += p->second.strength;
-        pdi.hasMoved = p->second.hasMoved;
-        pdi.hasAttacked = p->second.hasAttacked;
+        pdi.movesLeft = p->second.movesLeft;
+        pdi.attacksLeft = p->second.attacksLeft;
         pdi.piratesInStack.push_front(p->second.id); 
         
         int frame = (direction == STOP) ? 0 : 50;
@@ -422,13 +423,17 @@ void GUI::createActions()
 	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
 	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
 
-  m_fileExit = new QAction( tr( "E&xit" ), this );
-  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
+  m_fileExit = new QAction( tr( "&Quit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
   m_fileExit->setStatusTip(
       tr( "Close the Visualizer" )
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
+  togglePlayPauseAct = new QAction( tr("&Play/Pause"), this );
+  togglePlayPauseAct->setShortcut( tr( "Ctrl+P" ) );
+  togglePlayPauseAct->setStatusTip( tr("Toggle Playback") );
+  connect( togglePlayPauseAct, SIGNAL(triggered()), this, SLOT(togglePlayPause()) );
 }
 
 void GUI::createMenus()
@@ -470,6 +475,7 @@ void GUI::buildToolSet()
     m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
+    m_consoleArea -> setReadOnly(1);
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
 
@@ -491,4 +497,24 @@ void GUI::buildToolSet()
     addDockWidget( Qt::BottomDockWidgetArea, m_dockWidget );
 
   }
+}
+
+void GUI::closeGUI()
+{
+  GUI::get() -> close();
+}
+
+void GUI::toggleFullScreen()
+{
+	if( !fullScreen )
+		showFullScreen();
+	else
+		showNormal();
+	fullScreen = !fullScreen;
+	show();
+}
+
+void GUI::togglePlayPause()
+{
+  m_controlBar -> play();
 }

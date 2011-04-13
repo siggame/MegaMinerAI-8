@@ -14,8 +14,8 @@ struct PirateDataInfo : public RenderDataInfo
   int totalHealth; 
   int numPirates;
   int totalStrength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
   std::list<int> piratesInStack;
 
   void clear()
@@ -26,8 +26,8 @@ struct PirateDataInfo : public RenderDataInfo
 	  totalHealth = 0; 
   	numPirates = 0;
     totalStrength = 0;
-  	hasMoved = 0;
-  	hasAttacked = 0; 
+  	movesLeft = 0;
+  	attacksLeft = 0; 
     piratesInStack.clear();
   }
   

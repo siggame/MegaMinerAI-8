@@ -176,16 +176,22 @@ public:
   static void loadGamelog( std::string gamelog );
 
   static void update();
+  static void closeGUI();
 
 private slots:
   void helpContents();
   void fileOpen();
+  void toggleFullScreen();
+  void togglePlayPause();
 
 private:
   /// Container for the objects in the GUI
   std::map<std::string, guiObj*> m_objects;
   /// Setup?
   bool m_isSetup;
+  
+  //In full screen mode or not?
+	bool fullScreen;
 
   /// Main widget for this window
   CentralWidget *m_centralWidget; 
@@ -217,6 +223,7 @@ private:
   void createMenus();
   void buildToolSet();
 
+
   // Actions
   QAction *m_helpContents; /// Help->Contents
 
@@ -224,6 +231,8 @@ private:
   QAction *m_fileExit; /// File->Exit
   
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
+  
+  QAction *togglePlayPauseAct; /// Spacebar toggles play/pause
 };
 
 #endif
