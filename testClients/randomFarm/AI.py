@@ -33,19 +33,14 @@ class AI(BaseAI):
       myPirates = [i for i in self.pirates if i.getOwner() == self.playerID()]
       map = [ [ mapTile() for i in xrange(self.mapSize()) ] for j in xrange(self.mapSize()) ]
       for i in self.pirates:
-        i.gold = 0
+        i.gold = i.getGold()
         map[i.getX()][i.getY()].pirates.append(i)
       
       for i in self.ports:
         map[i.getX()][i.getY()].port = i
       
       for i in self.treasures:
-        if i.getPirateID() == -1:
-          map[i.getX()][i.getY()].gold += i.getAmount()
-        else:
-          for j in self.pirates:
-            if j.getId() == i.getPirateID():
-              j.gold = i.getAmount()
+          map[i.getX()][i.getY()].gold += i.getGold()
       
       for i in map:
         for j in i:

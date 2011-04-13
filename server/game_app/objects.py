@@ -204,7 +204,7 @@ class Pirate(Unit):
               opponentShip = True
         if opponentShip == True:
           return "You cannot board enemy ships. Kill all of their pirates first!"        
-        if not isShip:
+        if not freeShip:
           return "Pirates cannot swim!"
 
     #Lose control of ship if this is your last pirate leaving
