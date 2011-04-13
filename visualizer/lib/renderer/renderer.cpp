@@ -79,7 +79,7 @@ bool Renderer::refresh()
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
     {
-      r->renderAt(turn,frame);
+      //r->renderAt(turn,frame);
     }
 
     glPopMatrix();
