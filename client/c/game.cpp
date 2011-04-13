@@ -280,6 +280,12 @@ DLLEXPORT int pirateTalk(_Pirate* object, char* message)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  
+  // Game state changes
+  object->x = x;
+  object->y = y;
+  object->movesLeft--;
+  
   return 1;
 }
 
@@ -292,6 +298,13 @@ DLLEXPORT int pirateAttack(_Pirate* object, _Unit* Target)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
+  if(target->health > 0 && (target->health-=object->strength)<0)
+  {
+    // get their gold
+    object->gold+=target->gold;
+    target->gold=0;
+  }
   return 1;
 }
 
@@ -304,6 +317,8 @@ DLLEXPORT int piratePickupTreasure(_Pirate* object, int amount)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
+  object->gold+=amount;
   return 1;
 }
 
@@ -316,6 +331,8 @@ DLLEXPORT int pirateDropTreasure(_Pirate* object, int amount)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
+  object->gold-=amount;
   return 1;
 }
 
@@ -327,6 +344,9 @@ DLLEXPORT int pirateBuildPort(_Pirate* object)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
+  Connection* c = object->c;
+  c->Players[c->PlayerID()].gold-=c->portCost;
   return 1;
 }
 
@@ -340,6 +360,8 @@ DLLEXPORT int portCreatePirate(_Port* object)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
+  //TODO
   return 1;
 }
 
@@ -351,6 +373,7 @@ DLLEXPORT int portCreateShip(_Port* object)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
   return 1;
 }
 
@@ -365,6 +388,7 @@ DLLEXPORT int shipMove(_Ship* object, int x, int y)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
   return 1;
 }
 
@@ -377,6 +401,7 @@ DLLEXPORT int shipTalk(_Ship* object, char* message)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
   return 1;
 }
 
@@ -389,6 +414,7 @@ DLLEXPORT int shipAttack(_Ship* object, _Unit* Target)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+  // Game state changes
   return 1;
 }
 
@@ -434,6 +460,8 @@ void parseUnit(Connection* c, _Unit* object, sexp_t* expression)
   sub = sub->next;
   object->attacksLeft = atoi(sub->val);
   sub = sub->next;
+  object->gold = atoi(sub->val);
+  sub = sub->next;
   
 }
 void parsePirate(Connection* c, _Pirate* object, sexp_t* expression)
@@ -458,6 +486,8 @@ void parsePirate(Connection* c, _Pirate* object, sexp_t* expression)
   object->movesLeft = atoi(sub->val);
   sub = sub->next;
   object->attacksLeft = atoi(sub->val);
+  sub = sub->next;
+  object->gold = atoi(sub->val);
   sub = sub->next;
   
 }
@@ -520,6 +550,8 @@ void parseShip(Connection* c, _Ship* object, sexp_t* expression)
   sub = sub->next;
   object->attacksLeft = atoi(sub->val);
   sub = sub->next;
+  object->gold = atoi(sub->val);
+  sub = sub->next;
   
 }
 void parseTile(Connection* c, _Tile* object, sexp_t* expression)
@@ -552,9 +584,7 @@ void parseTreasure(Connection* c, _Treasure* object, sexp_t* expression)
   sub = sub->next;
   object->y = atoi(sub->val);
   sub = sub->next;
-  object->pirateID = atoi(sub->val);
-  sub = sub->next;
-  object->amount = atoi(sub->val);
+  object->gold = atoi(sub->val);
   sub = sub->next;
   
 }
