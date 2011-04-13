@@ -59,6 +59,10 @@ bool ResourceMan::del(const ResID_t & rName)
     return delPointer(rName);
 }
 
+#include <iostream>
+        using namespace std;
+
+
 /** @brief destroy
   * destroy the resource manager
   * @return true on success
@@ -70,9 +74,10 @@ bool ResourceMan::destroy()
 		return false;
 	}
 	DataTable::iterator it = get()->data()->begin();
-    for (; it != get()->data()->end(); )
+    for (; it != get()->data()->end(); it++)
     {
 
+      //if( it->second )
         if (it->second->numReferences())
         {
 			#ifdef DEBUG
@@ -82,12 +87,12 @@ bool ResourceMan::destroy()
             return false;
         }
 
-
-    if( it->second )
+    //if( it->second )
       if (!it->second->unload())
         return false;
 
 		delete it->second;
+    it->second = 0;
 
     }
 
