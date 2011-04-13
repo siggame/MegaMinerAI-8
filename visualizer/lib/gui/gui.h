@@ -214,8 +214,10 @@ private:
   /// Console Area
   QTextEdit *m_consoleArea;
   
-  /// Unit Stats table
-  QTableWidget * m_unitStatsArea;
+  /// Unit Stats Area
+  QTabWidget * m_unitStatsArea;
+  QTableWidget * m_totalStats;
+  QTableWidget * m_selectionStats;  
 
   /// Status Bar
   QStatusBar *m_statusBar;
@@ -231,6 +233,7 @@ private:
   void createActions();
   void createMenus();
   void buildToolSet();
+  void initUnitStats();
 
 
   // Actions

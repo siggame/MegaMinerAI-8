@@ -479,10 +479,7 @@ void GUI::buildToolSet()
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
     m_consoleArea -> setReadOnly(1);
-    
-    // Unit Stats to the right
-    m_unitStatsArea = new QTableWidget( m_dockLayoutFrame );
-    
+  
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
 
@@ -493,14 +490,7 @@ void GUI::buildToolSet()
     m_dockLayout->addWidget( m_consoleArea );
     
     //Add Unit Stats to the layout
-    m_dockLayout->addWidget( m_unitStatsArea );
-    
-    m_unitStatsArea->setRowCount(10);
-    m_unitStatsArea->setColumnCount(5);
-    
-    QTableWidgetItem *newItem = new QTableWidgetItem(tr("%1").arg(
-         (2)*(3)));
-     m_unitStatsArea->setItem(2, 3, newItem);
+    initUnitStats();
 
     // If we have our tools for this game, add those bitches
     if( m_toolSetWidget )
@@ -565,4 +555,18 @@ void GUI::stepTurnBackShortcut()
   {
     TimeManager::setTurn(TimeManager::getTurn() - 1);
   }
+}
+
+//Prepares the tabs and tables for the unit stats area
+void GUI::initUnitStats()
+{
+  m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
+  
+  m_totalStats = new QTableWidget(m_unitStatsArea);
+  m_selectionStats = new QTableWidget(m_unitStatsArea);  
+  
+  m_unitStatsArea->addTab( m_totalStats, "Total Units Stats" );
+  m_unitStatsArea->addTab( m_selectionStats, "Selected Units Stats" );
+  
+  m_dockLayout->addWidget( m_unitStatsArea );
 }
