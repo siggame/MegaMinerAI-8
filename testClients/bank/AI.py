@@ -43,7 +43,7 @@ class AI(BaseAI):
       
       while self.turnNumber() < 400:
         print "Turn: ", self.turnNumber()
-        print "Gold: ", max([i.getAmount() for i in self.treasures])
+        print "Gold: ", max([i.getGold() for i in self.treasures])
         yield 1
         
       print "Turn: ", self.turnNumber()
@@ -62,7 +62,7 @@ class AI(BaseAI):
       
       for i in self.treasures:
         if i.getX() == x and i.getY() == y:
-          amount = i.getAmount()
+          amount = i.getGold()
           print "I'm picking up: ", amount
           myUnits[0].pickupTreasure(amount)
       

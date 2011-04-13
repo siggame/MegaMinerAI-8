@@ -327,7 +327,7 @@ class Pirate(Unit):
           j.gold += amount
           self.gold -= amount
           return True
-    self.addObject(Treasure.make(self.game,self.x,self.y,amount))
+    self.game.addObject(Treasure.make(self.game,self.x,self.y,amount))
     self.gold -= amount
     return True
                       
