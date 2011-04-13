@@ -232,7 +232,6 @@ private:
   
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
   
-  QAction *togglePlayPauseAct; /// Spacebar toggles play/pause
 };
 
 #endif

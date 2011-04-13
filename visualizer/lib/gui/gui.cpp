@@ -430,10 +430,8 @@ void GUI::createActions()
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
-  togglePlayPauseAct = new QAction( tr("&Play/Pause"), this );
-  togglePlayPauseAct->setShortcut( tr( "Ctrl+P" ) );
-  togglePlayPauseAct->setStatusTip( tr("Toggle Playback") );
-  connect( togglePlayPauseAct, SIGNAL(triggered()), this, SLOT(togglePlayPause()) );
+ 	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+ 	
 }
 
 void GUI::createMenus()
