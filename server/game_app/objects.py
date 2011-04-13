@@ -188,7 +188,7 @@ class Pirate(Unit):
           return "Enemy at that location"
     for i in self.game.objects.values():
       #Check to see if the unit is moving into an enemy port
-      elif isinstance(i,Port):
+      if isinstance(i,Port):
         if i.owner != self.owner and i.x == x and i.y == y: 
           return "Moving into an enemy port"
       #Checking if unit is moving onto water
@@ -277,12 +277,12 @@ class Pirate(Unit):
               self.gold += amount
             treasurePickup = True
             return True
-      if treasurePickup == False
-      for i in self.game.objects.values():
-        if isinstance(i,Ship):
-          i.gold -= amount
-          self.gold += amount
-          return True
+      if treasurePickup == False:
+        for i in self.game.objects.values():
+          if isinstance(i,Ship):
+            i.gold -= amount
+            self.gold += amount
+            return True
     
     return True
   
@@ -323,7 +323,7 @@ class Pirate(Unit):
           j.gold += amount
           self.gold -= amount
           return True
-    self.addObject(Treasure.make(self.game,self.x,self.y,amount)
+    self.addObject(Treasure.make(self.game,self.x,self.y,amount))
     self.gold -= amount
     return True
                       
