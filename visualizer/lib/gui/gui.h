@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
+#include<QStringList>
 #include <map>
 #include <string>
 
@@ -216,9 +217,11 @@ private:
   
   /// Unit Stats Area
   QTabWidget * m_unitStatsArea;
-  QTableWidget * m_totalStats;
-  QTableWidget * m_selectionStats;  
-
+  QTableWidget * m_multipleStats;
+  QTableWidget * m_individualStats;  
+  QStringList m_multipleStatsVerticalLabels;
+  QStringList m_multipleStatsHorizontalLabels;
+  
   /// Status Bar
   QStatusBar *m_statusBar;
 

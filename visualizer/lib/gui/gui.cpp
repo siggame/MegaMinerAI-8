@@ -560,13 +560,26 @@ void GUI::stepTurnBackShortcut()
 //Prepares the tabs and tables for the unit stats area
 void GUI::initUnitStats()
 {
+  //Create unit Stats tab area
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
   
-  m_totalStats = new QTableWidget(m_unitStatsArea);
-  m_selectionStats = new QTableWidget(m_unitStatsArea);  
+  //Create tables to fill tabs
+  m_multipleStats = new QTableWidget(m_unitStatsArea);
+  m_individualStats = new QTableWidget(m_unitStatsArea);  
   
-  m_unitStatsArea->addTab( m_totalStats, "Total Units Stats" );
-  m_unitStatsArea->addTab( m_selectionStats, "Selected Units Stats" );
+  //Create headers for tables
+  m_multipleStatsVerticalLabels<<"Total Units"<<"P0 Units"<<"P1 Units"
+    <<"Total Gold"<<"Avg. Pirate Health"<<"Avg. Ship Health"<<"Treasure Boxes";
+  m_multipleStatsHorizontalLabels<<"Global"<<"Selection";
+  //Set table properties and headers
+  m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
+  m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
+  m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
+  m_multipleStats->setHorizontalHeaderLabels(m_multipleStatsHorizontalLabels);
+
+  
+  m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
+  m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
   
   m_dockLayout->addWidget( m_unitStatsArea );
 }
