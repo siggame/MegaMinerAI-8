@@ -20,6 +20,7 @@ Unit = Model('Unit',
     Variable('strength', int, 'Attacking strength of the unit'),
     Variable('movesLeft', int, 'Displays the remaining moves for this unit this turn'),
     Variable('attacksLeft', int, 'Displays the remaining attacks for this unit this turn'),
+    Variable('gold', int, 'Amount of gold carried by the unit.'),
     ],
   doc = 'Generic Unit',
   functions = [
@@ -98,8 +99,7 @@ Tile = Model('Tile',
 
 Treasure = Model('Treasure',
   parent = Mappable,
-  data = [ Variable('pirateID', int, 'The ID of the pirate carrying this treasure, 0 if not carried'),
-  Variable('amount', int, 'The amount of gold in this treaure'),
+  data = [ Variable('gold', int, 'The amount of gold in this treaure'),
     ],
   doc = 'A treasure',
 )
