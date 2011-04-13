@@ -43,8 +43,8 @@ class MerchantAI:
           if not alreadyDestination:
             for t in self.game.objects.values():
               if isinstance(t,Treasure) and p.x == t.x and p.y == t.y:
-                if t.amount > richness:
-                  richness = t.amount
+                if t.gold > richness:
+                  richness = t.gold
                   richestPort = p
           index += 1
     if richestPort == None:
@@ -63,20 +63,23 @@ class MerchantAI:
       self.game.addObject(pirateDude)
     treasureValue = 0
     for i in self.game.objects.values(): 
-      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y and i.pirateID == -1:
-        treasureValue =  i.amount
+      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
+        treasureValue =  i.gold
     for i in self.game.objects.values(): 
       if isinstance(i,Pirate) and i.x == port.x and i.y == port.y and i.owner == port.owner:
         i.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
     self.inTransit += [ShipAndDestination(newShip,destination)]
   
+  def shipLost(self, ship):
+    for i in self.inTransit:
+      if i.ship is ship:
+        i.inTransit.remove(i)
+        
   def pirateDied(self,homePort):
     self.thePorts[homePort].number += 1
     
   def pirateArrived(self,pirate,homePort):
-    for i in self.game.objects.values():
-      if isinstance(i,Treasure) and i.pirateID == pirate.id:
-        pirate.dropTreasure(i.amount)
+    pirate.dropTreasure(pirate.gold)
     self.game.removeObject(pirate)
     self.thePorts[homePort].partial += 1
     if self.thePorts[homePort].partial == 4:
@@ -87,15 +90,8 @@ class MerchantAI:
   
   def shipArrived(self,ship,destinationPort):
     for i in self.game.objects.values():
-      if isinstance(i,Treasure) and i.x == ship.x and i.y == ship.y:
-        i.x = destinationPort.x
-        i.y = destinationPort.y
-    for i in self.game.objects.values():
       if isinstance(i,Pirate) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
-        i.x = destinationPort.x
-        i.y = destinationPort.y
-        if isinstance(i,Pirate):
-          self.pirateArrived(i,i.homeBase)
+        self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
 
   def play(self):
@@ -115,7 +111,7 @@ class MerchantAI:
     for i in self.inTransit:
       if i.ship.attacksLeft <= 0:
         continue
-      if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 1:
+      if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 0:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
       else:
@@ -155,7 +151,7 @@ class MerchantAI:
       foundAShip = False
       isWorthy = False
       for i in self.game.objects.values():
-        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.pirateID == -1 and i.amount > self.treasureThreshold:
+        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
           isWorthy = True
         if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
