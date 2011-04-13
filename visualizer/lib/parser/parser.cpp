@@ -85,6 +85,11 @@ static bool parseUnit(Unit& object, sexp_t* expression)
   object.attacksLeft = atoi(sub->val);
   sub = sub->next;
 
+  if ( !sub ) goto ERROR;
+
+  object.gold = atoi(sub->val);
+  sub = sub->next;
+
   return true;
 
   ERROR:
@@ -135,6 +140,11 @@ static bool parsePirate(Pirate& object, sexp_t* expression)
   if ( !sub ) goto ERROR;
 
   object.attacksLeft = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.gold = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -255,6 +265,11 @@ static bool parseShip(Ship& object, sexp_t* expression)
   object.attacksLeft = atoi(sub->val);
   sub = sub->next;
 
+  if ( !sub ) goto ERROR;
+
+  object.gold = atoi(sub->val);
+  sub = sub->next;
+
   return true;
 
   ERROR:
@@ -316,12 +331,7 @@ static bool parseTreasure(Treasure& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.pirateID = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.amount = atoi(sub->val);
+  object.gold = atoi(sub->val);
   sub = sub->next;
 
   return true;

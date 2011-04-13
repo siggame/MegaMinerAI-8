@@ -24,6 +24,7 @@ std::ostream& operator<<(std::ostream& stream, Unit ob)
   stream << "strength: " << ob.strength  <<'\n';
   stream << "movesLeft: " << ob.movesLeft  <<'\n';
   stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
+  stream << "gold: " << ob.gold  <<'\n';
   return stream;
 }
 
@@ -38,6 +39,7 @@ std::ostream& operator<<(std::ostream& stream, Pirate ob)
   stream << "strength: " << ob.strength  <<'\n';
   stream << "movesLeft: " << ob.movesLeft  <<'\n';
   stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
+  stream << "gold: " << ob.gold  <<'\n';
   return stream;
 }
 
@@ -72,6 +74,7 @@ std::ostream& operator<<(std::ostream& stream, Ship ob)
   stream << "strength: " << ob.strength  <<'\n';
   stream << "movesLeft: " << ob.movesLeft  <<'\n';
   stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
+  stream << "gold: " << ob.gold  <<'\n';
   return stream;
 }
 
@@ -91,8 +94,7 @@ std::ostream& operator<<(std::ostream& stream, Treasure ob)
   stream << "id: " << ob.id  <<'\n';
   stream << "x: " << ob.x  <<'\n';
   stream << "y: " << ob.y  <<'\n';
-  stream << "pirateID: " << ob.pirateID  <<'\n';
-  stream << "amount: " << ob.amount  <<'\n';
+  stream << "gold: " << ob.gold  <<'\n';
   return stream;
 }
 
