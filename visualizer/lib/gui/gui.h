@@ -213,6 +213,9 @@ private:
 
   /// Console Area
   QTextEdit *m_consoleArea;
+  
+  /// Unit Stats table
+  QTableWidget * m_unitStatsArea;
 
   /// Status Bar
   QStatusBar *m_statusBar;
