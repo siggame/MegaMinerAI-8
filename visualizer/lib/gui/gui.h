@@ -183,6 +183,8 @@ private slots:
   void fileOpen();
   void toggleFullScreen();
   void togglePlayPause();
+  void fastForwardShortcut();
+  void rewindShortcut();
 
 private:
   /// Container for the objects in the GUI

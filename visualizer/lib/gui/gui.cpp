@@ -431,7 +431,8 @@ void GUI::createActions()
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
  	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
- 	
+ 	(void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+ 	(void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
 }
 
 void GUI::createMenus()
@@ -515,4 +516,14 @@ void GUI::toggleFullScreen()
 void GUI::togglePlayPause()
 {
   m_controlBar -> play();
+}
+
+void GUI::fastForwardShortcut()
+{
+  m_controlBar -> fastForward();
+}
+
+void GUI::rewindShortcut()
+{
+  m_controlBar -> rewind();
 }
