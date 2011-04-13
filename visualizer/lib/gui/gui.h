@@ -186,6 +186,9 @@ private slots:
   void fastForwardShortcut();
   void rewindShortcut();
   void turnPercentageShortcut(int);
+  void stepTurnForwardShortcut();
+  void stepTurnBackShortcut();
+
 
 private:
   /// Container for the objects in the GUI

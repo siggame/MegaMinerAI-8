@@ -433,6 +433,8 @@ void GUI::createActions()
  	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
  	(void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
  	(void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+	(void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
+	(void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
 }
 
 void GUI::createMenus()
@@ -531,4 +533,20 @@ void GUI::rewindShortcut()
 void GUI::turnPercentageShortcut(int value)
 {
   TimeManager::setTurn(value);
+}
+
+void GUI::stepTurnForwardShortcut()
+{
+  if(TimeManager::getTurn() < TimeManager::getNumTurns()-1)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() + 1);
+  }
+}
+
+void GUI::stepTurnBackShortcut()
+{
+  if(TimeManager::getTurn() > 0)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() - 1);
+  }
 }
