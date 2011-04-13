@@ -94,5 +94,11 @@ class Ship extends Unit
     validify();
     return Client.INSTANCE.shipGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.shipGetGold(ptr);
+  }
 
 }

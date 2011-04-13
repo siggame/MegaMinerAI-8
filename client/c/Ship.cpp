@@ -50,6 +50,11 @@ int Ship::attacksLeft()
   return ((_Ship*)ptr)->attacksLeft;
 }
 
+int Ship::gold()
+{
+  return ((_Ship*)ptr)->gold;
+}
+
 
 int Ship::move(int x, int y)
 {
@@ -78,5 +83,6 @@ std::ostream& operator<<(std::ostream& stream,Ship ob)
   stream << "strength: " << ((_Ship*)ob.ptr)->strength  <<'\n';
   stream << "movesLeft: " << ((_Ship*)ob.ptr)->movesLeft  <<'\n';
   stream << "attacksLeft: " << ((_Ship*)ob.ptr)->attacksLeft  <<'\n';
+  stream << "gold: " << ((_Ship*)ob.ptr)->gold  <<'\n';
   return stream;
 }

@@ -50,6 +50,11 @@ int Pirate::attacksLeft()
   return ((_Pirate*)ptr)->attacksLeft;
 }
 
+int Pirate::gold()
+{
+  return ((_Pirate*)ptr)->gold;
+}
+
 
 int Pirate::move(int x, int y)
 {
@@ -93,5 +98,6 @@ std::ostream& operator<<(std::ostream& stream,Pirate ob)
   stream << "strength: " << ((_Pirate*)ob.ptr)->strength  <<'\n';
   stream << "movesLeft: " << ((_Pirate*)ob.ptr)->movesLeft  <<'\n';
   stream << "attacksLeft: " << ((_Pirate*)ob.ptr)->attacksLeft  <<'\n';
+  stream << "gold: " << ((_Pirate*)ob.ptr)->gold  <<'\n';
   return stream;
 }

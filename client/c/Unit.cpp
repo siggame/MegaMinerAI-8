@@ -50,6 +50,11 @@ int Unit::attacksLeft()
   return ((_Unit*)ptr)->attacksLeft;
 }
 
+int Unit::gold()
+{
+  return ((_Unit*)ptr)->gold;
+}
+
 
 int Unit::move(int x, int y)
 {
@@ -78,5 +83,6 @@ std::ostream& operator<<(std::ostream& stream,Unit ob)
   stream << "strength: " << ((_Unit*)ob.ptr)->strength  <<'\n';
   stream << "movesLeft: " << ((_Unit*)ob.ptr)->movesLeft  <<'\n';
   stream << "attacksLeft: " << ((_Unit*)ob.ptr)->attacksLeft  <<'\n';
+  stream << "gold: " << ((_Unit*)ob.ptr)->gold  <<'\n';
   return stream;
 }

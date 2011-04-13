@@ -33,6 +33,7 @@ struct _Unit
   int strength;
   int movesLeft;
   int attacksLeft;
+  int gold;
 };
 struct _Pirate
 {
@@ -45,6 +46,7 @@ struct _Pirate
   int strength;
   int movesLeft;
   int attacksLeft;
+  int gold;
 };
 struct _Player
 {
@@ -73,6 +75,7 @@ struct _Ship
   int strength;
   int movesLeft;
   int attacksLeft;
+  int gold;
 };
 struct _Tile
 {
@@ -88,8 +91,7 @@ struct _Treasure
   int id;
   int x;
   int y;
-  int pirateID;
-  int amount;
+  int gold;
 };
 
 #endif

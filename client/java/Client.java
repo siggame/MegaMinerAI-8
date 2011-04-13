@@ -69,6 +69,7 @@ public interface Client extends Library {
   int unitGetStrength(Pointer ptr);
   int unitGetMovesLeft(Pointer ptr);
   int unitGetAttacksLeft(Pointer ptr);
+  int unitGetGold(Pointer ptr);
 
   int pirateGetId(Pointer ptr);
   int pirateGetX(Pointer ptr);
@@ -78,6 +79,7 @@ public interface Client extends Library {
   int pirateGetStrength(Pointer ptr);
   int pirateGetMovesLeft(Pointer ptr);
   int pirateGetAttacksLeft(Pointer ptr);
+  int pirateGetGold(Pointer ptr);
 
   int playerGetId(Pointer ptr);
   String playerGetPlayerName(Pointer ptr);
@@ -97,6 +99,7 @@ public interface Client extends Library {
   int shipGetStrength(Pointer ptr);
   int shipGetMovesLeft(Pointer ptr);
   int shipGetAttacksLeft(Pointer ptr);
+  int shipGetGold(Pointer ptr);
 
   int tileGetId(Pointer ptr);
   int tileGetX(Pointer ptr);
@@ -106,8 +109,7 @@ public interface Client extends Library {
   int treasureGetId(Pointer ptr);
   int treasureGetX(Pointer ptr);
   int treasureGetY(Pointer ptr);
-  int treasureGetPirateID(Pointer ptr);
-  int treasureGetAmount(Pointer ptr);
+  int treasureGetGold(Pointer ptr);
 
 
   //utilities
