@@ -83,8 +83,9 @@ bool ResourceMan::destroy()
         }
 
 
-		if (!it->second->unload())
-			return false;
+    if( it->second )
+      if (!it->second->unload())
+        return false;
 
 		delete it->second;
 
