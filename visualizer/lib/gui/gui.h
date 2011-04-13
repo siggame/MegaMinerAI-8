@@ -219,8 +219,12 @@ private:
   QTabWidget * m_unitStatsArea;
   QTableWidget * m_multipleStats;
   QTableWidget * m_individualStats;  
+  
   QStringList m_multipleStatsVerticalLabels;
   QStringList m_multipleStatsHorizontalLabels;
+  
+  QStringList m_individualStatsVerticalLabels;
+  QStringList m_individualStatsHorizontalLabels;
   
   /// Status Bar
   QStatusBar *m_statusBar;

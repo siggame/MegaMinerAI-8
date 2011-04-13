@@ -560,6 +560,8 @@ void GUI::stepTurnBackShortcut()
 //Prepares the tabs and tables for the unit stats area
 void GUI::initUnitStats()
 {
+  //TODO: Move this game-specific code out of GUI
+
   //Create unit Stats tab area
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
   
@@ -571,15 +573,26 @@ void GUI::initUnitStats()
   m_multipleStatsVerticalLabels<<"Total Units"<<"P0 Units"<<"P1 Units"
     <<"Total Gold"<<"Avg. Pirate Health"<<"Avg. Ship Health"<<"Treasure Boxes";
   m_multipleStatsHorizontalLabels<<"Global"<<"Selection";
+  
+  m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
+    <<"movesLeft"<<"attacksLeft";
+  m_individualStatsHorizontalLabels<<".";
+  
   //Set table properties and headers
   m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
   m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
   m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
-  m_multipleStats->setHorizontalHeaderLabels(m_multipleStatsHorizontalLabels);
-
+  m_multipleStats->setHorizontalHeaderLabels( m_multipleStatsHorizontalLabels );
   
+  m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
+  m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
+  m_individualStats->setVerticalHeaderLabels ( m_individualStatsVerticalLabels );
+  m_individualStats->setHorizontalHeaderLabels( m_individualStatsHorizontalLabels );
+
+  //Add tabs of tables to tab area 
   m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
   m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
   
+  //Add tab area to dockLayout
   m_dockLayout->addWidget( m_unitStatsArea );
 }
