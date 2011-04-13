@@ -46,8 +46,8 @@ typedef GOCFamily_GUI guiObj;
 
 ////////////////////////////////////////////////////////////////
 /// @fn       setup()
-/// @brief    Set's up the GUI along with the singleton   
-/// @pre      Object must have been created before hand
+/// @brief    Sets up the GUI along with the singleton   
+/// @pre      Object must have been created beforehand
 /// @post     The GUI will be all setup
 /// @return   bool True if successfully setup.  
 ///           False, if otherwise.  
