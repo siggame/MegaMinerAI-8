@@ -104,5 +104,11 @@ public class Ship: Unit
     validify();
     return Client.shipGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public new int getGold()
+  {
+    validify();
+    return Client.shipGetGold(ptr);
+  }
 
 }

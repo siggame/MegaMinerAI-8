@@ -91,5 +91,11 @@ public abstract class Unit: Mappable
     validify();
     return Client.unitGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.unitGetGold(ptr);
+  }
 
 }

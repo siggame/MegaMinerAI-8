@@ -31,6 +31,8 @@ class Pirate : public Unit {
   int movesLeft();
   ///Displays the remaining attacks for this unit this turn
   int attacksLeft();
+  ///Amount of gold carried by the unit.
+  int gold();
 
   // Actions
   ///Move the unit to the designated X and Y coordinates

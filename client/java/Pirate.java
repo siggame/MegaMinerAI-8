@@ -112,5 +112,11 @@ class Pirate extends Unit
     validify();
     return Client.INSTANCE.pirateGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.pirateGetGold(ptr);
+  }
 
 }

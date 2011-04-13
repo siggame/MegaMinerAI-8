@@ -122,5 +122,11 @@ public class Pirate: Unit
     validify();
     return Client.pirateGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public new int getGold()
+  {
+    validify();
+    return Client.pirateGetGold(ptr);
+  }
 
 }

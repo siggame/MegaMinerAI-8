@@ -20,10 +20,8 @@ class Treasure : public Mappable {
   int x();
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   int y();
-  ///The ID of the pirate carrying this treasure, 0 if not carried
-  int pirateID();
   ///The amount of gold in this treaure
-  int amount();
+  int gold();
 
   // Actions
 

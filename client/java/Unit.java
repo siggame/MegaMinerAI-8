@@ -81,5 +81,11 @@ abstract class Unit extends Mappable
     validify();
     return Client.INSTANCE.unitGetAttacksLeft(ptr);
   }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.unitGetGold(ptr);
+  }
 
 }

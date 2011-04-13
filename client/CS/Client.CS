@@ -119,6 +119,8 @@ public class Client {
   public static extern int unitGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
   public static extern int unitGetAttacksLeft(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int unitGetGold(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int pirateGetId(IntPtr ptr);
@@ -136,6 +138,8 @@ public class Client {
   public static extern int pirateGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
   public static extern int pirateGetAttacksLeft(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int pirateGetGold(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int playerGetId(IntPtr ptr);
@@ -171,6 +175,8 @@ public class Client {
   public static extern int shipGetMovesLeft(IntPtr ptr);
   [DllImport("client")]
   public static extern int shipGetAttacksLeft(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int shipGetGold(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int tileGetId(IntPtr ptr);
@@ -188,9 +194,7 @@ public class Client {
   [DllImport("client")]
   public static extern int treasureGetY(IntPtr ptr);
   [DllImport("client")]
-  public static extern int treasureGetPirateID(IntPtr ptr);
-  [DllImport("client")]
-  public static extern int treasureGetAmount(IntPtr ptr);
+  public static extern int treasureGetGold(IntPtr ptr);
 
 
   //utilities

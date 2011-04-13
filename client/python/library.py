@@ -1,3 +1,5 @@
+# -*-python-*-
+
 import os
 
 from ctypes import *
@@ -174,6 +176,9 @@ library.unitGetMovesLeft.argtypes = [c_void_p]
 library.unitGetAttacksLeft.restype = c_int
 library.unitGetAttacksLeft.argtypes = [c_void_p]
 
+library.unitGetGold.restype = c_int
+library.unitGetGold.argtypes = [c_void_p]
+
 library.pirateGetId.restype = c_int
 library.pirateGetId.argtypes = [c_void_p]
 
@@ -197,6 +202,9 @@ library.pirateGetMovesLeft.argtypes = [c_void_p]
 
 library.pirateGetAttacksLeft.restype = c_int
 library.pirateGetAttacksLeft.argtypes = [c_void_p]
+
+library.pirateGetGold.restype = c_int
+library.pirateGetGold.argtypes = [c_void_p]
 
 library.playerGetId.restype = c_int
 library.playerGetId.argtypes = [c_void_p]
@@ -246,6 +254,9 @@ library.shipGetMovesLeft.argtypes = [c_void_p]
 library.shipGetAttacksLeft.restype = c_int
 library.shipGetAttacksLeft.argtypes = [c_void_p]
 
+library.shipGetGold.restype = c_int
+library.shipGetGold.argtypes = [c_void_p]
+
 library.tileGetId.restype = c_int
 library.tileGetId.argtypes = [c_void_p]
 
@@ -267,11 +278,9 @@ library.treasureGetX.argtypes = [c_void_p]
 library.treasureGetY.restype = c_int
 library.treasureGetY.argtypes = [c_void_p]
 
-library.treasureGetPirateID.restype = c_int
-library.treasureGetPirateID.argtypes = [c_void_p]
+library.treasureGetGold.restype = c_int
+library.treasureGetGold.argtypes = [c_void_p]
 
-library.treasureGetAmount.restype = c_int
-library.treasureGetAmount.argtypes = [c_void_p]
 
 #utils
 library.getPathSize.restype = c_int

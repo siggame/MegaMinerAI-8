@@ -111,6 +111,11 @@ class Unit(Mappable):
     self.validify()
     return library.unitGetAttacksLeft(self.ptr)
 
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.unitGetGold(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -123,6 +128,7 @@ class Unit(Mappable):
     ret += "strength: %s\n" % self.getStrength()
     ret += "movesLeft: %s\n" % self.getMovesLeft()
     ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
 ##A generic pirate
@@ -219,6 +225,11 @@ class Pirate(Unit):
     self.validify()
     return library.pirateGetAttacksLeft(self.ptr)
 
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.pirateGetGold(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -231,6 +242,7 @@ class Pirate(Unit):
     ret += "strength: %s\n" % self.getStrength()
     ret += "movesLeft: %s\n" % self.getMovesLeft()
     ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
 ##
@@ -424,6 +436,11 @@ class Ship(Unit):
     self.validify()
     return library.shipGetAttacksLeft(self.ptr)
 
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.shipGetGold(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -436,6 +453,7 @@ class Ship(Unit):
     ret += "strength: %s\n" % self.getStrength()
     ret += "movesLeft: %s\n" % self.getMovesLeft()
     ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
 ##A basic tile
@@ -525,15 +543,10 @@ class Treasure(Mappable):
     self.validify()
     return library.treasureGetY(self.ptr)
 
-  ##The ID of the pirate carrying this treasure, 0 if not carried
-  def getPirateID(self):
-    self.validify()
-    return library.treasureGetPirateID(self.ptr)
-
   ##The amount of gold in this treaure
-  def getAmount(self):
+  def getGold(self):
     self.validify()
-    return library.treasureGetAmount(self.ptr)
+    return library.treasureGetGold(self.ptr)
 
 
   def __str__(self):
@@ -542,6 +555,5 @@ class Treasure(Mappable):
     ret += "id: %s\n" % self.getId()
     ret += "x: %s\n" % self.getX()
     ret += "y: %s\n" % self.getY()
-    ret += "pirateID: %s\n" % self.getPirateID()
-    ret += "amount: %s\n" % self.getAmount()
+    ret += "gold: %s\n" % self.getGold()
     return ret

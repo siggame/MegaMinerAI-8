@@ -24,14 +24,9 @@ int Treasure::y()
   return ((_Treasure*)ptr)->y;
 }
 
-int Treasure::pirateID()
+int Treasure::gold()
 {
-  return ((_Treasure*)ptr)->pirateID;
-}
-
-int Treasure::amount()
-{
-  return ((_Treasure*)ptr)->amount;
+  return ((_Treasure*)ptr)->gold;
 }
 
 
@@ -42,7 +37,6 @@ std::ostream& operator<<(std::ostream& stream,Treasure ob)
   stream << "id: " << ((_Treasure*)ob.ptr)->id  <<'\n';
   stream << "x: " << ((_Treasure*)ob.ptr)->x  <<'\n';
   stream << "y: " << ((_Treasure*)ob.ptr)->y  <<'\n';
-  stream << "pirateID: " << ((_Treasure*)ob.ptr)->pirateID  <<'\n';
-  stream << "amount: " << ((_Treasure*)ob.ptr)->amount  <<'\n';
+  stream << "gold: " << ((_Treasure*)ob.ptr)->gold  <<'\n';
   return stream;
 }
