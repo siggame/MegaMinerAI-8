@@ -100,15 +100,15 @@ class MerchantAI:
 
   def play(self):
     for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.id == self.id:
+      if isinstance(i,Pirate) and i.owner == self.id:
         for j in self.game.objects.values():
-          if isinstance(j,Pirate) and j.id != 2 and j.id != 3:
+          if isinstance(j,Pirate) and j.owner != 2 and j.owner != 3:
             if i.attacksLeft > 0:
               i.attack(j)
     for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.id == self.id:
+      if isinstance(i,Ship) and i.owner == self.id:
         for j in self.game.objects.values():
-          if isinstance(j,Ship) and j.id != 2 and j.id != 3:
+          if isinstance(j,Ship) and j.owner != 2 and j.owner != 3:
             if i.attacksLeft > 0:
               i.attack(j)
     #Ships arrive at ports!

@@ -375,7 +375,7 @@ class Pirate(Unit):
               if p[0].gold >= self.game.portCost:
                 p[0].gold -= self.game.portCost
                 port = i.make(self.game,self.x,self.y,self.owner)
-                game.addObject(port)
+                self.game.addObject(port)
                 return True
               else:
                 return "Not enough gold to make this purchase"
@@ -390,6 +390,15 @@ class Pirate(Unit):
                 return "Not enough gold to make this purchase"
           else:
            return "No water connected to this location"
+    #grabs any treasure that was on the ground where the port was just built and deposits it
+    for i in self.game.objects.values():
+      if isinstance(i,Treasure):
+        if i.x == self.x and i.y == self.y:
+          if i.pirateID == -1:
+            p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+            p[self.owner].gold += i.amount
+            self.game.removeObject(i)
+            
     return True
   #TODO: Test and review this logic
 
@@ -743,4 +752,4 @@ class Treasure(Mappable):
         if isinstance(p,Pirate):
           if p._distance(self.x,self.y) < closest:
             closest = p._distance(self.x,self.y)
-      self.amount += closest
+      self.amount += sqrt(closest)
