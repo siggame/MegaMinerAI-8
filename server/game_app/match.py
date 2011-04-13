@@ -1,4 +1,4 @@
-exit# -*- coding: iso-8859-1 -*-
+# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -138,7 +138,7 @@ class Match(DefaultGameWorld):
           if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
-            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
               
@@ -149,7 +149,7 @@ class Match(DefaultGameWorld):
             encountered.add(mapThing)
             self.addObject(Port.make(self, x, y, 2))
             
-            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
               
