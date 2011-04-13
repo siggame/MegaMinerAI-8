@@ -198,7 +198,7 @@ private:
   bool m_isSetup;
   
   //In full screen mode or not?
-	bool fullScreen;
+  bool fullScreen;
 
   /// Main widget for this window
   CentralWidget *m_centralWidget; 
@@ -242,6 +242,26 @@ private:
   void buildToolSet();
   void initUnitStats();
 
+  //Old unit selection code we're bringing forward
+  void mousePressEvent( QMouseEvent *event );
+  void mouseReleaseEvent( QMouseEvent *event );
+  void mouseMoveEvent( QMouseEvent *event );
+  
+  bool leftButtonDown;
+  bool leftDoubleClick;
+  bool leftButtonDrag;
+
+  bool rightButtonDown;
+  bool midButtonDown;
+
+  int curX;
+  int curY;
+
+  int clickX;
+  int clickY;
+
+  int dragX;
+  int dragY;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

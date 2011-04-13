@@ -596,3 +596,115 @@ void GUI::initUnitStats()
   //Add tab area to dockLayout
   m_dockLayout->addWidget( m_unitStatsArea );
 }
+
+void GUI::mousePressEvent( QMouseEvent *e )
+{
+  if( e->button() == Qt::LeftButton )
+  {
+    clickX = e->x();
+    clickY = e->y()-getAttr(boardOffsetY);
+    if( buttonTimes.elapsed() - leftButtonTime < getAttr( doubleClickTime ) )
+    {
+      // Do Double click event
+      // or nothing....
+    }
+    else
+    {
+      leftButtonTime = buttonTimes.elapsed();
+    }
+
+    leftButtonDown = true;
+    dragX = clickX;
+    dragY = clickY;
+  } 
+  else if ( e->button() == Qt::RightButton )
+  {
+    rightButtonTime = buttonTimes.elapsed();
+    rightButtonDown = true;
+  } 
+  else if( e->button() == Qt::MidButton )
+  {
+    midButtonTime = buttonTimes.elapsed();
+    midButtonDown = true;
+  }
+}
+
+void GUI::mouseReleaseEvent( QMouseEvent *e )
+{
+  curX = e->x()+1;
+  curY = e->y()+1-getAttr(boardOffsetY);
+  int selectWidth, selectHeight;
+  int selectX = selectWidth = curX/getAttr(unitSize);
+  int selectY = selectHeight = curY/getAttr(unitSize);
+
+   if( e->button() == Qt::LeftButton )
+  {
+    if( leftButtonDrag )
+    {
+      selectX = (curX<dragX ? curX : dragX)/getAttr(unitSize);
+      selectWidth = (curX<dragX ? dragX : curX)/getAttr(unitSize);
+      selectY = (curY<dragY ? curY : dragY)/getAttr(unitSize);
+      selectHeight = (curY<dragY ? dragY : curY)/getAttr(unitSize);
+    }
+
+    if( leftDoubleClick )
+    {
+      leftDoubleClick = false;
+      return;
+    }
+
+    Game *game = parent->gamelog;
+    int frame = getAttr( frameNumber );
+    if( game )
+    {
+      if( !(QApplication::keyboardModifiers() & Qt::ShiftModifier) )
+        selectedIDs.clear();
+
+      addSelection(game->states[frame].units, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+      std::map<int,Unit> tBots;
+      for( std::map<int,Bot>::iterator i = game->states[frame].bots.begin(); i != game->states[frame].bots.end(); i++ )
+      {
+        if( !i->second.partOf )
+          tBots[i->second.id] = i->second;
+      }
+
+      addSelection(tBots, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+      addSelection(game->states[frame].frames, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+      addSelection(game->states[frame].walls, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+
+      stringstream ss;
+      ss << "Selected Units: " << selectedIDs.size() << ", X: " << selectX << ", Y: " << selectY << '\n';
+
+      for (map<int,string>::iterator it = selectedIDs.begin(); it != selectedIDs.end(); it++)
+      {
+        ss << it->second << '\n';
+      }
+
+      //parent->console->setText( ss.str().c_str() );
+    }
+
+    leftButtonDown = false;
+    leftButtonDrag = false;
+  } else if ( e->button() == Qt::RightButton )
+  {
+    rightButtonDown = false;
+  } else if( e->button() == Qt::MidButton )
+  {
+    rightButtonDown = false;
+  }
+
+  // Invalidate last frame so we get the latest talkers.
+  setAttr( lastFrame, -1 );
+}
+
+
+void GUI::mouseMoveEvent( QMouseEvent *e )
+{
+  // If manhatten distance is 6 or greater, we're draggin
+  if( e->buttons() & Qt::LeftButton && abs(curX-dragX)+abs(curY-dragY) > 6 )
+    leftButtonDrag = true;
+
+  curX = e->x();
+  curY = e->y()-getAttr(boardOffsetY);
+
+}
