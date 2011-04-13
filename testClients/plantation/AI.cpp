@@ -14,7 +14,14 @@ const char* AI::password()
 }
 
 //This function is run once, before your first turn.
-void AI::init(){}
+void AI::init()
+{
+  land = vector<vector<bool> >(mapSize(),vector<bool>(mapSize(),false));
+  for(size_t i=0;i<tiles.size();i++)
+  {
+    land[tiles[i].x()][tiles[i].y()] = (tiles[i].type()==0);
+  }
+}
 
 //This function is called each time it is your turn.
 //Return true to end your turn, return false to ask the server for updated information.
@@ -43,6 +50,7 @@ bool AI::run()
   }
   // for each pirate at port
   vector<vector<size_t> > gold(mapSize(),vector<size_t>(mapSize(),0));
+  
   map<int, size_t> hasTreasure;
   for(size_t t=0;t<treasures.size();t++)
   {
@@ -60,13 +68,16 @@ bool AI::run()
   {
     for(size_t y=0;y<mapSize();y++)
     {
-      if(gold[x][y]>0)
+      if(land[x][x])
       {
-        growing.push_back(target(x,y,gold[x][y]));  
-      }
-      else
-      {
-        empty.push_back(target(x,y,0));
+        if(gold[x][y]>0)
+        {
+          growing.push_back(target(x,y,gold[x][y]));  
+        }
+        else
+        {
+          empty.push_back(target(x,y,0));
+        }
       }
     }
   }

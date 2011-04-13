@@ -45,7 +45,7 @@ public:
   virtual void init();
   virtual bool run();
   virtual void end();
-
+  vector<vector<bool> > land;
 template <class T>
 void sortNearest(int x, int y, list<T>& toSort, int type);
 
