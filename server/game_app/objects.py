@@ -603,11 +603,12 @@ class Ship(Unit):
     self.x = x
     self.y = y
     #auto dumps treasure if arriving at a port
-    for i in self.game.objects.values():
-      if isinstance(i,Port) and i.x == x and i.y == y:
-        p = [i for i in self.game.objects.values() if isinstance(i,Player)]
-        p[self.owner].gold += self.gold
-        self.gold = 0
+    if self.owner < 2:
+      for i in self.game.objects.values():
+        if isinstance(i,Port) and i.x == x and i.y == y:
+          p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+          p[self.owner].gold += self.gold
+          self.gold = 0
         
     return True
     
