@@ -121,13 +121,14 @@ class MerchantAI:
             if isinstance(j,Ship) and j.owner != 2 and j.owner != 3 and j._distance(i.ship.x,i.ship.y) == 1:
               if i.ship.attacksLeft > 0:
                 i.ship.attack(j)
+                #print "Attacking!"
               else:
                 break
         if i.ship.attacksLeft <= 0:
           i.foughtLastTurn = True
           continue
         else:
-          i.foughtLastTurn = False  
+          i.foughtLastTurn = False
       if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 0:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
