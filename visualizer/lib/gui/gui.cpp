@@ -120,7 +120,7 @@ using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
     if (!ObjectLoader::loadGamelog(gamelog))
-	return; //! @todo throw shitfit
+  return; //! @todo throw shitfit
 }
 
 void GUI::update()
@@ -220,10 +220,10 @@ void GUI::createActions()
       );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
-	toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
-	toggleFullScreenAct->setShortcut( tr("F11" ) );
-	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
-	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
+  toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
+  toggleFullScreenAct->setShortcut( tr("F11" ) );
+  toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
+  connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
 
   m_fileExit = new QAction( tr( "&Quit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
@@ -232,11 +232,11 @@ void GUI::createActions()
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
- 	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
- 	(void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
- 	(void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
-	(void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
-	(void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+   (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+   (void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+   (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
 }
 
 void GUI::createMenus()
@@ -313,12 +313,12 @@ void GUI::closeGUI()
 
 void GUI::toggleFullScreen()
 {
-	if( !fullScreen )
-		showFullScreen();
-	else
-		showNormal();
-	fullScreen = !fullScreen;
-	show();
+  if( !fullScreen )
+    showFullScreen();
+  else
+    showNormal();
+  fullScreen = !fullScreen;
+  show();
 }
 
 void GUI::togglePlayPause()
@@ -399,33 +399,32 @@ void GUI::initUnitStats()
 
 void GUI::mousePressEvent( QMouseEvent *e )
 {
-	  if( e->button() == Qt::LeftButton )
-	  {
-	    clickX = e->x();
-	    clickY = e->y();
- 			
- 			QString line;
- 			line.clear();
- 			line.append("X click: ");
- 			line.append(QString::number(clickX));
+    if( e->button() == Qt::LeftButton )
+    {
+      QString line;
+      
+      clickX = e->x();
+      clickY = e->y();
+       
+      line.clear();
+      line.append("Left click: ( ");
+      line.append(QString::number(clickX));
+      line.append(", ");
+      line.append(QString::number(clickY));
+      line.append(")");
 
-			m_consoleArea->append(line);
+      m_consoleArea->append(line);
 
-	    leftButtonDown = true;
-	    
-	    dragX = clickX;
-	    dragY = clickY;
-	  }
-//  else if ( e->button() == Qt::RightButton )
-//  {
-//    rightButtonTime = buttonTimes.elapsed();
-//    rightButtonDown = true;
-//  }
-//  else if( e->button() == Qt::MidButton )
-//  {
-//    midButtonTime = buttonTimes.elapsed();
-//    midButtonDown = true;
-//  }
+      leftButtonDown = true;
+      
+      dragX = clickX; 
+      dragY = clickY;
+      /* Thus, dragX and dragY become our starting point, 
+       * and curX and curY will be contiuously updated, eventually becoming 
+       * our ending point if dragging.
+       */
+    }
+
 
 }
 
@@ -485,13 +484,7 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 
 //    leftButtonDown = false;
 //    leftButtonDrag = false;
-//  } else if ( e->button() == Qt::RightButton )
-//  {
-//    rightButtonDown = false;
-//  } else if( e->button() == Qt::MidButton )
-//  {
-//    rightButtonDown = false;
-//  }
+//  } 
 
 //  // Invalidate last frame so we get the latest talkers.
 //  setAttr( lastFrame, -1 );
@@ -500,11 +493,16 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 
 void GUI::mouseMoveEvent( QMouseEvent *e )
 {
-//  // If manhatten distance is 6 or greater, we're draggin
-//  if( e->buttons() & Qt::LeftButton && abs(curX-dragX)+abs(curY-dragY) > 6 )
-//    leftButtonDrag = true;
+  curX = e->x();
+  curY = e->y();
 
-//  curX = e->x();
-//  curY = e->y()-getAttr(boardOffsetY);
+  // If Manhattan distance is 6 or greater, we're draggin
+  if( e->buttons() & Qt::LeftButton && 
+    abs(curX-dragX)+abs(curY-dragY) > m_DRAG_DISTANCE )
+  {
+    leftButtonDrag = true;
+  }
+
+  m_consoleArea->append("DRAGON");
 
 }

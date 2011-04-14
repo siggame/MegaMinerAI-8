@@ -253,9 +253,6 @@ private:
   bool leftDoubleClick;
   bool leftButtonDrag;
 
-  bool rightButtonDown;
-  bool midButtonDown;
-
   int curX;
   int curY;
 
@@ -264,6 +261,8 @@ private:
 
   int dragX;
   int dragY;
+  
+  static const int m_DRAG_DISTANCE = 6;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents
