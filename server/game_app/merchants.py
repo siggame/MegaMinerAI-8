@@ -4,8 +4,10 @@ import customastar
 import random
 class ShipAndDestination:
   def __init__(self,ship,port):
+    self.foughtLastTurn = False
     self.ship = ship
     self.port = port
+    self.pirates = []
 
 class PortAndPirateNumber:
   def __init__(self,port,number):
@@ -57,26 +59,31 @@ class MerchantAI:
     destination = self.chooseRichestPort(port)
     newShip = Ship.make(self.game,port.x,port.y,port.owner,self.game.shipHealth,self.game.shipStrength)
     self.game.addObject(newShip)
-    for i in range(0,self.thePorts[portNum].number):
-      pirateDude = Pirate.make(self.game,port.x,port.y,port.owner,self.game.pirateHealth,self.game.pirateStrength)
-      pirateDude.homeBase = portNum
-      self.game.addObject(pirateDude)
-    treasureValue = 0
+    newInTransit = ShipAndDestination(newShip,destination)
     for i in self.game.objects.values(): 
       if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
         treasureValue =  i.gold
-    for i in self.game.objects.values(): 
-      if isinstance(i,Pirate) and i.x == port.x and i.y == port.y and i.owner == port.owner:
-        i.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
-    self.inTransit += [ShipAndDestination(newShip,destination)]
+
+    for i in range(0,self.thePorts[portNum].number):
+      pirateDude = Pirate.make(self.game,port.x,port.y,port.owner,self.game.pirateHealth,self.game.pirateStrength)
+      pirateDude.homeBase = portNum
+      pirateDude.traderGroup = newInTransit
+      pirateDude.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
+      self.game.addObject(pirateDude)
+      newInTransit.pirates += [pirateDude]
+    treasureValue = 0
+    
+    self.inTransit += [newInTransit]
+        
   
   def shipLost(self, ship):
     for i in self.inTransit:
       if i.ship is ship:
         self.inTransit.remove(i)
         
-  def pirateDied(self,homePort):
-    self.thePorts[homePort].number += 1
+  def pirateDied(self,pirate):
+    pirate.traderGroup.pirates.remove(pirate)
+    self.thePorts[pirate.homeBase].number += 1
     
   def pirateArrived(self,pirate,homePort):
     pirate.dropTreasure(pirate.gold)
@@ -94,23 +101,33 @@ class MerchantAI:
         self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
 
-  def play(self):
-    for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.owner == self.id:
-        for j in self.game.objects.values():
-          if isinstance(j,Pirate) and j.owner != 2 and j.owner != 3:
-            if i.attacksLeft > 0:
-              i.attack(j)
-    for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.owner == self.id:
-        for j in self.game.objects.values():
-          if isinstance(j,Ship) and j.owner != 2 and j.owner != 3:
-            if i.attacksLeft > 0:
-              i.attack(j)
-    #Ships arrive at ports!
+  def play(self):    
     for i in self.inTransit:
-      if i.ship.attacksLeft <= 0:
-        continue
+      #if they didn't fight last turn, they can fight this turn
+      if not i.foughtLastTurn:
+        enemyInRange = False
+        for p in i.pirates:
+          for j in self.game.objects.values():
+            if isinstance(j,Pirate) and j.owner != 2 and j.owner != 3 and j._distance(p.x,p.y) == 1:
+              enemyInRange = True
+              if p.attacksLeft > 0:
+                p.attack(j)
+              else:
+                break
+          if not enemyInRange:
+            break
+        if enemyInRange:
+          for j in self.game.objects.values():
+            if isinstance(j,Ship) and j.owner != 2 and j.owner != 3 and j._distance(i.ship.x,i.ship.y) == 1:
+              if i.ship.attacksLeft > 0:
+                i.ship.attack(j)
+              else:
+                break
+        if i.ship.attacksLeft <= 0:
+          i.foughtLastTurn = True
+          continue
+        else:
+          i.foughtLastTurn = False  
       if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 0:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
