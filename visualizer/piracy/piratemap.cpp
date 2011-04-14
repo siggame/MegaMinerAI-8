@@ -5,7 +5,7 @@
 #include "../lib/optionsmanager/optionsman.h"
 #include <iostream>
 #include <queue>
-#include <math.h>
+#include <cmath>
 using namespace std;
 
 PirateMap::PirateMap()
@@ -26,7 +26,7 @@ void PirateMap::update()
 
 }
 
-#define PI 3.141592653589793238462
+#define PI 3.1415926535897932384626433832795028841971
 
 void PirateMap::blur( 
     int **map, 
@@ -145,7 +145,6 @@ void PirateMap::boxBlur(
 }
 
 
-#define SQ(x) (x)*(x)
 
 int PirateMap::distToTile( 
     const int& x, 
@@ -172,7 +171,7 @@ int PirateMap::distToTile(
       )
     {
       count++;
-      int pusher = SQ(i->second.x-x) + SQ(i->second.y-y);
+      int pusher = abs(i->second.x-x) + abs(i->second.y-y);
       if( pusher < smallest )
       {
         smallest = pusher;
