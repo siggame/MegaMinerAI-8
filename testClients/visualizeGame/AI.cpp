@@ -43,22 +43,24 @@ bool AI::run()
 void AI::displayCurrentMatch()
 {
   const int SHIP = 1;
+  const int SHIP_WITH_NO_PIRATES = -1;
   const int PIRATE = 2;
   const int PORT = 3;
   const int OWNER_RED = 0;
   const int OWNER_BLUE = 1;
   const int OWNER_MERCHANT_A = 2;
   const int OWNER_MERCHANT_B = 3;
+  const int TREASURE = 4;
 
   int mapTiles[mapSize()][mapSize()];
   int mapObjects[mapSize()][mapSize()];
   int mapOwners[mapSize()][mapSize()];
   
   //first we display red team
-  cout << "\033[22;35m";
-  cout << "Player 0: " << players[0].playerName() << " Gold: " << players[0].gold() << "       ";
+  cout << "\e[0;31m";
+  cout << "Player 0: " << players[0].playerName() << " Gold: " << players[0].gold() << "     ";
   cout << "\033[0;37m";
-  cout<<"turn: "<< turnNumber() << "        ";
+  cout<<"turn: "<< turnNumber() << "      ";
    cout << "\033[01;36m";
   cout << "Player 1: " << players[1].playerName() << " Gold: " << players[1].gold();
   
@@ -72,8 +74,13 @@ void AI::displayCurrentMatch()
     for(int x = 0; x < mapSize(); x++)
     {
       mapObjects[x][y] = 0;
-      mapOwners[x][y] = -1;
+      mapOwners[x][y] = 0;
     }
+  }
+  
+  for(int i = 0; i < treasures.size(); i++)
+  {
+    mapObjects[treasures[i].x()][treasures[i].y()] = TREASURE;
   }
   
   for(int i = 0; i < ports.size(); i++)
@@ -90,7 +97,14 @@ void AI::displayCurrentMatch()
   
   for(int i = 0; i < ships.size(); i++)
   {
-    mapObjects[ships[i].x()][ships[i].y()] = SHIP;
+    if(mapObjects[ships[i].x()][ships[i].y()] == PIRATE)
+    {
+      mapObjects[ships[i].x()][ships[i].y()] = SHIP;
+    }
+    else
+    {
+      mapObjects[ships[i].x()][ships[i].y()] = SHIP_WITH_NO_PIRATES;
+    }
     mapOwners[ships[i].x()][ships[i].y()] = ships[i].owner();
   }
   
@@ -114,33 +128,41 @@ void AI::displayCurrentMatch()
       }
       else if(mapTiles[x][y] == PORT) //port
       {
-        cout << "\033[7;35m";
+        //cout << "\033[7;35m";
       }
       
-      if(mapOwners == OWNER_RED)
+      if(mapOwners[x][y] == OWNER_RED)
       {
-        cout << "\033[22;31m";
+        cout << "\e[41m";
       }
       else if(mapOwners[x][y] == OWNER_BLUE)
       {
-        cout << "\033[01;36m";
+        cout << "\e[46m";
       }
       else if(mapOwners[x][y] == OWNER_MERCHANT_A)
       {
-        cout << "\033[0;37m";
+        cout << "\e[47m";
       }
       else if(mapOwners[x][y] == OWNER_MERCHANT_B)
       {
-        cout << "\033[01;30m";
+        cout << "\e[43m";
       }
       
       if(mapObjects[x][y] == PIRATE)
       {
-        cout << " P";
+        cout << " P"; //cout << " ☠";
       }
       else if(mapObjects[x][y] == SHIP)
       {
-        cout << " S";
+        cout << " S"; //cout << " ⚓";
+      }
+      else if(mapObjects[x][y] == TREASURE)
+      {
+        cout << " T"; //cout << " $";
+      }
+      else if(mapObjects[x][y] == SHIP_WITH_NO_PIRATES)
+      {
+        cout << " N";
       }
       else
       {
