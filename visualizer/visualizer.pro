@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
-    lib/objectmanager/objectloader.cpp
+    lib/objectmanager/*.cpp \
+    lib/objectmanager/objectmanager.cpp
 MOC = moc
 HEADERS += *.h \
     ./lib/manager/*.h \
@@ -39,7 +40,11 @@ HEADERS += *.h \
     ./lib/parser/*.h \
     ./lib/gui/*.h \
     ./piracy/*.h \
-    lib/objectmanager/objectloader.h
+    lib/objectmanager/*.h \
+    lib/timeline/timeline.h \
+    lib/timeline/timeline.hpp \
+    lib/timeline/lookupTable/lookuptable.h \
+    lib/timeline/lookupTable/lookuptable.hpp
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \

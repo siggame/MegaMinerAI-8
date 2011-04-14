@@ -1,6 +1,7 @@
 #ifndef OBJECTLOADER_H
 #define OBJECTLOADER_H
-#include <../singleton.h>
+#include "../singleton.h"
+#include <string>
 
 class ObjectLoader : public Singleton<ObjectLoader>
 {

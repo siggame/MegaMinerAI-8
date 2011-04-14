@@ -1,9 +1,11 @@
 #ifndef TIMELINE_H
 #define TIMELINE_H
-#include "timelineturnnode.h"
+#include "lookupTable/lookuptable.h"
+
+
 
 template<class T>
-class Timeline : private Avl < TimelineTurnNode <T> >
+class Timeline
 {
 	public:
 		T * operator()(const unsigned int & turn, const unsigned int & frame);
@@ -17,7 +19,7 @@ class Timeline : private Avl < TimelineTurnNode <T> >
 
 	protected:
 	private:
-		void add(const unsigned int & turnNum, const TimelineTurnNode<T> & node);
+		//void add(const unsigned int & turnNum, const TimelineTurnNode<T> & node);
 };
 
 #include "timeline.hpp"
