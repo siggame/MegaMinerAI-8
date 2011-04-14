@@ -31,7 +31,7 @@ void PirateRender::renderAt(
     PirateData *d = ((PirateData*)getOwner()->getGOC( "DataFamily" ));
     if( d )
     {
-      PirateDataInfo* t = d->getDataAt( turn, frame );
+      PirateDataInfo* t = d->getData();
       if( t )
       {
         //cout << "X: " << t->x << ", Y: " << t->y << endl;

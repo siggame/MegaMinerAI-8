@@ -7,6 +7,8 @@
 #include "../../piracy/renderdata.h"
 #include "../../piracy/treasuredata.h"
 #include "../../piracy/treasurerender.h"
+#include "../../piracy/shipdata.h"
+#include "../../piracy/portdata.h"
 
 typedef int idtype;
 
@@ -53,6 +55,14 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    GameObject * pirate = new GameObject(id);
 
 	    //setup stuff
+	    PirateData * data = new PirateData();
+	    //PirateRender * render = new PirateRender();
+
+	    data->setOwner(pirate);
+	    //render->setOwner(pirate);
+
+	    pirate->setGOC(data);
+	    //pirate->setGOC(render);
 
 	    //end setup
 
@@ -71,6 +81,15 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    GameObject * ship = new GameObject(id);
 	    //setup stuff
 
+	    ShipData * data = new ShipData();
+	    //ShipRender * render = new ShipRender();
+
+	    //render->setOwner(ship);
+	    data->setOwner(ship);
+
+	    ship->setGOC(data);
+	    //ship->setGOC(render);
+
 	    //end setup
 
 	    looksets[id].addNode(ship,turn,0);
@@ -88,6 +107,15 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    GameObject * treasure = new GameObject(id);
 	    //setup stuff
 
+	    TreasureData * data = new TreasureData();
+	    //TreasureRender * render = new TreasureRender();
+
+	    //render->setOwner(treasure);
+	    data->setOwner(treasure);
+
+	    treasure->setGOC(data);
+	    //treasure->setGOC(render);
+
 	    //end setup
 
 	    looksets[id].addNode(treasure,turn,0);
@@ -102,12 +130,21 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
 	    }
 
-	    GameObject * ports = new GameObject(id);
+	    GameObject * port = new GameObject(id);
 	    //setup stuff
 
+	    PortData * data = new PortData();
+	    //PortRender * render = new PortRender();
+
+
+	    //render->setOwner(port);
+	    data->setOwner(port);
+
+	    port->setGOC(data);
+	    //port->setGOC(render);
 	    //end setup
 
-	    looksets[id].addNode(ports,turn,0);
+	    looksets[id].addNode(port,turn,0);
 	}
 
     }
@@ -119,6 +156,8 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     }
 
     return true;
+
+
 
 #if 0
 

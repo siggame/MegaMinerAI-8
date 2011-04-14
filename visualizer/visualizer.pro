@@ -13,7 +13,6 @@ PPATHS += ./lib/gameobject/ \
     ./lib/gameobject/ \
     ./lib/gui/ \
     ./lib/parser/
-
 SOURCES += main.cpp \
     ./lib/gameobject/*.cpp \
     ./lib/mutex/*.cpp \
@@ -26,8 +25,8 @@ SOURCES += main.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
-    ./lib/objectmanager/*.cpp
-
+    ./lib/objectmanager/*.cpp \
+    ./lib/gocfamily_data.cpp
 MOC = moc
 HEADERS += *.h \
     ./lib/manager/*.h \
@@ -44,7 +43,14 @@ HEADERS += *.h \
     ./lib/timeline/timeline.h \
     ./lib/timeline/timeline.hpp \
     ./lib/timeline/lookupTable/lookuptable.h \
-    ./lib/timeline/lookupTable/lookuptable.hpp
+    ./lib/timeline/lookupTable/lookuptable.hpp \
+    ./lib/goc_controlbar.h \
+    ./lib/gocfamily_controlbar.h \
+    ./lib/gocfamily_data.h \
+    ./lib/gocfamily_gui.h \
+    ./lib/gocfamily_guitoolset.h \
+    ./lib/gocfamily_render.h \
+    ./lib/singleton.h
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \

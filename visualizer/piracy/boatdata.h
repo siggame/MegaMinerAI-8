@@ -20,7 +20,7 @@ public:
 
   void update();
   const GOC_IDType componentID() const;   
-  void parseBoat( const Game& game, int boatId ); 
+  void parseBoat( const Game& game, int boatId, int turn);
 
 private:
 };

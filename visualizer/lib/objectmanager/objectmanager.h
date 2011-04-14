@@ -39,7 +39,6 @@ public:
 
     static bool exists(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame){return true;} //! @todo FIX THIS
     static bool destroy();
-    ObjectLoader::destroy();
 
 private:
     typedef Singleton<ObjectManager> Single;

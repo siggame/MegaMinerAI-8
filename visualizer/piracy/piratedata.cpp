@@ -24,30 +24,24 @@ void PirateData::update()
 #include <iostream>
 using namespace std;
 
-void PirateData::parsePirate( const Game& game, int pirateId )
+void PirateData::parsePirate( const Game& game, int pirateId, int turn )
 {
-  for( int i = 0; i < (signed int)game.states.size(); i++ )
-  {
-    std::map<int,Pirate>::const_iterator j = game.states[i].pirates.find( pirateId );
-    if( j != game.states[i].pirates.end() )
+    std::map<int,Pirate>::const_iterator j = game.states[turn].pirates.find( pirateId );
+    if( j != game.states[turn].pirates.end() )
     {
-      PirateDataInfo t;
-      t.owner = j->second.owner;
-      t.x = j->second.x;
-      t.y = j->second.y;
-      t.totalHealth += j->second.health;
-      t.totalStrength += j->second.strength;
-      t.movesLeft = j->second.movesLeft;
-      t.attacksLeft = j->second.attacksLeft;
-      t.totalGold += j->second.gold;
-      //cout << "Turn: " << i << ", X: " << t.x << ", Y: " << t.y << endl;
-      m_timeline.add( i, 0, t );
+      m_data.owner = j->second.owner;
+      m_data.x = j->second.x;
+      m_data.y = j->second.y;
+      m_data.totalHealth += j->second.health;
+      m_data.totalStrength += j->second.strength;
+      m_data.movesLeft = j->second.movesLeft;
+      m_data.attacksLeft = j->second.attacksLeft;
+      m_data.totalGold += j->second.gold;
     }
-  }
 }
 
 void PirateData::addPirateStack(const PirateDataInfo & info, const int & turn, const int & frame)
 {
 	std::cout << "turn: " << turn << " frame: " << frame <<'\n';
-  m_timeline.add(turn, frame, info);
+  //m_timeline.add(turn, frame, info);
 }
