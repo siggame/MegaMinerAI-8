@@ -80,6 +80,7 @@ bool GUI::create()
   if( !Singleton<GUI>::create() )
     return false;
 
+
   return true;
 }
 
@@ -605,6 +606,12 @@ void GUI::mousePressEvent( QMouseEvent *e )
 	    clickX = e->x();
 	    clickY = e->y();
 
+  			
+//		  Singleton<GUI>::get()->handyString->setNum(clickX);
+
+			
+//			m_consoleArea->append("X click: ");
+//			m_consoleArea->append(Singleton<GUI>::get() ->handyString);
 	    leftButtonDown = true;
 	    
 	    dragX = clickX;
