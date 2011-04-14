@@ -2,9 +2,6 @@
 #define RENDERER_HPP
 
 #include "renderer.h"
-#include "../timemanager/timeManager.h"
-#include "../../piracy/piratemap.h"
-//#include "../gui/gui.h"
 
 /** @brief numObjects
   * the number of objects registered
@@ -74,8 +71,8 @@ bool Renderer<DupObject>::refresh()
 	/*std::map<unsigned int, renderObj*>::iterator it = Single::get()->m_objects.begin();
 	for (; it != Single::get()->m_objects.end(); it++)
 	{
-		/** @todo fill this in */
-/*
+		//! @todo fill this in
+
     glPushMatrix();
     glScalef( 20, 20, 1 );
 
