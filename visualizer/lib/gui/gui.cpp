@@ -430,8 +430,11 @@ void GUI::mousePressEvent( QMouseEvent *e )
 
 void GUI::mouseReleaseEvent( QMouseEvent *e )
 {
-//  curX = e->x()+1;
-//  curY = e->y()+1-getAttr(boardOffsetY);
+
+    curX = e->x()+1;
+    curY = e->y()+1;
+    //+1 guarantees we create a box, rather than a point.
+    
 //  int selectWidth, selectHeight;
 //  int selectX = selectWidth = curX/getAttr(unitSize);
 //  int selectY = selectHeight = curY/getAttr(unitSize);
@@ -446,11 +449,6 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 //      selectHeight = (curY<dragY ? dragY : curY)/getAttr(unitSize);
 //    }
 
-//    if( leftDoubleClick )
-//    {
-//      leftDoubleClick = false;
-//      return;
-//    }
 
 //    Game *game = parent->gamelog;
 //    int frame = getAttr( frameNumber );
@@ -502,7 +500,4 @@ void GUI::mouseMoveEvent( QMouseEvent *e )
   {
     leftButtonDrag = true;
   }
-
-  m_consoleArea->append("DRAGON");
-
 }

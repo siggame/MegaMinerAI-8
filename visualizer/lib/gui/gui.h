@@ -250,7 +250,6 @@ private:
   void mouseMoveEvent( QMouseEvent *event );
 
   bool leftButtonDown;
-  bool leftDoubleClick;
   bool leftButtonDrag;
 
   int curX;
