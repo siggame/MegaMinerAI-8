@@ -7,6 +7,7 @@
 #include "lib/threadler/threadler.h"
 #include "lib/resourcemanager/resourceman.h"
 #include "lib/resourcemanager/texture.h"
+#include "lib/objectmanager/objectmanager.h"
 #include "piracy/dupObj.h"
 
 int main(int argc, char *argv[])
@@ -22,6 +23,8 @@ int main(int argc, char *argv[])
 	Threadler::create();
 	GUI::create();
 	Render::create();
+	ObjectManager::create();
+	ObjectLoader::create();
 
 
 	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
@@ -34,6 +37,8 @@ int main(int argc, char *argv[])
 		Threadler::destroy();
 		Render::destroy();
 		GUI::destroy();
+		ObjectManager::destroy();
+		ObjectLoader::destroy();
 		return 1;
 	}
 
@@ -59,6 +64,8 @@ int main(int argc, char *argv[])
 		Threadler::destroy();
 		GUI::destroy();
 		Render::destroy();
+		ObjectManager::destroy();
+		ObjectLoader::destroy();
 		return 1;
 	}
 
@@ -80,5 +87,7 @@ int main(int argc, char *argv[])
 	ResourceMan::destroy();
 	Mutex::destroy();
 	Threadler::destroy();
+	ObjectManager::destroy();
+	ObjectLoader::destroy();
 	return retval;
 }

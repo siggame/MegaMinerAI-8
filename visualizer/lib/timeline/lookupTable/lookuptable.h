@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 //! @todo move shit to .hpp
-template <typename T, typename idtype = unsigned int>
+template <typename T, typename idtype>
 struct LookupNode
 {
 
@@ -22,20 +22,22 @@ struct LookupNode
 		data = t;
 	}
 
-	LookupNode(const T & t,LookupNode<T> * p, LookupNode<T> * n)
+	LookupNode(const T & t,LookupNode<T,idtype> * p, LookupNode<T,idtype> * n)
 	{
 		prev = p;
 		next = n;
 		data = t;
 	}
 
-	LookupNode<T> *prev, *next;
+	LookupNode<T,idtype> *prev, *next;
 	T data;
 
 };
 
+template <typename T, typename idtype>
+ class LookupTable;
 
-template <typename T, typename idtype = unsigned int>
+template <typename T, typename idtype>
 class LookupSet
 {
 public:
@@ -45,12 +47,14 @@ public:
 	m_frames = frames;
 	m_turns = turns;
 
-	for (unsigned int i = 0; m_set.size > i; i++)
+	for (unsigned int i = 0; m_set.size() > i; i++)
 	{
 	    m_set[i] = NULL;
 	}
 	m_id = id;
     }
+
+    LookupSet(){}; //maps bitch at you without this
 
     bool addNode(const T & data, const unsigned int & frame, const unsigned int & turn)
     {
@@ -63,8 +67,8 @@ public:
 	 m_set[frame*m_turns + turn] = new LookupNode<T,idtype>(data);
 
 
-	 LookupNode<T,idtype> prev;
-	 LookupNode<T,idtype> next;
+	 LookupNode<T,idtype> * prev;
+	 LookupNode<T,idtype> * next;
 
 	 for (int i = frame*m_turns + turn-1; i > -1; i--)
 	 {
@@ -107,12 +111,12 @@ private:
     std::vector<LookupNode<T,idtype>*> m_set;
     unsigned int m_frames, m_turns;
     idtype m_id;
-    friend class LookupTable;
+    friend class LookupTable<T,idtype>;
 };
 
 
 
-template <typename T, typename idtype = unsigned int>
+template <typename T, typename idtype>
 class LookupTable
 {
 	public:
@@ -131,14 +135,16 @@ class LookupTable
 
 		void clear();
 
-		void add(const unsigned int & turn, const unsigned int & frame, const idtype & id, const Node & input);
-		void add(const Set & set);
+		void add(const idtype & id, const unsigned int & turn, const unsigned int & frame,  const Node & input);
+		void add(Set & set);
 
-		Node * node(const unsigned int & turn, const unsigned int & frame, const idtype & id);
+		Node * node( const idtype & id,const unsigned int & turn, const unsigned int & frame);
 		Bucket * bucket(const unsigned int & turn, const unsigned int & frame);
 
 		/** Default destructor */
 		virtual ~LookupTable();
+
+
 
 	protected:
 		Table m_table;

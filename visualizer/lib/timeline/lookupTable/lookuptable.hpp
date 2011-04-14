@@ -18,7 +18,7 @@ template <typename T, typename idtype>
 	object is out of range or doesn't exist
   */
 template <typename T, typename idtype>
-LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, const unsigned int & frame, const idtype & id)
+LookupNode<T,idtype> * LookupTable<T,idtype>::node(const idtype & id, const unsigned int & turn, const unsigned int & frame)
 {
 
 	Bucket * buck = bucket(turn,frame);
@@ -28,10 +28,10 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, co
 
 	typename Bucket::iterator it = buck->find(id);
 
-	if (it == buck.end())
+	if (it == buck->end())
 		return NULL;
 
-	return &(it->second);
+	return(it->second);
 }
 
 /** @brief add
@@ -42,7 +42,7 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, co
   * @param input the value to input in
   */
 template <typename T, typename idtype>
-void LookupTable<T,idtype>::add(const unsigned int & turn, const unsigned int & frame, const idtype & id , const Node & input)
+void LookupTable<T,idtype>::add(const idtype & id, const unsigned int & turn, const unsigned int & frame, const Node & input)
 {
 	Bucket * buck = bucket(turn,frame);
 
@@ -140,7 +140,7 @@ std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const 
   * @todo document this function
   */
 template <typename T, typename idtype>
-void LookupTable<T,idtype>::add(const Set & set)
+void LookupTable<T,idtype>::add(Set & set)
 {
     if (m_frames != set.m_frames || m_turns != set.m_turns)
 	return;
@@ -150,8 +150,8 @@ void LookupTable<T,idtype>::add(const Set & set)
     {
 	for (unsigned int frame = 0; frame < m_frames; frame++)
 	{
-	    if (set[turn*m_frames + frame])
-		m_table[turn*m_frames + frame][set.id()] = set[turn*m_frames + frame];
+	    if (set.m_set[turn*m_frames + frame])
+		m_table[turn*m_frames + frame][set.m_id] = set.m_set[turn*m_frames + frame];
 	}
     }
 }

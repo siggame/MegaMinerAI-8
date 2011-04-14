@@ -4,24 +4,50 @@ bool ObjectManager::reg(const ObjIdType & id, GameObject * obj, const unsigned i
 {
     GameObject * temp = obj;
 
-
-    return true;
+    //! @todo FILL IN
+    return false;
 }
 
 bool ObjectManager::del(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame)
 {
    // if ()
 
+    //! @todo FILL IN
     return true;
 }
 
 
-GameObject * ObjectManager::get(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame )
+LookupNode<GameObject *,ObjIdType> * ObjectManager::get(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame )
 {
+    if (!Singleton<ObjectManager>::isInit())
+	return NULL;
 
 
+    if (turn >= turns() || frame >= frames())
+	return NULL;
 
+    return Single::get()->m_objects.node(id,turn,frame);
 }
 
 
+bool ObjectManager::reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> objset)
+{
+    if (!Singleton<ObjectManager>::isInit())
+	return false;
+    //! @todo check for shit existing, throw hissy fit if it does
 
+    Singleton<ObjectManager>::get()->m_objects.add(objset);
+
+    return true;
+}
+
+bool ObjectManager::destroy()
+{
+    if (!Single::isInit())
+	return false;
+
+   //! @todo CLEAN UP PROPERLY, 'CAUSE THIS SUCKS
+
+
+    return Single::destroy();
+}
