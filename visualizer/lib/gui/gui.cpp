@@ -403,9 +403,13 @@ void GUI::mousePressEvent( QMouseEvent *e )
 	  {
 	    clickX = e->x();
 	    clickY = e->y();
- 					
-			m_consoleArea->append("X click: ");
-			m_consoleArea->append(QString::number(clickX));
+ 			
+ 			QString line;
+ 			line.clear();
+ 			line.append("X click: ");
+ 			line.append(QString::number(clickX));
+
+			m_consoleArea->append(line);
 
 	    leftButtonDown = true;
 	    
