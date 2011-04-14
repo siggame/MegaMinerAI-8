@@ -13,6 +13,7 @@ PPATHS += ./lib/gameobject/ \
     ./lib/gameobject/ \
     ./lib/gui/ \
     ./lib/parser/
+
 SOURCES += main.cpp \
     ./lib/gameobject/*.cpp \
     ./lib/mutex/*.cpp \
@@ -25,8 +26,8 @@ SOURCES += main.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
-    lib/objectmanager/*.cpp \
-    lib/objectmanager/objectmanager.cpp
+    ./lib/objectmanager/*.cpp
+
 MOC = moc
 HEADERS += *.h \
     ./lib/manager/*.h \
@@ -36,15 +37,14 @@ HEADERS += *.h \
     ./lib/threadler/*.h \
     ./lib/optionsmanager/*.h \
     ./lib/renderer/*.h* \
-    ./lib/renderer/lookupTable/*.h* \
     ./lib/parser/*.h \
     ./lib/gui/*.h \
     ./piracy/*.h \
-    lib/objectmanager/*.h \
-    lib/timeline/timeline.h \
-    lib/timeline/timeline.hpp \
-    lib/timeline/lookupTable/lookuptable.h \
-    lib/timeline/lookupTable/lookuptable.hpp
+    ./lib/objectmanager/*.h \
+    ./lib/timeline/timeline.h \
+    ./lib/timeline/timeline.hpp \
+    ./lib/timeline/lookupTable/lookuptable.h \
+    ./lib/timeline/lookupTable/lookuptable.hpp
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \

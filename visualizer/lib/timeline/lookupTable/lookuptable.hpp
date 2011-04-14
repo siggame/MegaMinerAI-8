@@ -135,8 +135,9 @@ std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const 
 	return &m_table[turn*frame + frame];
 }
 
-/**
+/** @brief add
   *
+  * @todo document this function
   */
 template <typename T, typename idtype>
 void LookupTable<T,idtype>::add(const Set & set)
