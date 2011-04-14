@@ -108,10 +108,13 @@ class Pirate(Unit):
     return Pirate(game, id, x, y, owner, health, strength, 0, 0, 0)
 
   def nextTurn(self):
-    self.movesLeft = self.game.pirateMoves
-    self.attacksLeft = self.game.pirateAttacks
     if self.game.playerID != self.owner:
+      self.movesLeft = 0
+      self.attacksLeft = 0
       return True
+    else:  
+      self.movesLeft = self.game.pirateMoves
+      self.attacksLeft = self.game.pirateAttacks
     pass
     
   def takeDamage(self, pirate):
@@ -539,8 +542,12 @@ class Ship(Unit):
     return Ship(game, id, x, y, owner, health, strength, 0, 0, 0)
 
   def nextTurn(self):
-    self.movesLeft = self.game.shipMoves
-    self.attacksLeft = self.game.shipAttacks
+    if self.game.playerID != self.owner:
+      self.movesLeft = 0
+      self.attacksLeft = 0
+    else:
+      self.movesLeft = self.game.shipMoves
+      self.attacksLeft = self.game.shipAttacks
 
   def move(self, x, y):
     #Check the owner of the ship before moving

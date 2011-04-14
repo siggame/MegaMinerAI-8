@@ -73,7 +73,7 @@ class MerchantAI:
   def shipLost(self, ship):
     for i in self.inTransit:
       if i.ship is ship:
-        i.inTransit.remove(i)
+        self.inTransit.remove(i)
         
   def pirateDied(self,homePort):
     self.thePorts[homePort].number += 1

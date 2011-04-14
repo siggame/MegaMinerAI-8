@@ -252,11 +252,15 @@ class Match(DefaultGameWorld):
     if self.turn == self.players[0]:
       self.turn = self.players[1]
       self.playerID = 2
+      for obj in self.objects.values():
+        obj.nextTurn()
       self.Merchant2.play()
       self.playerID = 1
     elif self.turn == self.players[1]:
       self.turn = self.players[0]
       self.playerID = 3
+      for obj in self.objects.values():
+        obj.nextTurn()
       self.Merchant3.play()
       self.playerID = 0
 
