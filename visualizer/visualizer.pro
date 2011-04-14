@@ -21,7 +21,6 @@ SOURCES += main.cpp\
   ./lib/mutex/*.cpp\
   ./lib/threadler/*.cpp\
   ./lib/optionsmanager/*.cpp\
-  ./lib/renderer/*.cpp\
   ./lib/gui/*.cpp\
   ./lib/timemanager/*.cpp\
   ./lib/parser/parser.cpp\
@@ -39,7 +38,7 @@ HEADERS += *.h\
   ./lib/mutex/*.h\
   ./lib/threadler/*.h\
   ./lib/optionsmanager/*.h\
-  ./lib/renderer/*.h\
+  ./lib/renderer/*.h*\
   ./lib/renderer/lookupTable/*.h*\
   ./lib/parser/*.h\
   ./lib/gui/*.h\
