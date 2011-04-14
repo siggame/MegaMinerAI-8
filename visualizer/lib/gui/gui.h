@@ -216,7 +216,6 @@ private:
 
   /// Console Area
   QTextEdit *m_consoleArea;
-  QString *handyString;
 
   /// Unit Stats Area
   QTabWidget * m_unitStatsArea;
