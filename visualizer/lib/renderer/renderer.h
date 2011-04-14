@@ -10,6 +10,9 @@
 #include "../gui/renderwidget.h"
 #include "lookupTable/lookuptable.h"
 #include "../concepts/concept_check.hpp"
+#include "../timemanager/timeManager.h"
+#include "../../piracy/piratemap.h"
+//#include "../gui/gui.h"
 
 //this is a place holder
 typedef GameObject renderObj;
