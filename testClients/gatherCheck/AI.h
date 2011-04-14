@@ -29,7 +29,7 @@ struct Crew
 {
   Ship* ship;
   vector<Pirate*> mates;
-  vector<Treasure*> booty;
+  size_t gold;
   Ship* operator->(){return ship;}
   
 };
