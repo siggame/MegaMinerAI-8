@@ -8,8 +8,8 @@
 #include "../optionsmanager/optionsman.h"
 #include "../gocfamily_render.h"
 #include "../gui/renderwidget.h"
-#include "duplicatelist/dupObj.h"
 #include "lookupTable/lookuptable.h"
+#include "../concepts/concept_check.hpp"
 
 //this is a place holder
 typedef GameObject renderObj;
@@ -21,16 +21,19 @@ typedef GameObject renderObj;
 
 class RenderWidget;
 
-class Renderer : public Singleton<Renderer>
+template <typename DupObject>
+class Renderer : public Singleton< Renderer< DupObject > >
 {
+	//BOOST_CONCEPT_ASSERT((UnsignedInteger<DupObject::index>));
+
 	public:
-		static bool reg(const unsigned int & id, renderObj * obj);
-		static bool del(const unsigned int & id);
+		//static bool reg(const unsigned int & id, renderObj * obj);
+		//static bool del(const unsigned int & id);
 
 		static bool setup(/**@todo make options*/);
 		static bool clear();
 
-		static renderObj * getRenderObject(const unsigned int id);
+		//static renderObj * getRenderObject(const unsigned int id);
 
 		static bool create(/**@todo make options similar to setup*/);
 		static bool destroy();
@@ -40,7 +43,7 @@ class Renderer : public Singleton<Renderer>
 		static bool refresh();
 		static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 1);
 
-		static unsigned int numObjects();
+		//static unsigned int numObjects();
 
 		static bool isSetup();
 
@@ -51,21 +54,26 @@ class Renderer : public Singleton<Renderer>
 
 		static LookupTable<renderObj> & lookupTable();
 
+		static void update(const unsigned int & turn, const unsigned int & frame);
+
 	protected:
 	private:
-		std::map<unsigned int,renderObj*> m_objects; //!< Member variable "m_objects"
+		//std::map<unsigned int,renderObj*> m_objects; //!< Member variable "m_objects"
 		LookupTable<renderObj> m_lookupTable;
 		unsigned int m_height;
 		unsigned int m_width;
 		unsigned int m_depth;
 		bool m_isSetup;
 
-		DupObj **** m_duplicateList;
+		DupObject **** m_duplicateList;
 		unsigned int m_dupListDirs;
-		std::vector<DupObj> m_renderList;
+		std::vector<DupObject*> m_renderList;
 
 		static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
-							const unsigned int & time, DupObj obj);
+							const unsigned int & time, DupObject obj);
+
+		typedef Singleton<Renderer<DupObject> > Single;
+		typedef Renderer<DupObject> Render;
 
     RenderWidget *m_parent;
 };

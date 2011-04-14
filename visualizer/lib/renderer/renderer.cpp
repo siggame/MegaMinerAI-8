@@ -6,13 +6,13 @@
 /** @brief numObjects
   * the number of objects registered
   * @return the number of objects registered
-  */
+  *//*
 unsigned int Renderer::numObjects()
 {
 	if (!isInit())
 		return 0;
 	return get()->m_objects.size();
-}
+}*/
 
 /** @brief resize
   * resize and refresh the projection  and modelview matricies
@@ -21,9 +21,10 @@ unsigned int Renderer::numObjects()
   * @param depth the z depth of the render area. default 10
   * @return true if successful resize
   */
-bool Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
+template <typename DupObject>
+bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return false;
 
 	unsigned int _height = height?height:1;
@@ -37,9 +38,9 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	get()->m_height = _height;
-	get()->m_width = width;
-	get()->m_depth = depth;
+	Single::get()->m_height = _height;
+	Single::get()->m_width = width;
+	Single::get()->m_depth = depth;
   refresh();
 	return true;
 }
@@ -51,9 +52,10 @@ using namespace std;
   *	draw objects on screen
   * @return true if successful
   */
-bool Renderer::refresh()
+template <typename DupObject>
+bool Renderer<DupObject>::refresh()
 {
-	if (!isInit())
+	if (!Singleton<Renderer<DupObject> >::isInit())
 		return false;
 	if (!isSetup())
 		return false;
@@ -68,8 +70,8 @@ bool Renderer::refresh()
 	unsigned int frame = TimeManager::getFrame();
 
   //float depth = 0;
-	std::map<unsigned int, renderObj*>::iterator it = get()->m_objects.begin();
-	for (; it != get()->m_objects.end(); it++)
+	std::map<unsigned int, renderObj*>::iterator it = Single::get()->m_objects.begin();
+	for (; it != Single::get()->m_objects.end(); it++)
 	{
 		/** @todo fill this in */
 
@@ -84,9 +86,9 @@ bool Renderer::refresh()
 
     glPopMatrix();
 	}
-  if( get()->m_parent )
+  if( Single::get()->m_parent )
   {
-    get()->m_parent->swapBuffers();
+    Single::get()->m_parent->swapBuffers();
   }
 
  // static int p = 0;
@@ -94,40 +96,45 @@ bool Renderer::refresh()
 	return true;
 }
 
-void Renderer::setParent( RenderWidget *parent )
+template <typename DupObject>
+void Renderer<DupObject>::setParent( RenderWidget *parent )
 {
-  get()->m_parent = parent;
+  if (!Single::isInit())
+		return; //! @todo throw error
+  Single::get()->m_parent = parent;
 }
 
 /** @brief destroy
   * destroy the singleton
   * @return true on success
   */
-bool Renderer::destroy()
+template <typename DupObject>
+bool Renderer<DupObject>::destroy()
 {
-	if(!isInit())
+	if(!Single::isInit())
 		return false;
 	if (!clear())
 		return false;
 
-	return Singleton<Renderer>::destroy();
+	return Single::destroy();
 }
 
 /** @brief create
   * create the singleton and setup the render area
   * @return true on success
   */
-bool Renderer::create()
+template <typename DupObject>
+bool Renderer<DupObject>::create()
 {
-	if (!Singleton<Renderer>::create())
+	if (!Single::create())
 		return false;
 
-	get()->m_parent = 0;
-	get()->m_height = 0;
-	get()->m_width  = 0;
-	get()->m_depth  = 0;
-	get()->m_dupListDirs = 0;
-	get()-> m_duplicateList = NULL;
+	Single::get()->m_parent = 0;
+	Single::get()->m_height = 0;
+	Single::get()->m_width  = 0;
+	Single::get()->m_depth  = 0;
+	Single::get()->m_dupListDirs = 0;
+	Single::get()-> m_duplicateList = NULL;
 
 	return true;
 }
@@ -137,7 +144,7 @@ bool Renderer::create()
   * @param id the GO ID of the render object
   * @return a pointer to the render object
   * @todo figure out if we want multiple render objects to a single game object
-  */
+  *//*
 renderObj* Renderer::getRenderObject(const unsigned int id)
 {
 	if (!isInit())
@@ -147,7 +154,7 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
 		return NULL;
 
 	return get()->m_objects[id];
-}
+}*/
 
 /** @brief setup
   * setup the rendering for the render, size the screen according to
@@ -155,19 +162,20 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
   * @return true if successful
   * @todo add more to the render setup
   */
-bool Renderer::setup()
+template <typename DupObject>
+bool Renderer<DupObject>::setup()
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return false;
 
 	/** @todo fill this in with more setup information */
-	if ( get()->m_width && get()->m_height && get()->m_depth )
+	if ( Single::get()->m_width && Single::get()->m_height && Single::get()->m_depth )
 	{
-		resize( get()->m_width, get()->m_height, get()->m_depth );
+		resize( Single::get()->m_width, Single::get()->m_height, Single::get()->m_depth );
 	}
-	else if ( get()->m_width && get()->m_height )
+	else if ( Single::get()->m_width && Single::get()->m_height )
 	{
-		resize( get()->m_width, get()->m_height );
+		resize( Single::get()->m_width, Single::get()->m_height );
 	}
 	else if ( optionsMan::isInit() )
 	{
@@ -188,72 +196,57 @@ bool Renderer::setup()
 		}
 	}
 
-	if (get()->m_duplicateList)
-	{
-		for (unsigned int x = 0; x < width(); x++)
-		{
-			for (unsigned int y = 0; y < height(); y++)
-			{
-				for (unsigned int z = 0; z < depth(); z++)
-				{
-					delete [] get()->m_duplicateList[x][y][z];
-				}
-				delete [] get()->m_duplicateList[x][y];
-			}
-			delete [] get()->m_duplicateList[x];
-		}
-		delete [] get()->m_duplicateList;
-	}
+	clear();
 
-	if (get()->m_dupListDirs)
+	if (Single::get()->m_dupListDirs)
 	{
-		get()->m_duplicateList = new DupObj***[width()];
+		Single::get()->m_duplicateList = new DupObject***[width()];
 		for (unsigned int x = 0; x < width(); x++)
 		{
-			get()->m_duplicateList[x] = new DupObj**[height()];
+			Single::get()->m_duplicateList[x] = new DupObject**[height()];
 			for (unsigned int y = 0; y < height(); y++)
 			{
-				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
 				for (unsigned int z = 0; z < depth(); z++)
 				{
-					get()->m_duplicateList[x][y][z] = new DupObj[get()->m_dupListDirs];
+					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 				}
 			}
 		}
 	}
 	else if (optionsMan::exists(renderDirsName) && optionsMan::optionType(renderDirsName) == OT_INT)
 	{
-		get()->m_dupListDirs = optionsMan::getInt(renderDirsName);
-		get()->m_duplicateList = new DupObj***[width()];
+		Single::get()->m_dupListDirs = optionsMan::getInt(renderDirsName);
+		Single::get()->m_duplicateList = new DupObject***[width()];
 		for (unsigned int x = 0; x < width(); x++)
 		{
-			get()->m_duplicateList[x] = new DupObj**[height()];
+			Single::get()->m_duplicateList[x] = new DupObject**[height()];
 			for (unsigned int y = 0; y < height(); y++)
 			{
-				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
 				for (unsigned int z = 0; z < depth(); z++)
 				{
-					get()->m_duplicateList[x][y][z] = new DupObj[get()->m_dupListDirs];
+					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 				}
 			}
 		}
 	}
 	else
 	{
-		get()->m_duplicateList = new DupObj***[width()];
+		Single::get()->m_duplicateList = new DupObject***[width()];
 		for (unsigned int x = 0; x < width(); x++)
 		{
-			get()->m_duplicateList[x] = new DupObj**[height()];
+			Single::get()->m_duplicateList[x] = new DupObject**[height()];
 			for (unsigned int y = 0; y < height(); y++)
 			{
-				get()->m_duplicateList[x][y] = new DupObj*[depth()];
+				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
 				for (unsigned int z = 0; z < depth(); z++)
 				{
-					get()->m_duplicateList[x][y][z] = new DupObj[1];
+					Single::get()->m_duplicateList[x][y][z] = new DupObject[1];
 				}
 			}
 		}
-		get()->m_dupListDirs = 1;
+		Single::get()->m_dupListDirs = 1;
 	}
 
   /// @TODO: Move this to the appropriate spot
@@ -263,7 +256,7 @@ bool Renderer::setup()
 
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
-  get()->m_isSetup = true;
+  Single::get()->m_isSetup = true;
 
 
   refresh();
@@ -273,14 +266,14 @@ bool Renderer::setup()
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 
-	return get()->m_isSetup;
+	return Single::get()->m_isSetup;
 }
 
 /** @brief del
   * delete a reference to a render object
   * @param id the id associated with the render object
   * @return true on success
-  */
+  *//*
 bool Renderer::del(const unsigned int & id)
 {
 	if (!isInit())
@@ -292,14 +285,14 @@ bool Renderer::del(const unsigned int & id)
 	get()->m_objects.erase(id);
 
 	return true;
-}
+}*/
 
 /** @brief reg
   * register a reference to a render object
   * @param id the id of the render object to add
   * @param obj the reference to add
   * @return true on success
-  */
+  *//*
 bool Renderer::reg(const unsigned int & id, renderObj * obj)
 {
 	if (!isInit())
@@ -310,42 +303,62 @@ bool Renderer::reg(const unsigned int & id, renderObj * obj)
 
 	get()->m_objects[id] = obj;
 	return true;
-}
+}*/
 
 /** @brief depth
   *	accessthe depth of the render volume
   * @return depth
   */
-unsigned int Renderer::depth()
+template <typename DupObject>
+unsigned int Renderer<DupObject>::depth()
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return 0;
 
-	return get()->m_depth;
+	return Single::get()->m_depth;
 }
 
 /** @brief isSetup
   * access if the module has been set up
   * @return true if set up
   */
-bool Renderer::isSetup()
+template <typename DupObject>
+bool Renderer<DupObject>::isSetup()
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return false;
 
-	return get()->m_isSetup;
+	return Single::get()->m_isSetup;
 }
 
 /** @brief clear
   * clear all references to render objects
   * @return true on success
   */
-bool Renderer::clear()
+template <typename DupObject>
+bool Renderer<DupObject>::clear()
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return false;
 
-	get()->m_objects.clear();
+	if (Single::get()->m_duplicateList)
+	{
+		for (unsigned int x = 0; x < width(); x++)
+		{
+			for (unsigned int y = 0; y < height(); y++)
+			{
+				for (unsigned int z = 0; z < depth(); z++)
+				{
+					delete [] Single::get()->m_duplicateList[x][y][z];
+				}
+				delete [] Single::get()->m_duplicateList[x][y];
+			}
+			delete [] Single::get()->m_duplicateList[x];
+		}
+		delete [] Single::get()->m_duplicateList;
+	}
+
+	Single::get()->m_duplicateList = NULL;
 
 	return true;
 }
@@ -354,20 +367,30 @@ bool Renderer::clear()
   *
   * @todo: document this function
   */
-void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObj obj)
+template <typename DupObject>
+void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
 {
-	if (!isInit())
+	if (!Single::isInit())
 		return;
 
 	if (!isSetup())
 		return;
 
-	if (x > width() || y > height() || z > depth() || dir > get()->m_dupListDirs)
+	if (x > width() || y > height() || z > depth() || dir > Single::get()->m_dupListDirs)
 		return; //! @todo throw an error
 
+	bool sameFlag = false;
+
+	if (obj.time == time)
+	{
+		sameFlag = true;
+	}
 
 	obj.time = time;
-	get()->m_duplicateList[x][y][z][dir] +=  obj;
+	Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
+
+	if (!sameFlag)
+		Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
 
 }
 

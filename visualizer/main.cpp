@@ -7,10 +7,11 @@
 #include "lib/threadler/threadler.h"
 #include "lib/resourcemanager/resourceman.h"
 #include "lib/resourcemanager/texture.h"
+#include "piracy/dupObj.h"
 
 int main(int argc, char *argv[])
 {
-
+	typedef Renderer<DupObj> Render;
 	QApplication app( argc, argv );
 	TimeManager::create();
 	TimeManager::setSpeed( 1 );
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 	Mutex::create();
 	Threadler::create();
 	GUI::create();
-	Renderer::create();
+	Render::create();
 
 
 	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
 		ResourceMan::destroy();
 		Mutex::destroy();
 		Threadler::destroy();
-		Renderer::destroy();
+		Render::destroy();
 		GUI::destroy();
 		return 1;
 	}
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
 	GUI::setup();
 
 
-	Renderer::setup();
+	Render::setup();
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
 		Mutex::destroy();
 		Threadler::destroy();
 		GUI::destroy();
+		Render::destroy();
 		return 1;
 	}
 
@@ -67,11 +69,11 @@ int main(int argc, char *argv[])
 		GUI::loadGamelog( argv[1] );
 
 
-	Renderer::refresh();
+	Render::refresh();
 
 	int retval = app.exec();
 
-	Renderer::destroy();
+	Render::destroy();
 	TimeManager::destroy();
 	GUI::destroy();
 	optionsMan::destroy();
