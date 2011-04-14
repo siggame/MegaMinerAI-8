@@ -1,4 +1,5 @@
 #include "renderwidget.h"
+#include "../../piracy/dupObj.h"
 
 #include <iostream>
 using namespace std;
@@ -16,12 +17,12 @@ RenderWidget::~RenderWidget()
 void RenderWidget::initializeGL()
 {
 
-  Renderer::create();
-  Renderer::setParent( this );
+  Renderer<DupObj>::create();
+  Renderer<DupObj>::setParent( this );
 
 }
 
 void RenderWidget::resizeEvent( QResizeEvent *evt )
 {
-  Renderer::resize( evt->size().width(), evt->size().height() );
+  Renderer<DupObj>::resize( evt->size().width(), evt->size().height() );
 }

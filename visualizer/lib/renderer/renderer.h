@@ -78,4 +78,6 @@ class Renderer : public Singleton< Renderer< DupObject > >
     RenderWidget *m_parent;
 };
 
+#include "renderer.hpp"
+
 #endif // RENDERER_H

@@ -1,10 +1,11 @@
-#include "timeManager.h" 
+#include "timeManager.h"
 #include "../renderer/renderer.h"
 #include "../gui/gui.h"
+#include "../../piracy/dupObj.h"
 
 #include <ctime>
 
-const int& TimeManager::getTurn() 
+const int& TimeManager::getTurn()
 {
   if( !isInit() )
     throw 0;
@@ -12,7 +13,7 @@ const int& TimeManager::getTurn()
   return get()->m_turn;
 }
 
-const int& TimeManager::getFrame() 
+const int& TimeManager::getFrame()
 {
   if( !isInit() )
     throw 0;
@@ -28,7 +29,7 @@ void TimeManager::setTurn( const int& turn )
   get()->m_frame = 0;
 }
 
-const int& TimeManager::getSpeed() 
+const int& TimeManager::getSpeed()
 {
   if( !isInit() )
     throw 0;
@@ -42,7 +43,7 @@ void TimeManager::setSpeed( const int& speed )
   get()->m_speed = speed;
 }
 
-int TimeManager::timeHash() 
+int TimeManager::timeHash()
 {
   return get()->m_hash;
 }
@@ -54,7 +55,7 @@ TimeManager::mode TimeManager::getMode()
   return get()->m_mode;
 }
 
-const int& TimeManager::getNumTurns() 
+const int& TimeManager::getNumTurns()
 {
   if( !isInit() )
     throw 0;
@@ -112,7 +113,7 @@ void TimeManager::updateFrames()
     m_turn = m_numTurns-1;
     m_frame = m_framesPerTurn-1;
   }
-  
+
   //If in arena mode, show winner for a few secs at end
   if (optionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
   {
@@ -137,6 +138,6 @@ void TimeManager::timerUpdate()
   m_hash++;
   m_frame += m_time * m_speed;
   updateFrames();
-  Renderer::refresh();
+  Renderer<DupObj>::refresh();
 }
 

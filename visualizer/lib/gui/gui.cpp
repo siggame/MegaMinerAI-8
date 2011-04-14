@@ -10,6 +10,7 @@
 #include "../../piracy/piratemap.h"
 #include "../../piracy/treasuredata.h"
 #include "../../piracy/treasurerender.h"
+#include "../../piracy/dupObj.h"
 
 #include <iostream>
 #include <string>
@@ -125,9 +126,9 @@ void GUI::loadGamelog( std::string gamelog )
 
   // Gamespecific stuff which need a removing
 
-  if( !Renderer::isSetup() )
+  if( !Renderer<DupObj>::isSetup() )
   {
-    Renderer::create();
+    Renderer<DupObj>::create();
   }
 
   //int pirateId = 0;
@@ -142,7 +143,7 @@ void GUI::loadGamelog( std::string gamelog )
   pm->generateMap( g );
   pm->setOwner( go );
   go->setGOC( pm );
-  Renderer::reg( -1, go );
+  //Renderer<DupObj>::reg( -1, go );
 
   TimeManager::setTurn(0);
   TimeManager::setNumTurns(g.states.size() );
@@ -177,12 +178,12 @@ void GUI::loadGamelog( std::string gamelog )
     int xoff[] = {0, 1, 0, -1, 0};
     int yoff[] = {0, 0, 1, 0, -1};
     dir direction = STOP;
-    
+
     PirateDataInfo pdi;
-    
-    vector<vector<vector< PirateData> > >  piVec = 
-      vector<vector<vector<PirateData> > >(5, 
-      vector<vector<PirateData> >(g.states[0].mapSize, 
+
+    vector<vector<vector< PirateData> > >  piVec =
+      vector<vector<vector<PirateData> > >(5,
+      vector<vector<PirateData> >(g.states[0].mapSize,
       vector<PirateData> (g.states[0].mapSize) ) );
 
     for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
@@ -191,14 +192,14 @@ void GUI::loadGamelog( std::string gamelog )
        )
        {
 
-        //We're past turn 0, so movement from the last turn should happen 
+        //We're past turn 0, so movement from the last turn should happen
         // AND pirate exists
         if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end())
         {
           //Find direction enum
           int delta;
           delta = p -> second.x - g.states[i-1].pirates[p->first].x;
-          
+
           switch(delta)
           {
             case -1:
@@ -212,7 +213,7 @@ void GUI::loadGamelog( std::string gamelog )
               direction = STOP;
               break;
           }
-          
+
           delta = p->second.y - g.states[i-1].pirates[p->first].y;
           if (delta != 0)//There was any vertical motion
           {
@@ -227,7 +228,7 @@ void GUI::loadGamelog( std::string gamelog )
             }
           }
         }
-      
+
         pdi.x = p->second.x;
         pdi.y = p->second.y;
         pdi.owner = p->second.owner;
@@ -236,12 +237,12 @@ void GUI::loadGamelog( std::string gamelog )
         pdi.totalStrength += p->second.strength;
         pdi.movesLeft = p->second.movesLeft;
         pdi.attacksLeft = p->second.attacksLeft;
-        pdi.piratesInStack.push_front(p->second.id); 
-        
+        pdi.piratesInStack.push_front(p->second.id);
+
         int frame = (direction == STOP) ? 0 : 50;
-        
+
         //piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
-        
+
        }
 
 
@@ -258,13 +259,13 @@ void GUI::loadGamelog( std::string gamelog )
           PirateData *pd = new PirateData();
           *pd = piVec[z][x][y];
           pd->setOwner( go );
-         
+
           pr->setOwner( go );
-          
+
           go->setGOC( pd );
           go->setGOC( pr );
-          Renderer::reg( stackId, go );
-          
+          //Renderer<DupObj>::reg( stackId, go );
+
           stackId++;
         }
       }
@@ -287,7 +288,7 @@ void GUI::loadGamelog( std::string gamelog )
         go->setGOC( bd );
         go->setGOC( br );
 
-        Renderer::reg( boatId, go );
+       // Renderer<DupObj>::reg( boatId, go );
 
         boats++;
       }
@@ -310,7 +311,7 @@ void GUI::loadGamelog( std::string gamelog )
         go->setGOC( td );
         go->setGOC( tr );
 
-        Renderer::reg( treasureId, go );
+        //Renderer<DupObj>::reg( treasureId, go );
 
         treasures++;
       }
@@ -479,7 +480,7 @@ void GUI::buildToolSet()
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
     m_consoleArea -> setReadOnly(1);
-  
+
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
 
@@ -488,7 +489,7 @@ void GUI::buildToolSet()
 
     // Add the console to the layout
     m_dockLayout->addWidget( m_consoleArea );
-    
+
     //Add Unit Stats to the layout
     initUnitStats();
 
@@ -564,35 +565,35 @@ void GUI::initUnitStats()
 
   //Create unit Stats tab area
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
-  
+
   //Create tables to fill tabs
   m_multipleStats = new QTableWidget(m_unitStatsArea);
-  m_individualStats = new QTableWidget(m_unitStatsArea);  
-  
+  m_individualStats = new QTableWidget(m_unitStatsArea);
+
   //Create headers for tables
   m_multipleStatsVerticalLabels<<"Total Units"<<"P0 Units"<<"P1 Units"
     <<"Total Gold"<<"Avg. Pirate Health"<<"Avg. Ship Health"<<"Treasure Boxes";
   m_multipleStatsHorizontalLabels<<"Global"<<"Selection";
-  
+
   m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
     <<"movesLeft"<<"attacksLeft";
   m_individualStatsHorizontalLabels<<".";
-  
+
   //Set table properties and headers
   m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
   m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
   m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
   m_multipleStats->setHorizontalHeaderLabels( m_multipleStatsHorizontalLabels );
-  
+
   m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
   m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
   m_individualStats->setVerticalHeaderLabels ( m_individualStatsVerticalLabels );
   m_individualStats->setHorizontalHeaderLabels( m_individualStatsHorizontalLabels );
 
-  //Add tabs of tables to tab area 
+  //Add tabs of tables to tab area
   m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
   m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
-  
+
   //Add tab area to dockLayout
   m_dockLayout->addWidget( m_unitStatsArea );
 }
@@ -616,12 +617,12 @@ void GUI::mousePressEvent( QMouseEvent *e )
 //    leftButtonDown = true;
 //    dragX = clickX;
 //    dragY = clickY;
-//  } 
+//  }
 //  else if ( e->button() == Qt::RightButton )
 //  {
 //    rightButtonTime = buttonTimes.elapsed();
 //    rightButtonDown = true;
-//  } 
+//  }
 //  else if( e->button() == Qt::MidButton )
 //  {
 //    midButtonTime = buttonTimes.elapsed();
