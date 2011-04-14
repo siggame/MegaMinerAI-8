@@ -368,9 +368,6 @@ class Match(DefaultGameWorld):
             player1Loss = False
           elif i.owner == 1:
             player2Loss = False
-            #print "Does not lose"
-          #else :
-            #print i.owner
          
       #If a player has less gold than required for a pirate
       if player1Loss == True or player2Loss == True:   
@@ -380,7 +377,7 @@ class Match(DefaultGameWorld):
         print player1.gold        
         print player2.gold  
         if player1Loss == True and player2Loss == False:
-          self.declareWinner(self.players[1], 'Victory Through Annihilation') 
+          self.declareWinner(self.players[0], 'Victory Through Annihilation') 
         elif player1Loss == False and player2Loss == True:
           self.declareWinner(self.players[1], 'Victory Through Annihilation')             
         elif player1Loss == True and player2Loss == True and player1.gold < player2.gold:
