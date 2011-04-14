@@ -65,24 +65,22 @@ bool AI::run()
   {
     Crew working;
     working.ship = &ships[i];
+    working.gold = ships[i].gold();
     for(size_t p=0;p<pirates.size();p++)
     {
       if(samePos(ships[i],pirates[p]))
       {
         working.mates.push_back(&pirates[p]);
-      }
-    }
-    for(size_t t=0;t<treasures.size();t++)
-    {
-      if(samePos(ships[i],treasures[t]))
-      {
-        working.booty.push_back(&treasures[t]);
+        working.gold+=pirates[p].gold();
+        // TODO check error for droping when you have none
+        if(pirates[p].gold()>0 && pirates[p].owner()==playerID())pirates[p].dropTreasure(pirates[p].gold());
       }
     }
     // if I own it
     if(ships[i].owner()==playerID())
     {
-      if(working.booty.size()>0 && working.booty.size() == working.mates.size())
+      // if I have gold
+      if(working.gold>players[playerID()].gold() || (working.mates.size() < 4) && working.gold>pirateCost())
       {
         goToPort.push_back(working);
       }
@@ -97,13 +95,12 @@ bool AI::run()
       {
         abandoned.push_back(working);
       }
-      else if(working.booty.size()>0)
+      else if(working.gold>0)
       {
         toAttack.push_back(working);
       }
     }
   }
-  int futureGold=0;
   // for each ship I control that has treasure
   for(list<Crew>::iterator it=goToPort.begin();it!=goToPort.end();it++)
   {
@@ -120,6 +117,7 @@ bool AI::run()
     {
       cout<<"Home!"<<endl;
     }
+    /*
     // if I reached the port
     if(path.size()<3)
     {
@@ -147,7 +145,7 @@ bool AI::run()
             // move the last step
             (*it).mates[i]->move(path[path.size()-1]->x(),path[path.size()-1]->y());
           }
-          else */if(samePos(*(*it).mates[i],ports[myPort]))
+          else * /if(samePos(*(*it).mates[i],ports[myPort]))
           {
             cout<<"Droping: "<<amount<<endl;
             // Hope you can drop any amount
@@ -157,12 +155,12 @@ bool AI::run()
         }
       }
     }
+    */
   }
 //*
-  while(players[playerID()].gold()+futureGold>pirateCost())
+  while(players[playerID()].gold()>pirateCost())
   {
     ports[myPort].createPirate();
-    futureGold-=pirateCost();
   }
 // */
   // for each ship that is abandoned
@@ -181,7 +179,7 @@ bool AI::run()
       }
       if(options[0].path.size()<4 && options[0].path.size()>0)
       {
-        for(size_t x=0;x<options[0].path.size();x++)
+        for(size_t x=0;x+1<options[0].path.size();x++)
         {
           cout<<options[0].path[x]->x()<<","<<options[0].path[x]->y()<<endl;
         }

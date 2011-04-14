@@ -80,6 +80,7 @@ bool GUI::create()
   if( !Singleton<GUI>::create() )
     return false;
 
+
   return true;
 }
 
@@ -398,24 +399,22 @@ void GUI::initUnitStats()
 
 void GUI::mousePressEvent( QMouseEvent *e )
 {
-//  if( e->button() == Qt::LeftButton )
-//  {
-//    clickX = e->x();
-//    clickY = e->y()-getAttr(boardOffsetY);
-//    if( buttonTimes.elapsed() - leftButtonTime < getAttr( doubleClickTime ) )
-//    {
-//      // Do Double click event
-//      // or nothing....
-//    }
-//    else
-//    {
-//      leftButtonTime = buttonTimes.elapsed();
-//    }
+	  if( e->button() == Qt::LeftButton )
+	  {
+	    clickX = e->x();
+	    clickY = e->y();
 
-//    leftButtonDown = true;
-//    dragX = clickX;
-//    dragY = clickY;
-//  }
+  			
+//		  Singleton<GUI>::get()->handyString->setNum(clickX);
+
+			
+//			m_consoleArea->append("X click: ");
+//			m_consoleArea->append(Singleton<GUI>::get() ->handyString);
+	    leftButtonDown = true;
+	    
+	    dragX = clickX;
+	    dragY = clickY;
+	  }
 //  else if ( e->button() == Qt::RightButton )
 //  {
 //    rightButtonTime = buttonTimes.elapsed();
@@ -426,6 +425,7 @@ void GUI::mousePressEvent( QMouseEvent *e )
 //    midButtonTime = buttonTimes.elapsed();
 //    midButtonDown = true;
 //  }
+
 }
 
 void GUI::mouseReleaseEvent( QMouseEvent *e )
