@@ -16,6 +16,7 @@ echo "" | tee -a $logfilepath # Throw a newline on the end...
 # Build the codegen
 echo "Starting codegen build..." | tee -a $logfilepath
 cd ./codegen
+rm output/c/*.cpp output/c/*.h
 python main.py |& tee -a $logfilepath # |& pipes sterr AND stout to tee
 echo "" | tee -a $logfilepath # Throw a newline on the end...
 cd $rootdir

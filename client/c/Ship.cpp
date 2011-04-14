@@ -40,14 +40,19 @@ int Ship::strength()
   return ((_Ship*)ptr)->strength;
 }
 
-int Ship::hasMoved()
+int Ship::movesLeft()
 {
-  return ((_Ship*)ptr)->hasMoved;
+  return ((_Ship*)ptr)->movesLeft;
 }
 
-int Ship::hasAttacked()
+int Ship::attacksLeft()
 {
-  return ((_Ship*)ptr)->hasAttacked;
+  return ((_Ship*)ptr)->attacksLeft;
+}
+
+int Ship::gold()
+{
+  return ((_Ship*)ptr)->gold;
 }
 
 
@@ -76,7 +81,8 @@ std::ostream& operator<<(std::ostream& stream,Ship ob)
   stream << "owner: " << ((_Ship*)ob.ptr)->owner  <<'\n';
   stream << "health: " << ((_Ship*)ob.ptr)->health  <<'\n';
   stream << "strength: " << ((_Ship*)ob.ptr)->strength  <<'\n';
-  stream << "hasMoved: " << ((_Ship*)ob.ptr)->hasMoved  <<'\n';
-  stream << "hasAttacked: " << ((_Ship*)ob.ptr)->hasAttacked  <<'\n';
+  stream << "movesLeft: " << ((_Ship*)ob.ptr)->movesLeft  <<'\n';
+  stream << "attacksLeft: " << ((_Ship*)ob.ptr)->attacksLeft  <<'\n';
+  stream << "gold: " << ((_Ship*)ob.ptr)->gold  <<'\n';
   return stream;
 }

@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
+#include<QStringList>
 #include <map>
 #include <string>
 
@@ -45,8 +46,8 @@ typedef GOCFamily_GUI guiObj;
 
 ////////////////////////////////////////////////////////////////
 /// @fn       setup()
-/// @brief    Set's up the GUI along with the singleton   
-/// @pre      Object must have been created before hand
+/// @brief    Sets up the GUI along with the singleton   
+/// @pre      Object must have been created beforehand
 /// @post     The GUI will be all setup
 /// @return   bool True if successfully setup.  
 ///           False, if otherwise.  
@@ -176,16 +177,28 @@ public:
   static void loadGamelog( std::string gamelog );
 
   static void update();
+  static void closeGUI();
 
 private slots:
   void helpContents();
   void fileOpen();
+  void toggleFullScreen();
+  void togglePlayPause();
+  void fastForwardShortcut();
+  void rewindShortcut();
+  void turnPercentageShortcut(int);
+  void stepTurnForwardShortcut();
+  void stepTurnBackShortcut();
+
 
 private:
   /// Container for the objects in the GUI
   std::map<std::string, guiObj*> m_objects;
   /// Setup?
   bool m_isSetup;
+  
+  //In full screen mode or not?
+  bool fullScreen;
 
   /// Main widget for this window
   CentralWidget *m_centralWidget; 
@@ -201,7 +214,18 @@ private:
 
   /// Console Area
   QTextEdit *m_consoleArea;
-
+  
+  /// Unit Stats Area
+  QTabWidget * m_unitStatsArea;
+  QTableWidget * m_multipleStats;
+  QTableWidget * m_individualStats;  
+  
+  QStringList m_multipleStatsVerticalLabels;
+  QStringList m_multipleStatsHorizontalLabels;
+  
+  QStringList m_individualStatsVerticalLabels;
+  QStringList m_individualStatsHorizontalLabels;
+  
   /// Status Bar
   QStatusBar *m_statusBar;
 
@@ -216,6 +240,28 @@ private:
   void createActions();
   void createMenus();
   void buildToolSet();
+  void initUnitStats();
+
+  //Old unit selection code we're bringing forward
+  void mousePressEvent( QMouseEvent *event );
+  void mouseReleaseEvent( QMouseEvent *event );
+  void mouseMoveEvent( QMouseEvent *event );
+  
+  bool leftButtonDown;
+  bool leftDoubleClick;
+  bool leftButtonDrag;
+
+  bool rightButtonDown;
+  bool midButtonDown;
+
+  int curX;
+  int curY;
+
+  int clickX;
+  int clickY;
+
+  int dragX;
+  int dragY;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents
@@ -224,6 +270,7 @@ private:
   QAction *m_fileExit; /// File->Exit
   
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
+  
 };
 
 #endif

@@ -1,6 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 from objects import *
 import customastar
+import random
 class ShipAndDestination:
   def __init__(self,ship,port):
     self.ship = ship
@@ -42,8 +43,8 @@ class MerchantAI:
           if not alreadyDestination:
             for t in self.game.objects.values():
               if isinstance(t,Treasure) and p.x == t.x and p.y == t.y:
-                if t.amount > richness:
-                  richness = t.amount
+                if t.gold > richness:
+                  richness = t.gold
                   richestPort = p
           index += 1
     if richestPort == None:
@@ -62,20 +63,23 @@ class MerchantAI:
       self.game.addObject(pirateDude)
     treasureValue = 0
     for i in self.game.objects.values(): 
-      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y and i.pirateID == -1:
-        treasureValue =  i.amount
+      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
+        treasureValue =  i.gold
     for i in self.game.objects.values(): 
       if isinstance(i,Pirate) and i.x == port.x and i.y == port.y and i.owner == port.owner:
         i.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
     self.inTransit += [ShipAndDestination(newShip,destination)]
   
+  def shipLost(self, ship):
+    for i in self.inTransit:
+      if i.ship is ship:
+        self.inTransit.remove(i)
+        
   def pirateDied(self,homePort):
     self.thePorts[homePort].number += 1
     
   def pirateArrived(self,pirate,homePort):
-    for i in self.game.objects.values():
-      if isinstance(i,Treasure) and i.pirateID == pirate.id:
-        pirate.dropTreasure(i.amount)
+    pirate.dropTreasure(pirate.gold)
     self.game.removeObject(pirate)
     self.thePorts[homePort].partial += 1
     if self.thePorts[homePort].partial == 4:
@@ -86,66 +90,68 @@ class MerchantAI:
   
   def shipArrived(self,ship,destinationPort):
     for i in self.game.objects.values():
-      if isinstance(i,Treasure) and i.x == ship.x and i.y == ship.y:
-        i.x = destinationPort.x
-        i.y = destinationPort.y
-    for i in self.game.objects.values():
       if isinstance(i,Pirate) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
-        i.x = destinationPort.x
-        i.y = destinationPort.y
-        if isinstance(i,Pirate):
-          self.pirateArrived(i,i.homeBase)
+        self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
 
   def play(self):
     for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.id == self.id:
+      if isinstance(i,Pirate) and i.owner == self.id:
         for j in self.game.objects.values():
-          if isinstance(j,Pirate) and j.id != 2 and j.id != 3:
-            if i.hasAttacked == 0:
+          if isinstance(j,Pirate) and j.owner != 2 and j.owner != 3:
+            if i.attacksLeft > 0:
               i.attack(j)
     for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.id == self.id:
+      if isinstance(i,Ship) and i.owner == self.id:
         for j in self.game.objects.values():
-          if isinstance(j,Ship) and j.id != 2 and j.id != 3:
-            if i.hasAttacked == 0:
+          if isinstance(j,Ship) and j.owner != 2 and j.owner != 3:
+            if i.attacksLeft > 0:
               i.attack(j)
-    for x in range(0,self.game.shipSteps):
-      #Ships arrive at ports!
-      for i in self.inTransit:
-        if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 1:
-          self.shipArrived(i.ship,i.port)
-          self.inTransit.remove(i)
-        else:
-          direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
-          #Right
-          if len(direction) == 0:
-            continue 
-            #print "There is no path!"
-          elif direction[0] == '0':
-            #print "right"
-            i.ship.move(i.ship.x+1,i.ship.y)
-          #Down
-          elif direction[0] == '1':
-            #print "down"
-            i.ship.move(i.ship.x,i.ship.y+1)
-          #Left
-          elif direction[0] == '2':
-            #print "left"
-            i.ship.move(i.ship.x-1,i.ship.y)
-          #Up
-          elif direction[0] == '3':
-            #print "up"
-            i.ship.move(i.ship.x,i.ship.y-1)
-          #else:
-            #print direction
-            #print direction[0]
-            #print `direction[0] == '0'`
+    #Ships arrive at ports!
+    for i in self.inTransit:
+      if i.ship.attacksLeft <= 0:
+        continue
+      if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 0:
+        self.shipArrived(i.ship,i.port)
+        self.inTransit.remove(i)
+      else:
+        direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+        #Right
+        if len(direction) == 0:
+          dir = random.randint(0,3)
+          if dir == 0:
+            direction = ['0']
+          elif dir == 1:
+            direction = ['1']
+          elif dir == 2:
+            direction = ['2']
+          elif dir == 3:
+            direction = ['3']
+          #print "There is no path!"
+        if direction[0] == '0':
+          #print "right"
+          i.ship.move(i.ship.x+1,i.ship.y)
+        #Down
+        elif direction[0] == '1': 
+        #print "down"
+          i.ship.move(i.ship.x,i.ship.y+1)
+        #Left
+        elif direction[0] == '2':
+          #print "left"
+          i.ship.move(i.ship.x-1,i.ship.y)
+        #Up
+        elif direction[0] == '3':
+          #print "up"
+          i.ship.move(i.ship.x,i.ship.y-1)
+        #else:
+          #print direction
+          #print direction[0]
+          #print `direction[0] == '0'`
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
       for i in self.game.objects.values():
-        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.pirateID == -1 and i.amount > self.treasureThreshold:
+        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
           isWorthy = True
         if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
           foundAShip = True

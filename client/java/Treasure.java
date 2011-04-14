@@ -45,17 +45,11 @@ class Treasure extends Mappable
     validify();
     return Client.INSTANCE.treasureGetY(ptr);
   }
-  ///The ID of the pirate carrying this treasure, 0 if not carried
-  public int getPirateID()
-  {
-    validify();
-    return Client.INSTANCE.treasureGetPirateID(ptr);
-  }
   ///The amount of gold in this treaure
-  public int getAmount()
+  public int getGold()
   {
     validify();
-    return Client.INSTANCE.treasureGetAmount(ptr);
+    return Client.INSTANCE.treasureGetGold(ptr);
   }
 
 }

@@ -67,29 +67,35 @@ public abstract class Unit: Mappable
     validify();
     return Client.unitGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public int getHealth()
   {
     validify();
     return Client.unitGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public int getStrength()
   {
     validify();
     return Client.unitGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public int getMovesLeft()
   {
     validify();
-    return Client.unitGetHasMoved(ptr);
+    return Client.unitGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public int getAttacksLeft()
   {
     validify();
-    return Client.unitGetHasAttacked(ptr);
+    return Client.unitGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.unitGetGold(ptr);
   }
 
 }

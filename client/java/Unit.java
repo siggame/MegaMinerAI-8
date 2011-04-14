@@ -57,29 +57,35 @@ abstract class Unit extends Mappable
     validify();
     return Client.INSTANCE.unitGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.unitGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public int getStrength()
   {
     validify();
     return Client.INSTANCE.unitGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public int getMovesLeft()
   {
     validify();
-    return Client.INSTANCE.unitGetHasMoved(ptr);
+    return Client.INSTANCE.unitGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public int getAttacksLeft()
   {
     validify();
-    return Client.INSTANCE.unitGetHasAttacked(ptr);
+    return Client.INSTANCE.unitGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.unitGetGold(ptr);
   }
 
 }

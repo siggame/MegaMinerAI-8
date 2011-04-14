@@ -40,14 +40,19 @@ int Unit::strength()
   return ((_Unit*)ptr)->strength;
 }
 
-int Unit::hasMoved()
+int Unit::movesLeft()
 {
-  return ((_Unit*)ptr)->hasMoved;
+  return ((_Unit*)ptr)->movesLeft;
 }
 
-int Unit::hasAttacked()
+int Unit::attacksLeft()
 {
-  return ((_Unit*)ptr)->hasAttacked;
+  return ((_Unit*)ptr)->attacksLeft;
+}
+
+int Unit::gold()
+{
+  return ((_Unit*)ptr)->gold;
 }
 
 
@@ -76,7 +81,8 @@ std::ostream& operator<<(std::ostream& stream,Unit ob)
   stream << "owner: " << ((_Unit*)ob.ptr)->owner  <<'\n';
   stream << "health: " << ((_Unit*)ob.ptr)->health  <<'\n';
   stream << "strength: " << ((_Unit*)ob.ptr)->strength  <<'\n';
-  stream << "hasMoved: " << ((_Unit*)ob.ptr)->hasMoved  <<'\n';
-  stream << "hasAttacked: " << ((_Unit*)ob.ptr)->hasAttacked  <<'\n';
+  stream << "movesLeft: " << ((_Unit*)ob.ptr)->movesLeft  <<'\n';
+  stream << "attacksLeft: " << ((_Unit*)ob.ptr)->attacksLeft  <<'\n';
+  stream << "gold: " << ((_Unit*)ob.ptr)->gold  <<'\n';
   return stream;
 }

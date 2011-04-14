@@ -1,5 +1,6 @@
 #include "timeManager.h" 
 #include "../renderer/renderer.h"
+#include "../gui/gui.h"
 
 #include <ctime>
 
@@ -98,24 +99,43 @@ void TimeManager::updateFrames()
   m_turn += m_frame / m_framesPerTurn;
   m_frame %= m_framesPerTurn;
 
+  //Idiot check low
   if (m_turn < 0)
   {
     m_turn = 0;
     m_frame = 0;
   }
 
+  //Idiot check high
   if (m_turn >= m_numTurns)
   {
     m_turn = m_numTurns-1;
     m_frame = m_framesPerTurn-1;
   }
+  
+  //If in arena mode, show winner for a few secs at end
+  if (optionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
+  {
+    if( m_sleepTime == -1 )
+      m_sleepTime = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+    else
+    {
+      if( m_time - m_sleepTime > 3000 )
+      {
+        GUI::closeGUI();
+      }
+
+    }
+
+  }
+
 }
 
 void TimeManager::timerUpdate()
 {
-  int milliseconds = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
   m_hash++;
-  m_frame += milliseconds * m_speed;
+  m_frame += m_time * m_speed;
   updateFrames();
   Renderer::refresh();
 }

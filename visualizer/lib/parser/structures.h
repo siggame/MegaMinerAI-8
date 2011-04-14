@@ -24,8 +24,9 @@ struct Unit: public Mappable
   int owner;
   int health;
   int strength;
-  int hasMoved;
-  int hasAttacked;
+  int movesLeft;
+  int attacksLeft;
+  int gold;
 
   friend std::ostream& operator<<(std::ostream& stream, Unit obj);
 };
@@ -68,8 +69,7 @@ struct Tile: public Mappable
 
 struct Treasure: public Mappable 
 {
-  int pirateID;
-  int amount;
+  int gold;
 
   friend std::ostream& operator<<(std::ostream& stream, Treasure obj);
 };

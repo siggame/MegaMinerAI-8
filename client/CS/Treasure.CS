@@ -55,17 +55,11 @@ public class Treasure: Mappable
     validify();
     return Client.treasureGetY(ptr);
   }
-  ///The ID of the pirate carrying this treasure, 0 if not carried
-  public int getPirateID()
-  {
-    validify();
-    return Client.treasureGetPirateID(ptr);
-  }
   ///The amount of gold in this treaure
-  public int getAmount()
+  public int getGold()
   {
     validify();
-    return Client.treasureGetAmount(ptr);
+    return Client.treasureGetGold(ptr);
   }
 
 }

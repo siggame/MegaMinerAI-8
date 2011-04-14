@@ -88,29 +88,35 @@ class Pirate extends Unit
     validify();
     return Client.INSTANCE.pirateGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.pirateGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public int getStrength()
   {
     validify();
     return Client.INSTANCE.pirateGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public int getMovesLeft()
   {
     validify();
-    return Client.INSTANCE.pirateGetHasMoved(ptr);
+    return Client.INSTANCE.pirateGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public int getAttacksLeft()
   {
     validify();
-    return Client.INSTANCE.pirateGetHasAttacked(ptr);
+    return Client.INSTANCE.pirateGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.pirateGetGold(ptr);
   }
 
 }

@@ -65,7 +65,7 @@ int findPath(_Tile* start, _Tile* end, int type)
     tile = open.front();
     open.pop_front();
 
-    //std::cout << tile << std::endl;
+    std::cout << tile << std::endl;
 
     if(tile == endTile)
     {

@@ -5,8 +5,9 @@
 #include <QPushButton>
 #include "../optionsmanager/optionsman.h"
 
-class ControlBar : public QWidget
+class ControlBar : public QWidget 
 {
+  friend class GUI;
   Q_OBJECT
 public:
   ControlBar( QWidget *parent = 0 );

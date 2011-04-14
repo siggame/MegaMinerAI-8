@@ -148,12 +148,12 @@ public void moveCheck()
     const Int32 SIZEOFMAP = mapSize();
     bool[,] land = new bool[SIZEOFMAP, SIZEOFMAP];
     bool[,] tile = new bool[SIZEOFMAP, SIZEOFMAP];
-    //port = vector<vector<int> >(mapSize(),vector<int>(mapSize(),-1));
-    //for(Int32 i=0;i<tiles.size();i++)
-    //{
-    //  land[tiles[i].x()][tiles[i].y()]= tiles[i].type()==0;
-    //  tile[tiles[i].x()][tiles[i].y()]= true;
-    //}
+    bool[,] port = new bool[SIZEOFMAP, SIZEOFMAP];
+    for (Int32 i = 0; i < tiles.size(); i++)
+    {
+        land[tiles[i].x()][tiles[i].y()] = tiles[i].type() == 0;
+        tile[tiles[i].x()][tiles[i].y()] = true;
+    }
     //for(size_t i=0;i<ports.size();i++)
     //{
     //  if(!land[ports[i].x()][ports[i].y()])

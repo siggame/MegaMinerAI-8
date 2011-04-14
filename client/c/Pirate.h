@@ -23,14 +23,16 @@ class Pirate : public Unit {
   int y();
   ///The owner of the unit
   int owner();
-  ///health of the unit
+  ///Health of the unit
   int health();
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   int strength();
-  ///checks if the unit has moved this turn
-  int hasMoved();
-  ///checks if the unit has moved this turn
-  int hasAttacked();
+  ///Displays the remaining moves for this unit this turn
+  int movesLeft();
+  ///Displays the remaining attacks for this unit this turn
+  int attacksLeft();
+  ///Amount of gold carried by the unit.
+  int gold();
 
   // Actions
   ///Move the unit to the designated X and Y coordinates

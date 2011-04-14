@@ -70,29 +70,35 @@ class Ship extends Unit
     validify();
     return Client.INSTANCE.shipGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.shipGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public int getStrength()
   {
     validify();
     return Client.INSTANCE.shipGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public int getMovesLeft()
   {
     validify();
-    return Client.INSTANCE.shipGetHasMoved(ptr);
+    return Client.INSTANCE.shipGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public int getAttacksLeft()
   {
     validify();
-    return Client.INSTANCE.shipGetHasAttacked(ptr);
+    return Client.INSTANCE.shipGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.shipGetGold(ptr);
   }
 
 }

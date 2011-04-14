@@ -36,13 +36,17 @@ DLLEXPORT int unitGetStrength(_Unit* ptr)
 {
   return ptr->strength;
 }
-DLLEXPORT int unitGetHasMoved(_Unit* ptr)
+DLLEXPORT int unitGetMovesLeft(_Unit* ptr)
 {
-  return ptr->hasMoved;
+  return ptr->movesLeft;
 }
-DLLEXPORT int unitGetHasAttacked(_Unit* ptr)
+DLLEXPORT int unitGetAttacksLeft(_Unit* ptr)
 {
-  return ptr->hasAttacked;
+  return ptr->attacksLeft;
+}
+DLLEXPORT int unitGetGold(_Unit* ptr)
+{
+  return ptr->gold;
 }
 DLLEXPORT int pirateGetId(_Pirate* ptr)
 {
@@ -68,13 +72,17 @@ DLLEXPORT int pirateGetStrength(_Pirate* ptr)
 {
   return ptr->strength;
 }
-DLLEXPORT int pirateGetHasMoved(_Pirate* ptr)
+DLLEXPORT int pirateGetMovesLeft(_Pirate* ptr)
 {
-  return ptr->hasMoved;
+  return ptr->movesLeft;
 }
-DLLEXPORT int pirateGetHasAttacked(_Pirate* ptr)
+DLLEXPORT int pirateGetAttacksLeft(_Pirate* ptr)
 {
-  return ptr->hasAttacked;
+  return ptr->attacksLeft;
+}
+DLLEXPORT int pirateGetGold(_Pirate* ptr)
+{
+  return ptr->gold;
 }
 DLLEXPORT int playerGetId(_Player* ptr)
 {
@@ -132,13 +140,17 @@ DLLEXPORT int shipGetStrength(_Ship* ptr)
 {
   return ptr->strength;
 }
-DLLEXPORT int shipGetHasMoved(_Ship* ptr)
+DLLEXPORT int shipGetMovesLeft(_Ship* ptr)
 {
-  return ptr->hasMoved;
+  return ptr->movesLeft;
 }
-DLLEXPORT int shipGetHasAttacked(_Ship* ptr)
+DLLEXPORT int shipGetAttacksLeft(_Ship* ptr)
 {
-  return ptr->hasAttacked;
+  return ptr->attacksLeft;
+}
+DLLEXPORT int shipGetGold(_Ship* ptr)
+{
+  return ptr->gold;
 }
 DLLEXPORT int tileGetId(_Tile* ptr)
 {
@@ -168,12 +180,8 @@ DLLEXPORT int treasureGetY(_Treasure* ptr)
 {
   return ptr->y;
 }
-DLLEXPORT int treasureGetPirateID(_Treasure* ptr)
+DLLEXPORT int treasureGetGold(_Treasure* ptr)
 {
-  return ptr->pirateID;
-}
-DLLEXPORT int treasureGetAmount(_Treasure* ptr)
-{
-  return ptr->amount;
+  return ptr->gold;
 }
 

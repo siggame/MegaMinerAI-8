@@ -139,3 +139,5 @@ void ControlBar::fastForward()
     fastForwardButton->setText(symbol + ">");
   }
 }
+
+

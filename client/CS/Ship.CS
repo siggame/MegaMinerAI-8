@@ -80,29 +80,35 @@ public class Ship: Unit
     validify();
     return Client.shipGetOwner(ptr);
   }
-  ///health of the unit
+  ///Health of the unit
   public new int getHealth()
   {
     validify();
     return Client.shipGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit
   public new int getStrength()
   {
     validify();
     return Client.shipGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public new int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public new int getMovesLeft()
   {
     validify();
-    return Client.shipGetHasMoved(ptr);
+    return Client.shipGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public new int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public new int getAttacksLeft()
   {
     validify();
-    return Client.shipGetHasAttacked(ptr);
+    return Client.shipGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public new int getGold()
+  {
+    validify();
+    return Client.shipGetGold(ptr);
   }
 
 }

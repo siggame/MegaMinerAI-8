@@ -30,8 +30,7 @@ void TreasureData::parseTreasure( const Game& game, int treasureId )
       TreasureDataInfo t;
       t.x = j->second.x;
       t.y = j->second.y;
-      t.pirateID = j->second.pirateID;
-      t.amount = j->second.amount;
+      t.gold = j->second.gold;
       //cout << "Turn: " << i << ", X: " << t.x << ", Y: " << t.y << endl;
       m_timeline.add( i, 0, t );
     }

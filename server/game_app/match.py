@@ -1,4 +1,4 @@
-exit# -*- coding: iso-8859-1 -*-
+# -*- coding: iso-8859-1 -*-
 from base import *
 from matchUtils import *
 from objects import *
@@ -40,12 +40,16 @@ class Match(DefaultGameWorld):
     self.pirateStrength = 1
     self.pirateSteps = 1
     self.pirateCost = 1
+    self.pirateMoves = 1
+    self.pirateAttacks = 1
     
     self.shipHealth = 1
     self.shipStrength = 1
     self.shipSteps = 1
     self.shipCost = 1
     self.shipRange = 1
+    self.shipMoves = 1
+    self.shipAttacks = 1
     
     self.portCost = 1
     
@@ -77,12 +81,16 @@ class Match(DefaultGameWorld):
         self.pirateStrength = cfgUnits[i]["strength"]
         self.pirateSteps = cfgUnits[i]["steps"]
         self.pirateCost = cfgUnits[i]["cost"]
+        self.pirateMoves = cfgUnits[i]["totalMoves"]
+        self.pirateAttacks = cfgUnits[i]["totalAttacks"]
       elif "ship" in i.lower():
         self.shipHealth = cfgUnits[i]["health"]
         self.shipStrength = cfgUnits[i]["strength"]
         self.shipSteps = cfgUnits[i]["steps"]
         self.shipCost = cfgUnits[i]["cost"]
         self.shipRange = cfgUnits[i]["range"]
+        self.shipMoves = cfgUnits[i]["totalMoves"]
+        self.shipAttacks = cfgUnits[i]["totalAttacks"]
       elif "port" in i.lower():
         self.portCost = cfgUnits[i]["cost"]
     
@@ -130,7 +138,7 @@ class Match(DefaultGameWorld):
           if mapThing in encountered:
             self.addObject(Port.make(self, x, y, 3))
             
-            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 3, self.pirateHealth, self.pirateStrength))
               
@@ -141,7 +149,7 @@ class Match(DefaultGameWorld):
             encountered.add(mapThing)
             self.addObject(Port.make(self, x, y, 2))
             
-            self.addObject(Treasure.make(self, x, y, -1, self.npcStartingGold))  
+            self.addObject(Treasure.make(self, x, y, self.npcStartingGold))  
             #for i in range(0,self.npcStartingPirates):
             #  self.addObject(Pirate.make(self, x, y, 2, self.pirateHealth, self.pirateStrength))
               
@@ -244,11 +252,15 @@ class Match(DefaultGameWorld):
     if self.turn == self.players[0]:
       self.turn = self.players[1]
       self.playerID = 2
+      for obj in self.objects.values():
+        obj.nextTurn()
       self.Merchant2.play()
       self.playerID = 1
     elif self.turn == self.players[1]:
       self.turn = self.players[0]
       self.playerID = 3
+      for obj in self.objects.values():
+        obj.nextTurn()
       self.Merchant3.play()
       self.playerID = 0
 
@@ -286,11 +298,9 @@ class Match(DefaultGameWorld):
     if self.turnNumber >= 500:
       #Check for victory through wealth
       if player2.gold > player1.gold:
-        self.declareWinner(self.players[0], 'Victory Through Wealth!')
-        print "1 Wins!"
-      elif player1.gold > player2.gold:
         self.declareWinner(self.players[1], 'Victory Through Wealth!')
-        print "2 Wins!"
+      elif player1.gold > player2.gold:
+        self.declareWinner(self.players[0], 'Victory Through Wealth!')
       elif player1.gold == player2.gold:
       #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
       #Victory through strength
@@ -345,8 +355,12 @@ class Match(DefaultGameWorld):
     #Victory through annihilation
     #Checks to see if opponent has less gold than that required to buy a pirate first    
     elif player1.gold < self.pirateCost or player2.gold < self.pirateCost:
-      player1Loss = True
-      player2Loss = True
+      player1Loss = False
+      player2Loss = False
+      if player1.gold < self.pirateCost:
+        player1Loss = True
+      if player2.gold < self.pirateCost:
+        player2Loss = True
       #This checks to see if they have any pirates
       for i in self.objects.values():
         if isinstance(i,Pirate):

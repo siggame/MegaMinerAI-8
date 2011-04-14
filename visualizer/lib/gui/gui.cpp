@@ -2,6 +2,7 @@
 #include "../renderer/renderer.h"
 #include "../parser/parser.h"
 #include <QDesktopServices>
+#include <Qt>
 #include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
 #include "../../piracy/piratedata.h"
@@ -146,6 +147,8 @@ void GUI::loadGamelog( std::string gamelog )
   TimeManager::setTurn(0);
   TimeManager::setNumTurns(g.states.size() );
 
+  return;
+
 
   //cout << "Number of Turns: " << g.states.size() << endl;
 
@@ -231,13 +234,13 @@ void GUI::loadGamelog( std::string gamelog )
         pdi.totalHealth += p->second.health;
         pdi.numPirates++;
         pdi.totalStrength += p->second.strength;
-        pdi.hasMoved = p->second.hasMoved;
-        pdi.hasAttacked = p->second.hasAttacked;
+        pdi.movesLeft = p->second.movesLeft;
+        pdi.attacksLeft = p->second.attacksLeft;
         pdi.piratesInStack.push_front(p->second.id); 
         
         int frame = (direction == STOP) ? 0 : 50;
         
-        piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
+        //piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
         
        }
 
@@ -422,13 +425,18 @@ void GUI::createActions()
 	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
 	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
 
-  m_fileExit = new QAction( tr( "E&xit" ), this );
-  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
+  m_fileExit = new QAction( tr( "&Quit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
   m_fileExit->setStatusTip(
       tr( "Close the Visualizer" )
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
+ 	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+ 	(void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+ 	(void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+	(void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
+	(void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
 }
 
 void GUI::createMenus()
@@ -470,14 +478,19 @@ void GUI::buildToolSet()
     m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
+    m_consoleArea -> setReadOnly(1);
+  
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
 
-    // Add Buffer so we don't feel clausterphobic
+    // Add Buffer so we don't feel claustrophobic
     m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
 
     // Add the console to the layout
     m_dockLayout->addWidget( m_consoleArea );
+    
+    //Add Unit Stats to the layout
+    initUnitStats();
 
     // If we have our tools for this game, add those bitches
     if( m_toolSetWidget )
@@ -491,4 +504,207 @@ void GUI::buildToolSet()
     addDockWidget( Qt::BottomDockWidgetArea, m_dockWidget );
 
   }
+}
+
+void GUI::closeGUI()
+{
+  GUI::get() -> close();
+}
+
+void GUI::toggleFullScreen()
+{
+	if( !fullScreen )
+		showFullScreen();
+	else
+		showNormal();
+	fullScreen = !fullScreen;
+	show();
+}
+
+void GUI::togglePlayPause()
+{
+  m_controlBar -> play();
+}
+
+void GUI::fastForwardShortcut()
+{
+  m_controlBar -> fastForward();
+}
+
+void GUI::rewindShortcut()
+{
+  m_controlBar -> rewind();
+}
+
+void GUI::turnPercentageShortcut(int value)
+{
+  TimeManager::setTurn(value);
+}
+
+void GUI::stepTurnForwardShortcut()
+{
+  if(TimeManager::getTurn() < TimeManager::getNumTurns()-1)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() + 1);
+  }
+}
+
+void GUI::stepTurnBackShortcut()
+{
+  if(TimeManager::getTurn() > 0)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() - 1);
+  }
+}
+
+//Prepares the tabs and tables for the unit stats area
+void GUI::initUnitStats()
+{
+  //TODO: Move this game-specific code out of GUI
+
+  //Create unit Stats tab area
+  m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
+  
+  //Create tables to fill tabs
+  m_multipleStats = new QTableWidget(m_unitStatsArea);
+  m_individualStats = new QTableWidget(m_unitStatsArea);  
+  
+  //Create headers for tables
+  m_multipleStatsVerticalLabels<<"Total Units"<<"P0 Units"<<"P1 Units"
+    <<"Total Gold"<<"Avg. Pirate Health"<<"Avg. Ship Health"<<"Treasure Boxes";
+  m_multipleStatsHorizontalLabels<<"Global"<<"Selection";
+  
+  m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
+    <<"movesLeft"<<"attacksLeft";
+  m_individualStatsHorizontalLabels<<".";
+  
+  //Set table properties and headers
+  m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
+  m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
+  m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
+  m_multipleStats->setHorizontalHeaderLabels( m_multipleStatsHorizontalLabels );
+  
+  m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
+  m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
+  m_individualStats->setVerticalHeaderLabels ( m_individualStatsVerticalLabels );
+  m_individualStats->setHorizontalHeaderLabels( m_individualStatsHorizontalLabels );
+
+  //Add tabs of tables to tab area 
+  m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
+  m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
+  
+  //Add tab area to dockLayout
+  m_dockLayout->addWidget( m_unitStatsArea );
+}
+
+void GUI::mousePressEvent( QMouseEvent *e )
+{
+//  if( e->button() == Qt::LeftButton )
+//  {
+//    clickX = e->x();
+//    clickY = e->y()-getAttr(boardOffsetY);
+//    if( buttonTimes.elapsed() - leftButtonTime < getAttr( doubleClickTime ) )
+//    {
+//      // Do Double click event
+//      // or nothing....
+//    }
+//    else
+//    {
+//      leftButtonTime = buttonTimes.elapsed();
+//    }
+
+//    leftButtonDown = true;
+//    dragX = clickX;
+//    dragY = clickY;
+//  } 
+//  else if ( e->button() == Qt::RightButton )
+//  {
+//    rightButtonTime = buttonTimes.elapsed();
+//    rightButtonDown = true;
+//  } 
+//  else if( e->button() == Qt::MidButton )
+//  {
+//    midButtonTime = buttonTimes.elapsed();
+//    midButtonDown = true;
+//  }
+}
+
+void GUI::mouseReleaseEvent( QMouseEvent *e )
+{
+//  curX = e->x()+1;
+//  curY = e->y()+1-getAttr(boardOffsetY);
+//  int selectWidth, selectHeight;
+//  int selectX = selectWidth = curX/getAttr(unitSize);
+//  int selectY = selectHeight = curY/getAttr(unitSize);
+
+//   if( e->button() == Qt::LeftButton )
+//  {
+//    if( leftButtonDrag )
+//    {
+//      selectX = (curX<dragX ? curX : dragX)/getAttr(unitSize);
+//      selectWidth = (curX<dragX ? dragX : curX)/getAttr(unitSize);
+//      selectY = (curY<dragY ? curY : dragY)/getAttr(unitSize);
+//      selectHeight = (curY<dragY ? dragY : curY)/getAttr(unitSize);
+//    }
+
+//    if( leftDoubleClick )
+//    {
+//      leftDoubleClick = false;
+//      return;
+//    }
+
+//    Game *game = parent->gamelog;
+//    int frame = getAttr( frameNumber );
+//    if( game )
+//    {
+//      if( !(QApplication::keyboardModifiers() & Qt::ShiftModifier) )
+//        selectedIDs.clear();
+
+//      addSelection(game->states[frame].units, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+//      std::map<int,Unit> tBots;
+//      for( std::map<int,Bot>::iterator i = game->states[frame].bots.begin(); i != game->states[frame].bots.end(); i++ )
+//      {
+//        if( !i->second.partOf )
+//          tBots[i->second.id] = i->second;
+//      }
+
+//      addSelection(tBots, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+//      addSelection(game->states[frame].frames, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+//      addSelection(game->states[frame].walls, selectedIDs, selectX, selectY, selectWidth, selectHeight);
+
+//      stringstream ss;
+//      ss << "Selected Units: " << selectedIDs.size() << ", X: " << selectX << ", Y: " << selectY << '\n';
+
+//      for (map<int,string>::iterator it = selectedIDs.begin(); it != selectedIDs.end(); it++)
+//      {
+//        ss << it->second << '\n';
+//      }
+
+//      //parent->console->setText( ss.str().c_str() );
+//    }
+
+//    leftButtonDown = false;
+//    leftButtonDrag = false;
+//  } else if ( e->button() == Qt::RightButton )
+//  {
+//    rightButtonDown = false;
+//  } else if( e->button() == Qt::MidButton )
+//  {
+//    rightButtonDown = false;
+//  }
+
+//  // Invalidate last frame so we get the latest talkers.
+//  setAttr( lastFrame, -1 );
+}
+
+
+void GUI::mouseMoveEvent( QMouseEvent *e )
+{
+//  // If manhatten distance is 6 or greater, we're draggin
+//  if( e->buttons() & Qt::LeftButton && abs(curX-dragX)+abs(curY-dragY) > 6 )
+//    leftButtonDrag = true;
+
+//  curX = e->x();
+//  curY = e->y()-getAttr(boardOffsetY);
+
 }
