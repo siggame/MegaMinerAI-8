@@ -50,6 +50,7 @@ bool AI::run()
   {
     myPirate[pirates[i].id()]=pirates[i].owner()==playerID();
   }
+  // TODO changes because of treasure stuff
   int x, y;
   // Rate the treasures
   for(size_t i=0;i<treasures.size();i++)
@@ -57,18 +58,8 @@ bool AI::run()
     x= treasures[i].x();
     y= treasures[i].y();
     // No one holding it
-    if(treasures[i].pirateID() != 0)
-    {
-      grid[x][y].priority += treasures[i].amount();
-      grid[x][y].needs += 1;
-    }
-    // Not me has it
-    else if(!myPirate[treasures[i].pirateID()])
-    {
-      grid[x][y].priority += treasures[i].amount()*2;
-      grid[x][y].needs += 2;
-    }
-    // if I have it, no one cares
+    grid[x][y].priority += treasures[i].gold();
+    grid[x][y].needs += 1;
   }
   for(size_t i=0; i<pirates.size();i++)
   {
@@ -78,6 +69,7 @@ bool AI::run()
     if(pirates[i].owner() != playerID())
     {
       grid[x][y].priority++;
+      grid[x][y].priority+=pirates[i].gold();
       grid[x][y].needs++;
       grid[x][y].pToAttack = &pirates[i];
     }
