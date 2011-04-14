@@ -25,7 +25,7 @@ void AI::init()
 bool AI::run()
 {
   cout<<"Turn: "<<turnNumber()<<" My ID: "<<playerID()<<" My Gold: "<<players[playerID()].gold()<<endl;
-  
+
   // if you have enough gold to buy a pirate
   if(pirateCost() < players[playerID()].gold())
   {
@@ -52,7 +52,7 @@ bool AI::run()
       // Takes a start x, start y, end x, end y, and a tile type you wish to path on
       vector<Tile*> path = getPath(pirates[i].x(),pirates[i].y(),pirates[target].x(),pirates[target].y(),0);
       // for all but the last step of the path, while I have steps, move
-      for(size_t step=0;step<path.size()-1 && pirates[i].movesLeft()>0;step++)
+      for(size_t step=0;step+1<path.size() && pirates[i].movesLeft()>0;step++)
       {
         pirates[i].move(path[step]->x(),path[step]->y());
       }

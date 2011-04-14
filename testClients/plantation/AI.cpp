@@ -63,11 +63,11 @@ bool AI::run()
     {
       if(land[x][x])
       {
-        if(gold[x][y]>0)
+        if(gold[x][y]>1)
         {
           growing.push_back(target(x,y,gold[x][y]));  
         }
-        else
+        else if(gold[x][y]==0)
         {
           empty.push_back(target(x,y,0));
         }
@@ -80,7 +80,7 @@ bool AI::run()
     {
       // if he has treasure
       hasTreasure[pirates[i].id()] = pirates[i].gold();
-      if(hasTreasure.find(pirates[i].id())!= hasTreasure.end() && turnNumber()<400)
+      if(hasTreasure.find(pirates[i].id())!= hasTreasure.end() && turnNumber()<50)
       {
 //        cout<<"Spreading the seed"<<endl;
         sortNearest(pirates[i].x(), pirates[i].y(), empty, 0);
@@ -97,13 +97,23 @@ bool AI::run()
             gold[path[0]->x()][path[0]->y()]=1;
             empty.erase(empty.begin());  
           }
-          
         }
       }
       // needs treasure
       else
       {
-      
+        sortNearest(pirates[i].x(), pirates[i].y(), growing, 0);
+        if(growing.size()>0)
+        {
+          vector<Tile*> path = getPath(pirates[i].x(), pirates[i].y(), (*growing.begin()).x, (*growing.begin()).y,0);
+          pirates[i].move(path[0]->x(),path[0]->y());
+        }
+        if(gold[pirates[i].x()][pirates[i].y()]>0)
+        {
+          pirates[i].pickupTreasure(gold[pirates[i].x()][pirates[i].y()]);
+          gold[pirates[i].x()][pirates[i].y()]=0;
+          growing.erase(growing.begin());
+        }
       }
     }
   }
