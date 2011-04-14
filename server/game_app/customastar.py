@@ -172,14 +172,13 @@ def aStar(game, safeTile, startX, startY, endX, endY):
     if tile.type == safeTile:
       the_map[tile.y][tile.x] = 0
   
-  #mark all the ships as land tiles...
-  for ship in ships:
-    the_map[ship.y][ship.x] = 1
   
   #also set the starting and ending positions to valid tiles!
   the_map[startY][startX] = 0;
   the_map[endY][endX] = 0;
-  
+  #mark all the ships as land tiles...
+  for ship in ships:
+    the_map[ship.y][ship.x] = 1  
   # these are valid directions that the pathfinder can move
   dirs = 4  # 4 driections (N, E, S, W)
   dx = [1, 0, -1, 0]

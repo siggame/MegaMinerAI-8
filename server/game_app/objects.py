@@ -130,9 +130,9 @@ class Pirate(Unit):
         if self.gold > 0:
           self.reallyDropTreasure(self.gold)
       if self.owner == 2:
-        self.game.Merchant2.pirateDied(self.homeBase)
+        self.game.Merchant2.pirateDied(self)
       if self.owner == 3:
-        self.game.Merchant3.pirateDied(self.homeBase)
+        self.game.Merchant3.pirateDied(self)
     
         #Lose control of ship if this is your last pirate leaving
       for i in self.game.objects.values():
@@ -658,9 +658,9 @@ class Ship(Unit):
           if isinstance(i,Pirate):
             if i.x == self.x and i.y == self.y: 
               if i.owner == 2:
-                self.game.Merchant2.pirateDied(i.homeBase)
+                self.game.Merchant2.pirateDied(i)
               if i.owner == 3:
-                self.game.Merchant3.pirateDied(i.homeBase)
+                self.game.Merchant3.pirateDied(i)
               self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
