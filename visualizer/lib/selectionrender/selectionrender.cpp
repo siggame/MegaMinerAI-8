@@ -29,17 +29,20 @@ void SelectionRender::setDragging(bool dragging)
 {
 	m_dragging = dragging;
 }
+#include <iostream>
+using namespace std;
 
 void SelectionRender::renderAt(const unsigned int & turn, const unsigned int & frame)
 {
 	if(getDragging())
 	{
+    cout << "Draggin" << endl;
 		glColor4f(0.0f, 0.5f, 0.5f, 1.0f);
 		glBegin(GL_QUADS);
-			glVertex3f(m_X1, m_Y1, 10);
-			glVertex3f(m_X2, m_Y1, 10);
-			glVertex3f(m_X2, m_Y2, 10);
-			glVertex3f(m_X1, m_Y2, 10);
+			glVertex3f(m_X1, m_Y1, 0);
+			glVertex3f(m_X2, m_Y1, 0);
+			glVertex3f(m_X2, m_Y2, 0);
+			glVertex3f(m_X1, m_Y2, 0);
 		glEnd();
 	}
 }
