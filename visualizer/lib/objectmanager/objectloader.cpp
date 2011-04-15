@@ -9,6 +9,7 @@
 #include "../../piracy/treasurerender.h"
 #include "../../piracy/shipdata.h"
 #include "../../piracy/portdata.h"
+#include "../selectionrender/selectionrender.h"
 
 typedef int idtype;
 
@@ -24,12 +25,18 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
 
   //! @todo THIS IS BROKEN!!!!
-    GameObject *go = new GameObject( -999 );
+    GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     PirateData * data2 = new PirateData();
     pm->generateMap( game );
     pm->setOwner( go );
     go->setGOC( pm );
+    Renderer<DupObj>::registerConstantObj( 1, go );
+
+    go = new GameObject( 2 );
+    go->setGOC( SelectionRender::get() );
+    SelectionRender::get()->setOwner( go );
+    Renderer<DupObj>::registerConstantObj( 2, go );
 
     //Renderer<DupObj>::reg( -1, go );
 
