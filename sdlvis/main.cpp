@@ -16,9 +16,7 @@ int main(int argc, char** argv)
     parseFile(g, argv[1]);
   else
     parseFile(g, "test.gamelog");
-    
-  cout << g.states.size() << endl;
-  
+      
   initGUI();
   
   mainLoop(g);
