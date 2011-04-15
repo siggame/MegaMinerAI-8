@@ -370,7 +370,8 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  mapTexture.load( "./piracy/textures/midWater.png" );
+  mapTexture.load( result );
+  cout << "TEXTURE: " << mapTexture.getTexture() << endl;
 
   GLenum errCode;
   const GLubyte *errString;
@@ -446,8 +447,10 @@ void PirateMap::renderAt(
   glPushMatrix();
 
   glEnable( GL_TEXTURE );
+  glEnable( GL_TEXTURE_2D );
 
   glColor4f( 1, 1, 1, 1 );
+  cout << mapTexture.getTexture() << endl;
   glBindTexture( GL_TEXTURE_2D, mapTexture.getTexture() );
 
   glBegin( GL_QUADS );

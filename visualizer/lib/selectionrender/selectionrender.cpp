@@ -35,6 +35,7 @@ void SelectionRender::renderAt(const unsigned int & turn, const unsigned int & f
 	if(getDragging())
 	{
 		glDisable(GL_TEXTURE);
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 		glEnable(GL_BLEND);
 		
 		//Box shading
