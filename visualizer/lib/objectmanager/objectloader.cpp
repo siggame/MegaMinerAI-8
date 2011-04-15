@@ -23,12 +23,12 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     }
 
 
-
-    GameObject *go = new GameObject( -1 );
-    PirateMap *pm = new PirateMap();
-    pm->generateMap( game );
-    pm->setOwner( go );
-    go->setGOC( pm );
+  //! @todo THIS IS BROKEN!!!!
+   // GameObject *go = new GameObject( -1 );
+   // PirateMap *pm = new PirateMap();
+    //pm->generateMap( game );
+    //pm->setOwner( go );
+   // go->setGOC( pm );
 
     //Renderer<DupObj>::reg( -1, go );
 
