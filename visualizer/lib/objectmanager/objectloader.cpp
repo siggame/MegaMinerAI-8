@@ -45,6 +45,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     SelectionRender::get()->setOwner( go );
     Renderer<DupObj>::registerConstantObj( 2, go );
 
+    return true;
     //Renderer<DupObj>::reg( -1, go );
 
     unsigned int numTurns = game.states.size();

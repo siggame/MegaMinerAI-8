@@ -5,6 +5,7 @@
 
 #include "texture.h"
 #include <qgl.h>
+#include <GL/glu.h>
 #include <iostream>
 
 enum IMAGE_TYPE
@@ -73,16 +74,22 @@ bool ResTexture::load( const std::string & path )
 	switch (getImageType(path.c_str()))
 	{
 		case IMG_TIFF:
-      return loadTIFF(path.c_str(),texId,texture);
+      loadTIFF(path.c_str(),texId,texture);
+      break;
 		case IMG_PNG:
-      return loadPNG(path.c_str(),texId,texture);
+      loadPNG(path.c_str(),texId,texture);
+      break;
 		case IMG_TGA:
-      return loadTGA(path.c_str(),texId,texture);
+      loadTGA(path.c_str(),texId,texture);
+      break;
 		case IMG_BMP:
-      return loadBMP(path.c_str(),texId,texture);
+      loadBMP(path.c_str(),texId,texture);
 		default:
       return false;
 	}
+
+
+  return true;
 }
 
 bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture)
@@ -131,15 +138,6 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 		return false;
 	}
 
-  texture = QGLWidget::convertToGLFormat( buffer );
-  glGenTextures( 1, &texId );
-    glBindTexture( GL_TEXTURE_2D, texId );
-      glTexImage2D( GL_TEXTURE_2D, 0, 3, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-          glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-          
-
-#if 0
 	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
 	QPainter painter(&fixed);
 
@@ -149,9 +147,16 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 	painter.drawImage( 0, 0, buffer );
 	painter.end();
 
+  
+
 	texture = QGLWidget::convertToGLFormat( fixed );
+
 	glGenTextures( 1, &texId );
 
+  GLenum errCode;
+  const GLubyte *errString = gluErrorString ( glGetError() );
+  fprintf (stderr, "OpenGL Error: %s\n", errString);
+   
 	glBindTexture( GL_TEXTURE_2D, texId );
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
@@ -160,7 +165,6 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-#endif
 
 	return true;
 }

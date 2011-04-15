@@ -43,22 +43,22 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 template <typename DupObject>
 bool Renderer<DupObject>::refresh()
 {
-    if (!Single::isInit())
-	    return false;
+  if (!Single::isInit())
+    return false;
 
-    if (!isSetup())
-	    return false;
+  if (!isSetup())
+    return false;
 
-		if(SelectionRender::get()->getUpdated())
-		{
-      Single::get()->selectedUnitIds.clear();
-		}
+  if(SelectionRender::get()->getUpdated())
+  {
+    Single::get()->selectedUnitIds.clear();
+  }
 
 
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    unsigned int turn = TimeManager::getTurn();
-    unsigned int frame = TimeManager::getFrame();
+  unsigned int turn = TimeManager::getTurn();
+  unsigned int frame = TimeManager::getFrame();
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
@@ -71,24 +71,24 @@ bool Renderer<DupObject>::refresh()
     }
   }
 
-    //update what gets rendered this turn
-    update(turn,frame);
+  //update what gets rendered this turn
+  update(turn,frame);
 
-    glPushMatrix();
-    glScalef( 20, 20, 1 );
-
-
-    glPopMatrix();
+  glPushMatrix();
+  glScalef( 20, 20, 1 );
 
 
-    if( Single::get()->m_parent )
-    {
-      Single::get()->m_parent->swapBuffers();
-    }
+  glPopMatrix();
 
-		SelectionRender::get()->setUpdated(false);
 
-    return true;
+  if( Single::get()->m_parent )
+  {
+    Single::get()->m_parent->swapBuffers();
+  }
+
+  SelectionRender::get()->setUpdated(false);
+
+  return true;
 }
 
 template <typename DupObject>
@@ -254,12 +254,15 @@ bool Renderer<DupObject>::setup()
   Single::get()->m_isSetup = true;
 
 
-  refresh();
-
   glDisable( GL_TEXTURE_2D );
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+  if( !refresh() )
+  {
+    cout << "WHATHATL" << endl;
+  }
+  cout << "OPENGL INITIALIZED" << endl;
 
 	return Single::get()->m_isSetup;
 }

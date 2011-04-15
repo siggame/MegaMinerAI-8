@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 	ResourceMan::create();
 	Mutex::create();
 	Threadler::create();
-	Render::create();
 	ObjectManager::create();
 	ObjectLoader::create();
 
@@ -50,8 +49,6 @@ int main(int argc, char *argv[])
 	// done initializing
 
 	GUI::setup();
-
-
 	Render::setup();
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )

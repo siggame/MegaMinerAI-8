@@ -13,12 +13,11 @@ class ResTexture : public Resource
 		QImage texture;
 		unsigned int texId;
 	public:
-
     const QImage& getQImage() const { return texture; }
 
 		bool load( const std::string & path );
     bool load( const QImage& img );
-		ResTexture():Resource(RT_TEXTURE){}
+		ResTexture():Resource(RT_TEXTURE), texId(0){}
 		ResTexture(const std::string & path):Resource(RT_TEXTURE){load(path);}
 
 		int getWidth()
