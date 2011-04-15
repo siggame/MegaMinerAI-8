@@ -50,6 +50,7 @@ bool ResTexture::load( const QImage& img )
 	QImage texture = QGLWidget::convertToGLFormat( fixed );
 
   glEnable( GL_TEXTURE );
+  glEnable( GL_TEXTURE_2D );
 	glGenTextures( 1, &texId );
 
 	glBindTexture( GL_TEXTURE_2D, texId );
@@ -67,7 +68,8 @@ using namespace std;
 
 bool ResTexture::load( const std::string & path )
 {
-  cout <<getImageType(path.c_str()) << endl;
+  glEnable( GL_TEXTURE );
+  glEnable( GL_TEXTURE_2D );
 	switch (getImageType(path.c_str()))
 	{
 		case IMG_TIFF:
@@ -90,6 +92,7 @@ bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: TIFF File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
@@ -124,9 +127,19 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: PNG File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
+  texture = QGLWidget::convertToGLFormat( buffer );
+  glGenTextures( 1, &texId );
+    glBindTexture( GL_TEXTURE_2D, texId );
+      glTexImage2D( GL_TEXTURE_2D, 0, 3, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+          glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+          
+
+#if 0
 	QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
 	QPainter painter(&fixed);
 
@@ -140,13 +153,14 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 	glGenTextures( 1, &texId );
 
 	glBindTexture( GL_TEXTURE_2D, texId );
-	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 	//gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
+#endif
 
 	return true;
 }
@@ -159,6 +173,7 @@ bool loadTGA(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: TGA File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
@@ -194,6 +209,7 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: BMP File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 

@@ -2,6 +2,7 @@
 #define RENDERER_HPP
 
 #include "renderer.h"
+#include "../selectionrender/selectionrender.h"
 
 
 /** @brief resize
@@ -50,7 +51,7 @@ bool Renderer<DupObject>::refresh()
 
 		if(SelectionRender::get()->getUpdated())
 		{
-			unitID.clear();
+      Single::get()->selectedUnitIds.clear();
 		}
 
 

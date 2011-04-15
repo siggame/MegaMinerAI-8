@@ -370,7 +370,7 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
-  mapTexture.load( "./piracy/textures/Forest.png" );
+  mapTexture.load( "./piracy/textures/midWater.png" );
 
   GLenum errCode;
   const GLubyte *errString;
