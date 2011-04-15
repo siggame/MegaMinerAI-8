@@ -120,6 +120,9 @@ using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
     if (!ObjectLoader::loadGamelog(gamelog))
+    {
+	std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
+    }
   return; //! @todo throw shitfit
 }
 
