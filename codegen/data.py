@@ -15,9 +15,9 @@ Mappable = Model('Mappable',
 
 Unit = Model('Unit',
   parent = Mappable,
-    data = [Variable('owner', int, 'The owner of the unit'),
-    Variable('health', int, 'Health of the unit'),
-    Variable('strength', int, 'Attacking strength of the unit'),
+    data = [Variable('owner', int, 'Represents the owner of the unit.'),
+    Variable('health', int, 'Current ealth of the unit'),
+    Variable('strength', int, 'Attacking strength of the unit (Each point of strength deals 1 health of damage)'),
     Variable('movesLeft', int, 'Displays the remaining moves for this unit this turn'),
     Variable('attacksLeft', int, 'Displays the remaining attacks for this unit this turn'),
     Variable('gold', int, 'Amount of gold carried by the unit.'),
@@ -25,10 +25,10 @@ Unit = Model('Unit',
   doc = 'Generic Unit',
   functions = [
     Function('move',
-      arguments = [Variable('x', int, 'The x coordinate of where to move the unit'), 
-	    Variable('y', int, 'The Y coordinate of where to move the unit')],
+      arguments = [Variable('x', int, 'The x coordinate of where the unit wishes to move'), 
+	    Variable('y', int, 'The Y coordinate of where the unit wishes to move')],
       result = bool,
-      doc = 'Move the unit to the designated X and Y coordinates'
+      doc = 'Move the unit to the designated X and Y coordinates if possible'
     ),
     Function('talk',
       arguments = [Variable('message', str, 'The message that the unit should say')],
@@ -39,28 +39,28 @@ Unit = Model('Unit',
 )
 
 Unit.functions.append(Function('attack',
-      arguments = [Variable('Target', Unit, 'The unit to attack')],
+      arguments = [Variable('Target', Unit, 'The unit you wish to attack')],
       result = bool,
-      doc = 'Attempt to attack the given unit'
+      doc = 'Attempt to attack the input target if possible'
       ))
 
 
 Pirate = Model('Pirate',
   parent = Unit,
-  doc = 'A generic pirate',
+  doc = 'A basic pirate. These units are bound to land unless aboard a ship. they can pickup and drop treasure as well as build ports and fight other pirates.',
   functions = [
     Function('pickupTreasure',
-      arguments = [Variable('amount', int, 'The amount of gold you wish to pickup')],
+      arguments = [Variable('amount', int, 'The amount of gold you wish the pirate to pick up')],
       doc = 'Allows the pirate to pickup treasure on the ground.'
     ),
     Function('dropTreasure',
-      arguments = [Variable('amount', int, 'The amount of gold you wish to drop')],
-      doc = 'Allows the pirate to drop treasure on the groud.'
+      arguments = [Variable('amount', int, 'The amount of gold you wish this pirate to drop')],
+      doc = 'Allows the pirate to drop treasure they are carrying.'
     ),
     Function('buildPort',
       arguments = [],
       result = bool,
-      doc = 'Pirate builds a port on a land tile with water tile adjacent'
+      doc = 'Pirate builds a port on a land tile with water tile adjacent. Cannot be within three spaces of another port!'
     )
   ]
 )
@@ -68,14 +68,14 @@ Pirate = Model('Pirate',
 
 Ship = Model('Ship',
   parent = Unit,
-  doc = 'A generic ship',
+  doc = 'A basic ship. They can only travel by sea and attack other ships. Whenever the ship moves, any pirates on his tile go with it',
 )
 
 Port = Model('Port',
   parent = Mappable,
   data = [ Variable('owner', int, 'The ownder of the port'),
     ],
-  doc = 'A generic port',
+  doc = 'A basic port. The port can create new pirates and ships and is used when pirates need to deposit money.',
   functions = [ 
     Function('createPirate',
 	  arguments = [],
@@ -99,14 +99,14 @@ Tile = Model('Tile',
 
 Treasure = Model('Treasure',
   parent = Mappable,
-  data = [ Variable('gold', int, 'The amount of gold in this treaure'),
+  data = [ Variable('gold', int, 'The amount of gold currently with this treasure'),
     ],
-  doc = 'A treasure',
+  doc = 'This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth',
 )
 
 globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
-  Variable('playerID', int, 'Player Number; either 0 or 1'),
+  Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2'),
   Variable('gameNumber', int, 'What number game this is for the server'),
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),
