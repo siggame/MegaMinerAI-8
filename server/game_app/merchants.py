@@ -4,10 +4,10 @@ import customastar
 import random
 class ShipAndDestination:
   def __init__(self,ship,port):
-    self.foughtLastTurn = False
     self.ship = ship
     self.port = port
     self.pirates = []
+    self.shitlist = []
 
 class PortAndPirateNumber:
   def __init__(self,port,number):
@@ -60,6 +60,8 @@ class MerchantAI:
     newShip = Ship.make(self.game,port.x,port.y,port.owner,self.game.shipHealth,self.game.shipStrength)
     self.game.addObject(newShip)
     newInTransit = ShipAndDestination(newShip,destination)
+    newShip.traderGroup = newInTransit
+    treasureValue = 0
     for i in self.game.objects.values(): 
       if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
         treasureValue =  i.gold
@@ -71,8 +73,8 @@ class MerchantAI:
       pirateDude.pickupTreasure(treasureValue/(2*self.thePorts[portNum].number))
       self.game.addObject(pirateDude)
       newInTransit.pirates += [pirateDude]
-    treasureValue = 0
     
+    newShip.gold = treasureValue*(newShip._distance(destination.x,destination.y)/(self.game.mapSize*2))
     self.inTransit += [newInTransit]
         
   
@@ -103,32 +105,43 @@ class MerchantAI:
 
   def play(self):    
     for i in self.inTransit:
+      deadEnemies = []
+      for enemy in i.shitlist:
+        if self.game.objects.values().count(enemy) == 0:
+          deadEnemies += [enemy]
+      for enemy in deadEnemies:
+        i.shitlist.remove(enemy)
+          
       #if they didn't fight last turn, they can fight this turn
-      if not i.foughtLastTurn:
-        enemyInRange = False
-        for p in i.pirates:
-          for j in self.game.objects.values():
-            if isinstance(j,Pirate) and j.owner != 2 and j.owner != 3 and j._distance(p.x,p.y) == 1:
-              enemyInRange = True
-              if p.attacksLeft > 0:
-                p.attack(j)
-              else:
-                break
-          if not enemyInRange:
-            break
-        if enemyInRange:
-          for j in self.game.objects.values():
-            if isinstance(j,Ship) and j.owner != 2 and j.owner != 3 and j._distance(i.ship.x,i.ship.y) == 1:
-              if i.ship.attacksLeft > 0:
-                i.ship.attack(j)
-                #print "Attacking!"
-              else:
-                break
-        if i.ship.attacksLeft <= 0:
-          i.foughtLastTurn = True
-          continue
-        else:
-          i.foughtLastTurn = False
+      enemyInRange = False
+      for p in i.pirates:
+        for j in i.shitlist:
+          if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1:
+            enemyInRange = True
+            if p.attacksLeft > 0:
+              p.attack(j)
+              if self.game.objects.values().count(j) == 0:
+                i.shitlist.remove(j)
+                continue
+            else:
+              break
+        if not enemyInRange:
+          break
+      if enemyInRange:
+        for j in self.game.objects.values():
+          if isinstance(j,Ship) and (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
+            if i.ship.attacksLeft > 0:
+              i.ship.attack(j)
+              if self.game.objects.values().count(j) == 0:
+                i.shitlist.remove(j)
+                continue
+            else:
+              break
+      if i.ship.attacksLeft <= 0:
+        i.foughtLastTurn = True
+        continue
+      else:
+        i.foughtLastTurn = False
       if abs(i.ship.x - i.port.x) + abs(i.ship.y -   i.port.y) == 0:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
