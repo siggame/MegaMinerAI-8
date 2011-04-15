@@ -201,14 +201,14 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
   int i;
   for( i = 0; i < size; i++ )
   {
-    if( depth <= depths[i] )
+    if( depth <  depths[i] )
     {
       break;
     }
   }
 
   --i;
-  //std::cout << "i " << i << '\n';
+  std::cout << "i " << i << '\n';
 
   float r0, g0, b0;
   r0 = qRed( images[i].pixel( x, y ) );
@@ -364,7 +364,7 @@ void PirateMap::generateMap( Game& g )
       //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
       
       //result.setPixel( x, y, textures[0].pixel( x, y ) );
-	//std::cout << "textures: " << textures << " depths: " << depths << " done\n";
+	std::cout << "textures: " << textures << " depths: " << depths << " done\n";
       result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
     }
   }

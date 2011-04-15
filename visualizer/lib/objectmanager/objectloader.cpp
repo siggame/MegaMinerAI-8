@@ -30,18 +30,11 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
 
   //! @todo THIS IS BROKEN!!!!
-    GameObject *go = new GameObject( 1 );
-    PirateMap *pm = new PirateMap();
-    PirateData * data2 = new PirateData();
-    pm->generateMap( game );
-    pm->setOwner( go );
-    go->setGOC( pm );
-    Renderer<DupObj>::registerConstantObj( 1, go );
-
-    go = new GameObject( 2 );
-    go->setGOC( SelectionRender::get() );
-    SelectionRender::get()->setOwner( go );
-    Renderer<DupObj>::registerConstantObj( 2, go );
+   // GameObject *go = new GameObject( -1 );
+   // PirateMap *pm = new PirateMap();
+    //pm->generateMap( game );
+    //pm->setOwner( go );
+   // go->setGOC( pm );
 
     //Renderer<DupObj>::reg( -1, go );
 
@@ -55,7 +48,6 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
     for (unsigned int turn = 0; turn < game.states.size(); turn++)
     {
-    //  looksets[-999].addNode( go, turn, 0 );
 
 	// pirates
 	for (unsigned int unit = 0; unit < game.states[turn].pirates.size();unit++)

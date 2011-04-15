@@ -473,6 +473,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
 	}
+
     }
 
 }
