@@ -26,9 +26,9 @@ public:
 
     static unsigned int turns()
     {
-	if (!Singleton<ObjectManager>::isInit())
-	    return 0;
-	return Singleton<ObjectManager>::get()->m_objects.getTurns();
+      if (!Singleton<ObjectManager>::isInit())
+          return 0;
+      return Singleton<ObjectManager>::get()->m_objects.getTurns();
     }
 
 
@@ -45,7 +45,7 @@ public:
 	return NULL;
     }
 
-    static bool exists(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame){return true;} //! @todo FIX THIS
+    static bool exists(const ObjIdType &, const unsigned int &, const unsigned int &);
     static bool destroy();
 
 private:
