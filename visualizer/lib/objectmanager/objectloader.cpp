@@ -9,6 +9,8 @@
 #include "../../piracy/treasurerender.h"
 #include "../../piracy/shipdata.h"
 #include "../../piracy/portdata.h"
+#include "../../piracy/piracylocations.h"
+#include "../goc_owner.h"
 
 typedef int idtype;
 
@@ -56,13 +58,21 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
 	    //setup stuff
 	    PirateData * data = new PirateData();
+	    PiracyLocation * loc = new PiracyLocation();
+	    GOC_Owner * owner = new GOC_Owner(pirate, game.states[turn].pirates[unit].owner);
 	    //PirateRender * render = new PirateRender();
 
+	    data->parsePirate(game,id,turn);
+	    loc->parseLocation(&(game.states[turn].pirates[unit]));
+
 	    data->setOwner(pirate);
-	    //render->setOwner(pirate);
+	    loc->setOwner(pirate);
+
 
 	    pirate->setGOC(data);
-	    //pirate->setGOC(render);
+	    pirate->setGOC(loc);
+	    pirate->setGOC(owner);
+
 
 	    //end setup
 
@@ -82,13 +92,21 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    //setup stuff
 
 	    ShipData * data = new ShipData();
+	    PiracyLocation * loc = new PiracyLocation();
+	    GOC_Owner * owner = new GOC_Owner(ship, game.states[turn].ships[unit].owner);
 	    //ShipRender * render = new ShipRender();
 
 	    //render->setOwner(ship);
+	    data->parseShip(game,id,turn);
+	    loc->parseLocation(&(game.states[turn].ships[unit]));
+
+
+	    loc->setOwner(ship);
 	    data->setOwner(ship);
 
 	    ship->setGOC(data);
-	    //ship->setGOC(render);
+	    ship->setGOC(loc);
+	    ship->setGOC(owner);
 
 	    //end setup
 
@@ -108,12 +126,18 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    //setup stuff
 
 	    TreasureData * data = new TreasureData();
+	    PiracyLocation * loc = new PiracyLocation();
 	    //TreasureRender * render = new TreasureRender();
+
+	    data->parseTreasure(game,id,turn);
+	    loc->parseLocation(&(game.states[turn].treasures[unit]));
 
 	    //render->setOwner(treasure);
 	    data->setOwner(treasure);
+	    loc->setOwner(treasure);
 
 	    treasure->setGOC(data);
+	    treasure->setGOC(loc);
 	    //treasure->setGOC(render);
 
 	    //end setup
@@ -134,13 +158,19 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    //setup stuff
 
 	    PortData * data = new PortData();
-	    //PortRender * render = new PortRender();
+	    PiracyLocation * loc = new PiracyLocation();
+	    GOC_Owner * owner = new GOC_Owner(port, game.states[turn].ports[unit].owner);
 
 
-	    //render->setOwner(port);
+	    data->parsePort(game,id,turn);
+	    loc->parseLocation(&(game.states[turn].ports[unit]));
+
 	    data->setOwner(port);
+	    loc->setOwner(port);
 
 	    port->setGOC(data);
+	    port->setGOC(loc);
+	    port->setGOC(owner);
 	    //port->setGOC(render);
 	    //end setup
 

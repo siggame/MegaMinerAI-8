@@ -26,8 +26,7 @@ SOURCES += main.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
-    ./lib/gocfamily_data.cpp \
-    lib/gocfamily_location.cpp
+    ./lib/gocfamily_data.cpp
 MOC = moc
 HEADERS += *.h \
     ./lib/manager/*.h \
@@ -52,7 +51,10 @@ HEADERS += *.h \
     ./lib/gocfamily_guitoolset.h \
     ./lib/gocfamily_render.h \
     ./lib/singleton.h \
-    lib/gocfamily_location.h
+    lib/gocfamily_location.h \
+    piracy/piracylocations.h \
+    lib/goc_owner.h \
+    piracy/gold.h
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \

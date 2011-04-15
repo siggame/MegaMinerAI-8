@@ -314,7 +314,7 @@ bool Renderer<DupObject>::clear()
 			{
 				for (unsigned int z = 0; z < depth(); z++)
 				{
-					delete [] Single::get()->m_duplicateList[x][y][z];
+					delete Single::get()->m_duplicateList[x][y][z];
 				}
 				delete [] Single::get()->m_duplicateList[x][y];
 			}
@@ -331,7 +331,6 @@ bool Renderer<DupObject>::clear()
 /** @brief updateLocation
   *
   * @todo: document this function
-  * @param x: The 
   */
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
@@ -413,7 +412,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     {
 	if (it->second)
 	{
-	    updateLocation(it->second);
+	   // updateLocation(it->second);
 	}
     }
 
