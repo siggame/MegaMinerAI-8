@@ -29,6 +29,7 @@ private:
   QPushButton* rewindButton;
   QPushButton* playButton;
   QPushButton* fastForwardButton;
+  int preDragTimeManagerSpeed;
 };
 
 #endif
