@@ -26,8 +26,9 @@ class AI(BaseAI):
       myPorts = [i for i in self.ports if i.getOwner() == self.playerID()]
       if self.players[self.playerID()].getGold() > self.shipCost() and len(myShips) == 0:
         myPorts[0].createShip()
-      for i in range(0,int( self.players[self.playerID()].getGold() / self.pirateCost())):
-        myPorts[0].createPirate()
+      if self.players[self.playerID()].getGold() > 600:
+        for i in range(0,int( ((self.players[self.playerID()].getGold() - 600) / self.pirateCost()) ) ):
+          myPorts[0].createPirate()
       print len(myUnits)
       for i in myUnits:
         for j in self.pirates:
