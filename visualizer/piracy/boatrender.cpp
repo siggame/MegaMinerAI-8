@@ -34,7 +34,7 @@ void BoatRender::renderAt(
     BoatData *d = ((BoatData*)getOwner()->getGOC( "DataFamily" ));
     if( d )
     {
-      BoatDataInfo* t = d->getDataAt( turn, frame );
+      BoatDataInfo* t = d->getData();
       if( t )
       {
         glColor4f( 0, 0, 1, 0.25 );

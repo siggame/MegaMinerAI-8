@@ -50,7 +50,7 @@ public:
 
   void update();
   const GOC_IDType componentID() const;
-  void parsePirate( const Game& game, int pirateId );
+  void parsePirate( const Game& game, int pirateId, int turn );
 
 private:
 

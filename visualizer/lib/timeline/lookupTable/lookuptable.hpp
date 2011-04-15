@@ -18,7 +18,7 @@ template <typename T, typename idtype>
 	object is out of range or doesn't exist
   */
 template <typename T, typename idtype>
-LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, const unsigned int & frame, const idtype & id)
+LookupNode<T,idtype> * LookupTable<T,idtype>::node(const idtype & id, const unsigned int & turn, const unsigned int & frame)
 {
 
 	Bucket * buck = bucket(turn,frame);
@@ -28,10 +28,10 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, co
 
 	typename Bucket::iterator it = buck->find(id);
 
-	if (it == buck.end())
+	if (it == buck->end())
 		return NULL;
 
-	return &(it->second);
+	return(it->second);
 }
 
 /** @brief add
@@ -42,7 +42,7 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const unsigned int & turn, co
   * @param input the value to input in
   */
 template <typename T, typename idtype>
-void LookupTable<T,idtype>::add(const unsigned int & turn, const unsigned int & frame, const idtype & id , const Node & input)
+void LookupTable<T,idtype>::add(const idtype & id, const unsigned int & turn, const unsigned int & frame, const Node & input)
 {
 	Bucket * buck = bucket(turn,frame);
 
@@ -77,7 +77,7 @@ int LookupTable<T,idtype>::getFrames()
 
 /** @brief getTurns
   * get the number of turns per frame
-  * @return the number of frames
+  * @return the number of turns
   */
 template <typename T, typename idtype>
 int LookupTable<T,idtype>::getTurns()
@@ -114,7 +114,8 @@ template <typename T, typename idtype>
 
 /** @brief LookupTable
   * constructor
-  * @todo: document this function
+  * @param turns: the number of turns the structure is to have
+  * @param frames: the number of frames the structure is to have
   */
 template <typename T, typename idtype>
  LookupTable<T,idtype>::LookupTable(const unsigned int & turns, const unsigned int & frames)
@@ -123,11 +124,13 @@ template <typename T, typename idtype>
 }
 
 /** @brief bucket
-  *
-  * @todo: document this function
+  * Included only for completeness, you probably won't need to use this.
+  * @param turn: Which turn you want all the gameobjects of
+  * @param frame: Which frame you want all the gameobjects of
+  * @return pointer to a bucket (map) of all the gameobjects associated with that turn & frame
   */
 template <typename T, typename idtype>
-std::map< idtype, LookupNode<T,idtype> > * LookupTable<T,idtype>::bucket(const unsigned int & turn, const unsigned int & frame)
+std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const unsigned int & turn, const unsigned int & frame)
 {
 	if (turn >= m_turns || frame >= m_frames)
 		return NULL;
@@ -135,4 +138,24 @@ std::map< idtype, LookupNode<T,idtype> > * LookupTable<T,idtype>::bucket(const u
 	return &m_table[turn*frame + frame];
 }
 
+/** @brief add
+  * Allows you to add a gameobject set to the lookuptable.
+  * A set tracks a gameobject through the object's entire existance in the game.
+  * @todo document this function
+  */
+template <typename T, typename idtype>
+void LookupTable<T,idtype>::add(Set & set)
+{
+    if (m_frames != set.m_frames || m_turns != set.m_turns)
+	return;
 
+
+    for (unsigned int turn = 0; turn < m_turns; turn++)
+    {
+	for (unsigned int frame = 0; frame < m_frames; frame++)
+	{
+	    if (set.m_set[turn*m_frames + frame])
+		m_table[turn*m_frames + frame][set.m_id] = set.m_set[turn*m_frames + frame];
+	}
+    }
+}

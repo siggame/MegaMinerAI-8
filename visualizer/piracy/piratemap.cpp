@@ -5,7 +5,7 @@
 #include "../lib/optionsmanager/optionsman.h"
 #include <iostream>
 #include <queue>
-#include <math.h>
+#include <cmath>
 using namespace std;
 
 PirateMap::PirateMap()
@@ -26,7 +26,7 @@ void PirateMap::update()
 
 }
 
-#define PI 3.141592653589793238462
+#define PI 3.1415926535897932384626433832795028841971
 
 void PirateMap::blur( 
     int **map, 
@@ -145,7 +145,6 @@ void PirateMap::boxBlur(
 }
 
 
-#define SQ(x) (x)*(x)
 
 int PirateMap::distToTile( 
     const int& x, 
@@ -172,7 +171,7 @@ int PirateMap::distToTile(
       )
     {
       count++;
-      int pusher = SQ(i->second.x-x) + SQ(i->second.y-y);
+      int pusher = abs(i->second.x-x) + abs(i->second.y-y);
       if( pusher < smallest )
       {
         smallest = pusher;
@@ -195,6 +194,10 @@ float PirateMap::interp( float x,  float x0, float x1, float y0, float y1  )
 
 QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths, int depth )
 {
+
+  if (!images || !depths)
+      return QRgb();
+
   int i;
   for( i = 0; i < size; i++ )
   {
@@ -205,6 +208,7 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
   }
 
   --i;
+  std::cout << "i " << i << '\n';
 
   float r0, g0, b0;
   r0 = qRed( images[i].pixel( x, y ) );
@@ -360,6 +364,7 @@ void PirateMap::generateMap( Game& g )
       //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
       
       //result.setPixel( x, y, textures[0].pixel( x, y ) );
+	std::cout << "textures: " << textures << " depths: " << depths << " done\n";
       result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
     }
   }

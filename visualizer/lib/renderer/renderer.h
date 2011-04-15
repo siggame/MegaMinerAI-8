@@ -6,10 +6,12 @@
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
+#include "../objectmanager/objectmanager.h"
 #include "../gocfamily_render.h"
 #include "../gui/renderwidget.h"
-#include "lookupTable/lookuptable.h"
-#include "../concepts/concept_check.hpp"
+#include "../timemanager/timeManager.h"
+#include "../../piracy/piratemap.h"
+//#include "../gui/gui.h"
 
 //this is a place holder
 typedef GameObject renderObj;
@@ -35,7 +37,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		//static renderObj * getRenderObject(const unsigned int id);
 
-		static bool create(/**@todo make options similar to setup*/);
+		static bool create();
 		static bool destroy();
 
     static void setParent( RenderWidget *parent );
@@ -51,15 +53,12 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		static unsigned int width();
 		static unsigned int depth();
 
-
-		static LookupTable<renderObj> & lookupTable();
-
 		static void update(const unsigned int & turn, const unsigned int & frame);
 
 	protected:
 	private:
 		//std::map<unsigned int,renderObj*> m_objects; //!< Member variable "m_objects"
-		LookupTable<renderObj> m_lookupTable;
+		//LookupTable<renderObj> m_lookupTable;
 		unsigned int m_height;
 		unsigned int m_width;
 		unsigned int m_depth;

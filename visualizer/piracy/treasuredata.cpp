@@ -20,19 +20,13 @@ void TreasureData::update()
 #include <iostream>
 using namespace std;
 
-void TreasureData::parseTreasure( const Game& game, int treasureId )
+void TreasureData::parseTreasure( const Game& game, int treasureId, int turn )
 {
-  for( int i = 0; i < (signed int)game.states.size(); i++ )
-  {
-    std::map<int,Treasure>::const_iterator j = game.states[i].treasures.find( treasureId );
-    if( j != game.states[i].treasures.end() )
+    std::map<int,Treasure>::const_iterator j = game.states[turn].treasures.find( treasureId );
+    if( j != game.states[turn].treasures.end() )
     {
-      TreasureDataInfo t;
-      t.x = j->second.x;
-      t.y = j->second.y;
-      t.gold = j->second.gold;
-      //cout << "Turn: " << i << ", X: " << t.x << ", Y: " << t.y << endl;
-      m_timeline.add( i, 0, t );
+      m_data.x = j->second.x;
+      m_data.y = j->second.y;
+      m_data.gold = j->second.gold;
     }
-  }
 }

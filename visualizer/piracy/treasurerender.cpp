@@ -31,7 +31,7 @@ void TreasureRender::renderAt(
     TreasureData *d = ((TreasureData*)getOwner()->getGOC( "DataFamily" ));
     if( d )
     {
-      TreasureDataInfo* t = d->getDataAt( turn, frame );
+      TreasureDataInfo* t = d->getData();
       if( t )
       {
         //cout << "X: " << t->x << ", Y: " << t->y << endl;

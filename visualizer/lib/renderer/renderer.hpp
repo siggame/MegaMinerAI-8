@@ -2,20 +2,7 @@
 #define RENDERER_HPP
 
 #include "renderer.h"
-#include "../timemanager/timeManager.h"
-#include "../../piracy/piratemap.h"
-//#include "../gui/gui.h"
 
-/** @brief numObjects
-  * the number of objects registered
-  * @return the number of objects registered
-  *//*
-unsigned int Renderer::numObjects()
-{
-	if (!isInit())
-		return 0;
-	return get()->m_objects.size();
-}*/
 
 /** @brief resize
   * resize and refresh the projection  and modelview matricies
@@ -55,47 +42,35 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 template <typename DupObject>
 bool Renderer<DupObject>::refresh()
 {
-	if (!Single::isInit())
-		return false;
+    if (!Single::isInit())
+	    return false;
 
-	if (!isSetup())
-		return false;
+    if (!isSetup())
+	    return false;
 
   //GUI::update();
 
-  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	/** @todo change this to the proper accessors */
-	//get time (turn, frame)
-	unsigned int turn = TimeManager::getTurn();
-	unsigned int frame = TimeManager::getFrame();
+    unsigned int turn = TimeManager::getTurn();
+    unsigned int frame = TimeManager::getFrame();
 
-  //float depth = 0;
-	/*std::map<unsigned int, renderObj*>::iterator it = Single::get()->m_objects.begin();
-	for (; it != Single::get()->m_objects.end(); it++)
-	{
-		/** @todo fill this in */
-/*
+    //update what gets rendered this turn
+    update(turn,frame);
+
     glPushMatrix();
     glScalef( 20, 20, 1 );
 
-    GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
-    if( r )
-    {
-      //r->renderAt(turn,frame);
-    }
 
     glPopMatrix();
-	}
-  if( Single::get()->m_parent )
-  {
-    Single::get()->m_parent->swapBuffers();
-  }
 
- // static int p = 0;
- */
 
-	return true;
+    if( Single::get()->m_parent )
+    {
+      Single::get()->m_parent->swapBuffers();
+    }
+
+    return true;
 }
 
 template <typename DupObject>
@@ -356,6 +331,7 @@ bool Renderer<DupObject>::clear()
 /** @brief updateLocation
   *
   * @todo: document this function
+  * @param x: The 
   */
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
@@ -420,4 +396,28 @@ unsigned int Renderer<DupObject>::depth()
 
     return 0;
 }
+
+/**
+  * @todo doxyment
+  */
+template <typename DupObject>
+void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
+{
+    typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
+    Bucket * bucket = ObjectManager::getBucket(turn,frame);
+    if (!bucket)
+	return; //! @todo toss computer against wall
+
+    Bucket::iterator it = bucket->begin();
+    for (;it != bucket->end(); it++)
+    {
+	if (it->second)
+	{
+	    updateLocation(it->second);
+	}
+    }
+
+}
+
 #endif
+

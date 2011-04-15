@@ -19,7 +19,7 @@ public:
 
   void update();
   const GOC_IDType componentID() const;
-  void parseTreasure( const Game& game, int treasureId );
+  void parseTreasure( const Game& game, int treasureId, int turn );
 private:
 };
 

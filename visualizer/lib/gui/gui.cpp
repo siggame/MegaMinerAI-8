@@ -80,6 +80,7 @@ bool GUI::create()
   if( !Singleton<GUI>::create() )
     return false;
 
+
   return true;
 }
 
@@ -118,210 +119,11 @@ void GUI::dragEnterEvent( QDragEnterEvent* evt )
 using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
-  Game g;
-  if( !parseFile( g, gamelog.c_str() ) )
-  {
-    throw "Cannot Load Gamelog";
-  }
-
-  // Gamespecific stuff which need a removing
-
-  if( !Renderer<DupObj>::isSetup() )
-  {
-    Renderer<DupObj>::create();
-  }
-
-  //int pirateId = 0;
-  int boatId = 0;
-  int treasureId = 0;
-  int boats = 0;
-  int pirates = 0;
-  int treasures = 0;
-
-  GameObject *go = new GameObject( -1 );
-  PirateMap *pm = new PirateMap();
-  pm->generateMap( g );
-  pm->setOwner( go );
-  go->setGOC( pm );
-  //Renderer<DupObj>::reg( -1, go );
-
-  TimeManager::setTurn(0);
-  TimeManager::setNumTurns(g.states.size() );
-
-  return;
-
-
-  //cout << "Number of Turns: " << g.states.size() << endl;
-
-  for( int i = 0; i < (signed int)g.states.size(); i++ )
-  {
-#if 0
-    cout << "Turn: " << i << endl;
-    cout << " -Mapp: " << g.states[i].mappables.size() << endl;
-    cout << " -Unit: " << g.states[i].units.size() << endl;
-    cout << " -Pyrt: " << g.states[i].pirates.size() << endl;
-    cout << " -Plyr: " << g.states[i].players.size() << endl;
-    cout << " -Ship: " << g.states[i].ships.size() << endl;
-    cout << " -Tile: " << g.states[i].tiles.size() << endl;
-    cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
-#else
-
-    enum dir
+    if (!ObjectLoader::loadGamelog(gamelog))
     {
-      STOP,
-      RIGHT,
-      UP,
-      LEFT,
-      DOWN
-    };
-
-    int xoff[] = {0, 1, 0, -1, 0};
-    int yoff[] = {0, 0, 1, 0, -1};
-    dir direction = STOP;
-
-    PirateDataInfo pdi;
-
-    vector<vector<vector< PirateData> > >  piVec =
-      vector<vector<vector<PirateData> > >(5,
-      vector<vector<PirateData> >(g.states[0].mapSize,
-      vector<PirateData> (g.states[0].mapSize) ) );
-
-    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
-        p != g.states[i].pirates.end();
-        p++
-       )
-       {
-
-        //We're past turn 0, so movement from the last turn should happen
-        // AND pirate exists
-        if(i>0 && g.states[i-1].pirates.find(p->first) != g.states[i-1].pirates.end())
-        {
-          //Find direction enum
-          int delta;
-          delta = p -> second.x - g.states[i-1].pirates[p->first].x;
-
-          switch(delta)
-          {
-            case -1:
-              direction = LEFT;
-              break;
-            case 1:
-              direction = RIGHT;
-              break;
-
-            default:
-              direction = STOP;
-              break;
-          }
-
-          delta = p->second.y - g.states[i-1].pirates[p->first].y;
-          if (delta != 0)//There was any vertical motion
-          {
-            switch(delta)
-            {
-              case -1:
-                direction = UP;
-                break;
-              case 1:
-                direction = DOWN;
-                break;
-            }
-          }
-        }
-
-        pdi.x = p->second.x;
-        pdi.y = p->second.y;
-        pdi.owner = p->second.owner;
-        pdi.totalHealth += p->second.health;
-        pdi.numPirates++;
-        pdi.totalStrength += p->second.strength;
-        pdi.movesLeft = p->second.movesLeft;
-        pdi.attacksLeft = p->second.attacksLeft;
-        pdi.piratesInStack.push_front(p->second.id);
-
-        int frame = (direction == STOP) ? 0 : 50;
-
-        //piVec[direction][p->second.x + xoff[direction]][p->second.y + yoff[direction]].addPirateStack( pdi, i, frame );
-
-       }
-
-
-    //Step through moving stacks
-    int stackId = 0;
-    for(int z = 0; z < 5; z++)
-    {
-      for(int x = 0; x < g.states[0].mapSize; x++)
-      {
-        for(int y = 0; y < g.states[0].mapSize; y++)
-        {
-          go = new GameObject( stackId );
-          PirateRender *pr = new PirateRender();
-          PirateData *pd = new PirateData();
-          *pd = piVec[z][x][y];
-          pd->setOwner( go );
-
-          pr->setOwner( go );
-
-          go->setGOC( pd );
-          go->setGOC( pr );
-          //Renderer<DupObj>::reg( stackId, go );
-
-          stackId++;
-        }
-      }
+	std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
     }
-
-    for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
-        s != g.states[i].ships.end();
-        s++ )
-    {
-      if( s->second.id > boatId )
-      {
-        boatId = s->second.id;
-        go  = new GameObject( boatId );
-        BoatData *bd = new BoatData();
-        bd->parseBoat( g, boatId );
-        BoatRender *br = new BoatRender();
-
-        bd->setOwner( go );
-        br->setOwner( go );
-        go->setGOC( bd );
-        go->setGOC( br );
-
-       // Renderer<DupObj>::reg( boatId, go );
-
-        boats++;
-      }
-    }
-
-  for( std::map<int,Treasure>::iterator t = g.states[i].treasures.begin();
-        t != g.states[i].treasures.end();
-        t++ )
-    {
-      if( t->second.id > treasureId )
-      {
-        treasureId = t->second.id;
-        go  = new GameObject( treasureId );
-        TreasureData *td = new TreasureData();
-        td->parseTreasure( g, treasureId );
-        TreasureRender *tr = new TreasureRender();
-
-        td->setOwner( go );
-        tr->setOwner( go );
-        go->setGOC( td );
-        go->setGOC( tr );
-
-        //Renderer<DupObj>::reg( treasureId, go );
-
-        treasures++;
-      }
-    }
-#endif
-
-  }
-
-  cout << "Boats: " << boats << ", Pirates: " << pirates << endl;
-
+  return; //! @todo throw shitfit
 }
 
 void GUI::update()
@@ -421,10 +223,10 @@ void GUI::createActions()
       );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
-	toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
-	toggleFullScreenAct->setShortcut( tr("F11" ) );
-	toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
-	connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
+  toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
+  toggleFullScreenAct->setShortcut( tr("F11" ) );
+  toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
+  connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
 
   m_fileExit = new QAction( tr( "&Quit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
@@ -433,11 +235,11 @@ void GUI::createActions()
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
- 	(void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
- 	(void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
- 	(void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
-	(void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
-	(void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+   (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+   (void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+   (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
 }
 
 void GUI::createMenus()
@@ -514,12 +316,12 @@ void GUI::closeGUI()
 
 void GUI::toggleFullScreen()
 {
-	if( !fullScreen )
-		showFullScreen();
-	else
-		showNormal();
-	fullScreen = !fullScreen;
-	show();
+  if( !fullScreen )
+    showFullScreen();
+  else
+    showNormal();
+  fullScreen = !fullScreen;
+  show();
 }
 
 void GUI::togglePlayPause()
@@ -600,41 +402,43 @@ void GUI::initUnitStats()
 
 void GUI::mousePressEvent( QMouseEvent *e )
 {
-//  if( e->button() == Qt::LeftButton )
-//  {
-//    clickX = e->x();
-//    clickY = e->y()-getAttr(boardOffsetY);
-//    if( buttonTimes.elapsed() - leftButtonTime < getAttr( doubleClickTime ) )
-//    {
-//      // Do Double click event
-//      // or nothing....
-//    }
-//    else
-//    {
-//      leftButtonTime = buttonTimes.elapsed();
-//    }
+    if( e->button() == Qt::LeftButton )
+    {
+      QString line;
+      
+      clickX = e->x();
+      clickY = e->y();
+       
+      line.clear();
+      line.append("Left click: ( ");
+      line.append(QString::number(clickX));
+      line.append(", ");
+      line.append(QString::number(clickY));
+      line.append(")");
 
-//    leftButtonDown = true;
-//    dragX = clickX;
-//    dragY = clickY;
-//  }
-//  else if ( e->button() == Qt::RightButton )
-//  {
-//    rightButtonTime = buttonTimes.elapsed();
-//    rightButtonDown = true;
-//  }
-//  else if( e->button() == Qt::MidButton )
-//  {
-//    midButtonTime = buttonTimes.elapsed();
-//    midButtonDown = true;
-//  }
+      m_consoleArea->append(line);
+
+      leftButtonDown = true;
+      
+      dragX = clickX; 
+      dragY = clickY;
+      /* Thus, dragX and dragY become our starting point, 
+       * and curX and curY will be contiuously updated, eventually becoming 
+       * our ending point if dragging.
+       */
+    }
+
+
 }
 
 void GUI::mouseReleaseEvent( QMouseEvent *e )
 {
-//  curX = e->x()+1;
-//  curY = e->y()+1-getAttr(boardOffsetY);
-//  int selectWidth, selectHeight;
+
+    curX = e->x()+1;
+    curY = e->y()+1;
+    //+1 guarantees we create a box, rather than a point.
+    
+    int selectWidth, selectHeight;
 //  int selectX = selectWidth = curX/getAttr(unitSize);
 //  int selectY = selectHeight = curY/getAttr(unitSize);
 
@@ -648,11 +452,6 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 //      selectHeight = (curY<dragY ? dragY : curY)/getAttr(unitSize);
 //    }
 
-//    if( leftDoubleClick )
-//    {
-//      leftDoubleClick = false;
-//      return;
-//    }
 
 //    Game *game = parent->gamelog;
 //    int frame = getAttr( frameNumber );
@@ -686,13 +485,7 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 
 //    leftButtonDown = false;
 //    leftButtonDrag = false;
-//  } else if ( e->button() == Qt::RightButton )
-//  {
-//    rightButtonDown = false;
-//  } else if( e->button() == Qt::MidButton )
-//  {
-//    rightButtonDown = false;
-//  }
+//  } 
 
 //  // Invalidate last frame so we get the latest talkers.
 //  setAttr( lastFrame, -1 );
@@ -701,11 +494,13 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
 
 void GUI::mouseMoveEvent( QMouseEvent *e )
 {
-//  // If manhatten distance is 6 or greater, we're draggin
-//  if( e->buttons() & Qt::LeftButton && abs(curX-dragX)+abs(curY-dragY) > 6 )
-//    leftButtonDrag = true;
+  curX = e->x();
+  curY = e->y();
 
-//  curX = e->x();
-//  curY = e->y()-getAttr(boardOffsetY);
-
+  // If Manhattan distance is 6 or greater, we're draggin
+  if( e->buttons() & Qt::LeftButton && 
+    abs(curX-dragX)+abs(curY-dragY) > m_DRAG_DISTANCE )
+  {
+    leftButtonDrag = true;
+  }
 }

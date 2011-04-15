@@ -6,10 +6,12 @@
 #include "../timemanager/timeManager.h"
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
+#include "../objectmanager/objectloader.h"
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
 #include <QStringList>
+#include <QString>
 #include <map>
 #include <string>
 
@@ -248,11 +250,7 @@ private:
   void mouseMoveEvent( QMouseEvent *event );
 
   bool leftButtonDown;
-  bool leftDoubleClick;
   bool leftButtonDrag;
-
-  bool rightButtonDown;
-  bool midButtonDown;
 
   int curX;
   int curY;
@@ -262,6 +260,8 @@ private:
 
   int dragX;
   int dragY;
+  
+  static const int m_DRAG_DISTANCE = 6;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

@@ -17,20 +17,15 @@ void BoatData::update()
 {
 }
 
-void BoatData::parseBoat( const Game& game, int boatId )
+void BoatData::parseBoat( const Game& game, int boatId, int turn)
 {
-  for( int i = 0; i < (signed int)game.states.size(); i++ )
-  {
-    std::map<int,Ship>::const_iterator j = game.states[i].ships.find(boatId);
-    if( j != game.states[i].ships.end() )
+    std::map<int,Ship>::const_iterator j = game.states[turn].ships.find(boatId);
+    if( j != game.states[turn].ships.end() )
     {
-      BoatDataInfo t;
-      t.owner = j->second.owner;
-      t.x = j->second.x;
-      t.y = j->second.y;
-      m_timeline.add( i, 0, t );
+      m_data.owner = j->second.owner;
+      m_data.x = j->second.x;
+      m_data.y = j->second.y;
     }
-  }
 }
 
 
