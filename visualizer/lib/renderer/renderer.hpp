@@ -402,17 +402,25 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+    if (!Single::isInit())
+	return; //! @todo fuck off
+
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
     Bucket * bucket = ObjectManager::getBucket(turn,frame);
     if (!bucket)
 	return; //! @todo toss computer against wall
+
+    int time = TimeManager::timeHash();
 
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
     {
 	if (it->second)
 	{
-	   // updateLocation(it->second);
+	   DupObject temp;
+	   //temp.
+	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
+	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 	}
     }
 

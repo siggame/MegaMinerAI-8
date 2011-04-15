@@ -8,6 +8,7 @@
 #include "../optionsmanager/optionsman.h"
 #include "../objectmanager/objectmanager.h"
 #include "../gocfamily_render.h"
+#include "../gocfamily_location.h"
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
 #include "../../piracy/piratemap.h"

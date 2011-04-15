@@ -23,6 +23,8 @@ struct DupObj
 		pirates = obj.pirates;
 		owner = obj.owner;
 		time = obj.time;
+
+		//! @todo object type precedences: ex ship over pirate, pirate over treasure
 		objType = objType;
 		return *this;
 	}

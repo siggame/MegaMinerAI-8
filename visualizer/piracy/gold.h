@@ -1,7 +1,7 @@
 #ifndef GOLD_H
 #define GOLD_H
 
-class Gold : GOComponent
+class Gold : public GOComponent
 {
 public:
     Gold(){}

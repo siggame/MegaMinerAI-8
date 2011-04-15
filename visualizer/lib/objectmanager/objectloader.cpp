@@ -11,6 +11,7 @@
 #include "../../piracy/portdata.h"
 #include "../../piracy/piracylocations.h"
 #include "../goc_owner.h"
+#include "../../piracy/gold.h"
 
 typedef int idtype;
 
@@ -60,7 +61,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    PirateData * data = new PirateData();
 	    PiracyLocation * loc = new PiracyLocation();
 	    GOC_Owner * owner = new GOC_Owner(pirate, game.states[turn].pirates[unit].owner);
-	    //PirateRender * render = new PirateRender();
+	    Gold * gold = new Gold(pirate,game.states[turn].pirates[unit].gold);
 
 	    data->parsePirate(game,id,turn);
 	    loc->parseLocation(&(game.states[turn].pirates[unit]));
@@ -72,6 +73,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    pirate->setGOC(data);
 	    pirate->setGOC(loc);
 	    pirate->setGOC(owner);
+	    pirate->setGOC(gold);
 
 
 	    //end setup
@@ -94,6 +96,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    ShipData * data = new ShipData();
 	    PiracyLocation * loc = new PiracyLocation();
 	    GOC_Owner * owner = new GOC_Owner(ship, game.states[turn].ships[unit].owner);
+	    Gold * gold = new Gold(ship,game.states[turn].ships[unit].gold);
 	    //ShipRender * render = new ShipRender();
 
 	    //render->setOwner(ship);
@@ -107,6 +110,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    ship->setGOC(data);
 	    ship->setGOC(loc);
 	    ship->setGOC(owner);
+	    ship->setGOC(gold);
 
 	    //end setup
 
@@ -127,18 +131,18 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
 	    TreasureData * data = new TreasureData();
 	    PiracyLocation * loc = new PiracyLocation();
-	    //TreasureRender * render = new TreasureRender();
+	    Gold * gold = new Gold(treasure,game.states[turn].treasures[unit].gold);
 
 	    data->parseTreasure(game,id,turn);
 	    loc->parseLocation(&(game.states[turn].treasures[unit]));
 
-	    //render->setOwner(treasure);
+
 	    data->setOwner(treasure);
 	    loc->setOwner(treasure);
 
 	    treasure->setGOC(data);
 	    treasure->setGOC(loc);
-	    //treasure->setGOC(render);
+	    treasure->setGOC(gold);
 
 	    //end setup
 
