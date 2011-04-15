@@ -77,7 +77,7 @@ int LookupTable<T,idtype>::getFrames()
 
 /** @brief getTurns
   * get the number of turns per frame
-  * @return the number of frames
+  * @return the number of turns
   */
 template <typename T, typename idtype>
 int LookupTable<T,idtype>::getTurns()
@@ -114,7 +114,8 @@ template <typename T, typename idtype>
 
 /** @brief LookupTable
   * constructor
-  * @todo: document this function
+  * @param turns: the number of turns the structure is to have
+  * @param frames: the number of frames the structure is to have
   */
 template <typename T, typename idtype>
  LookupTable<T,idtype>::LookupTable(const unsigned int & turns, const unsigned int & frames)
@@ -123,8 +124,10 @@ template <typename T, typename idtype>
 }
 
 /** @brief bucket
-  *
-  * @todo: document this function
+  * Included only for completeness, you probably won't need to use this.
+  * @param turn: Which turn you want all the gameobjects of
+  * @param frame: Which frame you want all the gameobjects of
+  * @return pointer to a bucket (map) of all the gameobjects associated with that turn & frame
   */
 template <typename T, typename idtype>
 std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const unsigned int & turn, const unsigned int & frame)
@@ -136,7 +139,8 @@ std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const 
 }
 
 /** @brief add
-  *
+  * Allows you to add a gameobject set to the lookuptable.
+  * A set tracks a gameobject through the object's entire existance in the game.
   * @todo document this function
   */
 template <typename T, typename idtype>
