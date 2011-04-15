@@ -29,6 +29,10 @@ LookupNode<GameObject *,ObjIdType> * ObjectManager::get(const ObjIdType & id, co
     return Single::get()->m_objects.node(id,turn,frame);
 }
 
+bool exists(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame)
+{
+  return (LookupTable::node(id, turn, frame) != NULL);
+}
 
 bool ObjectManager::reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> objset)
 {

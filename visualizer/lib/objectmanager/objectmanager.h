@@ -26,22 +26,31 @@ public:
 
     static unsigned int turns()
     {
-	if (!Singleton<ObjectManager>::isInit())
-	    return 0;
-	return Singleton<ObjectManager>::get()->m_objects.getTurns();
+      if (!Singleton<ObjectManager>::isInit())
+          return 0;
+      return Singleton<ObjectManager>::get()->m_objects.getTurns();
     }
 
 
     static bool reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> objset);
     static bool reg(const ObjIdType & id, GameObject * obj, const unsigned int & turn, const unsigned int & frame);
     static bool del(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame);
-    static LookupNode<GameObject *,ObjIdType> * get(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame);
 
-    static bool exists(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame){return true;} //! @todo FIX THIS
+    static LookupNode<GameObject *,ObjIdType> * get(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame);
+    static std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > * getBucket(const unsigned int & turn, const unsigned int & frame)
+    {
+	if (Single::isInit())
+	    return Single::get()->m_objects.bucket(turn,frame);
+
+	return NULL;
+    }
+
+    static bool exists(const ObjIdType &, const unsigned int &, const unsigned int &);
     static bool destroy();
 
 private:
     typedef Singleton<ObjectManager> Single;
+    typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType> > Bucket;
     LookupTable<GameObject*,ObjIdType> m_objects;
 };
 
