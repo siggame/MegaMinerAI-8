@@ -468,10 +468,9 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	if (it->second)
 	{
 	   DupObject temp;
-	   //temp.
+	   setDupObj(it->second->data,temp);
 	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
 	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
-
 	}
 
     }
