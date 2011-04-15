@@ -135,10 +135,9 @@ void TimeManager::updateFrames()
   } 
   if(GUI::isSetup())
   {
-    cout << "GUI SETUP "<<endl;
+
     GUI::getControlBar()->m_slider->setValue ( m_turn );
   }
-    cout << "Update frame for turn: " << m_turn <<endl;  
 }
 
 void TimeManager::timerUpdate()
