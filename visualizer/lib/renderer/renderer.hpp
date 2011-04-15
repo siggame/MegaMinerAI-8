@@ -353,6 +353,7 @@ bool Renderer<DupObject>::clear()
 /** @brief updateLocation
   *
   * @todo: document this function
+  * @param x: The 
   */
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
