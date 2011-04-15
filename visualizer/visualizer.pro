@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
-    ./lib/gocfamily_data.cpp
+    ./lib/gocfamily_data.cpp \
+    lib/gocfamily_location.cpp
 MOC = moc
 HEADERS += *.h \
     ./lib/manager/*.h \
@@ -50,7 +51,8 @@ HEADERS += *.h \
     ./lib/gocfamily_gui.h \
     ./lib/gocfamily_guitoolset.h \
     ./lib/gocfamily_render.h \
-    ./lib/singleton.h
+    ./lib/singleton.h \
+    lib/gocfamily_location.h
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \

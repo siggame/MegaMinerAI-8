@@ -6,9 +6,9 @@
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
+#include "../objectmanager/objectmanager.h"
 #include "../gocfamily_render.h"
 #include "../gui/renderwidget.h"
-//const ObjIdType & id, const unsigned int & turn, const unsigned int & frame#include "lookupTable/lookuptable.h"
 #include "../timemanager/timeManager.h"
 #include "../../piracy/piratemap.h"
 //#include "../gui/gui.h"
@@ -37,7 +37,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		//static renderObj * getRenderObject(const unsigned int id);
 
-		static bool create(/**@todo make options similar to setup*/);
+		static bool create();
 		static bool destroy();
 
     static void setParent( RenderWidget *parent );
