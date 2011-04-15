@@ -8,6 +8,7 @@ using namespace std;
 RenderWidget::RenderWidget( QWidget *parent )
 : QGLWidget( QGLFormat( QGL::SampleBuffers ), parent )
 {
+  initializeGL();
 
 }
 
@@ -17,6 +18,7 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
+  cout << "INIT GL" << endl;
 
   Renderer<DupObj>::create();
   Renderer<DupObj>::setParent( this );

@@ -18,10 +18,10 @@ int main(int argc, char *argv[])
 	TimeManager::setSpeed( 1 );
 
 	optionsMan::create();
+	GUI::create();
 	ResourceMan::create();
 	Mutex::create();
 	Threadler::create();
-	GUI::create();
 	Render::create();
 	ObjectManager::create();
 	ObjectLoader::create();

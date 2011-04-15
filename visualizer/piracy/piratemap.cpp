@@ -1,8 +1,9 @@
 #include "piratemap.h"
 #include <GL/gl.h>
 #include <GL/glext.h>
-
+#include "../lib/resourcemanager/texture.h"
 #include "../lib/optionsmanager/optionsman.h"
+#include <GL/glu.h>
 #include <iostream>
 #include <queue>
 #include <cmath>
@@ -369,6 +370,15 @@ void PirateMap::generateMap( Game& g )
     }
   }
 
+  mapTexture.load( "./piracy/textures/Forest.png" );
+
+  GLenum errCode;
+  const GLubyte *errString;
+  
+  if ((errCode = glGetError()) != GL_NO_ERROR) {
+    errString = gluErrorString(errCode);
+    fprintf (stderr, "OpenGL Error: %s\n", errString);
+  }
 
 #if 0
   std::ofstream out( "depth.tga" );
@@ -389,6 +399,8 @@ void PirateMap::generateMap( Game& g )
 
   out.close();
 #endif
+
+
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -432,6 +444,23 @@ void PirateMap::renderAt(
     )
 {
   glPushMatrix();
+
+  glEnable( GL_TEXTURE );
+
+  glColor4f( 1, 1, 1, 1 );
+  glBindTexture( GL_TEXTURE_2D, mapTexture.getTexture() );
+
+  glBegin( GL_QUADS );
+  glTexCoord2f( 0, 0 );
+  glVertex3f( 0, 0, 0 );
+  glTexCoord2f( 1, 0 );
+  glVertex3f( 1024, 0, 0 );
+  glTexCoord2f( 1, 1 );
+  glVertex3f( 1024, 1024, 0 );
+  glTexCoord2f( 0, 1 );
+  glVertex3f( 0, 1024, 0 );
+  glEnd();
+
 
   glPopMatrix();
 }
