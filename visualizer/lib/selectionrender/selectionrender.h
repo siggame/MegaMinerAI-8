@@ -3,7 +3,10 @@
 
 class SelectionRender : public GOCFamily_Render; Singleton <SelectionRender>
 {
-	void setSelectionBox(int, int, int, int) //X1, Y1, X2, Y2
+	void setSelectionBox(int, int, int, int); //X1, Y1, X2, Y2 Screen Resolution
+	
+	bool updated;
+	bool dragging;
 }
 
 #endif
