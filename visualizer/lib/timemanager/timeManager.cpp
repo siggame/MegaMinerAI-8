@@ -134,7 +134,6 @@ void TimeManager::updateFrames()
 
 void TimeManager::timerUpdate()
 {
-  cout << "TIMEUP" << endl;
   m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
   m_hash++;
   m_frame += m_time * m_speed;

@@ -35,7 +35,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     PirateData * data2 = new PirateData();
-    pm->generateMap( game );
+//    pm->generateMap( game );
     pm->setOwner( go );
     go->setGOC( pm );
     Renderer<DupObj>::registerConstantObj( 1, go );
