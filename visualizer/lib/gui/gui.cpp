@@ -435,7 +435,7 @@ void GUI::mouseReleaseEvent( QMouseEvent *e )
     curY = e->y()+1;
     //+1 guarantees we create a box, rather than a point.
     
-//  int selectWidth, selectHeight;
+    int selectWidth, selectHeight;
 //  int selectX = selectWidth = curX/getAttr(unitSize);
 //  int selectY = selectHeight = curY/getAttr(unitSize);
 
