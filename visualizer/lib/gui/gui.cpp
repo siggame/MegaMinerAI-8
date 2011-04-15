@@ -278,7 +278,7 @@ void GUI::buildToolSet()
     // Give it a frame to hold a layout
     m_dockLayoutFrame = new QFrame( m_dockWidget );
     // Give this frame a layout
-    m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
+    m_dockLayout = new QVBoxLayout( m_dockLayoutFrame );
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
     m_consoleArea -> setReadOnly(1);
@@ -304,7 +304,7 @@ void GUI::buildToolSet()
     // Add the frame to the actual dock
     m_dockWidget->setWidget( m_dockLayoutFrame );
     // Add the dock to the main window
-    addDockWidget( Qt::BottomDockWidgetArea, m_dockWidget );
+    addDockWidget( Qt::RightDockWidgetArea, m_dockWidget );
 
   }
 }

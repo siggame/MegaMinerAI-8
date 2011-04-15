@@ -215,7 +215,7 @@ private:
   QFrame *m_dockLayoutFrame;
 
   /// Layout For the Dock Widget
-  QHBoxLayout *m_dockLayout;
+  QVBoxLayout *m_dockLayout;
 
   /// Console Area
   QTextEdit *m_consoleArea;
