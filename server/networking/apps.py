@@ -4,6 +4,7 @@ from collections import defaultdict
 from functools import wraps
 import string
 import traceback
+import WebServerAuthenticator
 
 import config.config
 
@@ -66,12 +67,32 @@ class AccountsAppMixin(object):
   
   @protocolmethod
   def login(self, name, password):
-    validNames = config.config.readConfig("config/login.cfg")
-    if (name in validNames and validNames[name]["password"] == password):
-      self.logged_in = True
-      self.name = name
-      return ["login-accepted"]
-    return ["login-denied"]
+    #THIS IS THE OLD CODE FOR VERIFYING LOGIN STUFFz
+    #validNames = config.config.readConfig("config/login.cfg")
+    #if (name in validNames and validNames[name]["password"] == password):
+    #  self.logged_in = True
+    #  self.name = name
+    #  return ["login-accepted"]
+    #return ["login-denied"]
+    
+    
+    #THIS IS THE NEW CODE THAT VERIFIES LOGIN WITH AWESOME WEB SERVER!!!
+    
+    webAuth = WebServerAuthenticator.WebServerAuthenticator("megaminerai.com")
+    
+    try:
+      val = webAuth.auth_team(name, password)
+      if (val):
+        self.logged_in = True
+        self.name = str(val)
+        print "val: ",
+        print val
+        return ["login-accepted"]
+      else:
+        return ["login-denied"]
+    except WebServerAuthenticator.WebServerException:
+      return ["login-denied"]
+    
 
   @protocolmethod
   def logout(self):
