@@ -59,12 +59,13 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
 void ControlBar::sliderDrag()
 {
+	preDragTimeManagerSpeed = TimeManager::getSpeed();
   TimeManager::setSpeed(0);
 }
 
 void ControlBar::sliderRelease()
 {
-  TimeManager::setSpeed(1);
+  TimeManager::setSpeed(preDragTimeManagerSpeed);
 }
 
 void ControlBar::sliderChanged( int value )
