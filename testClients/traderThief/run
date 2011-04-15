@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ../../codegen/output/python
+
+python main.py $1 $2
