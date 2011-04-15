@@ -182,7 +182,7 @@ void mainLoop(Game& g)
     
     turn++;
     
-    if (turn > g.states.size())
+    if (turn >= g.states.size())
       break;
   }
 }
