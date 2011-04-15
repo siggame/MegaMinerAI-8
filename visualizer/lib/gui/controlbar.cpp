@@ -6,6 +6,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 {
   setContentsMargins( 0, 0, 0, 0 );
   QHBoxLayout *layout = new QHBoxLayout;
+  layout -> setContentsMargins(0,0,0,0);
 
   rewindButton = new QPushButton("<", this);
   playButton = new QPushButton("||", this);

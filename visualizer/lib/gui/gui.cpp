@@ -201,6 +201,7 @@ bool GUI::doSetup()
 void GUI::buildControlBar()
 {
   m_statusBar = statusBar();
+  m_statusBar -> setMaximumHeight(20);
   m_controlBar = new ControlBar( this );
 
   m_statusBar->addPermanentWidget( m_controlBar, 100 );
