@@ -1,5 +1,7 @@
 #ifndef SELECTIONRENDER_H
 #define SELECTIONRENDER_H
+#include "../gocfamily_render.h"
+#include "../singleton.h"
 
 class SelectionRender : public GOCFamily_Render, Singleton <SelectionRender>
 {
