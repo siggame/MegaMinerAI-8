@@ -119,6 +119,15 @@ class Pirate(Unit):
     
   def takeDamage(self, pirate):
     self.health -= pirate.strength
+    #Merchants add attacker to shitlist
+    if self.owner == 2 or self.owner == 3: 
+      found = False
+      for enemy in self.traderGroup.shitlist:
+        if enemy is pirate:
+          found = True
+          break
+      if not found:
+        self.traderGroup.shitlist += [pirate]
     #If pirate is killed by the attack
     if self.health <= 0:
       #If the pirate did not kill himself, transfer gold to killing pirate... if it was a pirate that killed him
@@ -645,6 +654,14 @@ class Ship(Unit):
     
   def takeDamage(self, attacker):
     self.health -= attacker.strength
+    if self.owner is 2 or self.owner is 3:
+      found = False
+      for enemy in self.traderGroup.shitlist:
+        if enemy is attacker:
+          found = True
+          break
+      if not found:
+        self.traderGroup.shitlist += [attacker]
     #If the ship is killed by the attack
     #Destroy everything that was on it
     #If it was not at a port
