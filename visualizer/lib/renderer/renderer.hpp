@@ -67,6 +67,17 @@ bool Renderer<DupObject>::refresh()
 	unsigned int turn = TimeManager::getTurn();
 	unsigned int frame = TimeManager::getFrame();
 
+  std::list<renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+
+  for( ; it != Single::get()->m_renderConstant.end(); it++ )
+  {
+    GOCFamily_Render *r = (GOCFamily_Render*)(*it)->getGOC( "RenderFamily" );
+    if( r )
+    {
+      r->renderAt( 0, 0 );
+    }
+  }
+
   //float depth = 0;
 	/*std::map<unsigned int, renderObj*>::iterator it = Single::get()->m_objects.begin();
 	for (; it != Single::get()->m_objects.end(); it++)
@@ -346,6 +357,14 @@ bool Renderer<DupObject>::clear()
 	}
 
 	Single::get()->m_duplicateList = NULL;
+
+  std::list<renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+  for(; it!=Single::get()->m_renderConstant.end(); it++ )
+  {
+    delete (*it);
+  }
+
+  Single::get()->m_renderConstant.clear();
 
 	return true;
 }
