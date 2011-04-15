@@ -29,20 +29,34 @@ void SelectionRender::setDragging(bool dragging)
 {
 	m_dragging = dragging;
 }
-#include <iostream>
-using namespace std;
 
 void SelectionRender::renderAt(const unsigned int & turn, const unsigned int & frame)
 {
 	if(getDragging())
 	{
-    cout << "Draggin" << endl;
-		glColor4f(0.0f, 0.5f, 0.5f, 1.0f);
+		glDisable(GL_TEXTURE);
+		glEnable(GL_BLEND);
+		
+		//Box shading
+		glColor4f(0.0f, 0.5f, 0.5f, 0.1f);
 		glBegin(GL_QUADS);
 			glVertex3f(m_X1, m_Y1, 0);
 			glVertex3f(m_X2, m_Y1, 0);
 			glVertex3f(m_X2, m_Y2, 0);
 			glVertex3f(m_X1, m_Y2, 0);
 		glEnd();
+		
+		//Selection Box lines
+		glLineWidth(2);
+		glColor4f(0.0f, 0.4f, 0.6f, 1.0f);
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(m_X1, m_Y1, 0);
+			glVertex3f(m_X2, m_Y1, 0);
+			glVertex3f(m_X2, m_Y2, 0);
+			glVertex3f(m_X1, m_Y2, 0);
+		glEnd();
+		
+		glDisable(GL_BLEND);
+		glEnable(GL_TEXTURE);
 	}
 }
