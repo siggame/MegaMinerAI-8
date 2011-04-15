@@ -1,8 +1,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+// TODO: Add more includes.  Not nearly enough
 #include "../singleton.h"
 #include <map>
+#include <list>
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -31,6 +33,9 @@ class Renderer : public Singleton< Renderer< DupObject > >
 	public:
 		//static bool reg(const unsigned int & id, renderObj * obj);
 		//static bool del(const unsigned int & id);
+
+    static bool registerConstantObj( const unsigned int& id, renderObj* obj );
+    static bool deleteConstantObj( const unsigned int& id );
 
 		static bool setup(/**@todo make options*/);
 		static bool clear();
@@ -67,6 +72,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		DupObject **** m_duplicateList;
 		unsigned int m_dupListDirs;
 		std::vector<DupObject*> m_renderList;
+
+    std::map<int, renderObj*> m_renderConstant;
 
 		static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
 							const unsigned int & time, DupObject obj);
