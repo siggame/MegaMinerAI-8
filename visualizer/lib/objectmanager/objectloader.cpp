@@ -37,10 +37,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     PirateData * data2 = new PirateData();
-    //pm->generateMap( game );
+    //pm->generateMap( game );     //TODO: REMOVE BEFORE COMPETITION
     pm->setOwner( go );
     go->setGOC( pm );
-    Renderer<DupObj>::registerConstantObj( 1, go );
+//    Renderer<DupObj>::registerConstantObj( 1, go );     //TODO: REMOVE BEFORE COMPETITION
 
     go = new GameObject( 2 );
     go->setGOC( SelectionRender::get() );
@@ -52,6 +52,8 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     TimeManager::setTurn(0);
     TimeManager::setNumTurns( numTurns );
 
+
+    return true;     //TODO: REMOVE BEFORE COMPETITION
 
     std::map<idtype, LookupSet<GameObject*,idtype> > looksets;
 

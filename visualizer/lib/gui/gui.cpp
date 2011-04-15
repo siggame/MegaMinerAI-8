@@ -52,7 +52,9 @@ bool GUI::setup()
   if( !isInit() )
     return false;
 
-  return get()->doSetup();
+
+  get()->m_isSetup = get()->doSetup();
+  return get()->m_isSetup;
 }
 
 bool GUI::clear()

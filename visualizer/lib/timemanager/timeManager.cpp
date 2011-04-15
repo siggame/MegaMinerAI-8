@@ -27,6 +27,8 @@ void TimeManager::setTurn( const int& turn )
     throw 0;
   get()->m_turn = turn;
   get()->m_frame = 0;
+  
+  GUI::getControlBar()->m_slider->setValue ( turn );
 }
 
 const int& TimeManager::getSpeed()
@@ -130,8 +132,13 @@ void TimeManager::updateFrames()
 
     }
 
+  } 
+  if(GUI::isSetup())
+  {
+    cout << "GUI SETUP "<<endl;
+    GUI::getControlBar()->m_slider->setValue ( m_turn );
   }
-
+    cout << "Update frame for turn: " << m_turn <<endl;  
 }
 
 void TimeManager::timerUpdate()

@@ -15,10 +15,6 @@ int main(int argc, char *argv[])
   int i = 0;
 	typedef Renderer<DupObj> Render;
 	QApplication app( argc, argv );
-	TimeManager::create();
-  cout << "Got to: " << i++ << endl;
-	TimeManager::setSpeed( 1 );
-  cout << "Got to: " << i++ << endl;
 
 	optionsMan::create();
   cout << "Got to: " << i++ << endl;
@@ -59,12 +55,18 @@ int main(int argc, char *argv[])
 	optionsMan::addInt( "currentTurn", 0 );
 	// done initializing
 
+	TimeManager::create();
+  cout << "Got to: " << i++ << endl;
+	TimeManager::setSpeed( 1 );
+  cout << "Got to: " << i++ << endl;
+
   cout << "Got to: " << i++ << endl;
 	GUI::setup();
   cout << "Got to: " << i++ << endl;
 	Render::setup();
   cout << "Got to: " << i++ << endl;
-  //TimeManager::setup();
+
+
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
