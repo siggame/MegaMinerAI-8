@@ -17,6 +17,7 @@
 #include "../renderer/renderer.h"
 #include "../../piracy/dupObj.h"
 #include "../selectionrender/selectionrender.h"
+#include "../gui/controlbar.h"
 
 typedef int idtype;
 
@@ -31,11 +32,12 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     }
 
 
+
   //! @todo THIS IS BROKEN!!!!
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     PirateData * data2 = new PirateData();
-    pm->generateMap( game );
+    //pm->generateMap( game );
     pm->setOwner( go );
     go->setGOC( pm );
     Renderer<DupObj>::registerConstantObj( 1, go );
@@ -44,9 +46,6 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     go->setGOC( SelectionRender::get() );
     SelectionRender::get()->setOwner( go );
     Renderer<DupObj>::registerConstantObj( 2, go );
-
-    return true;
-    //Renderer<DupObj>::reg( -1, go );
 
     unsigned int numTurns = game.states.size();
     unsigned int numFrames = optionsMan::getInt("numFrames");

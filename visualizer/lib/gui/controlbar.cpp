@@ -14,6 +14,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
   m_slider = new QSlider( Qt::Horizontal, this );
   m_slider->setMinimum( 0 );
+  //maximum set by TimeManager
   m_slider->setTickInterval( 50 ); 
   m_slider->setStyleSheet( "\
 			QSlider::groove:horizontal {\

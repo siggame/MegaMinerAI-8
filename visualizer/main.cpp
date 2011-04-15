@@ -64,6 +64,7 @@ int main(int argc, char *argv[])
   cout << "Got to: " << i++ << endl;
 	Render::setup();
   cout << "Got to: " << i++ << endl;
+  //TimeManager::setup();
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{

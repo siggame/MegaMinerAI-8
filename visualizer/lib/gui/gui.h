@@ -183,6 +183,8 @@ public:
 
   static void update();
   static void closeGUI();
+  
+  static ControlBar * getControlBar();
 
 private slots:
   void helpContents();

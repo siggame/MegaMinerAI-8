@@ -401,3 +401,7 @@ void GUI::initUnitStats()
   m_dockLayout->addWidget( m_unitStatsArea );
 }
 
+ControlBar * GUI::getControlBar()
+{
+  return get()->m_controlBar;
+}

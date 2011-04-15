@@ -8,6 +8,7 @@
 class ControlBar : public QWidget 
 {
   friend class GUI;
+  friend class TimeManager;
   Q_OBJECT
 public:
   ControlBar( QWidget *parent = 0 );

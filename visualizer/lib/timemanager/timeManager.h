@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <time.h>
 #include "../singleton.h"
+#include "../gui/controlbar.h"
 
 class TimeManager : public QObject, public Singleton<TimeManager>
 {
