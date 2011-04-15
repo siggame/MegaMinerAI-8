@@ -28,7 +28,6 @@ SOURCES += main.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/gocfamily_data.cpp \
     ./lib/selectionrender/*.cpp
-
 MOC = moc
 HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
@@ -56,8 +55,8 @@ HEADERS += ./lib/manager/*.h \
     lib/gocfamily_location.h \
     piracy/piracylocations.h \
     lib/goc_owner.h \
-    piracy/gold.h
-
+    piracy/gold.h \
+    piracy/objecttype.h
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \
