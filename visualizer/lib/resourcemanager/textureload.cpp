@@ -153,10 +153,6 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 
 	glGenTextures( 1, &texId );
 
-  GLenum errCode;
-  const GLubyte *errString = gluErrorString ( glGetError() );
-  fprintf (stderr, "OpenGL Error: %s\n", errString);
-   
 	glBindTexture( GL_TEXTURE_2D, texId );
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 

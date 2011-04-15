@@ -362,16 +362,11 @@ void PirateMap::generateMap( Game& g )
   {
     for( int y = 0; y < mHeight; y++ )
     {
-      //result.setPixel( x, y, qRgb( depthMap[x][y], depthMap[x][y], depthMap[x][y] ) );
-      
-      //result.setPixel( x, y, textures[0].pixel( x, y ) );
-	//std::cout << "textures: " << textures << " depths: " << depths << " done\n";
       result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
     }
   }
 
   mapTexture.load( result );
-  cout << "TEXTURE: " << mapTexture.getTexture() << endl;
 
   GLenum errCode;
   const GLubyte *errString;
@@ -450,7 +445,6 @@ void PirateMap::renderAt(
   glEnable( GL_TEXTURE_2D );
 
   glColor4f( 1, 1, 1, 1 );
-  cout << mapTexture.getTexture() << endl;
   glBindTexture( GL_TEXTURE_2D, mapTexture.getTexture() );
 
   glBegin( GL_QUADS );
