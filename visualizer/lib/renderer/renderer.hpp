@@ -48,7 +48,11 @@ bool Renderer<DupObject>::refresh()
     if (!isSetup())
 	    return false;
 
-  //GUI::update();
+		if(SelectionRender::get()->getUpdated())
+		{
+			unitID.clear();
+		}
+
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -80,6 +84,8 @@ bool Renderer<DupObject>::refresh()
     {
       Single::get()->m_parent->swapBuffers();
     }
+
+		SelectionRender::get()->setUpdated(false);
 
     return true;
 }

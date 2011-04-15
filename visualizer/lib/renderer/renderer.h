@@ -14,7 +14,7 @@
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
 #include "../../piracy/piratemap.h"
-//#include "../gui/gui.h"
+
 
 //this is a place holder
 typedef GameObject renderObj;
@@ -83,6 +83,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		typedef Renderer<DupObject> Render;
 
     RenderWidget *m_parent;
+    
+    list <int> selectedUnitIds;
 };
 
 #include "renderer.hpp"
