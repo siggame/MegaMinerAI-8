@@ -56,11 +56,17 @@ Piracy : The Game
        Allows you to build pirates and ships. These units will spawn on the port tile.
        Ships can exist on ports, so they can be used as bridges.
        Keep in mind that only one ship can exist on each tile, so they will need to be moved before more are created.
+       Whenever a ship enters a port it will automatically give all of its gold to the port (the pirates need to drop theirs on their own)
        
        
 [The Merchants]
-       Merchant ships and units will periodically spawn from merchant ports and travel to another merchant port.
-       All of the units on these ships will be carrying gold, kill them to add to your vast wealth.
+       There will be six merchant ports on each map.
+       Each merchant port has treasure that gains interest in the same way as treasure lying on the ground
+       Whenever a merchant port reaches 900 gold, it will spawn a ship and some number of pirates (bodyguards), half of the port's money will be split evenly amongst the pirates.
+       Merchant ships will path from their source port to another port, with preference being given to the port with the most money.
+       Merchant ships will spawn carrying extra gold equal to one quarter of the distance to the destination port divided by the width of the map.
+       Merchant ships will path from their home port to their destination port using A*, if there is no path they will attempt to move in a random direction.
+       All of the units on these ships will be carrying gold, kill them to add to your vast wealth, kill all of them and steal their ship to add even more to your vast wealth.
        Merchant ships are neutral in nature until you attack them, at which point they will fight back and try to destroy you.
        Merchants get angry when you kill their men, and will send out stronger armies if their cargo never arrives. If their ships arrive safely, they will send weaker detachments to guard them.
 
@@ -70,5 +76,3 @@ Piracy : The Game
        
         
        
-       
-
