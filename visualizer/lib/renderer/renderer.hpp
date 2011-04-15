@@ -327,6 +327,7 @@ bool Renderer<DupObject>::clear()
 	if (!Single::isInit())
 		return false;
 
+#if 0
 	if (Single::get()->m_duplicateList)
 	{
 		for (unsigned int x = 0; x < width(); x++)
@@ -343,6 +344,7 @@ bool Renderer<DupObject>::clear()
 		}
 		delete [] Single::get()->m_duplicateList;
 	}
+#endif
 
 	Single::get()->m_duplicateList = NULL;
 
