@@ -153,6 +153,9 @@ typedef GOCFamily_GUI guiObj;
 class GUI : public QMainWindow, public Singleton<GUI>
 {
   Q_OBJECT
+  
+  friend class RenderWidget;
+  
 public:
   ~GUI();
   static bool reg( const std::string& id, guiObj *obj );
@@ -244,24 +247,7 @@ private:
   void buildToolSet();
   void initUnitStats();
 
-  //Old unit selection code we're bringing forward
-  void mousePressEvent( QMouseEvent *event );
-  void mouseReleaseEvent( QMouseEvent *event );
-  void mouseMoveEvent( QMouseEvent *event );
 
-  bool leftButtonDown;
-  bool leftButtonDrag;
-
-  int curX;
-  int curY;
-
-  int clickX;
-  int clickY;
-
-  int dragX;
-  int dragY;
-  
-  static const int m_DRAG_DISTANCE = 6;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

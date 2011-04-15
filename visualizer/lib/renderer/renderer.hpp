@@ -411,10 +411,10 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
     {
-	if (it->second)
-	{
-	    updateLocation(it->second);
-	}
+    	if (it->second)
+    	{
+//    	    updateLocation(it->second);
+    	}
     }
 
 }
