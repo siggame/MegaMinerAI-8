@@ -48,7 +48,11 @@ bool Renderer<DupObject>::refresh()
     if (!isSetup())
 	    return false;
 
-  //GUI::update();
+		if(SelectionRender::get()->getUpdated())
+		{
+			unitID.clear();
+		}
+
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -80,6 +84,8 @@ bool Renderer<DupObject>::refresh()
     {
       Single::get()->m_parent->swapBuffers();
     }
+
+		SelectionRender::get()->setUpdated(false);
 
     return true;
 }
@@ -468,10 +474,9 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	if (it->second)
 	{
 	   DupObject temp;
-	   //temp.
+	   setDupObj(it->second->data,temp);
 	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
 	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
-
 	}
 
     }

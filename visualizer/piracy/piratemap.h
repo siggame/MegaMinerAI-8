@@ -79,6 +79,8 @@ public:
       const int& rad );
 #endif
 
+  ResTexture mapTexture;
+
   void update();
   virtual void renderAt(
       const unsigned int& turn,
