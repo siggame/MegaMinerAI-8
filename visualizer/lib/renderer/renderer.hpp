@@ -67,11 +67,11 @@ bool Renderer<DupObject>::refresh()
 	unsigned int turn = TimeManager::getTurn();
 	unsigned int frame = TimeManager::getFrame();
 
-  std::list<renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
   for( ; it != Single::get()->m_renderConstant.end(); it++ )
   {
-    GOCFamily_Render *r = (GOCFamily_Render*)(*it)->getGOC( "RenderFamily" );
+    GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
     {
       r->renderAt( 0, 0 );
@@ -358,15 +358,46 @@ bool Renderer<DupObject>::clear()
 
 	Single::get()->m_duplicateList = NULL;
 
-  std::list<renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
   for(; it!=Single::get()->m_renderConstant.end(); it++ )
   {
-    delete (*it);
+    delete (it->second);
   }
 
   Single::get()->m_renderConstant.clear();
 
 	return true;
+}
+
+template<typename DupObject>
+bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
+{
+  if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
+  {
+    return false;
+    delete Single::get()->m_renderConstant[id];
+  }
+
+  Single::get()->m_renderConstant[id] = obj;
+
+  return true;
+}
+
+template<typename DupObject>
+bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
+{
+  std::map<int,renderObj*> it = Single::get()->m_renderConstant.find( id );
+  if( it != Single::get()->m_renderConstant.end() )
+  {
+    delete Single::get()->m_renderConstant[id];
+    Single::get()->m_renderConstant.erase( it );
+    return true;
+  } else
+  {
+    return false;
+  }
+
+
 }
 
 /** @brief updateLocation
