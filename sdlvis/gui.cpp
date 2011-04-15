@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
+#include <sstream>
 
 #include <SDL_ttf.h>
 
@@ -10,6 +12,7 @@ using namespace std;
 
 static SDL_Surface* screen = NULL;
 static TTF_Font* font = NULL;
+static TTF_Font* consoleFont = NULL;
 
 bool initGUI()
 {
@@ -27,33 +30,31 @@ bool initGUI()
   font=TTF_OpenFont("arial.ttf", 8);
   if(font == NULL)
     return false;
+  
+  consoleFont=TTF_OpenFont("arial.ttf", 20);
+  if(consoleFont == NULL)
+    return false;
 }
 
-void renderTurn(Game& g, int turn)
+void clearScreen()
+{
+  SDL_Rect dest;
+  dest.x = dest.y = 0;
+  dest.w = 1024;
+  dest.h = 768;
+  SDL_FillRect(screen, &dest, SDL_MapRGB(screen->format, 255, 255, 255));
+}
+
+void renderMap(Game& g)
 {
   SDL_Surface* land = loadImage("images/land.png");
   SDL_Surface* water = loadImage("images/water.png");
-  SDL_Surface* ship = loadImage("images/ship.png");
-  SDL_Surface* image = NULL;
+  
   SDL_Rect dest;
-  SDL_Color yellow = {255,255,0};
-  SDL_Color white = {255,255,255};
-  SDL_Color black = {0,0,0};
-  SDL_Color color;
-  char buf[9];
+  
   dest.w = 19;
   dest.h = 19;
-  int owner[40][40];
-  int gold[40][40];
-  int pirates[40][40];
   
-  for(int i = 0; i < 40; i++)
-    for(int j = 0; j < 40; j++)
-    {
-      owner[i][j] = 0;
-      gold[i][j] = 0;
-      pirates[i][j] = 0;
-    }
   for(int i = 0; i < g.states[0].tiles.size(); i++)
   {
     if(g.states[0].tiles[i].id == 0) continue;
@@ -69,6 +70,66 @@ void renderTurn(Game& g, int turn)
       SDL_BlitSurface(land, NULL, screen, &dest);
     }
   }
+}
+
+void drawText(Game& g, int turn)
+{
+  stringstream message;
+  SDL_Rect dest;
+  dest.x = 760;
+  dest.y = 0;
+  SDL_Surface* image;
+  SDL_Color purple = {255,0,255};
+  SDL_Color black = {0,0,0};
+  
+  message << "Player 1 gold: ";
+  message << g.states[turn].players[0].gold;
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Player 2 gold: ";
+  message << g.states[turn].players[1].gold;
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+}
+
+void renderTurn(Game& g, int turn)
+{
+  
+  SDL_Surface* ship = loadImage("images/ship.png");
+  SDL_Surface* image = NULL;
+  SDL_Rect dest;
+  SDL_Color yellow = {255,255,0};
+  SDL_Color purple = {255,0,255};
+  SDL_Color black = {0,0,0};
+  SDL_Color color;
+  char buf[9];
+  dest.w = 19;
+  dest.h = 19;
+  int owner[40][40];
+  int gold[40][40];
+  int pirates[40][40];
+  
+  for(int i = 0; i < 40; i++)
+  {
+    for(int j = 0; j < 40; j++)
+    {
+      owner[i][j] = 0;
+      gold[i][j] = 0;
+      pirates[i][j] = 0;
+    }
+  }
+  
+  clearScreen();
+  renderMap(g);
   
   for(int i = 0; i < g.states[turn].ports.size(); i++)
   {
@@ -114,6 +175,7 @@ void renderTurn(Game& g, int turn)
   }
   
   for(int i = 0; i < 40; i++)
+  {
     for(int j = 0; j < 40; j++)
     {
       if(gold[i][j] != 0)
@@ -135,11 +197,11 @@ void renderTurn(Game& g, int turn)
         
         if(owner[i][j] == 0)
         {
-          color = white;
+          color = black;
         }
         else if(owner[i][j] == 1)
         {
-          color = black;
+          color = purple;
         }
         else
         {
@@ -154,6 +216,9 @@ void renderTurn(Game& g, int turn)
         SDL_FreeSurface(image);
       }
     }
+  }
+  
+  drawText(g, turn);
   
   SDL_Flip(screen);
 }
