@@ -205,7 +205,7 @@ class Pirate(Unit):
           return "Ye cannot move yerr pirates into enemy ports"
       #Checking if unit is moving onto water
       elif isinstance(i,Tile) and i.x == x and i.y == y and i.type == 1:
-        waterTile = True
+        intoWater = True
       #Checking about the Boats
       elif isinstance(i,Ship) and i.x == x and i.y == y:
         #-1 is placeholder value for neutral ship. May need to be changed
