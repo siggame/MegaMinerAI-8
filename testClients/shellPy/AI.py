@@ -6,19 +6,25 @@ import random
 class AI(BaseAI):
   """The class implementing gameplay logic."""
   @staticmethod
+  
+  #Set this return value to be your team username as configured on megaminerai.com
   def username():
     return "Shell AI"
 
+  #Set this return value to be your team password as configured on megaminerai.com
   @staticmethod
   def password():
     return "password"
 
+  #things that happen before your turn begins
   def init(self):
     print "Initializing"
 
+  #Things that happen after your turn has ended
   def end(self):
     pass
 
+  #Things that happen during your turn.
   def run(self):
   
     #----------------------------------------------------------------------
