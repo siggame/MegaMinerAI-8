@@ -1,6 +1,6 @@
 import com.sun.jna.Pointer;
 
-///A generic pirate
+///A basic pirate. These units are bound to land unless aboard a ship. they can pickup and drop treasure as well as build ports and fight other pirates.
 class Pirate extends Unit 
 {
   public Pirate(Pointer p)
@@ -24,7 +24,7 @@ class Pirate extends Unit
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   int move(int x, int y)
   {
     validify();
@@ -36,7 +36,7 @@ class Pirate extends Unit
     validify();
     return Client.INSTANCE.pirateTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   int attack(Unit Target)
   {
     validify();
@@ -49,13 +49,13 @@ class Pirate extends Unit
     validify();
     return Client.INSTANCE.piratePickupTreasure(ptr, amount);
   }
-  ///Allows the pirate to drop treasure on the groud.
+  ///Allows the pirate to drop treasure they are carrying.
   int dropTreasure(int amount)
   {
     validify();
     return Client.INSTANCE.pirateDropTreasure(ptr, amount);
   }
-  ///Pirate builds a port on a land tile with water tile adjacent
+  ///Pirate builds a port on a land tile with water tile adjacent. Cannot be within three spaces of another port!
   int buildPort()
   {
     validify();
@@ -82,19 +82,19 @@ class Pirate extends Unit
     validify();
     return Client.INSTANCE.pirateGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public int getOwner()
   {
     validify();
     return Client.INSTANCE.pirateGetOwner(ptr);
   }
-  ///Health of the unit
+  ///Current ealth of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.pirateGetHealth(ptr);
   }
-  ///Attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public int getStrength()
   {
     validify();

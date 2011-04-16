@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 
-///A generic pirate
+///A basic pirate. These units are bound to land unless aboard a ship. they can pickup and drop treasure as well as build ports and fight other pirates.
 public class Pirate: Unit 
 {
   
@@ -34,7 +34,7 @@ public class Pirate: Unit
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   public new int move(int x, int y)
   {
     validify();
@@ -46,7 +46,7 @@ public class Pirate: Unit
     validify();
     return Client.pirateTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   public new int attack(Unit Target)
   {
     validify();
@@ -59,13 +59,13 @@ public class Pirate: Unit
     validify();
     return Client.piratePickupTreasure(ptr, amount);
   }
-  ///Allows the pirate to drop treasure on the groud.
+  ///Allows the pirate to drop treasure they are carrying.
   public int dropTreasure(int amount)
   {
     validify();
     return Client.pirateDropTreasure(ptr, amount);
   }
-  ///Pirate builds a port on a land tile with water tile adjacent
+  ///Pirate builds a port on a land tile with water tile adjacent. Cannot be within three spaces of another port!
   public int buildPort()
   {
     validify();
@@ -92,19 +92,19 @@ public class Pirate: Unit
     validify();
     return Client.pirateGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public new int getOwner()
   {
     validify();
     return Client.pirateGetOwner(ptr);
   }
-  ///Health of the unit
+  ///Current ealth of the unit
   public new int getHealth()
   {
     validify();
     return Client.pirateGetHealth(ptr);
   }
-  ///Attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public new int getStrength()
   {
     validify();

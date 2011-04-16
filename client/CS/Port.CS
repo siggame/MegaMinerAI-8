@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 
-///A generic port
+///A basic port. The port can create new pirates and ships and is used when pirates need to deposit money.
 public class Port: Mappable 
 {
   
