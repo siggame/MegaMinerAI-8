@@ -3,11 +3,14 @@
 
 AI::AI(Connection* conn) : BaseAI(conn) {}
 
+
+//NOTE: You must change the return value of this to the username you team sets on MegaMinerAI.com
 const char* AI::username()
 {
   return "Shell AI";
 }
 
+//NOTE: You must change the return value of this to the password you team sets on MegaMinerAI.com
 const char* AI::password()
 {
   return "password";
