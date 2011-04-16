@@ -218,7 +218,29 @@ DLLEXPORT void getStatus(Connection* c)
   UNLOCK( &c->mutex );
 }
 
-
+static void pirateShip( Connection * c,int x, int y, int futureOwner)
+{
+  int count = 0;
+  // look for a pirate at either the start or end location
+  for(int i=0; i < c->PirateCount && count<2; i++)
+  {
+    if(c->Pirates[i].health > 0 && c->Pirates[i].x == x && c->Pirates[i].y == y)
+    {
+      count++;
+    }
+  }
+  // Look for ships if either are true
+  for(int i=0; i < c->ShipCount && count < 2; i++)
+  {
+    // there is a ship at your starting location, and you were the only pirate on it
+    if(c->Ships[i].x == x && c->Ships[i].y == y)
+    {
+      c->Ships[i].owner = futureOwner;
+      // stop looking for a ship
+      count=2;
+    }
+  }
+}
 
 DLLEXPORT int unitMove(_Unit* object, int x, int y)
 {
@@ -270,6 +292,11 @@ DLLEXPORT int pirateMove(_Pirate* object, int x, int y)
   UNLOCK( &object->_c->mutex);
   
   // Game state changes
+
+  // leaving the ship
+  pirateShip(object->_c, object->x,object->y,-1);
+  // entering a ship
+  pirateShip(object->_c, x,y,object->owner);
   object->x = x;
   object->y = y;
   object->movesLeft--;
@@ -305,8 +332,11 @@ DLLEXPORT int pirateAttack(_Pirate* object, _Unit* Target)
     // get their gold
     object->gold+=Target->gold;
     Target->gold=0;
+    // handle ship ownership
+    pirateShip(object->_c, Target->x, Target->y,-1);
   }
   object->attacksLeft--;
+  
   return 1;
 }
 
@@ -431,6 +461,7 @@ DLLEXPORT int portCreatePirate(_Port* object)
   // Game state changes
   Connection* c = object->_c;
   c->Players[c->playerID].gold-=c->pirateCost;
+  pirateShip(object->_c, object->x, object->y, object->owner);
   return 1;
 }
 
