@@ -30,7 +30,8 @@ class AI(BaseAI):
     pass
 
   def grabEmptyShips(self,myUnits):
-      #boards empty ships      
+    if self.turnNumber() < 350:
+      #boards empty ships
       for p in myUnits:
         for e in self.ships:
           if e.getOwner() == -1:
@@ -87,8 +88,15 @@ class AI(BaseAI):
         if fight:
           for p in group.pirates:
             self.attackAnything(p)
-
-        direction = aStar(self,1,group.ship.getX(),group.ship.getY(),best.getX(),best.getY())
+        
+        direction = []
+        if not fight:
+          direction = aStar(self,1,group.ship.getX(),group.ship.getY(),best.getX(),best.getY())
+        else:
+          spots = [i for i in self.tiles if (abs(i.getX()-best.getX())+abs(i.getY()-best.getY())) == 1 and i.getType() == 1]
+          index = randint(0,len(spots)-1)
+          direction = aStar(self,1,group.ship.getX(),group.ship.getY(),spots[index].getX(),spots[index].getY())
+            
         if len(direction) == 0:
           dir = random.randint(0,3)
           if dir == 0:
@@ -353,13 +361,17 @@ def aStar(game, safeTile, startX, startY, endX, endY):
     #if the tile we are looking at is the safe tile we need to make it safe, change it to a 0
     if tile.getType() == safeTile:
       the_map[tile.getY()][tile.getX()] = 0
-  
+  #makes your ports pathable
+  for port in game.ports:
+    if port.getOwner() == game.playerID():
+      the_map[port.getY()][port.getX()] = 0
   #mark all the ships as land tiles...
   for ship in ships:
     the_map[ship.getY()][ship.getX()] = 1   
-  #also set the starting and ending positions to valid tiles!
+  #also set the starting positions to valid tiles!
   the_map[startY][startX] = 0;
-  the_map[endY][endX] = 0;
+
+
  
   # these are valid directions that the pathfinder can move
   dirs = 4  # 4 driections (N, E, S, W)
