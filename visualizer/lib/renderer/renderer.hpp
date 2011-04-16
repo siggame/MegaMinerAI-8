@@ -530,7 +530,6 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	   if (goc)
 	   {
 	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
-	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
          if( selectUpdate )
          {
@@ -539,17 +538,23 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                loc->y() >= y1 &&
                loc->y() <= y2 )
            {
+             temp.selected = true;
+#if 0
              goc = it->second->data->getGOC( "Owner" );
              if( goc )
              {
                int id =((GOC_Owner*)goc)->owner();
                Single::get()->selectedUnitIds.push_back( id );
+
                stringstream ss;
                ss << id << endl; 
                //GUI::appendConsole(  ss.str() );
              }
+#endif
            }
          }
+	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+
 
 	   }
 	   else
