@@ -77,7 +77,7 @@ class AI(BaseAI):
             if dist(group.ship.getX(),group.ship.getY(),port.getX(),port.getY()) < dist(group.ship.getX(),group.ship.getY(),best.getX(),best.getY()):
               best = port
         else:
-          targetShips = [i for i in self.ships if i.getOwner() == 2 or i.getOwner() == 3]
+          targetShips = [i for i in self.ships if i.getOwner() != self.playerID()]
           best = group.ship
           if len(targetShips) > 0:
             best = targetShips[0]
@@ -108,21 +108,32 @@ class AI(BaseAI):
           elif dir == 3:
             direction = ['3']
         #print "There is no path!"
+        destx = group.ship.getX()
+        desty = group.ship.getY()
         if direction[0] == '0':
           #print "right"
-          group.ship.move(group.ship.getX()+1,group.ship.getY())
+          destx += 1
         #Down
         elif direction[0] == '1': 
         #print "down"
-          group.ship.move(group.ship.getX(),group.ship.getY()+1)
+          desty += 1
         #Left
         elif direction[0] == '2':
           #print "left"
-          group.ship.move(group.ship.getX()-1,group.ship.getY())
+          destx -= 1
         #Up
         elif direction[0] == '3':
           #print "up"
-          group.ship.move(group.ship.getX(),group.ship.getY()-1)
+          desty -= 1
+        if destx < 0:
+          destx = 1
+        if desty < 0:
+          desty = 1
+        if destx > game.mapSize()-1:
+          destx = game.mapSize()-3
+        if desty > game.mapSize()-1:
+          desty = game.mapSize()-3
+        group.ship.move(destx,desty)
         if fight:
           for p in group.pirates:
             self.attackAnything(p)
@@ -130,19 +141,21 @@ class AI(BaseAI):
         if len(direction) > 1:
           if direction[1] == '0':
             #print "right"
-            group.ship.move(group.ship.getX()+1,group.ship.getY())
+            destx += 1
           #Down
           elif direction[1] == '1': 
           #print "down"
-            group.ship.move(group.ship.getX(),group.ship.getY()+1)
-          #Left
+            desty += 1
+          #Left  
           elif direction[1] == '2':
             #print "left"
-            group.ship.move(group.ship.getX()-1,group.ship.getY())
+            destx -= 1
           #Up
           elif direction[1] == '3':
             #print "up"
-            group.ship.move(group.ship.getX(),group.ship.getY()-1)
+            desty -= 1
+          group.ship.move(destx,desty)
+
         if group.ship.getMovesLeft() > 1:
           dir = random.randint(0,3)
           if dir == 0:
@@ -153,22 +166,31 @@ class AI(BaseAI):
             direction += '2'
           elif dir == 3:
             direction += '3'
-          #print "There is no path!"
+
+            #print "There is no path!"
           if direction[0] == '0':
             #print "right"
-            group.ship.move(group.ship.getX()+1,group.ship.getY())
+            destx += 1
           #Down
           elif direction[0] == '1': 
           #print "down"
-            group.ship.move(group.ship.getX(),group.ship.getY()+1)
+            desty += 1
           #Left
           elif direction[0] == '2':
             #print "left"
-            group.ship.move(group.ship.getX()-1,group.ship.getY())
+            destx -= 1
           #Up
           elif direction[0] == '3':
-            #print "up"
-            group.ship.move(group.ship.getX(),group.ship.getY()-1)
+            desty -= 1
+          if destx < 0:
+            destx = 1
+          if desty < 0:
+            desty = 1
+          if destx > 39:
+            destx = 37
+          if desty > 39:
+            desty = 37
+          group.ship.move(destx,desty)
           
         if fight:
           for p in group.pirates:
