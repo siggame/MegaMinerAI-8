@@ -27,10 +27,7 @@ SOURCES += main.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/gocfamily_data.cpp \
-    ./lib/selectionrender/*.cpp \
-    lib/resourcemanager/resourceload.cpp \
-    lib/resourcemanager/resourceman.cpp \
-    lib/resourcemanager/textureload.cpp
+    ./lib/selectionrender/*.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
@@ -55,15 +52,13 @@ HEADERS += ./lib/manager/*.h \
     ./lib/gocfamily_render.h \
     ./lib/singleton.h \
     ./lib/selectionrender/*.h \
-    lib/gocfamily_location.h \
-    piracy/piracylocations.h \
-    lib/goc_owner.h \
-    piracy/gold.h \
-    piracy/objecttype.h \
-    lib/resourcemanager/resource.h \
-    lib/resourcemanager/resourceman.h \
-    lib/resourcemanager/texture.h \
-    lib/resourcemanager/typedefs.h
+    ./lib/gocfamily_location.h \
+    ./piracy/piracylocations.h \
+    ./lib/goc_owner.h \
+    ./piracy/gold.h \
+    ./piracy/objecttype.h \
+    ./lib/resourcemanager/*.h
+
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg

@@ -32,7 +32,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 	Single::get()->m_height = _height;
 	Single::get()->m_width = width;
 	Single::get()->m_depth = depth;
-  refresh();
+	refresh();
 	return true;
 }
 
@@ -79,7 +79,7 @@ bool Renderer<DupObject>::refresh()
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
   {
-      renderIt->render();
+     // renderIt->render();
   }
 
   glPopMatrix();

@@ -3,6 +3,9 @@
 * ~Shep
 **************/
 
+#ifndef TEXTURELOAD_CPP
+#define TEXTURELOAD_CPP
+
 #include "texture.h"
 #include <qgl.h>
 #include <GL/glu.h>
@@ -237,3 +240,4 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 	return true;
 }
 
+#endif
