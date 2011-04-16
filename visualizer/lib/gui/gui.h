@@ -7,6 +7,8 @@
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
 #include "../objectmanager/objectloader.h"
+
+
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>

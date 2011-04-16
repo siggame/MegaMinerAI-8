@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 {
   int i = 0;
 	typedef Renderer<DupObj> Render;
+
 	QApplication app( argc, argv );
 
 	if (!optionsMan::create())
