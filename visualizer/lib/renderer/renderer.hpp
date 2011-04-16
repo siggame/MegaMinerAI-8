@@ -3,6 +3,10 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
+#include "../gui/gui.h"
+#include "../goc_owner.h"
+#include <sstream>
+using namespace std;
 
 
 /** @brief resize
@@ -55,6 +59,7 @@ bool Renderer<DupObject>::refresh()
   if(SelectionRender::get()->getUpdated())
   {
     Single::get()->selectedUnitIds.clear();
+    update( TimeManager::getTurn(), TimeManager::getFrame() );
   }
 
 
@@ -515,7 +520,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     if (!bucket)
     {
 	//std::cout << "CANT FIND YOUR FUCKING BUCKET\n";
-	return; //! @todo toss computer against wall
+      return; //! @todo toss computer against wall
     }
     else
     {
@@ -524,6 +529,26 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
     Single::get()->m_renderList.clear();
     int time = TimeManager::timeHash();
+
+    bool selectUpdate = SelectionRender::get()->getUpdated();
+    float mapSize = (float)optionsMan::getInt("mapSize");
+    float unitSize  = height()/mapSize;
+
+    int x1;
+    int x2;
+    int y1;
+    int y2;
+
+    if( selectUpdate )
+    {
+      x1 = SelectionRender::get()->getX1()/unitSize;
+      x2 = SelectionRender::get()->getX2()/unitSize;
+      y2 = SelectionRender::get()->getY1()/unitSize+1;
+      y2 = SelectionRender::get()->getY2()/unitSize+1;
+    }
+
+
+
 
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
@@ -537,6 +562,26 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	   {
 	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
 	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+
+         if( selectUpdate )
+         {
+           if( loc->x() >= x1 && 
+               loc->x() <= x2 &&
+               loc->y() >= y1 &&
+               loc->y() <= y2 )
+           {
+             goc = it->second->data->getGOC( "Owner" );
+             if( goc )
+             {
+               int id =((GOC_Owner*)goc)->owner();
+               Single::get()->selectedUnitIds.push_back( id );
+               stringstream ss;
+               ss << id << endl; 
+               //GUI::appendConsole(  ss.str() );
+             }
+           }
+         }
+
 	   }
 	   else
 	   {

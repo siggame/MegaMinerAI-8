@@ -14,14 +14,13 @@
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
 
-
 //this is a place holder
 typedef GameObject renderObj;
 
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"
 #define renderDepthName "renderDepth"
-#define renderDirsName 	"renderDirections"
+#define renderDirsName  "renderDirections"
 
 class RenderWidget;
 
@@ -34,8 +33,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		//static bool reg(const unsigned int & id, renderObj * obj);
 		//static bool del(const unsigned int & id);
 
-    static bool registerConstantObj( const unsigned int& id, renderObj* obj );
-    static bool deleteConstantObj( const unsigned int& id );
+		static bool registerConstantObj( const unsigned int& id, renderObj* obj );
+		static bool deleteConstantObj( const unsigned int& id );
 
 		static bool setup(/**@todo make options*/);
 		static bool clear();
@@ -45,7 +44,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		static bool create();
 		static bool destroy();
 
-    static void setParent( RenderWidget *parent );
+		static void setParent( RenderWidget *parent );
 
 		static bool refresh();
 		static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 1);
@@ -73,19 +72,18 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		unsigned int m_dupListDirs;
 		std::vector<DupObject*> m_renderList;
 
-    std::map<int, renderObj*> m_renderConstant;
+		std::map<int, renderObj*> m_renderConstant;
 
 		static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
-							const unsigned int & time, DupObject obj);
+			const unsigned int & time, DupObject obj);
 
 		typedef Singleton<Renderer<DupObject> > Single;
 		typedef Renderer<DupObject> Render;
 
-    RenderWidget *m_parent;
-    
-    list <int> selectedUnitIds;
+		RenderWidget *m_parent;
+
+		list <int> selectedUnitIds;
 };
 
 #include "renderer.hpp"
-
-#endif // RENDERER_H
+#endif													 // RENDERER_H

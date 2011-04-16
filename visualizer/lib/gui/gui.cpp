@@ -3,13 +3,7 @@
 #include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-//#include "../../piracy/boatdata.h"
-#include "../../piracy/boatrender.h"
-//#include "../../piracy/piratedata.h"
-#include "../../piracy/piraterender.h"
 #include "../../piracy/piratemap.h"
-//#include "../../piracy/treasuredata.h"
-#include "../../piracy/treasurerender.h"
 #include "../../piracy/dupObj.h"
 
 #include <iostream>
@@ -146,6 +140,24 @@ void GUI::dropEvent( QDropEvent* evt )
 
   // TODO: Open the gamelog with the appropriate plugins
 
+}
+
+void GUI::appendConsole( string line )
+{
+  QString param;
+  param.append( line.c_str() );
+  appendConsole( param );
+}
+
+void GUI::appendConsole( QString line )
+{
+  GUI::get()->m_consoleArea->append( line );
+}
+
+void GUI::clearConsole()
+{
+
+  GUI::get()->m_consoleArea->clear();
 }
 
 void GUI::resizeEvent( QResizeEvent* evt )

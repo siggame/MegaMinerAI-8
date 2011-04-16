@@ -34,9 +34,6 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     }
 
 
-    cout << __LINE__ << endl;
-
-  //! @todo THIS IS BROKEN!!!!
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     pm->generateMap( game );
@@ -60,7 +57,6 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     for (unsigned int turn = 0; turn < game.states.size(); turn++)
     {
 
-    	// pirates
       for( 
           std::map<int,Pirate>::iterator i = game.states[turn].pirates.begin();
           i != game.states[turn].pirates.end(); 
@@ -80,7 +76,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
-	    PirateHealth * health = new PirateHealth(pirate,i->second.health,optionsMan::getInt("pirateMaxHealth"));
+        PirateHealth * health = new PirateHealth(pirate,i->second.health,optionsMan::getInt("pirateMaxHealth"));
 
 	    //data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
