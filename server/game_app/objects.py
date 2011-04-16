@@ -122,8 +122,9 @@ class Pirate(Unit):
     #Merchants add attacker to shitlist
     if self.owner == 2 or self.owner == 3: 
       found = False
-      if enemy not in self.traderGroup.shitList:
-        self.traderGroup.shitlist += [pirate]
+      for enemy in self.game.objects.values():
+        if enemy not in self.traderGroup.shitlist:
+          self.traderGroup.shitlist += [pirate]
     #If pirate is killed by the attack
     if self.health <= 0:
       #If the pirate did not kill himself, transfer gold to killing pirate... if it was a pirate that killed him
@@ -194,7 +195,7 @@ class Pirate(Unit):
 
     freeShip = False
     intoWater = False
-    theFreeShip
+    theFreeShip = None
     #Check to see if the unit is moving into an enemy
     for i in self.game.objects.values():
       if isinstance(i,Unit):
@@ -261,10 +262,11 @@ class Pirate(Unit):
       if isinstance(i,Port):
         if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
           portPickup = True
+          break
     if amount < 1:
       return "We be not interested in picking up such small amounts of gold!"
     if portPickup == True:
-      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      p = [self.game.objects[i] for i in range(2)]
       #Sets the owner of the pirate to eaither player 0 or 1
       if self.owner == 0:
         owner = 0
@@ -359,7 +361,7 @@ class Pirate(Unit):
         if i._distance(self.x,self.y) == 1: #Not sure about this
           if i.type == 1:
             if self.owner == 0:
-              p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+              p = [self.game.objects[i] for i in range(2)]
               if p[0].gold >= self.game.portCost:
                 #Checks to see if there is treasure on the loaction of the new port
                 for j in self.game.objects.values():
@@ -373,7 +375,7 @@ class Pirate(Unit):
               else:
                 return "We do not have enough gowld to make tha' port, captain!"
             else:
-              p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+              p = [self.game.objects[i] for i in range(2)]
               if p[1].gold >= self.game.portCost:
                 #Checks to see if there is treasure on the loaction of the new port
                 for j in self.game.objects.values():
@@ -476,13 +478,13 @@ class Port(Mappable):
       return "That be not your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      p = [self.game.objects[i] for i in range(2)]
       if p[0].gold >= self.game.pirateCost:
         p[0].gold -= self.game.pirateCost
       else:
         return "We don' have enough gold fer that unit, captain"
     else:
-      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      p = [self.game.objects[i] for i in range(2)]
       if p[1].gold >= self.game.pirateCost:
         p[1].gold -= self.game.pirateCost
       else:
@@ -497,13 +499,13 @@ class Port(Mappable):
       return "That be not your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      p = [self.game.objects[i] for i in range(2)]
       if p[0].gold >= self.game.shipCost:
         p[0].gold -= self.game.shipCost
       else:
         return "We don' have enough gold fer that unit, captain"
     else:
-      p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+      p = [self.game.objects[i] for i in range(2)]
       if p[1].gold >= self.game.shipCost:
         p[1].gold -= self.game.shipCost
       else:
@@ -629,7 +631,7 @@ class Ship(Unit):
     if self.owner < 2:
       for i in self.game.objects.values():
         if isinstance(i,Port) and i.x == x and i.y == y:
-          p = [i for i in self.game.objects.values() if isinstance(i,Player)]
+          p = [self.game.objects[i] for i in range(2)]
           p[self.owner].gold += self.gold
           self.gold = 0
         
