@@ -106,7 +106,7 @@ Treasure = Model('Treasure',
 
 globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
-  Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2'),
+  Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2)'),
   Variable('gameNumber', int, 'What number game this is for the server'),
   Variable('pirateCost', int, 'The cost of a pirate'),
   Variable('shipCost', int, 'The cost of a ship'),

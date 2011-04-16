@@ -98,7 +98,7 @@ public abstract class BaseAI
   {
     return Client.getTurnNumber(connection);
   }
-  ///Player Number; either 0 or 1
+  ///Player Number; either 0 or 1 (0 is player 1, 1 is player 2)
   public int playerID()
   {
     return Client.getPlayerID(connection);
