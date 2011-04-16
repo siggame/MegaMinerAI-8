@@ -274,7 +274,7 @@ private:
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
   
   QString m_previousDirectory;
-
+	QRect m_normalWindowGeometry;
 
 };
 

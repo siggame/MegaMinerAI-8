@@ -9,7 +9,7 @@ File options
 * Ctrl + Q to Quit
 
 View options
-* F11 to toggle fullscreen (you may need to resize after leaving fullscreen.)
+* F11 to toggle fullscreen
 
 Playback options
 * Space to pause playback

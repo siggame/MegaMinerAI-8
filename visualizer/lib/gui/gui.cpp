@@ -362,9 +362,15 @@ void GUI::closeGUI()
 void GUI::toggleFullScreen()
 {
   if( !fullScreen )
+  {
+  	m_normalWindowGeometry = geometry();
     showFullScreen();
+  }
   else
+  {
     showNormal();
+    setGeometry(m_normalWindowGeometry);
+  }
   fullScreen = !fullScreen;
   show();
 }
