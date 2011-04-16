@@ -123,3 +123,4 @@ int findPath(_Tile* start, _Tile* end, int type)
   }
   return 0; //failure
 }
+

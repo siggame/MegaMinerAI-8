@@ -80,3 +80,4 @@ DLLEXPORT int treasureGetGold(_Treasure* ptr);
 #endif
 
 #endif
+

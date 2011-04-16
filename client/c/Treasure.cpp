@@ -40,3 +40,4 @@ std::ostream& operator<<(std::ostream& stream,Treasure ob)
   stream << "gold: " << ((_Treasure*)ob.ptr)->gold  <<'\n';
   return stream;
 }
+

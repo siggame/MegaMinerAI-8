@@ -997,3 +997,4 @@ DLLEXPORT int getMapSize(Connection* c)
 {
   return c->mapSize;
 }
+

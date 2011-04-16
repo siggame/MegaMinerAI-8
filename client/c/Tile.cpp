@@ -40,3 +40,4 @@ std::ostream& operator<<(std::ostream& stream,Tile ob)
   stream << "type: " << ((_Tile*)ob.ptr)->type  <<'\n';
   return stream;
 }
+

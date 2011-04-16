@@ -185,3 +185,4 @@ DLLEXPORT int treasureGetGold(_Treasure* ptr)
   return ptr->gold;
 }
 
+
