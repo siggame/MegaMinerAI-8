@@ -159,7 +159,10 @@ class Pirate(Unit):
                 self.game.Merchant3.shipLost(i)
               i.owner = -1
           break
-              
+      if pirate.owner == 2:
+        self.game.Merchant2.unlist(self)
+      if pirate.owner == 3:
+        self.game.Merchant3.unlist(self)
       self.game.removeObject(self)
 
     return True
@@ -704,6 +707,10 @@ class Ship(Unit):
               if i.owner == 3:
                 self.game.Merchant3.pirateDied(i)
               self.game.removeObject(i)
+      if pirate.owner == 2:
+        self.game.Merchant2.unlist(self)
+      if pirate.owner == 3:
+        self.game.Merchant3.unlist(self)
       self.game.removeObject(self)
     return True          
 
