@@ -440,13 +440,13 @@ void GUI::initUnitStats()
   m_individualStats = new QTableWidget(m_unitStatsArea);
 
   //Create headers for tables
-  m_multipleStatsVerticalLabels<<"Total Units"<<"P0 Units"<<"P1 Units"
-    <<"Total Gold"<<"Avg. Pirate Health"<<"Avg. Ship Health"<<"Treasure Boxes";
-  m_multipleStatsHorizontalLabels<<"Global"<<"Selection";
+  m_multipleStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
+    <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
+  m_multipleStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
 
   m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
     <<"movesLeft"<<"attacksLeft";
-  m_individualStatsHorizontalLabels<<".";
+  m_individualStatsHorizontalLabels<<"derp";
 
   //Set table properties and headers
   m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
