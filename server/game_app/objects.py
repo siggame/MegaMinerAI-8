@@ -283,14 +283,6 @@ class Pirate(Unit):
     #If the pirate is not on a port and is trying to pickup Treasure
     if portPickup == False:
       for i in self.game.objects.values():
-        if isinstance(i,Ship):
-          if amount > i.gold:
-            return "Yer boat does not have that much gold!"
-          elif amount < 1:
-            return "Ye have to pick up somethin!"
-          i.gold -= amount
-          self.gold += amount
-          return True
         if isinstance(i,Treasure):
           if i.x == self.x and i.y == self.y:
             #Check to make sure the amount being picked up isn't greater than its value
@@ -307,6 +299,15 @@ class Pirate(Unit):
               self.gold += amount
             treasurePickup = True
             return True    
+      for i in self.game.objects.values():
+        if isinstance(i,Ship):
+          if amount > i.gold:
+            return "Yer boat does not have that much gold!"
+          elif amount < 1:
+            return "Ye have to pick up somethin!"
+          i.gold -= amount
+          self.gold += amount
+          return True
     return True
   
   def dropTreasure(self, amount):
