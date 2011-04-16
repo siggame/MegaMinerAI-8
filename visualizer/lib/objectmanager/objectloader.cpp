@@ -1,14 +1,6 @@
 #include "objectloader.h"
-/*#include "../../piracy/boatdata.h"
-#include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"*/
 #include "../../piracy/piratemap.h"
-//#include "../../piracy/piraterender.h"
 #include "../../piracy/renderdata.h"
-/*#include "../../piracy/treasuredata.h"
-#include "../../piracy/treasurerender.h"
-#include "../../piracy/shipdata.h"
-#include "../../piracy/portdata.h"*/
 #include "../../piracy/piracylocations.h"
 #include "../../piracy/objecttype.h"
 #include "../../piracy/piratehealth.h"
@@ -27,6 +19,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 {
     //! @todo PUT THE LOADING LOGIC HERE!!
     Game game;
+
 
     if( !parseFile( game, filename.c_str() ) )
     {
@@ -122,8 +115,6 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    ObjectType * type = new ObjectType(ship,POT_SHIP);
 	    ShipHealth * health = new ShipHealth(ship,i->second.health,optionsMan::getInt("shipMaxHealth"));
   	    //ShipRender * render = new ShipRender();
-
-	    std::cout << "ship health: " << i->second.health << '\n';
 
   	    //render->setOwner(ship);
   //	    data->parseShip(game,id,turn);
