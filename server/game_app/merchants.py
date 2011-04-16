@@ -107,8 +107,9 @@ class MerchantAI:
     #removes empty ships
     for p in self.thePorts:
       for s in self.game.objects.values():
-        if p.x == s.x and p.y == s.y and s.owner == -1:
-          self.game.removeObject(s)
+        if isinstance(s,Ship):
+          if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
+            self.game.removeObject(s)
     for i in self.inTransit:
       deadEnemies = []
       for enemy in i.shitlist:
