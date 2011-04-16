@@ -69,7 +69,7 @@ class WebServerInterface(object):
         """
         login - the team's login
         Error:
-          Success - returns a dict {'path', 'commit_id'}
+          Success - returns a dict {'path', 'commit_id', 'version'}
           BadLogin - throws NoSuchLogin (inherits from WebServerException)
           NoRepo - throws NoSuchRepository (inherits from WebServerException)
           Other Error - throws WebServerException
@@ -85,7 +85,8 @@ class WebServerInterface(object):
         else:
             path = '%s/%s/%s'%(data['path'], data['id'], data['repo'],)
             return {'path': path,
-                    'commit_id': data['version']}
+                    'commit_id': data['commit_id'],
+                    'version':data['version']}
 
     def set_game_stat(self, p1_name, p2_name, p1_score, p2_score,
                       p1_version, p2_version, log_name):
@@ -114,12 +115,12 @@ if __name__ == '__main__':
     w = WebServerInterface('localhost:8000')
     print w.auth_team('mylogin', '123')
     try:
+        print w.get_ssh_path('beep')
         print w.get_ssh_path('coollogin')
-        print w.get_ssh_path('mylogin')
     except NoSuchRepository, e:
         print e
     try:
-        print w.get_ssh_path('mylogn')
+        print w.get_ssh_path('mylogin')
     except NoSuchLogin, e:
         print e
         
