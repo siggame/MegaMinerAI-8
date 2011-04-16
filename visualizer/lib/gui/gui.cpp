@@ -446,7 +446,7 @@ void GUI::initUnitStats()
 
   m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
     <<"movesLeft"<<"attacksLeft";
-  m_individualStatsHorizontalLabels<<"derp";
+  m_individualStatsHorizontalLabels<<".";
 
   //Set table properties and headers
   m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
