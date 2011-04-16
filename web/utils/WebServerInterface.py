@@ -92,6 +92,9 @@ class WebServerInterface(object):
                     'commit_id': data['commit_id'],
                     'version':data['version']}
 
+    def _get_id(self):
+        return self._query_web_server('log_id', {})['id']
+
     def set_game_stat(self, p1_name, p2_name, p1_score, p2_score,
                       p1_version, p2_version, log_name):
         """
@@ -105,9 +108,9 @@ class WebServerInterface(object):
         info = {'player_1': p1_name, 'player_2':p2_name, 
                 'player_1_score':p1_score, 'player_2_score': p2_score,
                 'player_1_tag':p1_version, 'player_2_tag': p2_version, 
-                'log_name': log_name}
+                'log_name': log_name, 'key': self._get_id()}
         message = json.dumps(info)
-        h = sha1(message+self.INTERFACE_SALT).hexdigest()
+        h = sha1(message+self.INTERFACE_SALT+info['key']).hexdigest()
         data = self._query_web_server('game_stat', {'message': message, 'verify': h})
         if data['error']:
             return False
@@ -116,7 +119,7 @@ class WebServerInterface(object):
 
     
 if __name__ == '__main__':
-    w = WebServerInterface('megaminerai.com')
+    w = WebServerInterface('r99acm.device.mst.edu:8091')
     try:
         print w.auth_team('Shell AI', 'password')
         webs = w.get_ssh_path('Shell AI')
@@ -133,5 +136,5 @@ if __name__ == '__main__':
         print e
 
     print w.login_list()
-    w.set_game_stat("coollogin", "derp", 10, 20,
+    print w.set_game_stat("Shell AI", "Shell AI", 10, 20,
                       "V0.1", "v1.0", "loggy")
