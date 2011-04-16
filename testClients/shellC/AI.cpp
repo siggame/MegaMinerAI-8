@@ -57,12 +57,12 @@ bool AI::run()
         pirates[i].move(path[step]->x(),path[step]->y());
       }
       // get the distance between the guys
-      int distance = abs(pirates[i].x() + pirates[target].x()) + abs(pirates[i].y()+pirates[target].y());
+      int distance = abs(pirates[i].x() + pirates[target].x()) + abs(pirates[i].y()-pirates[target].y());
       
       // If the distance is exactly 1 away and I don't own the guy
       if( distance ==1 && pirates[i].owner()!=pirates[target].owner())
       {
-        while(pirates[i].movesLeft()>0)
+        while(pirates[i].attacksLeft()>0)
         {
           // attack the target
           pirates[i].attack(pirates[target]);
