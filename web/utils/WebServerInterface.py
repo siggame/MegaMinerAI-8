@@ -48,9 +48,10 @@ class WebServerInterface(object):
             m = "Webserver Error: HTTP %d %s" % (response.status,
                                                  response.reason)
             raise WebServerException(m)
-        conn.close()
+        r = json.loads(response.read())
         # Get the data out and check the responses.
-        return json.loads(response.read())
+        conn.close()
+        return r
     
     def auth_team(self, login, passwd):
         """
@@ -64,6 +65,9 @@ class WebServerInterface(object):
             return False
         else:
             return data['authenticated']
+
+    def login_list(self):
+        return self._query_web_server('login_list', {})
 
     def get_ssh_path(self, login):
         """
@@ -112,17 +116,22 @@ class WebServerInterface(object):
 
     
 if __name__ == '__main__':
-    w = WebServerInterface('localhost:8000')
-    print w.auth_team('mylogin', '123')
+    w = WebServerInterface('megaminerai.com')
     try:
-        print w.get_ssh_path('beep')
-        print w.get_ssh_path('coollogin')
+        print w.auth_team('Shell AI', 'password')
+        webs = w.get_ssh_path('Shell AI')
+        from os.path import split
+        print split(webs['path'])[0][:-4]
     except NoSuchRepository, e:
         print e
-    try:
-        print w.get_ssh_path('mylogin')
     except NoSuchLogin, e:
         print e
-        
+
+    try:
+        print w.get_ssh_path('Shell AI')
+    except NoSuchLogin, e:
+        print e
+
+    print w.login_list()
     w.set_game_stat("coollogin", "derp", 10, 20,
                       "V0.1", "v1.0", "loggy")
