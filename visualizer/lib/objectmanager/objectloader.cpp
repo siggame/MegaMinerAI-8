@@ -32,15 +32,16 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     }
 
 
+    cout << __LINE__ << endl;
 
   //! @todo THIS IS BROKEN!!!!
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
     PirateData * data2 = new PirateData();
-    //pm->generateMap( game );     //TODO: REMOVE BEFORE COMPETITION
+    pm->generateMap( game );     //TODO: REMOVE BEFORE COMPETITION
     pm->setOwner( go );
     go->setGOC( pm );
-//    Renderer<DupObj>::registerConstantObj( 1, go );     //TODO: REMOVE BEFORE COMPETITION
+    Renderer<DupObj>::registerConstantObj( 1, go );     //TODO: REMOVE BEFORE COMPETITION
 
     go = new GameObject( 2 );
     go->setGOC( SelectionRender::get() );
@@ -52,35 +53,35 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     TimeManager::setTurn(0);
     TimeManager::setNumTurns( numTurns );
 
-
-    return true;     //TODO: REMOVE BEFORE COMPETITION
-
     std::map<idtype, LookupSet<GameObject*,idtype> > looksets;
 
+    unsigned int id;
     for (unsigned int turn = 0; turn < game.states.size(); turn++)
     {
-    //  looksets[-999].addNode( go, turn, 0 );
 
     	// pirates
-    	for (unsigned int unit = 0; unit < game.states[turn].pirates.size();unit++)
-    	{
-  	    unsigned int id = game.states[turn].pirates[unit].id;
-  	    if (looksets.find(id) == looksets.end())
-  	    {
-      		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
-  	    }
+      for( 
+          std::map<int,Pirate>::iterator i = game.states[turn].pirates.begin();
+          i != game.states[turn].pirates.end(); 
+          i++ )
+      {
+  	     id = i->second.id;
+         if( looksets.find( id ) == looksets.end() )
+         {
+           looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
+         }
 
   	    GameObject * pirate = new GameObject(id);
 
   	    //setup stuff
   	    PirateData * data = new PirateData();
   	    PiracyLocation * loc = new PiracyLocation();
-  	    GOC_Owner * owner = new GOC_Owner(pirate, game.states[turn].pirates[unit].owner);
-  	    Gold * gold = new Gold(pirate,game.states[turn].pirates[unit].gold);
+  	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
+  	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
 
   	    data->parsePirate(game,id,turn);
-  	    loc->parseLocation(&(game.states[turn].pirates[unit]));
+  	    loc->parseLocation(&(i->second));
 
   	    data->setOwner(pirate);
   	    loc->setOwner(pirate);
@@ -92,19 +93,21 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    pirate->setGOC(gold);
   	    pirate->setGOC(type);
 
-
   	    //end setup
 
   	    looksets[id].addNode(pirate,turn,0);
-	    }
+      }
 
-  	// ships
-  	for (unsigned int unit = 0; unit < game.states[turn].ships.size();unit++)
-  	{
-  	    unsigned int id = game.states[turn].ships[unit].id;
+      for( 
+          std::map<int,Ship>::iterator i = game.states[turn].ships.begin();
+          i != game.states[turn].ships.end();
+          i++ )
+      {
+
+  	    id = i->second.id;
   	    if (looksets.find(id) == looksets.end())
   	    {
-  		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
+          looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
   	    }
 
   	    GameObject * ship = new GameObject(id);
@@ -112,14 +115,14 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
   	    ShipData * data = new ShipData();
   	    PiracyLocation * loc = new PiracyLocation();
-  	    GOC_Owner * owner = new GOC_Owner(ship, game.states[turn].ships[unit].owner);
-  	    Gold * gold = new Gold(ship,game.states[turn].ships[unit].gold);
+  	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
+  	    Gold * gold = new Gold(ship,i->second.gold);
   	    ObjectType * type = new ObjectType(ship,POT_SHIP);
   	    //ShipRender * render = new ShipRender();
 
   	    //render->setOwner(ship);
   	    data->parseShip(game,id,turn);
-  	    loc->parseLocation(&(game.states[turn].ships[unit]));
+  	    loc->parseLocation(&(i->second));
 
 
   	    loc->setOwner(ship);
@@ -132,17 +135,18 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    ship->setGOC(type);
 
   	    //end setup
-
   	    looksets[id].addNode(ship,turn,0);
-  	}
+      }
 
-  	// treasures
-  	for (unsigned int unit = 0; unit < game.states[turn].treasures.size();unit++)
-  	{
-  	    unsigned int id = game.states[turn].treasures[unit].id;
+      for( 
+          std::map<int, Treasure>::iterator i = game.states[turn].treasures.begin();
+          i != game.states[turn].treasures.end();
+          i++ )
+      {
+  	    id = i->second.id;
   	    if (looksets.find(id) == looksets.end())
   	    {
-  		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
+          looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
   	    }
 
   	    GameObject * treasure = new GameObject(id);
@@ -150,11 +154,11 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
   	    TreasureData * data = new TreasureData();
   	    PiracyLocation * loc = new PiracyLocation();
-  	    Gold * gold = new Gold(treasure,game.states[turn].treasures[unit].gold);
+  	    Gold * gold = new Gold(treasure,i->second.gold);
   	    ObjectType * type = new ObjectType(treasure,POT_TREAS);
 
   	    data->parseTreasure(game,id,turn);
-  	    loc->parseLocation(&(game.states[turn].treasures[unit]));
+  	    loc->parseLocation(&(i->second));
 
 
   	    data->setOwner(treasure);
@@ -168,12 +172,14 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    //end setup
 
   	    looksets[id].addNode(treasure,turn,0);
-  	}
+      }
 
-  	// ports
-  	for (unsigned int unit = 0; unit < game.states[turn].ports.size();unit++)
-  	{
-  	    unsigned int id = game.states[turn].ports[unit].id;
+      for( 
+          std::map<int, Port>::iterator i = game.states[turn].ports.begin();
+          i != game.states[turn].ports.end();
+          i++ )
+      {
+  	    id = i->second.id;
   	    if (looksets.find(id) == looksets.end())
   	    {
   		    looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
@@ -184,12 +190,12 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
   	    PortData * data = new PortData();
   	    PiracyLocation * loc = new PiracyLocation();
-  	    GOC_Owner * owner = new GOC_Owner(port, game.states[turn].ports[unit].owner);
+  	    GOC_Owner * owner = new GOC_Owner(port, i->second.owner);
   	    ObjectType * type = new ObjectType(port,POT_PORT);
 
 
   	    data->parsePort(game,id,turn);
-  	    loc->parseLocation(&(game.states[turn].ports[unit]));
+  	    loc->parseLocation(&(i->second));
 
   	    data->setOwner(port);
   	    loc->setOwner(port);
@@ -202,7 +208,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    //end setup
 
   	    looksets[id].addNode(port,turn,0);
-  	}
+      }
 
   }
 

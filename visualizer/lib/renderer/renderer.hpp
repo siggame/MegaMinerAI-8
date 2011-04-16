@@ -24,7 +24,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho( 0, width, _height, 0, 0, depth );
+	glOrtho( 0, width, _height, 0, -depth, depth );
 
 
 	glMatrixMode(GL_MODELVIEW);
@@ -62,6 +62,7 @@ bool Renderer<DupObject>::refresh()
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
+#if 1
   for( ; it != Single::get()->m_renderConstant.end(); it++ )
   {
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
@@ -70,9 +71,10 @@ bool Renderer<DupObject>::refresh()
       r->renderAt( 0, 0 );
     }
   }
+#endif
 
   //update what gets rendered this turn
-  update(turn,frame);
+  //update(turn,frame);
 
   glPushMatrix();
   glScalef( 20, 20, 1 );
@@ -127,7 +129,7 @@ bool Renderer<DupObject>::create()
 	Single::get()->m_parent = 0;
 	Single::get()->m_height = 0;
 	Single::get()->m_width  = 0;
-	Single::get()->m_depth  = 0;
+	Single::get()->m_depth  = 10;
 	Single::get()->m_dupListDirs = 0;
 	Single::get()-> m_duplicateList = NULL;
 
@@ -193,16 +195,20 @@ bool Renderer<DupObject>::setup()
 
 	clear();
 
+  unsigned int rwidth = width();
+  unsigned int rheight = height();
+  unsigned int rdepth = depth();
+
 	if (Single::get()->m_dupListDirs)
 	{
-		Single::get()->m_duplicateList = new DupObject***[width()];
+		Single::get()->m_duplicateList = new DupObject***[rwidth];
 		for (unsigned int x = 0; x < width(); x++)
 		{
-			Single::get()->m_duplicateList[x] = new DupObject**[height()];
+			Single::get()->m_duplicateList[x] = new DupObject**[rheight];
 			for (unsigned int y = 0; y < height(); y++)
 			{
-				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
-				for (unsigned int z = 0; z < depth(); z++)
+				Single::get()->m_duplicateList[x][y] = new DupObject*[rdepth];
+				for (unsigned int z = 0; z < rdepth; z++)
 				{
 					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 				}
@@ -258,13 +264,8 @@ bool Renderer<DupObject>::setup()
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  if( !refresh() )
-  {
-    cout << "WHATHATL" << endl;
-  }
-  cout << "OPENGL INITIALIZED" << endl;
-
-	return Single::get()->m_isSetup;
+  refresh();
+  return Single::get()->m_isSetup;
 }
 
 /** @brief del
