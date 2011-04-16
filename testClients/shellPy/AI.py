@@ -20,6 +20,126 @@ class AI(BaseAI):
     pass
 
   def run(self):
+  
+    #----------------------------------------------------------------------
+    #Pre-Defined Data Structures : 
+    #vector of type Pirate  named pirates
+    #vector of type Ship named ships
+    #vector of type Port named ports
+    #vector of type Tile named tiles
+    #vector of type Treasure named treasures
+    
+    #If you need clarification on python, please find a dev
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------
+    #Port Functions:   
+    #WHERE CALLING OBJECT IS A PORT
+    
+    #id()
+      #Unique Identifier
+    
+    #x()
+      #The X position of this object.  X is horizontal, with 0,0 as the top left corner
+        
+    #y()
+      #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+        
+    #owner()
+      #The owner of the port
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------  
+    #Pirate/Ship Functions:
+    #WHERE CALLING OBJECT IS A PIRATE OR SHIP
+    
+    #id()
+      #Unique Identifier
+    
+    #x()
+      #The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    
+    #y()
+      #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    
+    #owner()
+      #The owner of the unit
+    
+    #health()
+      #health of the unit
+    
+    #strength()
+      #attacking strength of the unit
+    
+    #movesLeft()
+      #Attacks left this turn for the unit
+    
+    #attacksLeft()
+      #Moves left this turn for the unit
+      
+    #gold()
+      #Amoutn of gold the unit is carrying
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------
+    #Tile Functions:
+    #WHERE CALLING OBJECT IS OF TYPE TILE
+    
+    #id()
+      #Unique Identifier
+      
+    #x()
+      #The X position of this object.  X is horizontal, with 0,0 as the top left corner
+      
+    #y()
+      #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+      
+    #type()
+      #land = 0, water = 1
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------  
+    #Treasure Functions:
+    #WHERE CALLING OBJECT IS OF TYPE TREASURE
+    
+    #id()
+      #Unique Identifier
+
+    #x()
+      #The X position of this object.  X is horizontal, with 0,0 as the top left corner
+      
+    #y()
+      #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------
+    #Additional Functionality:
+    
+    
+    #self.playerID()
+      #Can be used to identify what player you are.
+
+    #self.PirateCost()
+      #Constant cost of a pirate unit
+
+    #self.ShipCost()
+      #Constant cost of a ship unit
+
+    #self.PortCost()
+      #Constant cost of a port
+
+    #self.boardX()
+      #The max length of the board's X
+
+    #self.boardY()
+      #The max length of the board's Y
+      
+    #self.getPath(startX, startY, endX, endY, tileType) 
+      #Returns a vector of moves from the passed in start location to passed in end location over specified Tile type
+      #0 = Land, 1 = Water. 
+      #Example code provided in the snipets below
+    #----------------------------------------------------------------------
+  
     print "Turn:", self.turnNumber
     print "My ID: ", self.playerID()
     print "My Gold: ", self.players[self.playerID()].gold()

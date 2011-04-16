@@ -40,103 +40,104 @@ bool AI::run()
   /////////////////////////////////////////////////////////////////
   //Port Functions:  
   
-  ///Unique Identifier
   //ports[i].id()
-  
-  ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    ///Unique Identifier
+
   //ports[i].x()
-  
-  ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+
   //ports[i].y()
-  
-  ///The owner of the port
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+
   //cports[i].owner()
+    ///The owner of the port
   ///////////////////////////////////////////////////////////////////
   
     ///////////////////////////////////////////////////////////////////
   //Pirate/Ship Functions:
   
-  ///Unique Identifier
   //pirates[i].id() / ships[i].id()
-  
-  ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    ///Unique Identifier
+    
   //pirates[i].x() / ships[i].x()
-  
-  ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+
   //pirates[i].y() / ships[i].y()
-  
-  ///The owner of the unit
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+
   //pirates[i].owner() / ships[i].owner()
-  
-  ///health of the unit
+    ///The owner of the unit
+
   //pirates[i].health() / ships[i].health()
-  
-  ///attacking strength of the unit
+    ///health of the unit
+
   //pirates[i].strength() / ships[i].strength()
-  
-  ///Attacks left this turn for the unit
+    ///attacking strength of the unit
+
   //pirates[i].movesLeft() / ships[i].movesLeft()
-  
-  ///Moves left this turn for the unit
+    ///Attacks left this turn for the unit
+
   //pirates[i]/attacksLeft() / ships[i].attacksLeft()
-  
-  ///Amoutn of gold the unit is carrying
+    ///Moves left this turn for the unit
+
   //pirates[i].gold() / ships[i].gold()
+    ///Amoutn of gold the unit is carrying
   ///////////////////////////////////////////////////////////////////
   
   ///////////////////////////////////////////////////////////////////
-  //Time Functions:
+  //Tile Functions:
   
-  ///Unique Identifier
   //tiles[i].id()
-  
-  ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    ///Unique Identifier
+
   //tiles[i].x()
-  
-  ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+
   //tiles[i].y()
-  
-  ///land = 0, water = 1
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+
   //tiles[i].type()
+    ///land = 0, water = 1
   ///////////////////////////////////////////////////////////////////
 
   ///////////////////////////////////////////////////////////////////
   //Treasure Functions:
   
-  ///Unique Identifier
   //treasures[i].id()
-  
-  ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+    ///Unique Identifier
+
   //treasures[i].x()
-  
-  ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
+    ///The X position of this object.  X is horizontal, with 0,0 as the top left corner
+
   //treasures[i].y()
+    ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   ///////////////////////////////////////////////////////////////////
   
   ///////////////////////////////////////////////////////////////////
   //Additional Functionality:
-  ///Can be used to identify what player you are.
+
   //playerID()
-  
-  ///Constant cost of a pirate unit
+    ///Can be used to identify what player you are.
+
   //PirateCost()
-  
-  ///Constant cost of a ship unit
+    ///Constant cost of a pirate unit
+
   //ShipCost()
-  
-  ///Constant cost of a port
+    ///Constant cost of a ship unit
+
   //PortCost()
-  
-  ///The max length of the board's X
+    ///Constant cost of a port
+
   //boardX()
-  
-  ///The max length of the board's Y
+    ///The max length of the board's X
+
   //boardY()
-  
-   ///Returns a vector of moves from the passed in start location to passed in end location over specified Tile type
-   ///0 = Land, 1 = Water. 
-   ///Example code provided in the snipets below
-  //getPath(int startX, int startY, int endX, int endY, int timeType) 
+    ///The max length of the board's Y
+
+  //getPath(int startX, int startY, int endX, int endY, int tileType) 
+    ///Returns a vector of moves from the passed in start location to passed in end location over specified Tile type
+    ///0 = Land, 1 = Water. 
+    ///Example code provided in the snipets below
   ///////////////////////////////////////////////////////////////////
 
   
