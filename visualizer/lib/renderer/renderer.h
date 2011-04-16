@@ -13,6 +13,7 @@
 #include "../gocfamily_location.h"
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
+#include "../gui/gui.h"
 
 //this is a place holder
 typedef GameObject renderObj;
