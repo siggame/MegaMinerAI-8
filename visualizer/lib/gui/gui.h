@@ -272,6 +272,9 @@ private:
   QAction *m_fileExit; /// File->Exit
 
   QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
+  
+  QString m_previousDirectory;
+
 
 };
 
