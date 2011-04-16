@@ -74,7 +74,7 @@ class MerchantAI:
       self.game.addObject(pirateDude)
       newInTransit.pirates += [pirateDude]
     
-    newShip.gold = treasureValue*(newShip._distance(destination.x,destination.y)/(self.game.mapSize*2))
+    newShip.gold = treasureValue*(newShip._distance(destination.x,destination.y)/(self.game.mapSize*4))
     self.inTransit += [newInTransit]
         
   
