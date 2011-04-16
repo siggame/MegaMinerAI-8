@@ -42,16 +42,16 @@ class AI(BaseAI):
     #Port Functions:   
     #WHERE CALLING OBJECT IS A PORT
     
-    #id()
+    #getId()
       #Unique Identifier
     
-    #x()
+    #getX()
       #The X position of this object.  X is horizontal, with 0,0 as the top left corner
         
-    #y()
+    #getY()
       #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
         
-    #owner()
+    #getOwner()
       #The owner of the port
       
     #createPirate()
@@ -65,31 +65,31 @@ class AI(BaseAI):
     #Pirate/Ship Functions:
     #WHERE CALLING OBJECT IS A PIRATE OR SHIP
     
-    #id()
+    #getId()
       #Unique Identifier
     
-    #x()
+    #getX()
       #The X position of this object.  X is horizontal, with 0,0 as the top left corner
     
-    #y()
+    #getY()
       #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
     
-    #owner()
+    #getOwner()
       #The owner of the unit
     
-    #health()
+    #getHealth()
       #health of the unit
     
-    #strength()
+    #getStrength()
       #attacking strength of the unit
     
-    #movesLeft()
+    #getMovesLeft()
       #Attacks left this turn for the unit
     
-    #attacksLeft()
+    #getAttacksLeft()
       #Moves left this turn for the unit
       
-    #gold()
+    #getGold()
       #Amoutn of gold the unit is carrying
       
     #attack(target)
@@ -112,16 +112,16 @@ class AI(BaseAI):
     #Tile Functions:
     #WHERE CALLING OBJECT IS OF TYPE TILE
     
-    #id()
+    #getId()
       #Unique Identifier
       
-    #x()
+    #getX()
       #The X position of this object.  X is horizontal, with 0,0 as the top left corner
       
-    #y()
+    #getY()
       #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
       
-    #type()
+    #getType()
       #land = 0, water = 1
     #----------------------------------------------------------------------
     
@@ -129,13 +129,13 @@ class AI(BaseAI):
     #Treasure Functions:
     #WHERE CALLING OBJECT IS OF TYPE TREASURE
     
-    #id()
+    #getId()
       #Unique Identifier
 
-    #x()
+    #getX()
       #The X position of this object.  X is horizontal, with 0,0 as the top left corner
       
-    #y()
+    #getY()
       #The Y position of this object.  Y is vertical, with 0,0 as the top left corner
     #----------------------------------------------------------------------
     
@@ -146,13 +146,13 @@ class AI(BaseAI):
     #self.playerID()
       #Can be used to identify what player you are.
 
-    #self.PirateCost()
+    #self.pirateCost()
       #Constant cost of a pirate unit
 
-    #self.ShipCost()
+    #self.shipCost()
       #Constant cost of a ship unit
 
-    #self.PortCost()
+    #self.portCost()
       #Constant cost of a port
 
     #self.boardX()
@@ -167,12 +167,12 @@ class AI(BaseAI):
       #Example code provided in the snipets below
     #----------------------------------------------------------------------
   
-    print "Turn:", self.turnNumber
+    print "Turn:", self.turnNumber()
     print "My ID: ", self.playerID()
     print "My Gold: ", self.players[self.playerID()].getGold()
 
     #if you have enough gold to buy a pirate
-    if self.pirateCost < self.players[self.playerID()].getGold():
+    if self.pirateCost() < self.players[self.playerID()].getGold():
       #find a port you own
       for p in self.ports:
         if p.getOwner == self.playerID():
