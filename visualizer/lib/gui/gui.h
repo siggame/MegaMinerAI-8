@@ -7,6 +7,8 @@
 #include "../singleton.h"
 #include "../gocfamily_gui.h"
 #include "../objectmanager/objectloader.h"
+
+
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
@@ -17,9 +19,6 @@
 using namespace std;
 
 typedef GOCFamily_GUI guiObj;
-
-class CentralWidget;
-class GOCFamily_GUIToolSet;
 
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
@@ -209,17 +208,16 @@ private slots:
 
   void catchEscapeKey();
   
-  //Ugly hack
-  void turnPercentageShortcut1(){	turnPercentageCalc(0); };
-  void turnPercentageShortcut2(){	turnPercentageCalc(1); };
-  void turnPercentageShortcut3(){	turnPercentageCalc(2); };
-  void turnPercentageShortcut4(){	turnPercentageCalc(3); };
-  void turnPercentageShortcut5(){	turnPercentageCalc(4); };
-  void turnPercentageShortcut6(){	turnPercentageCalc(5); };
-  void turnPercentageShortcut7(){	turnPercentageCalc(6); };
-  void turnPercentageShortcut8(){	turnPercentageCalc(7); };
-  void turnPercentageShortcut9(){	turnPercentageCalc(8); };  
-  void turnPercentageShortcut0(){	turnPercentageCalc(9); };
+  void turnPercentageShortcut1();
+  void turnPercentageShortcut2();
+  void turnPercentageShortcut3();
+  void turnPercentageShortcut4();
+  void turnPercentageShortcut5();
+  void turnPercentageShortcut6();
+  void turnPercentageShortcut7();
+  void turnPercentageShortcut8();
+  void turnPercentageShortcut9();
+  void turnPercentageShortcut0();
   
 
   

@@ -8,21 +8,40 @@
 #include "lib/resourcemanager/resourceman.h"
 #include "lib/resourcemanager/texture.h"
 #include "lib/objectmanager/objectmanager.h"
+#include "lib/renderer/renderer.h"
 #include "piracy/dupObj.h"
 
 int main(int argc, char *argv[])
 {
   int i = 0;
 	typedef Renderer<DupObj> Render;
+
 	QApplication app( argc, argv );
 
-	optionsMan::create();
-	GUI::create();
-	ResourceMan::create();
-	Mutex::create();
-	Threadler::create();
-	ObjectManager::create();
-	ObjectLoader::create();
+	if (!optionsMan::create())
+	    return 1;
+
+	if (!GUI::create())
+	    return 1;
+
+	if (!ResourceMan::create())
+	    return 1;
+
+	if (!Mutex::create())
+	    return 1;
+
+	if (!Threadler::create())
+	    return 1;
+
+	if (!ObjectManager::create())
+	    return 1;
+
+
+	if (!ObjectLoader::create())
+	    return 1;
+
+	if (!TimeManager::create())
+	    return 1;
 
 	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
 	{
@@ -45,7 +64,6 @@ int main(int argc, char *argv[])
 	optionsMan::addInt( "currentTurn", 0 );
 	// done initializing
 
-	TimeManager::create();
 	TimeManager::setSpeed( 1 );
 
 	GUI::setup();

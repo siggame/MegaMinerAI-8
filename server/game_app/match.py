@@ -216,6 +216,10 @@ class Match(DefaultGameWorld):
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
         self.declareWinner(winner)
+        if 1 - self.getPlayerIndex(connection) == 1:
+          print "1 Wins!"
+        else:
+          print "2 Wins!"
       self.players.remove(connection)
     else:
       self.spectators.remove(connection)
@@ -299,8 +303,10 @@ class Match(DefaultGameWorld):
       #Check for victory through wealth
       if player2.gold > player1.gold:
         self.declareWinner(self.players[1], 'Victory Through Wealth!')
+        print "2 Wins!"
       elif player1.gold > player2.gold:
         self.declareWinner(self.players[0], 'Victory Through Wealth!')
+        print "1 Wins!"
       elif player1.gold == player2.gold:
       #currently living ships * ship cost + currently living pirates * pirate cost + ports * portCost
       #Victory through strength
@@ -377,9 +383,12 @@ class Match(DefaultGameWorld):
         print player1.gold        
         print player2.gold  
         if player1Loss == True and player2Loss == False:
-          self.declareWinner(self.players[0], 'Victory Through Annihilation') 
+          self.declareWinner(self.players[0], 'Victory Through Annihilation')
+          print "1 Wins!"
+          
         elif player1Loss == False and player2Loss == True:
-          self.declareWinner(self.players[1], 'Victory Through Annihilation')             
+          self.declareWinner(self.players[1], 'Victory Through Annihilation')
+          print "2 Wins!"
         elif player1Loss == True and player2Loss == True and player1.gold < player2.gold:
           self.declareWinner(self.players[1], 'Victory Through Annihilation') 
           print "2 Wins!"

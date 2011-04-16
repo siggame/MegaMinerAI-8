@@ -1,5 +1,6 @@
 #include "renderwidget.h"
 #include "../../piracy/dupObj.h"
+#include "../renderer/renderer.h"
 #include "gui.h"
 
 #include <iostream>
@@ -19,9 +20,9 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
-  Renderer<DupObj>::create();
   Renderer<DupObj>::setParent( this );
   QGLWidget::initializeGL();
+  Renderer<DupObj>::create();
   cout << "VALID: " << isValid() << endl;
 }
 
@@ -49,7 +50,6 @@ void RenderWidget::mousePressEvent( QMouseEvent *e )
       //line.append(QString::number(initialY));
       //line.append(")");
 
-      //GUI::get()->m_consoleArea->append(line);
 
       leftButtonDown = true;
       

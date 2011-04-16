@@ -11,6 +11,7 @@
 #include "../objectmanager/objectmanager.h"
 #include "../gocfamily_render.h"
 #include "../gocfamily_location.h"
+#include "../gui/gui.h"
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
 
@@ -57,7 +58,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		static unsigned int width();
 		static unsigned int depth();
 
-		static void update(const unsigned int & turn, const unsigned int & frame);
+		static bool update(const unsigned int & turn, const unsigned int & frame);
 
 	protected:
 	private:

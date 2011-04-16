@@ -9,6 +9,8 @@
 #include "../lib/resourcemanager/texture.h"
 #include "piratehealth.h"
 #include "../lib/renderer/textRenderer/drawGLFont.h"
+#include <list>
+
 
 struct DupObj
 {
@@ -21,6 +23,7 @@ struct DupObj
 	unsigned int x, y;
 	unsigned int health;
 	unsigned int maxHealth;
+  bool selected;
 
 	DupObj & operator+=(const DupObj & obj)
 	{
@@ -28,17 +31,20 @@ struct DupObj
 		{
 			gold += obj.gold;
 			pirates += obj.pirates;
+      if( obj.selected )
+        selected = true;
 			return *this;
 		}
 
-		gold += obj.gold;
-		pirates += obj.pirates;
+    selected = obj.selected;
+		gold = obj.gold;
+		pirates = obj.pirates;
 		owner = obj.owner;
 		time = obj.time;
 		x = obj.x;
 		y = obj.y;
-		health += obj.health;
-		maxHealth += obj.maxHealth;
+		health = obj.health;
+		maxHealth = obj.maxHealth;
 
 		//! @todo object type precedences: ex ship over pirate, pirate over treasure
 		if (objType == POT_PORT || obj.objType == POT_PORT)

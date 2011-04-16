@@ -25,7 +25,6 @@ private slots:
   void fastForward();
 
 private:
-
   QLabel* turnLabel;
   QSlider* m_slider;
   QPushButton* rewindButton;

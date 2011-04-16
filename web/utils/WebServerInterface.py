@@ -48,9 +48,10 @@ class WebServerInterface(object):
             m = "Webserver Error: HTTP %d %s" % (response.status,
                                                  response.reason)
             raise WebServerException(m)
-        conn.close()
+        r = json.loads(response.read())
         # Get the data out and check the responses.
-        return json.loads(response.read())
+        conn.close()
+        return r
     
     def auth_team(self, login, passwd):
         """
@@ -64,6 +65,9 @@ class WebServerInterface(object):
             return False
         else:
             return data['authenticated']
+
+    def login_list(self):
+        return self._query_web_server('login_list', {})
 
     def get_ssh_path(self, login):
         """
@@ -88,6 +92,9 @@ class WebServerInterface(object):
                     'commit_id': data['commit_id'],
                     'version':data['version']}
 
+    def _get_id(self):
+        return self._query_web_server('log_id', {})['id']
+
     def set_game_stat(self, p1_name, p2_name, p1_score, p2_score,
                       p1_version, p2_version, log_name):
         """
@@ -101,9 +108,9 @@ class WebServerInterface(object):
         info = {'player_1': p1_name, 'player_2':p2_name, 
                 'player_1_score':p1_score, 'player_2_score': p2_score,
                 'player_1_tag':p1_version, 'player_2_tag': p2_version, 
-                'log_name': log_name}
+                'log_name': log_name, 'key': self._get_id()}
         message = json.dumps(info)
-        h = sha1(message+self.INTERFACE_SALT).hexdigest()
+        h = sha1(message+self.INTERFACE_SALT+info['key']).hexdigest()
         data = self._query_web_server('game_stat', {'message': message, 'verify': h})
         if data['error']:
             return False
@@ -112,17 +119,22 @@ class WebServerInterface(object):
 
     
 if __name__ == '__main__':
-    w = WebServerInterface('localhost:8000')
-    print w.auth_team('mylogin', '123')
+    w = WebServerInterface('r99acm.device.mst.edu:8091')
     try:
-        print w.get_ssh_path('beep')
-        print w.get_ssh_path('coollogin')
+        print w.auth_team('Shell AI', 'password')
+        webs = w.get_ssh_path('Shell AI')
+        from os.path import split
+        print split(webs['path'])[0][:-4]
     except NoSuchRepository, e:
         print e
-    try:
-        print w.get_ssh_path('mylogin')
     except NoSuchLogin, e:
         print e
-        
-    w.set_game_stat("coollogin", "derp", 10, 20,
+
+    try:
+        print w.get_ssh_path('Shell AI')
+    except NoSuchLogin, e:
+        print e
+
+    print w.login_list()
+    print w.set_game_stat("Shell AI", "Shell AI", 10, 20,
                       "V0.1", "v1.0", "loggy")
