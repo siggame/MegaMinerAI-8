@@ -11,6 +11,7 @@
 #include "../../piracy/portdata.h"
 #include "../../piracy/piracylocations.h"
 #include "../../piracy/objecttype.h"
+#include "../../piracy/piratehealth.h"
 
 #include "../goc_owner.h"
 #include "../../piracy/gold.h"
@@ -79,6 +80,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
+	    PirateHealth * health = new PirateHealth(pirate,i->second.health);
 
   	    data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
@@ -92,6 +94,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    pirate->setGOC(owner);
   	    pirate->setGOC(gold);
   	    pirate->setGOC(type);
+	    pirate->setGOC(health);
 
   	    //end setup
 
@@ -121,6 +124,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
   	    Gold * gold = new Gold(ship,i->second.gold);
   	    ObjectType * type = new ObjectType(ship,POT_SHIP);
+	    PirateHealth * health = new PirateHealth(ship,i->second.health);
   	    //ShipRender * render = new ShipRender();
 
   	    //render->setOwner(ship);
@@ -136,6 +140,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    ship->setGOC(owner);
   	    ship->setGOC(gold);
   	    ship->setGOC(type);
+	    ship->setGOC(health);
 
   	    //end setup
 	    if (!looksets[id].addNode(ship,turn,0))

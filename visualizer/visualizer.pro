@@ -57,8 +57,9 @@ HEADERS += ./lib/manager/*.h \
     ./lib/goc_owner.h \
     ./piracy/gold.h \
     ./piracy/objecttype.h \
-    ./lib/resourcemanager/*.h
-
+    ./lib/resourcemanager/*.h \
+    lib/gocfamily_health.h \
+    piracy/piratehealth.h
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg
@@ -66,4 +67,4 @@ CONFIG += debug
 QT += opengl
 SUBDIRS += parser \
     tools
-OTHER_FILES += lib/resourcemanager/resourceman.o
+OTHER_FILES += 

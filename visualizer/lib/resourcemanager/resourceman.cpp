@@ -99,4 +99,40 @@ bool ResourceMan::destroy()
     return ManagerType::destroy();
 }
 
+Resource * ResourceMan::reference(const std::string & rName, const std::string & referencer)
+{
+    if (!ManagerType::isInit())
+	return NULL;
+    Resource ** res = ManagerType::getItem(rName);
+    if (!res)
+	return NULL;
 
+    if (!*res)
+	return NULL;
+
+    if ((*res)->reference(referencer))
+	return *res;
+
+    return NULL;
+
+}
+
+bool ResourceMan::release(const std::string &rName, const std::string &referencer)
+{
+    if (!ManagerType::isInit())
+	return false;
+
+    Resource ** res = ManagerType::getItem(rName);
+
+    if (!res)
+	return false;
+
+    if (!*res)
+	return false;
+
+    if ((*res)->deReference(referencer))
+	return true;
+
+    return false;
+
+}

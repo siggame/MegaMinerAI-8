@@ -6,6 +6,8 @@
 #include "../lib/goc_owner.h"
 #include <GL/gl.h>
 #include "../lib/resourcemanager/resourceman.h"
+#include "../lib/resourcemanager/texture.h"
+#include "piratehealth.h"
 
 struct DupObj
 {
@@ -16,6 +18,8 @@ struct DupObj
 	unsigned int time;
 	unsigned int index;
 	unsigned int x, y;
+	unsigned int health;
+	unsigned int maxHealth;
 
 
 	DupObj & operator+=(const DupObj & obj)
@@ -27,15 +31,32 @@ struct DupObj
 		return *this;
 		}
 
-		gold = obj.gold;
-		pirates = obj.pirates;
+		gold += obj.gold;
+		pirates += obj.pirates;
 		owner = obj.owner;
 		time = obj.time;
 		x = obj.x;
 		y = obj.y;
+		health += obj.health;
+		maxHealth += obj.maxHealth;
 
 		//! @todo object type precedences: ex ship over pirate, pirate over treasure
-		objType = obj.objType;
+		if (objType == POT_PORT || obj.objType == POT_PORT)
+		{
+		    objType = POT_PORT;
+		}
+		else if (objType == POT_SHIP || obj.objType == POT_SHIP)
+		{
+		    objType = POT_SHIP;
+		}
+		else if (objType == POT_PIRATE || obj.objType == POT_PIRATE)
+		{
+		    objType = POT_PIRATE;
+		}
+		else
+		{
+		    objType = POT_TREAS;
+		}
 		return *this;
 	}
 
@@ -45,57 +66,136 @@ struct DupObj
 
 
 	    glTranslatef(x,y,0);
-	    if (ResourceMan::isInit() && false)
+	    bool flag = false;
+	    if (ResourceMan::isInit())
 	    {//! @todo: textures here
+		glEnable(GL_TEXTURE_2D);
+		Resource * res;
+		std::string textureName;
 		switch (objType)
 		{
 		case POT_PIRATE:
+		    switch (owner)
+		    {
+		    case 0:
+			textureName = "pirateRed";
+			break;
+		    case 1:
+			textureName = "pirateGreen";
+			break;
+		    default:
+			textureName = "pirateNPC";
+		    }
 		    break;
 		case POT_SHIP:
+		    switch (owner)
+		    {
+		    case 0:
+			textureName = "shipRed";
+			break;
+		    case 1:
+			textureName = "shipGreen";
+			break;
+		    default:
+			textureName = "shipNPC";
+		    }
 		    break;
 		case POT_PORT:
+		    switch (owner)
+		    {
+		    case 0:
+			textureName = "portRed";
+			break;
+		    case 1:
+			textureName = "portGreen";
+			break;
+		    default:
+			textureName = "portNPC";
+		    }
 		    break;
 		case POT_TREAS:
+		    textureName = "treasure";
 		    break;
 		default:
 		    //fuckoff
 		    i=i;
 		}
 
-		glBegin(GL_QUADS);
+		res = ResourceMan::reference(textureName,"dupObject");
+		if (res)
+		{
+		    glEnable(GL_BLEND);
+		    glColor4f(1,1,1,1);
+		    glBindTexture(GL_TEXTURE_2D,((ResTexture*)res)->getTexture());
+		    glBegin(GL_QUADS);
 
-		glVertex3f(0,0,-1); glTexCoord2f(0,0);
-		glVertex3f(1,0,-1); glTexCoord2f(1,0);
-		glVertex3f(1,1,-1); glTexCoord2f(1,1);
-		glVertex3f(0,1,-1); glTexCoord2f(0,1);
+		    glVertex3f(0,0,-1); glTexCoord2f(1,1);
+		    glVertex3f(1,0,-1); glTexCoord2f(1,0);
+		    glVertex3f(1,1,-1); glTexCoord2f(0,0);
+		    glVertex3f(0,1,-1); glTexCoord2f(0,1);
 
-		glEnd();
+		    glEnd();
+
+		    ResourceMan::release(textureName,"dupObject");
+
+		}
+		else
+		{
+		    flag = true;
+		}
+
+		glDisable(GL_TEXTURE_2D);
 	    }
 	    else
+	    {
+		flag = true;
+	    }
+
+	    if (flag)
 	    {
 		//std::cout << "Render: l(" << x << "," << y << ") \n";
 		glDisable(GL_BLEND);
 		switch (objType)
 		{
 		case POT_PIRATE:
-		    if (owner == 0)
+		    switch (owner)
+		    {
+		    case 0:
 			glColor4f(1,0,0,1);
-		    else
+			break;
+		    case 1:
 			glColor4f(0,1,0,1);
-		    break;
+			break;
+		    default:
+			glColor4f(0,1,1,1);
+		    }
 		case POT_SHIP:
-		    if (owner == 0)
-			glColor4f(1,.5,.5,1);
-		    else
-			glColor4f(.5,1,.5,1);
+
+		    switch (owner)
+		    {
+		    case 0:
+			glColor4f(1,0.5,0.5,1);
+			break;
+		    case 1:
+			glColor4f(0.5,1,0.5,1);
+			break;
+		    default:
+			glColor4f(0.5,1,1,1);
+		    }
 
 		    break;
 		case POT_PORT:
-		    if (owner == 0)
+		    switch (owner)
+		    {
+		    case 0:
 			glColor4f(.5,0,0,1);
-		    else
+			break;
+		    case 1:
 			glColor4f(0,.5,0,1);
-		    break;
+			break;
+		    default:
+			glColor4f(0,.5,.5,1);
+		    }
 		case POT_TREAS:
 		    glColor4f(1,1,0,1);
 		    break;
@@ -114,6 +214,12 @@ struct DupObj
 
 		glEnable(GL_BLEND);
 	    }
+
+	    //draw pirate count
+	    //draw gold count
+	    //draw health?
+
+
 	}
 
 };
@@ -161,6 +267,18 @@ void setDupObj(GameObject * object, DupObject & dup)
 	    std::cout << "object has no Owner\n";
     }
 
+    goc = object->getGOC("HealthFamily");
+    if (goc)
+    {
+	dup.health = ((GOCFamily_Health*)(goc))->currentHealth();
+	dup.maxHealth = ((GOCFamily_Health*)(goc))->maxHealth();
+
+    }
+    else
+    {
+	dup.health = 0;
+	dup.maxHealth = 0;
+    }
 
 
     switch (ot)

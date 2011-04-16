@@ -1,7 +1,10 @@
 texture portRed			./piracy/textures/CastleRed.png
 texture portGreen		./piracy/textures/CastleGreen.png
+texture portNPC			./piracy/textures/CastleBlack.png
 texture pirateGreen		./piracy/textures/piratered.png
 texture pirateRed		./piracy/textures/pirategreen.png
+texture pirateNPC		./piracy/textures/pirateblack.png
+texture treasure		./piracy/textures/coin-Lv-5.png
 texture forest			./piracy/textures/Forest.png
 texture hills			./piracy/textures/Hills.png
 texture grass			./piracy/textures/Grass.png

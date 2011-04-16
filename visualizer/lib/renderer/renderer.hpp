@@ -127,9 +127,9 @@ bool Renderer<DupObject>::refresh()
 template <typename DupObject>
 void Renderer<DupObject>::setParent( RenderWidget *parent )
 {
-  if (!Single::isInit())
-		return; //! @todo throw error
-  Single::get()->m_parent = parent;
+    if (!Single::isInit())
+	return; //! @todo throw error
+    Single::get()->m_parent = parent;
 }
 
 /** @brief destroy
@@ -139,12 +139,12 @@ void Renderer<DupObject>::setParent( RenderWidget *parent )
 template <typename DupObject>
 bool Renderer<DupObject>::destroy()
 {
-	if(!Single::isInit())
-		return false;
-	if (!clear())
-		return false;
+    if(!Single::isInit())
+	return false;
+    if (!clear())
+	return false;
 
-	return Single::destroy();
+    return Single::destroy();
 }
 
 /** @brief create
@@ -154,17 +154,17 @@ bool Renderer<DupObject>::destroy()
 template <typename DupObject>
 bool Renderer<DupObject>::create()
 {
-	if (!Single::create())
-		return false;
+    if (!Single::create())
+	return false;
 
-	Single::get()->m_parent = 0;
-	Single::get()->m_height = 0;
-	Single::get()->m_width  = 0;
-	Single::get()->m_depth  = 10;
-	Single::get()->m_dupListDirs = 0;
-	Single::get()-> m_duplicateList = NULL;
+    Single::get()->m_parent = 0;
+    Single::get()->m_height = 0;
+    Single::get()->m_width  = 0;
+    Single::get()->m_depth  = 10;
+    Single::get()->m_dupListDirs = 0;
+    Single::get()-> m_duplicateList = NULL;
 
-	return true;
+    return true;
 }
 
 /** @brief getRenderObject
