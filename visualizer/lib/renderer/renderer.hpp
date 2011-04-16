@@ -193,16 +193,19 @@ bool Renderer<DupObject>::setup()
 
 	clear();
 
+  unsigned int rwidth = width();
+  unsigned int rheight = height();
+  unsigned int rdepth = depth();
 	if (Single::get()->m_dupListDirs)
 	{
-		Single::get()->m_duplicateList = new DupObject***[width()];
+		Single::get()->m_duplicateList = new DupObject***[rwidth];
 		for (unsigned int x = 0; x < width(); x++)
 		{
-			Single::get()->m_duplicateList[x] = new DupObject**[height()];
+			Single::get()->m_duplicateList[x] = new DupObject**[rheight];
 			for (unsigned int y = 0; y < height(); y++)
 			{
-				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
-				for (unsigned int z = 0; z < depth(); z++)
+				Single::get()->m_duplicateList[x][y] = new DupObject*[rdepth];
+				for (unsigned int z = 0; z < rdepth; z++)
 				{
 					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 				}
