@@ -148,6 +148,24 @@ void GUI::dropEvent( QDropEvent* evt )
 
 }
 
+void GUI::appendConsole( string line )
+{
+  QString param;
+  param.append( line.c_str() );
+  appendConsole( param );
+}
+
+void GUI::appendConsole( QString line )
+{
+  GUI::get()->m_consoleArea->append( line );
+}
+
+void GUI::clearConsole()
+{
+
+  GUI::get()->m_consoleArea->clear();
+}
+
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );

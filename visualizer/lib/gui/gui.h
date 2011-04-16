@@ -186,6 +186,10 @@ public:
   static void closeGUI();
   
   static ControlBar * getControlBar();
+
+  static void appendConsole( string line );
+  static void appendConsole( QString line );
+  static void clearConsole();
   
   bool getFullScreen();
   void setFullScreen(bool);
