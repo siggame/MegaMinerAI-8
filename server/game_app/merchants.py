@@ -103,7 +103,12 @@ class MerchantAI:
         self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
 
-  def play(self):    
+  def play(self):
+    #removes empty ships
+    for p in self.thePorts:
+      for s in self.game.objects.values():
+        if p.x == s.x and p.y == s.y and s.owner == -1:
+          self.game.removeObject(s)
     for i in self.inTransit:
       deadEnemies = []
       for enemy in i.shitlist:
