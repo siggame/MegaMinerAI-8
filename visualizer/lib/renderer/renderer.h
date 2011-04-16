@@ -13,7 +13,6 @@
 #include "../gocfamily_location.h"
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
-#include "../../piracy/piratemap.h"
 
 
 //this is a place holder

@@ -2,7 +2,7 @@
 # WebServerAuthenticator
 # 
 # Use this class to verify that a team's login/password combo
-# is valid.
+# is valid. It's for the Game Server
 # 
 import httplib
 import urllib

@@ -24,7 +24,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho( 0, width, _height, 0, -depth, depth );
+	glOrtho( 0, width,_height,0, -depth, depth );
 
 
 	glMatrixMode(GL_MODELVIEW);

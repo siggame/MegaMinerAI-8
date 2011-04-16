@@ -18,26 +18,27 @@ AWS_ACCESS_KEY = 'AKIAICYAQREP6CMTOZ7Q'
 
 AWS_SECRET_KEY = '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'
 
-GIT_PATH = "ssh://ubuntu@localhost/~/testclients/"#"ssh://david@r03dlokv6.device.mst.edu:2222/~/Dropbox/siggame/client-gits/"
+GIT_PATH = "ssh://ubuntu@localhost/~/testClients/"#"ssh://david@r03dlokv6.device.mst.edu:2222/~/Dropbox/siggame/client-gits/"
 password = ''
 
 dbManagerName='r03mwwcp2.device.mst.edu'
 s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 logbucket = s3conn.get_bucket("megaminer7")
 
-port = 19000
+port = "19000"
 
 def update(program):
   print "updating",program
   if not exists(program):
     print 'cloning'
-    command = "git clone " + GIT_PATH + program
-    cwd = '/mnt'
+    command = "git clone " + GIT_PATH + program + '/.git'
+    cwd = '.'
   else:
     print 'pulling'
     command = "git pull"
-    cwd = join('/mnt',program)
+    cwd = program
   p = pexpect.spawn(command, cwd = cwd) 
+  print "spawned a process:",command
   i = p.expect(['password:',pexpect.EOF])
   #if i == 0:
   #  p.sendline(password)
@@ -56,7 +57,7 @@ def run_game(client1, client2, name):
   startTime = time.time()
   
   #now start the server...
-  serverp = pexpect.spawn('python main.py '+port, cwd = join('/mnt','server'))
+  serverp = pexpect.spawn('python main.py '+port, cwd = 'server')
   #i = serverp.expect(['Starting Server',pexpect.EOF])
   #if i == 0:
   #  print "server started"
@@ -65,7 +66,7 @@ def run_game(client1, client2, name):
     #return -1
   time.sleep(5)
   #now client 1...
-  client1p = pexpect.spawn('/bin/bash ./run localhost:'+port, cwd = join('/mnt',client1))
+  client1p = pexpect.spawn('/bin/bash ./run localhost:'+port, cwd = client1)
   i = serverp.expect(['Creating game 1',pexpect.EOF])
   if i == 0:
     print "game created!"
@@ -73,7 +74,7 @@ def run_game(client1, client2, name):
     print "game failed to create"
     return -2
   #and client 2...
-  client2p = pexpect.spawn('/bin/bash ./run localhost:'+port+' 0', cwd = join('/mnt',client2))
+  client2p = pexpect.spawn('/bin/bash ./run localhost:'+port+' 0', cwd = client2)
   i = client2p.expect(['',pexpect.EOF])
   if i == 0:
     print "game started!"
