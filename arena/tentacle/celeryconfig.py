@@ -1,4 +1,4 @@
-BROKER_HOST = 'localhost'
+BROKER_HOST = '10.85.129.91'
 BROKER_PORT = 5672
 BROKER_USER = 'mastercontroller'
 BROKER_PASSWORD = 'XSPnDy5G'
