@@ -7,6 +7,12 @@
 #include <sstream>
 using namespace std;
 
+// TODO: REMOVE LATER FOR NON_GAME SPECIFIC
+#include "../../piracy/objecttype.h"
+#include "../../piracy/piratehealth.h"
+#include "../../piracy/shiphealth.h"
+#include "../../piracy/gold.h"
+
 
 /** @brief resize
   * resize and refresh the projection  and modelview matricies
@@ -481,6 +487,7 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+  Stats global, p0, p1, p2, p3, selected;
 
 
     if (!Single::isInit())
@@ -547,11 +554,17 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
     {
+      int owner = 0;
 	if (it->second)
 	{
 	   DupObject temp;
-	   setDupObj(it->second->data,temp);	  
-	   GOComponent * goc = it->second->data->getGOC("LocationFamily");
+     setDupObj(it->second->data,temp);	  
+     GOComponent * goc = it->second->data->getGOC( "Owner" );
+     if( goc )
+     {
+       owner = ((GOC_Owner*)goc)->owner();
+     }
+	   goc = it->second->data->getGOC("LocationFamily");
 	   if (goc)
 	   {
 	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
@@ -573,16 +586,68 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 #endif
            }
          } else 
+         if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
          {
-           if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
+           temp.selected = true;
+
+           goc = it->second->data->getGOC( "ObjectType" );
+           if( goc )
            {
-             temp.selected = true;
-           } else {
-             temp.selected = false;
+             Stats temp;
+             switch( ((ObjectType*)goc)->type() )
+             {
+               case POT_PIRATE:
+                 goc = it->second->data->getGOC( "PirateHealth" );
+                 temp.avgPirateHealth = ((PirateHealth*)goc)->currentHealth();
+                 temp.pirates = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               case POT_SHIP:
+                 goc = it->second->data->getGOC( "ShipHealth" );
+                 temp.avgShipHealth = ((ShipHealth*)goc)->currentHealth();
+                 temp.ships = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               case POT_TREAS:
+                 goc = it->second->data->getGOC( "ShipHealth" );
+                 temp.treasures = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               default:
+                 break;
+             }
+
+             switch( owner )
+             {
+               case 0:
+                 p0 += temp;
+                 break;
+               case 1:
+                 p1 += temp;
+                 break;
+               case 2:
+                 p2 += temp;
+                 break;
+               case 3:
+                 p3 += temp;
+                 break;
+             }
+
            }
 
-	         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+           selected += p0;
+           selected += p1;
+           selected += p2;
+           selected += p3;
+
+         } else {
+           temp.selected = false;
          }
+
+         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
 	   }
 	   else
