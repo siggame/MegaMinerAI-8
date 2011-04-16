@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/gocfamily_data.cpp \
-    ./lib/selectionrender/*.cpp
+    ./lib/selectionrender/*.cpp \
+    lib/renderer/textRenderer/drawGLFont.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
@@ -59,7 +60,8 @@ HEADERS += ./lib/manager/*.h \
     ./piracy/objecttype.h \
     ./lib/resourcemanager/*.h \
     lib/gocfamily_health.h \
-    piracy/piratehealth.h
+    piracy/piratehealth.h \
+    lib/renderer/textRenderer/drawGLFont.h
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg

@@ -42,7 +42,7 @@ class DrawGLFont
 
 		void setBold( bool isBold )
 		{
-			bold = isBold;
+		    bold = isBold;
 		}
 
 		bool loadNewFont( int fontTextureId, string fontWidthsFile );

@@ -8,6 +8,7 @@
 #include "../lib/resourcemanager/resourceman.h"
 #include "../lib/resourcemanager/texture.h"
 #include "piratehealth.h"
+#include "../lib/renderer/textRenderer/drawGLFont.h"
 
 struct DupObj
 {
@@ -216,6 +217,8 @@ struct DupObj
 	    }
 
 	    //draw pirate count
+
+
 	    //draw gold count
 
 	    if (maxHealth > 0)
