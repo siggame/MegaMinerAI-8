@@ -49,7 +49,6 @@ void RenderWidget::mousePressEvent( QMouseEvent *e )
       //line.append(QString::number(initialY));
       //line.append(")");
 
-      //GUI::get()->m_consoleArea->append(line);
 
       leftButtonDown = true;
       

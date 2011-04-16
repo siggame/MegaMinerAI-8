@@ -3,7 +3,6 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
-#include "../gui/gui.h"
 #include "../goc_owner.h"
 //#include <sstream>
 using namespace std;
