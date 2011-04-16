@@ -12,6 +12,7 @@
 #include "../../piracy/piracylocations.h"
 #include "../../piracy/objecttype.h"
 #include "../../piracy/piratehealth.h"
+#include "../../piracy/shiphealth.h"
 
 #include "../goc_owner.h"
 #include "../../piracy/gold.h"
@@ -79,7 +80,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
-	    PirateHealth * health = new PirateHealth(pirate,i->second.health);
+	    PirateHealth * health = new PirateHealth(pirate,i->second.health,optionsMan::getInt("pirateMaxHealth"));
 
   	    data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
@@ -123,8 +124,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
   	    Gold * gold = new Gold(ship,i->second.gold);
   	    ObjectType * type = new ObjectType(ship,POT_SHIP);
-	    PirateHealth * health = new PirateHealth(ship,i->second.health);
+	    ShipHealth * health = new ShipHealth(ship,i->second.health,optionsMan::getInt("shipMaxHealth"));
   	    //ShipRender * render = new ShipRender();
+
+	    std::cout << "ship health: " << i->second.health << '\n';
 
   	    //render->setOwner(ship);
   	    data->parseShip(game,id,turn);
