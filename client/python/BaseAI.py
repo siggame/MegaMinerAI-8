@@ -77,7 +77,7 @@ class BaseAI:
 
     library.findPath(start, end, type)
     size = library.getPathSize()
-    path = [tiles[getPathStep(i)] for i in xrange(size) ]
+    path = [self.tiles[library.getPathStep(i)] for i in xrange(size) ]
 
     return path
 

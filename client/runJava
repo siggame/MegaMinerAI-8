@@ -1,3 +1,3 @@
 #!/bin/bash
 cd java
-./run $1 $2
+bash ./run $1 $2
