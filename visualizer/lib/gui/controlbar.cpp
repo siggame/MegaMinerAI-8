@@ -12,6 +12,11 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   playButton = new QPushButton("||", this);
   fastForwardButton = new QPushButton("->", this);
 
+  turnLabel = new QLabel("", this);
+  turnLabel->setMinimumWidth(30);
+  turnLabel->setMaximumWidth(30);
+  turnLabel->clear();
+
   m_slider = new QSlider( Qt::Horizontal, this );
   m_slider->setMinimum( 0 );
   //maximum set by TimeManager
@@ -47,6 +52,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   connect( playButton, SIGNAL(clicked()), this, SLOT( play()) );
   connect( fastForwardButton, SIGNAL(clicked()), this, SLOT( fastForward()) );
 
+  layout->addWidget( turnLabel );
   layout->addWidget( m_slider );
   layout->addWidget( rewindButton );
   layout->addWidget( playButton );
@@ -55,7 +61,6 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   setLayout( layout );
 
   update();
-
 }
 
 void ControlBar::sliderDrag()
@@ -78,6 +83,7 @@ void ControlBar::update()
 {
   m_slider->setSliderPosition( TimeManager::getTurn() );
   m_slider->setMaximum( TimeManager::getNumTurns() );
+  turnLabel->setText( QString::number( TimeManager::getNumTurns() ) );
 }
 
 void ControlBar::rewind()

@@ -3,6 +3,7 @@
 
 #include <QSlider>
 #include <QPushButton>
+#include <QLabel>
 #include "../optionsmanager/optionsman.h"
 
 class ControlBar : public QWidget 
@@ -25,7 +26,8 @@ private slots:
 
 private:
 
-  QSlider *m_slider;
+  QLabel* turnLabel;
+  QSlider* m_slider;
   QPushButton* rewindButton;
   QPushButton* playButton;
   QPushButton* fastForwardButton;

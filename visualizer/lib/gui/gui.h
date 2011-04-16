@@ -14,9 +14,12 @@
 #include <QString>
 #include <map>
 #include <string>
+using namespace std;
 
 typedef GOCFamily_GUI guiObj;
 
+class CentralWidget;
+class GOCFamily_GUIToolSet;
 
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
@@ -186,6 +189,10 @@ public:
   static void closeGUI();
   
   static ControlBar * getControlBar();
+
+  static void appendConsole( string line );
+  static void appendConsole( QString line );
+  static void clearConsole();
   
   bool getFullScreen();
   void setFullScreen(bool);
