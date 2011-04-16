@@ -36,8 +36,6 @@ int main(int argc, char *argv[])
 	if (!ObjectManager::create())
 	    return 1;
 
-	if (!Render::create())
-	    return 1;
 
 	if (!ObjectLoader::create())
 	    return 1;
