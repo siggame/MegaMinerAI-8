@@ -523,11 +523,15 @@ class Port(Mappable):
     #Checks to make sure there is no other ships in the port
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
-        return "Therr already be a ship in that port, cap'n"     
-    if len([i for i in self.game.objects.values() if isinstance(i,Pirate) and i.x == self.x and i.y == self.y]) >= 1:
-      ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
-      self.game.addObject(ship)
-    else:
+        return "Therr already be a ship in that port, cap'n"
+    havePirateHere = False
+    for i in self.game.objects.values():
+      if isinstance(i,Pirate) and i.x == self.x and i.y == self.y:
+        havePirateHere = True
+        ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
+        self.game.addObject(ship)
+      break
+    if not havePirateHere:
       ship = Ship.make(self.game, self.x, self.y, -1, self.game.shipHealth, self.game.shipStrength) #placeholder values
       self.game.addObject(ship)
     return True    
@@ -602,29 +606,31 @@ class Ship(Unit):
       return "Stepping off the world, the kracken lies beyond!" 
      
     #Makes sure the ship stays on water
+    isWater = True
+    portTile = False
     for i in self.game.objects.values():
       if isinstance(i,Tile) and i.x == x and i.y == y:
         #If the ship is attempting to move onto a land tile
         if i.type != 1:
           #This variable checks whether or not the ship is trying to move onto a port
-          portTile = False
-          for j in self.game.objects.values():
-            if isinstance(j,Port):
-              if j.x == x and j.y == y:
-                #True if we find a port at desired location
-                portTile = True
-                #If the port does not belong to you, throw an error
-                if j.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
-                  return "We cannot move arr ships into enemy ports!"
-          #If the player is simply trying to move a ship onto land
-          if portTile == False:
-            return "Ships cannot move onto land, captain!"
-      
-    #Makes sure there is no units at target location
-    for i in self.game.objects.values():
+          isWater = False
+      if isinstance(i,Port):
+        if i.x == x and i.y == y:
+          #True if we find a port at desired location
+          portTile = True
+          #If the port does not belong to you, throw an error
+          if i.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
+            return "We cannot move arr ships into enemy ports!"      
+      #Makes sure there is no units at target location
       if isinstance(i,Ship):
         if i.x == x and i.y == y:
           return "Therr already be a ship at that location!" 
+    #If the player is simply trying to move a ship onto land
+    if portTile == False and isWater == False:
+      return "Ships cannot move onto land, captain!"
+      
+
+
 
     #Ship has passed all checks and it ready to move
     self.movesLeft -= 1
