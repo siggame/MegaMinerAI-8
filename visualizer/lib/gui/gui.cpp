@@ -3,12 +3,12 @@
 #include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-#include "../../piracy/boatdata.h"
+//#include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"
+//#include "../../piracy/piratedata.h"
 #include "../../piracy/piraterender.h"
 #include "../../piracy/piratemap.h"
-#include "../../piracy/treasuredata.h"
+//#include "../../piracy/treasuredata.h"
 #include "../../piracy/treasurerender.h"
 #include "../../piracy/dupObj.h"
 
@@ -286,6 +286,7 @@ void GUI::createActions()
   (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr("Escape") ), this, SLOT( catchEscapeKey() ) );
  
   //Ugly hack
   (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
@@ -461,7 +462,10 @@ ControlBar * GUI::getControlBar()
 
 void GUI::catchEscapeKey()
 {
-  
+  if(getFullScreen())
+  {
+    setFullScreen(false);
+  }
 }
 
 bool GUI::getFullScreen()
