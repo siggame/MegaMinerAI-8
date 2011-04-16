@@ -71,12 +71,14 @@ bool Renderer<DupObject>::refresh()
     }
   }
 
-  //update what gets rendered this turn
-  update(turn,frame);
-
   glPushMatrix();
   glScalef( 20, 20, 1 );
 
+  typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
+  for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
+  {
+      renderIt->render();
+  }
 
   glPopMatrix();
 
@@ -415,6 +417,8 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	{
 		sameFlag = true;
 	}
+	obj.x = x;
+	obj.y = y;
 
 	obj.time = time;
 	Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
@@ -475,6 +479,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     if (!bucket)
 	return; //! @todo toss computer against wall
 
+    Single::get()->m_renderList.clear();
     int time = TimeManager::timeHash();
 
     Bucket::iterator it = bucket->begin();
@@ -483,7 +488,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	if (it->second)
 	{
 	   DupObject temp;
-	   setDupObj(it->second->data,temp);
+	   setDupObj(it->second->data,temp);	  
 	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
 	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 	}

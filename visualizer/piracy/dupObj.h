@@ -4,6 +4,8 @@
 #include "objecttype.h"
 #include "piracylocations.h"
 #include "../lib/goc_owner.h"
+#include <GL/gl.h>
+#include "../lib/resourcemanager/resourceman.h"
 
 struct DupObj
 {
@@ -13,6 +15,8 @@ struct DupObj
 	unsigned int owner;
 	unsigned int time;
 	unsigned int index;
+	unsigned int x, y;
+
 
 	DupObj & operator+=(const DupObj & obj)
 	{
@@ -27,10 +31,84 @@ struct DupObj
 		pirates = obj.pirates;
 		owner = obj.owner;
 		time = obj.time;
+		x = obj.x;
+		y = obj.y;
 
 		//! @todo object type precedences: ex ship over pirate, pirate over treasure
 		objType = objType;
 		return *this;
+	}
+
+	void render()
+	{
+	    int i;
+	    //! @todo: textures here
+	    if (ResourceMan::isInit() && false)
+	    {
+		switch (objType)
+		{
+		case POT_PIRATE:
+		    break;
+		case POT_SHIP:
+		    break;
+		case POT_PORT:
+		    break;
+		case POT_TREAS:
+		    break;
+		default:
+		    //fuckoff
+		    i=i;
+		}
+
+		glBegin(GL_QUADS);
+
+		glVertex3f(0,0,1); glTexCoord2f(0,0);
+		glVertex3f(1,0,1); glTexCoord2f(1,0);
+		glVertex3f(1,1,1); glTexCoord2f(1,1);
+		glVertex3f(0,1,1); glTexCoord2f(0,1);
+
+		glEnd();
+	    }
+	    else
+	    {
+
+		switch (objType)
+		{
+		case POT_PIRATE:
+		    if (owner == 0)
+			glColor4f(1,0,0,1);
+		    else
+			glColor4f(0,1,0,1);
+		    break;
+		case POT_SHIP:
+		    if (owner == 0)
+			glColor4f(1,.5,.5,1);
+		    else
+			glColor4f(.5,1,.5,1);
+
+		    break;
+		case POT_PORT:
+		    if (owner == 0)
+			glColor4f(.5,0,0,1);
+		    else
+			glColor4f(.5,1,0,1);
+		    break;
+		case POT_TREAS:
+		    glColor4f(1,1,0,1);
+		    break;
+		default:
+		    i=i;
+		}
+
+		glBegin(GL_QUADS);
+
+		glVertex3d(0,0,1);
+		glVertex3d(1,0,1);
+		glVertex3d(1,1,1);
+		glVertex3d(0,1,1);
+
+		glEnd();
+	    }
 	}
 
 };
