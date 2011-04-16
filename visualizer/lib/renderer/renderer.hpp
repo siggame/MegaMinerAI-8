@@ -24,7 +24,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho( 0, width, _height, 0, 0, depth );
+	glOrtho( 0, width, _height, 0, -depth, depth );
 
 
 	glMatrixMode(GL_MODELVIEW);
@@ -62,6 +62,7 @@ bool Renderer<DupObject>::refresh()
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
+#if 1
   for( ; it != Single::get()->m_renderConstant.end(); it++ )
   {
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
@@ -70,6 +71,7 @@ bool Renderer<DupObject>::refresh()
       r->renderAt( 0, 0 );
     }
   }
+#endif
 
   glPushMatrix();
   glScalef( 20, 20, 1 );
@@ -129,7 +131,7 @@ bool Renderer<DupObject>::create()
 	Single::get()->m_parent = 0;
 	Single::get()->m_height = 0;
 	Single::get()->m_width  = 0;
-	Single::get()->m_depth  = 0;
+	Single::get()->m_depth  = 10;
 	Single::get()->m_dupListDirs = 0;
 	Single::get()-> m_duplicateList = NULL;
 
@@ -198,6 +200,7 @@ bool Renderer<DupObject>::setup()
   unsigned int rwidth = width();
   unsigned int rheight = height();
   unsigned int rdepth = depth();
+
 	if (Single::get()->m_dupListDirs)
 	{
 		Single::get()->m_duplicateList = new DupObject***[rwidth];
@@ -263,13 +266,8 @@ bool Renderer<DupObject>::setup()
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  if( !refresh() )
-  {
-    cout << "WHATHATL" << endl;
-  }
-  cout << "OPENGL INITIALIZED" << endl;
-
-	return Single::get()->m_isSetup;
+  refresh();
+  return Single::get()->m_isSetup;
 }
 
 /** @brief del
