@@ -86,4 +86,5 @@ class Renderer : public Singleton< Renderer< DupObject > >
 };
 
 #include "renderer.hpp"
+
 #endif													 // RENDERER_H

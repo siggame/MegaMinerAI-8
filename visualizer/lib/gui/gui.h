@@ -14,9 +14,12 @@
 #include <QString>
 #include <map>
 #include <string>
+using namespace std;
 
 typedef GOCFamily_GUI guiObj;
 
+class CentralWidget;
+class GOCFamily_GUIToolSet;
 
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
