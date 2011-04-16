@@ -122,11 +122,7 @@ class Pirate(Unit):
     #Merchants add attacker to shitlist
     if self.owner == 2 or self.owner == 3: 
       found = False
-      for enemy in self.traderGroup.shitlist:
-        if enemy is pirate:
-          found = True
-          break
-      if not found:
+      if enemy not in self.traderGroup.shitList:
         self.traderGroup.shitlist += [pirate]
     #If pirate is killed by the attack
     if self.health <= 0:
@@ -152,6 +148,8 @@ class Pirate(Unit):
             for j in self.game.objects.values():
               if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
                 counter+=1
+                if counter > 1:
+                  break
             #If this was the last pirate on board, the ship becomes neutral.
             if counter == 1:
               if i.owner == 2:
@@ -159,6 +157,7 @@ class Pirate(Unit):
               if i.owner == 3:
                 self.game.Merchant3.shipLost(i)
               i.owner = -1
+          break
               
       self.game.removeObject(self)
 
@@ -193,44 +192,53 @@ class Pirate(Unit):
     elif x < 0:
       return "Stepping off the world, the kracken shall get ye"
 
+    freeShip = False
+    intoWater = False
+    theFreeShip
     #Check to see if the unit is moving into an enemy
     for i in self.game.objects.values():
       if isinstance(i,Unit):
         if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
           return "Therr already be an enemy at that location, yarr"
-    for i in self.game.objects.values():
       #Check to see if the unit is moving into an enemy port
       if isinstance(i,Port):
         if i.owner != self.owner and i.x == x and i.y == y: 
           return "Ye cannot move yerr pirates into enemy ports"
       #Checking if unit is moving onto water
       elif isinstance(i,Tile) and i.x == x and i.y == y and i.type == 1:
-        freeShip = False
-        opponentShip = False
-        for j in self.game.objects.values():
-          if isinstance(j,Ship) and j.x == x and j.y == y:
-            #-1 is placeholder value for neutral ship. May need to be changed
-            if j.owner == self.owner or j.owner == -1:
-              freeShip = True
-            elif j.owner != self and j.owner != -1:
-              opponentShip = True
-        if opponentShip == True:
+        waterTile = True
+      #Checking about the Boats
+      elif isinstance(i,Ship) and i.x == x and i.y == y:
+        #-1 is placeholder value for neutral ship. May need to be changed
+        if i.owner == self.owner or i.owner == -1:
+          freeShip = True
+          theFreeShip = i
+        elif i.owner != self and i.owner != -1:
+          opponentShip = True
           return "Ye cannot board enemy ships. Lay waste to all of their pirates first!"        
-        if not freeShip:
-          return "Pirates cannot move into the water without a ship, yarr!"
-
+    if intoWater and not freeShip:
+      return "Yer pirates cannot enter water without a boat"
+    #Point of no return
+    #take control of a ship if you move onto it
+    if freeShip:
+      theFreeShip.owner = self.owner
     #Lose control of ship if this is your last pirate leaving
+    counter = 0
+    onABoat = False
+    theBoatIAmOn
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         if i.owner == self.owner:
-          counter = 0
-          #if the pirate was on a ship, count how many pirates are on it
-          for j in self.game.objects.values():
-            if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
-              counter+=1
+          onABoat = True
+          theBoatIAmOn = i
+          #if the pirate was on a ship, count how many pirates are on
+      if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
+        counter+=1
           #If this was the last pirate on board, the ship becomes neutral.
-          if counter == 1:
-            i.owner = -1          
+        if counter > 1:
+          break
+    if onABoat and counter > 1:
+      theBoatIAmOn.owner = -1
             
     #Moves the unit and makes it unable to move until next turn
     self.game.animations.append(['move', self.id,x,y])
@@ -238,11 +246,6 @@ class Pirate(Unit):
     self.x = x
     self.y = y
     
-    #Take control of a ship if you are the first one on it
-    for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.x == x and i.y == y:
-        if i.owner == -1:
-          i.owner = self.owner
     return True
 
   def talk(self, message):
