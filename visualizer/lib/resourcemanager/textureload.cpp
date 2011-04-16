@@ -3,6 +3,9 @@
 * ~Shep
 **************/
 
+#ifndef TEXTURELOAD_CPP
+#define TEXTURELOAD_CPP
+
 #include "texture.h"
 #include <qgl.h>
 #include <GL/glu.h>
@@ -27,13 +30,6 @@ IMAGE_TYPE getImageType(const QString & path)
 
 	return IMG_NONE;
 }
-
-
-//prototypes
-bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
-bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
-bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
-bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
 
 
 bool ResTexture::load( const QImage& img )
@@ -237,3 +233,4 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 	return true;
 }
 
+#endif

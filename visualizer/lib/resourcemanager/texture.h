@@ -6,6 +6,13 @@
 #include <QPainter>
 #include <QString>
 
+//prototypes
+bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
+bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
+bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
+bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
+
+
 
 class ResTexture : public Resource
 {

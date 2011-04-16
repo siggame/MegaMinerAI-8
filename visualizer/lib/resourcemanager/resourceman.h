@@ -36,6 +36,7 @@ class ResourceMan : protected Manager <ResID_t,Resource*>
 
 		static bool destroy();
 		static bool create(){return Manager <ResID_t,Resource*>::create();}
+		static bool isInit(){return Manager<ResID_t,Resource*>::isInit();}
 
 	protected:
 	private:

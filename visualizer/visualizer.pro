@@ -52,16 +52,18 @@ HEADERS += ./lib/manager/*.h \
     ./lib/gocfamily_render.h \
     ./lib/singleton.h \
     ./lib/selectionrender/*.h \
-    lib/gocfamily_location.h \
-    piracy/piracylocations.h \
-    lib/goc_owner.h \
-    piracy/gold.h \
-    piracy/objecttype.h
-QMAKE_CFLAGS_DEBUG+=-pg
-QMAKE_CXXFLAGS_DEBUG+=-pg
-QMAKE_LFLAGS_DEBUG+=-pg
+    ./lib/gocfamily_location.h \
+    ./piracy/piracylocations.h \
+    ./lib/goc_owner.h \
+    ./piracy/gold.h \
+    ./piracy/objecttype.h \
+    ./lib/resourcemanager/*.h
 
+QMAKE_CFLAGS_DEBUG += -pg
+QMAKE_CXXFLAGS_DEBUG += -pg
+QMAKE_LFLAGS_DEBUG += -pg
 CONFIG += debug
 QT += opengl
 SUBDIRS += parser \
     tools
+OTHER_FILES += lib/resourcemanager/resourceman.o
