@@ -6,21 +6,20 @@
 
 struct TreasureDataInfo
 {
-  int x;
-  int y;
-  int gold; 
+	int x;
+	int y;
+	int gold;
 };
 
 class TreasureData : public GOCFamily_Data<TreasureDataInfo>
 {
-public:
-  TreasureData();
-  ~TreasureData();
+	public:
+		TreasureData();
+		~TreasureData();
 
-  void update();
-  const GOC_IDType componentID() const;
-  void parseTreasure( const Game& game, int treasureId, int turn );
-private:
+		void update();
+		const GOC_IDType componentID() const;
+		void parseTreasure( const Game& game, int treasureId, int turn );
+	private:
 };
-
 #endif

@@ -5,18 +5,17 @@
 
 struct PortDataInfo
 {
-    int x;
-    int y;
-    int owner;
+	int x;
+	int y;
+	int owner;
 };
 
 class PortData : public GOCFamily_Data<PortDataInfo>
 {
-public:
+	public:
 
-    const GOC_IDType componentID() const;
-    void parsePort( const Game& game, int portId, int turn );
-    void update(){};
+		const GOC_IDType componentID() const;
+		void parsePort( const Game& game, int portId, int turn );
+		void update(){};
 };
-
-#endif // PORTDATA_H
+#endif													 // PORTDATA_H

@@ -4,26 +4,23 @@
 #include "../lib/gocfamily_data.h"
 #include "../lib/parser/parser.h"
 
-
 struct BoatDataInfo
 {
-  int owner;
-  float x;
-  float y;
+	int owner;
+	float x;
+	float y;
 };
 
 class BoatData : public GOCFamily_Data<BoatDataInfo>
 {
-public:
-  BoatData();
-  ~BoatData();
+	public:
+		BoatData();
+		~BoatData();
 
-  void update();
-  const GOC_IDType componentID() const;   
-  void parseBoat( const Game& game, int boatId, int turn);
+		void update();
+		const GOC_IDType componentID() const;
+		void parseBoat( const Game& game, int boatId, int turn);
 
-private:
+	private:
 };
-
-
 #endif

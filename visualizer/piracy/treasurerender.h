@@ -5,16 +5,15 @@
 
 class TreasureRender : public GOCFamily_Render
 {
-public:
-  TreasureRender();
-  ~TreasureRender();
+	public:
+		TreasureRender();
+		~TreasureRender();
 
-  virtual const GOC_IDType componentID() const;
+		virtual const GOC_IDType componentID() const;
 
-  void update();
-  virtual void renderAt( 
-      const unsigned int& turn,
-      const unsigned int& frame );
+		void update();
+		virtual void renderAt(
+			const unsigned int& turn,
+			const unsigned int& frame );
 };
-
 #endif

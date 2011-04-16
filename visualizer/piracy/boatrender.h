@@ -5,18 +5,16 @@
 
 class BoatRender : public GOCFamily_Render
 {
-public:
-  BoatRender();
-  ~BoatRender();
-  virtual const GOC_IDType componentID() const;
+	public:
+		BoatRender();
+		~BoatRender();
+		virtual const GOC_IDType componentID() const;
 
-  void update();
+		void update();
 
-  virtual void renderAt( 
-      const unsigned int& turn, 
-      const unsigned int& frame );
+		virtual void renderAt(
+			const unsigned int& turn,
+			const unsigned int& frame );
 
 };
-
-
 #endif

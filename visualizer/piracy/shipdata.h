@@ -5,22 +5,21 @@
 
 struct ShipDataInfo
 {
-    int x;
-    int y;
-    //int owner;
-    int facing;
-    // 0 - 1 - 2
-    // 7 - * - 3
-    // 6 - 5 - 4
+	int x;
+	int y;
+	//int owner;
+	int facing;
+	// 0 - 1 - 2
+	// 7 - * - 3
+	// 6 - 5 - 4
 };
 
 class ShipData : public GOCFamily_Data<ShipDataInfo>
 {
-public:
+	public:
 
-    const GOC_IDType componentID() const;
-    void parseShip( const Game& game, int shipId, int turn );
-    void update(){};
+		const GOC_IDType componentID() const;
+		void parseShip( const Game& game, int shipId, int turn );
+		void update(){};
 };
-
-#endif // SHIPDATA_H
+#endif													 // SHIPDATA_H
