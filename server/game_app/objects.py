@@ -364,7 +364,7 @@ class Pirate(Unit):
         if i._distance(self.x,self.y) == 1 and i.type == 1: #Not sure about this
           nearWater = True
         if i._distance(self.x,self.y) == 0 and i.type == 0:
-          onLand = False
+          onLand = True
     if not nearWater:
       return "Our ports must be near water!"
     if not onLand:
