@@ -111,7 +111,7 @@ class MerchantAI:
           if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
             self.game.removeObject(s)
     for i in self.inTransit:
-      print i.shitlist
+      #print i.shitlist
       deadEnemies = []
       for enemy in i.shitlist:
         if enemy not in self.game.objects.values():
