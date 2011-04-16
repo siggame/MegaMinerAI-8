@@ -129,10 +129,10 @@ class AI(BaseAI):
           destx = 1
         if desty < 0:
           desty = 1
-        if destx > game.mapSize()-1:
-          destx = game.mapSize()-3
-        if desty > game.mapSize()-1:
-          desty = game.mapSize()-3
+        if destx > self.mapSize()-1:
+          destx = self.mapSize()-3
+        if desty > self.mapSize()-1:
+          desty = self.mapSize()-3
         group.ship.move(destx,desty)
         if fight:
           for p in group.pirates:
@@ -182,14 +182,10 @@ class AI(BaseAI):
           #Up
           elif direction[0] == '3':
             desty -= 1
-          if destx < 0:
-            destx = 1
-          if desty < 0:
-            desty = 1
-          if destx > 39:
-            destx = 37
-          if desty > 39:
-            desty = 37
+          if destx > self.mapSize()-1:
+            destx = self.mapSize()-3
+          if desty > self.mapSize()-1:
+            desty = self.mapSize()-3
           group.ship.move(destx,desty)
           
         if fight:
