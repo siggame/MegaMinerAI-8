@@ -156,24 +156,22 @@ class Match(DefaultGameWorld):
             #for i in range(0,self.npcStartingShips):
             #  self.addObject(Ship.make(self, x, y, 2, self.shipHealth, self.shipStrength))
 
-    for p in self.objects.values():
-      if isinstance(p,Port) and (p.owner == 1 or p.owner == 0):
+    for p in self.objects.ports:
+      if (p.owner == 1 or p.owner == 0):
         for i in range(0,self.playersStartingPirates):
           self.addObject(Pirate.make(self, p.x, p.y, p.owner, self.pirateHealth, self.pirateStrength))
         
         #Finds empty water tiles, puts their locations in a list along with their modified distances from each player (modified such that one builds clockwise while the other builds counterclockwise)
         emptyWaterTiles = [[0,p.x,p.y]]
             
-        for i in self.objects.values():
-          if isinstance(i,Tile):
-            if i.type == 1:
-              empty = True
-              for j in self.objects.values():
-                if isinstance(j,Ship):
-                  if j.x == i.x and j.y == i.y:
-                    empty = False
-              if empty:
-                emptyWaterTiles += [[modDistance(i,p),i.x,i.y]]
+        for i in self.objects.tiles:
+          if i.type == 1:
+            empty = True
+            for j in self.objects.ships:
+              if j.x == i.x and j.y == i.y:
+                empty = False
+            if empty:
+              emptyWaterTiles += [[modDistance(i,p),i.x,i.y]]
           if len(emptyWaterTiles) > self.playersStartingShips:
             break
         
@@ -292,13 +290,12 @@ class Match(DefaultGameWorld):
     firstFound = False
     player1 = Player
     player2 = Player
-    for i in self.objects.values():
-      if isinstance(i,Player):
-        if firstFound == False:
-          player1 = i
-          firstFound = True
-        else:
-          player2 = i
+    for i in self.objects.players:
+      if firstFound == False:
+        player1 = i
+        firstFound = True
+      else:
+        player2 = i
     if self.turnNumber >= self.turnLimit:
       #Check for victory through wealth
       if player2.gold > player1.gold:
@@ -312,22 +309,21 @@ class Match(DefaultGameWorld):
       #Victory through strength
         player1Total = 0
         player2Total = 0
-        for i in self.objects.values():
-          if isinstance(i,Ship):
-            if i.owner == 0:
-              player1Total += self.shipCost
-            elif i.owner == 1:
-              player2Total += self.shipCost
-          elif isinstance(i,Pirate):
-            if i.owner == 0:
-              player1Total += self.pirateCost
-            elif i.owner == 1:
-              player2Total += self.pirateCost
-          elif isinstance(i,Port):
-            if i.owner == 0:
-              player1Total += self.portCost
-            elif i.owner == 1:
-              player2Total += self.portCost
+        for i in self.objects.ships:
+          if i.owner == 0:
+            player1Total += self.shipCost
+          elif i.owner == 1:
+            player2Total += self.shipCost
+        for i in self.objects.pirates:
+          if i.owner == 0:
+            player1Total += self.pirateCost
+          elif i.owner == 1:
+            player2Total += self.pirateCost
+        for i in self.objects.ports:
+          if i.owner == 0:
+            player1Total += self.portCost
+          elif i.owner == 1:
+            player2Total += self.portCost
         if player1Total > player2Total:
           self.declareWinner(self.players[0], 'Victory Through Strength!')
           print "1 Wins!"
@@ -338,17 +334,16 @@ class Match(DefaultGameWorld):
           #Victory Through Hardiness
           player1Total = 0
           player2Total = 0
-          for i in self.objects.values():
-            if isinstance(i,Ship):
+          for i in self.objects.ships:
               if i.owner == 0:
                 player1Total += i.health
               elif i.owner == 1:
                 player2Total += i.health
-            elif isinstance(i,Pirate):
-              if i.owner == 0:
-                player1Total += i.health
-              elif i.owner == 1:
-                player2Total += i.health
+          for i in self.objects.pirates:
+            if i.owner == 0:
+              player1Total += i.health
+            elif i.owner == 1:
+              player2Total += i.health
           if player1Total > player2Total:
             self.declareWinner(self.players[0], 'Victory Through Hardiness!')
             print "1 Wins!"
@@ -368,12 +363,11 @@ class Match(DefaultGameWorld):
       if player2.gold < self.pirateCost:
         player2Loss = True
       #This checks to see if they have any pirates
-      for i in self.objects.values():
-        if isinstance(i,Pirate):
-          if i.owner == 0:              
-            player1Loss = False
-          elif i.owner == 1:
-            player2Loss = False
+      for i in self.objects.pirates:
+        if i.owner == 0:              
+          player1Loss = False
+        elif i.owner == 1:
+          player2Loss = False
          
       #If a player has less gold than required for a pirate
       if player1Loss == True or player2Loss == True:   
@@ -384,8 +378,7 @@ class Match(DefaultGameWorld):
         print player2.gold  
         if player1Loss == True and player2Loss == False:
           self.declareWinner(self.players[0], 'Victory Through Annihilation')
-          print "1 Wins!"
-          
+          print "1 Wins!"         
         elif player1Loss == False and player2Loss == True:
           self.declareWinner(self.players[1], 'Victory Through Annihilation')
           print "2 Wins!"
