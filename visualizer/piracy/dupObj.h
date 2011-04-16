@@ -42,9 +42,11 @@ struct DupObj
 	void render()
 	{
 	    int i;
-	    //! @todo: textures here
+
+
+	    glTranslatef(x,y,0);
 	    if (ResourceMan::isInit() && false)
-	    {
+	    {//! @todo: textures here
 		switch (objType)
 		{
 		case POT_PIRATE:

@@ -16,6 +16,9 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <iostream>
+#include <fstream>
+
 using namespace std;
 
 GUI::~GUI()
@@ -164,16 +167,39 @@ void GUI::helpContents()
 
 void GUI::fileOpen()
 {
+	ifstream dirinfoIN;
+	dirinfoIN.open("dirinfo.txt");	
+	if (dirinfoIN.is_open())
+  {
+  	string line;
+    while ( dirinfoIN.good() )
+    {
+      getline (dirinfoIN,line);
+      m_previousDirectory.clear();
+      m_previousDirectory.append(QString::fromStdString(line));
+    }
+    dirinfoIN.close();
+  }
 
-  string filename = QFileDialog::getOpenFileName(
+
+  QFileDialog fileDialog;
+	  
+	
+  QString filename = fileDialog.getOpenFileName(
       this,
       tr( "Open Gamelog" ),
-      QDir::currentPath(),
+      m_previousDirectory,
       tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
-    loadGamelog( filename );
+		m_previousDirectory = filename;
+		
+		ofstream dirinfoOUT;
+		dirinfoOUT.open("dirinfo.txt");
+		dirinfoOUT << m_previousDirectory.toStdString();
+		dirinfoOUT.close();
+    loadGamelog( filename.toStdString() );
   }
 
 }
@@ -198,6 +224,9 @@ bool GUI::doSetup()
       );
 
   show();
+  
+  m_previousDirectory = QDir::homePath();
+  
   return true;
 }
 
@@ -256,8 +285,6 @@ void GUI::createActions()
   (void) new QShortcut( QKeySequence( Qt::Key_8 ), this, SLOT( turnPercentageShortcut8() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_9 ), this, SLOT( turnPercentageShortcut9() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_0 ), this, SLOT( turnPercentageShortcut0() ) );
-  
-  cout << "ADDED NUMERIC SHORTCUTS!"<<endl;
 }
 
 void GUI::createMenus()
@@ -335,9 +362,15 @@ void GUI::closeGUI()
 void GUI::toggleFullScreen()
 {
   if( !fullScreen )
+  {
+  	m_normalWindowGeometry = geometry();
     showFullScreen();
+  }
   else
+  {
     showNormal();
+    setGeometry(m_normalWindowGeometry);
+  }
   fullScreen = !fullScreen;
   show();
 }
