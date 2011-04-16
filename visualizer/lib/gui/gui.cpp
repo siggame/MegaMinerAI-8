@@ -213,7 +213,7 @@ bool GUI::doSetup()
   setCentralWidget( m_centralWidget );
   createActions();
   
-    // If we're in arenaMode, don't even bother setting this up
+    // If we're not arenaMode, don't even bother setting this up
   if(
       !optionsMan::isInit() ||
       !optionsMan::exists( "arenaMode" ) ||
@@ -222,7 +222,11 @@ bool GUI::doSetup()
     {
       createMenus();
       buildToolSet();
-      toggleFullScreen();
+
+    }
+    else//in arena mode
+    {
+      setFullScreen(true);
     }
   buildControlBar();
 
