@@ -169,10 +169,10 @@ class AI(BaseAI):
   
     print "Turn:", self.turnNumber
     print "My ID: ", self.playerID()
-    print "My Gold: ", self.players[self.playerID()].gold()
+    print "My Gold: ", self.players[self.playerID()].getGold()
 
     #if you have enough gold to buy a pirate
-    if self.pirateCost < self.players[self.playerID()].gold():
+    if self.pirateCost < self.players[self.playerID()].getGold():
       #find a port you own
       for p in self.ports:
         if p.getOwner == self.playerID():
