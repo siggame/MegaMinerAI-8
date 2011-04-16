@@ -3,7 +3,10 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
+#include "../gui/gui.h"
 #include "../goc_owner.h"
+#include <sstream>
+using namespace std;
 
 
 /** @brief resize
@@ -570,7 +573,11 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
              goc = it->second->data->getGOC( "Owner" );
              if( goc )
              {
-               Single::get()->selectedUnitIds.push_back( ((GOC_Owner*)goc)->owner()  );
+               int id =((GOC_Owner*)goc)->owner();
+               Single::get()->selectedUnitIds.push_back( id );
+               stringstream ss;
+               ss << id << endl; 
+               //GUI::appendConsole(  ss.str() );
              }
            }
          }
