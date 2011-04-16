@@ -32,7 +32,7 @@ Piracy : The Game
        Cost - 250 gold
        Moves - 2 per turn
        Attacks - 1 per turn
-       Health - 25
+       Health - 12
        Strength - 1
 
        Ships are bound to the sea, but can still move on and off of friendly ports.
