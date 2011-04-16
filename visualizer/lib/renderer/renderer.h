@@ -11,6 +11,7 @@
 #include "../objectmanager/objectmanager.h"
 #include "../gocfamily_render.h"
 #include "../gocfamily_location.h"
+#include "../gui/gui.h"
 #include "../gui/renderwidget.h"
 #include "../timemanager/timeManager.h"
 

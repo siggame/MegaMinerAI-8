@@ -1,5 +1,6 @@
 #include "renderwidget.h"
 #include "../../piracy/dupObj.h"
+#include "../renderer/renderer.h"
 #include "gui.h"
 
 #include <iostream>
@@ -19,7 +20,6 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
-  Renderer<DupObj>::create();
   Renderer<DupObj>::setParent( this );
   QGLWidget::initializeGL();
   cout << "VALID: " << isValid() << endl;

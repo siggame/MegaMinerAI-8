@@ -401,6 +401,12 @@ bool Renderer<DupObject>::clear()
 template<typename DupObject>
 bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
+    if (Single::isInit())
+    {
+	return false;
+    }
+
+
   if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
   {
     return false;
