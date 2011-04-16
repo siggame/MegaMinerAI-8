@@ -157,6 +157,7 @@ class GUI : public QMainWindow, public Singleton<GUI>
   friend class RenderWidget;
   
 public:
+  GUI() : m_isSetup(false) {};
   ~GUI();
   static bool reg( const std::string& id, guiObj *obj );
   static bool del( const std::string& id );
