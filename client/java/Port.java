@@ -1,6 +1,6 @@
 import com.sun.jna.Pointer;
 
-///A generic port
+///A basic port. The port can create new pirates and ships and is used when pirates need to deposit money.
 class Port extends Mappable 
 {
   public Port(Pointer p)

@@ -53,7 +53,7 @@ class Unit(Mappable):
     
     self.id = library.unitGetId(ptr)
 
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.unitMove(self.ptr, x, y)
@@ -63,7 +63,7 @@ class Unit(Mappable):
     self.validify()
     return library.unitTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -86,17 +86,17 @@ class Unit(Mappable):
     self.validify()
     return library.unitGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.unitGetOwner(self.ptr)
 
-  ##Health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.unitGetHealth(self.ptr)
 
-  ##Attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.unitGetStrength(self.ptr)
@@ -131,7 +131,7 @@ class Unit(Mappable):
     ret += "gold: %s\n" % self.getGold()
     return ret
 
-##A generic pirate
+##A basic pirate. These units are bound to land unless aboard a ship. they can pickup and drop treasure as well as build ports and fight other pirates.
 class Pirate(Unit):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -152,7 +152,7 @@ class Pirate(Unit):
         self.iteration = BaseAI.iteration
         return True
     raise ExistentialError()
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.pirateMove(self.ptr, x, y)
@@ -162,7 +162,7 @@ class Pirate(Unit):
     self.validify()
     return library.pirateTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -175,12 +175,12 @@ class Pirate(Unit):
     self.validify()
     return library.piratePickupTreasure(self.ptr, amount)
 
-  ##Allows the pirate to drop treasure on the groud.
+  ##Allows the pirate to drop treasure they are carrying.
   def dropTreasure(self, amount):
     self.validify()
     return library.pirateDropTreasure(self.ptr, amount)
 
-  ##Pirate builds a port on a land tile with water tile adjacent
+  ##Pirate builds a port on a land tile with water tile adjacent. Cannot be within three spaces of another port!
   def buildPort(self):
     self.validify()
     return library.pirateBuildPort(self.ptr)
@@ -200,17 +200,17 @@ class Pirate(Unit):
     self.validify()
     return library.pirateGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.pirateGetOwner(self.ptr)
 
-  ##Health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.pirateGetHealth(self.ptr)
 
-  ##Attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.pirateGetStrength(self.ptr)
@@ -296,7 +296,7 @@ class Player(GameObject):
     ret += "time: %s\n" % self.getTime()
     return ret
 
-##A generic port
+##A basic port. The port can create new pirates and ships and is used when pirates need to deposit money.
 class Port(Mappable):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -357,7 +357,7 @@ class Port(Mappable):
     ret += "owner: %s\n" % self.getOwner()
     return ret
 
-##A generic ship
+##A basic ship. They can only travel by sea and attack other ships. Whenever the ship moves, any pirates on his tile go with it
 class Ship(Unit):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -378,7 +378,7 @@ class Ship(Unit):
         self.iteration = BaseAI.iteration
         return True
     raise ExistentialError()
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.shipMove(self.ptr, x, y)
@@ -388,7 +388,7 @@ class Ship(Unit):
     self.validify()
     return library.shipTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -411,17 +411,17 @@ class Ship(Unit):
     self.validify()
     return library.shipGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.shipGetOwner(self.ptr)
 
-  ##Health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.shipGetHealth(self.ptr)
 
-  ##Attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.shipGetStrength(self.ptr)
@@ -507,7 +507,7 @@ class Tile(Mappable):
     ret += "type: %s\n" % self.getType()
     return ret
 
-##A treasure
+##This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth
 class Treasure(Mappable):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -543,7 +543,7 @@ class Treasure(Mappable):
     self.validify()
     return library.treasureGetY(self.ptr)
 
-  ##The amount of gold in this treaure
+  ##The amount of gold currently with this treasure
   def getGold(self):
     self.validify()
     return library.treasureGetGold(self.ptr)

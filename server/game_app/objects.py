@@ -217,11 +217,11 @@ class Pirate(Unit):
         if opponentShip == True:
           return "Ye cannot board enemy ships. Lay waste to all of their pirates first!"        
         if not freeShip:
-          return "Pirates cannot swim, yarr!"
+          return "Pirates cannot move into the water without a ship, yarr!"
 
     #Lose control of ship if this is your last pirate leaving
     for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.x == x and i.y == y:
+      if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         if i.owner == self.owner:
           counter = 0
           #if the pirate was on a ship, count how many pirates are on it
@@ -508,9 +508,13 @@ class Port(Mappable):
     #Checks to make sure there is no other ships in the port
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
-        return "Therr already be a ship in that port, cap'n"      
-    ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
-    self.game.addObject(ship)
+        return "Therr already be a ship in that port, cap'n"     
+    if len([i for i in self.game.objects.values() if isinstance(i,Pirate) and i.x == self.x and i.y == self.y]) >= 1:
+      ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
+      self.game.addObject(ship)
+    else:
+      ship = Ship.make(self.game, self.x, self.y, -1, self.game.shipHealth, self.game.shipStrength) #placeholder values
+      self.game.addObject(ship)
     return True    
     pass
 
@@ -599,7 +603,7 @@ class Ship(Unit):
                   return "We cannot move arr ships into enemy ports!"
           #If the player is simply trying to move a ship onto land
           if portTile == False:
-            return "Ships cannot walk, captain!"
+            return "Ships cannot move onto land, captain!"
       
     #Makes sure there is no units at target location
     for i in self.game.objects.values():
