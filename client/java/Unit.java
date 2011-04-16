@@ -11,7 +11,7 @@ abstract class Unit extends Mappable
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   int move(int x, int y)
   {
     validify();
@@ -23,7 +23,7 @@ abstract class Unit extends Mappable
     validify();
     return Client.INSTANCE.unitTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   int attack(Unit Target)
   {
     validify();
@@ -51,19 +51,19 @@ abstract class Unit extends Mappable
     validify();
     return Client.INSTANCE.unitGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public int getOwner()
   {
     validify();
     return Client.INSTANCE.unitGetOwner(ptr);
   }
-  ///Health of the unit
+  ///Current ealth of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.unitGetHealth(ptr);
   }
-  ///Attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public int getStrength()
   {
     validify();

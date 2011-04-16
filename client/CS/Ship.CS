@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 
-///A generic ship
+///A basic ship. They can only travel by sea and attack other ships. Whenever the ship moves, any pirates on his tile go with it
 public class Ship: Unit 
 {
   
@@ -34,7 +34,7 @@ public class Ship: Unit
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   public new int move(int x, int y)
   {
     validify();
@@ -46,7 +46,7 @@ public class Ship: Unit
     validify();
     return Client.shipTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   public new int attack(Unit Target)
   {
     validify();
@@ -74,19 +74,19 @@ public class Ship: Unit
     validify();
     return Client.shipGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public new int getOwner()
   {
     validify();
     return Client.shipGetOwner(ptr);
   }
-  ///Health of the unit
+  ///Current ealth of the unit
   public new int getHealth()
   {
     validify();
     return Client.shipGetHealth(ptr);
   }
-  ///Attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public new int getStrength()
   {
     validify();

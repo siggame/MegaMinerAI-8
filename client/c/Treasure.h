@@ -8,7 +8,7 @@
 
 #include "Mappable.h"
 
-///A treasure
+///This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth
 class Treasure : public Mappable {
   public:
   Treasure(_Treasure* ptr = NULL);
@@ -20,7 +20,7 @@ class Treasure : public Mappable {
   int x();
   ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
   int y();
-  ///The amount of gold in this treaure
+  ///The amount of gold currently with this treasure
   int gold();
 
   // Actions
