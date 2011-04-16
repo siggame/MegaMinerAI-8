@@ -198,10 +198,10 @@ public class Client {
 
 
   //utilities
-  DllImport("client")]
+  [DllImport("client")]
   public static extern int getPathSize();
-  DllImport("client")]
+  [DllImport("client")]
   public static extern int getPathSize();
-  DllImport("client")]
+  [DllImport("client")]
   public static extern int findPath(IntPtr start, IntPtr end, int type);
 }
