@@ -49,8 +49,14 @@ bool AI::run()
   //ports[i].y()
     ///The Y position of this object.  Y is vertical, with 0,0 as the top left corner
 
-  //cports[i].owner()
+  //ports[i].owner()
     ///The owner of the port
+    
+  //ports[i].createPirate()
+    ///creates a pirate at the calling port
+      
+  //ports[i].createShip()
+    ///creates a ship at the calling port
   ///////////////////////////////////////////////////////////////////
   
     ///////////////////////////////////////////////////////////////////
@@ -82,6 +88,21 @@ bool AI::run()
 
   //pirates[i].gold() / ships[i].gold()
     ///Amoutn of gold the unit is carrying
+    
+  //pirates[i].attack( Pirate target) / ships[i].attacks(Ship target)
+    ///Attacks the passed in unit if possible
+      
+  //pirates[i].move(int x,int y) / ships[i].move(int x, int y)
+    ///Moves to the passed in location if possible
+    
+  //pirates[i].createPort() (ONLY FOR PIRATES)
+    ///Creates a port at the pirate's current location if possible 
+    
+  //pirates[i].pickupTreasure(int goldAmount) (ONLY FOR PIRATES)
+    ///Picks up gold from the ground or from a port
+  
+  //pirates[i].dropTreasure(int goldAmount) (ONLY FOR PIRATES)
+    ///Pirate drops its gold
   ///////////////////////////////////////////////////////////////////
   
   ///////////////////////////////////////////////////////////////////

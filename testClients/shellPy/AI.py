@@ -29,11 +29,11 @@ class AI(BaseAI):
   
     #----------------------------------------------------------------------
     #Pre-Defined Data Structures : 
-    #vector of type Pirate  named pirates
-    #vector of type Ship named ships
-    #vector of type Port named ports
-    #vector of type Tile named tiles
-    #vector of type Treasure named treasures
+    #List of type Pirate named pirates
+    #List of type Ship named ships
+    #List of type Port named ports
+    #List of type Tile named tiles
+    #List of type Treasure named treasures
     
     #If you need clarification on python, please find a dev
     #----------------------------------------------------------------------
@@ -53,6 +53,12 @@ class AI(BaseAI):
         
     #owner()
       #The owner of the port
+      
+    #createPirate()
+      #creates a pirate at the calling port
+      
+    #createShip()
+      #creates a ship at the calling port
     #----------------------------------------------------------------------
     
     #----------------------------------------------------------------------  
@@ -85,6 +91,21 @@ class AI(BaseAI):
       
     #gold()
       #Amoutn of gold the unit is carrying
+      
+    #attack(target)
+      #Attacks the passed in unit if possible
+      
+    #move(x,y)
+      #Moves to the passed in location if possible
+      
+    #createPort() (ONLY FOR PIRATES)
+      #Creates a port at the pirate's current location if possible 
+      
+    #pickupTreasure(goldAmount) (ONLY FOR PIRATES)
+      #Picks up gold from the ground or from a port
+    
+    #dropTreasure(goldAmount) (ONLY FOR PIRATES)
+      #Pirate drops its gold
     #----------------------------------------------------------------------
     
     #----------------------------------------------------------------------
