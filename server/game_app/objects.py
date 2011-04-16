@@ -599,7 +599,7 @@ class Ship(Unit):
                   return "We cannot move arr ships into enemy ports!"
           #If the player is simply trying to move a ship onto land
           if portTile == False:
-            return "Ships cannot walk, captain!"
+            return "Ships cannot move onto land, captain!"
       
     #Makes sure there is no units at target location
     for i in self.game.objects.values():
