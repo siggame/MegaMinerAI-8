@@ -85,8 +85,6 @@ class AccountsAppMixin(object):
       if (val):
         self.logged_in = True
         self.name = str(val)
-        print "val: ",
-        print val
         return ["login-accepted"]
       else:
         return ["login-denied"]
