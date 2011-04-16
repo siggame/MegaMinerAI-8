@@ -368,7 +368,7 @@ class Pirate(Unit):
     if not nearWater:
       return "Our ports must be near water!"
     if not onLand:
-      return "How ye plan to build a port on the waves?"
+      return "Ports must be built on land"
     
     if self.owner == 0:
       p = [self.game.objects[i] for i in range(2)]
@@ -378,10 +378,10 @@ class Pirate(Unit):
           if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
             p[0].gold += j.gold
             self.game.removeObject(j)
-            p[0].gold -= self.game.portCost
-            port = Port.make(self.game,self.x,self.y,self.owner)
-            self.game.addObject(port)
-            return True
+        p[0].gold -= self.game.portCost
+        port = Port.make(self.game,self.x,self.y,self.owner)
+        self.game.addObject(port)
+        return True
       else:
         return "We do not have enough gowld to make tha' port, captain!"
     else:
