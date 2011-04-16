@@ -30,9 +30,10 @@ while True:
     numberplaying = len(inspector.active())
   if numberplaying > len(players)/2:
     print "would normally start another tentacle node"
-  while numberwaiting < players*2:
+  while numberwaiting < len(players)*2:
     games.append(run_game.delay(choice(players),choice(players),str(counter)))
     counter += 1
+    numberwaiting += 1
   
   for g in games[:]:
     if g.result != None:
