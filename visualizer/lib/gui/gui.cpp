@@ -212,9 +212,18 @@ bool GUI::doSetup()
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
   createActions();
-  createMenus();
-
-  buildToolSet();
+  
+    // If we're in arenaMode, don't even bother setting this up
+  if(
+      !optionsMan::isInit() ||
+      !optionsMan::exists( "arenaMode" ) ||
+      !optionsMan::getBool( "arenaMode" )
+    )
+    {
+      createMenus();
+      buildToolSet();
+      toggleFullScreen();
+    }
   buildControlBar();
 
   setWindowState(
@@ -361,18 +370,7 @@ void GUI::closeGUI()
 
 void GUI::toggleFullScreen()
 {
-  if( !fullScreen )
-  {
-  	m_normalWindowGeometry = geometry();
-    showFullScreen();
-  }
-  else
-  {
-    showNormal();
-    setGeometry(m_normalWindowGeometry);
-  }
-  fullScreen = !fullScreen;
-  show();
+  setFullScreen(!fullScreen);
 }
 
 void GUI::togglePlayPause()
@@ -455,4 +453,31 @@ void GUI::initUnitStats()
 ControlBar * GUI::getControlBar()
 {
   return get()->m_controlBar;
+}
+
+void GUI::catchEscapeKey()
+{
+  
+}
+
+bool GUI::getFullScreen()
+{
+  return fullScreen; 
+}
+
+void GUI::setFullScreen(bool value)
+{
+  fullScreen = value;
+  if(fullScreen)
+  {
+  	m_normalWindowGeometry = geometry();
+    showFullScreen();
+  }
+  else
+  {
+    showNormal();
+    setGeometry(m_normalWindowGeometry);
+  }
+  show();
+  
 }

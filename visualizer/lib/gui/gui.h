@@ -186,6 +186,9 @@ public:
   static void closeGUI();
   
   static ControlBar * getControlBar();
+  
+  bool getFullScreen();
+  void setFullScreen(bool);
 
 private slots:
   void helpContents();
@@ -196,6 +199,8 @@ private slots:
   void rewindShortcut();
   void stepTurnForwardShortcut();
   void stepTurnBackShortcut();
+
+  void catchEscapeKey();
   
   //Ugly hack
   void turnPercentageShortcut1(){	turnPercentageCalc(0); };
@@ -209,6 +214,7 @@ private slots:
   void turnPercentageShortcut9(){	turnPercentageCalc(8); };  
   void turnPercentageShortcut0(){	turnPercentageCalc(9); };
   
+
   
 
 private:
