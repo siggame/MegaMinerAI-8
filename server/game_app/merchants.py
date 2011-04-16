@@ -130,7 +130,7 @@ class MerchantAI:
       enemyInRange = False
       for p in i.pirates:
         for j in i.shitlist:
-          if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1:
+          if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.values():
             enemyInRange = True
             if p.attacksLeft > 0:
               p.attack(j)

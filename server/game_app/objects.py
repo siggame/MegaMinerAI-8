@@ -409,6 +409,8 @@ class Pirate(Unit):
 
   def attack(self, Target):
     #Ensures that you own the attacking unit
+    if Target not in self.game.objects.values():
+      return "That Target does not exist"
     if self.owner != self.game.playerID:
       return "I do not take orders from you! You be not my captain"
       
@@ -663,7 +665,8 @@ class Ship(Unit):
     #Make sure you own the attacking unit
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
-     
+    if Target not in self.game.objects.values():
+      return "That Target does not exist"
     #Checks to see that the target is in range     
     if self._distance(Target.x,Target.y) > self.game.shipRange:
       return "That tarrget is out of arr range, sir!"      
