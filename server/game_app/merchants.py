@@ -27,15 +27,7 @@ class MerchantAI:
       if isinstance(i,Port):
         if i.owner == self.id:
           self.thePorts += [PortAndPirateNumber(i,self.numPirates)]
-  
-  #removes dying pirates and ships from shitlist
-  def unlist(self,enemy):
-    for group in self.inTransit:
-      if enemy not in group.shitlist:
-        continue
-      else:
-        group.shitlist.remove(enemy)
-  
+    
   def chooseRichestPort(self,port):
     richestPort = None
     richness = 0
@@ -119,6 +111,7 @@ class MerchantAI:
           if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
             self.game.removeObject(s)
     for i in self.inTransit:
+      print i.shitlist
       deadEnemies = []
       for enemy in i.shitlist:
         if enemy not in self.game.objects.values():
@@ -130,6 +123,7 @@ class MerchantAI:
       enemyInRange = False
       for p in i.pirates:
         for j in i.shitlist:
+          #print "someone's on my list!"
           if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.values():
             enemyInRange = True
             if p.attacksLeft > 0:

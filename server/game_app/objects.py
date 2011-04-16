@@ -122,9 +122,8 @@ class Pirate(Unit):
     #Merchants add attacker to shitlist
     if self.owner == 2 or self.owner == 3: 
       found = False
-      for enemy in self.game.objects.values():
-        if enemy not in self.traderGroup.shitlist:
-          self.traderGroup.shitlist += [pirate]
+      if pirate not in self.traderGroup.shitlist:
+        self.traderGroup.shitlist += [pirate]
     #If pirate is killed by the attack
     if self.health <= 0:
       #If the pirate did not kill himself, transfer gold to killing pirate... if it was a pirate that killed him
@@ -159,10 +158,6 @@ class Pirate(Unit):
                 self.game.Merchant3.shipLost(i)
               i.owner = -1
           break
-      if pirate.owner == 2:
-        self.game.Merchant2.unlist(self)
-      if pirate.owner == 3:
-        self.game.Merchant3.unlist(self)
       self.game.removeObject(self)
 
     return True
@@ -360,7 +355,7 @@ class Pirate(Unit):
     #checks for distance to nearest port
     for i in self.game.objects.values():
       if isinstance(i,Port):
-        if self._distance(i.x,i.y) <= 3:
+        if self._distance(i.x,i.y) < 3:
           return "This port be too close to another port!"
     nearWater = False
     onLand = False
@@ -710,10 +705,6 @@ class Ship(Unit):
               if i.owner == 3:
                 self.game.Merchant3.pirateDied(i)
               self.game.removeObject(i)
-      if pirate.owner == 2:
-        self.game.Merchant2.unlist(self)
-      if pirate.owner == 3:
-        self.game.Merchant3.unlist(self)
       self.game.removeObject(self)
     return True          
 
