@@ -131,8 +131,8 @@ void TimeManager::updateFrames()
       }
 
     }
-
   } 
+
   if(GUI::isSetup())
   {
 

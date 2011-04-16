@@ -508,9 +508,13 @@ class Port(Mappable):
     #Checks to make sure there is no other ships in the port
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
-        return "Therr already be a ship in that port, cap'n"      
-    ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
-    self.game.addObject(ship)
+        return "Therr already be a ship in that port, cap'n"     
+    if len([i for i in self.game.objects.values() if isinstance(i,Pirate) and i.x == self.x and i.y == self.y]) >= 1:
+      ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
+      self.game.addObject(ship)
+    else:
+      ship = Ship.make(self.game, self.x, self.y, -1, self.game.shipHealth, self.game.shipStrength) #placeholder values
+      self.game.addObject(ship)
     return True    
     pass
 
