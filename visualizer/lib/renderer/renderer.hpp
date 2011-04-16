@@ -4,7 +4,7 @@
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
 #include "../goc_owner.h"
-//#include <sstream>
+#include <sstream>
 using namespace std;
 
 
@@ -365,10 +365,11 @@ bool Renderer<DupObject>::clear()
 template<typename DupObject>
 bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
-    if (Single::isInit())
+    if (!Single::isInit())
     {
-	return false;
+      return false;
     }
+
 
 
   if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
@@ -481,6 +482,7 @@ template <typename DupObject>
 bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
 
+
     if (!Single::isInit())
     {
 	std::cout << "Update Failed: Renderer is not inititalized or setup\n";
@@ -514,9 +516,9 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
       x2 = SelectionRender::get()->getX2()/unitSize;
       y2 = SelectionRender::get()->getY1()/unitSize+1;
       y2 = SelectionRender::get()->getY2()/unitSize+1;
+      GUI::clearConsole();
+      Single::get()->selectedUnitIds.clear();
     }
-
-
 
 
     Bucket::iterator it = bucket->begin();
@@ -539,17 +541,13 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                loc->y() <= y2 )
            {
              temp.selected = true;
-#if 0
-             goc = it->second->data->getGOC( "Owner" );
-             if( goc )
-             {
-               int id =((GOC_Owner*)goc)->owner();
-               Single::get()->selectedUnitIds.push_back( id );
+#if 1
+             int id =((GOC_Owner*)goc)->owner();
+             Single::get()->selectedUnitIds.push_back( id );
 
-               stringstream ss;
-               ss << id << endl; 
-               //GUI::appendConsole(  ss.str() );
-             }
+             stringstream ss;
+             ss << id << endl; 
+             GUI::appendConsole(  ss.str() );
 #endif
            }
          }
