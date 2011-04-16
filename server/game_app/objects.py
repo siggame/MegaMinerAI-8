@@ -358,41 +358,48 @@ class Pirate(Unit):
       if isinstance(i,Port):
         if self._distance(i.x,i.y) <= 3:
           return "This port be too close to another port!"
+    nearWater = False
+    onLand = False
     for i in self.game.objects.values():
       if isinstance(i, Tile):
-        if i._distance(self.x,self.y) == 1: #Not sure about this
-          if i.type == 1:
-            if self.owner == 0:
-              p = [self.game.objects[i] for i in range(2)]
-              if p[0].gold >= self.game.portCost:
-                #Checks to see if there is treasure on the loaction of the new port
-                for j in self.game.objects.values():
-                  if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
-                    p[0].gold += j.gold
-                    self.game.removeObject(j)
-                p[0].gold -= self.game.portCost
-                port = i.make(self.game,self.x,self.y,self.owner)
-                self.game.addObject(port)
-                return True
-              else:
-                return "We do not have enough gowld to make tha' port, captain!"
-            else:
-              p = [self.game.objects[i] for i in range(2)]
-              if p[1].gold >= self.game.portCost:
-                #Checks to see if there is treasure on the loaction of the new port
-                for j in self.game.objects.values():
-                  if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
-                    p[1].gold += j.gold
-                    self.game.removeObject(j)
-                p[1].gold -= self.game.portCost
-                port = i.make(self.game,self.x,self.y,self.owner)
-                self.game.addObject(port)
-                return True
-              else:
-                return "There be not enough gold to make that perrchase"
-          else:
-           return "Fool! Ourr ports must be touchin' the sea!"
-            
+        if i._distance(self.x,self.y) == 1 and i.type == 1: #Not sure about this
+          nearWater = True
+        if i._distance(self.x,self.y) == 0 and i.type == 0:
+          onLand = False
+    if not nearWater:
+      return "Our ports must be near water!"
+    if not onLand:
+      return "How ye plan to build a port on the waves?"
+    
+    if self.owner == 0:
+      p = [self.game.objects[i] for i in range(2)]
+      if p[0].gold >= self.game.portCost:
+        #Checks to see if there is treasure on the loaction of the new port
+        for j in self.game.objects.values():
+          if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
+            p[0].gold += j.gold
+            self.game.removeObject(j)
+            p[0].gold -= self.game.portCost
+            port = Port.make(self.game,self.x,self.y,self.owner)
+            self.game.addObject(port)
+            return True
+      else:
+        return "We do not have enough gowld to make tha' port, captain!"
+    else:
+      p = [self.game.objects[i] for i in range(2)]
+      if p[1].gold >= self.game.portCost:
+        #Checks to see if there is treasure on the loaction of the new port
+        for j in self.game.objects.values():
+          if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
+            p[1].gold += j.gold
+            self.game.removeObject(j)
+        p[1].gold -= self.game.portCost
+        port = Port.make(self.game,self.x,self.y,self.owner)
+        self.game.addObject(port)
+        return True
+      else:
+        return "We do not have enough gowld to make tha' port, captain!"
+ 
     return True
   #TODO: Test and review this logic
 
