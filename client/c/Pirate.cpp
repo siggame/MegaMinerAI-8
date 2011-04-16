@@ -101,3 +101,4 @@ std::ostream& operator<<(std::ostream& stream,Pirate ob)
   stream << "gold: " << ((_Pirate*)ob.ptr)->gold  <<'\n';
   return stream;
 }
+

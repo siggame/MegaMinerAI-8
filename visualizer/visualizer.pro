@@ -26,8 +26,8 @@ SOURCES += main.cpp \
     ./lib/resourcemanager/*.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
-    ./lib/gocfamily_data.cpp \
-    ./lib/selectionrender/*.cpp
+    ./lib/selectionrender/*.cpp \
+    ./lib/renderer/textRenderer/*.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
@@ -38,27 +38,15 @@ HEADERS += ./lib/manager/*.h \
     ./lib/renderer/*.h* \
     ./lib/parser/*.h \
     ./lib/gui/*.h \
-    ./piracy/*.h \
     ./lib/objectmanager/*.h \
-    ./lib/timeline/timeline.h \
-    ./lib/timeline/timeline.hpp \
-    ./lib/timeline/lookupTable/lookuptable.h \
-    ./lib/timeline/lookupTable/lookuptable.hpp \
+    ./lib/timeline/lookupTable/*.h \
+    ./lib/timeline/lookupTable/*.hpp \
     ./lib/goc_controlbar.h \
-    ./lib/gocfamily_controlbar.h \
-    ./lib/gocfamily_data.h \
-    ./lib/gocfamily_gui.h \
-    ./lib/gocfamily_guitoolset.h \
-    ./lib/gocfamily_render.h \
-    ./lib/singleton.h \
+    ./lib/*.h \
     ./lib/selectionrender/*.h \
-    ./lib/gocfamily_location.h \
-    ./piracy/piracylocations.h \
-    ./lib/goc_owner.h \
-    ./piracy/gold.h \
-    ./piracy/objecttype.h \
-    ./lib/resourcemanager/*.h
-
+    ./piracy/*.h \
+    ./lib/resourcemanager/*.h \
+    ./lib/renderer/textRenderer/*.h
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg
@@ -66,4 +54,4 @@ CONFIG += debug
 QT += opengl
 SUBDIRS += parser \
     tools
-OTHER_FILES += lib/resourcemanager/resourceman.o
+OTHER_FILES += 

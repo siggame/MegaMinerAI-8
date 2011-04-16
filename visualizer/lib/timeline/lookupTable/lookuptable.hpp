@@ -1,4 +1,5 @@
 #include "lookuptable.h"
+#include <iostream>
 
 /** @brief ~LookupTable
   * destructor!
@@ -42,12 +43,16 @@ LookupNode<T,idtype> * LookupTable<T,idtype>::node(const idtype & id, const unsi
   * @param input the value to input in
   */
 template <typename T, typename idtype>
-void LookupTable<T,idtype>::add(const idtype & id, const unsigned int & turn, const unsigned int & frame, const Node & input)
+bool LookupTable<T,idtype>::add(const idtype & id, const unsigned int & turn, const unsigned int & frame, const Node & input)
 {
 	Bucket * buck = bucket(turn,frame);
 
 	if (buck)
-		(*buck)[id] = input;
+	{
+	    (*buck)[id] = input;
+	    return true;
+	}
+	return false;
 }
 
 /** @brief clear
@@ -132,10 +137,11 @@ template <typename T, typename idtype>
 template <typename T, typename idtype>
 std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const unsigned int & turn, const unsigned int & frame)
 {
-	if (turn >= m_turns || frame >= m_frames)
-		return NULL;
+    //std::cout << "check: turn (" << turn << " , " << m_turns<< ") frame (" << frame << "," << m_frames << ")\n";
+    if (turn >= m_turns || frame >= m_frames)
+	    return NULL;
 
-	return &m_table[turn*frame + frame];
+    return &m_table[turn*m_frames + frame];
 }
 
 /** @brief add
@@ -144,18 +150,30 @@ std::map< idtype, LookupNode<T,idtype>* > * LookupTable<T,idtype>::bucket(const 
   * @todo document this function
   */
 template <typename T, typename idtype>
-void LookupTable<T,idtype>::add(Set & set)
+bool LookupTable<T,idtype>::add(Set & set)
 {
     if (m_frames != set.m_frames || m_turns != set.m_turns)
-	return;
-
+    {
+	//
+	std::cout << "Add frames: " << m_frames << "->" << set.m_frames << " turns: " << m_turns << "->" << set.m_turns <<"\n";
+	return false;
+    }
 
     for (unsigned int turn = 0; turn < m_turns; turn++)
     {
 	for (unsigned int frame = 0; frame < m_frames; frame++)
 	{
 	    if (set.m_set[turn*m_frames + frame])
+	    {
+		//std::cout << "somad: " << turn*m_frames + frame << " <==> " <<set.m_set.size() << '\n';
+		//std::cout << "test: " << set.m_set[turn*m_frames + frame] << " ==> " << turn*m_frames + frame << "\n";
 		m_table[turn*m_frames + frame][set.m_id] = set.m_set[turn*m_frames + frame];
+	    }
+	    else
+	    {
+		//std::cout << "test: " << set.m_set[turn*m_frames + frame] << " ==> " << turn*m_frames + frame << "\n";
+	    }
 	}
     }
+    return true;
 }

@@ -40,3 +40,4 @@ std::ostream& operator<<(std::ostream& stream,Player ob)
   stream << "time: " << ((_Player*)ob.ptr)->time  <<'\n';
   return stream;
 }
+

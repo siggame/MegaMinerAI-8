@@ -140,3 +140,4 @@ DLLEXPORT int getTreasureCount(Connection* c);
 #endif
 
 #endif
+

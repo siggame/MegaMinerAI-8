@@ -4,6 +4,7 @@
 #include "../singleton.h"
 #include "../gameobject/gameobject.h"
 #include "../timeline/lookupTable/lookuptable.h"
+#include <iostream>
 
 typedef int ObjIdType;
 
@@ -32,7 +33,7 @@ public:
     }
 
 
-    static bool reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> objset);
+    static bool reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> & objset);
     static bool reg(const ObjIdType & id, GameObject * obj, const unsigned int & turn, const unsigned int & frame);
     static bool del(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame);
 
@@ -42,6 +43,7 @@ public:
 	if (Single::isInit())
 	    return Single::get()->m_objects.bucket(turn,frame);
 
+	std::cout << "idiot check for buckets\n";
 	return NULL;
     }
 

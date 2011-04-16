@@ -41,7 +41,7 @@ template <typename T, typename idtype>
 class LookupSet
 {
 public:
-    LookupSet(const unsigned int & frames, const unsigned int & turns, const idtype & id)
+    LookupSet(const unsigned int & turns, const unsigned int & frames, const idtype & id)
     {
 	m_set.resize(frames*turns);
 	m_frames = frames;
@@ -56,34 +56,46 @@ public:
 
     LookupSet(){}; //maps bitch at you without this
 
-    bool addNode(const T & data, const unsigned int & frame, const unsigned int & turn)
+    unsigned int frames()
+    {
+	return m_frames;
+    }
+
+    unsigned int turns()
+    {
+	return m_turns;
+    }
+
+    bool addNode(const T & data, const unsigned int & turn,const unsigned int & frame )
     {
 	 if (frame >= m_frames || turn >= m_turns)
-		return false;
+	{
 
-	 if (m_set[frame*m_turns + turn])
+		return false;
+	 }
+	 if (m_set[turn*m_frames + frame])
 	     return false;
 
-	 m_set[frame*m_turns + turn] = new LookupNode<T,idtype>(data);
+	 m_set[turn*m_frames +frame ] = new LookupNode<T,idtype>(data);
 
 
 	 LookupNode<T,idtype> * prev;
 	 LookupNode<T,idtype> * next;
 
-	 for (int i = frame*m_turns + turn-1; i > -1; i--)
+	 for (int i = turn*m_frames +frame-1; i > -1; i--)
 	 {
 	    if (m_set[i])
 		prev = m_set[i];
 	 }
 
-	 for (unsigned int i = frame*m_turns + turn+1; i < m_set.size(); i++)
+	 for (unsigned int i = turn*m_frames +frame+1; i < m_set.size(); i++)
 	 {
 	    if (m_set[i])
 		next = m_set[i];
 	 }
 
-	 m_set[frame*m_turns+turn]->prev = prev;
-	 m_set[frame*m_turns+turn]->next = next;
+	 m_set[turn*m_frames +frame]->prev = prev;
+	 m_set[turn*m_frames +frame]->next = next;
 
 
 	 return true;
@@ -135,8 +147,8 @@ class LookupTable
 
 		void clear();
 
-		void add(const idtype & id, const unsigned int & turn, const unsigned int & frame,  const Node & input);
-		void add(Set & set);
+		bool add(const idtype & id, const unsigned int & turn, const unsigned int & frame,  const Node & input);
+		bool add(Set & set);
 
 		Node * node( const idtype & id,const unsigned int & turn, const unsigned int & frame);
 		Bucket * bucket(const unsigned int & turn, const unsigned int & frame);

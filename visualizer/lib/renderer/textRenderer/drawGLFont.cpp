@@ -12,7 +12,7 @@ DrawGLFont::DrawGLFont()
 }
 
 
-Color DrawGLFont::retrieveColor( int id )
+Color DrawGLFont::retrieveColor( const unsigned int & id )
 {
 	if( id >= colors.size() )
 		return Color( 0, 0, 0 );
@@ -148,7 +148,7 @@ void DrawGLFont::drawString( string message )
 	int index = 0;
 	int colorindex = 0;
 
-	for( int i = 0; i < message.size(); i++ )
+	for(unsigned int i = 0; i < message.size(); i++ )
 	{
 		if( message[i] == '$' )
 		{

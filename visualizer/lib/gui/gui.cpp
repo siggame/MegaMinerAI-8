@@ -3,13 +3,7 @@
 #include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-#include "../../piracy/boatdata.h"
-#include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"
-#include "../../piracy/piraterender.h"
 #include "../../piracy/piratemap.h"
-#include "../../piracy/treasuredata.h"
-#include "../../piracy/treasurerender.h"
 #include "../../piracy/dupObj.h"
 
 #include <iostream>
@@ -148,6 +142,24 @@ void GUI::dropEvent( QDropEvent* evt )
 
 }
 
+void GUI::appendConsole( string line )
+{
+  QString param;
+  param.append( line.c_str() );
+  appendConsole( param );
+}
+
+void GUI::appendConsole( QString line )
+{
+  GUI::get()->m_consoleArea->append( line );
+}
+
+void GUI::clearConsole()
+{
+
+  GUI::get()->m_consoleArea->clear();
+}
+
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   QMainWindow::resizeEvent( evt );
@@ -212,9 +224,22 @@ bool GUI::doSetup()
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
   createActions();
-  createMenus();
+  
+    // If we're not arenaMode, don't even bother setting this up
+  if(
+      !optionsMan::isInit() ||
+      !optionsMan::exists( "arenaMode" ) ||
+      !optionsMan::getBool( "arenaMode" )
+    )
+    {
+      createMenus();
+      buildToolSet();
 
-  buildToolSet();
+    }
+    else//in arena mode
+    {
+      setFullScreen(true);
+    }
   buildControlBar();
 
   setWindowState(
@@ -273,6 +298,7 @@ void GUI::createActions()
   (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr("Escape") ), this, SLOT( catchEscapeKey() ) );
  
   //Ugly hack
   (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
@@ -361,18 +387,7 @@ void GUI::closeGUI()
 
 void GUI::toggleFullScreen()
 {
-  if( !fullScreen )
-  {
-  	m_normalWindowGeometry = geometry();
-    showFullScreen();
-  }
-  else
-  {
-    showNormal();
-    setGeometry(m_normalWindowGeometry);
-  }
-  fullScreen = !fullScreen;
-  show();
+  setFullScreen(!fullScreen);
 }
 
 void GUI::togglePlayPause()
@@ -455,4 +470,34 @@ void GUI::initUnitStats()
 ControlBar * GUI::getControlBar()
 {
   return get()->m_controlBar;
+}
+
+void GUI::catchEscapeKey()
+{
+  if(getFullScreen())
+  {
+    setFullScreen(false);
+  }
+}
+
+bool GUI::getFullScreen()
+{
+  return fullScreen; 
+}
+
+void GUI::setFullScreen(bool value)
+{
+  fullScreen = value;
+  if(fullScreen)
+  {
+  	m_normalWindowGeometry = geometry();
+    showFullScreen();
+  }
+  else
+  {
+    showNormal();
+    setGeometry(m_normalWindowGeometry);
+  }
+  show();
+  
 }

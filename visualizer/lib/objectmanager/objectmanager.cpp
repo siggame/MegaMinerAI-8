@@ -34,14 +34,13 @@ bool ObjectManager::exists(const ObjIdType & id, const unsigned int & turn, cons
     return (Single::get()->m_objects.node(id, turn, frame) != NULL);
 }
 
-bool ObjectManager::reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> objset)
+bool ObjectManager::reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> & objset)
 {
     if (!Singleton<ObjectManager>::isInit())
 	return false;
     //! @todo check for shit existing, throw hissy fit if it does
-
+   // std::cout << "Objset Size: " << objset.turns() << " , " << objset.frames() << '\n';
     Singleton<ObjectManager>::get()->m_objects.add(objset);
-
     return true;
 }
 

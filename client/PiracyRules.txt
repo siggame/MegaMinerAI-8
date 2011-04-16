@@ -32,7 +32,7 @@ Piracy : The Game
        Cost - 250 gold
        Moves - 2 per turn
        Attacks - 1 per turn
-       Health - 25
+       Health - 12
        Strength - 1
 
        Ships are bound to the sea, but can still move on and off of friendly ports.
@@ -69,6 +69,7 @@ Piracy : The Game
        All of the units on these ships will be carrying gold, kill them to add to your vast wealth, kill all of them and steal their ship to add even more to your vast wealth.
        Merchant ships are neutral in nature until you attack them, at which point they will fight back and try to destroy you.
        Merchants get angry when you kill their men, and will send out stronger armies if their cargo never arrives. If their ships arrive safely, they will send weaker detachments to guard them.
+       There are two identical Merchant AI's, Units with Owner 2 move after player 0's turn, while Units with Onwer 3 move after player 1's turn
 
 [Starting State]
       Each player will begin with a port, a ship, and 5 pirates. (The units will start on the port)

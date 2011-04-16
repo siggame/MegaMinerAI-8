@@ -7,6 +7,11 @@ class SelectionRender : public GOCFamily_Render, Singleton <SelectionRender>
 {
 	public:
 		void setSelectionBox(int, int, int, int); //X1, Y1, X2, Y2 Screen Resolution
+    int getX1() { return m_X1; }
+    int getX2() { return m_X2; }
+    int getY1() { return m_Y1; }
+    int getY2() { return m_Y2; }
+    
 
 		bool getUpdated();
 		void setUpdated(bool);

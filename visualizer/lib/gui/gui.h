@@ -14,9 +14,12 @@
 #include <QString>
 #include <map>
 #include <string>
+using namespace std;
 
 typedef GOCFamily_GUI guiObj;
 
+class CentralWidget;
+class GOCFamily_GUIToolSet;
 
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
@@ -187,6 +190,13 @@ public:
   
   static ControlBar * getControlBar();
 
+  static void appendConsole( string line );
+  static void appendConsole( QString line );
+  static void clearConsole();
+  
+  bool getFullScreen();
+  void setFullScreen(bool);
+
 private slots:
   void helpContents();
   void fileOpen();
@@ -196,6 +206,8 @@ private slots:
   void rewindShortcut();
   void stepTurnForwardShortcut();
   void stepTurnBackShortcut();
+
+  void catchEscapeKey();
   
   //Ugly hack
   void turnPercentageShortcut1(){	turnPercentageCalc(0); };
@@ -209,6 +221,7 @@ private slots:
   void turnPercentageShortcut9(){	turnPercentageCalc(8); };  
   void turnPercentageShortcut0(){	turnPercentageCalc(9); };
   
+
   
 
 private:

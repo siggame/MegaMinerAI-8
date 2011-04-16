@@ -34,7 +34,7 @@ void RenderWidget::mousePressEvent( QMouseEvent *e )
 {
     if( e->button() == Qt::LeftButton )
     {
-      QString line;
+      //QString line;
       
       initialX = e->x();
       initialY = e->y();
@@ -42,14 +42,14 @@ void RenderWidget::mousePressEvent( QMouseEvent *e )
      	SelectionRender::get()->setSelectionBox(initialX, initialY, initialX+1, initialY+1);
  	    //+1 guarantees we create a box, rather than a point.
        
-      line.clear();
-      line.append("Left click: ( ");
-      line.append(QString::number(initialX));
-      line.append(", ");
-      line.append(QString::number(initialY));
-      line.append(")");
+      //line.clear();
+      //line.append("Left click: ( ");
+      //line.append(QString::number(initialX));
+      //line.append(", ");
+      //line.append(QString::number(initialY));
+      //line.append(")");
 
-      GUI::get()->m_consoleArea->append(line);
+      //GUI::get()->m_consoleArea->append(line);
 
       leftButtonDown = true;
       
@@ -72,8 +72,8 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
     
 		SelectionRender::get()->setUpdated(true); 
 		SelectionRender::get()->setDragging(false); 		   
-    
-    int selectWidth, selectHeight;
+
+// int selectWidth, selectHeight;
 //  int selectX = selectWidth = curX/getAttr(unitSize);
 //  int selectY = selectHeight = curY/getAttr(unitSize);
 

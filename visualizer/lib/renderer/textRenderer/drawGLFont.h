@@ -42,7 +42,7 @@ class DrawGLFont
 
 		void setBold( bool isBold )
 		{
-			bold = isBold;
+		    bold = isBold;
 		}
 
 		bool loadNewFont( int fontTextureId, string fontWidthsFile );
@@ -59,7 +59,7 @@ class DrawGLFont
 
 		void resetColors();
 		void addColor( float r, float g, float b );
-		Color retrieveColor( int id );
+		Color retrieveColor( const unsigned int & id );
 
 
 	private:

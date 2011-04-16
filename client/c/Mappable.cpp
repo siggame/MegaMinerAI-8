@@ -34,3 +34,4 @@ std::ostream& operator<<(std::ostream& stream,Mappable ob)
   stream << "y: " << ((_Mappable*)ob.ptr)->y  <<'\n';
   return stream;
 }
+

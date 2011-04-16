@@ -3,6 +3,10 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
+#include "../gui/gui.h"
+#include "../goc_owner.h"
+//#include <sstream>
+using namespace std;
 
 
 /** @brief resize
@@ -43,22 +47,28 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 template <typename DupObject>
 bool Renderer<DupObject>::refresh()
 {
+
   if (!Single::isInit())
     return false;
+
 
   if (!isSetup())
     return false;
 
+
   if(SelectionRender::get()->getUpdated())
   {
     Single::get()->selectedUnitIds.clear();
+    update( TimeManager::getTurn(), TimeManager::getFrame() );
   }
+
 
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-  unsigned int turn = TimeManager::getTurn();
-  unsigned int frame = TimeManager::getFrame();
+  //unsigned int turn = TimeManager::getTurn();
+  //unsigned int frame = TimeManager::getFrame();
+
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
@@ -73,16 +83,39 @@ bool Renderer<DupObject>::refresh()
   }
 #endif
 
+
   glPushMatrix();
-  glScalef( 20, 20, 1 );
+  //glTranslatef(0.0f,24.0f,0.0f);
+  float mapSize = (float)optionsMan::getInt("mapSize");
+  glScalef( height()/mapSize, height()/mapSize, 1 );
+#if 0
+  glDisable(GL_BLEND);
+  glColor4f(1.0f,0.0f,1.0f,1.0f);
+   //glTranslatef(3,3,0);
+  glBegin(GL_QUADS);
+
+  glVertex3f(0,0,-1);
+  glVertex3f(0,1,-1);
+  glVertex3f(1,1,-1);
+  glVertex3f(1,0,-1);
+
+  glEnd();
+  glEnable(GL_BLEND);
+
+#else
 
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
   {
-      (*renderIt)->render();\
+      glPushMatrix();
+      (*renderIt)->render();
+      glPopMatrix();
   }
 
+#endif
+
   glPopMatrix();
+
 
 
   if( Single::get()->m_parent )
@@ -90,7 +123,9 @@ bool Renderer<DupObject>::refresh()
     Single::get()->m_parent->swapBuffers();
   }
 
+
   SelectionRender::get()->setUpdated(false);
+
 
   return true;
 }
@@ -98,9 +133,9 @@ bool Renderer<DupObject>::refresh()
 template <typename DupObject>
 void Renderer<DupObject>::setParent( RenderWidget *parent )
 {
-  if (!Single::isInit())
-		return; //! @todo throw error
-  Single::get()->m_parent = parent;
+    if (!Single::isInit())
+	return; //! @todo throw error
+    Single::get()->m_parent = parent;
 }
 
 /** @brief destroy
@@ -110,12 +145,12 @@ void Renderer<DupObject>::setParent( RenderWidget *parent )
 template <typename DupObject>
 bool Renderer<DupObject>::destroy()
 {
-	if(!Single::isInit())
-		return false;
-	if (!clear())
-		return false;
+    if(!Single::isInit())
+	return false;
+    if (!clear())
+	return false;
 
-	return Single::destroy();
+    return Single::destroy();
 }
 
 /** @brief create
@@ -125,17 +160,17 @@ bool Renderer<DupObject>::destroy()
 template <typename DupObject>
 bool Renderer<DupObject>::create()
 {
-	if (!Single::create())
-		return false;
+    if (!Single::create())
+	return false;
 
-	Single::get()->m_parent = 0;
-	Single::get()->m_height = 0;
-	Single::get()->m_width  = 0;
-	Single::get()->m_depth  = 10;
-	Single::get()->m_dupListDirs = 0;
-	Single::get()-> m_duplicateList = NULL;
+    Single::get()->m_parent = 0;
+    Single::get()->m_height = 0;
+    Single::get()->m_width  = 0;
+    Single::get()->m_depth  = 10;
+    Single::get()->m_dupListDirs = 0;
+    Single::get()-> m_duplicateList = NULL;
 
-	return true;
+    return true;
 }
 
 /** @brief getRenderObject
@@ -259,6 +294,7 @@ bool Renderer<DupObject>::setup()
 
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
+
   Single::get()->m_isSetup = true;
 
 
@@ -400,6 +436,8 @@ bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
 {
+    //std::cout << "updateLocation Called\n";
+
 	if (!Single::isInit())
 		return;
 
@@ -415,6 +453,7 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	{
 		sameFlag = true;
 	}
+
 	obj.x = x;
 	obj.y = y;
 
@@ -422,8 +461,10 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
 
 	if (!sameFlag)
-		Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
-
+	{
+	    Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
+	    //std::cout << "Gets to add\n";
+	}
 }
 
 
@@ -469,16 +510,45 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+    //std::cout << "update?\n";
     if (!Single::isInit())
 	return; //! @todo fuck off
 
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
     Bucket * bucket = ObjectManager::getBucket(turn,frame);
+
     if (!bucket)
-	return; //! @todo toss computer against wall
+    {
+	//std::cout << "CANT FIND YOUR FUCKING BUCKET\n";
+      return; //! @todo toss computer against wall
+    }
+    else
+    {
+	//std::cout << "Fucket Size: " << bucket->size() << '\n';
+    }
 
     Single::get()->m_renderList.clear();
     int time = TimeManager::timeHash();
+
+    bool selectUpdate = SelectionRender::get()->getUpdated();
+    float mapSize = (float)optionsMan::getInt("mapSize");
+    float unitSize  = height()/mapSize;
+
+    int x1 = 0;
+    int x2 = 0;
+    int y1 = 0;
+    int y2 = 0;
+
+    if( selectUpdate )
+    {
+      x1 = SelectionRender::get()->getX1()/unitSize;
+      x2 = SelectionRender::get()->getX2()/unitSize;
+      y2 = SelectionRender::get()->getY1()/unitSize+1;
+      y2 = SelectionRender::get()->getY2()/unitSize+1;
+    }
+
+
+
 
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
@@ -487,8 +557,37 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	{
 	   DupObject temp;
 	   setDupObj(it->second->data,temp);	  
-	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
-	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+	   GOComponent * goc = it->second->data->getGOC("LocationFamily");
+	   if (goc)
+	   {
+	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
+	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+
+         if( selectUpdate )
+         {
+           if( loc->x() >= x1 && 
+               loc->x() <= x2 &&
+               loc->y() >= y1 &&
+               loc->y() <= y2 )
+           {
+             goc = it->second->data->getGOC( "Owner" );
+             if( goc )
+             {
+               int id =((GOC_Owner*)goc)->owner();
+               Single::get()->selectedUnitIds.push_back( id );
+               stringstream ss;
+               ss << id << endl; 
+               //GUI::appendConsole(  ss.str() );
+             }
+           }
+         }
+
+	   }
+	   else
+	   {
+	       std::cout << "no location for obj type: " << temp.objType << '\n';
+	   }
+
 	}
 
     }

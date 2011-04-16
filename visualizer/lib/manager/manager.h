@@ -4,21 +4,7 @@
 #include "../singleton.h"
 #include <map>
 
-#if 0
-/**
-  *This is just a helper class because I cant get it to work any other way, ignore this
-  *
-  */
-template < typename IdType, typename DataType >
-class ManagerBase
-{
-	template <typename idType = IdType,typename dataType = DataType>
-	friend class Manager;
-	DataTable m_data;
-	public:
-	DataTable * data(){return &m_data;}
-};
-#endif
+
 
 
 /**
