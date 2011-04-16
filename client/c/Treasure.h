@@ -33,3 +33,4 @@ class Treasure : public Mappable {
 
 #endif
 
+

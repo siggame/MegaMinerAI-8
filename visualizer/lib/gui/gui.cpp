@@ -3,12 +3,12 @@
 #include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-#include "../../piracy/boatdata.h"
+//#include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"
+//#include "../../piracy/piratedata.h"
 #include "../../piracy/piraterender.h"
 #include "../../piracy/piratemap.h"
-#include "../../piracy/treasuredata.h"
+//#include "../../piracy/treasuredata.h"
 #include "../../piracy/treasurerender.h"
 #include "../../piracy/dupObj.h"
 
