@@ -72,8 +72,8 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
     
 		SelectionRender::get()->setUpdated(true); 
 		SelectionRender::get()->setDragging(false); 		   
-    
-    int selectWidth, selectHeight;
+
+// int selectWidth, selectHeight;
 //  int selectX = selectWidth = curX/getAttr(unitSize);
 //  int selectY = selectHeight = curY/getAttr(unitSize);
 

@@ -59,7 +59,7 @@ class DrawGLFont
 
 		void resetColors();
 		void addColor( float r, float g, float b );
-		Color retrieveColor( int id );
+		Color retrieveColor( const unsigned int & id );
 
 
 	private:

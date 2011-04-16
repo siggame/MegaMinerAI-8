@@ -61,8 +61,8 @@ bool Renderer<DupObject>::refresh()
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-  unsigned int turn = TimeManager::getTurn();
-  unsigned int frame = TimeManager::getFrame();
+  //unsigned int turn = TimeManager::getTurn();
+  //unsigned int frame = TimeManager::getFrame();
 
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();

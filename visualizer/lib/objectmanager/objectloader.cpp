@@ -38,11 +38,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   //! @todo THIS IS BROKEN!!!!
     GameObject *go = new GameObject( 1 );
     PirateMap *pm = new PirateMap();
-    PirateData * data2 = new PirateData();
-    pm->generateMap( game );     //TODO: REMOVE BEFORE COMPETITION
+    pm->generateMap( game );
     pm->setOwner( go );
     go->setGOC( pm );
-    Renderer<DupObj>::registerConstantObj( 1, go );     //TODO: REMOVE BEFORE COMPETITION
+    Renderer<DupObj>::registerConstantObj( 1, go );
 
     go = new GameObject( 2 );
     go->setGOC( SelectionRender::get() );
