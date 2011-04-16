@@ -501,6 +501,11 @@ class Port(Mappable):
         return "We don' have enough gold fer that unit, captain"
     pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.pirateHealth, self.game.pirateStrength) #placeholder values
     self.game.addObject(pirate)
+    for s in self.game.objects.values():
+      if isinstance(s,Ship):
+        if s.x == self.x and s.y == self.y:
+	  if s.owner == -1:
+	    s.owner = self.owner
     return True
   #TODO: Test and review this logic
 

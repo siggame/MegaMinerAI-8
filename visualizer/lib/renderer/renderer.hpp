@@ -518,7 +518,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
       x2 = SelectionRender::get()->getX2()/unitSize;
       if( x2 < x1 )
       {
-        x2 = temp;
+        temp = x2;
         x2 = x1;
         x1 = temp;
       }
@@ -529,9 +529,9 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
       if( y2 < y1 )
       {
+        temp = y1;
+        y1 = y2;
         y2 = temp;
-        y2 = y1;
-        y1 = temp;
       }
 
 
