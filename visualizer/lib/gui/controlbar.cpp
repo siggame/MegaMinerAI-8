@@ -122,7 +122,7 @@ void ControlBar::play()
     TimeManager::setSpeed(0);//Pause
     playButton->setText(">");//Set button to "will play if pressed"
   }
-  else //Sometheing other than normal playback speed
+  else //Something other than normal playback speed
   {
     rewindButton->setText("<<");
     playButton->setText("||");
