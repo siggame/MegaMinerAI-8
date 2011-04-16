@@ -7,6 +7,8 @@
 #include <iostream>
 #include <queue>
 #include <cmath>
+#include "../lib/renderer/renderer.h"
+#include "dupObj.h"
 using namespace std;
 
 PirateMap::PirateMap()
@@ -59,10 +61,12 @@ void PirateMap::blur(
           {
             index = i-x+radius;
 
+#if 0
             if( 
                 (map[x][y+1] > 0 && map[i][y+1] > 0) ||  
                 (map[x][y+1] <= 0 && map[i][y+1] <= 0)
                 )
+#endif
             {
               map[x][y] += map[i][y+1];
               c++;
@@ -89,10 +93,12 @@ void PirateMap::blur(
               i++ )
           {
             index = i-x+radius;
+#if 0
             if( 
                 (map[x+1][y] > 0 && map[x+1][i] > 0) ||
                 (map[x+1][y] <= 0 && map[x+1][i] <= 0 )
               )
+#endif
             {
               map[x][y] += map[x+1][i];
               c++;
@@ -239,10 +245,10 @@ void PirateMap::generateMap( Game& g )
 {
 
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
-  int pixels = 25;
+  int pixels = 12;
   int mapSize = g.states[0].mapSize;
-  int mWidth = mapSize*pixels; //mapSize*pixels;
-  int mHeight = mapSize*pixels; //mapSize*pixels;
+  int mWidth = mapSize*pixels; 
+  int mHeight = mapSize*pixels; 
   cout << "Pixels: " << pixels << endl;
 
   int **depthMap = new int*[mWidth];
@@ -255,6 +261,8 @@ void PirateMap::generateMap( Game& g )
     memset( depthMap[x], 0, sizeof( int ) * mHeight );
   }
 
+  cout << __LINE__ << endl;
+  const int big = 50;
   for( 
       std::map<int,Tile>::iterator i = g.states[0].tiles.begin();
       i != g.states[0].tiles.end();
@@ -268,26 +276,25 @@ void PirateMap::generateMap( Game& g )
         mapSize, 
         (TileType)(1-i->second.type),
         g.states[0].tiles ) * ty;
-  }
 
-  const int big = 1000;
-  for( int i = 0; i < (signed int)g.states[0].tiles.size(); i++ )
-  {
     for( int x = 0; x < (int)pixels; x++ )
-    {
-      for( int y = 0; y < (int)pixels; y++ )
       {
-        tx = g.states[0].tiles[i].x;
-        ty = g.states[0].tiles[i].y;
+        for( int y = 0; y < (int)pixels; y++ )
+        {
+        tx = i->second.x;
+        ty = i->second.y;
         
         depthMap
           [(int)((float)(tx)*pixels)+x]
           [(int)((float)(ty)*pixels)+y] 
-          = g.states[0].tiles[i].type*big;
+          = i->second.type*big;
 
       }
     }
   }
+
+  
+  cout << __LINE__ << endl;
 
   int larger = 0;
   int smaller = 0;
@@ -336,6 +343,7 @@ void PirateMap::generateMap( Game& g )
     optionsMan::getStr( "proc9" ),
     optionsMan::getStr( "proc10" )
   };
+
   int depths[10] = {
     optionsMan::getInt( "depth1" ),
     optionsMan::getInt( "depth2" ),
@@ -355,7 +363,7 @@ void PirateMap::generateMap( Game& g )
     textures[i] = r.getQImage();
   }
 
-  QImage result( 1024, 1024, QImage::Format_RGB32 );
+  QImage result( 512, 512, QImage::Format_RGB32 );
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -375,27 +383,7 @@ void PirateMap::generateMap( Game& g )
     fprintf (stderr, "OpenGL Error: %s\n", errString);
   }
 
-#if 0
-  std::ofstream out( "depth.tga" );
-
-  unsigned char TGAheader[12] = {0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  unsigned char header[6] = {mWidth%256, mWidth/256, mHeight%256, mHeight/256, 8, 0 };
-
-  out.write( (const char*)TGAheader, 12 );
-  out.write( (const char*)header, 6 );
-
-  for( int x = 0; x < mWidth; x++ )
-  {
-    for( int y = 0; y < mHeight; y++ )
-    {
-      out.write( (const char*)&depthMap[x][y], 1 );
-    }
-  }
-
-  out.close();
-#endif
-
-
+#if 1
 
   for( int x = 0; x < mWidth; x++ )
   {
@@ -403,6 +391,7 @@ void PirateMap::generateMap( Game& g )
   }
 
   delete [] depthMap;
+#endif
 
 }
 
@@ -446,16 +435,39 @@ void PirateMap::renderAt(
   glColor4f( 1, 1, 1, 1 );
   glBindTexture( GL_TEXTURE_2D, mapTexture.getTexture() );
 
+
+
+
+  const float tex = 1-0.9375;
   glBegin( GL_QUADS );
-  glTexCoord2f( 0, 0 );
+  glTexCoord2f( 0, tex );
   glVertex3f( 0, 0, 0 );
-  glTexCoord2f( 1, 0 );
-  glVertex3f( 1024, 0, 0 );
-  glTexCoord2f( 1, 1 );
-  glVertex3f( 1024, 1024, 0 );
-  glTexCoord2f( 0, 1 );
-  glVertex3f( 0, 1024, 0 );
+  glTexCoord2f( 1-tex, tex );
+  glVertex3f( Renderer<DupObj>::height(), 0, 0 );
+  glTexCoord2f( 1-tex, 1);
+  glVertex3f( Renderer<DupObj>::height(), Renderer<DupObj>::height(), 0 );
+  glTexCoord2f( 0, 1);
+  glVertex3f( 0, Renderer<DupObj>::height(), 0 );
   glEnd();
+
+  glDisable( GL_BLEND);
+  glDisable( GL_TEXTURE );
+  glDisable( GL_TEXTURE_2D );
+  glColor4f( 1, 1, 1, 1 );
+
+  glTranslatef( -2, 2, 0 );
+
+  float size = ((float)Renderer<DupObj>::height())/40;
+  for( int i = 0; i < 41; i++ )
+  {
+    glBegin( GL_QUADS );
+    glVertex3f( 0, 0, -2 );
+    glVertex3f( size, 0, -2 );
+    glVertex3f( size, size, -2 );
+    glVertex3f( 0, size, -2 );
+    glEnd();
+    glTranslatef( size, size, 0 );
+  }
 
 
   glPopMatrix();
