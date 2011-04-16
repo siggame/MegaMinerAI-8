@@ -440,19 +440,21 @@ void PirateMap::renderAt(
 
   const float tex = 1-0.9375;
   glBegin( GL_QUADS );
-  glTexCoord2f( 0, tex );
-  glVertex3f( 0, 0, 0 );
-  glTexCoord2f( 1-tex, tex );
-  glVertex3f( Renderer<DupObj>::height(), 0, 0 );
-  glTexCoord2f( 1-tex, 1);
-  glVertex3f( Renderer<DupObj>::height(), Renderer<DupObj>::height(), 0 );
-  glTexCoord2f( 0, 1);
-  glVertex3f( 0, Renderer<DupObj>::height(), 0 );
+
+  glVertex3f( 0, 0, 0 );glTexCoord2f( 0, tex );
+
+  glVertex3f( Renderer<DupObj>::height(), 0, 0 );glTexCoord2f( 1-tex, tex );
+
+  glVertex3f( Renderer<DupObj>::height(), Renderer<DupObj>::height(), 0 );glTexCoord2f( 1-tex, 1);
+
+  glVertex3f( 0, Renderer<DupObj>::height(), 0 );glTexCoord2f( 0, 1);
   glEnd();
 
   glDisable( GL_BLEND);
   glDisable( GL_TEXTURE );
   glDisable( GL_TEXTURE_2D );
+
+#if 0
   glColor4f( 1, 1, 1, 1 );
 
   glTranslatef( -2, 2, 0 );
@@ -468,7 +470,7 @@ void PirateMap::renderAt(
     glEnd();
     glTranslatef( size, size, 0 );
   }
-
+#endif
 
   glPopMatrix();
 }
