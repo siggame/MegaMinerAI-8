@@ -8,6 +8,7 @@ class ObjectHolder(dict):
     self.tiles = []
     self.ports = []
     self.players = []
+    self.treasures = []
 
   def __setitem__(self, key, value):
     if key in self:
@@ -23,11 +24,13 @@ class ObjectHolder(dict):
       self.ports.append(value)
     if isinstance(value, objects.Player):
       self.players.append(value)
+    if isinstance(value, objects.Treasure):
+      self.treasures.append(value)
 
   def __delitem__(self, key):
     value = self[key]
     dict.__delitem__(self, key)
-    for i in self.pirates, self.ships, self.tiles, self.ports, self.players:
+    for i in self.pirates, self.ships, self.tiles, self.ports, self.players, self.treasures:
       if value in i:
         i.remove(value)
 
