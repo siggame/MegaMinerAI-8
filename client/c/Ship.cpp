@@ -86,3 +86,4 @@ std::ostream& operator<<(std::ostream& stream,Ship ob)
   stream << "gold: " << ((_Ship*)ob.ptr)->gold  <<'\n';
   return stream;
 }
+
