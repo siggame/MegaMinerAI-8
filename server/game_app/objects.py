@@ -140,13 +140,13 @@ class Pirate(Unit):
         self.game.Merchant3.pirateDied(self)
     
         #Lose control of ship if this is your last pirate leaving
-      for i in self.game.objects.values():
-        if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
+      for i in self.game.objects.ships:
+        if i.x == self.x and i.y == self.y:
           if i.owner == self.owner:
             counter = 0
             #if the pirate was on a ship, count how many pirates are on it
-            for j in self.game.objects.values():
-              if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
+            for j in self.game.objects.pirates:
+              if j.x == i.x and j.y == i.y:
                 counter+=1
                 if counter > 1:
                   break
@@ -195,16 +195,22 @@ class Pirate(Unit):
     intoWater = False
     theFreeShip = None
     #Check to see if the unit is moving into an enemy
-    for i in self.game.objects.values():
-      if isinstance(i,Unit):
-        if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
-          return "Therr already be an enemy at that location, yarr"
+    for i in self.game.objects.pirates, self.game.objects.ships:
+      if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
+        return "Therr already be an enemy at that location, yarr"
+    for i in self.game.objects.ships:
+      if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
+        return "Therr already be an enemy at that location, yarr"
+      elif (i.owner == self.owner or i.owner == -1) and i.x == x and i.y == y:
+        freeShip = True
+        break
+    for i in self.game.objects.ports:
       #Check to see if the unit is moving into an enemy port
-      if isinstance(i,Port):
-        if i.owner != self.owner and i.x == x and i.y == y: 
-          return "Ye cannot move yerr pirates into enemy ports"
+      if i.owner != self.owner and i.x == x and i.y == y: 
+        return "Ye cannot move yerr pirates into enemy ports"
+    for i in self.game.objects.tiles:
       #Checking if unit is moving onto water
-      elif isinstance(i,Tile) and i.x == x and i.y == y and i.type == 1:
+      if i.x == x and i.y == y and i.type == 1:
         intoWater = True
       #Checking about the Boats
       elif isinstance(i,Ship) and i.x == x and i.y == y:
@@ -225,7 +231,7 @@ class Pirate(Unit):
     counter = 0
     onABoat = False
     theBoatIAmOn = None
-    for i in self.game.objects.values():
+    for i in self.game.objects.ships,self.game.objects.pirates:
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         if i.owner == self.owner:
           onABoat = True
