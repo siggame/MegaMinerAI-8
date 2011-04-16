@@ -534,10 +534,10 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     float mapSize = (float)optionsMan::getInt("mapSize");
     float unitSize  = height()/mapSize;
 
-    int x1;
-    int x2;
-    int y1;
-    int y2;
+    int x1 = 0;
+    int x2 = 0;
+    int y1 = 0;
+    int y2 = 0;
 
     if( selectUpdate )
     {

@@ -46,8 +46,7 @@ HEADERS += ./lib/manager/*.h \
     ./lib/selectionrender/*.h \
     ./piracy/*.h \
     ./lib/resourcemanager/*.h \
-    ./lib/renderer/textRenderer/*.h \
-    piracy/shiphealth.h
+    ./lib/renderer/textRenderer/*.h
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -pg
