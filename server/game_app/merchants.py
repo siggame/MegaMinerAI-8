@@ -23,18 +23,17 @@ class MerchantAI:
     self.inTransit = []
     self.treasureThreshold = self.game.treasureThreshold
     self.thePorts = []
-    for i in game.objects.values():
-      if isinstance(i,Port):
-        if i.owner == self.id:
-          self.thePorts += [PortAndPirateNumber(i,self.numPirates)]
+    for i in game.objects.ports:
+      if i.owner == self.id:
+        self.thePorts += [PortAndPirateNumber(i,self.numPirates)]
     
   def chooseRichestPort(self,port):
     richestPort = None
     richness = 0
     destiDensity = []
     index = 0
-    for p in self.game.objects.values():
-      if isinstance(p,Port) and (p.owner == 2 or p.owner == 3):
+    for p in self.game.objects.ports:
+      if (p.owner == 2 or p.owner == 3):
         if p is not port:
           destiDensity+= [[0,p]]
           alreadyDestination = False
@@ -43,8 +42,8 @@ class MerchantAI:
               alreadyDestination = True
               destiDensity[index][0] += 1
           if not alreadyDestination:
-            for t in self.game.objects.values():
-              if isinstance(t,Treasure) and p.x == t.x and p.y == t.y:
+            for t in self.game.objects.treasures:
+              if p.x == t.x and p.y == t.y:
                 if t.gold > richness:
                   richness = t.gold
                   richestPort = p
@@ -62,8 +61,8 @@ class MerchantAI:
     newInTransit = ShipAndDestination(newShip,destination)
     newShip.traderGroup = newInTransit
     treasureValue = 0
-    for i in self.game.objects.values(): 
-      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
+    for i in self.game.objects.treasures: 
+      if i.x == port.x and i.y == port.y:
         treasureValue =  i.gold
 
     for i in range(0,self.thePorts[portNum].number):
@@ -98,18 +97,17 @@ class MerchantAI:
         self.thePorts[homePort].number = 1
   
   def shipArrived(self,ship,destinationPort):
-    for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
+    for i in self.game.objects.pirates:
+      if i.owner == self.id and i.x == ship.x and i.y == ship.y:
         self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
     
   def play(self):
     #removes empty ships
     for p in self.thePorts:
-      for s in self.game.objects.values():
-        if isinstance(s,Ship):
-          if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
-            self.game.removeObject(s)
+      for s in self.game.objects.ships:
+        if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
+          self.game.removeObject(s)
     for i in self.inTransit:
       #print i.shitlist
       deadEnemies = []
@@ -136,8 +134,8 @@ class MerchantAI:
         if not enemyInRange:
           break
       if enemyInRange:
-        for j in self.game.objects.values():
-          if isinstance(j,Ship) and (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
+        for j in self.game.objects.ships:
+          if  (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
             if i.ship.attacksLeft > 0:
               i.ship.attack(j)
               if self.game.objects.values().count(j) == 0:
@@ -189,10 +187,11 @@ class MerchantAI:
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
-      for i in self.game.objects.values():
-        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
+      for i in self.game.objects.treasures:
+        if i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
           isWorthy = True
-        if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
+      for i in self.game.objects.ships:
+        if i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
       if isWorthy and not foundAShip:
         self.makeTradeShip(self.thePorts.index(p))
