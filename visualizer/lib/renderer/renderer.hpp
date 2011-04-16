@@ -81,11 +81,11 @@ bool Renderer<DupObject>::refresh()
 
   glPushMatrix();
   //glTranslatef(0.0f,24.0f,0.0f);
-  //glScalef( 24.0f, 24.0f, 1.0f );
+  glScalef( optionsMan::getFloat("objectWidth"), optionsMan::getFloat("objectHeight"), optionsMan::getFloat("objectDepth") );
 #if 0
   glDisable(GL_BLEND);
   glColor4f(1.0f,0.0f,1.0f,1.0f);
-   glTranslatef(3,3,0);
+   //glTranslatef(3,3,0);
   glBegin(GL_QUADS);
 
   glVertex3f(0,0,-1);
@@ -101,7 +101,9 @@ bool Renderer<DupObject>::refresh()
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
   {
-      (*renderIt)->render();\
+      glPushMatrix();
+      (*renderIt)->render();
+      glPopMatrix();
   }
 
 #endif
