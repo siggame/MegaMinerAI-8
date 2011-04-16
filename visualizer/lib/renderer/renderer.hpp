@@ -81,7 +81,8 @@ bool Renderer<DupObject>::refresh()
 
   glPushMatrix();
   //glTranslatef(0.0f,24.0f,0.0f);
-  glScalef( optionsMan::getFloat("objectWidth"), optionsMan::getFloat("objectHeight"), optionsMan::getFloat("objectDepth") );
+  float mapSize = (float)optionsMan::getInt("mapSize");
+  glScalef( height()/mapSize, height()/mapSize, 1 );
 #if 0
   glDisable(GL_BLEND);
   glColor4f(1.0f,0.0f,1.0f,1.0f);
@@ -288,6 +289,7 @@ bool Renderer<DupObject>::setup()
 
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
+
   Single::get()->m_isSetup = true;
 
 
