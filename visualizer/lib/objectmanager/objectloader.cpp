@@ -1,14 +1,14 @@
 #include "objectloader.h"
-#include "../../piracy/boatdata.h"
+/*#include "../../piracy/boatdata.h"
 #include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"
+#include "../../piracy/piratedata.h"*/
 #include "../../piracy/piratemap.h"
-#include "../../piracy/piraterender.h"
+//#include "../../piracy/piraterender.h"
 #include "../../piracy/renderdata.h"
-#include "../../piracy/treasuredata.h"
+/*#include "../../piracy/treasuredata.h"
 #include "../../piracy/treasurerender.h"
 #include "../../piracy/shipdata.h"
-#include "../../piracy/portdata.h"
+#include "../../piracy/portdata.h"*/
 #include "../../piracy/piracylocations.h"
 #include "../../piracy/objecttype.h"
 #include "../../piracy/piratehealth.h"
@@ -75,21 +75,21 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GameObject * pirate = new GameObject(id);
 
   	    //setup stuff
-  	    PirateData * data = new PirateData();
+	   // PirateData * data = new PirateData();
   	    PiracyLocation * loc = new PiracyLocation();
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
 	    PirateHealth * health = new PirateHealth(pirate,i->second.health,optionsMan::getInt("pirateMaxHealth"));
 
-  	    data->parsePirate(game,id,turn);
+	    //data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
 
-  	    data->setOwner(pirate);
+  //	    data->setOwner(pirate);
   	    loc->setOwner(pirate);
 
 
-  	    pirate->setGOC(data);
+	    //pirate->setGOC(data);
   	    pirate->setGOC(loc);
   	    pirate->setGOC(owner);
   	    pirate->setGOC(gold);
@@ -119,7 +119,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GameObject * ship = new GameObject(id);
   	    //setup stuff
 
-  	    ShipData * data = new ShipData();
+	    //ShipData * data = new ShipData();
   	    PiracyLocation * loc = new PiracyLocation();
   	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
   	    Gold * gold = new Gold(ship,i->second.gold);
@@ -130,14 +130,14 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 	    std::cout << "ship health: " << i->second.health << '\n';
 
   	    //render->setOwner(ship);
-  	    data->parseShip(game,id,turn);
+  //	    data->parseShip(game,id,turn);
   	    loc->parseLocation(&(i->second));
 
 
   	    loc->setOwner(ship);
-  	    data->setOwner(ship);
+  //	    data->setOwner(ship);
 
-  	    ship->setGOC(data);
+  //	    ship->setGOC(data);
   	    ship->setGOC(loc);
   	    ship->setGOC(owner);
   	    ship->setGOC(gold);
@@ -165,19 +165,19 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GameObject * treasure = new GameObject(id);
   	    //setup stuff
 
-  	    TreasureData * data = new TreasureData();
+	    //TreasureData * data = new TreasureData();
   	    PiracyLocation * loc = new PiracyLocation();
   	    Gold * gold = new Gold(treasure,i->second.gold);
   	    ObjectType * type = new ObjectType(treasure,POT_TREAS);
 
-  	    data->parseTreasure(game,id,turn);
+  //	    data->parseTreasure(game,id,turn);
   	    loc->parseLocation(&(i->second));
 
 
-  	    data->setOwner(treasure);
+  //	    data->setOwner(treasure);
   	    loc->setOwner(treasure);
 
-  	    treasure->setGOC(data);
+  //	    treasure->setGOC(data);
   	    treasure->setGOC(loc);
   	    treasure->setGOC(gold);
   	    treasure->setGOC(type);
@@ -205,19 +205,19 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GameObject * port = new GameObject(id);
   	    //setup stuff
 
-  	    PortData * data = new PortData();
+	    //PortData * data = new PortData();
   	    PiracyLocation * loc = new PiracyLocation();
   	    GOC_Owner * owner = new GOC_Owner(port, i->second.owner);
   	    ObjectType * type = new ObjectType(port,POT_PORT);
 
 
-  	    data->parsePort(game,id,turn);
+  //	    data->parsePort(game,id,turn);
   	    loc->parseLocation(&(i->second));
 
-  	    data->setOwner(port);
+  //	    data->setOwner(port);
   	    loc->setOwner(port);
 
-  	    port->setGOC(data);
+	//    port->setGOC(data);
   	    port->setGOC(loc);
   	    port->setGOC(owner);
   	    port->setGOC(type);
