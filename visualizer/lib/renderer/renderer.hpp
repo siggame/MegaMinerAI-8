@@ -3,9 +3,8 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
-#include "../gui/gui.h"
 #include "../goc_owner.h"
-#include <sstream>
+//#include <sstream>
 using namespace std;
 
 
@@ -401,6 +400,12 @@ bool Renderer<DupObject>::clear()
 template<typename DupObject>
 bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
+    if (Single::isInit())
+    {
+	return false;
+    }
+
+
   if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
   {
     return false;
@@ -534,10 +539,10 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     float mapSize = (float)optionsMan::getInt("mapSize");
     float unitSize  = height()/mapSize;
 
-    int x1;
-    int x2;
-    int y1;
-    int y2;
+    int x1 = 0;
+    int x2 = 0;
+    int y1 = 0;
+    int y2 = 0;
 
     if( selectUpdate )
     {
@@ -561,7 +566,6 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	   if (goc)
 	   {
 	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
-	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
          if( selectUpdate )
          {
@@ -570,17 +574,23 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                loc->y() >= y1 &&
                loc->y() <= y2 )
            {
+             temp.selected = true;
+#if 0
              goc = it->second->data->getGOC( "Owner" );
              if( goc )
              {
                int id =((GOC_Owner*)goc)->owner();
                Single::get()->selectedUnitIds.push_back( id );
+
                stringstream ss;
                ss << id << endl; 
                //GUI::appendConsole(  ss.str() );
              }
+#endif
            }
          }
+	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+
 
 	   }
 	   else
