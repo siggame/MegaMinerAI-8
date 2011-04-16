@@ -24,7 +24,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho( 0, width, _height, 0, 0, depth );
+	glOrtho( 0, width, _height, 0, -depth, depth );
 
 
 	glMatrixMode(GL_MODELVIEW);
@@ -62,6 +62,7 @@ bool Renderer<DupObject>::refresh()
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
+#if 1
   for( ; it != Single::get()->m_renderConstant.end(); it++ )
   {
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
@@ -70,13 +71,16 @@ bool Renderer<DupObject>::refresh()
       r->renderAt( 0, 0 );
     }
   }
-
-  //update what gets rendered this turn
-  update(turn,frame);
+#endif
 
   glPushMatrix();
   glScalef( 20, 20, 1 );
 
+  typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
+  for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
+  {
+      (*renderIt)->render();
+  }
 
   glPopMatrix();
 
@@ -127,7 +131,7 @@ bool Renderer<DupObject>::create()
 	Single::get()->m_parent = 0;
 	Single::get()->m_height = 0;
 	Single::get()->m_width  = 0;
-	Single::get()->m_depth  = 0;
+	Single::get()->m_depth  = 10;
 	Single::get()->m_dupListDirs = 0;
 	Single::get()-> m_duplicateList = NULL;
 
@@ -196,6 +200,7 @@ bool Renderer<DupObject>::setup()
   unsigned int rwidth = width();
   unsigned int rheight = height();
   unsigned int rdepth = depth();
+
 	if (Single::get()->m_dupListDirs)
 	{
 		Single::get()->m_duplicateList = new DupObject***[rwidth];
@@ -261,13 +266,8 @@ bool Renderer<DupObject>::setup()
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  if( !refresh() )
-  {
-    cout << "WHATHATL" << endl;
-  }
-  cout << "OPENGL INITIALIZED" << endl;
-
-	return Single::get()->m_isSetup;
+  refresh();
+  return Single::get()->m_isSetup;
 }
 
 /** @brief del
@@ -415,6 +415,8 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	{
 		sameFlag = true;
 	}
+	obj.x = x;
+	obj.y = y;
 
 	obj.time = time;
 	Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
@@ -475,6 +477,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     if (!bucket)
 	return; //! @todo toss computer against wall
 
+    Single::get()->m_renderList.clear();
     int time = TimeManager::timeHash();
 
     Bucket::iterator it = bucket->begin();
@@ -483,7 +486,7 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	if (it->second)
 	{
 	   DupObject temp;
-	   setDupObj(it->second->data,temp);
+	   setDupObj(it->second->data,temp);	  
 	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
 	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 	}
