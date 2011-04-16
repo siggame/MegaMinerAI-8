@@ -226,7 +226,7 @@ class Pirate(Unit):
           counter = 0
           #if the pirate was on a ship, count how many pirates are on it
           for j in self.game.objects.values():
-            if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
+            if isinstance(j,Pirate) and j.x == self.x and j.y == self.y:
               counter+=1
           #If this was the last pirate on board, the ship becomes neutral.
           if counter == 1:
