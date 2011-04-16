@@ -226,14 +226,14 @@ class Pirate(Unit):
     #Lose control of ship if this is your last pirate leaving
     counter = 0
     onABoat = False
-    theBoatIAmOn
+    theBoatIAmOn = None
     for i in self.game.objects.values():
       if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
         if i.owner == self.owner:
           onABoat = True
           theBoatIAmOn = i
           #if the pirate was on a ship, count how many pirates are on
-      if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
+      if isinstance(i,Pirate) and x == i.x and y == i.y:
         counter+=1
           #If this was the last pirate on board, the ship becomes neutral.
         if counter > 1:
