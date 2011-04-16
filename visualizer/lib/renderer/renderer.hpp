@@ -3,7 +3,6 @@
 
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
-#include "../gui/gui.h"
 #include "../goc_owner.h"
 //#include <sstream>
 using namespace std;
@@ -401,6 +400,12 @@ bool Renderer<DupObject>::clear()
 template<typename DupObject>
 bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
+    if (Single::isInit())
+    {
+	return false;
+    }
+
+
   if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
   {
     return false;
