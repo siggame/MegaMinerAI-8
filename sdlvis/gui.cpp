@@ -76,11 +76,24 @@ void drawText(Game& g, int turn)
 {
   stringstream message;
   SDL_Rect dest;
-  dest.x = 760;
-  dest.y = 0;
+  dest.x = 768;
+  dest.y = 8;
   SDL_Surface* image;
   SDL_Color purple = {255,0,255};
+  SDL_Color red = {255,0,0};
   SDL_Color black = {0,0,0};
+  SDL_Color darkSlateGray = {47,79,79};
+  
+  message << "Current Turn: ";
+  message << turn;
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  dest.y += image->h;
+  
+  message.str("");
   
   message << "Player 1 gold: ";
   message << g.states[turn].players[0].gold;
@@ -96,6 +109,87 @@ void drawText(Game& g, int turn)
   message << g.states[turn].players[1].gold;
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  dest.y += image->h;
+  
+  message.str("");
+  
+  if(turn >= g.states.size() - 1)
+  {
+    message << "Winner: Player ";
+    message << g.winner;
+  
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << g.winReason;
+  
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    SDL_FreeSurface(image);
+    dest.y += image->h*19;
+    
+    message.str("");
+  }
+  else
+  {
+    dest.y += image->h*20;
+  }
+  
+  message << "Controls:";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Space Bar = Pause";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Left Arrow = Decrease Turn";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Right Arrow = Increase Turn";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Up Arrow = Go to last Turn";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "Down Arrow = Go to first Turn";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
   SDL_BlitSurface(image, NULL, screen, &dest);
   dest.y += image->h;
   SDL_FreeSurface(image);
@@ -227,27 +321,106 @@ void mainLoop(Game& g)
 {
   int turn = 0;
   
+  bool render = true;
+  bool killMe = false;
+  
   while(true)
   {
-    renderTurn(g, turn);
+    if(render)
+    {
+      renderTurn(g, turn);
     
-    SDL_Event event;
-    while ( SDL_PollEvent(&event) ) {
-      switch (event.type) {
-        case SDL_MOUSEBUTTONDOWN:
-          printf("Mouse button %d pressed at (%d,%d)\n",
-                event.button.button, event.button.x, event.button.y);
-          break;
-        case SDL_QUIT:
-          return;
-      }
+      turn++;
+    }
+    
+    if (turn >= g.states.size())
+    {
+      render = false;
+      killMe = false;
     }
     
     SDL_Delay(100);
     
-    turn++;
+    SDL_Event event;
+    while ( SDL_PollEvent(&event) )
+    {
+      switch (event.type)
+      {
+        case SDL_QUIT:
+        {
+          return;
+        }
+        case SDL_MOUSEBUTTONDOWN:
+        {
+        //printf("Mouse button %d pressed at (%d,%d)\n",
+        //      event.button.button, event.button.x, event.button.y);
+        /*if(event.button.x > 500)
+        {
+          turn++;
+          renderTurn(g, turn);
+          render = false;
+        }
+        else
+        {*/
+          //render = !render;
+        //}
+          break;
+        }
+        case SDL_KEYDOWN:
+        {
+          switch(event.key.keysym.sym)
+          {
+            case SDLK_LEFT:
+            {
+              if(!render)
+              {
+                if(turn > 0)
+                {
+                  turn--;
+                  renderTurn(g, turn);
+                }
+              }
+              break;
+            }
+            case SDLK_RIGHT:
+            {
+              if(!render)
+              {
+                turn++;
+                
+                if (!(turn >= g.states.size()))
+                {
+                   renderTurn(g, turn);
+                }
+                else
+                {
+                  killMe = true;
+                }
+              }
+              break;
+            }
+            case SDLK_UP:
+            {
+              render = false;
+              turn = g.states.size() - 1;
+              renderTurn(g, turn);
+              break;
+            }            
+            case SDLK_SPACE:
+            {
+              render = !render;
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
     
-    if (turn >= g.states.size())
+    if(killMe)
+    {
+      return;
       break;
+    }
   }
 }

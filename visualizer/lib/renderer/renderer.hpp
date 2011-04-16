@@ -512,11 +512,34 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
     if( selectUpdate )
     {
+      
+      int temp;
       x1 = SelectionRender::get()->getX1()/unitSize;
       x2 = SelectionRender::get()->getX2()/unitSize;
-      y2 = SelectionRender::get()->getY1()/unitSize+1;
-      y2 = SelectionRender::get()->getY2()/unitSize+1;
+      if( x2 < x1 )
+      {
+        x2 = temp;
+        x2 = x1;
+        x1 = temp;
+      }
+
+      y1 = SelectionRender::get()->getY1()/unitSize;
+      y2 = SelectionRender::get()->getY2()/unitSize;
+
+
+      if( y2 < y1 )
+      {
+        y2 = temp;
+        y2 = y1;
+        y1 = temp;
+      }
+
+
       GUI::clearConsole();
+      stringstream ss;
+      ss << "X1: " << x1 << ", Y1: " << y1 << endl;
+      ss << "X2: " << x2 << ", Y2: " << y2 << endl;
+      GUI::appendConsole( ss.str() );
       Single::get()->selectedUnitIds.clear();
     }
 
@@ -542,17 +565,24 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
            {
              temp.selected = true;
 #if 1
-             int id =((GOC_Owner*)goc)->owner();
-             Single::get()->selectedUnitIds.push_back( id );
+             int id = it->first;
+             Single::get()->selectedUnitIds.insert( id );
+             //Single::get()->selectedUnitIds.push_back( id );
 
              stringstream ss;
-             ss << id << endl; 
-             GUI::appendConsole(  ss.str() );
 #endif
            }
-         }
-	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+         } else 
+         {
+           if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
+           {
+             temp.selected = true;
+           } else {
+             temp.selected = false;
+           }
 
+	         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+         }
 
 	   }
 	   else

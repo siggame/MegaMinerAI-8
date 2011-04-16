@@ -5,6 +5,7 @@
 #include "../singleton.h"
 #include <map>
 #include <list>
+#include <set>
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -83,7 +84,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		RenderWidget *m_parent;
 
-		list <int> selectedUnitIds;
+		set<int> selectedUnitIds;
 };
 
 #include "renderer.hpp"
