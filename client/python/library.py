@@ -290,4 +290,4 @@ library.getPathStep.restype = c_int
 library.getPathStep.argtypes = [c_int]
 
 library.findPath.restype = c_int
-library.getPathStep.argtypes = [c_void_p, c_void_p, c_int]
+library.findPath.argtypes = [c_void_p, c_void_p, c_int]
