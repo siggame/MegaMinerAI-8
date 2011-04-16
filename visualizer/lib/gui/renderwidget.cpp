@@ -22,6 +22,7 @@ void RenderWidget::initializeGL()
 {
   Renderer<DupObj>::setParent( this );
   QGLWidget::initializeGL();
+  Renderer<DupObj>::create();
   cout << "VALID: " << isValid() << endl;
 }
 

@@ -305,41 +305,6 @@ bool Renderer<DupObject>::setup()
   return Single::get()->m_isSetup;
 }
 
-/** @brief del
-  * delete a reference to a render object
-  * @param id the id associated with the render object
-  * @return true on success
-  *//*
-bool Renderer::del(const unsigned int & id)
-{
-	if (!isInit())
-		return false;
-
-	if (get()->m_objects.find(id) == get()->m_objects.end())
-		return false;
-
-	get()->m_objects.erase(id);
-
-	return true;
-}*/
-
-/** @brief reg
-  * register a reference to a render object
-  * @param id the id of the render object to add
-  * @param obj the reference to add
-  * @return true on success
-  *//*
-bool Renderer::reg(const unsigned int & id, renderObj * obj)
-{
-	if (!isInit())
-		return false;
-
-	if (get()->m_objects.find(id) != get()->m_objects.end())
-		return false;
-
-	get()->m_objects[id] = obj;
-	return true;
-}*/
 
 
 /** @brief isSetup
@@ -513,23 +478,22 @@ unsigned int Renderer<DupObject>::depth()
   * @todo doxyment
   */
 template <typename DupObject>
-void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
+bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
-    //std::cout << "update?\n";
+
     if (!Single::isInit())
-	return; //! @todo fuck off
+    {
+	std::cout << "Update Failed: Renderer is not inititalized or setup\n";
+	return false;
+    }//! @todo fuck off
 
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
     Bucket * bucket = ObjectManager::getBucket(turn,frame);
 
     if (!bucket)
     {
-	//std::cout << "CANT FIND YOUR FUCKING BUCKET\n";
-      return; //! @todo toss computer against wall
-    }
-    else
-    {
-	//std::cout << "Fucket Size: " << bucket->size() << '\n';
+	std::cout << "Bucket Requested at (" << turn <<","<<frame << ") does not exist\n";
+      return false;
     }
 
     Single::get()->m_renderList.clear();
@@ -601,6 +565,9 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	}
 
     }
+
+
+    return true;
 
 }
 

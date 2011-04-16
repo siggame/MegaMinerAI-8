@@ -1,5 +1,6 @@
 #ifndef GOLD_H
 #define GOLD_H
+#include "../lib/gameobject/gocomponent.h"
 
 class Gold : public GOComponent
 {
