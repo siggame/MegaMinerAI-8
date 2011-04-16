@@ -30,6 +30,8 @@ void TimeManager::setTurn( const int& turn )
 
   //update renderer
   Renderer<DupObj>::update(turn,0);
+  Renderer<DupObj>::refresh();
+
   GUI::getControlBar()->m_slider->setValue ( turn );
 }
 
@@ -134,9 +136,6 @@ void TimeManager::updateFrames()
 
     }
 
-    //update renderer
-    Renderer<DupObj>::update(m_turn,m_frame);
-
   } 
 
   if(GUI::isSetup())
@@ -152,6 +151,6 @@ void TimeManager::timerUpdate()
   m_hash++;
   m_frame += m_time * m_speed;
   updateFrames();
-  Renderer<DupObj>::refresh();
+  //Renderer<DupObj>::refresh();
 }
 
