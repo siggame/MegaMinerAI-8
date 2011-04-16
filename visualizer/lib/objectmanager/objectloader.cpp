@@ -52,7 +52,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     unsigned int numFrames = optionsMan::getInt("numFrames");
     TimeManager::setTurn(0);
     TimeManager::setNumTurns( numTurns );
-
+    ObjectManager::setSize(numTurns,numFrames);
     std::map<idtype, LookupSet<GameObject*,idtype> > looksets;
 
     unsigned int id;
@@ -95,7 +95,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
   	    //end setup
 
-  	    looksets[id].addNode(pirate,turn,0);
+	    if (!looksets[id].addNode(pirate,turn,0))
+	    {
+		std::cout << "Pirate node adding fail\n";
+	    }
       }
 
       for( 
@@ -107,7 +110,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    id = i->second.id;
   	    if (looksets.find(id) == looksets.end())
   	    {
-          looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
+		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
   	    }
 
   	    GameObject * ship = new GameObject(id);
@@ -135,7 +138,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    ship->setGOC(type);
 
   	    //end setup
-  	    looksets[id].addNode(ship,turn,0);
+	    if (!looksets[id].addNode(ship,turn,0))
+	    {
+		std::cout << "Ship node adding fail\n";
+	    }
       }
 
       for( 
@@ -171,7 +177,11 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
   	    //end setup
 
-  	    looksets[id].addNode(treasure,turn,0);
+	    if(!looksets[id].addNode(treasure,turn,0))
+	    {
+		std::cout << "Treasure node adding fail\n";
+	    }
+
       }
 
       for( 
@@ -207,7 +217,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    //port->setGOC(render);
   	    //end setup
 
-  	    looksets[id].addNode(port,turn,0);
+	    if (!looksets[id].addNode(port,turn,0))
+	    {
+		std::cout << "Port node adding fail\n";
+	    }
       }
 
   }
@@ -215,7 +228,10 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
      std::map<idtype,LookupSet<GameObject*,idtype> > :: iterator it = looksets.begin();
     for (; it != looksets.end(); it++)
     {
-    	ObjectManager::reg(it->first,it->second);
+	//
+	//std::cout << "add ships & shit\n";
+    	if (!ObjectManager::reg(it->first,it->second))
+	    std::cout << "Object load error: id " << it->first << '\n';
     }
 
     return true;

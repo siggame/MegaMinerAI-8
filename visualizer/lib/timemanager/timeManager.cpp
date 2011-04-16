@@ -8,7 +8,7 @@
 const int& TimeManager::getTurn()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
   get()->updateFrames();
   return get()->m_turn;
 }
@@ -16,7 +16,7 @@ const int& TimeManager::getTurn()
 const int& TimeManager::getFrame()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
   get()->updateFrames();
   return get()->m_frame;
 }
@@ -25,6 +25,7 @@ void TimeManager::setTurn( const int& turn )
 {
   if( !isInit() )
     throw 0;
+
   get()->m_turn = turn;
   get()->m_frame = 0;
 
@@ -37,7 +38,7 @@ void TimeManager::setTurn( const int& turn )
 const int& TimeManager::getSpeed()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
   return get()->m_speed;
 }
 
@@ -50,20 +51,23 @@ void TimeManager::setSpeed( const int& speed )
 
 int TimeManager::timeHash()
 {
+    if (!isInit())
+	return 0;
   return get()->m_hash;
 }
 
 TimeManager::mode TimeManager::getMode()
 {
   if( !isInit() )
-    throw 0;
+    return mode();
   return get()->m_mode;
 }
 
 const int& TimeManager::getNumTurns()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
+
   return get()->m_numTurns;
 }
 
@@ -77,14 +81,14 @@ void TimeManager::setNumTurns( const int& numTurns )
 }
 
 
-void TimeManager::create()
+bool TimeManager::create()
 {
-  if( !isInit() )
-  {
+
     if( !Singleton<TimeManager>::create() )
-      throw 0;
-  }
-  get()->setup();
+      return false;
+
+    Singleton<TimeManager>::get()->setup();
+   return true;
 }
 
 void TimeManager::setup()
@@ -151,5 +155,6 @@ void TimeManager::timerUpdate()
   m_frame += m_time * m_speed;
   updateFrames();
   Renderer<DupObj>::refresh();
+  Renderer<DupObj>::update(m_turn,0);
 }
 

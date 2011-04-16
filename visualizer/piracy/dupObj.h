@@ -35,7 +35,7 @@ struct DupObj
 		y = obj.y;
 
 		//! @todo object type precedences: ex ship over pirate, pirate over treasure
-		objType = objType;
+		objType = obj.objType;
 		return *this;
 	}
 
@@ -64,16 +64,17 @@ struct DupObj
 
 		glBegin(GL_QUADS);
 
-		glVertex3f(0,0,1); glTexCoord2f(0,0);
-		glVertex3f(1,0,1); glTexCoord2f(1,0);
-		glVertex3f(1,1,1); glTexCoord2f(1,1);
-		glVertex3f(0,1,1); glTexCoord2f(0,1);
+		glVertex3f(0,0,-1); glTexCoord2f(0,0);
+		glVertex3f(1,0,-1); glTexCoord2f(1,0);
+		glVertex3f(1,1,-1); glTexCoord2f(1,1);
+		glVertex3f(0,1,-1); glTexCoord2f(0,1);
 
 		glEnd();
 	    }
 	    else
 	    {
-
+		//std::cout << "Render: l(" << x << "," << y << ") \n";
+		glDisable(GL_BLEND);
 		switch (objType)
 		{
 		case POT_PIRATE:
@@ -93,7 +94,7 @@ struct DupObj
 		    if (owner == 0)
 			glColor4f(.5,0,0,1);
 		    else
-			glColor4f(.5,1,0,1);
+			glColor4f(0,.5,0,1);
 		    break;
 		case POT_TREAS:
 		    glColor4f(1,1,0,1);
@@ -110,6 +111,8 @@ struct DupObj
 		glVertex3d(0,1,1);
 
 		glEnd();
+
+		glEnable(GL_BLEND);
 	    }
 	}
 
@@ -121,10 +124,44 @@ void setDupObj(GameObject * object, DupObject & dup)
     if (!object)
 	return;//! @todo fuck off
 
-    dup.gold = ((Gold*)(object->getGOC("Gold")))->gold();
-    dup.owner = ((GOC_Owner*)(object->getGOC("Owner")))->owner();
+    bool flag = false;
 
-    PiracyObjectType ot = ((ObjectType*)(object->getGOC("ObjectType")))->type();
+    GOComponent * goc = object->getGOC("ObjectType");
+    PiracyObjectType ot;
+    if (goc)
+	ot = ((ObjectType*)(object->getGOC("ObjectType")))->type();
+    else
+    {
+	ot = POT_NONE;
+	std::cout << "object has no Type\n";
+	flag = true;
+    }
+
+    goc = object->getGOC("Gold");
+    if (goc)
+	dup.gold = ((Gold*)(goc))->gold();
+    else
+    {
+	dup.gold = 0;
+
+	flag = ot != POT_PORT;
+	if(flag)
+	  std::cout << "object has no gold\n";
+    }
+
+    goc = object->getGOC("Owner");
+    if (goc)
+	dup.owner = ((GOC_Owner*)(goc))->owner();
+    else
+    {
+	dup.owner = -1;
+
+	flag = ot != POT_TREAS;
+	if(flag)
+	    std::cout << "object has no Owner\n";
+    }
+
+
 
     switch (ot)
     {
@@ -146,11 +183,19 @@ void setDupObj(GameObject * object, DupObject & dup)
 	break;
     default:
 	//fuckoff
-	dup = dup;
+	std::cout << "AAAHHH!!! NO OBJECT TYPE!!\n";
     }
 
 
-
+    if (flag)
+    {
+	std::cout << "Component List:\n";
+	std::vector<GOC_IDType> components = object->listComponentFamilies();
+	for (unsigned int i = 0; i < components.size(); i++)
+	{
+	    std::cout << "comp " << i << ": " << components[i] << '\n';
+	}
+    }
 }
 
 

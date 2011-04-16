@@ -36,7 +36,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     static int timeHash();
     static mode getMode();
 
-    static void create();
+    static bool create();
     void setup();
 
     void updateFrames();

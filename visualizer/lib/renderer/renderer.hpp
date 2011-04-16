@@ -43,11 +43,14 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 template <typename DupObject>
 bool Renderer<DupObject>::refresh()
 {
+
   if (!Single::isInit())
     return false;
 
+
   if (!isSetup())
     return false;
+
 
   if(SelectionRender::get()->getUpdated())
   {
@@ -55,10 +58,12 @@ bool Renderer<DupObject>::refresh()
   }
 
 
+
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
   unsigned int turn = TimeManager::getTurn();
   unsigned int frame = TimeManager::getFrame();
+
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
@@ -73,8 +78,25 @@ bool Renderer<DupObject>::refresh()
   }
 #endif
 
+
   glPushMatrix();
-  glScalef( 20, 20, 1 );
+  //glTranslatef(0.0f,24.0f,0.0f);
+  //glScalef( 24.0f, 24.0f, 1.0f );
+#if 0
+  glDisable(GL_BLEND);
+  glColor4f(1.0f,0.0f,1.0f,1.0f);
+   glTranslatef(3,3,0);
+  glBegin(GL_QUADS);
+
+  glVertex3f(0,0,-1);
+  glVertex3f(0,1,-1);
+  glVertex3f(1,1,-1);
+  glVertex3f(1,0,-1);
+
+  glEnd();
+  glEnable(GL_BLEND);
+
+#else
 
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
@@ -82,7 +104,10 @@ bool Renderer<DupObject>::refresh()
       (*renderIt)->render();\
   }
 
+#endif
+
   glPopMatrix();
+
 
 
   if( Single::get()->m_parent )
@@ -90,7 +115,9 @@ bool Renderer<DupObject>::refresh()
     Single::get()->m_parent->swapBuffers();
   }
 
+
   SelectionRender::get()->setUpdated(false);
+
 
   return true;
 }
@@ -400,6 +427,8 @@ bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
 {
+    //std::cout << "updateLocation Called\n";
+
 	if (!Single::isInit())
 		return;
 
@@ -415,6 +444,7 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	{
 		sameFlag = true;
 	}
+
 	obj.x = x;
 	obj.y = y;
 
@@ -422,8 +452,10 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
 	Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
 
 	if (!sameFlag)
-		Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
-
+	{
+	    Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
+	    //std::cout << "Gets to add\n";
+	}
 }
 
 
@@ -469,13 +501,22 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+    //std::cout << "update?\n";
     if (!Single::isInit())
 	return; //! @todo fuck off
 
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
     Bucket * bucket = ObjectManager::getBucket(turn,frame);
+
     if (!bucket)
+    {
+	//std::cout << "CANT FIND YOUR FUCKING BUCKET\n";
 	return; //! @todo toss computer against wall
+    }
+    else
+    {
+	//std::cout << "Fucket Size: " << bucket->size() << '\n';
+    }
 
     Single::get()->m_renderList.clear();
     int time = TimeManager::timeHash();
@@ -487,8 +528,17 @@ void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 	{
 	   DupObject temp;
 	   setDupObj(it->second->data,temp);	  
-	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
-	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+	   GOComponent * goc = it->second->data->getGOC("LocationFamily");
+	   if (goc)
+	   {
+	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
+	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+	   }
+	   else
+	   {
+	       std::cout << "no location for obj type: " << temp.objType << '\n';
+	   }
+
 	}
 
     }
