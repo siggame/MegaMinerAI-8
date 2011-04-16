@@ -237,12 +237,12 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
 
 void PirateMap::generateMap( Game& g )
 {
+
   cout << "Generate Map: " << g.states[0].tiles.size() << endl;
-  int pixels;
+  int pixels = 25;
   int mapSize = g.states[0].mapSize;
-  int mWidth = 1024; //mapSize*pixels;
-  int mHeight = 1024; //mapSize*pixels;
-  pixels = (int)1001/mapSize;
+  int mWidth = mapSize*pixels; //mapSize*pixels;
+  int mHeight = mapSize*pixels; //mapSize*pixels;
   cout << "Pixels: " << pixels << endl;
 
   int **depthMap = new int*[mWidth];
@@ -355,8 +355,7 @@ void PirateMap::generateMap( Game& g )
     textures[i] = r.getQImage();
   }
 
-
-  QImage result( mWidth, mHeight, QImage::Format_RGB32 );
+  QImage result( 1024, 1024, QImage::Format_RGB32 );
 
   for( int x = 0; x < mWidth; x++ )
   {
