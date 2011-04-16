@@ -113,3 +113,4 @@ std::vector<Tile*> BaseAI::getPath(int startx, int starty, int endx, int endy, i
   return path;
 }
 
+
