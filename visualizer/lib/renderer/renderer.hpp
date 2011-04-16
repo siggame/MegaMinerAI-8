@@ -2,6 +2,7 @@
 #define RENDERER_HPP
 
 #include "renderer.h"
+#include "../selectionrender/selectionrender.h"
 
 
 /** @brief resize
@@ -42,35 +43,52 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
 template <typename DupObject>
 bool Renderer<DupObject>::refresh()
 {
-    if (!Single::isInit())
-	    return false;
+  if (!Single::isInit())
+    return false;
 
-    if (!isSetup())
-	    return false;
+  if (!isSetup())
+    return false;
 
-  //GUI::update();
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    unsigned int turn = TimeManager::getTurn();
-    unsigned int frame = TimeManager::getFrame();
-
-    //update what gets rendered this turn
-    update(turn,frame);
-
-    glPushMatrix();
-    glScalef( 20, 20, 1 );
+  if(SelectionRender::get()->getUpdated())
+  {
+    Single::get()->selectedUnitIds.clear();
+  }
 
 
-    glPopMatrix();
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+  unsigned int turn = TimeManager::getTurn();
+  unsigned int frame = TimeManager::getFrame();
 
-    if( Single::get()->m_parent )
+  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+
+  for( ; it != Single::get()->m_renderConstant.end(); it++ )
+  {
+    GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
+    if( r )
     {
-      Single::get()->m_parent->swapBuffers();
+      r->renderAt( 0, 0 );
     }
+  }
 
-    return true;
+  //update what gets rendered this turn
+  update(turn,frame);
+
+  glPushMatrix();
+  glScalef( 20, 20, 1 );
+
+
+  glPopMatrix();
+
+
+  if( Single::get()->m_parent )
+  {
+    Single::get()->m_parent->swapBuffers();
+  }
+
+  SelectionRender::get()->setUpdated(false);
+
+  return true;
 }
 
 template <typename DupObject>
@@ -236,12 +254,15 @@ bool Renderer<DupObject>::setup()
   Single::get()->m_isSetup = true;
 
 
-  refresh();
-
   glDisable( GL_TEXTURE_2D );
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
+  if( !refresh() )
+  {
+    cout << "WHATHATL" << endl;
+  }
+  cout << "OPENGL INITIALIZED" << endl;
 
 	return Single::get()->m_isSetup;
 }
@@ -306,6 +327,7 @@ bool Renderer<DupObject>::clear()
 	if (!Single::isInit())
 		return false;
 
+#if 0
 	if (Single::get()->m_duplicateList)
 	{
 		for (unsigned int x = 0; x < width(); x++)
@@ -314,7 +336,7 @@ bool Renderer<DupObject>::clear()
 			{
 				for (unsigned int z = 0; z < depth(); z++)
 				{
-					delete [] Single::get()->m_duplicateList[x][y][z];
+					delete Single::get()->m_duplicateList[x][y][z];
 				}
 				delete [] Single::get()->m_duplicateList[x][y];
 			}
@@ -322,16 +344,55 @@ bool Renderer<DupObject>::clear()
 		}
 		delete [] Single::get()->m_duplicateList;
 	}
+#endif
 
 	Single::get()->m_duplicateList = NULL;
 
+  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+  for(; it!=Single::get()->m_renderConstant.end(); it++ )
+  {
+    delete (it->second);
+  }
+
+  Single::get()->m_renderConstant.clear();
+
 	return true;
+}
+
+template<typename DupObject>
+bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
+{
+  if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
+  {
+    return false;
+    delete Single::get()->m_renderConstant[id];
+  }
+
+  Single::get()->m_renderConstant[id] = obj;
+
+  return true;
+}
+
+template<typename DupObject>
+bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
+{
+  std::map<int,renderObj*> it = Single::get()->m_renderConstant.find( id );
+  if( it != Single::get()->m_renderConstant.end() )
+  {
+    delete Single::get()->m_renderConstant[id];
+    Single::get()->m_renderConstant.erase( it );
+    return true;
+  } else
+  {
+    return false;
+  }
+
+
 }
 
 /** @brief updateLocation
   *
   * @todo: document this function
-  * @param x: The 
   */
 template <typename DupObject>
 void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
@@ -403,18 +464,27 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 void Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+    if (!Single::isInit())
+	return; //! @todo fuck off
+
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
     Bucket * bucket = ObjectManager::getBucket(turn,frame);
     if (!bucket)
 	return; //! @todo toss computer against wall
+
+    int time = TimeManager::timeHash();
 
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
     {
 	if (it->second)
 	{
-	    updateLocation(it->second);
+	   DupObject temp;
+	   setDupObj(it->second->data,temp);
+	   GOCFamily_Location * loc = (GOCFamily_Location *)(it->second->data->getGOC("Location"));
+	   updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 	}
+
     }
 
 }

@@ -12,20 +12,24 @@
 
 int main(int argc, char *argv[])
 {
+  int i = 0;
 	typedef Renderer<DupObj> Render;
 	QApplication app( argc, argv );
-	TimeManager::create();
-	TimeManager::setSpeed( 1 );
 
 	optionsMan::create();
-	ResourceMan::create();
-	Mutex::create();
-	Threadler::create();
+  cout << "Got to: " << i++ << endl;
 	GUI::create();
-	Render::create();
+  cout << "Got to: " << i++ << endl;
+	ResourceMan::create();
+  cout << "Got to: " << i++ << endl;
+	Mutex::create();
+  cout << "Got to: " << i++ << endl;
+	Threadler::create();
+  cout << "Got to: " << i++ << endl;
 	ObjectManager::create();
+  cout << "Got to: " << i++ << endl;
 	ObjectLoader::create();
-
+  cout << "Got to: " << i++ << endl;
 
 	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
 	{
@@ -43,16 +47,26 @@ int main(int argc, char *argv[])
 	}
 
 
+  cout << "Got to: " << i++ << endl;
+
 	// initialize global options
 	optionsMan::addInt("numTurns",1);
 	optionsMan::addBool("sliderDragging", false );
 	optionsMan::addInt( "currentTurn", 0 );
 	// done initializing
 
+	TimeManager::create();
+  cout << "Got to: " << i++ << endl;
+	TimeManager::setSpeed( 1 );
+  cout << "Got to: " << i++ << endl;
+
+  cout << "Got to: " << i++ << endl;
 	GUI::setup();
-
-
+  cout << "Got to: " << i++ << endl;
 	Render::setup();
+  cout << "Got to: " << i++ << endl;
+
+
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
@@ -70,16 +84,20 @@ int main(int argc, char *argv[])
 	}
 
 
+  cout << "Got to: " << i++ << endl;
 
 
 	if( argc > 1 )
 		GUI::loadGamelog( argv[1] );
 
+  cout << "Got to: " << i++ << endl;
 
 	Render::refresh();
 
+  cout << "Got to: " << i++ << endl;
 	int retval = app.exec();
 
+  cout << "Got to: " << i++ << endl;
 	Render::destroy();
 	TimeManager::destroy();
 	GUI::destroy();

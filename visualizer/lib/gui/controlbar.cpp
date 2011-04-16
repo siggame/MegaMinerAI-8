@@ -6,6 +6,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 {
   setContentsMargins( 0, 0, 0, 0 );
   QHBoxLayout *layout = new QHBoxLayout;
+  layout -> setContentsMargins(0,0,0,0);
 
   rewindButton = new QPushButton("<", this);
   playButton = new QPushButton("||", this);
@@ -13,6 +14,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
   m_slider = new QSlider( Qt::Horizontal, this );
   m_slider->setMinimum( 0 );
+  //maximum set by TimeManager
   m_slider->setTickInterval( 50 ); 
   m_slider->setStyleSheet( "\
 			QSlider::groove:horizontal {\
@@ -57,12 +59,13 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
 void ControlBar::sliderDrag()
 {
+	preDragTimeManagerSpeed = TimeManager::getSpeed();
   TimeManager::setSpeed(0);
 }
 
 void ControlBar::sliderRelease()
 {
-  TimeManager::setSpeed(1);
+  TimeManager::setSpeed(preDragTimeManagerSpeed);
 }
 
 void ControlBar::sliderChanged( int value )

@@ -1,7 +1,9 @@
 #ifndef GOCFAMILY_LOCATION_H
 #define GOCFAMILY_LOCATION_H
 
-class GOCFamily_Location
+#include "gameobject/gocomponent.h"
+
+class GOCFamily_Location :public GOComponent
 {
 public:
     GOCFamily_Location()
@@ -17,12 +19,14 @@ public:
     return GOC_IDType( "LocationFamily" );
     };
 
-    int x();
-    int y();
-    int z();
-    int dir();
+    int x(){return m_x;}
+    int y(){return m_y;}
+    int z(){return m_z;}
+    int dir(){return m_dir;}
 
-    private:
+    void update(){}
+
+    protected:
     int m_x, m_y, m_z, m_dir;
 
 };

@@ -27,6 +27,8 @@ void TimeManager::setTurn( const int& turn )
     throw 0;
   get()->m_turn = turn;
   get()->m_frame = 0;
+  
+  GUI::getControlBar()->m_slider->setValue ( turn );
 }
 
 const int& TimeManager::getSpeed()
@@ -67,6 +69,8 @@ void TimeManager::setNumTurns( const int& numTurns )
   if( !isInit() )
     throw 0;
   get()->m_numTurns = numTurns;
+  GUI::getControlBar()->m_slider->setMaximum ( numTurns );
+  cout << "numTurns: " << numTurns<<endl;
 }
 
 
@@ -128,8 +132,12 @@ void TimeManager::updateFrames()
 
     }
 
-  }
+  } 
+  if(GUI::isSetup())
+  {
 
+    GUI::getControlBar()->m_slider->setValue ( m_turn );
+  }
 }
 
 void TimeManager::timerUpdate()

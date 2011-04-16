@@ -153,6 +153,9 @@ typedef GOCFamily_GUI guiObj;
 class GUI : public QMainWindow, public Singleton<GUI>
 {
   Q_OBJECT
+  
+  friend class RenderWidget;
+  
 public:
   ~GUI();
   static bool reg( const std::string& id, guiObj *obj );
@@ -180,6 +183,8 @@ public:
 
   static void update();
   static void closeGUI();
+  
+  static ControlBar * getControlBar();
 
 private slots:
   void helpContents();
@@ -188,10 +193,22 @@ private slots:
   void togglePlayPause();
   void fastForwardShortcut();
   void rewindShortcut();
-  void turnPercentageShortcut(int);
   void stepTurnForwardShortcut();
   void stepTurnBackShortcut();
-
+  
+  //Ugly hack
+  void turnPercentageShortcut1(){	turnPercentageCalc(0); };
+  void turnPercentageShortcut2(){	turnPercentageCalc(1); };
+  void turnPercentageShortcut3(){	turnPercentageCalc(2); };
+  void turnPercentageShortcut4(){	turnPercentageCalc(3); };
+  void turnPercentageShortcut5(){	turnPercentageCalc(4); };
+  void turnPercentageShortcut6(){	turnPercentageCalc(5); };
+  void turnPercentageShortcut7(){	turnPercentageCalc(6); };
+  void turnPercentageShortcut8(){	turnPercentageCalc(7); };
+  void turnPercentageShortcut9(){	turnPercentageCalc(8); };  
+  void turnPercentageShortcut0(){	turnPercentageCalc(9); };
+  
+  
 
 private:
   /// Container for the objects in the GUI
@@ -212,7 +229,7 @@ private:
   QFrame *m_dockLayoutFrame;
 
   /// Layout For the Dock Widget
-  QHBoxLayout *m_dockLayout;
+  QVBoxLayout *m_dockLayout;
 
   /// Console Area
   QTextEdit *m_consoleArea;
@@ -244,24 +261,8 @@ private:
   void buildToolSet();
   void initUnitStats();
 
-  //Old unit selection code we're bringing forward
-  void mousePressEvent( QMouseEvent *event );
-  void mouseReleaseEvent( QMouseEvent *event );
-  void mouseMoveEvent( QMouseEvent *event );
+  void turnPercentageCalc(int);
 
-  bool leftButtonDown;
-  bool leftButtonDrag;
-
-  int curX;
-  int curY;
-
-  int clickX;
-  int clickY;
-
-  int dragX;
-  int dragY;
-  
-  static const int m_DRAG_DISTANCE = 6;
 
   // Actions
   QAction *m_helpContents; /// Help->Contents

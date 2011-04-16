@@ -5,6 +5,7 @@
 
 #include "texture.h"
 #include <qgl.h>
+#include <GL/glu.h>
 #include <iostream>
 
 enum IMAGE_TYPE
@@ -36,45 +37,69 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
 
 
 bool ResTexture::load( const QImage& img )
-{
-	QImage texture = QGLWidget::convertToGLFormat( img );
+{	
 
+	QImage fixed( img.width(), img.height(), QImage::Format_ARGB32 );
+	QPainter painter(&fixed);
+
+	painter.setCompositionMode(QPainter::CompositionMode_Source);
+	painter.fillRect( fixed.rect(), Qt::transparent );
+	painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+	painter.drawImage( 0, 0, img );
+	painter.end();
+
+	QImage texture = QGLWidget::convertToGLFormat( fixed );
+
+  glEnable( GL_TEXTURE );
+  glEnable( GL_TEXTURE_2D );
 	glGenTextures( 1, &texId );
 
 	glBindTexture( GL_TEXTURE_2D, texId );
 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 
   return false;
 }
 
+#include <iostream>
+using namespace std;
+
 bool ResTexture::load( const std::string & path )
 {
+  glEnable( GL_TEXTURE );
+  glEnable( GL_TEXTURE_2D );
 	switch (getImageType(path.c_str()))
 	{
 		case IMG_TIFF:
-		return loadTIFF(path.c_str(),texId,texture);
+      loadTIFF(path.c_str(),texId,texture);
+      break;
 		case IMG_PNG:
-		return loadPNG(path.c_str(),texId,texture);
+      loadPNG(path.c_str(),texId,texture);
+      break;
 		case IMG_TGA:
-		return loadTGA(path.c_str(),texId,texture);
+      loadTGA(path.c_str(),texId,texture);
+      break;
 		case IMG_BMP:
-		return loadBMP(path.c_str(),texId,texture);
+      loadBMP(path.c_str(),texId,texture);
 		default:
-		return false;
+      return false;
 	}
+
+
+  return true;
 }
 
 bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture)
 {
-	QImage buffer;
 
+	QImage buffer;
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: TIFF File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
@@ -109,6 +134,7 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: PNG File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
@@ -121,11 +147,14 @@ bool loadPNG(const QString & path, unsigned int & texId, QImage & texture)
 	painter.drawImage( 0, 0, buffer );
 	painter.end();
 
+  
+
 	texture = QGLWidget::convertToGLFormat( fixed );
+
 	glGenTextures( 1, &texId );
 
 	glBindTexture( GL_TEXTURE_2D, texId );
-	//	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -144,6 +173,7 @@ bool loadTGA(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: TGA File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 
@@ -179,6 +209,7 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 	if (!buffer.load( path ))
 	{
 		std::cout << "Load Texture Error: BMP File would not load\n";
+    std::cout << "File: " << qPrintable(path) << std::endl;
 		return false;
 	}
 

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 GUI::~GUI()
@@ -52,7 +53,9 @@ bool GUI::setup()
   if( !isInit() )
     return false;
 
-  return get()->doSetup();
+
+  get()->m_isSetup = get()->doSetup();
+  return get()->m_isSetup;
 }
 
 bool GUI::clear()
@@ -201,6 +204,7 @@ bool GUI::doSetup()
 void GUI::buildControlBar()
 {
   m_statusBar = statusBar();
+  m_statusBar -> setMaximumHeight(20);
   m_controlBar = new ControlBar( this );
 
   m_statusBar->addPermanentWidget( m_controlBar, 100 );
@@ -235,11 +239,25 @@ void GUI::createActions()
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
-   (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
-   (void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
-   (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+  (void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+ 
+  //Ugly hack
+  (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_2 ), this, SLOT( turnPercentageShortcut2() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_3 ), this, SLOT( turnPercentageShortcut3() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_4 ), this, SLOT( turnPercentageShortcut4() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) ); 
+  (void) new QShortcut( QKeySequence( Qt::Key_6 ), this, SLOT( turnPercentageShortcut6() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_7 ), this, SLOT( turnPercentageShortcut7() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_8 ), this, SLOT( turnPercentageShortcut8() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_9 ), this, SLOT( turnPercentageShortcut9() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_0 ), this, SLOT( turnPercentageShortcut0() ) );
+  
+  cout << "ADDED NUMERIC SHORTCUTS!"<<endl;
 }
 
 void GUI::createMenus()
@@ -278,7 +296,7 @@ void GUI::buildToolSet()
     // Give it a frame to hold a layout
     m_dockLayoutFrame = new QFrame( m_dockWidget );
     // Give this frame a layout
-    m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
+    m_dockLayout = new QVBoxLayout( m_dockLayoutFrame );
     // Console area to the left
     m_consoleArea = new QTextEdit( m_dockLayoutFrame );
     m_consoleArea -> setReadOnly(1);
@@ -304,7 +322,7 @@ void GUI::buildToolSet()
     // Add the frame to the actual dock
     m_dockWidget->setWidget( m_dockLayoutFrame );
     // Add the dock to the main window
-    addDockWidget( Qt::BottomDockWidgetArea, m_dockWidget );
+    addDockWidget( Qt::RightDockWidgetArea, m_dockWidget );
 
   }
 }
@@ -339,9 +357,10 @@ void GUI::rewindShortcut()
   m_controlBar -> rewind();
 }
 
-void GUI::turnPercentageShortcut(int value)
+void GUI::turnPercentageCalc(int value)
 {
-  TimeManager::setTurn(value);
+  float turnPercent = value /9.0;
+  TimeManager::setTurn((int) floor(turnPercent * TimeManager::getNumTurns()));
 }
 
 void GUI::stepTurnForwardShortcut()
@@ -400,107 +419,7 @@ void GUI::initUnitStats()
   m_dockLayout->addWidget( m_unitStatsArea );
 }
 
-void GUI::mousePressEvent( QMouseEvent *e )
+ControlBar * GUI::getControlBar()
 {
-    if( e->button() == Qt::LeftButton )
-    {
-      QString line;
-      
-      clickX = e->x();
-      clickY = e->y();
-       
-      line.clear();
-      line.append("Left click: ( ");
-      line.append(QString::number(clickX));
-      line.append(", ");
-      line.append(QString::number(clickY));
-      line.append(")");
-
-      m_consoleArea->append(line);
-
-      leftButtonDown = true;
-      
-      dragX = clickX; 
-      dragY = clickY;
-      /* Thus, dragX and dragY become our starting point, 
-       * and curX and curY will be contiuously updated, eventually becoming 
-       * our ending point if dragging.
-       */
-    }
-
-
-}
-
-void GUI::mouseReleaseEvent( QMouseEvent *e )
-{
-
-    curX = e->x()+1;
-    curY = e->y()+1;
-    //+1 guarantees we create a box, rather than a point.
-    
-    int selectWidth, selectHeight;
-//  int selectX = selectWidth = curX/getAttr(unitSize);
-//  int selectY = selectHeight = curY/getAttr(unitSize);
-
-//   if( e->button() == Qt::LeftButton )
-//  {
-//    if( leftButtonDrag )
-//    {
-//      selectX = (curX<dragX ? curX : dragX)/getAttr(unitSize);
-//      selectWidth = (curX<dragX ? dragX : curX)/getAttr(unitSize);
-//      selectY = (curY<dragY ? curY : dragY)/getAttr(unitSize);
-//      selectHeight = (curY<dragY ? dragY : curY)/getAttr(unitSize);
-//    }
-
-
-//    Game *game = parent->gamelog;
-//    int frame = getAttr( frameNumber );
-//    if( game )
-//    {
-//      if( !(QApplication::keyboardModifiers() & Qt::ShiftModifier) )
-//        selectedIDs.clear();
-
-//      addSelection(game->states[frame].units, selectedIDs, selectX, selectY, selectWidth, selectHeight);
-//      std::map<int,Unit> tBots;
-//      for( std::map<int,Bot>::iterator i = game->states[frame].bots.begin(); i != game->states[frame].bots.end(); i++ )
-//      {
-//        if( !i->second.partOf )
-//          tBots[i->second.id] = i->second;
-//      }
-
-//      addSelection(tBots, selectedIDs, selectX, selectY, selectWidth, selectHeight);
-//      addSelection(game->states[frame].frames, selectedIDs, selectX, selectY, selectWidth, selectHeight);
-//      addSelection(game->states[frame].walls, selectedIDs, selectX, selectY, selectWidth, selectHeight);
-
-//      stringstream ss;
-//      ss << "Selected Units: " << selectedIDs.size() << ", X: " << selectX << ", Y: " << selectY << '\n';
-
-//      for (map<int,string>::iterator it = selectedIDs.begin(); it != selectedIDs.end(); it++)
-//      {
-//        ss << it->second << '\n';
-//      }
-
-//      //parent->console->setText( ss.str().c_str() );
-//    }
-
-//    leftButtonDown = false;
-//    leftButtonDrag = false;
-//  } 
-
-//  // Invalidate last frame so we get the latest talkers.
-//  setAttr( lastFrame, -1 );
-}
-
-
-void GUI::mouseMoveEvent( QMouseEvent *e )
-{
-  curX = e->x();
-  curY = e->y();
-
-  // If Manhattan distance is 6 or greater, we're draggin
-  if( e->buttons() & Qt::LeftButton && 
-    abs(curX-dragX)+abs(curY-dragY) > m_DRAG_DISTANCE )
-  {
-    leftButtonDrag = true;
-  }
+  return get()->m_controlBar;
 }
