@@ -18,7 +18,6 @@ using namespace std;
 
 typedef GOCFamily_GUI guiObj;
 
-
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
 /// @brief    GUI object for drawing debugging info along with
