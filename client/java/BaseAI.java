@@ -91,7 +91,7 @@ public abstract class BaseAI
     return run();
   }
 
-
+  ///
   ///How many turns it has been since the beginning of the game
   int turnNumber()
   {
@@ -102,32 +102,39 @@ public abstract class BaseAI
   {
     return Client.INSTANCE.getPlayerID(connection);
   }
+  ///
   ///What number game this is for the server
   int gameNumber()
   {
     return Client.INSTANCE.getGameNumber(connection);
   }
+  ///
   ///The cost of a pirate
   int pirateCost()
   {
     return Client.INSTANCE.getPirateCost(connection);
   }
+  ///
   ///The cost of a ship
   int shipCost()
   {
     return Client.INSTANCE.getShipCost(connection);
   }
+  ///
   ///The cost to build a new port
   int portCost()
   {
     return Client.INSTANCE.getPortCost(connection);
   }
+  ///
   ///The boards width and height
   int mapSize()
   {
     return Client.INSTANCE.getMapSize(connection);
   }
 
+  ///
+  ///Finds a path between two squares
   Tile[] getPath(int startx, int starty, int endx, int endy, int type)
   {
     Pointer start = tiles[starty * mapSize() + startx].ptr;
