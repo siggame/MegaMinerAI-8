@@ -217,9 +217,29 @@ struct DupObj
 
 	    //draw pirate count
 	    //draw gold count
-	    //draw health?
+
+	    if (maxHealth > 0)
+	    {
+		//draw health
+		glDisable(GL_BLEND);
+		glBegin(GL_QUADS);
+		glColor4f(1,.5,.5,1);
+		glVertex3d(1,1,2);
+		glVertex3d(0,1,2);
+		glVertex3d(0,.9,2);
+		glVertex3d(1,.9,2);
 
 
+		unsigned int width = health/maxHealth;
+		glColor4f(.5,1,.5,1);
+		glVertex3d(0,1,2.1);
+		glVertex3d(0,.9,2.1);
+		glVertex3d(width,.9,2.1);
+		glVertex3d(width,1,2.1);
+		glEnd();
+
+		glEnable(GL_BLEND);
+	    }
 	}
 
 };
