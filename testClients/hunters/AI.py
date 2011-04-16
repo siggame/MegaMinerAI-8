@@ -29,18 +29,23 @@ class AI(BaseAI):
   def end(self):
     pass
 
+  def grabEmptyShips(self,myUnits):
+      #boards empty ships      
+      for p in myUnits:
+        for e in self.ships:
+          if e.getOwner() == -1:
+            if dist(p.getX(),p.getY(),e.getX(),e.getY()) == 1:
+              if len([i for i in myUnits if i.getX() == e.getX() and i.getY() == e.getY()]) == 0 and len([i for i in myUnits if i.getX() == p.getX() and i.getY() == p.getY()]) > 1:
+                p.move(e.getX(),e.getY())  
+   
   def run(self):
       myUnits = [i for i in self.pirates if i.getOwner() == self.playerID()]
       myShips = [i for i in self.ships if i.getOwner() == self.playerID()]
       myPorts = [i for i in self.ports if i.getOwner() == self.playerID()]
       
-      #boards empty ships      #boards empty ships
-      for p in myUnits:
-        for e in self.ships:
-          if e.getOwner() == -1:
-            if dist(p.getX(),p.getY(),e.getX(),e.getY()) == 1:
-              if len([i for i in myUnits if i.getX() == e.getX() and i.getY() == e.getY()]) == 0:
-                p.move(e.getX(),e.getY())
+      #boards empty ships
+      self.grabEmptyShips(myUnits)
+
       
       myBattleGroups = []
       for s in myShips:
@@ -58,14 +63,14 @@ class AI(BaseAI):
           dumpEverything(i)
         if len([i for i in self.ships if i.getX() == port.getX() and i.getY() == port.getY()]) > 0:
           if len([i for i in myUnits if i.getX() == port.getX() and i.getY() == port.getY()]) < 12:
-            for i in range(len([i for i in myUnits if i.getX() == port.getX() and i.getY() == port.getY()]),12):
+            for i in range(len([i for i in myUnits if i.getX() == port.getX() and i.getY() == port.getY()]),20):
               port.createPirate()
       
       for group in myBattleGroups:
-        for p in group.pirates:
-          self.attackAnything(p)
+        fight = True
         best = None
-        if group.netWorth > 0:
+        if group.netWorth > 0 or (len(group.pirates) < 12 and self.players[self.playerID()].getGold() > 500):
+          fight = False
           best = myPorts[0]
           for port in myPorts:
             if dist(group.ship.getX(),group.ship.getY(),port.getX(),port.getY()) < dist(group.ship.getX(),group.ship.getY(),best.getX(),best.getY()):
@@ -79,7 +84,10 @@ class AI(BaseAI):
             if dist(group.ship.getX(),group.ship.getY(),target.getX(),target.getY()) < dist(group.ship.getX(),group.ship.getY(),best.getX(),best.getY()):
               if len([i for i in self.pirates if i.getX() == target.getX() and i.getY() == target.getY()]) < len(group.pirates)/3:
                 best = target
-        print group.ship.getMovesLeft()
+        if fight:
+          for p in group.pirates:
+            self.attackAnything(p)
+
         direction = aStar(self,1,group.ship.getX(),group.ship.getY(),best.getX(),best.getY())
         if len(direction) == 0:
           dir = random.randint(0,3)
@@ -91,16 +99,6 @@ class AI(BaseAI):
             direction = ['2']
           elif dir == 3:
             direction = ['3']
-        if len(direction) == 1:
-          dir = random.randint(0,3)
-          if dir == 0:
-            direction += '0'
-          elif dir == 1:
-            direction += '1'
-          elif dir == 2:
-            direction += '2'
-          elif dir == 3:
-            direction += '3'
         #print "There is no path!"
         if direction[0] == '0':
           #print "right"
@@ -117,35 +115,64 @@ class AI(BaseAI):
         elif direction[0] == '3':
           #print "up"
           group.ship.move(group.ship.getX(),group.ship.getY()-1)
-        print group.ship.getMovesLeft()
-        if direction[1] == '0':
-          #print "right"
-          group.ship.move(group.ship.getX()+1,group.ship.getY())
-        #Down
-        elif direction[1] == '1': 
-        #print "down"
-          group.ship.move(group.ship.getX(),group.ship.getY()+1)
-        #Left
-        elif direction[1] == '2':
-          #print "left"
-          group.ship.move(group.ship.getX()-1,group.ship.getY())
-        #Up
-        elif direction[1] == '3':
-          #print "up"
-          group.ship.move(group.ship.getX(),group.ship.getY()-1)
-        for p in group.pirates:
-          self.attackAnything(p)
+        if fight:
+          for p in group.pirates:
+            self.attackAnything(p)
+        self.grabEmptyShips(group.pirates)
+        if len(direction) > 1:
+          if direction[1] == '0':
+            #print "right"
+            group.ship.move(group.ship.getX()+1,group.ship.getY())
+          #Down
+          elif direction[1] == '1': 
+          #print "down"
+            group.ship.move(group.ship.getX(),group.ship.getY()+1)
+          #Left
+          elif direction[1] == '2':
+            #print "left"
+            group.ship.move(group.ship.getX()-1,group.ship.getY())
+          #Up
+          elif direction[1] == '3':
+            #print "up"
+            group.ship.move(group.ship.getX(),group.ship.getY()-1)
+        if group.ship.getMovesLeft() > 1:
+          dir = random.randint(0,3)
+          if dir == 0:
+            direction += '0'
+          elif dir == 1:
+            direction += '1'
+          elif dir == 2:
+            direction += '2'
+          elif dir == 3:
+            direction += '3'
+          #print "There is no path!"
+          if direction[0] == '0':
+            #print "right"
+            group.ship.move(group.ship.getX()+1,group.ship.getY())
+          #Down
+          elif direction[0] == '1': 
+          #print "down"
+            group.ship.move(group.ship.getX(),group.ship.getY()+1)
+          #Left
+          elif direction[0] == '2':
+            #print "left"
+            group.ship.move(group.ship.getX()-1,group.ship.getY())
+          #Up
+          elif direction[0] == '3':
+            #print "up"
+            group.ship.move(group.ship.getX(),group.ship.getY()-1)
+          
+        if fight:
+          for p in group.pirates:
+            self.attackAnything(p)
       return 1
       
   def attackAnything(self,pirate):
     for enemy in self.pirates:
       if enemy.getOwner() != self.playerID():
         if dist(pirate.getX(),pirate.getY(),enemy.getX(),enemy.getY()) == 1:
-          if pirate.getAttacksLeft() > 0:
-            pirate.attack(enemy)
-          else:
-            return
-
+          pirate.attack(enemy)
+          
   def __init__(self, conn):
       BaseAI.__init__(self, conn)
 
