@@ -217,7 +217,7 @@ class Pirate(Unit):
         if opponentShip == True:
           return "Ye cannot board enemy ships. Lay waste to all of their pirates first!"        
         if not freeShip:
-          return "Pirates cannot swim, yarr!"
+          return "Pirates cannot move into the water without a ship, yarr!"
 
     #Lose control of ship if this is your last pirate leaving
     for i in self.game.objects.values():
@@ -226,7 +226,7 @@ class Pirate(Unit):
           counter = 0
           #if the pirate was on a ship, count how many pirates are on it
           for j in self.game.objects.values():
-            if isinstance(j,Pirate) and j.x == self.x and j.y == self.y:
+            if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
               counter+=1
           #If this was the last pirate on board, the ship becomes neutral.
           if counter == 1:
@@ -486,10 +486,6 @@ class Port(Mappable):
         return "We don' have enough gold fer that unit, captain"
     pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.pirateHealth, self.game.pirateStrength) #placeholder values
     self.game.addObject(pirate)
-    for ship in self.game.objects.values():
-      if isinstance(ship,Ship):
-        if ship.x == self.x and ship.y == self.y and ship.owner == -1:
-          ship.owner = self.owner
     return True
   #TODO: Test and review this logic
 
