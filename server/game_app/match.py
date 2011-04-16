@@ -295,7 +295,7 @@ class Match(DefaultGameWorld):
           firstFound = True
         else:
           player2 = i
-    if self.turnNumber >= 500:
+    if self.turnNumber >= self.turnLimit:
       #Check for victory through wealth
       if player2.gold > player1.gold:
         self.declareWinner(self.players[1], 'Victory Through Wealth!')
