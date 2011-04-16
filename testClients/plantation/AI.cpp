@@ -16,7 +16,8 @@ const char* AI::password()
 //This function is run once, before your first turn.
 void AI::init()
 {
-  land = vector<vector<bool> >(mapSize(),vector<bool>(mapSize(),false));
+  land.resize(mapSize(), vector<bool>(mapSize(), false));
+
   for(size_t i=0;i<tiles.size();i++)
   {
     land[tiles[i].x()][tiles[i].y()] = (tiles[i].type()==0);
@@ -27,96 +28,143 @@ void AI::init()
 //Return true to end your turn, return false to ask the server for updated information.
 bool AI::run()
 {
-  cout<<"Turn Number: "<<turnNumber()<<endl;
-  int myPort=0;
-  while(ports[myPort].owner() != playerID())myPort++;
-  list<Pirate*> atPort;
+  cout<<"Turn Number: "<<turnNumber()<<" My Gold: "<<players[playerID()].gold()<<endl;
+  int turningPoint = 100;
+  if(turnNumber() > turningPoint+50) return true;
+ 
+  list<Port*> myPorts;
+  gold = vector<vector<size_t> >(mapSize(), vector<size_t>(mapSize(),0));
   
+  for(size_t i=0;i<ports.size();i++)
+  {
+    if(ports[i].owner()==playerID())
+    {
+      myPorts.push_back(&ports[i]);
+    }
+    land[tiles[i].x()][tiles[i].y()] = false;
+  }
   for(size_t i=0;i<pirates.size();i++)
   {
-    if(samePos(ports[myPort],pirates[i]))
+    if(pirates[i].owner()!=playerID())
     {
-      atPort.push_back(&pirates[i]);
+      land[pirates[i].x()][pirates[i].y()] = false;
     }
   }
-  if(atPort.size() >0 && turnNumber() < 400 && players[playerID()].gold()>0)
+  int amount = players[playerID()].gold()/myPorts.size();
+  for(list<Port*>::iterator it = myPorts.begin();it!=myPorts.end();it++)
   {
-    // divide it among the guys at port
-    int amount = players[playerID()].gold() / atPort.size();
-    for(list<Pirate*>::iterator it = atPort.begin();it!=atPort.end();it++)
+    vector<Pirate*> pickup;
+    for(size_t i=0;i<pirates.size();i++)
     {
-      (*it)->pickupTreasure(amount);
-    }
-  }
-  // for each pirate at port
-  vector<vector<size_t> > gold(mapSize(),vector<size_t>(mapSize(),0));
-  
-  map<int, size_t> hasTreasure;
-  for(size_t t=0;t<treasures.size();t++)
-  {
-    gold[treasures[t].x()][treasures[t].y()]+= treasures[t].gold();
-  }
-  list<target> empty, growing;
-  for(size_t x=0;x<mapSize();x++)
-  {
-    for(size_t y=0;y<mapSize();y++)
-    {
-      if(land[x][x])
+      if(samePos(pirates[i], **it))
       {
-        if(gold[x][y]>1)
-        {
-          growing.push_back(target(x,y,gold[x][y]));  
-        }
-        else if(gold[x][y]==0)
-        {
-          empty.push_back(target(x,y,0));
-        }
+        pickup.push_back(&pirates[i]);
+      }
+    }
+    if(pickup.size()==0)
+    {
+      /*
+      while(pirateCost() < amount)
+      {
+        (*it)->createPirate();
+        amount -= pirateCost();
+      }
+      */
+    }
+    else if(turnNumber()< turningPoint)
+    {
+      amount/=pickup.size();
+      for(size_t i=0;i<pickup.size() && amount>0;i++)
+      {
+        pickup[i]->pickupTreasure(amount);
       }
     }
   }
+  // save the amount of gold
+  for(size_t i=0;i<treasures.size();i++)
+  {
+    gold[treasures[i].x()][treasures[i].y()]+=treasures[i].gold();
+  }
+  list<Tile*> empty, harvest;
+  for(size_t i=0;i<tiles.size();i++)
+  {
+    if(land[tiles[i].x()][tiles[i].y()] && gold[tiles[i].x()][tiles[i].y()]==0)
+    {
+      empty.push_back(&tiles[i]);
+    }
+    else if(land[tiles[i].x()][tiles[i].y()])
+    {
+      harvest.push_back(&tiles[i]);
+    }
+  }
   for(size_t i=0;i<pirates.size();i++)
   {
-    if(pirates[i].owner() == playerID())
+    //
+    if(pirates[i].owner()==playerID())
     {
-      // if he has treasure
-      hasTreasure[pirates[i].id()] = pirates[i].gold();
-      if(hasTreasure.find(pirates[i].id())!= hasTreasure.end() && turnNumber()<50)
+      if(players[playerID()].gold()> portCost())
       {
-//        cout<<"Spreading the seed"<<endl;
-        sortNearest(pirates[i].x(), pirates[i].y(), empty, 0);
-        if(empty.size()>0)
+      //  pirates[i].buildPort();
+      }
+      bool spread = turnNumber()< turningPoint;
+      if(!spread)
+      {
+        vector<MoveHelper<Tile*> > sorted;  
+        sortNearest(pirates[i].x(), pirates[i].y(), harvest, sorted, 0);
+        if(sorted.size()>0)
         {
-          vector<Tile*> path = getPath(pirates[i].x(), pirates[i].y(), (*empty.begin()).x, (*empty.begin()).y,0);
-          cout<<"Heading for: "<<endl;
-          for(size_t p=0;p<path.size();p++){cout<<"\t"<<path[p]->x()<<","<<path[p]->y()<<endl;}
-          pirates[i].move(path[0]->x(),path[0]->y());
-          if(gold[path[0]->x()][path[0]->y()]==0)
+          cout<<"Harvesting"<<endl;
+          pirates[i].move(sorted[0].path[0]->x(),sorted[0].path[0]->y());
+          harvest.erase(sorted[0].it);
+        }
+        else
+        {
+          // move to the nearest port
+          vector<MoveHelper<Port*> > sorted;
+          sortNearest(pirates[i].x(), pirates[i].y(), myPorts, sorted, 0);
+          if(sorted.size()>0)
           {
-            cout<<"Dropping treasure!"<<endl;
-            pirates[i].dropTreasure(1);
-            gold[path[0]->x()][path[0]->y()]=1;
-            empty.erase(empty.begin());  
+            pirates[i].move(sorted[0].path[0]->x(),sorted[0].path[0]->y());
           }
         }
       }
-      // needs treasure
-      else
+      if(spread)
       {
-        sortNearest(pirates[i].x(), pirates[i].y(), growing, 0);
-        if(growing.size()>0)
+        vector<MoveHelper<Tile*> > sorted;  
+        sortNearest(pirates[i].x(), pirates[i].y(), empty, sorted, 0);
+        // move there
+        if(sorted.size()>0)
         {
-          vector<Tile*> path = getPath(pirates[i].x(), pirates[i].y(), (*growing.begin()).x, (*growing.begin()).y,0);
-          pirates[i].move(path[0]->x(),path[0]->y());
+          pirates[i].move(sorted[0].path[0]->x(),sorted[0].path[0]->y());
+          empty.erase(sorted[0].it);
         }
-        if(gold[pirates[i].x()][pirates[i].y()]>0)
+      }
+      
+      if(at(pirates[i],myPorts))
+      {
+        if(pirates[i].gold()>0)
         {
-          pirates[i].pickupTreasure(gold[pirates[i].x()][pirates[i].y()]);
-          gold[pirates[i].x()][pirates[i].y()]=0;
-          growing.erase(growing.begin());
+          pirates[i].dropTreasure(pirates[i].gold());
         }
+      }
+      else if(gold[pirates[i].x()][pirates[i].y()]==0 && pirates[i].gold()>0 && spread)
+      {
+        pirates[i].dropTreasure(1);
+        gold[pirates[i].x()][pirates[i].y()]++;
+      }
+      else if(gold[pirates[i].x()][pirates[i].y()]>1)
+      {
+        int modifier = 1;
+        if(!spread)
+        {
+          modifier = 0;
+        }
+        pirates[i].pickupTreasure(gold[pirates[i].x()][pirates[i].y()]-modifier);
+        gold[pirates[i].x()][pirates[i].y()]=modifier;
       }
     }
   }
+  
   return true;
 }
 
