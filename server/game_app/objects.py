@@ -578,13 +578,9 @@ class Ship(Unit):
     # Placeholder for health and strength as 1, 1 respectively
     return Ship(game, id, x, y, owner, health, strength, 0, 0, 0)
 
-  def nextTurn(self):
-    if self.game.playerID != self.owner:
-      self.movesLeft = 0
-      self.attacksLeft = 0
-    else:
-      self.movesLeft = self.game.shipMoves
-      self.attacksLeft = self.game.shipAttacks
+  def nextTurn(self): 
+    self.movesLeft = self.game.shipMoves
+    self.attacksLeft = self.game.shipAttacks
 
   def move(self, x, y):
     #Check the owner of the ship before moving
