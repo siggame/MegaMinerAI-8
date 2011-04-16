@@ -64,7 +64,13 @@ struct DupObj
 	void render()
 	{
 
+	    glPushMatrix();
+	    #if 0
+	    glTranslatef(x-.1,y-.1,0);
+	    glScalef(1.2,1.2,1);
+	    #else
 	    glTranslatef(x,y,0);
+	    #endif
 	    bool flag = false;
 	    if (ResourceMan::isInit())
 	    {//! @todo: textures here
@@ -123,6 +129,7 @@ struct DupObj
 		res = ResourceMan::reference(textureName,"dupObject");
 		if (res)
 		{
+
 		    glEnable(GL_BLEND);
 		    glColor4f(1,1,1,1);
 		    glBindTexture(GL_TEXTURE_2D,((ResTexture*)res)->getTexture());
@@ -166,7 +173,7 @@ struct DupObj
 			glColor4f(0,1,0,1);
 			break;
 		    default:
-			glColor4f(0,1,1,1);
+			glColor4f(.1,.1,.1,1);
 		    }
 		case POT_SHIP:
 
@@ -179,7 +186,7 @@ struct DupObj
 			glColor4f(0.5,1,0.5,1);
 			break;
 		    default:
-			glColor4f(0.5,1,1,1);
+			glColor4f(0.5,.5,.5,1);
 		    }
 
 		    break;
@@ -224,24 +231,29 @@ struct DupObj
 		//draw health
 		glDisable(GL_BLEND);
 		glBegin(GL_QUADS);
-		glColor4f(1,.5,.5,1);
-		glVertex3d(1,1,2);
-		glVertex3d(0,1,2);
-		glVertex3d(0,.9,2);
-		glVertex3d(1,.9,2);
+		glColor4f(1,0,0,1);
+		glVertex3d(1,1,-2);
+		glVertex3d(0,1,-2);
+		glVertex3d(0,.9,-2);
+		glVertex3d(1,.9,-2);
 
 
 		unsigned int width = health/maxHealth;
-		glColor4f(.5,1,.5,1);
-		glVertex3d(0,1,2.1);
-		glVertex3d(0,.9,2.1);
-		glVertex3d(width,.9,2.1);
-		glVertex3d(width,1,2.1);
+		glColor4f(0,1,0,1);
+		glVertex3d(0,1,-1.9);
+		glVertex3d(0,.85,-1.9);
+		glVertex3d(width,.85,-1.9);
+		glVertex3d(width,1,-1.9);
 		glEnd();
 
 		glEnable(GL_BLEND);
 	    }
+
+
+	    glPopMatrix();
 	}
+
+
 
 };
 

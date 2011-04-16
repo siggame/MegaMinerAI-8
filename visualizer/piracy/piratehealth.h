@@ -5,10 +5,9 @@
 class PirateHealth : public GOCFamily_Health
 {
 public:
-    PirateHealth(GameObject*parent, int & currentHealth):GOCFamily_Health(parent,currentHealth){}
+    PirateHealth(GameObject*parent, const int & currentHealth, const int & maxHealth):GOCFamily_Health(parent,currentHealth,maxHealth){}
     ~PirateHealth(){}
     const GOC_IDType componentID() const {return GOC_IDType("PirateHealth");}
-    unsigned int maxHealth(){return 100;} //! @todo make this the apropriate value
 private:
 };
 

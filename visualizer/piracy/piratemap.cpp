@@ -459,7 +459,7 @@ void PirateMap::renderAt(
 
   glTranslatef( -2, 2, 0 );
 
-  float size = ((float)Renderer<DupObj>::height())/40;
+  float size = ((float)Renderer<DupObj>::height())/optionsMan::getInt("mapSize");
   for( int i = 0; i < 41; i++ )
   {
     glBegin( GL_QUADS );
