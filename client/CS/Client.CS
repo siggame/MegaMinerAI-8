@@ -201,7 +201,7 @@ public class Client {
   [DllImport("client")]
   public static extern int getPathSize();
   [DllImport("client")]
-  public static extern int getPathSize();
+  public static extern int getPathStep(int step);
   [DllImport("client")]
   public static extern int findPath(IntPtr start, IntPtr end, int type);
 }

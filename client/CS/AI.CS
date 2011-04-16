@@ -5,6 +5,8 @@ using System.Collections.Generic;
 ///The class implementing gameplay logic.
 class AI : BaseAI
 {
+
+  Random rand;
   //NOTE: You must change the return value of this to the username you team sets on MegaMinerAI.com
   public override string username()
   {
@@ -156,7 +158,7 @@ class AI : BaseAI
   //This function is called once, before your first turn
   public override void init()
   {
-      Random rand = new Random();
+      rand = new Random();
       Console.WriteLine("Initialization called");
   }
 
@@ -165,7 +167,6 @@ class AI : BaseAI
   //Return true to end your turn, return false to ask the server for updated information
   public override bool run()
   {
-      Random rand = new Random();
       Console.Write("Turn: ");
       Console.Write(turnNumber());
       Console.Write(" My ID: ");
