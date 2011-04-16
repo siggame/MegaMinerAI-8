@@ -21,7 +21,7 @@ public abstract class Unit: Mappable
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   public int move(int x, int y)
   {
     validify();
@@ -33,7 +33,7 @@ public abstract class Unit: Mappable
     validify();
     return Client.unitTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   public int attack(Unit Target)
   {
     validify();
@@ -61,19 +61,19 @@ public abstract class Unit: Mappable
     validify();
     return Client.unitGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public int getOwner()
   {
     validify();
     return Client.unitGetOwner(ptr);
   }
-  ///Health of the unit
+  ///Current ealth of the unit
   public int getHealth()
   {
     validify();
     return Client.unitGetHealth(ptr);
   }
-  ///Attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public int getStrength()
   {
     validify();
