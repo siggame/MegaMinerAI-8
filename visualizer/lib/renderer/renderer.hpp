@@ -79,7 +79,7 @@ bool Renderer<DupObject>::refresh()
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
   {
-     // renderIt->render();
+      (*renderIt)->render();\
   }
 
   glPopMatrix();
