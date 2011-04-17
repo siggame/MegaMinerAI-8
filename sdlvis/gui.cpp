@@ -219,12 +219,12 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   {
     if(strcmp(g.states[turn].players[i].playerName,"booty()") == 0)
     {
-      message << "booty(" << i + 1 << "): ";
+      message << "booty(" << i + 1 << ")";
     }
     else
     {
       message << g.states[turn].players[i].playerName;
-      message << " (" << i + 1 << "): ";
+      message << " (" << i + 1 << ")";
     }
     
     image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), teamColor[i]);
@@ -268,12 +268,21 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   
   if(turn >= g.states.size() - 1)
   {
-    message << "Winner: Player ";
-    message << (g.winner + 1);
+    message << "Winner: ";
+    
+    if(strcmp(g.states[turn].players[g.winner].playerName,"booty()") == 0)
+    {
+      message << "booty(" << g.winner + 1 << "): ";
+    }
+    else
+    {
+      message << g.states[turn].players[g.winner].playerName;
+      message << " (" << g.winner + 1 << "): ";
+    }
     
     if(g.winner == 0)
     {
-     image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+      image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
     }
     else if(g.winner == 1)
     {
@@ -521,7 +530,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
     dest.y += image->h*7;
   }
   
-  message << "                     Version: 0.602";
+  message << "                     Version: 0.603";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
