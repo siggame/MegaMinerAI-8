@@ -134,13 +134,13 @@ def run_game(client1, client2, name):
     print "game created!"
   else:
     print "game failed to create:",i
-    return ("Error","Game failed to create")
+    return ("Error","Game failed to create "+client1)
   #and client 2...
   client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], timeout = 600)
   i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
   if i == 0:
     print client2,"couldn't connect"
-    return ("Error",client2+"couldn't connect to server")
+    return ("Error",client2+" couldn't connect to server")
   print "game started!"
   result = ''
   while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:
