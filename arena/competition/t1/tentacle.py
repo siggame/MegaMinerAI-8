@@ -146,12 +146,15 @@ def run_game(client1, client2, name):
   c2_score = 0
   if "1" in result:# == "1 Wins!":
     c1_score = 1
+    winner = client1
     print client1, "wins"
   elif "2" in result:# == "2 Wins!":
     c2_score = 1
+    winner = client2
     print client2, "wins"
   elif "tie" in result.lower():# == "Tie game!":
     print "tie"
+    winner = client2
     c2_score = 1
   elif result == '':
     print "someone crashed!"
@@ -172,7 +175,7 @@ def run_game(client1, client2, name):
   remove(rootdir+"server/logs/1.gamelog")
   remove(rootdir+"server/logs/1.gamelog.bz2")
   
-  return result
+  return (winner, logname)
 
 #run_game('Shell AI','Shell AI', 19000)
 
