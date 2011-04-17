@@ -502,6 +502,7 @@ void GUI::setFullScreen(bool value)
   show();
   
 } 
+
   void GUI::turnPercentageShortcut1(){	turnPercentageCalc(0); };
   void GUI::turnPercentageShortcut2(){	turnPercentageCalc(1); };
   void GUI::turnPercentageShortcut3(){	turnPercentageCalc(2); };
@@ -513,10 +514,16 @@ void GUI::setFullScreen(bool value)
   void GUI::turnPercentageShortcut9(){	turnPercentageCalc(8); };  
   void GUI::turnPercentageShortcut0(){	turnPercentageCalc(9); };
 
+QTableWidget * GUI::getIndividualStats()
+{
+  return get()->m_individualStats;
+}
+
+
 
 QTableWidget * GUI::getMultipleStats()
 {
-  return m_multipleStats;
+  return get()->m_multipleStats;
 }
 
 
