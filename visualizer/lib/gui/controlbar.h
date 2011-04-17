@@ -30,7 +30,7 @@ private:
   QPushButton* rewindButton;
   QPushButton* playButton;
   QPushButton* fastForwardButton;
-  int originalTimeManagerSpeed;
+  float originalTimeManagerSpeed;
 };
 
 #endif

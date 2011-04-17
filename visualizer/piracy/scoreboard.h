@@ -18,27 +18,24 @@ struct Score
 
 class Scoreboard : public GOCFamily_Render
 {
-public:
-  const GOC_IDType componentID() const { return GOC_IDType( "ScoreboardRender" ); }
+  public:
+    const GOC_IDType componentID() const { return GOC_IDType( "ScoreboardRender" ); }
 
-  void loadFont( int fontTex, string fontWidthsFile );
+    void loadFont( int fontTex, string fontWidthsFile );
 
-  void update();
-  void renderAt( const unsigned int& turn, const unsigned int& frame );
+    void update();
+    void renderAt( const unsigned int& turn, const unsigned int& frame );
 
-  void parseScores( Game& g );
+    void parseScores( Game& g );
 
-  list<Score> scores;
+    vector<Score> scores;
 
-  Player player[2];
-  int winner;
-  string winReason;
+    Player player[2];
+    int winner;
+    string winReason;
 
-
-private:
-  DrawGLFont fnt;
-
+  private:
+    DrawGLFont fnt;
 
 };
-
 #endif

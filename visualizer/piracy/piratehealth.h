@@ -4,10 +4,10 @@
 
 class PirateHealth : public GOCFamily_Health
 {
-	public:
-		PirateHealth(GameObject*parent, const int & currentHealth, const int & maxHealth):GOCFamily_Health(parent,currentHealth,maxHealth){}
-		~PirateHealth(){}
-		const GOC_IDType componentID() const {return GOC_IDType("PirateHealth");}
-	private:
+  public:
+    PirateHealth(GameObject*parent, const int & currentHealth, const int & maxHealth):GOCFamily_Health(parent,currentHealth,maxHealth){}
+    ~PirateHealth(){}
+    const GOC_IDType componentID() const {return GOC_IDType("PirateHealth");}
+  private:
 };
-#endif													 // PIRATEHEALTH_H
+#endif                           // PIRATEHEALTH_H

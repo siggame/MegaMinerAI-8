@@ -60,8 +60,7 @@ bool Renderer<DupObject>::refresh()
 
   if(SelectionRender::get()->getUpdated())
   {
-    Single::get()->selectedUnitIds.clear();
-    update( TimeManager::getTurn(), TimeManager::getFrame() );
+    update( TimeManager::getTurn(), 0 );
   }
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -431,7 +430,7 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
   obj.y = y;
 
   obj.time = time;
-  Single::get()->m_duplicateList[x][y][z][dir] +=  obj;
+  Single::get()->m_duplicateList[x][y][z][dir] += obj;
 
   if (!sameFlag)
   {
@@ -519,11 +518,11 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
   if( selectUpdate )
   {
 
-    int temp;
     x1 = SelectionRender::get()->getX1()/unitSize;
     x2 = SelectionRender::get()->getX2()/unitSize;
     if( x2 < x1 )
     {
+      int temp;
       temp = x2;
       x2 = x1;
       x1 = temp;
@@ -534,12 +533,18 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
     if( y2 < y1 )
     {
+      int temp;
       temp = y1;
       y1 = y2;
       y2 = temp;
     }
+  
+    stringstream ss;
+    ss << "(" << x1 << ", " << y1 << ") -> (" 
+      << x2 << ", " << y2 << ")" << endl; 
 
     GUI::clearConsole();
+    GUI::appendConsole( ss.str() );
     Single::get()->selectedUnitIds.clear();
   }
 
@@ -575,87 +580,89 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
             stringstream ss;
             #endif
+          } else 
+          {
+            temp.selected = false;
           }
-        } else
+        } 
+
+        goc = it->second->data->getGOC( "HealthFamily" );
+        if( goc )
+        {
+          health = ((GOCFamily_Health*)goc)->currentHealth();
+        }
+
+        Stats tStats;
+        goc = it->second->data->getGOC( "ObjectType" );
+        bool treasure = false;
+        if( goc )
+        {
+          switch( ((ObjectType*)goc)->type() )
+          {
+            case POT_PIRATE:
+              tStats.avgPirateHealth = health;
+
+              tStats.pirates = 1;
+              goc = it->second->data->getGOC( "Gold" );
+              tStats.gold = ((Gold*)goc)->gold();
+              break;
+            case POT_SHIP:
+              tStats.avgShipHealth = health;
+              tStats.ships = 1;
+              goc = it->second->data->getGOC( "Gold" );
+              tStats.gold = ((Gold*)goc)->gold();
+              break;
+            case POT_PORT:
+              tStats.ports = 1;
+              break;
+            case POT_TREAS:
+              treasure = true;
+              tStats.treasures = 1;
+              goc = it->second->data->getGOC( "Gold" );
+              tStats.gold = ((Gold*)goc)->gold();
+              break;
+            default:
+              break;
+          }
+        }
+
+
         if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
         {
           temp.selected = true;
-
-          goc = it->second->data->getGOC( "HealthFamily" );
-          if( goc )
-          {
-            health = ((GOCFamily_Health*)goc)->currentHealth();
-          }
-
-          goc = it->second->data->getGOC( "ObjectType" );
-          bool treasure = false;
-          if( goc )
-          {
-            Stats temp;
-            switch( ((ObjectType*)goc)->type() )
-            {
-              case POT_PIRATE:
-                temp.avgPirateHealth = health;
-
-                temp.pirates = 1;
-                goc = it->second->data->getGOC( "Gold" );
-                temp.gold = ((Gold*)goc)->gold();
-                break;
-              case POT_SHIP:
-                temp.avgShipHealth = health;
-                temp.ships = 1;
-                goc = it->second->data->getGOC( "Gold" );
-                temp.gold = ((Gold*)goc)->gold();
-                break;
-              case POT_TREAS:
-                treasure = true;
-                temp.treasures = 1;
-                goc = it->second->data->getGOC( "Gold" );
-                temp.gold = ((Gold*)goc)->gold();
-                break;
-              default:
-                break;
-            }
-
-            if( !treasure )
-            {
-              switch( owner )
-              {
-                case 0:
-                  p0 += temp;
-                  break;
-                case 1:
-                  p1 += temp;
-                  break;
-                case 2:
-                  p2 += temp;
-                  break;
-                case 3:
-                  p3 += temp;
-                  break;
-              }
-            } else {
-              selected += temp;
-            }
-
-          }
-
-          selected += p0;
-          selected += p1;
-          selected += p2;
-          selected += p3;
-
-          p0.final();
-          p1.final();
-          p2.final();
-          p3.final();
-          selected.final();
-
         }
         else
         {
           temp.selected = false;
         }
+
+        if( temp.selected )
+        {
+          if( !treasure )
+          {
+            switch( owner )
+            {
+              case 0:
+                p0 += tStats;
+                break;
+              case 1:
+                p1 += tStats;
+                break;
+              case 2:
+                p2 += tStats;
+                break;
+              case 3:
+                p3 += tStats;
+                break;
+            }
+          } else {
+            selected += tStats;
+          }
+        } else
+        {
+          global += tStats;
+        }
+
 
         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
@@ -669,13 +676,27 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
   }
 
+  selected += p0;
+  selected += p1;
+  selected += p2;
+  selected += p3;
 
+  global += selected;
 
+  p0.final();
+  p1.final();
+  p2.final();
+  p3.final();
+  selected.final();
+  global.final();
+
+  Single::get()->multipleUnitStatColumnPopulate (global, 0);
   Single::get()->multipleUnitStatColumnPopulate (p0, 1);
   Single::get()->multipleUnitStatColumnPopulate (p1, 2);
   Single::get()->multipleUnitStatColumnPopulate (selected, 3);
   Single::get()->multipleUnitStatColumnPopulate (p2, 4);
   Single::get()->multipleUnitStatColumnPopulate (p3, 5);
+
   return true;
 
 }

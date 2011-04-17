@@ -37,24 +37,24 @@ void TimeManager::setTurn( const int& turn )
     GUI::getControlBar()->update();
 }
 
-const int& TimeManager::getSpeed()
+const float& TimeManager::getSpeed()
 {
   if( !isInit() )
     return 0;
-  return get()->m_speed;
+  return get()->m_speed*1000;
 }
 
-void TimeManager::setSpeed( const int& speed )
+void TimeManager::setSpeed( const float& speed )
 {
   if( !isInit() )
     throw 0;
-  get()->m_speed = speed;
+  get()->m_speed = speed/1000;
 }
 
 int TimeManager::timeHash()
 {
-    if (!isInit())
-	return 0;
+  if (!isInit())
+    return 0;
   return get()->m_hash;
 }
 
@@ -102,7 +102,7 @@ bool TimeManager::create()
 void TimeManager::setup()
 {
   m_lastTime = clock();
-  m_framesPerTurn = 10000;
+  m_framesPerTurn = 100;
   m_turn = 0;
   m_frame = 0;
 

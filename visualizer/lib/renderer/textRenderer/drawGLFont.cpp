@@ -180,6 +180,7 @@ void DrawGLFont::drawString( string message )
 			break;
 		default:
 			drawAlignedLeft( massage );
+      break;
 	}
 
 
