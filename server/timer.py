@@ -11,10 +11,10 @@ def install():
     if self not in games:
       games.append(self)
     if self.turn == self.players[0]:
-      p = [i for i in self.objects.values() if isinstance(i,Player)]
+      p = [i for i in self.objects.players]
       p[1].time += self.timeInc
     elif self.turn == self.players[1]:
-      p = [i for i in self.objects.values() if isinstance(i,Player)]
+      p = [i for i in self.objects.players]
       p[0].time += self.timeInc
     retval = yield aspects.proceed
 
@@ -28,10 +28,12 @@ def install():
         p[0].time -= 1
         if p[0].time < 0:
           i.declareWinner(i.players[1], 'Player 1 Lagged Out, Player 2 Wins')
+          print "2 Wins!"
       elif i.turn == i.players[1]:
         p[1].time -= 1
         if p[1].time < 0:
           i.declareWinner(i.players[0], 'Player 2 Lagged Out, Player 1 Wins')
+          print "1 Wins!"
       else:
         games.remove(i)
 
