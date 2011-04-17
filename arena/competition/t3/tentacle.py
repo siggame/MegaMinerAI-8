@@ -26,7 +26,7 @@ webserver=WebServerInterface('megaminerai.com')
 s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 logbucket = s3conn.get_bucket("megaminer7")
 
-startport = 25000
+startport = 21000
 count = 0
 tentacle = "3"
 rootdir = '/tmp/'+tentacle+'/'
@@ -35,7 +35,8 @@ repositories = dict()
 
 working_copies=dict()
 
-Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir+"server", shell = True).wait()
+Popen("rm -rf "+rootdir+"/*", shell = True).wait()
+Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir, shell = True).wait()
 
 def getPort():
   global count
@@ -50,7 +51,7 @@ def update(program):
   repositories[program] = split(path)[1][:-4]
   if commit == None or commit == '':
     print "bad request, no commit version"
-    return False
+    return "Git setup wrong for"+program
   working_copies[program]=commit
   if not exists(rootdir+repositories[program]):
     p = pexpect.spawn('rm -rf '+rootdir+split(path)[1][:-4])
@@ -78,46 +79,55 @@ def update(program):
     if i == 1:
       print "error in git"
       print p.before
+      return "Git clone timed out for "+program
   else:
     print "ERROR, can't clone git directory of",program
     print p.before
-    return False
+    return "Git clone timed out for "+program
   if commit != None:
     p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
     i = p.expect(['fatal',pexpect.EOF])
     if i == 0:
       print "failed to get the build",commit
       print p.before
-      return False
+      return "Failed to get commit "+str(commit)+" for "+program
   
   if program != 'server':
     p = pexpect.spawn("make", cwd = rootdir+repositories[program])
     i = p.expect(['Error',pexpect.EOF], timeout = 60)
     if i == 0:
       print "failed to make"
-      return False
+      return "Faild to make "+program
     p = pexpect.spawn("chmod +x run", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
-  return True
+  return "good!"
 
 @task
 def run_game(client1, client2, name):
-  if not update(client1):
-    return -10
-  if not update(client2):
-    return -11
+  c1_status = update(client1)
+  if c1_status != "good!":
+    return ("Error", c1_status)
+  c2_status = update(client2)
+  if c2_status != "good!":
+    return ("Error", c2_status)
 #  if not update('server'):
 #    return -13
-  port = getPort()
   startTime = time.time()
   #now start the server...
-  serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 10)
-  #i = serverp.expect(['Starting Server',pexpect.EOF])
-  #if i == 0:
-  #  print "server started"
-  #else:
-  #  print "server failed to start"
-    #return -1
+  servergood = False
+  port = startport
+  while not servergood:
+    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/')
+    i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
+    if i == 0 or i == 3 or i == 2:
+      print "bad socket"
+      port += 1
+    elif i == 1:
+      print "server should be started on port",port
+      servergood = True
+    else:
+      print 'THE WORLD IS AT AN END'
+      return "fail"
   time.sleep(2)
   #now client 1...
   client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell = True)
@@ -126,7 +136,7 @@ def run_game(client1, client2, name):
     print "game created!"
   else:
     print "game failed to create:",i
-    return -2
+    return ("Error","Game failed to create")
   #and client 2...
   client2p = Popen('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], shell = True)
   print "game started!"
@@ -146,18 +156,21 @@ def run_game(client1, client2, name):
   c2_score = 0
   if "1" in result:# == "1 Wins!":
     c1_score = 1
+    winner = client1
     print client1, "wins"
   elif "2" in result:# == "2 Wins!":
     c2_score = 1
+    winner = client2
     print client2, "wins"
   elif "tie" in result.lower():# == "Tie game!":
     print "tie"
+    winner = client2
     c2_score = 1
   elif result == '':
     print "someone crashed!"
   else:
     print "wat?",result
-    return -4
+    return ("Error","Unknown results from server:"+result)
   serverp.close(True)
   client1p.kill()
   client2p.kill()
@@ -172,7 +185,7 @@ def run_game(client1, client2, name):
   remove(rootdir+"server/logs/1.gamelog")
   remove(rootdir+"server/logs/1.gamelog.bz2")
   
-  return result
+  return (winner, logname)
 
 #run_game('Shell AI','Shell AI', 19000)
 
