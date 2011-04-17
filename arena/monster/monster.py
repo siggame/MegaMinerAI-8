@@ -46,6 +46,7 @@ def priority_update(players, old_p, old_v, new_v):
     if old_v[p] == None:
       update = True
     if old_v[p] != new_v[p]:
+      print "UPDATED:",players[p]
       update = True
     if update:
       for o in new_v:
@@ -61,6 +62,7 @@ def priority_update(players, old_p, old_v, new_v):
 
 def next_game(priorities):
   match = max(priorities, key=lambda x: priorities[x])
+  priorities[match]=0
   for m in priorities:
     if m[0] in match or m[1] in match:
       continue
@@ -81,15 +83,15 @@ while True:
   newPriorities = priority_update(players, priorities, versions, newVersions)
   versions = newVersions
   priorities = newPriorities
+  print "TICK: max priority", priorities[max(priorities, key=lambda x: priorities[x])]
   #print priorities
   while len(games) < len(players)*2:
     nextg = next_game(priorities)
     print "adding game:",nextg
-    games.append(run_game.delay(players[nextg[0]],players[nextg[1]],str(counter)))
+    games.append((run_game.delay(players[nextg[0]],players[nextg[1]],str(counter)),nextg))
     counter += 1
   for g in games[:]:
-    if g.result != None:
-      print g.result
+    if g[0].result != None:
+      print g[0].result,g[1]
       games.remove(g)
-  print len(games)
   time.sleep(2)

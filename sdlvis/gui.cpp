@@ -24,12 +24,19 @@ static SDL_Surface* screen = NULL;
 static TTF_Font* font = NULL;
 static TTF_Font* consoleFont = NULL;
 
-bool initGUI()
+bool initGUI(bool arenaMode)
 {
   if( SDL_Init(SDL_INIT_VIDEO) <0 )
     return false;
   
-  screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+  if(!arenaMode)
+  {
+    screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+  }
+  else
+  {
+    screen = SDL_SetVideoMode(1024, 768, 32, SDL_FULLSCREEN|SDL_DOUBLEBUF);
+  }
   
   if(screen == NULL)
     return false;
@@ -71,8 +78,8 @@ void renderMap(Game& g)
   
   for(int i = 0; i < g.states[0].tiles.size(); i++)
   {
-    /*if(g.states[0].tiles[i].id == 0) continue;
-    dest.x = g.states[0].tiles[i].x * 19;
+    if(g.states[0].tiles[i].id == 0) continue;
+    /*dest.x = g.states[0].tiles[i].x * 19;
     dest.y = g.states[0].tiles[i].y * 19;
       
     if(g.states[0].tiles[i].type)
@@ -468,7 +475,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   
   message.str("");
   
-  message << "                     Version: 0.584";
+  message << "                     Version: 0.587";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
@@ -726,6 +733,11 @@ void mainLoop(Game& g, bool arenaMode)
     {
       if(arenaMode)
       {
+        long int counter = 0;
+        while(counter != 2700000000)
+        {
+          counter++;
+        }
         return;
       }
       render = false;
@@ -765,6 +777,10 @@ void mainLoop(Game& g, bool arenaMode)
         {
           switch(event.key.keysym.sym)
           {
+            case SDLK_ESCAPE:
+            {
+              return;
+            }
             case SDLK_LEFT:
             {
               if(!render)
