@@ -33,5 +33,7 @@ int main(int argc, char** argv)
   
   mainLoop(g, arenaMode);
   
+  SDL_Quit();
+  
   return 0;
 }
