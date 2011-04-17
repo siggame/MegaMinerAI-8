@@ -8,6 +8,7 @@ class ShipAndDestination:
     self.port = port
     self.pirates = []
     self.shitlist = []
+    self.path = []
 
 class PortAndPirateNumber:
   def __init__(self,port,number):
@@ -112,7 +113,7 @@ class MerchantAI:
       #print i.shitlist
       deadEnemies = []
       for enemy in i.shitlist:
-        if enemy not in self.game.objects.values():
+        if enemy not in self.game.objects.pirates and enemy not in self.game.objects.ships:
           deadEnemies += [enemy]
       for enemy in deadEnemies:
         i.shitlist.remove(enemy)
@@ -122,11 +123,11 @@ class MerchantAI:
       for p in i.pirates:
         for j in i.shitlist:
           #print "someone's on my list!"
-          if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.values():
+          if (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.pirates:
             enemyInRange = True
             if p.attacksLeft > 0:
               p.attack(j)
-              if self.game.objects.values().count(j) == 0:
+              if j not in self.game.objects.pirates:
                 i.shitlist.remove(j)
                 continue
             else:
@@ -138,7 +139,7 @@ class MerchantAI:
           if  (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
             if i.ship.attacksLeft > 0:
               i.ship.attack(j)
-              if self.game.objects.values().count(j) == 0:
+              if j not in self.game.objects.ships:
                 i.shitlist.remove(j)
                 continue
             else:
@@ -152,38 +153,76 @@ class MerchantAI:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
       else:
-        direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+        if len(i.path) == 0:
+          i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
         #Right
-        if len(direction) == 0:
+        tryAgain = False
+        if len(i.path) == 0:
           dir = random.randint(0,3)
           if dir == 0:
-            direction = ['0']
+            i.path = ['0']
           elif dir == 1:
-            direction = ['1']
+            i.path = ['1']
           elif dir == 2:
-            direction = ['2']
+            i.path = ['2']
           elif dir == 3:
-            direction = ['3']
+            i.path = ['3']
           #print "There is no path!"
-        if direction[0] == '0':
+        if i.path[0] == '0':
           #print "right"
-          i.ship.move(i.ship.x+1,i.ship.y)
+          if not i.ship.move(i.ship.x+1,i.ship.y):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Down
-        elif direction[0] == '1': 
+        elif i.path[0] == '1': 
         #print "down"
-          i.ship.move(i.ship.x,i.ship.y+1)
+          if not i.ship.move(i.ship.x,i.ship.y+1):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Left
-        elif direction[0] == '2':
+        elif i.path[0] == '2':
           #print "left"
-          i.ship.move(i.ship.x-1,i.ship.y)
+          if not i.ship.move(i.ship.x-1,i.ship.y):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Up
-        elif direction[0] == '3':
+        elif i.path[0] == '3':
           #print "up"
-          i.ship.move(i.ship.x,i.ship.y-1)
-        #else:
-          #print direction
-          #print direction[0]
-          #print `direction[0] == '0'`
+          if not i.ship.move(i.ship.x,i.ship.y-1):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
+          
+        if tryAgain:
+          if len(i.path) == 0:
+            dir = random.randint(0,3)
+            if dir == 0:
+              i.path = ['0']
+            elif dir == 1:
+              i.path = ['1']
+            elif dir == 2:
+              i.path = ['2']
+            elif dir == 3:
+              i.path = ['3']
+            #print "There is no path!"
+          if i.path[0] == '0':
+            #print "right"
+            i.ship.move(i.ship.x+1,i.ship.y)
+          #Down
+          elif i.path[0] == '1': 
+          #print "down"
+            i.ship.move(i.ship.x,i.ship.y+1)
+          #Left
+          elif i.path[0] == '2':
+            #print "left"
+            i.ship.move(i.ship.x-1,i.ship.y)
+          #Up
+          elif i.path[0] == '3':
+            #print "up"
+            i.ship.move(i.ship.x,i.ship.y-1)
+          #else:
+            #print i.path
+            #print i.path[0]
+            #print `i.path[0] == '0'`
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
