@@ -493,6 +493,8 @@ template <typename DupObject>
 bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
   Stats global, p0, p1, p2, p3, selected;
+  int health;
+
 
 
     if (!Single::isInit())
@@ -548,10 +550,6 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
 
       GUI::clearConsole();
-      stringstream ss;
-      ss << "X1: " << x1 << ", Y1: " << y1 << endl;
-      ss << "X2: " << x2 << ", Y2: " << y2 << endl;
-      GUI::appendConsole( ss.str() );
       Single::get()->selectedUnitIds.clear();
     }
 
@@ -585,7 +583,6 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 #if 1
              int id = it->first;
              Single::get()->selectedUnitIds.insert( id );
-             //Single::get()->selectedUnitIds.push_back( id );
 
              stringstream ss;
 #endif
@@ -594,6 +591,13 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
          if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
          {
            temp.selected = true;
+           
+           goc = it->second->data->getGOC( "HealthFamily" );
+           if( goc )
+           {
+             health = ((GOCFamily_Health*)goc)->currentHealth();
+
+           }
 
            goc = it->second->data->getGOC( "ObjectType" );
            if( goc )
@@ -602,21 +606,19 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
              switch( ((ObjectType*)goc)->type() )
              {
                case POT_PIRATE:
-                 goc = it->second->data->getGOC( "PirateHealth" );
-                 temp.avgPirateHealth = ((PirateHealth*)goc)->currentHealth();
+                 temp.avgPirateHealth = health;
+
                  temp.pirates = 1;
                  goc = it->second->data->getGOC( "Gold" );
                  temp.gold = ((Gold*)goc)->gold();
                  break;
                case POT_SHIP:
-                 goc = it->second->data->getGOC( "ShipHealth" );
-                 temp.avgShipHealth = ((ShipHealth*)goc)->currentHealth();
+                 temp.avgShipHealth = health;
                  temp.ships = 1;
                  goc = it->second->data->getGOC( "Gold" );
                  temp.gold = ((Gold*)goc)->gold();
                  break;
                case POT_TREAS:
-                 goc = it->second->data->getGOC( "ShipHealth" );
                  temp.treasures = 1;
                  goc = it->second->data->getGOC( "Gold" );
                  temp.gold = ((Gold*)goc)->gold();
@@ -664,9 +666,17 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
     }
 
+    Single::get()->multipleUnitStatColumnPopulate (p0, 2);
 
     return true;
 
+}
+
+template<typename DupObject>
+void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int column)
+{
+  (GUI::getMultipleStats()->setCellWidget( column, 1, new QLabel( QString::number(multi.gold))));
+  //(GUI::getMultipleStats()->itemAt(column, 2))->setText(QString::number(multi.pirates));
 }
 
 #endif

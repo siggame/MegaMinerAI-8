@@ -356,6 +356,7 @@ void GUI::buildToolSet()
 
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
+    m_dockWidget->setMinimumWidth( 0 );
 
     // Add Buffer so we don't feel claustrophobic
     m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
@@ -501,6 +502,7 @@ void GUI::setFullScreen(bool value)
   show();
   
 } 
+
   void GUI::turnPercentageShortcut1(){	turnPercentageCalc(0); };
   void GUI::turnPercentageShortcut2(){	turnPercentageCalc(1); };
   void GUI::turnPercentageShortcut3(){	turnPercentageCalc(2); };
@@ -511,5 +513,17 @@ void GUI::setFullScreen(bool value)
   void GUI::turnPercentageShortcut8(){	turnPercentageCalc(7); };
   void GUI::turnPercentageShortcut9(){	turnPercentageCalc(8); };  
   void GUI::turnPercentageShortcut0(){	turnPercentageCalc(9); };
-  
+
+QTableWidget * GUI::getIndividualStats()
+{
+  return get()->m_individualStats;
+}
+
+
+
+QTableWidget * GUI::getMultipleStats()
+{
+  return get()->m_multipleStats;
+}
+
 

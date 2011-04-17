@@ -6,6 +6,7 @@
 #include <map>
 #include <list>
 #include <set>
+#include <QTableWidget>
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -114,6 +115,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		std::map<int, renderObj*> m_renderConstant;
 
+    void multipleUnitStatColumnPopulate( Stats multi, int column );
+
 		static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
 			const unsigned int & time, DupObject obj);
 
@@ -123,6 +126,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		RenderWidget *m_parent;
 
 		set<int> selectedUnitIds;
+		
+		//static void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
 #include "renderer.hpp"

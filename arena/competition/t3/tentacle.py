@@ -26,7 +26,7 @@ webserver=WebServerInterface('megaminerai.com')
 s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 logbucket = s3conn.get_bucket("megaminer7")
 
-startport = 19010
+startport = 25000
 count = 0
 tentacle = "3"
 rootdir = '/tmp/'+tentacle+'/'
