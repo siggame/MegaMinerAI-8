@@ -39,8 +39,6 @@ HEADERS += ./lib/manager/*.h \
     ./lib/parser/*.h \
     ./lib/gui/*.h \
     ./lib/objectmanager/*.h \
-    ./lib/timeline/lookupTable/*.h \
-    ./lib/timeline/lookupTable/*.hpp \
     ./lib/goc_controlbar.h \
     ./lib/*.h \
     ./lib/selectionrender/*.h \
