@@ -237,7 +237,7 @@ class Pirate(Unit):
             #If this was the last pirate on board, the ship becomes neutral.
           if counter > 1:
             break
-    if onABoat and counter > 1:
+    if onABoat and counter == 1:
       theBoatIAmOn.owner = -1
             
     #Moves the unit and makes it unable to move until next turn
