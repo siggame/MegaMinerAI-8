@@ -86,13 +86,9 @@ int main(int argc, char *argv[])
 	if( argc > 1 )
 	{
 	    GUI::loadGamelog( argv[1] );
-	    TimeManager::timerStart();
 	}
 
-
-
-	//Render::refresh();
-
+  TimeManager::timerStart();
 
 	int retval = app.exec();
 

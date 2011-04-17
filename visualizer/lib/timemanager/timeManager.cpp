@@ -41,14 +41,17 @@ const float& TimeManager::getSpeed()
 {
   if( !isInit() )
     return 0;
-  return get()->m_speed*1000;
+  float multi = OptionsMan::getFloat( "speed" );
+  return get()->m_speed*multi;
 }
 
 void TimeManager::setSpeed( const float& speed )
 {
   if( !isInit() )
     throw 0;
-  get()->m_speed = speed/1000;
+
+  float multi = OptionsMan::getFloat( "speed" );
+  get()->m_speed = speed/multi;
 }
 
 int TimeManager::timeHash()
@@ -91,11 +94,10 @@ void TimeManager::setNumTurns( const int& numTurns )
 
 bool TimeManager::create()
 {
+  if( !Singleton<TimeManager>::create() )
+    return false;
 
-    if( !Singleton<TimeManager>::create() )
-      return false;
-
-    Singleton<TimeManager>::get()->setup();
+  Singleton<TimeManager>::get()->setup();
    return true;
 }
 
@@ -144,19 +146,17 @@ void TimeManager::updateFrames()
   }
 
   //If in arena mode, show winner for a few secs at end
-  if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
+  if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
   {
     if( m_sleepTime == -1 )
-      m_sleepTime = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+      m_sleepTime = clock();
     else
     {
-      if( m_time - m_sleepTime > 3000 )
+      if( clock() - m_sleepTime > 1000000 )
       {
         GUI::closeGUI();
       }
-
     }
-
   } 
 
   if(GUI::isSetup())

@@ -65,9 +65,6 @@ bool Renderer<DupObject>::refresh()
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-  //unsigned int turn = TimeManager::getTurn();
-  //unsigned int frame = TimeManager::getFrame();
-
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
   #if 1
@@ -82,24 +79,8 @@ bool Renderer<DupObject>::refresh()
   #endif
 
   glPushMatrix();
-  //glTranslatef(0.0f,24.0f,0.0f);
   float mapSize = (float)OptionsMan::getInt("mapSize");
   glScalef( height()/mapSize, height()/mapSize, 1 );
-  #if 0
-  glDisable(GL_BLEND);
-  glColor4f(1.0f,0.0f,1.0f,1.0f);
-  //glTranslatef(3,3,0);
-  glBegin(GL_QUADS);
-
-  glVertex3f(0,0,-1);
-  glVertex3f(0,1,-1);
-  glVertex3f(1,1,-1);
-  glVertex3f(1,0,-1);
-
-  glEnd();
-  glEnable(GL_BLEND);
-
-  #else
 
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
@@ -108,7 +89,6 @@ bool Renderer<DupObject>::refresh()
     (*renderIt)->render();
     glPopMatrix();
   }
-  #endif
 
   glPopMatrix();
 
@@ -729,6 +709,8 @@ template<typename DupObject>
 void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int column)
 {
 
+
+
   Single::get()->printGlobalSelected( column, 1, QString::number(multi.pirates));
   Single::get()->printGlobalSelected( column, 2, QString::number(multi.avgPirateHealth));
   Single::get()->printGlobalSelected( column, 3, QString::number(multi.avgPirateGold));
@@ -737,5 +719,6 @@ void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int colum
   Single::get()->printGlobalSelected( column, 6, QString::number(multi.avgShipHealth));
   Single::get()->printGlobalSelected( column, 7, QString::number(multi.avgShipGold));
   Single::get()->printGlobalSelected( column, 8, QString::number(multi.treasures));
+  //Single::get()->printGlobalSelected( column, 0, QString::number(0));
 }
 #endif

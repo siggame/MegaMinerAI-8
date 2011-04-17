@@ -70,15 +70,6 @@ class PirateMap : public GOCFamily_Render
 
     int m_width;
     int m_power;
-  #if 0
-    void findClosest(
-      int **map,
-      const int& width,
-      const int& height,
-      const int& xc,
-      const int& yc,
-      const int& rad );
-  #endif
 
     ResTexture mapTexture;
 
