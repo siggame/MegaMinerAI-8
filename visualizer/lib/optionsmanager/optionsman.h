@@ -12,7 +12,7 @@
 
 typedef std::string OptID_t;
 
-class optionsMan : public Singleton <optionsMan>
+class OptionsMan : public Singleton <OptionsMan>
 {
 	public:
 

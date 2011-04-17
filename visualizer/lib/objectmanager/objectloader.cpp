@@ -40,10 +40,12 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     Renderer<DupObj>::registerConstantObj( 2, go );
 
     unsigned int numTurns = game.states.size();
-    unsigned int numFrames = optionsMan::getInt("numFrames");
+    unsigned int numFrames = OptionsMan::getInt("numFrames");
+
+    ObjectManager::setSize(numTurns,numFrames);
+
     TimeManager::setTurn(0);
     TimeManager::setNumTurns( numTurns );
-    ObjectManager::setSize(numTurns,numFrames);
     std::map<idtype, LookupSet<GameObject*,idtype> > looksets;
 
     unsigned int id;
@@ -69,7 +71,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
-        PirateHealth * health = new PirateHealth(pirate,i->second.health,optionsMan::getInt("pirateMaxHealth"));
+	PirateHealth * health = new PirateHealth(pirate,i->second.health,OptionsMan::getInt("pirateMaxHealth"));
 
 	    //data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
@@ -113,7 +115,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
   	    Gold * gold = new Gold(ship,i->second.gold);
   	    ObjectType * type = new ObjectType(ship,POT_SHIP);
-	    ShipHealth * health = new ShipHealth(ship,i->second.health,optionsMan::getInt("shipMaxHealth"));
+	    ShipHealth * health = new ShipHealth(ship,i->second.health,OptionsMan::getInt("shipMaxHealth"));
   	    //ShipRender * render = new ShipRender();
 
   	    //render->setOwner(ship);
