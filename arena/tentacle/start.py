@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 from subprocess import Popen
+Popen("rm -rf /tmp/1", shell = True).wait()
+Popen("rm -rf /tmp/2", shell = True).wait()
+Popen("rm -rf /tmp/3", shell = True).wait()
+Popen("rm -rf /tmp/4", shell = True).wait()
 
 Popen("mkdir /tmp/1", shell = True).wait()
 Popen("mkdir /tmp/2", shell = True).wait()
