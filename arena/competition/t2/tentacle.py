@@ -68,12 +68,12 @@ def update(program):
     print 'pulling'
     command = "git pull"
     cwd = rootdir+repositories[program]
-  p = pexpect.spawn(command, cwd = cwd, timeout = 120) 
+  p = pexpect.spawn(command, cwd = cwd, timeout = 180) 
   print "spawned a process:",command
-  i = p.expect(['Password:',pexpect.EOF], timeout = 120)
+  i = p.expect(['Password:',pexpect.EOF], timeout = 180)
   if i == 0:
     p.sendline(password)
-    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 120)
+    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 180)
     if i == 1:
       print "error in git"
       print p.before
@@ -84,7 +84,7 @@ def update(program):
     return "Git clone timed out for "+program
   if commit != None:
     p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
-    i = p.expect(['fatal',pexpect.EOF])
+    i = p.expect(['''[all] Error''',pexpect.EOF])
     if i == 0:
       print "failed to get the build",commit
       print p.before

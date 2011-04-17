@@ -345,7 +345,7 @@ class Pirate(Unit):
     if self.owner != self.game.playerID:
       return "Yarr, ye can't make me build a port! Ye are not my captain!"  
     #checks for distance to nearest port
-    for i in self.game.ports:
+    for i in self.game.objects.ports:
       if self._distance(i.x,i.y) < 3:
         return "This port be too close to another port!"
     nearWater = False

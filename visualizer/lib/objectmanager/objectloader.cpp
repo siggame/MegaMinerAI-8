@@ -41,11 +41,19 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
     go = new GameObject( 3 );
     Scoreboard *sb = new Scoreboard();
+    ResTexture res;
+    res.load( "./piracy/textures/font1.png" );
+#if 0
     Resource *res = ResourceMan::reference( "fontTexture", "objLoader" );
     if( res )
     {
-      sb->loadFont( ((ResTexture*)res)->getTexture(),  );
+      cout << "FONT" << endl;
     }
+    ResourceMan::reference( "fontTexture", "objLoader" );
+#endif
+
+    cout << "TEXTURE: " << res.getTexture() << endl;
+    sb->loadFont( res.getTexture(), "./piracy/textures/font1.dat"  );
     sb->parseScores( game );
 
     sb->setOwner( go );

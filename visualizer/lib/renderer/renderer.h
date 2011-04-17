@@ -35,10 +35,12 @@ struct Stats
     pirates = 0;
     avgPirateHealth = 0;
     avgPirateGold = 0;
+    ports = 0;
     ships = 0;
     avgShipHealth = 0;
     avgShipGold = 0;
     treasures = 0;
+    portGold = 0;
   }
 
   Stats& operator += ( const Stats& rhs )
@@ -51,8 +53,12 @@ struct Stats
     avgShipHealth += rhs.avgShipHealth;
     avgShipGold += rhs.avgShipGold;
     treasures += rhs.treasures;
+    ports += rhs.ports;
     return *this;
   }
+
+  int portGold;
+  int ports;
   int gold;
   int pirates;
   int avgPirateHealth;

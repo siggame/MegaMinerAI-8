@@ -30,8 +30,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     static const int& getNumTurns();
     static void setNumTurns( const int& numTurns );
 
-    static const int& getSpeed();
-    static void setSpeed( const int& speed );
+    static const float& getSpeed();
+    static void setSpeed( const float& speed );
 
     static int timeHash();
     static mode getMode();
@@ -55,7 +55,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
 
     QTimer *timer;
 
-    int m_speed;
+    float m_speed;
     int m_lastTime;
     int m_hash;
     int m_sleepTime;

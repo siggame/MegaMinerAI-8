@@ -95,7 +95,7 @@ void ControlBar::rewind()
     playButton->setText(">");
     fastForwardButton->setText("->>");
   }
-  else if(TimeManager::getSpeed() == 0)
+  else if((float)TimeManager::getSpeed() == 0)
   {
 	  if(originalTimeManagerSpeed < 0) //Was going Rewind
 		{

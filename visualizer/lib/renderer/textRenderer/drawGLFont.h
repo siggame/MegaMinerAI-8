@@ -50,13 +50,15 @@ class DrawGLFont
 
 		void setColor( int &i, string message );
 
+		void resetColors();
+		void addColor( float r, float g, float b );
+		Color retrieveColor( const unsigned int & id );
+
+  private:
 		void drawAlignedLeft( string message, int offset );
 		void drawAlignedCenter( string message );
 		void drawAlignedRight( string message, int offset );
 
-		void resetColors();
-		void addColor( float r, float g, float b );
-		Color retrieveColor( const unsigned int & id );
 
 
 	private:

@@ -250,15 +250,16 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
 
 }
 
+const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384, 32728, 65536 };
 
 void PirateMap::generateMap( Game& g )
 {
 
 	cout << "Generate Map: " << g.states[0].tiles.size() << endl;
-	int pixels = 12;
+	int pixels = 25;
 	int mapSize = g.states[0].mapSize;
-	int mWidth = mapSize*pixels;
-	int mHeight = mapSize*pixels;
+	int mWidth = m_width = mapSize*pixels;
+	int mHeight = m_width = mapSize*pixels;
 	cout << "Pixels: " << pixels << endl;
 
 	int **depthMap = new int*[mWidth];
@@ -271,7 +272,6 @@ void PirateMap::generateMap( Game& g )
 		memset( depthMap[x], 0, sizeof( int ) * mHeight );
 	}
 
-	cout << __LINE__ << endl;
 	const int big = 50;
 	for(
 		std::map<int,Tile>::iterator i = g.states[0].tiles.begin();
@@ -371,7 +371,19 @@ void PirateMap::generateMap( Game& g )
 		textures[i] = r.getQImage();
 	}
 
-	QImage result( 512, 512, QImage::Format_RGB32 );
+
+  int temp;
+  for( temp = 0; temp<16; temp++ )
+  {
+    if( mWidth <= powers[temp] )
+      break;
+  }
+
+  m_power = powers[temp];
+
+  cout << "Power: " << m_power << endl;
+
+	QImage result( m_power, m_power, QImage::Format_RGB32 );
 
 	for( int x = 0; x < mWidth; x++ )
 	{
@@ -402,6 +414,7 @@ void PirateMap::generateMap( Game& g )
 }
 
 
+#if 1
 void PirateMap::drawTGA( std::string filename )
 {
 	int mWidth = 40*20;
@@ -428,11 +441,12 @@ void PirateMap::drawTGA( std::string filename )
 	out.close();
 
 }
+#endif
 
 
 void PirateMap::renderAt(
 const unsigned int& /*turn*/,
-const unsigned int&							 /*frame*/
+const unsigned int&	/*frame*/
 )
 {
 	glPushMatrix();
@@ -441,9 +455,18 @@ const unsigned int&							 /*frame*/
 	glEnable( GL_TEXTURE_2D );
 
 	glColor4f( 1, 1, 1, 1 );
+
+  static bool first = true;
+  static ResTexture res;
+  if( first )
+  {
+    first = false;
+    res.load( "./piracy/textures/font1.png" );
+  }
+
 	glBindTexture( GL_TEXTURE_2D, mapTexture.getTexture() );
 
-	const float tex = 1-0.9375;
+	const float tex = 1-((float)m_width/m_power);
 	glBegin( GL_QUADS );
 
 	glTexCoord2f( 0, 1);

@@ -13,3 +13,4 @@ texture hills			./piracy/textures/Hills.png
 texture grass			./piracy/textures/Grass.png
 texture mountains		./piracy/textures/Mountains.png
 texture water			./piracy/textures/water.png
+texture fontTexture ./piracy/textures/font1.png
