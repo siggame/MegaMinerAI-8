@@ -195,9 +195,10 @@ class Pirate(Unit):
     intoWater = False
     theFreeShip = None
     #Check to see if the unit is moving into an enemy
-    for i in self.game.objects.pirates + self.game.objects.ships:
+    for i in self.game.objects.pirates:
       if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
         return "Therr already be an enemy at that location, yarr"
+        
     for i in self.game.objects.ships:
       if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
         return "Therr already be an enemy at that location, yarr"
@@ -258,21 +259,17 @@ class Pirate(Unit):
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
     for i in self.game.objects.ports:       
-      if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
+      if i.x == self.x and i.y == self.y and (self.owner == 0 or self.owner == 1):
+        print "On a port"
         portPickup = True
         break
     if amount < 1:
       return "We be not interested in picking up such small amounts of gold!"
     if portPickup == True:
-      #Sets the owner of the pirate to eaither player 0 or 1
-      if self.owner == 0:
-        owner = 0
-      else:
-        owner = 1
       #Checks to make sure amount being withdrawn is less than that player has
-      if amount <= self.game.objects.players[owner].gold:
+      if amount <= self.game.objects.players[self.owner].gold:
         self.gold += amount
-        self.game.objects.players[owner].gold -= amount
+        self.game.objects.players[self.owner].gold -= amount
         return True
       else:
         return "Ye do not have that much gold, yargh!"
@@ -290,19 +287,21 @@ class Pirate(Unit):
             if amount == i.gold:
               self.gold += amount
               self.game.removeObject(i)
+              return True
             elif amount < i.gold:
               i.gold -= amount
               self.gold += amount
-            treasurePickup = True
-            return True    
+            return True               
       for i in self.game.objects.ships:
-        if amount > i.gold:
-          return "Yer boat does not have that much gold!"
-        elif amount < 1:
-          return "Ye have to pick up somethin!"
-        i.gold -= amount
-        self.gold += amount
-        return True
+        if i.x == self.x and i.y == self.y:
+          if amount > i.gold:
+            return "Yer boat does not have that much gold!"
+          elif amount < 1:
+            return "Ye have to pick up somethin!"
+          i.gold -= amount
+          self.gold += amount
+          return True
+      return "Thar be no treasure for me to pick up!"
     return True
   
   def dropTreasure(self, amount):
@@ -611,13 +610,13 @@ class Ship(Unit):
           return "We cannot move arr ships into enemy ports!"  
         if self.owner < 2:   
           self.game.objects.players[self.owner].gold += self.gold
-          self.gold = 0        
+          self.gold = 0             
         break
     #Makes sure there is no units at target location
     for i in self.game.objects.ships: 
       if i.x == x and i.y == y:
         return "Therr already be a ship at that location!" 
-  #If the player is simply trying to move a ship onto land
+    #If the player is simply trying to move a ship onto land
     if portTile == False and isWater == False:
       return "Ships cannot move onto land, captain!"
       
@@ -630,6 +629,7 @@ class Ship(Unit):
       if i.x == self.x and i.y == self.y:
         i.x = x
         i.y = y
+        
     self.x = x
     self.y = y
        
@@ -754,4 +754,4 @@ class Treasure(Mappable):
     for p in self.game.objects.pirates:
       if p._distance(self.x,self.y) < closest:
         closest = p._distance(self.x,self.y)
-    self.gold += sqrt(closest)
+    self.gold += int(sqrt(closest))
