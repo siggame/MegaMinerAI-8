@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
+from subprocess import Popen
 
-f = open('test','w')
-f.write("triumph!")
-f.close()
+Popen("mkdir /tmp/1", shell = True).wait()
+Popen("mkdir /tmp/2", shell = True).wait()
+Popen("mkdir /tmp/3", shell = True).wait()
+Popen("mkdir /tmp/4", shell = True).wait()
+Popen("celeryd --concurrency=1", shell = True, cwd="~/megaminer7/arena/competition/t1")
+Popen("celeryd --concurrency=1", shell = True, cwd="~/megaminer7/arena/competition/t2")
+Popen("celeryd --concurrency=1", shell = True, cwd="~/megaminer7/arena/competition/t3")
+Popen("celeryd --concurrency=1", shell = True, cwd="~/megaminer7/arena/competition/t4")
