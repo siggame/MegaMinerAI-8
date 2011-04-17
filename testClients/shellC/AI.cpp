@@ -13,7 +13,7 @@ const char* AI::username()
 //NOTE: You must change the return value of this to the password you team sets on MegaMinerAI.com
 const char* AI::password()
 {
-  return "password";
+  return "friday";
 }
 
 //This function is run once, before your first turn.

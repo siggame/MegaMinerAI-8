@@ -22,13 +22,11 @@ AWS_SECRET_KEY = 'R3X1zEKiBLi793mzsyd4mL+pBeIPyYWvHBGvXNQE'
 
 password = 'blastfromthepast'
 
+config = open("config.cfg",'r').read().split()
+startport = int(config[0])
+tentacle = config[1]
 webserver=WebServerInterface('megaminerai.com')
-s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-logbucket = s3conn.get_bucket("megaminer7")
-
-startport = 22000
 count = 0
-tentacle = "4"
 rootdir = '/tmp/'+tentacle+'/'
 
 repositories = dict()
@@ -70,12 +68,12 @@ def update(program):
     print 'pulling'
     command = "git pull"
     cwd = rootdir+repositories[program]
-  p = pexpect.spawn(command, cwd = cwd, timeout = 120) 
+  p = pexpect.spawn(command, cwd = cwd, timeout = 180) 
   print "spawned a process:",command
-  i = p.expect(['Password:',pexpect.EOF], timeout = 120)
+  i = p.expect(['Password:',pexpect.EOF], timeout = 180)
   if i == 0:
     p.sendline(password)
-    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 120)
+    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 180)
     if i == 1:
       print "error in git"
       print p.before
@@ -86,7 +84,7 @@ def update(program):
     return "Git clone timed out for "+program
   if commit != None:
     p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
-    i = p.expect(['fatal',pexpect.EOF])
+    i = p.expect(['''[all] Error''',pexpect.EOF])
     if i == 0:
       print "failed to get the build",commit
       print p.before
@@ -117,7 +115,7 @@ def run_game(client1, client2, name):
   servergood = False
   port = startport
   while not servergood:
-    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/')
+    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 600)
     i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
     if i == 0 or i == 3 or i == 2:
       print "bad socket"
@@ -130,18 +128,22 @@ def run_game(client1, client2, name):
       return "fail"
   time.sleep(2)
   #now client 1...
-  client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell = True)
-  i = serverp.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT])
+  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], timeout = 600)
+  i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
     print "game created!"
   else:
     print "game failed to create:",i
-    return ("Error","Game failed to create")
+    return ("Error","Game failed to create "+client1)
   #and client 2...
-  client2p = Popen('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], shell = True)
+  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], timeout = 600)
+  i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
+  if i == 0:
+    print client2,"couldn't connect"
+    return ("Error",client2+" couldn't connect to server")
   print "game started!"
   result = ''
-  while time.time() < startTime + 600 and client1p.returncode == None and client2p.returncode == None and len(result) < 5:
+  while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
     try:
       result = serverp.readline()
@@ -172,11 +174,13 @@ def run_game(client1, client2, name):
     print "wat?",result
     return ("Error","Unknown results from server:"+result)
   serverp.close(True)
-  client1p.kill()
-  client2p.kill()
+  client1p.close(True)
+  client2p.close(True)
 
   logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
   log = logfile.read()
+  s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
+  logbucket = s3conn.get_bucket("megaminer7")
   newkey = Key(logbucket)
   logname = 'logs/arena/'+str(tentacle)+'-'+str(time.time())+'.gamelog.bz2'
   newkey.key = logname

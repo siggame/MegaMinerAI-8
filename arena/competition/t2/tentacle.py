@@ -68,12 +68,12 @@ def update(program):
     print 'pulling'
     command = "git pull"
     cwd = rootdir+repositories[program]
-  p = pexpect.spawn(command, cwd = cwd, timeout = 120) 
+  p = pexpect.spawn(command, cwd = cwd, timeout = 180) 
   print "spawned a process:",command
-  i = p.expect(['Password:',pexpect.EOF], timeout = 120)
+  i = p.expect(['Password:',pexpect.EOF], timeout = 180)
   if i == 0:
     p.sendline(password)
-    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 120)
+    i = p.expect([pexpect.EOF, pexpect.TIMEOUT], timeout = 180)
     if i == 1:
       print "error in git"
       print p.before
@@ -84,7 +84,7 @@ def update(program):
     return "Git clone timed out for "+program
   if commit != None:
     p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
-    i = p.expect(['fatal',pexpect.EOF])
+    i = p.expect(['''[all] Error''',pexpect.EOF])
     if i == 0:
       print "failed to get the build",commit
       print p.before
@@ -115,7 +115,7 @@ def run_game(client1, client2, name):
   servergood = False
   port = startport
   while not servergood:
-    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/')
+    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 600)
     i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
     if i == 0 or i == 3 or i == 2:
       print "bad socket"
@@ -128,19 +128,19 @@ def run_game(client1, client2, name):
       return "fail"
   time.sleep(2)
   #now client 1...
-  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1])
+  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], timeout = 600)
   i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
     print "game created!"
   else:
     print "game failed to create:",i
-    return ("Error","Game failed to create")
+    return ("Error","Game failed to create "+client1)
   #and client 2...
-  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2])
+  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], timeout = 600)
   i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
   if i == 0:
     print client2,"couldn't connect"
-    return ("Error",client2+"couldn't connect to server")
+    return ("Error",client2+" couldn't connect to server")
   print "game started!"
   result = ''
   while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:

@@ -24,12 +24,23 @@ static SDL_Surface* screen = NULL;
 static TTF_Font* font = NULL;
 static TTF_Font* consoleFont = NULL;
 
-bool initGUI()
+bool arenaMode = false;
+
+bool initGUI(bool arenaM)
 {
   if( SDL_Init(SDL_INIT_VIDEO) <0 )
     return false;
   
-  screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+  arenaMode = arenaM;
+  
+  if(!arenaMode)
+  {
+    screen = SDL_SetVideoMode(1024, 768, 32, SDL_HWSURFACE|SDL_DOUBLEBUF);
+  }
+  else
+  {
+    screen = SDL_SetVideoMode(1024, 768, 32, SDL_FULLSCREEN|SDL_DOUBLEBUF);
+  }
   
   if(screen == NULL)
     return false;
@@ -100,7 +111,7 @@ void renderMap(Game& g)
       dest.x = x * 19;
       dest.y = y * 19;
       
-      if(x == 0 || x == 39 || y == 0 || y == 39)
+      /*if(x == 0 || x == 39 || y == 0 || y == 39)
       {
         if(tileTypes[x][y])
         {
@@ -112,13 +123,47 @@ void renderMap(Game& g)
         }
         
         continue;
+      }*/
+      
+      bool superTile = true;
+      
+      if(x != 0)
+      {
+        if(!(tileTypes[x - 1][y] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
       }
       
+      if(superTile && x != 39)
+      {
+        if(!(tileTypes[x + 1][y] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
       
-      if( tileTypes[x - 1][y] == tileTypes[x][y] &&
+      if(superTile && y != 0)
+      {
+        if(!(tileTypes[x][y - 1] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
+      
+      if(superTile && y != 39)
+      {
+        if(!(tileTypes[x][y + 1] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
+      
+      /*if( tileTypes[x - 1][y] == tileTypes[x][y] &&
           tileTypes[x + 1][y] == tileTypes[x][y] &&
           tileTypes[x][y - 1] == tileTypes[x][y] &&
-          tileTypes[x][y + 1] == tileTypes[x][y])
+          tileTypes[x][y + 1] == tileTypes[x][y])*/
+      if(superTile)
       {
         if(tileTypes[x][y])
         {
@@ -413,62 +458,70 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
     }
   }
   
-  dest.y += image->h;
-  message << "Controls:";
   
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
+  if(!arenaMode)
+  {
+    dest.y += image->h;
+    message << "Controls:";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "Space Bar = Pause";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "Left Arrow = Decrease Turn";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "Right Arrow = Increase Turn";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "Up Arrow = Go to last Turn";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "Down Arrow = Go to first Turn";
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+  }
+  else
+  {
+    dest.y += image->h*7;
+  }
   
-  message.str("");
-  
-  message << "Space Bar = Pause";
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "Left Arrow = Decrease Turn";
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "Right Arrow = Increase Turn";
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "Up Arrow = Go to last Turn";
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "Down Arrow = Go to first Turn";
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "                     Version: 0.585";
+  message << "                     Version: 0.602";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
@@ -703,6 +756,23 @@ void renderTurn(Game& g, int turn, int xTile, int yTile)
   
   drawText(g, turn, numships, numpirates, unitData);
   
+  //now draw the time thingy
+  SDL_Rect timeBarDest;
+  timeBarDest.x = 0;
+  timeBarDest.y = 760;
+  
+  if(g.states.size() != 0)
+  {
+    timeBarDest.w = (int)((float)760 * (float)turn/(float)g.states.size());
+  }
+  else
+  {
+    timeBarDest.w = 760;
+  }
+  
+  timeBarDest.h = 8;
+  SDL_FillRect(screen, &timeBarDest, SDL_MapRGB(screen->format, 255, 0, 0));
+  
   SDL_Flip(screen);
 }
 
@@ -726,6 +796,11 @@ void mainLoop(Game& g, bool arenaMode)
     {
       if(arenaMode)
       {
+        long int counter = 0;
+        while(counter != 2700000000)
+        {
+          counter++;
+        }
         return;
       }
       render = false;
@@ -765,6 +840,10 @@ void mainLoop(Game& g, bool arenaMode)
         {
           switch(event.key.keysym.sym)
           {
+            case SDLK_ESCAPE:
+            {
+              return;
+            }
             case SDLK_LEFT:
             {
               if(!render)
@@ -827,10 +906,16 @@ void mainLoop(Game& g, bool arenaMode)
   }
 }
 
-void handleMouse(int turn, int x, int y, Game & g)
+void handleMouse(int & turn, int x, int y, Game & g)
 {
   int xTile = x/19;
   int yTile = y/19;
+  
+  if(yTile == 40 && xTile < 40)
+  {
+    turn = ((float)x/(float)760)*(float)g.states.size();
+    renderTurn(g, turn, -1, -1);
+  }
   
   if(xTile >= 40 || yTile >= 40)
   {

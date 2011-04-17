@@ -29,9 +29,11 @@ int main(int argc, char** argv)
     parseFile(g, "test.gamelog");
   }
       
-  initGUI();
+  initGUI(arenaMode);
   
   mainLoop(g, arenaMode);
+  
+  SDL_Quit();
   
   return 0;
 }
