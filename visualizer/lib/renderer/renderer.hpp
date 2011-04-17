@@ -77,7 +77,7 @@ bool Renderer<DupObject>::refresh()
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
     {
-      r->renderAt( 0, 0 );
+      r->renderAt( TimeManager::getTurn(), 0 );
     }
   }
   #endif
