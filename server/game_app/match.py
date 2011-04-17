@@ -246,6 +246,7 @@ class Match(DefaultGameWorld):
     self.turn = self.players[1]
 
     self.nextTurn()
+    print "Starting game " + `self.id`
     return True
 
 
