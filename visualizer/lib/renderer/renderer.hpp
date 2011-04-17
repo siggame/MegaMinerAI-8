@@ -671,12 +671,12 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     return true;
 
 }
-/*
+
 void multipleUnitStatColumnPopulate (Stats multi, int column)
 {
-  (GUI::getMultipleStats().itemAt(column, 1))->setText(QString::number(multi.gold));
-  (GUI::getMultipleStats().itemAt(column, 2))->setText(QString::number(multi.pirates));
+  (GUI::m_multipleStats->itemAt(column, 1))->setText(QString::number(multi.gold));
+  (GUI::m_multipleStats->itemAt(column, 2))->setText(QString::number(multi.pirates));
 }
-*/
+
 #endif
 
