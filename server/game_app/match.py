@@ -377,11 +377,11 @@ class Match(DefaultGameWorld):
         #print player1.gold        
         #print player2.gold  
         if player1Loss == True and player2Loss == False:
-          self.declareWinner(self.players[0], 'Victory Through Annihilation')
-          print "1 Wins!"         
-        elif player1Loss == False and player2Loss == True:
           self.declareWinner(self.players[1], 'Victory Through Annihilation')
-          print "2 Wins!"
+          print "2 Wins!"         
+        elif player1Loss == False and player2Loss == True:
+          self.declareWinner(self.players[0], 'Victory Through Annihilation')
+          print "1 Wins!"
         elif player1Loss == True and player2Loss == True and player1.gold < player2.gold:
           self.declareWinner(self.players[1], 'Victory Through Annihilation') 
           print "2 Wins!"
