@@ -125,7 +125,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		set<int> selectedUnitIds;
 		
-		static void multipleUnitStatColumnPopulate (Stats multi, int column);
+		//static void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
 #include "renderer.hpp"
