@@ -11,12 +11,12 @@ class GOCFamily_Health : public GOComponent
 
     unsigned int maxHealth()
     {
-	return m_maxHealth;
+      return m_maxHealth;
     }
 
     unsigned int currentHealth()
     {
-	return m_currentHealth;
+      return m_currentHealth;
     }
 
     const GOC_IDType familyID() const { return GOC_IDType("HealthFamily"); }

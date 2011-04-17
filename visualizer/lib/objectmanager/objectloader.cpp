@@ -66,26 +66,22 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    GameObject * pirate = new GameObject(id);
 
   	    //setup stuff
-	   // PirateData * data = new PirateData();
+        // PirateData * data = new PirateData();
   	    PiracyLocation * loc = new PiracyLocation();
   	    GOC_Owner * owner = new GOC_Owner(pirate, i->second.owner);
   	    Gold * gold = new Gold(pirate,i->second.gold);
   	    ObjectType * type = new ObjectType(pirate,POT_PIRATE);
-	PirateHealth * health = new PirateHealth(pirate,i->second.health,OptionsMan::getInt("pirateMaxHealth"));
+        PirateHealth * health = new PirateHealth(pirate,i->second.health,OptionsMan::getInt("pirateMaxHealth"));
 
-	    //data->parsePirate(game,id,turn);
   	    loc->parseLocation(&(i->second));
 
-  //	    data->setOwner(pirate);
   	    loc->setOwner(pirate);
 
-
-	    //pirate->setGOC(data);
   	    pirate->setGOC(loc);
   	    pirate->setGOC(owner);
   	    pirate->setGOC(gold);
   	    pirate->setGOC(type);
-	    pirate->setGOC(health);
+        pirate->setGOC(health);
 
   	    //end setup
 
@@ -104,18 +100,18 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    id = i->second.id;
   	    if (looksets.find(id) == looksets.end())
   	    {
-		looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
+          looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
   	    }
 
-  	    GameObject * ship = new GameObject(id);
+  	    GameObject* ship = new GameObject(id);
   	    //setup stuff
 
 	    //ShipData * data = new ShipData();
-  	    PiracyLocation * loc = new PiracyLocation();
-  	    GOC_Owner * owner = new GOC_Owner(ship, i->second.owner);
-  	    Gold * gold = new Gold(ship,i->second.gold);
-  	    ObjectType * type = new ObjectType(ship,POT_SHIP);
-	    ShipHealth * health = new ShipHealth(ship,i->second.health,OptionsMan::getInt("shipMaxHealth"));
+  	    PiracyLocation* loc = new PiracyLocation();
+  	    GOC_Owner* owner = new GOC_Owner(ship, i->second.owner);
+  	    Gold* gold = new Gold(ship,i->second.gold);
+  	    ObjectType* type = new ObjectType(ship,POT_SHIP);
+	    ShipHealth* health = new ShipHealth(ship,i->second.health,OptionsMan::getInt("shipMaxHealth"));
   	    //ShipRender * render = new ShipRender();
 
   	    //render->setOwner(ship);
@@ -131,7 +127,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    ship->setGOC(owner);
   	    ship->setGOC(gold);
   	    ship->setGOC(type);
-	    ship->setGOC(health);
+        ship->setGOC(health);
 
   	    //end setup
 	    if (!looksets[id].addNode(ship,turn,0))
