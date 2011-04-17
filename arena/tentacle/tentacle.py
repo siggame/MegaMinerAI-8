@@ -204,5 +204,5 @@ def run_game(client1, client2, name):
   
   return (winner, logname)
 
-run_game('Shell AI','Shell AI', 19000)
+#run_game('Shell AI','Shell AI', 19000)
 

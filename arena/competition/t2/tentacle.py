@@ -139,7 +139,7 @@ def run_game(client1, client2, name):
     print "game failed to create:",i
     return ("Error","Game failed to create "+client1)
   #and client 2...
-  client2p = Popen(['/bin/bash ./run localhost:'+str(port) + ' 0'], cwd = rootdir+repositories[client1], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
+  client2p = Popen(['/bin/bash ./run localhost:'+str(port) + ' 0'], cwd = rootdir+repositories[client2], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
   #client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0 > /dev/null 2>&1', cwd = rootdir+repositories[client2], timeout = 600)
   #i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
   #i = serverp.expect(['start',pexpect.EOF,pexpect.TIMEOUT], timeout = 5)
@@ -204,5 +204,5 @@ def run_game(client1, client2, name):
   
   return (winner, logname)
 
-run_game('Shell AI','Shell AI', 19000)
+#run_game('Shell AI','Shell AI', 19000)
 
