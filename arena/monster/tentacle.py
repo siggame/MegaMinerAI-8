@@ -26,7 +26,7 @@ webserver=WebServerInterface('megaminerai.com')
 s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 logbucket = s3conn.get_bucket("megaminer7")
 
-startport = 19010
+startport = 19000
 count = 0
 tentacle = "3"
 rootdir = '/tmp/'+tentacle+'/'
@@ -34,8 +34,6 @@ rootdir = '/tmp/'+tentacle+'/'
 repositories = dict()
 
 working_copies=dict()
-
-Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir+"server", shell = True).wait()
 
 def getPort():
   global count
@@ -62,10 +60,8 @@ def update(program):
     #first git clean
     p = pexpect.spawn("git checkout master", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
-    #print p.before
-    p = pexpect.spawn("git clean -f", cwd = rootdir+repositories[program])
+    p = pexpect.spawn(" git clean", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
-    #print p.before
     print 'pulling'
     command = "git pull"
     cwd = rootdir+repositories[program]
@@ -83,7 +79,7 @@ def update(program):
     print p.before
     return False
   if commit != None:
-    p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
+    p = pexpect.spawn("git checkout -b arena "+commit,cwd = rootdir+repositories[program])
     i = p.expect(['fatal',pexpect.EOF])
     if i == 0:
       print "failed to get the build",commit
@@ -111,7 +107,7 @@ def run_game(client1, client2, name):
   port = getPort()
   startTime = time.time()
   #now start the server...
-  serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 10)
+  serverp = pexpect.spawn('python main.py '+str(port), cwd = '/home/ubuntu/megaminer7/server/', timeout = 10)
   #i = serverp.expect(['Starting Server',pexpect.EOF])
   #if i == 0:
   #  print "server started"
@@ -135,7 +131,7 @@ def run_game(client1, client2, name):
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
     try:
       result = serverp.readline()
-      if "win" not in result.lower() and "tie" not in result.lower():
+      if "wind" not in result.lower() and "tie" not in result.lower():
         result = ''
     except:
       pass
@@ -162,15 +158,15 @@ def run_game(client1, client2, name):
   client1p.kill()
   client2p.kill()
 
-  logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
+  logfile = open('/home/ubuntu/megaminer7/server/logs/1.gamelog.bz2','rb')
   log = logfile.read()
   newkey = Key(logbucket)
-  logname = 'logs/arena/'+str(tentacle)+'-'+str(time.time())+'.gamelog.bz2'
+  logname = 'logs/'+str(name)+'/'+str(time.time())+'.gamelog.bz2'
   newkey.key = logname
-  newkey.set_contents_from_filename(rootdir+"server/logs/1.gamelog.bz2")
+  newkey.set_contents_from_filename("/home/ubuntu/megaminer7/server/logs/1.gamelog.bz2")
   webserver.set_game_stat(client1, client2, c1_score, c2_score, working_copies[client1], working_copies[client2], logname)
-  remove(rootdir+"server/logs/1.gamelog")
-  remove(rootdir+"server/logs/1.gamelog.bz2")
+  remove("/home/ubuntu/megaminer7/server/logs/1.gamelog")
+  remove("/home/ubuntu/megaminer7/server/logs/1.gamelog.bz2")
   
   return result
 
