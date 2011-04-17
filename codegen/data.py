@@ -104,6 +104,19 @@ Treasure = Model('Treasure',
   doc = 'This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth',
 )
 
+move = Animation("Move",
+  data = [Variable("unit", Unit), Variable("x", str), Variable("y",str)]
+  )
+
+attack = Animation("Attack",
+  data = [Variable("attacker", Unit), Variable("victim", Unit)]
+  )
+  
+talk = Animation("Talk",
+  data = [Variable("speaker", Unit), Variable("message", str)]
+  ) 
+    
+
 globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
   Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2)'),
