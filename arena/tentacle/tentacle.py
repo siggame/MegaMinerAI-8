@@ -127,32 +127,37 @@ def run_game(client1, client2, name):
       print 'THE WORLD IS AT AN END'
       return ("Error","fail")
   time.sleep(2)
-  #now client 1...
-  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], timeout = 600)
-  i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
+  #now client 1..
+  client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
+  #client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+'> /dev/null 2>&1', cwd = rootdir+repositories[client1], timeout = 600)
+  #i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
+  i = serverp.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
     print "game created!"
   else:
+    print client1p.returncode
     print "game failed to create:",i
     return ("Error","Game failed to create "+client1)
   #and client 2...
-  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], timeout = 600)
-  i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
-  if i == 0:
-    print client2,"couldn't connect"
-    return ("Error",client2+" couldn't connect to server")
+  client2p = Popen(['/bin/bash ./run localhost:'+str(port) + ' 0'], cwd = rootdir+repositories[client1], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
+  #client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0 > /dev/null 2>&1', cwd = rootdir+repositories[client2], timeout = 600)
+  #i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
+  #i = serverp.expect(['start',pexpect.EOF,pexpect.TIMEOUT], timeout = 5)
+  #if i == 0:
+  #  print client2,"couldn't connect"
+  #  return ("Error",client2+" couldn't connect to server")
   print "game started!"
   result = ''
-  while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:
+  while time.time() < startTime + 600 and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
-    try:
-      client1p.read_nonblocking(1024, timeout = 0)
-    except:
-      pass
-    try:
-      client2p.read_nonblocking(1024, timeout = 0)
-    except:
-      pass
+    #try:
+    #  client1p.read_nonblocking(1024, timeout = 0)
+    #except:
+    #  pass
+    #try:
+    #  client2p.read_nonblocking(1024, timeout = 0)
+    #except:
+    #  pass
     try:
       result = serverp.readline()
       if "win" not in result.lower() and "tie" not in result.lower():
@@ -168,7 +173,7 @@ def run_game(client1, client2, name):
     c1_score = 1
     winner = client1
     print client1, "wins"
-  elif "2" in result:# == "2 Wins!":
+  elif "2" in result or result == '':# == "2 Wins!":
     c2_score = 1
     winner = client2
     print client2, "wins"
@@ -182,8 +187,8 @@ def run_game(client1, client2, name):
     print "wat?",result
     return ("Error","Unknown results from server:"+result)
   serverp.close(True)
-  client1p.close(True)
-  client2p.close(True)
+  #client1p.close(True)
+  #client2p.close(True)
 
   logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
   log = logfile.read()
@@ -199,5 +204,5 @@ def run_game(client1, client2, name):
   
   return (winner, logname)
 
-#run_game('Shell AI','Shell AI', 19000)
+run_game('Shell AI','Shell AI', 19000)
 
