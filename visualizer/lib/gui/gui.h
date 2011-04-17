@@ -197,7 +197,8 @@ public:
   bool getFullScreen();
   void setFullScreen(bool);
   
-  static QTableWidget * & getMultipleStats();
+  static QTableWidget * getMultipleStats();
+
 
 private slots:
   void helpContents();
