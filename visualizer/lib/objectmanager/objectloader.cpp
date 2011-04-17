@@ -5,7 +5,7 @@
 #include "../../piracy/objecttype.h"
 #include "../../piracy/piratehealth.h"
 #include "../../piracy/shiphealth.h"
-
+#include "../../piracy/scoreboard.h"
 #include "../goc_owner.h"
 #include "../../piracy/gold.h"
 #include "../renderer/renderer.h"
@@ -38,6 +38,19 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     go->setGOC( SelectionRender::get() );
     SelectionRender::get()->setOwner( go );
     Renderer<DupObj>::registerConstantObj( 2, go );
+
+    go = new GameObject( 3 );
+    Scoreboard *sb = new Scoreboard();
+    Resource *res = ResourceMan::reference( "fontTexture", "objLoader" );
+    if( res )
+    {
+      sb->loadFont( ((ResTexture*)res)->getTexture(),  );
+    }
+    sb->parseScores( game );
+
+    sb->setOwner( go );
+    go->setGOC( sb );
+    Renderer<DupObj>::registerConstantObj( 3, go );
 
     unsigned int numTurns = game.states.size();
     unsigned int numFrames = OptionsMan::getInt("numFrames");

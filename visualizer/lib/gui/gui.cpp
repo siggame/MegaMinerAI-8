@@ -164,7 +164,20 @@ void GUI::resizeEvent( QResizeEvent* evt )
 {
   if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
   {
-    m_dockWidget->resize(Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), 1);
+    int w = Singleton<GUI>::get()->width();
+    int h = Renderer<DupObj>::height();
+
+    if( h > w )
+    {
+      int temp = w;
+      w = h;
+      h = temp;
+    }
+
+    //m_dockWidget->resize( Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), -1 );
+#if 1
+    m_dockWidget->setMinimumWidth( w - h);
+#endif
   }
   QMainWindow::resizeEvent( evt );
 }
