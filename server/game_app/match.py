@@ -371,11 +371,11 @@ class Match(DefaultGameWorld):
          
       #If a player has less gold than required for a pirate
       if player1Loss == True or player2Loss == True:   
-        print "In loss loop"
-        print player1Loss       
-        print player2Loss 
-        print player1.gold        
-        print player2.gold  
+        #print "In loss loop"
+        #print player1Loss       
+        #print player2Loss 
+        #print player1.gold        
+        #print player2.gold  
         if player1Loss == True and player2Loss == False:
           self.declareWinner(self.players[0], 'Victory Through Annihilation')
           print "1 Wins!"         
