@@ -7,6 +7,12 @@
 #include <sstream>
 using namespace std;
 
+// TODO: REMOVE LATER FOR NON_GAME SPECIFIC
+#include "../../piracy/objecttype.h"
+#include "../../piracy/piratehealth.h"
+#include "../../piracy/shiphealth.h"
+#include "../../piracy/gold.h"
+
 
 /** @brief resize
   * resize and refresh the projection  and modelview matricies
@@ -85,7 +91,7 @@ bool Renderer<DupObject>::refresh()
 
   glPushMatrix();
   //glTranslatef(0.0f,24.0f,0.0f);
-  float mapSize = (float)optionsMan::getInt("mapSize");
+  float mapSize = (float)OptionsMan::getInt("mapSize");
   glScalef( height()/mapSize, height()/mapSize, 1 );
 #if 0
   glDisable(GL_BLEND);
@@ -198,111 +204,116 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
 template <typename DupObject>
 bool Renderer<DupObject>::setup()
 {
-	if (!Single::isInit())
-		return false;
+    if (!Single::isInit())
+    {
+	std::cout << "Renderer Error: Trying to set up an uninitialized Renderer\n";
+	return false;
+    }
 
-	/** @todo fill this in with more setup information */
-	if ( Single::get()->m_width && Single::get()->m_height && Single::get()->m_depth )
+    /** @todo fill this in with more setup information */
+    if ( Single::get()->m_width && Single::get()->m_height && Single::get()->m_depth )
+    {
+	resize( Single::get()->m_width, Single::get()->m_height, Single::get()->m_depth );
+    }
+    else if ( Single::get()->m_width && Single::get()->m_height )
+    {
+	resize( Single::get()->m_width, Single::get()->m_height );
+    }
+    else if ( OptionsMan::isInit() )
+    {
+	if ( OptionsMan::exists(renderHeightName) && OptionsMan::optionType(renderDepthName) == OT_INT &&
+	    OptionsMan::exists(renderWidthName) && OptionsMan::optionType(renderWidthName) == OT_INT )
 	{
-		resize( Single::get()->m_width, Single::get()->m_height, Single::get()->m_depth );
+	    if ( OptionsMan::exists(renderDepthName) && OptionsMan::optionType(renderDepthName) == OT_INT)
+	    {
+		resize( OptionsMan::getInt(renderWidthName),
+			OptionsMan::getInt(renderHeightName),
+			OptionsMan::getInt(renderDepthName) );
+	    }
+	    else
+	    {
+		resize( OptionsMan::getInt(renderWidthName),
+			    OptionsMan::getInt(renderHeightName) );
+	    }
 	}
-	else if ( Single::get()->m_width && Single::get()->m_height )
+    }
+
+    clear();
+
+    unsigned int rwidth = width();
+    unsigned int rheight = height();
+    unsigned int rdepth = depth();
+
+    std::cout << "Renderer width: " << rwidth << " height: " << rheight << " depth: " << rdepth << '\n';
+
+    if (Single::get()->m_dupListDirs)
+    {
+	Single::get()->m_duplicateList = new DupObject***[rwidth];
+	for (unsigned int x = 0; x < width(); x++)
 	{
-		resize( Single::get()->m_width, Single::get()->m_height );
-	}
-	else if ( optionsMan::isInit() )
-	{
-		if ( optionsMan::exists(renderHeightName) && optionsMan::optionType(renderDepthName) == OT_INT &&
-				  optionsMan::exists(renderWidthName) && optionsMan::optionType(renderWidthName) == OT_INT )
+	    Single::get()->m_duplicateList[x] = new DupObject**[rheight];
+	    for (unsigned int y = 0; y < height(); y++)
+	    {
+		Single::get()->m_duplicateList[x][y] = new DupObject*[rdepth];
+		for (unsigned int z = 0; z < rdepth; z++)
 		{
-			if ( optionsMan::exists(renderDepthName) && optionsMan::optionType(renderDepthName) == OT_INT)
-			{
-				resize( optionsMan::getInt(renderWidthName),
-						optionsMan::getInt(renderHeightName),
-						optionsMan::getInt(renderDepthName) );
-			}
-			else
-			{
-				resize( optionsMan::getInt(renderWidthName),
-						optionsMan::getInt(renderHeightName) );
-			}
+		    Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 		}
+	    }
 	}
-
-	clear();
-
-  unsigned int rwidth = width();
-  unsigned int rheight = height();
-  unsigned int rdepth = depth();
-
-	if (Single::get()->m_dupListDirs)
+    }
+    else if (OptionsMan::exists(renderDirsName) && OptionsMan::optionType(renderDirsName) == OT_INT)
+    {
+	Single::get()->m_dupListDirs = OptionsMan::getInt(renderDirsName);
+	Single::get()->m_duplicateList = new DupObject***[width()];
+	for (unsigned int x = 0; x < width(); x++)
 	{
-		Single::get()->m_duplicateList = new DupObject***[rwidth];
-		for (unsigned int x = 0; x < width(); x++)
+	    Single::get()->m_duplicateList[x] = new DupObject**[height()];
+	    for (unsigned int y = 0; y < height(); y++)
+	    {
+		Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
+		for (unsigned int z = 0; z < depth(); z++)
 		{
-			Single::get()->m_duplicateList[x] = new DupObject**[rheight];
-			for (unsigned int y = 0; y < height(); y++)
-			{
-				Single::get()->m_duplicateList[x][y] = new DupObject*[rdepth];
-				for (unsigned int z = 0; z < rdepth; z++)
-				{
-					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
-				}
-			}
+		    Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
 		}
+	    }
 	}
-	else if (optionsMan::exists(renderDirsName) && optionsMan::optionType(renderDirsName) == OT_INT)
+    }
+    else
+    {
+	Single::get()->m_duplicateList = new DupObject***[width()];
+	for (unsigned int x = 0; x < width(); x++)
 	{
-		Single::get()->m_dupListDirs = optionsMan::getInt(renderDirsName);
-		Single::get()->m_duplicateList = new DupObject***[width()];
-		for (unsigned int x = 0; x < width(); x++)
+	    Single::get()->m_duplicateList[x] = new DupObject**[height()];
+	    for (unsigned int y = 0; y < height(); y++)
+	    {
+		Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
+		for (unsigned int z = 0; z < depth(); z++)
 		{
-			Single::get()->m_duplicateList[x] = new DupObject**[height()];
-			for (unsigned int y = 0; y < height(); y++)
-			{
-				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
-				for (unsigned int z = 0; z < depth(); z++)
-				{
-					Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
-				}
-			}
+		    Single::get()->m_duplicateList[x][y][z] = new DupObject[1];
 		}
+	    }
 	}
-	else
-	{
-		Single::get()->m_duplicateList = new DupObject***[width()];
-		for (unsigned int x = 0; x < width(); x++)
-		{
-			Single::get()->m_duplicateList[x] = new DupObject**[height()];
-			for (unsigned int y = 0; y < height(); y++)
-			{
-				Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
-				for (unsigned int z = 0; z < depth(); z++)
-				{
-					Single::get()->m_duplicateList[x][y][z] = new DupObject[1];
-				}
-			}
-		}
-		Single::get()->m_dupListDirs = 1;
-	}
+	Single::get()->m_dupListDirs = 1;
+    }
 
-  /// @TODO: Move this to the appropriate spot
-  glShadeModel( GL_SMOOTH );
-  glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-  glClearDepth( 1.0f );
+    /// @TODO: Move this to the appropriate spot
+    glShadeModel( GL_SMOOTH );
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    glClearDepth( 1.0f );
 
-  glEnable( GL_DEPTH_TEST );
-  glDepthFunc( GL_LEQUAL );
+    glEnable( GL_DEPTH_TEST );
+    glDepthFunc( GL_LEQUAL );
 
-  Single::get()->m_isSetup = true;
+    Single::get()->m_isSetup = true;
 
 
-  glDisable( GL_TEXTURE_2D );
-  glEnable( GL_BLEND );
-  glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glDisable( GL_TEXTURE_2D );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-  refresh();
-  return Single::get()->m_isSetup;
+    refresh();
+    return Single::get()->m_isSetup;
 }
 
 
@@ -481,6 +492,7 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
+  Stats global, p0, p1, p2, p3, selected;
 
 
     if (!Single::isInit())
@@ -502,7 +514,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     int time = TimeManager::timeHash();
 
     bool selectUpdate = SelectionRender::get()->getUpdated();
-    float mapSize = (float)optionsMan::getInt("mapSize");
+    float mapSize = (float)OptionsMan::getInt("mapSize");
     float unitSize  = height()/mapSize;
 
     int x1 = 0;
@@ -512,11 +524,34 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
     if( selectUpdate )
     {
+      
+      int temp;
       x1 = SelectionRender::get()->getX1()/unitSize;
       x2 = SelectionRender::get()->getX2()/unitSize;
-      y2 = SelectionRender::get()->getY1()/unitSize+1;
-      y2 = SelectionRender::get()->getY2()/unitSize+1;
+      if( x2 < x1 )
+      {
+        temp = x2;
+        x2 = x1;
+        x1 = temp;
+      }
+
+      y1 = SelectionRender::get()->getY1()/unitSize;
+      y2 = SelectionRender::get()->getY2()/unitSize;
+
+
+      if( y2 < y1 )
+      {
+        temp = y1;
+        y1 = y2;
+        y2 = temp;
+      }
+
+
       GUI::clearConsole();
+      stringstream ss;
+      ss << "X1: " << x1 << ", Y1: " << y1 << endl;
+      ss << "X2: " << x2 << ", Y2: " << y2 << endl;
+      GUI::appendConsole( ss.str() );
       Single::get()->selectedUnitIds.clear();
     }
 
@@ -524,11 +559,17 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     Bucket::iterator it = bucket->begin();
     for (;it != bucket->end(); it++)
     {
+      int owner = 0;
 	if (it->second)
 	{
 	   DupObject temp;
-	   setDupObj(it->second->data,temp);	  
-	   GOComponent * goc = it->second->data->getGOC("LocationFamily");
+     setDupObj(it->second->data,temp);	  
+     GOComponent * goc = it->second->data->getGOC( "Owner" );
+     if( goc )
+     {
+       owner = ((GOC_Owner*)goc)->owner();
+     }
+	   goc = it->second->data->getGOC("LocationFamily");
 	   if (goc)
 	   {
 	       GOCFamily_Location * loc = (GOCFamily_Location *)(goc);
@@ -542,17 +583,76 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
            {
              temp.selected = true;
 #if 1
-             int id =((GOC_Owner*)goc)->owner();
-             Single::get()->selectedUnitIds.push_back( id );
+             int id = it->first;
+             Single::get()->selectedUnitIds.insert( id );
+             //Single::get()->selectedUnitIds.push_back( id );
 
              stringstream ss;
-             ss << id << endl; 
-             GUI::appendConsole(  ss.str() );
 #endif
            }
-         }
-	       updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
+         } else 
+         if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
+         {
+           temp.selected = true;
 
+           goc = it->second->data->getGOC( "ObjectType" );
+           if( goc )
+           {
+             Stats temp;
+             switch( ((ObjectType*)goc)->type() )
+             {
+               case POT_PIRATE:
+                 goc = it->second->data->getGOC( "PirateHealth" );
+                 temp.avgPirateHealth = ((PirateHealth*)goc)->currentHealth();
+                 temp.pirates = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               case POT_SHIP:
+                 goc = it->second->data->getGOC( "ShipHealth" );
+                 temp.avgShipHealth = ((ShipHealth*)goc)->currentHealth();
+                 temp.ships = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               case POT_TREAS:
+                 goc = it->second->data->getGOC( "ShipHealth" );
+                 temp.treasures = 1;
+                 goc = it->second->data->getGOC( "Gold" );
+                 temp.gold = ((Gold*)goc)->gold();
+                 break;
+               default:
+                 break;
+             }
+
+             switch( owner )
+             {
+               case 0:
+                 p0 += temp;
+                 break;
+               case 1:
+                 p1 += temp;
+                 break;
+               case 2:
+                 p2 += temp;
+                 break;
+               case 3:
+                 p3 += temp;
+                 break;
+             }
+
+           }
+
+           selected += p0;
+           selected += p1;
+           selected += p2;
+           selected += p3;
+
+         } else {
+           temp.selected = false;
+         }
+
+         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
 	   }
 	   else

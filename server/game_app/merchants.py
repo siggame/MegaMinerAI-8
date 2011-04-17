@@ -8,6 +8,7 @@ class ShipAndDestination:
     self.port = port
     self.pirates = []
     self.shitlist = []
+    self.path = []
 
 class PortAndPirateNumber:
   def __init__(self,port,number):
@@ -23,18 +24,17 @@ class MerchantAI:
     self.inTransit = []
     self.treasureThreshold = self.game.treasureThreshold
     self.thePorts = []
-    for i in game.objects.values():
-      if isinstance(i,Port):
-        if i.owner == self.id:
-          self.thePorts += [PortAndPirateNumber(i,self.numPirates)]
+    for i in game.objects.ports:
+      if i.owner == self.id:
+        self.thePorts += [PortAndPirateNumber(i,self.numPirates)]
     
   def chooseRichestPort(self,port):
     richestPort = None
     richness = 0
     destiDensity = []
     index = 0
-    for p in self.game.objects.values():
-      if isinstance(p,Port) and (p.owner == 2 or p.owner == 3):
+    for p in self.game.objects.ports:
+      if (p.owner == 2 or p.owner == 3):
         if p is not port:
           destiDensity+= [[0,p]]
           alreadyDestination = False
@@ -43,8 +43,8 @@ class MerchantAI:
               alreadyDestination = True
               destiDensity[index][0] += 1
           if not alreadyDestination:
-            for t in self.game.objects.values():
-              if isinstance(t,Treasure) and p.x == t.x and p.y == t.y:
+            for t in self.game.objects.treasures:
+              if p.x == t.x and p.y == t.y:
                 if t.gold > richness:
                   richness = t.gold
                   richestPort = p
@@ -62,8 +62,8 @@ class MerchantAI:
     newInTransit = ShipAndDestination(newShip,destination)
     newShip.traderGroup = newInTransit
     treasureValue = 0
-    for i in self.game.objects.values(): 
-      if isinstance(i,Treasure) and i.x == port.x and i.y == port.y:
+    for i in self.game.objects.treasures: 
+      if i.x == port.x and i.y == port.y:
         treasureValue =  i.gold
 
     for i in range(0,self.thePorts[portNum].number):
@@ -98,23 +98,22 @@ class MerchantAI:
         self.thePorts[homePort].number = 1
   
   def shipArrived(self,ship,destinationPort):
-    for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.owner == self.id and i.x == ship.x and i.y == ship.y:
+    for i in self.game.objects.pirates:
+      if i.owner == self.id and i.x == ship.x and i.y == ship.y:
         self.pirateArrived(i,i.homeBase)
     self.game.removeObject(ship)
     
   def play(self):
     #removes empty ships
     for p in self.thePorts:
-      for s in self.game.objects.values():
-        if isinstance(s,Ship):
-          if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
-            self.game.removeObject(s)
+      for s in self.game.objects.ships:
+        if p.port.x == s.x and p.port.y == s.y and s.owner == -1:
+          self.game.removeObject(s)
     for i in self.inTransit:
       #print i.shitlist
       deadEnemies = []
       for enemy in i.shitlist:
-        if enemy not in self.game.objects.values():
+        if enemy not in self.game.objects.pirates and enemy not in self.game.objects.ships:
           deadEnemies += [enemy]
       for enemy in deadEnemies:
         i.shitlist.remove(enemy)
@@ -124,11 +123,11 @@ class MerchantAI:
       for p in i.pirates:
         for j in i.shitlist:
           #print "someone's on my list!"
-          if isinstance(j,Pirate) and (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.values():
+          if (j.owner == 0 or j.owner == 1) and j._distance(p.x,p.y) == 1 and j in self.game.objects.pirates:
             enemyInRange = True
             if p.attacksLeft > 0:
               p.attack(j)
-              if self.game.objects.values().count(j) == 0:
+              if j not in self.game.objects.pirates:
                 i.shitlist.remove(j)
                 continue
             else:
@@ -136,11 +135,11 @@ class MerchantAI:
         if not enemyInRange:
           break
       if enemyInRange:
-        for j in self.game.objects.values():
-          if isinstance(j,Ship) and (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
+        for j in self.game.objects.ships:
+          if  (j.owner == 0 or j.owner == 1) and j._distance(i.ship.x,i.ship.y) == 1:
             if i.ship.attacksLeft > 0:
               i.ship.attack(j)
-              if self.game.objects.values().count(j) == 0:
+              if j not in self.game.objects.ships:
                 i.shitlist.remove(j)
                 continue
             else:
@@ -154,45 +153,86 @@ class MerchantAI:
         self.shipArrived(i.ship,i.port)
         self.inTransit.remove(i)
       else:
-        direction = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+        if len(i.path) == 0:
+          i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
         #Right
-        if len(direction) == 0:
+        tryAgain = False
+        if len(i.path) == 0:
           dir = random.randint(0,3)
           if dir == 0:
-            direction = ['0']
+            i.path = ['0']
           elif dir == 1:
-            direction = ['1']
+            i.path = ['1']
           elif dir == 2:
-            direction = ['2']
+            i.path = ['2']
           elif dir == 3:
-            direction = ['3']
+            i.path = ['3']
           #print "There is no path!"
-        if direction[0] == '0':
+        if i.path[0] == '0':
           #print "right"
-          i.ship.move(i.ship.x+1,i.ship.y)
+          if not i.ship.move(i.ship.x+1,i.ship.y):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Down
-        elif direction[0] == '1': 
+        elif i.path[0] == '1': 
         #print "down"
-          i.ship.move(i.ship.x,i.ship.y+1)
+          if not i.ship.move(i.ship.x,i.ship.y+1):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Left
-        elif direction[0] == '2':
+        elif i.path[0] == '2':
           #print "left"
-          i.ship.move(i.ship.x-1,i.ship.y)
+          if not i.ship.move(i.ship.x-1,i.ship.y):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
         #Up
-        elif direction[0] == '3':
+        elif i.path[0] == '3':
           #print "up"
-          i.ship.move(i.ship.x,i.ship.y-1)
-        #else:
-          #print direction
-          #print direction[0]
-          #print `direction[0] == '0'`
+          if not i.ship.move(i.ship.x,i.ship.y-1):
+            i.path = customastar.aStar(self.game,1,i.ship.x,i.ship.y,i.port.x,i.port.y)
+            tryAgain = True
+          
+        if tryAgain:
+          if len(i.path) == 0:
+            dir = random.randint(0,3)
+            if dir == 0:
+              i.path = ['0']
+            elif dir == 1:
+              i.path = ['1']
+            elif dir == 2:
+              i.path = ['2']
+            elif dir == 3:
+              i.path = ['3']
+            #print "There is no path!"
+          if i.path[0] == '0':
+            #print "right"
+            i.ship.move(i.ship.x+1,i.ship.y)
+          #Down
+          elif i.path[0] == '1': 
+          #print "down"
+            i.ship.move(i.ship.x,i.ship.y+1)
+          #Left
+          elif i.path[0] == '2':
+            #print "left"
+            i.ship.move(i.ship.x-1,i.ship.y)
+          #Up
+          elif i.path[0] == '3':
+            #print "up"
+            i.ship.move(i.ship.x,i.ship.y-1)
+          #else:
+            #print i.path
+            #print i.path[0]
+            #print `i.path[0] == '0'`
+        if len(i.path) > 0:
+          i.path = i.path[1:]
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
-      for i in self.game.objects.values():
-        if isinstance(i,Treasure) and i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
+      for i in self.game.objects.treasures:
+        if i.x == p.port.x and i.y == p.port.y and i.gold > self.treasureThreshold:
           isWorthy = True
-        if isinstance(i,Ship) and i.x == p.port.x and i.y == p.port.y:
+      for i in self.game.objects.ships:
+        if i.x == p.port.x and i.y == p.port.y:
           foundAShip = True
       if isWorthy and not foundAShip:
         self.makeTradeShip(self.thePorts.index(p))

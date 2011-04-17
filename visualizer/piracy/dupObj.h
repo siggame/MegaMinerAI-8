@@ -25,46 +25,49 @@ struct DupObj
 	unsigned int maxHealth;
   bool selected;
 
-	DupObj & operator+=(const DupObj & obj)
+    DupObj & operator+=(const DupObj & obj)
+    {
+	if (obj.time == time)
 	{
-		if (obj.time == time)
-		{
-			gold += obj.gold;
-			pirates += obj.pirates;
-      if( obj.selected )
-        selected = true;
-			return *this;
-		}
+	    gold += obj.gold;
+	    pirates += obj.pirates;
+	    if( obj.selected )
+		selected = true;
 
-    selected = obj.selected;
-		gold = obj.gold;
-		pirates = obj.pirates;
-		owner = obj.owner;
-		time = obj.time;
-		x = obj.x;
-		y = obj.y;
-		health = obj.health;
-		maxHealth = obj.maxHealth;
-
-		//! @todo object type precedences: ex ship over pirate, pirate over treasure
-		if (objType == POT_PORT || obj.objType == POT_PORT)
-		{
-			objType = POT_PORT;
-		}
-		else if (objType == POT_SHIP || obj.objType == POT_SHIP)
-		{
-			objType = POT_SHIP;
-		}
-		else if (objType == POT_PIRATE || obj.objType == POT_PIRATE)
-		{
-			objType = POT_PIRATE;
-		}
-		else
-		{
-			objType = POT_TREAS;
-		}
-		return *this;
+	    return *this;
 	}
+
+
+
+	selected = obj.selected;
+	gold = obj.gold;
+	pirates = obj.pirates;
+	owner = obj.owner;
+	time = obj.time;
+	x = obj.x;
+	y = obj.y;
+	health = obj.health;
+	maxHealth = obj.maxHealth;
+
+	//! @todo object type precedences: ex ship over pirate, pirate over treasure
+	if (objType == POT_PORT || obj.objType == POT_PORT)
+	{
+	    objType = POT_PORT;
+	}
+	else if (objType == POT_SHIP || obj.objType == POT_SHIP)
+	{
+	    objType = POT_SHIP;
+	}
+	else if (objType == POT_PIRATE || obj.objType == POT_PIRATE)
+	{
+	    objType = POT_PIRATE;
+	}
+	else
+	{
+	    objType = POT_TREAS;
+	}
+	return *this;
+    }
 
 	void render()
 	{
@@ -250,6 +253,22 @@ struct DupObj
 			glEnd();
 
 			glEnable(GL_BLEND);
+		}
+
+
+		if (selected)
+		{
+		    glDisable(GL_BLEND);
+		    glBegin(GL_LINE_LOOP);
+		    glLineWidth(3);
+		    glColor4f(0,0,0,1);
+		    glVertex3d(1,1,-2);
+		    glVertex3d(0,1,-2);
+		    glVertex3d(0,0,-2);
+		    glVertex3d(1,0,-2);
+		    glLineWidth(1);
+		    glEnd();
+		    glEnable(GL_BLEND);
 		}
 
 		glPopMatrix();

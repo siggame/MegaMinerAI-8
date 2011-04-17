@@ -1,4 +1,4 @@
-texture portRed			./piracy/textures/CastleRed.png
+texture portRed			./piracy/textures/CastleRedAlt1.png
 texture portGreen		./piracy/textures/CastleGreen.png
 texture portNPC			./piracy/textures/CastleBlack.png
 texture pirateGreen		./piracy/textures/pirategreen.png

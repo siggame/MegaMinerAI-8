@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
 	QApplication app( argc, argv );
 
-	if (!optionsMan::create())
+	if (!OptionsMan::create())
 	    return 1;
 
 	if (!GUI::create())
@@ -43,11 +43,11 @@ int main(int argc, char *argv[])
 	if (!TimeManager::create())
 	    return 1;
 
-	if( !optionsMan::loadOptionFile( "./options.cfg" ) )
+	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
 		TimeManager::destroy();
-		optionsMan::destroy();
+		OptionsMan::destroy();
 		ResourceMan::destroy();
 		Mutex::destroy();
 		Threadler::destroy();
@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
 	}
 
 	// initialize global options
-	optionsMan::addInt("numTurns",1);
-	optionsMan::addBool("sliderDragging", false );
-	optionsMan::addInt( "currentTurn", 0 );
+	OptionsMan::addInt("numTurns",1);
+	OptionsMan::addBool("sliderDragging", false );
+	OptionsMan::addInt( "currentTurn", 0 );
 	// done initializing
 
 	TimeManager::setSpeed( 1 );
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;
 		TimeManager::destroy();
-		optionsMan::destroy();
+		OptionsMan::destroy();
 		ResourceMan::destroy();
 		Mutex::destroy();
 		Threadler::destroy();
@@ -85,15 +85,22 @@ int main(int argc, char *argv[])
 	}
 
 	if( argc > 1 )
-		GUI::loadGamelog( argv[1] );
+	{
+	    GUI::loadGamelog( argv[1] );
+	    TimeManager::timerStart();
+	}
 
-	Render::refresh();
+
+
+	//Render::refresh();
+
+
 	int retval = app.exec();
 
 	Render::destroy();
 	TimeManager::destroy();
 	GUI::destroy();
-	optionsMan::destroy();
+	OptionsMan::destroy();
 	ResourceMan::destroy();
 	Mutex::destroy();
 	Threadler::destroy();

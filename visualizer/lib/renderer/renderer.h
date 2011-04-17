@@ -5,6 +5,7 @@
 #include "../singleton.h"
 #include <map>
 #include <list>
+#include <set>
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -24,6 +25,44 @@ typedef GameObject renderObj;
 #define renderDirsName  "renderDirections"
 
 class RenderWidget;
+
+struct Stats
+{
+  Stats()
+  {
+    gold = 0;
+    pirates = 0;
+    avgPirateHealth = 0;
+    avgPirateGold = 0;
+    ships = 0;
+    avgShipHealth = 0;
+    avgShipGold = 0;
+    treasures = 0;
+  }
+
+  Stats& operator += ( const Stats& rhs )
+  {
+    gold += rhs.gold;
+    pirates += rhs.pirates;
+    avgPirateHealth += rhs.avgPirateHealth;
+    avgPirateGold += rhs.avgPirateGold;
+    ships += rhs.ships;
+    avgShipHealth += rhs.avgShipHealth;
+    avgShipGold += rhs.avgShipGold;
+    treasures += rhs.treasures;
+    return *this;
+  }
+  int gold;
+  int pirates;
+  int avgPirateHealth;
+  int avgPirateGold;
+  int ships;
+  int avgShipHealth;
+  int avgShipGold;
+  int treasures;
+
+};
+
 
 template <typename DupObject>
 class Renderer : public Singleton< Renderer< DupObject > >
@@ -83,7 +122,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
 		RenderWidget *m_parent;
 
-		list <int> selectedUnitIds;
+		set<int> selectedUnitIds;
 };
 
 #include "renderer.hpp"

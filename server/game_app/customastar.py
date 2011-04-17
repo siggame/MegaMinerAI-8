@@ -153,9 +153,8 @@ def aStar(game, safeTile, startX, startY, endX, endY):
   
   
   #let's get all the tiles in the game!
-  tiles = [i for i in game.objects.values() if isinstance(i,objects.Tile)]
-  
-  ships = [i for i in game.objects.values() if isinstance(i,objects.Ship)]
+  tiles = [i for i in game.objects.tiles] 
+  ships = [i for i in game.objects.ships]
   
   n = int(math.sqrt(len(tiles)))    # horizontal size of the map
   m = n     # vertical size of the map (right now we are assuming maps are sqaure

@@ -3,7 +3,7 @@
 
 #include "../singleton.h"
 #include "../gameobject/gameobject.h"
-#include "../timeline/lookupTable/lookuptable.h"
+#include "../timeline/timeline.h"
 #include <iostream>
 
 typedef int ObjIdType;
