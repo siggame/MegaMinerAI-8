@@ -100,6 +100,34 @@ std::ostream& operator<<(std::ostream& stream, Treasure ob)
 
 
 
+std::ostream& operator<<(std::ostream& stream, Attack ob)
+{
+  stream << "Attack" << "\n";
+  stream << "attacker: " << ob.attacker  <<'\n';
+  stream << "victim: " << ob.victim  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Move ob)
+{
+  stream << "Move" << "\n";
+  stream << "unit: " << ob.unit  <<'\n';
+  stream << "x: " << ob.x  <<'\n';
+  stream << "y: " << ob.y  <<'\n';
+  return stream;
+}
+
+
+std::ostream& operator<<(std::ostream& stream, Talk ob)
+{
+  stream << "Talk" << "\n";
+  stream << "speaker: " << ob.speaker  <<'\n';
+  stream << "message: " << ob.message  <<'\n';
+  return stream;
+}
+
+
 std::ostream& operator<<(std::ostream& stream, GameState ob)
 {
   stream << "turnNumber: " << ob.turnNumber  <<'\n';
@@ -137,6 +165,12 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "\nAnimation\n";
   for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
   {
+    if((**i).type == ATTACK)
+      stream << *((Attack*)*i) << "\n";
+    if((**i).type == MOVE)
+      stream << *((Move*)*i) << "\n";
+    if((**i).type == TALK)
+      stream << *((Talk*)*i) << "\n";
   }
   
   return stream;

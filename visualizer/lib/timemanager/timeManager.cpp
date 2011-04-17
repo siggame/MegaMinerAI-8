@@ -77,8 +77,12 @@ void TimeManager::setNumTurns( const int& numTurns )
   if( !isInit() )
     throw 0;
   get()->m_numTurns = numTurns;
-  GUI::getControlBar()->m_slider->setMaximum ( numTurns );
-  cout << "numTurns: " << numTurns<<endl;
+
+  if(GUI::isSetup())
+  {
+    if( GUI::getControlBar() )
+      GUI::getControlBar()->update();//m_slider->setMaximum ( numTurns );
+  }
 }
 
 
