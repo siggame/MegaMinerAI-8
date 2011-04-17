@@ -26,7 +26,7 @@ webserver=WebServerInterface('megaminerai.com')
 s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
 logbucket = s3conn.get_bucket("megaminer7")
 
-startport = 25000
+startport = 21000
 count = 0
 tentacle = "3"
 rootdir = '/tmp/'+tentacle+'/'
@@ -35,8 +35,8 @@ repositories = dict()
 
 working_copies=dict()
 
-Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir+"server", shell = True).wait()
 Popen("rm -rf "+rootdir+"/*", shell = True).wait()
+Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir, shell = True).wait()
 
 def getPort():
   global count
@@ -112,16 +112,22 @@ def run_game(client1, client2, name):
     return ("Error", c2_status)
 #  if not update('server'):
 #    return -13
-  port = getPort()
   startTime = time.time()
   #now start the server...
-  serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 10)
-  #i = serverp.expect(['Starting Server',pexpect.EOF])
-  #if i == 0:
-  #  print "server started"
-  #else:
-  #  print "server failed to start"
-    #return -1
+  servergood = False
+  port = startport
+  while not servergood:
+    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/')
+    i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
+    if i == 0 or i == 3 or i == 2:
+      print "bad socket"
+      port += 1
+    elif i == 1:
+      print "server should be started on port",port
+      servergood = True
+    else:
+      print 'THE WORLD IS AT AN END'
+      return "fail"
   time.sleep(2)
   #now client 1...
   client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell = True)

@@ -40,6 +40,7 @@ class WebServerInterface(object):
             conn.request(http_method, "/api/%s?%s"%(method, params,))
         except:
             m = "Couldn't connect to server at %s" % (self.url,)
+            conn.close()
             raise WebServerException(m)
         # Grab the response
         response = conn.getresponse() 
@@ -47,6 +48,7 @@ class WebServerInterface(object):
             # Error if it's not an "HTTP 200 OK" response
             m = "Webserver Error: HTTP %d %s" % (response.status,
                                                  response.reason)
+            conn.close()
             raise WebServerException(m)
         r = json.loads(response.read())
         # Get the data out and check the responses.
@@ -119,7 +121,7 @@ class WebServerInterface(object):
 
     
 if __name__ == '__main__':
-    w = WebServerInterface('r99acm.device.mst.edu:8091')
+    w = WebServerInterface('megaminerai.com')
     try:
         print w.auth_team('Shell AI', 'password')
         webs = w.get_ssh_path('Shell AI')
