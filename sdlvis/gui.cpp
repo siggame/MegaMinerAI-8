@@ -475,7 +475,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   
   message.str("");
   
-  message << "                     Version: 0.586";
+  message << "                     Version: 0.587";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
@@ -777,6 +777,10 @@ void mainLoop(Game& g, bool arenaMode)
         {
           switch(event.key.keysym.sym)
           {
+            case SDLK_ESCAPE:
+            {
+              return;
+            }
             case SDLK_LEFT:
             {
               if(!render)
