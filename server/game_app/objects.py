@@ -606,7 +606,7 @@ class Ship(Unit):
         #True if we find a port at desired location
         portTile = True
         #If the port does not belong to you, throw an error
-        if i.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
+        if i.owner != self.game.playerID and not ((self.game.playerID == 2  or self.game.playerID == 3) and (i.owner == 2 or i.owner == 3)):
           return "We cannot move arr ships into enemy ports!"  
         if self.owner < 2:   
           self.game.objects.players[self.owner].gold += self.gold
