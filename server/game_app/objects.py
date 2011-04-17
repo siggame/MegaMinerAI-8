@@ -203,6 +203,7 @@ class Pirate(Unit):
         return "Therr already be an enemy at that location, yarr"
       elif (i.owner == self.owner or i.owner == -1) and i.x == x and i.y == y:
         freeShip = True
+        theFreeShip = i
         break
     for i in self.game.objects.ports:
       #Check to see if the unit is moving into an enemy port
@@ -211,21 +212,12 @@ class Pirate(Unit):
     for i in self.game.objects.tiles:
       #Checking if unit is moving onto water
       if i.x == x and i.y == y and i.type == 1:
-        intoWater = True
-      #Checking about the Boats
-      elif isinstance(i,Ship) and i.x == x and i.y == y:
-        #-1 is placeholder value for neutral ship. May need to be changed
-        if i.owner == self.owner or i.owner == -1:
-          freeShip = True
-          theFreeShip = i
-        elif i.owner != self and i.owner != -1:
-          opponentShip = True
-          return "Ye cannot board enemy ships. Lay waste to all of their pirates first!"        
+        intoWater = True      
     if intoWater and not freeShip:
       return "Yer pirates cannot enter water without a boat"
     #Point of no return
     #take control of a ship if you move onto it
-    if freeShip:
+    if freeShip and theFreeShip is not None:
       theFreeShip.owner = self.owner
     #Lose control of ship if this is your last pirate leaving
     counter = 0

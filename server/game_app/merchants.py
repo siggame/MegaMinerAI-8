@@ -223,6 +223,8 @@ class MerchantAI:
             #print i.path
             #print i.path[0]
             #print `i.path[0] == '0'`
+        if len(i.path) > 0:
+          i.path = i.path[1:]
     for p in self.thePorts:
       foundAShip = False
       isWorthy = False
