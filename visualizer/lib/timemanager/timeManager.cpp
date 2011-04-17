@@ -98,10 +98,20 @@ void TimeManager::setup()
   m_turn = 0;
   m_frame = 0;
 
-  timer = new QTimer( this );
-  connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-  timer->start( 35 );
 }
+
+void TimeManager::start()
+{
+    get()->timer = new QTimer( this );
+    connect( get()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
+    get()->timer->start( 35 );
+}
+
+void TimeManager::timerStart()
+{
+    get()->start();
+}
+
 
 #include <iostream>
 using namespace std;
@@ -126,7 +136,7 @@ void TimeManager::updateFrames()
   }
 
   //If in arena mode, show winner for a few secs at end
-  if (optionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
+  if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1)
   {
     if( m_sleepTime == -1 )
       m_sleepTime = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;

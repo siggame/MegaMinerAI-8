@@ -40,6 +40,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     void setup();
 
     void updateFrames();
+    void start();
+    static void timerStart();
 
   private slots:
     void timerUpdate();
