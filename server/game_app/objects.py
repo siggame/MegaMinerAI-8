@@ -644,7 +644,7 @@ class Ship(Unit):
     #Make sure you own the attacking unit
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
-    if Target not in self.game.objects.ships():
+    if Target not in self.game.objects.ships:
       return "Ye may only attack enemy ships with arr ships"
     #Checks to see that the target is in range     
     if self._distance(Target.x,Target.y) > self.game.shipRange:
