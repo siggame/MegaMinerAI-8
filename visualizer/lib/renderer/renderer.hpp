@@ -667,7 +667,10 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     }
 
     Single::get()->multipleUnitStatColumnPopulate (p0, 2);
-
+    Single::get()->multipleUnitStatColumnPopulate (p1, 3);
+    Single::get()->multipleUnitStatColumnPopulate (selected, 4);
+    Single::get()->multipleUnitStatColumnPopulate (p2, 5);
+    Single::get()->multipleUnitStatColumnPopulate (p3, 6);
     return true;
 
 }
@@ -676,7 +679,13 @@ template<typename DupObject>
 void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int column)
 {
   (GUI::getMultipleStats()->setCellWidget( column, 1, new QLabel( QString::number(multi.gold))));
-  //(GUI::getMultipleStats()->itemAt(column, 2))->setText(QString::number(multi.pirates));
+  (GUI::getMultipleStats()->setCellWidget( column, 2, new QLabel( QString::number(multi.pirates))));
+  (GUI::getMultipleStats()->setCellWidget( column, 3, new QLabel( QString::number(multi.avgPirateHealth))));
+  (GUI::getMultipleStats()->setCellWidget( column, 4, new QLabel( QString::number(multi.avgPirateGold))));
+  (GUI::getMultipleStats()->setCellWidget( column, 5, new QLabel( QString::number(multi.ships))));
+  (GUI::getMultipleStats()->setCellWidget( column, 6, new QLabel( QString::number(multi.avgShipHealth))));
+  (GUI::getMultipleStats()->setCellWidget( column, 7, new QLabel( QString::number(multi.avgShipGold))));
+  (GUI::getMultipleStats()->setCellWidget( column, 8, new QLabel( QString::number(multi.treasures))));
 }
 
 #endif
