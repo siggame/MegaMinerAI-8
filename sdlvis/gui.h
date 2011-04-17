@@ -10,5 +10,5 @@ void renderTurn(Game& g, int turn, int xTile, int yTile);
 
 void mainLoop(Game& g, bool arenaMode);
 
-void handleMouse(int turn, int x, int y, Game& g);
+void handleMouse(int & turn, int x, int y, Game& g);
 
