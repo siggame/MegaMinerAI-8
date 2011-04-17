@@ -8,6 +8,14 @@
 
 #include <SDL_ttf.h>
 
+#define TOTAL_GOLD 0
+#define OWNER 1
+#define NUM_PIRATES 2
+#define PIRATE_AVG_HEALTH 3
+#define NUM_SHIPS 4
+#define SHIP_AVG_HEALTH 5
+#define UNIT_INFO 6
+
 using namespace std;
 
 static SDL_Surface* screen = NULL;
@@ -72,7 +80,7 @@ void renderMap(Game& g)
   }
 }
 
-void drawText(Game& g, int turn)
+void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitData[UNIT_INFO])
 {
   stringstream message;
   SDL_Rect dest;
@@ -82,6 +90,9 @@ void drawText(Game& g, int turn)
   SDL_Color purple = {255,0,255};
   SDL_Color red = {255,0,0};
   SDL_Color black = {0,0,0};
+  SDL_Color blue = {0,0,255};
+  SDL_Color yellow = {255,196,0};
+  SDL_Color teamColor[2] = {{255,0,0},{0,0,255}};
   SDL_Color darkSlateGray = {47,79,79};
   
   message << "Current Turn: ";
@@ -95,33 +106,75 @@ void drawText(Game& g, int turn)
   
   message.str("");
   
-  message << "Player 1 gold: ";
-  message << g.states[turn].players[0].gold;
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  
-  message.str("");
-  
-  message << "Player 2 gold: ";
-  message << g.states[turn].players[1].gold;
-  
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
-  SDL_BlitSurface(image, NULL, screen, &dest);
-  dest.y += image->h;
-  SDL_FreeSurface(image);
-  dest.y += image->h;
-  
-  message.str("");
+  for(int i = 0; i < 2; i++)
+  {
+    if(strcmp(g.states[turn].players[i].playerName,"booty()") == 0)
+    {
+      message << "booty(" << i + 1 << "): ";
+    }
+    else
+    {
+      message << g.states[turn].players[i].playerName;
+      message << " (" << i + 1 << "): ";
+    }
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), teamColor[i]);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "  Gold: ";
+    message << g.states[turn].players[i].gold;
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), teamColor[i]);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "  Ships: ";
+    message << numships[i];
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), teamColor[i]);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    message << "  Pirates: ";
+    message << numpirates[i];
+    
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), teamColor[i]);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    dest.y += image->h;
+  }
   
   if(turn >= g.states.size() - 1)
   {
     message << "Winner: Player ";
-    message << g.winner;
-  
-    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+    message << (g.winner + 1);
+    
+    if(g.winner == 0)
+    {
+     image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+    }
+    else if(g.winner == 1)
+    {
+      image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), blue);
+    }
+    else
+    {
+      image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+    }
+    
     SDL_BlitSurface(image, NULL, screen, &dest);
     dest.y += image->h;
     SDL_FreeSurface(image);
@@ -130,18 +183,167 @@ void drawText(Game& g, int turn)
     
     message << g.winReason;
   
-    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
     SDL_BlitSurface(image, NULL, screen, &dest);
     SDL_FreeSurface(image);
-    dest.y += image->h*19;
+    dest.y += image->h*2;
     
     message.str("");
   }
   else
   {
-    dest.y += image->h*20;
+    dest.y += image->h*3;
   }
   
+  if(unitData[0] == -2)
+  {
+    dest.y += image->h*9;
+  }
+  else
+  {
+    message << "Info:";
+  
+    image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+    SDL_BlitSurface(image, NULL, screen, &dest);
+    dest.y += image->h;
+    SDL_FreeSurface(image);
+    
+    message.str("");
+    
+    for(int i = 0; i < UNIT_INFO; i++)
+    {
+      switch(i)
+      {
+        case TOTAL_GOLD:
+        {
+          message << "Total Gold: " << unitData[i];
+          break;
+        }
+        case OWNER:
+        {
+          if(unitData[i] <= -1)
+          {
+            message << "Owner: None";
+          }
+          else if(unitData[i] == 2 || unitData[i] == 3)
+          {
+            message << "Owner: Merchant";
+          }
+          else
+          {
+            message << "Owner: ";
+            
+            if(strcmp(g.states[turn].players[unitData[i]].playerName,"booty()") == 0)
+            {
+              message << "booty(" << unitData[i] + 1 << "): ";
+            }
+            else
+            {
+              message << g.states[turn].players[unitData[i]].playerName;
+              message << " (" << unitData[i] + 1 << "): ";
+            }
+          }
+          break;
+        }
+        case NUM_PIRATES:
+        {
+          message << "Pirates: ";
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+          SDL_BlitSurface(image, NULL, screen, &dest);
+          dest.y += image->h;
+          SDL_FreeSurface(image);
+          message.str("");
+          
+          if(unitData[i] == 0)
+          {
+            message << "  Number: None";
+          }
+          else
+          {
+            message << "  Number: " << unitData[i];
+          }
+          break;
+        }
+        case PIRATE_AVG_HEALTH:
+        {
+          if(unitData[NUM_PIRATES] == 0)
+          {
+            message << "  Avg Health: None";
+          }
+          else
+          {
+            message << "  Avg Health: " << ((float)unitData[i]/(float)unitData[NUM_PIRATES]);
+          }
+          break;
+        }
+        case NUM_SHIPS:
+        {
+          message << "Ships: ";
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+          SDL_BlitSurface(image, NULL, screen, &dest);
+          dest.y += image->h;
+          SDL_FreeSurface(image);
+          message.str("");
+          
+          if(unitData[i] == 0)
+          {
+            message << "  Number: None";
+          }
+          else
+          {
+            message << "  Number: " << unitData[i];
+          }
+          break;
+        }
+        case SHIP_AVG_HEALTH:
+        {
+          if(unitData[i] == 0)
+          {
+            message << "  Avg Health: None";
+          }
+          else
+          {
+            message << "  Avg Health: " << unitData[i];
+          }
+          break;
+        }
+      }
+      
+      
+      if(i == OWNER)
+      {
+        if(unitData[i] == 0)
+        {
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), red);
+        }
+        else if(unitData[i] == 1)
+        {
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), blue);
+        }
+        else if(unitData[i] == 2 || unitData[i] == 3)
+        {
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), yellow);
+        }
+        else
+        {
+          image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+        }
+      }
+      else
+      {
+        image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+      }
+      
+      SDL_BlitSurface(image, NULL, screen, &dest);
+      dest.y += image->h;
+      SDL_FreeSurface(image);
+      
+      message.str("");
+      
+    }
+  }
+  
+  dest.y += image->h;
   message << "Controls:";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
@@ -193,17 +395,37 @@ void drawText(Game& g, int turn)
   SDL_BlitSurface(image, NULL, screen, &dest);
   dest.y += image->h;
   SDL_FreeSurface(image);
+  
+  message.str("");
+  
+  message << "                      Version: 0.58";
+  
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+  SDL_BlitSurface(image, NULL, screen, &dest);
+  dest.y += image->h;
+  SDL_FreeSurface(image);
 }
 
-void renderTurn(Game& g, int turn)
+void renderTurn(Game& g, int turn, int xTile, int yTile)
 {
   
-  SDL_Surface* ship = loadImage("images/ship.png");
+  SDL_Surface* ship_red = loadImage("images/ship_red.png");
+  SDL_Surface* ship_blue = loadImage("images/ship_blue.png");
+  SDL_Surface* ship_yellow = loadImage("images/ship_yellow.png");
+  SDL_Surface* ship_none = loadImage("images/ship_none.png");
+  SDL_Surface* pirate_red = loadImage("images/pirate_red.png");
+  SDL_Surface* pirate_blue = loadImage("images/pirate_blue.png");
+  SDL_Surface* pirate_yellow = loadImage("images/pirate_yellow.png");
+  SDL_Surface* treasure = loadImage("images/treasure.png");
+  SDL_Surface* selector = loadImage("images/selector.png");
   SDL_Surface* image = NULL;
   SDL_Rect dest;
-  SDL_Color yellow = {255,255,0};
-  SDL_Color purple = {255,0,255};
-  SDL_Color black = {0,0,0};
+  //SDL_Color yellow = {255,255,0};
+  SDL_Color yellow = {0,255,0};
+  //SDL_Color purple = {255,0,255};
+  SDL_Color purple = {0,255,0};
+  //SDL_Color black = {0,0,0};
+  SDL_Color black = {0,255,0};
   SDL_Color color;
   char buf[9];
   dest.w = 19;
@@ -211,14 +433,30 @@ void renderTurn(Game& g, int turn)
   int owner[40][40];
   int gold[40][40];
   int pirates[40][40];
+  int ships[40][40];
+  int piratesHealth[40][40];
+  int shipsHealth[40][40];
+  
+  int unitData[UNIT_INFO];
+  
+  for(int i = 0; i < UNIT_INFO; i++)
+  {
+    unitData[i] = -2;
+  }
+  
+  int numships[2] = {0,0};
+  int numpirates[2] = {0,0};
   
   for(int i = 0; i < 40; i++)
   {
     for(int j = 0; j < 40; j++)
     {
-      owner[i][j] = 0;
+      owner[i][j] = -1;
       gold[i][j] = 0;
       pirates[i][j] = 0;
+      ships[i][j] = 0;
+      shipsHealth[i][j] = 0;
+      piratesHealth[i][j] = 0;
     }
   }
   
@@ -257,15 +495,77 @@ void renderTurn(Game& g, int turn)
     pirates[g.states[turn].pirates[i].x][g.states[turn].pirates[i].y] += 1;
     gold[g.states[turn].pirates[i].x][g.states[turn].pirates[i].y] += g.states[turn].pirates[i].gold;
     owner[g.states[turn].pirates[i].x][g.states[turn].pirates[i].y] = g.states[turn].pirates[i].owner;
+    piratesHealth[g.states[turn].pirates[i].x][g.states[turn].pirates[i].y] += g.states[turn].pirates[i].health;
   }
   
   for(int i = 0; i < g.states[turn].ships.size(); i++)
   {
     if(g.states[turn].ships[i].id == 0) continue;
     gold[g.states[turn].ships[i].x][g.states[turn].ships[i].y] += g.states[turn].ships[i].gold;
-    dest.x = g.states[turn].ships[i].x * 19;
-    dest.y = g.states[turn].ships[i].y * 19;
-    SDL_BlitSurface(ship, NULL, screen, &dest);
+    ships[g.states[turn].ships[i].x][g.states[turn].ships[i].y] += 1;
+    //dest.x = g.states[turn].ships[i].x * 19;
+    //dest.y = g.states[turn].ships[i].y * 19;
+    shipsHealth[g.states[turn].ships[i].x][g.states[turn].ships[i].y] += g.states[turn].ships[i].health;
+    //SDL_BlitSurface(ship, NULL, screen, &dest);
+  }
+  
+  for(int x = 0; x < 40; x++)
+  {
+    for(int y = 0; y < 40; y++)
+    {
+      if(ships[x][y] > 0)
+      {
+        dest.x = x * 19;
+        dest.y = y * 19;
+        
+        if(owner[x][y] == 0)
+        {
+          SDL_BlitSurface(ship_red, NULL, screen, &dest);
+          numships[0]++;
+          numpirates[0] += pirates[x][y];
+        }
+        else if(owner[x][y] == 1)
+        {
+          SDL_BlitSurface(ship_blue, NULL, screen, &dest);
+          numships[1]++;
+          numpirates[1] += pirates[x][y];
+        }
+        else if(owner[x][y] == 2 || owner[x][y] == 3)
+        {
+          SDL_BlitSurface(ship_yellow, NULL, screen, &dest);
+        }
+        else
+        {
+          SDL_BlitSurface(ship_none, NULL, screen, &dest);
+        }
+      }
+      else if(pirates[x][y] > 0)
+      {
+        dest.x = x * 19;
+        dest.y = y * 19;
+        
+        if(owner[x][y] == 0)
+        {
+          SDL_BlitSurface(pirate_red, NULL, screen, &dest);
+          numpirates[0] += pirates[x][y];
+        }
+        else if(owner[x][y] == 1)
+        {
+          SDL_BlitSurface(pirate_blue, NULL, screen, &dest);
+          numpirates[1] += pirates[x][y];
+        }
+        else
+        {
+          SDL_BlitSurface(pirate_yellow, NULL, screen, &dest);
+        }
+      }
+      else if(gold[x][y] > 0)
+      {
+        dest.x = x * 19;
+        dest.y = y * 19;
+        SDL_BlitSurface(treasure, NULL, screen, &dest);
+      }
+    }
   }
   
   for(int i = 0; i < 40; i++)
@@ -312,12 +612,29 @@ void renderTurn(Game& g, int turn)
     }
   }
   
-  drawText(g, turn);
+  //now we draw the selector!
+  if(xTile != -1 && yTile != -1)
+  {
+    dest.x = xTile * 19;
+    dest.y = yTile * 19;
+    
+    SDL_BlitSurface(selector, NULL, screen, &dest);
+    
+    unitData[TOTAL_GOLD] = gold[xTile][yTile];
+    unitData[OWNER] = owner[xTile][yTile];
+    unitData[NUM_PIRATES] = pirates[xTile][yTile];
+    unitData[PIRATE_AVG_HEALTH] = piratesHealth[xTile][yTile];
+    unitData[NUM_SHIPS] = ships[xTile][yTile];
+    unitData[SHIP_AVG_HEALTH] = shipsHealth[xTile][yTile];
+    
+  }
+  
+  drawText(g, turn, numships, numpirates, unitData);
   
   SDL_Flip(screen);
 }
 
-void mainLoop(Game& g)
+void mainLoop(Game& g, bool arenaMode)
 {
   int turn = 0;
   
@@ -328,13 +645,17 @@ void mainLoop(Game& g)
   {
     if(render)
     {
-      renderTurn(g, turn);
+      renderTurn(g, turn, -1, -1);
     
       turn++;
     }
     
     if (turn >= g.states.size())
     {
+      if(arenaMode)
+      {
+        return;
+      }
       render = false;
       killMe = false;
     }
@@ -357,13 +678,15 @@ void mainLoop(Game& g)
         /*if(event.button.x > 500)
         {
           turn++;
-          renderTurn(g, turn);
+          renderTurn(g, turn,-1, -1);
           render = false;
         }
         else
         {*/
           //render = !render;
         //}
+          render = false;
+          handleMouse(turn, event.button.x, event.button.y, g);
           break;
         }
         case SDL_KEYDOWN:
@@ -377,7 +700,7 @@ void mainLoop(Game& g)
                 if(turn > 0)
                 {
                   turn--;
-                  renderTurn(g, turn);
+                  renderTurn(g, turn, -1, -1);
                 }
               }
               break;
@@ -390,7 +713,7 @@ void mainLoop(Game& g)
                 
                 if (!(turn >= g.states.size()))
                 {
-                   renderTurn(g, turn);
+                   renderTurn(g, turn, -1, -1);
                 }
                 else
                 {
@@ -403,9 +726,16 @@ void mainLoop(Game& g)
             {
               render = false;
               turn = g.states.size() - 1;
-              renderTurn(g, turn);
+              renderTurn(g, turn, -1, -1);
               break;
-            }            
+            }   
+            case SDLK_DOWN:
+            {
+              render = false;
+              turn = 0;
+              renderTurn(g, turn, -1, -1);
+              break;
+            }         
             case SDLK_SPACE:
             {
               render = !render;
@@ -423,4 +753,17 @@ void mainLoop(Game& g)
       break;
     }
   }
+}
+
+void handleMouse(int turn, int x, int y, Game & g)
+{
+  int xTile = x/19;
+  int yTile = y/19;
+  
+  if(xTile >= 40 || yTile >= 40)
+  {
+    return;
+  }
+  
+  renderTurn(g, turn, xTile, yTile);
 }
