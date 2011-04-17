@@ -162,6 +162,10 @@ void GUI::clearConsole()
 
 void GUI::resizeEvent( QResizeEvent* evt )
 {
+  if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
+  {
+    m_dockWidget->resize(Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), 1);
+  }
   QMainWindow::resizeEvent( evt );
 }
 
