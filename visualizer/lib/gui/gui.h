@@ -12,6 +12,7 @@
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
+#include <QTableWidget>
 #include <QStringList>
 #include <QString>
 #include <map>
@@ -195,6 +196,9 @@ public:
   
   bool getFullScreen();
   void setFullScreen(bool);
+  
+  static QTableWidget * getMultipleStats();
+
 
 private slots:
   void helpContents();

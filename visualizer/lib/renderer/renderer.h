@@ -6,6 +6,7 @@
 #include <map>
 #include <list>
 #include <set>
+#include <QTableWidget>
 #include <GL/gl.h>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -123,6 +124,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
 		RenderWidget *m_parent;
 
 		set<int> selectedUnitIds;
+		
+		//static void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
 #include "renderer.hpp"
