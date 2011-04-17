@@ -608,8 +608,11 @@ class Ship(Unit):
         portTile = True
         #If the port does not belong to you, throw an error
         if i.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
-          return "We cannot move arr ships into enemy ports!"      
-	break
+          return "We cannot move arr ships into enemy ports!"  
+        if self.owner < 2:   
+          self.game.objects.players[self.owner].gold += self.gold
+          self.gold = 0        
+        break
     #Makes sure there is no units at target location
     for i in self.game.objects.ships: 
       if i.x == x and i.y == y:
@@ -618,9 +621,6 @@ class Ship(Unit):
     if portTile == False and isWater == False:
       return "Ships cannot move onto land, captain!"
       
-
-
-
     #Ship has passed all checks and it ready to move
     self.movesLeft -= 1
     
@@ -632,13 +632,7 @@ class Ship(Unit):
         i.y = y
     self.x = x
     self.y = y
-    #auto dumps treasure if arriving at a port
-    if self.owner < 2:
-      for i in self.game.objects.ports:
-        if i.x == x and i.y == y:
-          self.game.objects.players[self.owner].gold += self.gold
-          self.gold = 0
-        
+       
     return True
     
   def talk(self, message):
