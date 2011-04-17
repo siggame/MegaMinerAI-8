@@ -519,7 +519,7 @@ class Port(Mappable):
         havePirateHere = True
         ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
         self.game.addObject(ship)
-      break
+        break
     if not havePirateHere:
       ship = Ship.make(self.game, self.x, self.y, -1, self.game.shipHealth, self.game.shipStrength) #placeholder values
       self.game.addObject(ship)
