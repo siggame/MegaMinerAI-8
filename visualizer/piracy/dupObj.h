@@ -131,7 +131,7 @@ struct DupObj
 					break;
 				default:
 					//fuckoff
-					std::cout << "Bad Object Type\n";
+					std::cout << "B Bad Object Type\n";
 			}
 
 			res = ResourceMan::reference(textureName,"dupObject");
@@ -214,7 +214,7 @@ struct DupObj
 					glColor4f(1,1,0,1);
 					break;
 				default:
-					std::cout << "Bad Object Type\n";
+					std::cout << "A Bad Object Type\n";
 			}
 
 			glBegin(GL_QUADS);

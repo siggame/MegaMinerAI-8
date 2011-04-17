@@ -32,7 +32,8 @@ void TimeManager::setTurn( const int& turn )
   //update renderer
   Renderer<DupObj>::update(turn,0);
 
-  GUI::getControlBar()->m_slider->update();
+
+  GUI::getControlBar()->update();
 }
 
 const int& TimeManager::getSpeed()
@@ -76,8 +77,12 @@ void TimeManager::setNumTurns( const int& numTurns )
   if( !isInit() )
     throw 0;
   get()->m_numTurns = numTurns;
-  GUI::getControlBar()->m_slider->setMaximum ( numTurns );
-  cout << "numTurns: " << numTurns<<endl;
+
+  if(GUI::isSetup())
+  {
+    if( GUI::getControlBar() )
+      GUI::getControlBar()->update();//m_slider->setMaximum ( numTurns );
+  }
 }
 
 
