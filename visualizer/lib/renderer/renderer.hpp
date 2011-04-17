@@ -641,11 +641,12 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                  break;
              }
 
-
            }
-           
 
-
+           selected += p0;
+           selected += p1;
+           selected += p2;
+           selected += p3;
 
          } else {
            temp.selected = false;
