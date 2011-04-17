@@ -125,7 +125,7 @@ def run_game(client1, client2, name):
       servergood = True
     else:
       print 'THE WORLD IS AT AN END'
-      return "fail"
+      return ("Error","fail")
   time.sleep(2)
   #now client 1...
   client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], timeout = 600)
@@ -145,6 +145,14 @@ def run_game(client1, client2, name):
   result = ''
   while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
+    try:
+      client1p.read_nonblocking(1024, timeout = 0)
+    except:
+      pass
+    try:
+      client2p.read_nonblocking(1024, timeout = 0)
+    except:
+      pass
     try:
       result = serverp.readline()
       if "win" not in result.lower() and "tie" not in result.lower():
