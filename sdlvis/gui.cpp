@@ -111,7 +111,7 @@ void renderMap(Game& g)
       dest.x = x * 19;
       dest.y = y * 19;
       
-      if(x == 0 || x == 39 || y == 0 || y == 39)
+      /*if(x == 0 || x == 39 || y == 0 || y == 39)
       {
         if(tileTypes[x][y])
         {
@@ -123,13 +123,47 @@ void renderMap(Game& g)
         }
         
         continue;
+      }*/
+      
+      bool superTile = true;
+      
+      if(x != 0)
+      {
+        if(!(tileTypes[x - 1][y] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
       }
       
+      if(superTile && x != 39)
+      {
+        if(!(tileTypes[x + 1][y] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
       
-      if( tileTypes[x - 1][y] == tileTypes[x][y] &&
+      if(superTile && y != 0)
+      {
+        if(!(tileTypes[x][y - 1] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
+      
+      if(superTile && y != 39)
+      {
+        if(!(tileTypes[x][y + 1] == tileTypes[x][y]))
+        {
+          superTile = false;
+        }
+      }
+      
+      /*if( tileTypes[x - 1][y] == tileTypes[x][y] &&
           tileTypes[x + 1][y] == tileTypes[x][y] &&
           tileTypes[x][y - 1] == tileTypes[x][y] &&
-          tileTypes[x][y + 1] == tileTypes[x][y])
+          tileTypes[x][y + 1] == tileTypes[x][y])*/
+      if(superTile)
       {
         if(tileTypes[x][y])
         {
@@ -487,7 +521,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
     dest.y += image->h*7;
   }
   
-  message << "                     Version: 0.601";
+  message << "                     Version: 0.602";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
