@@ -237,7 +237,7 @@ class Pirate(Unit):
             #If this was the last pirate on board, the ship becomes neutral.
           if counter > 1:
             break
-    if onABoat and counter > 1:
+    if onABoat and counter == 1:
       theBoatIAmOn.owner = -1
             
     #Moves the unit and makes it unable to move until next turn
@@ -565,6 +565,10 @@ class Ship(Unit):
   def nextTurn(self): 
     self.movesLeft = self.game.shipMoves
     self.attacksLeft = self.game.shipAttacks
+    for p in self.game.objects.pirates:
+      if p.x == self.x and p.y == self.y:
+        self.owner = p.owner
+        #brea
 
   def move(self, x, y):
     #Check the owner of the ship before moving
