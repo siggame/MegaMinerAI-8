@@ -140,13 +140,13 @@ class Pirate(Unit):
         self.game.Merchant3.pirateDied(self)
     
         #Lose control of ship if this is your last pirate leaving
-      for i in self.game.objects.values():
-        if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
+      for i in self.game.objects.ships:
+        if i.x == self.x and i.y == self.y:
           if i.owner == self.owner:
             counter = 0
             #if the pirate was on a ship, count how many pirates are on it
-            for j in self.game.objects.values():
-              if isinstance(j,Pirate) and j.x == i.x and j.y == i.y:
+            for j in self.game.objects.pirates:
+              if j.x == i.x and j.y == i.y:
                 counter+=1
                 if counter > 1:
                   break
@@ -195,47 +195,48 @@ class Pirate(Unit):
     intoWater = False
     theFreeShip = None
     #Check to see if the unit is moving into an enemy
-    for i in self.game.objects.values():
-      if isinstance(i,Unit):
-        if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
-          return "Therr already be an enemy at that location, yarr"
+    for i in self.game.objects.pirates + self.game.objects.ships:
+      if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
+        return "Therr already be an enemy at that location, yarr"
+    for i in self.game.objects.ships:
+      if i.owner != -1 and i.owner != self.owner and i.x == x and i.y == y:
+        return "Therr already be an enemy at that location, yarr"
+      elif (i.owner == self.owner or i.owner == -1) and i.x == x and i.y == y:
+        freeShip = True
+        theFreeShip = i
+        break
+    for i in self.game.objects.ports:
       #Check to see if the unit is moving into an enemy port
-      if isinstance(i,Port):
-        if i.owner != self.owner and i.x == x and i.y == y: 
-          return "Ye cannot move yerr pirates into enemy ports"
+      if i.owner != self.owner and i.x == x and i.y == y: 
+        return "Ye cannot move yerr pirates into enemy ports"
+    for i in self.game.objects.tiles:
       #Checking if unit is moving onto water
-      elif isinstance(i,Tile) and i.x == x and i.y == y and i.type == 1:
-        intoWater = True
-      #Checking about the Boats
-      elif isinstance(i,Ship) and i.x == x and i.y == y:
-        #-1 is placeholder value for neutral ship. May need to be changed
-        if i.owner == self.owner or i.owner == -1:
-          freeShip = True
-          theFreeShip = i
-        elif i.owner != self and i.owner != -1:
-          opponentShip = True
-          return "Ye cannot board enemy ships. Lay waste to all of their pirates first!"        
+      if i.x == x and i.y == y and i.type == 1:
+        intoWater = True      
     if intoWater and not freeShip:
       return "Yer pirates cannot enter water without a boat"
     #Point of no return
     #take control of a ship if you move onto it
-    if freeShip:
+    if freeShip and theFreeShip is not None:
       theFreeShip.owner = self.owner
     #Lose control of ship if this is your last pirate leaving
     counter = 0
     onABoat = False
     theBoatIAmOn = None
-    for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
-        if i.owner == self.owner:
-          onABoat = True
-          theBoatIAmOn = i
-          #if the pirate was on a ship, count how many pirates are on
-      if isinstance(i,Pirate) and x == i.x and y == i.y:
-        counter+=1
-          #If this was the last pirate on board, the ship becomes neutral.
-        if counter > 1:
-          break
+    for i in self.game.objects.ships: 
+      if i.x == self.x and i.y == self.y:
+        onABoat = True
+        theBoatIAmOn = i
+        break
+        #if the pirate was on a ship, count how many pirates are on
+    counter = 0
+    if onABoat:
+      for i in self.game.objects.pirates:
+        if x == i.x and y == i.y:
+          counter+=1
+            #If this was the last pirate on board, the ship becomes neutral.
+          if counter > 1:
+            break
     if onABoat and counter > 1:
       theBoatIAmOn.owner = -1
             
@@ -256,32 +257,29 @@ class Pirate(Unit):
       return "Ye cannot make me pickup that therr treasurrr. Ye be not my captain!"  
     #If trying to use pickup treasure and standing on a port  
     portPickup = False
-    for i in self.game.objects.values():       
-      if isinstance(i,Port):
-        if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
-          portPickup = True
-          break
+    for i in self.game.objects.ports:       
+      if i.x == self.x and i.y == self.y and (i.owner == 0 or i.owner == 1):
+        portPickup = True
+        break
     if amount < 1:
       return "We be not interested in picking up such small amounts of gold!"
     if portPickup == True:
-      p = [self.game.objects[i] for i in range(2)]
       #Sets the owner of the pirate to eaither player 0 or 1
       if self.owner == 0:
         owner = 0
       else:
         owner = 1
       #Checks to make sure amount being withdrawn is less than that player has
-      if amount <= p[owner].gold:
+      if amount <= self.game.objects.players[owner].gold:
         self.gold += amount
-        p[owner].gold -= amount
+        self.game.objects.players[owner].gold -= amount
         return True
       else:
         return "Ye do not have that much gold, yargh!"
               
     #If the pirate is not on a port and is trying to pickup Treasure
     if portPickup == False:
-      for i in self.game.objects.values():
-        if isinstance(i,Treasure):
+      for i in self.game.objects.treasures:
           if i.x == self.x and i.y == self.y:
             #Check to make sure the amount being picked up isn't greater than its value
             if amount > i.gold:
@@ -297,15 +295,14 @@ class Pirate(Unit):
               self.gold += amount
             treasurePickup = True
             return True    
-      for i in self.game.objects.values():
-        if isinstance(i,Ship):
-          if amount > i.gold:
-            return "Yer boat does not have that much gold!"
-          elif amount < 1:
-            return "Ye have to pick up somethin!"
-          i.gold -= amount
-          self.gold += amount
-          return True
+      for i in self.game.objects.ships:
+        if amount > i.gold:
+          return "Yer boat does not have that much gold!"
+        elif amount < 1:
+          return "Ye have to pick up somethin!"
+        i.gold -= amount
+        self.gold += amount
+        return True
     return True
   
   def dropTreasure(self, amount):
@@ -319,32 +316,28 @@ class Pirate(Unit):
       return "Yarrgh, I don't have that much gold!"
     if amount < 1:
       return "Droppin' no gold be useless!"
-    for j in self.game.objects.values():
+    for j in self.game.objects.ports:
       #if the treasure is being dropped on a port
-      if isinstance(j,Port) and (j.owner == 0 or j.owner == 1):
+      if (j.owner == 0 or j.owner == 1):
         if self.x == j.x and self.y == j.y:
           #Increase gold of owner
           if self.owner == 0:
-            p = [k for k in self.game.objects.values() if isinstance(k,Player)]
-            p[0].gold += amount
+            self.game.objects.players[0].gold += amount
           else:
-            p = [k for k in self.game.objects.values() if isinstance(k,Player)]
-            p[1].gold += amount
+            self.game.objects.players[1].gold += amount
           #Decrement gold if only partially dropped
           self.gold -= amount
           return True
-    for j in self.game.objects.values():    
-      if isinstance(j,Treasure):
-        if self.x == j.x and self.y == j.y:
-          j.gold += amount
-          self.gold -= amount
-          return True
-    for j in self.game.objects.values():
-      if isinstance(j,Ship):
-        if self.x == j.x and self.y == j.y:
-          j.gold += amount
-          self.gold -= amount
-          return True
+    for j in self.game.objects.treasures:    
+      if self.x == j.x and self.y == j.y:
+        j.gold += amount
+        self.gold -= amount
+        return True
+    for j in self.game.objects.ships:
+      if self.x == j.x and self.y == j.y:
+        j.gold += amount
+        self.gold -= amount
+        return True
     self.game.addObject(Treasure.make(self.game,self.x,self.y,amount))
     self.gold -= amount
     return True
@@ -353,46 +346,42 @@ class Pirate(Unit):
     if self.owner != self.game.playerID:
       return "Yarr, ye can't make me build a port! Ye are not my captain!"  
     #checks for distance to nearest port
-    for i in self.game.objects.values():
-      if isinstance(i,Port):
-        if self._distance(i.x,i.y) < 3:
-          return "This port be too close to another port!"
+    for i in self.game.ports:
+      if self._distance(i.x,i.y) < 3:
+        return "This port be too close to another port!"
     nearWater = False
     onLand = False
-    for i in self.game.objects.values():
-      if isinstance(i, Tile):
-        if i._distance(self.x,self.y) == 1 and i.type == 1: #Not sure about this
-          nearWater = True
-        if i._distance(self.x,self.y) == 0 and i.type == 0:
-          onLand = True
+    for i in self.game.objects.tiles:
+      if i._distance(self.x,self.y) == 1 and i.type == 1: #Not sure about this
+        nearWater = True
+      if i._distance(self.x,self.y) == 0 and i.type == 0:
+        onLand = True
     if not nearWater:
       return "Our ports must be near water!"
     if not onLand:
       return "Ports must be built on land"
     
     if self.owner == 0:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[0].gold >= self.game.portCost:
+      if self.game.objects.players[0].gold >= self.game.portCost:
         #Checks to see if there is treasure on the loaction of the new port
-        for j in self.game.objects.values():
-          if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
-            p[0].gold += j.gold
+        for j in self.game.objects.treasures:
+          if j.x == self.x and j.y == self.y:
+            self.game.objects.players[0].gold += j.gold
             self.game.removeObject(j)
-        p[0].gold -= self.game.portCost
+        self.game.objects.players[0].gold -= self.game.portCost
         port = Port.make(self.game,self.x,self.y,self.owner)
         self.game.addObject(port)
         return True
       else:
         return "We do not have enough gowld to make tha' port, captain!"
     else:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[1].gold >= self.game.portCost:
+      if self.game.objects.players[1].gold >= self.game.portCost:
         #Checks to see if there is treasure on the loaction of the new port
-        for j in self.game.objects.values():
-          if isinstance(j,Treasure) and j.x == self.x and j.y == self.y:
-            p[1].gold += j.gold
+        for j in self.game.objects.treasures:
+          if j.x == self.x and j.y == self.y:
+            self.game.objects.players[1].gold += j.gold
             self.game.removeObject(j)
-        p[1].gold -= self.game.portCost
+        self.game.objects.players[1].gold -= self.game.portCost
         port = Port.make(self.game,self.x,self.y,self.owner)
         self.game.addObject(port)
         return True
@@ -404,12 +393,12 @@ class Pirate(Unit):
 
   def attack(self, Target):
     #Ensures that you own the attacking unit
-    if Target not in self.game.objects.values():
+    if Target not in self.game.objects.pirates:
       return "That Target does not exist"
     if self.owner != self.game.playerID:
       return "I do not take orders from you! You be not my captain"
       
-    elif not isinstance(Target,Unit):
+    elif not isinstance(Target,Pirate):
       return "That unit cannot be attacked, captain!"
     
     elif self.attacksLeft <= 0:
@@ -421,7 +410,7 @@ class Pirate(Unit):
     else:
       self.attacksLeft -= 1
       #Optional Ally Pirate Auto Kill
-      if isinstance(Target,Pirate) and Target.owner is self.owner:
+      if Target.owner is self.owner:
         Target.health = 0
       self.game.animations.append(['PirateAttack', self.id,Target.x,Target.y])
       Target.takeDamage(self)
@@ -488,24 +477,21 @@ class Port(Mappable):
       return "That be not your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[0].gold >= self.game.pirateCost:
-        p[0].gold -= self.game.pirateCost
+      if self.game.objects.players[0].gold >= self.game.pirateCost:
+        self.game.objects.players[0].gold -= self.game.pirateCost
       else:
         return "We don' have enough gold fer that unit, captain"
     else:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[1].gold >= self.game.pirateCost:
-        p[1].gold -= self.game.pirateCost
+      if self.game.objects.players[1].gold >= self.game.pirateCost:
+        self.game.objects.players[1].gold -= self.game.pirateCost
       else:
         return "We don' have enough gold fer that unit, captain"
     pirate = Pirate.make(self.game, self.x, self.y, self.owner, self.game.pirateHealth, self.game.pirateStrength) #placeholder values
     self.game.addObject(pirate)
-    for s in self.game.objects.values():
-      if isinstance(s,Ship):
+    for s in self.game.objects.ships:
         if s.x == self.x and s.y == self.y:
-	  if s.owner == -1:
-	    s.owner = self.owner
+          if s.owner == -1:
+            s.owner = self.owner
     return True
   #TODO: Test and review this logic
 
@@ -514,28 +500,26 @@ class Port(Mappable):
       return "That be not your port!"
     #Decrememnting gold of corresponding player
     if self.owner == 0:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[0].gold >= self.game.shipCost:
-        p[0].gold -= self.game.shipCost
+      if self.game.objects.players[0].gold >= self.game.shipCost:
+        self.game.objects.players[0].gold -= self.game.shipCost
       else:
         return "We don' have enough gold fer that unit, captain"
     else:
-      p = [self.game.objects[i] for i in range(2)]
-      if p[1].gold >= self.game.shipCost:
-        p[1].gold -= self.game.shipCost
+      if self.game.objects.players[1].gold >= self.game.shipCost:
+        self.game.objects.players[1].gold -= self.game.shipCost
       else:
         return "We don' have enough gold fer that unit, captain"
     #Checks to make sure there is no other ships in the port
-    for i in self.game.objects.values():
-      if isinstance(i,Ship) and i.x == self.x and i.y == self.y:
+    for i in self.game.objects.ships:
+      if i.x == self.x and i.y == self.y:
         return "Therr already be a ship in that port, cap'n"
     havePirateHere = False
-    for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.x == self.x and i.y == self.y:
+    for i in self.game.objects.pirates:
+      if i.x == self.x and i.y == self.y:
         havePirateHere = True
         ship = Ship.make(self.game, self.x, self.y, self.owner, self.game.shipHealth, self.game.shipStrength) #placeholder values
         self.game.addObject(ship)
-      break
+        break
     if not havePirateHere:
       ship = Ship.make(self.game, self.x, self.y, -1, self.game.shipHealth, self.game.shipStrength) #placeholder values
       self.game.addObject(ship)
@@ -609,24 +593,24 @@ class Ship(Unit):
     #Makes sure the ship stays on water
     isWater = True
     portTile = False
-    for i in self.game.objects.values():
-      if isinstance(i,Tile) and i.x == x and i.y == y:
-        #If the ship is attempting to move onto a land tile
-        if i.type != 1:
-          #This variable checks whether or not the ship is trying to move onto a port
-          isWater = False
-      if isinstance(i,Port):
-        if i.x == x and i.y == y:
-          #True if we find a port at desired location
-          portTile = True
-          #If the port does not belong to you, throw an error
-          if i.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
-            return "We cannot move arr ships into enemy ports!"      
-      #Makes sure there is no units at target location
-      if isinstance(i,Ship):
-        if i.x == x and i.y == y:
-          return "Therr already be a ship at that location!" 
-    #If the player is simply trying to move a ship onto land
+    i = self.game.objects.tiles[x + y * self.game.mapSize]
+    #If the ship is attempting to move onto a land tile
+    if i.type != 1:
+      #This variable checks whether or not the ship is trying to move onto a port
+      isWater = False
+    for i in self.game.objects.ports:
+      if i.x == x and i.y == y:
+        #True if we find a port at desired location
+        portTile = True
+        #If the port does not belong to you, throw an error
+        if i.owner != self.game.playerID and self.game.playerID != 2  and self.game.playerID != 3:
+          return "We cannot move arr ships into enemy ports!"      
+	break
+    #Makes sure there is no units at target location
+    for i in self.game.objects.ships: 
+      if i.x == x and i.y == y:
+        return "Therr already be a ship at that location!" 
+  #If the player is simply trying to move a ship onto land
     if portTile == False and isWater == False:
       return "Ships cannot move onto land, captain!"
       
@@ -638,18 +622,17 @@ class Ship(Unit):
     
     #Moving all treasure,pirates on the ship to the new location
     #Also moves the ship to the new location
-    for i in self.game.objects.values():
-      if isinstance(i,Pirate) and i.x == self.x and i.y == self.y:
+    for i in self.game.objects.pirates:
+      if i.x == self.x and i.y == self.y:
         i.x = x
         i.y = y
     self.x = x
     self.y = y
     #auto dumps treasure if arriving at a port
     if self.owner < 2:
-      for i in self.game.objects.values():
-        if isinstance(i,Port) and i.x == x and i.y == y:
-          p = [self.game.objects[i] for i in range(2)]
-          p[self.owner].gold += self.gold
+      for i in self.game.objects.ports:
+        if i.x == x and i.y == y:
+          self.game.objects.players[self.owner].gold += self.gold
           self.gold = 0
         
     return True
@@ -661,15 +644,11 @@ class Ship(Unit):
     #Make sure you own the attacking unit
     if self.owner != self.game.playerID:
       return "This be not yarr ship, ye swine!"
-    if Target not in self.game.objects.values():
-      return "That Target does not exist"
+    if Target not in self.game.objects.ships:
+      return "Ye may only attack enemy ships with arr ships"
     #Checks to see that the target is in range     
     if self._distance(Target.x,Target.y) > self.game.shipRange:
       return "That tarrget is out of arr range, sir!"      
-      
-    #Makes sure the opponent's type is ship
-    if isinstance(Target,Ship) == False:
-      return "Ye may only attack enemy ships with arr ships"
       
     #Meets all conditions for attack
     if self.attacksLeft <= 0:
@@ -694,18 +673,17 @@ class Ship(Unit):
     #If it was not at a port
     if self.health <= 0:
       atPort = False
-      for i in self.game.objects.values():
-        if isinstance(i,Port) and i.x == self.x and i.y == self.y:
+      for i in self.game.objects.ports:
+        if i.x == self.x and i.y == self.y:
           atPort = True
       if not atPort:
-        for i in self.game.objects.values():
-          if isinstance(i,Pirate):
-            if i.x == self.x and i.y == self.y: 
-              if i.owner == 2:
-                self.game.Merchant2.pirateDied(i)
-              if i.owner == 3:
-                self.game.Merchant3.pirateDied(i)
-              self.game.removeObject(i)
+        for i in self.game.objects.pirates:
+          if i.x == self.x and i.y == self.y: 
+            if i.owner == 2:
+              self.game.Merchant2.pirateDied(i)
+            if i.owner == 3:
+              self.game.Merchant3.pirateDied(i)
+            self.game.removeObject(i)
       self.game.removeObject(self)
     return True          
 
@@ -775,8 +753,7 @@ class Treasure(Mappable):
   
   def nextTurn(self):
     closest = self.game.mapSize*2
-    for p in self.game.objects.values():
-      if isinstance(p,Pirate):
-        if p._distance(self.x,self.y) < closest:
-          closest = p._distance(self.x,self.y)
+    for p in self.game.objects.pirates:
+      if p._distance(self.x,self.y) < closest:
+        closest = p._distance(self.x,self.y)
     self.gold += sqrt(closest)

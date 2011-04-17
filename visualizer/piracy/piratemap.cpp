@@ -140,7 +140,7 @@ const int& radius )
 {
 
 	float *gaussian = new float[radius*2+1];
-	//float sigma = optionsMan::getFloat( "sigma" );
+	//float sigma = OptionsMan::getFloat( "sigma" );
 
 	#if 0
 	for( int i = -radius; i < radius+1; i++ )
@@ -315,7 +315,7 @@ void PirateMap::generateMap( Game& g )
 		}
 	}
 
-	boxBlur( depthMap, mWidth, mHeight, optionsMan::getInt( "blurRadius" ) );
+	boxBlur( depthMap, mWidth, mHeight, OptionsMan::getInt( "blurRadius" ) );
 
 	for( int x = 0; x < mWidth; x++ )
 	{
@@ -339,30 +339,30 @@ void PirateMap::generateMap( Game& g )
 	QImage textures[10];
 	std::string textureNames[10] =
 	{
-		optionsMan::getStr( "proc1" ),
-		optionsMan::getStr( "proc2" ),
-		optionsMan::getStr( "proc3" ),
-		optionsMan::getStr( "proc4" ),
-		optionsMan::getStr( "proc5" ),
-		optionsMan::getStr( "proc6" ),
-		optionsMan::getStr( "proc7" ),
-		optionsMan::getStr( "proc8" ),
-		optionsMan::getStr( "proc9" ),
-		optionsMan::getStr( "proc10" )
+		OptionsMan::getStr( "proc1" ),
+		OptionsMan::getStr( "proc2" ),
+		OptionsMan::getStr( "proc3" ),
+		OptionsMan::getStr( "proc4" ),
+		OptionsMan::getStr( "proc5" ),
+		OptionsMan::getStr( "proc6" ),
+		OptionsMan::getStr( "proc7" ),
+		OptionsMan::getStr( "proc8" ),
+		OptionsMan::getStr( "proc9" ),
+		OptionsMan::getStr( "proc10" )
 	};
 
 	int depths[10] =
 	{
-		optionsMan::getInt( "depth1" ),
-		optionsMan::getInt( "depth2" ),
-		optionsMan::getInt( "depth3" ),
-		optionsMan::getInt( "depth4" ),
-		optionsMan::getInt( "depth5" ),
-		optionsMan::getInt( "depth6" ),
-		optionsMan::getInt( "depth7" ),
-		optionsMan::getInt( "depth8" ),
-		optionsMan::getInt( "depth9" ),
-		optionsMan::getInt( "depth10" )
+		OptionsMan::getInt( "depth1" ),
+		OptionsMan::getInt( "depth2" ),
+		OptionsMan::getInt( "depth3" ),
+		OptionsMan::getInt( "depth4" ),
+		OptionsMan::getInt( "depth5" ),
+		OptionsMan::getInt( "depth6" ),
+		OptionsMan::getInt( "depth7" ),
+		OptionsMan::getInt( "depth8" ),
+		OptionsMan::getInt( "depth9" ),
+		OptionsMan::getInt( "depth10" )
 	};
 
 	for( int i = 0; i < 10; i++ )
@@ -468,7 +468,7 @@ const unsigned int&							 /*frame*/
 
 	glTranslatef( -2, 2, 0 );
 
-	float size = ((float)Renderer<DupObj>::height())/optionsMan::getInt("mapSize");
+	float size = ((float)Renderer<DupObj>::height())/OptionsMan::getInt("mapSize");
 	for( int i = 0; i < 41; i++ )
 	{
 		glBegin( GL_QUADS );

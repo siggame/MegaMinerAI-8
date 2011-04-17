@@ -167,10 +167,10 @@ void GUI::resizeEvent( QResizeEvent* evt )
 
 void GUI::helpContents()
 {
-  if( optionsMan::isInit() &&
-      optionsMan::exists( "helpURL" ) )
+  if( OptionsMan::isInit() &&
+      OptionsMan::exists( "helpURL" ) )
   {
-    QDesktopServices::openUrl( QUrl( optionsMan::getStr( "helpURL" ).c_str() ) );
+    QDesktopServices::openUrl( QUrl( OptionsMan::getStr( "helpURL" ).c_str() ) );
   } else
   {
     QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
@@ -227,9 +227,9 @@ bool GUI::doSetup()
   
     // If we're not arenaMode, don't even bother setting this up
   if(
-      !optionsMan::isInit() ||
-      !optionsMan::exists( "arenaMode" ) ||
-      !optionsMan::getBool( "arenaMode" )
+      !OptionsMan::isInit() ||
+      !OptionsMan::exists( "arenaMode" ) ||
+      !OptionsMan::getBool( "arenaMode" )
     )
     {
       createMenus();
@@ -339,9 +339,9 @@ void GUI::buildToolSet()
 
   // If we're in arenaMode, don't even bother setting this up
   if(
-      !optionsMan::isInit() ||
-      !optionsMan::exists( "arenaMode" ) ||
-      !optionsMan::getBool( "arenaMode" )
+      !OptionsMan::isInit() ||
+      !OptionsMan::exists( "arenaMode" ) ||
+      !OptionsMan::getBool( "arenaMode" )
     )
   {
     // Create the dock
