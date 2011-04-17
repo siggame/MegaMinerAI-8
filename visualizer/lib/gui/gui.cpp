@@ -507,16 +507,16 @@ void GUI::setFullScreen(bool value)
   
 } 
 
-  void GUI::turnPercentageShortcut1(){	turnPercentageCalc(0); };
-  void GUI::turnPercentageShortcut2(){	turnPercentageCalc(1); };
-  void GUI::turnPercentageShortcut3(){	turnPercentageCalc(2); };
-  void GUI::turnPercentageShortcut4(){	turnPercentageCalc(3); };
-  void GUI::turnPercentageShortcut5(){	turnPercentageCalc(4); };
-  void GUI::turnPercentageShortcut6(){	turnPercentageCalc(5); };
-  void GUI::turnPercentageShortcut7(){	turnPercentageCalc(6); };
-  void GUI::turnPercentageShortcut8(){	turnPercentageCalc(7); };
-  void GUI::turnPercentageShortcut9(){	turnPercentageCalc(8); };  
-  void GUI::turnPercentageShortcut0(){	turnPercentageCalc(9); };
+  void GUI::turnPercentageShortcut1(){turnPercentageCalc(0);};
+  void GUI::turnPercentageShortcut2(){turnPercentageCalc(1);};
+  void GUI::turnPercentageShortcut3(){turnPercentageCalc(2);};
+  void GUI::turnPercentageShortcut4(){turnPercentageCalc(3);};
+  void GUI::turnPercentageShortcut5(){turnPercentageCalc(4);};
+  void GUI::turnPercentageShortcut6(){turnPercentageCalc(5);};
+  void GUI::turnPercentageShortcut7(){turnPercentageCalc(6);};
+  void GUI::turnPercentageShortcut8(){turnPercentageCalc(7);};
+  void GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};  
+  void GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
 
 QTableWidget * GUI::getIndividualStats()
 {

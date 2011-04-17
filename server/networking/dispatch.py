@@ -34,4 +34,5 @@ class SexpProtocol(Int32StringReceiver):
     f = protocol.ServerFactory()
     f.protocol = cls
     reactor.listenTCP(port, f)
+    print "Server Started"
     reactor.run()

@@ -32,7 +32,8 @@ void TimeManager::setTurn( const int& turn )
   //update renderer
   Renderer<DupObj>::update(turn,0);
 
-  GUI::getControlBar()->m_slider->update();
+
+  GUI::getControlBar()->update();
 }
 
 const int& TimeManager::getSpeed()
