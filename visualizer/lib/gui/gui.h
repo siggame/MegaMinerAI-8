@@ -197,9 +197,6 @@ public:
   bool getFullScreen();
   void setFullScreen(bool);
   
-  static QTableWidget * getMultipleStats();
-
-
 private slots:
   void helpContents();
   void fileOpen();
@@ -222,11 +219,17 @@ private slots:
   void turnPercentageShortcut8();
   void turnPercentageShortcut9();
   void turnPercentageShortcut0();
-  
 
-  
+public:
+
+  static QTableWidget* getMultipleStats();
+  static QTableWidget* getIndividualStats();
 
 private:
+  
+  QTableWidget * m_multipleStats;
+  QTableWidget * m_individualStats;
+
   /// Container for the objects in the GUI
   std::map<std::string, guiObj*> m_objects;
   /// Setup?
@@ -252,9 +255,6 @@ private:
 
   /// Unit Stats Area
   QTabWidget * m_unitStatsArea;
-  QTableWidget * m_multipleStats;
-  QTableWidget * m_individualStats;
-
   QStringList m_multipleStatsVerticalLabels;
   QStringList m_multipleStatsHorizontalLabels;
 
