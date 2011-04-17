@@ -1,39 +1,24 @@
 #ifndef AI_H
 #define AI_H
-
-#include "BaseAI.h"
+#include <list>
 #include <iostream>
 #include <algorithm>
 #include <utility>
-#include <list>
-#include <map>
+#include <cmath>
+#include <cstdlib>
+
 using namespace std;
-
-
-struct target
+#include "BaseAI.h"
+template <class T>
+struct MoveHelper
 {
-  target():x(0),y(0),priority(0){};
-  target(size_t X, size_t Y, size_t P ):x(X),y(Y),priority(P){};
-  size_t x,y,priority;
-//  friend bool operator<(const target& lhs, const target& rhs){return lhs.priority > lhs.priority;} 
+  MoveHelper(){}
+  typename list<T>::iterator it;
+  vector<Tile*> path;
+  size_t length() const {return path.size();}
+  friend bool operator<(const MoveHelper<T>& lhs, const MoveHelper<T>& rhs){return lhs.length() < rhs.length();}
+
 };
-
-template <class T>
-bool lowHigh(const T& lhs, const T&rhs)
-{
-  return lhs.priority < rhs.priority;
-}
-template <class T>
-bool highLow(const T& lhs, const T&rhs)
-{
-  return lhs.priority > rhs.priority;
-}
-template <class T, class U>
-bool samePos(T& first, U& second)
-{
-  return first.x()==second.x() and first.y()==second.y();
-}
-
 
 ///The class implementing gameplay logic.
 class AI: public BaseAI
@@ -45,27 +30,51 @@ public:
   virtual void init();
   virtual bool run();
   virtual void end();
+  template <class T>
+  void sortNearest(int x, int y, list<T>& toSort, vector<MoveHelper<T> >& indexed, int type);
+  vector<vector<size_t> > gold;
   vector<vector<bool> > land;
-template <class T>
-void sortNearest(int x, int y, list<T>& toSort, int type);
-
 };
 
 template <class T>
-void AI::sortNearest(int x, int y, list<T>& toSort, int type)
+void AI::sortNearest(int x, int y, list<T>& toSort, vector<MoveHelper<T> >& indexed, int type)
 {
+  indexed.clear();
   for(typename list<T>::iterator it=toSort.begin();it!=toSort.end();it++)
   {
-    (*it).priority = getPath(x,y,(*it).x,(*it).y,type).size();
-    // if there is a path
-    if((*it).priority==0)
+    MoveHelper<T> move;
+    move.it = it;
+    move.path = getPath(x,y,(*it)->x(),(*it)->y(),type);
+    if(move.path.size()!=0)
     {
-      toSort.erase(it);
-      it--;
+      indexed.push_back(move);
     }
   }
-  toSort.sort(lowHigh<target>);
+  sort(indexed.begin(),indexed.end());
 }
 
+template <class T, class U>
+bool at(T& first, list<U>& set)
+{
+  for(typename list<U>::iterator it=set.begin();it!=set.end();it++)
+  {
+    if(samePos(first,**it))
+    {
+      return true;
+    }
+  }
+  return false;
+} 
 
+template <class T, class U>
+bool samePos(T& first, U& second)
+{
+  return first.x()==second.x() and first.y()==second.y();
+}
+
+template <class T, class U>
+bool inRange(T& first, U& second)
+{
+  return abs(first.x()-second.x())+abs(first.y()-second.y())==1;
+}
 #endif

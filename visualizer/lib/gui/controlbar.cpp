@@ -82,8 +82,8 @@ void ControlBar::sliderChanged( int value )
 void ControlBar::update()
 {
   m_slider->setSliderPosition( TimeManager::getTurn() );
-  m_slider->setMaximum( TimeManager::getNumTurns() );
-  turnLabel->setText( QString::number( TimeManager::getNumTurns() ) );
+  m_slider->setMaximum( TimeManager::getNumTurns()-1 );
+  turnLabel->setText( QString::number( TimeManager::getTurn() ) );
 }
 
 void ControlBar::rewind()
