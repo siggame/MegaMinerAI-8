@@ -14,7 +14,9 @@
 #define PIRATE_AVG_HEALTH 3
 #define NUM_SHIPS 4
 #define SHIP_AVG_HEALTH 5
-#define UNIT_INFO 6
+#define TILE_X 6
+#define TILE_Y 7
+#define UNIT_INFO 8
 
 using namespace std;
 
@@ -57,25 +59,87 @@ void renderMap(Game& g)
 {
   SDL_Surface* land = loadImage("images/land.png");
   SDL_Surface* water = loadImage("images/water.png");
-  
+  SDL_Surface* deepWater = loadImage("images/deep_water.png");
+  SDL_Surface* sand = loadImage("images/sand.png");
+    
   SDL_Rect dest;
   
   dest.w = 19;
   dest.h = 19;
   
+  int tileTypes[40][40];
+  
   for(int i = 0; i < g.states[0].tiles.size(); i++)
   {
-    if(g.states[0].tiles[i].id == 0) continue;
+    /*if(g.states[0].tiles[i].id == 0) continue;
     dest.x = g.states[0].tiles[i].x * 19;
     dest.y = g.states[0].tiles[i].y * 19;
       
     if(g.states[0].tiles[i].type)
     {
-     SDL_BlitSurface(water, NULL, screen, &dest);
+      bool isDeepWater = true;
+      //it is water
+      if(g.states[0].tiles[i].x > 0)
+      {
+        if(g.states[0].tiles[i].x - 1)
+      
+      SDL_BlitSurface(water, NULL, screen, &dest);
     }
     else
     {
       SDL_BlitSurface(land, NULL, screen, &dest);
+    }*/
+    
+    tileTypes[g.states[0].tiles[i].x][g.states[0].tiles[i].y] = g.states[0].tiles[i].type;
+  }
+  
+  for(int x = 0; x < 40; x++)
+  {
+    for(int y = 0; y < 40; y++)
+    {
+      dest.x = x * 19;
+      dest.y = y * 19;
+      
+      if(x == 0 || x == 39 || y == 0 || y == 39)
+      {
+        if(tileTypes[x][y])
+        {
+          SDL_BlitSurface(water, NULL, screen, &dest);
+        }
+        else
+        {
+          SDL_BlitSurface(sand, NULL, screen, &dest);
+        }
+        
+        continue;
+      }
+      
+      
+      if( tileTypes[x - 1][y] == tileTypes[x][y] &&
+          tileTypes[x + 1][y] == tileTypes[x][y] &&
+          tileTypes[x][y - 1] == tileTypes[x][y] &&
+          tileTypes[x][y + 1] == tileTypes[x][y])
+      {
+        if(tileTypes[x][y])
+        {
+          SDL_BlitSurface(deepWater, NULL, screen, &dest);
+        }
+        else
+        {
+          SDL_BlitSurface(land, NULL, screen, &dest);
+        }
+      }
+      else
+      {
+        if(tileTypes[x][y])
+        {
+          SDL_BlitSurface(water, NULL, screen, &dest);
+        }
+        else
+        {
+          SDL_BlitSurface(sand, NULL, screen, &dest);
+        }
+      }
     }
   }
 }
@@ -85,7 +149,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   stringstream message;
   SDL_Rect dest;
   dest.x = 768;
-  dest.y = 8;
+  dest.y = 2;
   SDL_Surface* image;
   SDL_Color purple = {255,0,255};
   SDL_Color red = {255,0,0};
@@ -201,7 +265,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   }
   else
   {
-    message << "Info:";
+    message << "Info for (" << unitData[TILE_X] << "," << unitData[TILE_Y] << "):";
   
     image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
     SDL_BlitSurface(image, NULL, screen, &dest);
@@ -307,6 +371,12 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
           }
           break;
         }
+        case TILE_X:
+        case TILE_Y:
+        {
+          continue;
+          break;
+        }
       }
       
       
@@ -346,7 +416,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   dest.y += image->h;
   message << "Controls:";
   
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), darkSlateGray);
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
   SDL_BlitSurface(image, NULL, screen, &dest);
   dest.y += image->h;
   SDL_FreeSurface(image);
@@ -398,9 +468,9 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   
   message.str("");
   
-  message << "                      Version: 0.58";
+  message << "                     Version: 0.584";
   
-  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), black);
+  image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
   dest.y += image->h;
   SDL_FreeSurface(image);
@@ -626,6 +696,8 @@ void renderTurn(Game& g, int turn, int xTile, int yTile)
     unitData[PIRATE_AVG_HEALTH] = piratesHealth[xTile][yTile];
     unitData[NUM_SHIPS] = ships[xTile][yTile];
     unitData[SHIP_AVG_HEALTH] = shipsHealth[xTile][yTile];
+    unitData[TILE_X] = xTile;
+    unitData[TILE_Y] = yTile;
     
   }
   

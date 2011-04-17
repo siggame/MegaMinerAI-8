@@ -681,28 +681,40 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 }
 
 template<typename DupObject>
-void Renderer<DupObject>::printSelected( int r, int c, QString str )
+void Renderer<DupObject>::printToTable( QTableWidget *w, int c, int r, QString str )
 {
-  if( GUI::getMultipleStats()->itemAt( c, r ) )
+  if( w->itemAt( c, r ) )
   {
-    GUI::getMultipleStats()->itemAt( c, r )->setText( str );
-  } else
-  {
-    GUI::getMultipleStats()->setItem( c, r, new QTableWidgetItem( str ) );
+    w->itemAt( c, r )->setText( str );
+  } else {
+    w->setItem( c, r, new QTableWidgetItem( str ) );
   }
+
+}
+
+template<typename DupObject>
+void Renderer<DupObject>::printIndividuals( int c, int r, QString str )
+{
+  printToTable( GUI::getIndividualStats(), c, r, str );
+}
+
+template<typename DupObject>
+void Renderer<DupObject>::printGlobalSelected( int r, int c, QString str )
+{
+  printToTable( GUI::getMultipleStats(), c, r, str );
 }
 
 template<typename DupObject>
 void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int column)
 {
 
-  Single::get()->printSelected( column, 1, QString::number(multi.pirates));
-  Single::get()->printSelected( column, 2, QString::number(multi.avgPirateHealth));
-  Single::get()->printSelected( column, 3, QString::number(multi.avgPirateGold));
-  Single::get()->printSelected( column, 4, QString::number(multi.gold));
-  Single::get()->printSelected( column, 5, QString::number(multi.ships));
-  Single::get()->printSelected( column, 6, QString::number(multi.avgShipHealth));
-  Single::get()->printSelected( column, 7, QString::number(multi.avgShipGold));
-  Single::get()->printSelected( column, 8, QString::number(multi.treasures));
+  Single::get()->printGlobalSelected( column, 1, QString::number(multi.pirates));
+  Single::get()->printGlobalSelected( column, 2, QString::number(multi.avgPirateHealth));
+  Single::get()->printGlobalSelected( column, 3, QString::number(multi.avgPirateGold));
+  Single::get()->printGlobalSelected( column, 4, QString::number(multi.gold));
+  Single::get()->printGlobalSelected( column, 5, QString::number(multi.ships));
+  Single::get()->printGlobalSelected( column, 6, QString::number(multi.avgShipHealth));
+  Single::get()->printGlobalSelected( column, 7, QString::number(multi.avgShipGold));
+  Single::get()->printGlobalSelected( column, 8, QString::number(multi.treasures));
 }
 #endif
