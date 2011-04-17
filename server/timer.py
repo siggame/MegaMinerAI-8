@@ -27,13 +27,13 @@ def install():
       if i.turn == i.players[0]:
         p[0].time -= 1
         if p[0].time < 0:
-          i.declareWinner(i.players[1], 'Player 1 Lagged Out, Player 2 Wins')
           print "2 Wins!"
+          i.declareWinner(i.players[1], 'Player 1 Lagged Out, Player 2 Wins')
       elif i.turn == i.players[1]:
         p[1].time -= 1
         if p[1].time < 0:
-          i.declareWinner(i.players[0], 'Player 2 Lagged Out, Player 1 Wins')
           print "1 Wins!"
+          i.declareWinner(i.players[0], 'Player 2 Lagged Out, Player 1 Wins')
       else:
         games.remove(i)
 
