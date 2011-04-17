@@ -356,6 +356,7 @@ void GUI::buildToolSet()
 
     // Allow users to stupidly move this as small as they like
     m_dockWidget->setMinimumHeight( 0 );
+    m_dockWidget->setMinimumWidth( 0 );
 
     // Add Buffer so we don't feel claustrophobic
     m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
