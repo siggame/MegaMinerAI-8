@@ -41,14 +41,17 @@ const float& TimeManager::getSpeed()
 {
   if( !isInit() )
     return 0;
-  return get()->m_speed*1000;
+  float multi = OptionsMan::getFloat( "speed" );
+  return get()->m_speed*multi;
 }
 
 void TimeManager::setSpeed( const float& speed )
 {
   if( !isInit() )
     throw 0;
-  get()->m_speed = speed/1000;
+
+  float multi = OptionsMan::getFloat( "speed" );
+  get()->m_speed = speed/multi;
 }
 
 int TimeManager::timeHash()

@@ -255,7 +255,7 @@ const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8
 void PirateMap::generateMap( Game& g )
 {
 
-	int pixels = 25;
+	int pixels = OptionsMan::getInt( "unitSize" );
 	int mapSize = g.states[0].mapSize;
 	int mWidth = m_width = mapSize*pixels;
 	int mHeight = m_width = mapSize*pixels;
