@@ -71,8 +71,8 @@ void renderMap(Game& g)
   
   for(int i = 0; i < g.states[0].tiles.size(); i++)
   {
-    /*if(g.states[0].tiles[i].id == 0) continue;
-    dest.x = g.states[0].tiles[i].x * 19;
+    if(g.states[0].tiles[i].id == 0) continue;
+    /*dest.x = g.states[0].tiles[i].x * 19;
     dest.y = g.states[0].tiles[i].y * 19;
       
     if(g.states[0].tiles[i].type)
@@ -468,7 +468,7 @@ void drawText(Game& g, int turn, int numships[2], int numpirates[2], int unitDat
   
   message.str("");
   
-  message << "                     Version: 0.584";
+  message << "                     Version: 0.585";
   
   image = TTF_RenderText_Solid(consoleFont, message.str().c_str(), purple);
   SDL_BlitSurface(image, NULL, screen, &dest);
