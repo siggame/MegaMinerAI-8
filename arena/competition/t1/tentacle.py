@@ -115,7 +115,7 @@ def run_game(client1, client2, name):
   servergood = False
   port = startport
   while not servergood:
-    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/')
+    serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 600)
     i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
     if i == 0 or i == 3 or i == 2:
       print "bad socket"
@@ -128,7 +128,7 @@ def run_game(client1, client2, name):
       return "fail"
   time.sleep(2)
   #now client 1...
-  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1])
+  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], timeout = 600)
   i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
     print "game created!"
@@ -136,7 +136,7 @@ def run_game(client1, client2, name):
     print "game failed to create:",i
     return ("Error","Game failed to create")
   #and client 2...
-  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2])
+  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], timeout = 600)
   i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
   if i == 0:
     print client2,"couldn't connect"
