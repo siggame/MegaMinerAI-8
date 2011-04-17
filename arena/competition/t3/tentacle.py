@@ -22,13 +22,11 @@ AWS_SECRET_KEY = 'R3X1zEKiBLi793mzsyd4mL+pBeIPyYWvHBGvXNQE'
 
 password = 'blastfromthepast'
 
+config = open("config.cfg",'r').read().split()
+startport = int(config[0])
+tentacle = config[1]
 webserver=WebServerInterface('megaminerai.com')
-s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
-logbucket = s3conn.get_bucket("megaminer7")
-
-startport = 21000
 count = 0
-tentacle = "3"
 rootdir = '/tmp/'+tentacle+'/'
 
 repositories = dict()
@@ -130,18 +128,22 @@ def run_game(client1, client2, name):
       return "fail"
   time.sleep(2)
   #now client 1...
-  client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell = True)
-  i = serverp.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT])
+  client1p = pexpect.spawn('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1])
+  i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
     print "game created!"
   else:
     print "game failed to create:",i
     return ("Error","Game failed to create")
   #and client 2...
-  client2p = Popen('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2], shell = True)
+  client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0', cwd = rootdir+repositories[client2])
+  i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
+  if i == 0:
+    print client2,"couldn't connect"
+    return ("Error",client2+"couldn't connect to server")
   print "game started!"
   result = ''
-  while time.time() < startTime + 600 and client1p.returncode == None and client2p.returncode == None and len(result) < 5:
+  while time.time() < startTime + 600 and client1p.isalive() and client2p.isalive() and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
     try:
       result = serverp.readline()
@@ -172,11 +174,13 @@ def run_game(client1, client2, name):
     print "wat?",result
     return ("Error","Unknown results from server:"+result)
   serverp.close(True)
-  client1p.kill()
-  client2p.kill()
+  client1p.close(True)
+  client2p.close(True)
 
   logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
   log = logfile.read()
+  s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
+  logbucket = s3conn.get_bucket("megaminer7")
   newkey = Key(logbucket)
   logname = 'logs/arena/'+str(tentacle)+'-'+str(time.time())+'.gamelog.bz2'
   newkey.key = logname
