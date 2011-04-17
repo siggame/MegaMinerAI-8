@@ -602,11 +602,10 @@ class Ship(Unit):
     isWater = True
     portTile = False
     i = self.game.objects.tiles[x + y * self.game.mapSize]
-    if i.x == x and i.y == y:
-      #If the ship is attempting to move onto a land tile
-      if i.type != 1:
-        #This variable checks whether or not the ship is trying to move onto a port
-        isWater = False
+    #If the ship is attempting to move onto a land tile
+    if i.type != 1:
+      #This variable checks whether or not the ship is trying to move onto a port
+      isWater = False
     for i in self.game.objects.ports:
       if i.x == x and i.y == y:
         #True if we find a port at desired location
