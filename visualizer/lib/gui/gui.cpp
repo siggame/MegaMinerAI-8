@@ -228,6 +228,7 @@ void GUI::fileOpen()
 		dirinfoOUT.open("dirinfo.txt");
 		dirinfoOUT << m_previousDirectory.toStdString();
 		dirinfoOUT.close();
+    cout << filename.toStdString() << endl;
     loadGamelog( filename.toStdString() );
   }
 
@@ -241,23 +242,22 @@ bool GUI::doSetup()
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
   createActions();
-  
+  buildControlBar();
+
+  createMenus();
+  buildToolSet();
+
     // If we're not arenaMode, don't even bother setting this up
   if(
       !OptionsMan::isInit() ||
       !OptionsMan::exists( "arenaMode" ) ||
-      !OptionsMan::getBool( "arenaMode" )
+      OptionsMan::getBool( "arenaMode" )
     )
     {
-      createMenus();
-      buildToolSet();
-
-    }
-    else//in arena mode
-    {
+      menuBar()->hide();
       setFullScreen(true);
+      m_dockWidget->hide();
     }
-  buildControlBar();
 
   setWindowState(
       windowState()
@@ -354,48 +354,40 @@ void GUI::buildToolSet()
   m_toolSetWidget =
     (GOCFamily_GUIToolSet*)GUI::getGUIObject( "ToolSet" );
 
-  // If we're in arenaMode, don't even bother setting this up
-  if(
-      !OptionsMan::isInit() ||
-      !OptionsMan::exists( "arenaMode" ) ||
-      !OptionsMan::getBool( "arenaMode" )
-    )
+  // Create the dock
+  m_dockWidget = new QDockWidget( this );
+  // Give it a frame to hold a layout
+  m_dockLayoutFrame = new QFrame( m_dockWidget );
+  // Give this frame a layout
+  m_dockLayout = new QVBoxLayout( m_dockLayoutFrame );
+  // Console area to the left
+  m_consoleArea = new QTextEdit( m_dockLayoutFrame );
+  m_consoleArea -> setReadOnly(1);
+
+  // Allow users to stupidly move this as small as they like
+  m_dockWidget->setMinimumHeight( 0 );
+  m_dockWidget->setMinimumWidth( 0 );
+
+  // Add Buffer so we don't feel claustrophobic
+  m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
+
+  // Add the console to the layout
+  m_dockLayout->addWidget( m_consoleArea );
+
+  //Add Unit Stats to the layout
+  initUnitStats();
+
+  // If we have our tools for this game, add those bitches
+  if( m_toolSetWidget )
   {
-    // Create the dock
-    m_dockWidget = new QDockWidget( this );
-    // Give it a frame to hold a layout
-    m_dockLayoutFrame = new QFrame( m_dockWidget );
-    // Give this frame a layout
-    m_dockLayout = new QVBoxLayout( m_dockLayoutFrame );
-    // Console area to the left
-    m_consoleArea = new QTextEdit( m_dockLayoutFrame );
-    m_consoleArea -> setReadOnly(1);
-
-    // Allow users to stupidly move this as small as they like
-    m_dockWidget->setMinimumHeight( 0 );
-    m_dockWidget->setMinimumWidth( 0 );
-
-    // Add Buffer so we don't feel claustrophobic
-    m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
-
-    // Add the console to the layout
-    m_dockLayout->addWidget( m_consoleArea );
-
-    //Add Unit Stats to the layout
-    initUnitStats();
-
-    // If we have our tools for this game, add those bitches
-    if( m_toolSetWidget )
-    {
-      m_dockLayout->addWidget( m_toolSetWidget );
-    }
-
-    // Add the frame to the actual dock
-    m_dockWidget->setWidget( m_dockLayoutFrame );
-    // Add the dock to the main window
-    addDockWidget( Qt::RightDockWidgetArea, m_dockWidget );
-
+    m_dockLayout->addWidget( m_toolSetWidget );
   }
+
+  // Add the frame to the actual dock
+  m_dockWidget->setWidget( m_dockLayoutFrame );
+  // Add the dock to the main window
+  addDockWidget( Qt::RightDockWidgetArea, m_dockWidget );
+
 }
 
 void GUI::closeGUI()

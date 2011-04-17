@@ -255,12 +255,10 @@ const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8
 void PirateMap::generateMap( Game& g )
 {
 
-	cout << "Generate Map: " << g.states[0].tiles.size() << endl;
 	int pixels = 25;
 	int mapSize = g.states[0].mapSize;
 	int mWidth = m_width = mapSize*pixels;
 	int mHeight = m_width = mapSize*pixels;
-	cout << "Pixels: " << pixels << endl;
 
 	int **depthMap = new int*[mWidth];
 	int tx = 0;
