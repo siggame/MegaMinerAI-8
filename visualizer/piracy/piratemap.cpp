@@ -232,19 +232,32 @@ QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths
 	float r0, g0, b0;
 	float r1, g1, b1;
 
-	#if 1
+
+	#if 0
 	r0 = qRed( images[i].pixel( x, y ) );
 	g0= qGreen( images[i].pixel( x, y ) );
 	b0= qBlue( images[i].pixel( x, y ) );
 	r1 = qRed(  images[i+1].pixel( x, y ) );
 	g1 = qGreen(  images[i+1].pixel( x,y ) );
 	b1 = qBlue(  images[i+1].pixel( x, y ) );
+#else
+
+  QRgb c0 = ((QRgb*)images[i].scanLine(y))[x];
+  QRgb c1 = ((QRgb*)images[i+1].scanLine(y))[x];
 	#endif
 
+#if 0
 	QRgb color = qRgb(
 		(int)interp( depth, depths[i], depths[i+1], b0, b1 ),
 		(int)interp( depth, depths[i], depths[i+1], g0, g1 ),
 		(int)interp( depth, depths[i], depths[i+1], r0, r1 ) );
+#else
+	QRgb color = qRgb(
+		(int)interp( depth, depths[i], depths[i+1], qBlue( c0 ), qBlue( c1 ) ),
+		(int)interp( depth, depths[i], depths[i+1], qGreen( c0 ), qGreen( c1 )),
+		(int)interp( depth, depths[i], depths[i+1], qRed( c0 ) , qRed( c1 ) ) );
+
+#endif
 
 	return color;
 
