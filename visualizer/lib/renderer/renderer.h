@@ -27,6 +27,12 @@ typedef GameObject renderObj;
 
 class RenderWidget;
 
+struct Talks
+{
+  int id;
+  String message;
+};
+
 struct Stats
 {
   Stats()
