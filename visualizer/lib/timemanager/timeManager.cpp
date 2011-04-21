@@ -115,6 +115,7 @@ void TimeManager::start()
     get()->timer = new QTimer( this );
     connect( get()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
     get()->timer->start( 35 );
+
 }
 
 void TimeManager::timerStart()
@@ -131,6 +132,9 @@ void TimeManager::updateFrames()
   m_turn += m_frame / m_framesPerTurn;
   m_frame %= m_framesPerTurn;
 
+
+#if 0
+
   //Idiot check low
   if (m_turn < 0)
   {
@@ -144,6 +148,7 @@ void TimeManager::updateFrames()
     m_turn = m_numTurns-1;
     m_frame = m_framesPerTurn-1;
   }
+#endif
 
   //If in arena mode, show winner for a few secs at end
   if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)

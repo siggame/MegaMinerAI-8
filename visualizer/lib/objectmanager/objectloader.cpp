@@ -98,11 +98,11 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
        //Add talking
        for(std::vector<Animation*>::iterator j = game.states[turn].animations.begin(); j != game.states[turn].animations.end(); j++)
        {
-          if(j -> type == TALK)
+          if((*j)->type == TALK)
           {
             if( ((Talk*)*j)->speaker == i->second.id )
             {
-              PirateTalk *talk = new PirateTalk( pirate, j->message );
+              PirateTalk *talk = new PirateTalk( pirate, ((Talk*)*j)->message );
               pirate->setGOC( talk );
             }
           }

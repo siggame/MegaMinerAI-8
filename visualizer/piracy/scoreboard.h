@@ -3,6 +3,7 @@
 #include "../lib/gocfamily_render.h"
 #include "../lib/parser/structures.h"
 #include "../lib/renderer/textRenderer/drawGLFont.h"
+#include <QWaitCondition>
 #include <list>
 #include <iostream>
 using namespace std;
@@ -25,6 +26,9 @@ class Scoreboard : public GOCFamily_Render
 
     void update();
     void renderAt( const unsigned int& turn, const unsigned int& frame );
+
+    void drawStart();
+    void drawEnd();
 
     void parseScores( Game& g );
 

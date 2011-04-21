@@ -36,6 +36,15 @@ void Scoreboard::parseScores( Game& g )
   } 
 }
 
+void Scoreboard::drawStart()
+{
+
+}
+
+void Scoreboard::drawEnd()
+{
+}
+
 void Scoreboard::renderAt( const unsigned int& turn, const unsigned int& frame )
 {
 
@@ -45,6 +54,19 @@ void Scoreboard::renderAt( const unsigned int& turn, const unsigned int& frame )
   glEnable( GL_TEXTURE_2D );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   glEnable( GL_BLEND );
+
+
+  if( turn < 0 )
+  {
+    drawStart();
+    return;
+  }
+
+  if( turn == TimeManager::getNumTurns() )
+  {
+    drawEnd();
+    return;
+  }
 
   glPushMatrix();
   glTranslatef( Renderer<DupObj>::height(), 0, 0 );
