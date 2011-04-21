@@ -2,6 +2,7 @@
 #include "../../piracy/piratemap.h"
 #include "../../piracy/renderdata.h"
 #include "../../piracy/piracylocations.h"
+#include "../../piracy/piratetalk.h"
 #include "../../piracy/objecttype.h"
 #include "../../piracy/piratehealth.h"
 #include "../../piracy/shiphealth.h"
@@ -73,7 +74,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
          {
            looksets.insert( std::pair<idtype,LookupSet<GameObject*,idtype> >(id,LookupSet<GameObject*,idtype>(numTurns,numFrames,id) ));
          }
-
+         
   	    GameObject * pirate = new GameObject(id);
 
   	    //setup stuff
@@ -94,12 +95,26 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    pirate->setGOC(type);
         pirate->setGOC(health);
 
+       //Add talking
+       for(std::vector<Animation*>::iterator j = game.states[turn].animations.begin(); j != game.states[turn].animations.end(); j++)
+       {
+          if(j -> type == TALK)
+          {
+            if( ((Talk*)*j)->speaker == i->second.id )
+            {
+              PirateTalk *talk = new PirateTalk( pirate, j->message );
+              pirate->setGOC( talk );
+            }
+          }
+      
+       }
+
   	    //end setup
 
-	    if (!looksets[id].addNode(pirate,turn,0))
-	    {
-		std::cout << "Pirate node adding fail\n";
-	    }
+	      if (!looksets[id].addNode(pirate,turn,0))
+	      {
+          std::cout << "Pirate node adding fail\n";
+	      }
       }
 
       for( 
@@ -143,7 +158,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    //end setup
 	    if (!looksets[id].addNode(ship,turn,0))
 	    {
-		std::cout << "Ship node adding fail\n";
+        std::cout << "Ship node adding fail\n";
 	    }
       }
 
@@ -182,7 +197,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
 	    if(!looksets[id].addNode(treasure,turn,0))
 	    {
-		std::cout << "Treasure node adding fail\n";
+        std::cout << "Treasure node adding fail\n";
 	    }
 
       }
@@ -220,11 +235,13 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   	    //port->setGOC(render);
   	    //end setup
 
-	    if (!looksets[id].addNode(port,turn,0))
-	    {
-		std::cout << "Port node adding fail\n";
-	    }
+	      if (!looksets[id].addNode(port,turn,0))
+	      {
+          std::cout << "Port node adding fail\n";
+	      }
       }
+      
+
 
   }
 
