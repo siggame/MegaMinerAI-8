@@ -519,12 +519,6 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
       y2 = temp;
     }
   
-    stringstream ss;
-    ss << "(" << x1 << ", " << y1 << ") -> (" 
-      << x2 << ", " << y2 << ")" << endl; 
-
-    GUI::clearConsole();
-    GUI::appendConsole( ss.str() );
     Single::get()->selectedUnitIds.clear();
   }
 
