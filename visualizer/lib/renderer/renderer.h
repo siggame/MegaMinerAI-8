@@ -8,6 +8,7 @@
 #include <set>
 #include <QTableWidget>
 #include <GL/gl.h>
+#include <string>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
 #include "../objectmanager/objectmanager.h"
@@ -30,7 +31,7 @@ class RenderWidget;
 struct Talks
 {
   int id;
-  String message;
+  string message;
 };
 
 struct Stats
