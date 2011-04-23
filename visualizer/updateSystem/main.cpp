@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include "ftp.h"
+#include "updatemonitor.h"
 
 using namespace std;
 int main( int argc, char *argv[] )

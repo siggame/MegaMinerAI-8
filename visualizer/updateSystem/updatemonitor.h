@@ -1,7 +1,6 @@
-#ifndef FTP_H
-#define FTP_H
+#ifndef UPDATEMONITOR_H
+#define UPDATEMONITOR_H 
 #include <QFtp>
-
 
 class UpdateMonitor: public QFtp
 {
