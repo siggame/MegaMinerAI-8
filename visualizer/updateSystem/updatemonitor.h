@@ -55,7 +55,16 @@ private:
 
   QTimer *m_monitorTimer;
   int m_monitorTimeout;
-  bool m_waitingForFtp;
+
+  enum GenericStatus
+  {
+    S_None = 0,
+    S_Waiting,
+    S_Delivered
+  };
+
+  GenericStatus m_ftpStatus;
+  GenericStatus m_timeStampStatus;
 
 };
 

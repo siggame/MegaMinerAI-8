@@ -20,7 +20,8 @@ UpdateMonitor::UpdateMonitor( const QString& host, QObject* parent ) : QFtp( par
   connect( m_monitorTimer, SIGNAL(timeout()), this, SLOT(checkForUpdate()) );
   m_monitorTimeout = 500000;
 
-  m_waitingForFtp = false;
+  m_ftpStatus = S_None;
+  m_timeStampStatus = S_None;
 
 }
 
@@ -64,9 +65,9 @@ void UpdateMonitor::commandDone( int id, bool error )
 void UpdateMonitor::stateChange( int state )
 {
   m_ftpState = (QFtp::State)state;
-  if( m_waitingForFtp && m_ftpState == QFtp::LoggedIn )
+  if( m_ftpStatus == Waiting && m_ftpState == QFtp::LoggedIn )
   {
-    m_waitingForFtp = false;
+    m_ftpStatus = S_Delivered;
     checkForUpdate();
   }
 }
@@ -76,22 +77,38 @@ void UpdateMonitor::listUpdate( const QUrlInfo& i )
   if( i.name() == QString( "update.lst" ) )
   {
     cout << qPrintable( i.name() + QString( " Time: " ) + i.lastModified().toString( "dd.MM.yyyy:hh:mm:ss.zzz" ) ) << endl;
-  }
 
+    m_timeStampStatus = S_Delivered;
+    checkForUpdate();
+  }
 }
 
 void UpdateMonitor::checkForUpdate()
 {
   if( m_ftpState != QFtp::LoggedIn ) 
   {
-    m_waitingForFtp = true;
+    m_ftpStatus = S_Waiting;
     login();
     return;
   }
 
-  // Logged In
-  list( m_remoteDir );
-  cout << "START LISTING" << endl;
+  if( m_ftpStatus == S_Delivered )
+  {
+    m_ftpStatus = S_None;
+  }
+
+  if( m_timeStampStatus == S_None )
+  {
+    list( m_remoteDir );
+    m_timeStampStatus = S_Waiting;
+    return;
+  } else if( m_timeStampStatus == S_Delivered )
+  {
+    m_timeStampStatus = S_None;
+  } else 
+  {
+    throw MonitorException( "No Timestamp Achieved Before Next Call" );
+  }
 
 
 }

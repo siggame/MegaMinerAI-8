@@ -19,7 +19,7 @@ int main( int argc, char *argv[] )
   UpdateMonitor *updater = new UpdateMonitor( "r99acm.device.mst.edu", &app );
   updater->setRemoteDirectory( "./visualizer" );
   updater->setLocalDirectory( "./" );
-  updater->setMonitorInterval( 50 );
+  updater->setMonitorInterval( 1000 );
   updater->checkForUpdate();
   updater->startMonitoring();
 
