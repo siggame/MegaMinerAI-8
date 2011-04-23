@@ -4,14 +4,36 @@
 
 using namespace std;
 
+namespace SIGGAME_UPDATE
+{
+
 UpdateMonitor::UpdateMonitor( const QString& host, QObject* parent ) : QFtp( parent )
 {
-  m_host = host;
+  m_hostName = host;
   connect( this, SIGNAL(commandFinished(int,bool)), this, SLOT(commandDone(int,bool)) );
   connect( this, SIGNAL(commandStarted(int)), this, SLOT( commandStart( int ) ) );
   connect( this, SIGNAL(stateChanged(int)), this, SLOT( stateChange( int ) ) );
   connect( this, SIGNAL(listInfo(const QUrlInfo&)), this, SLOT(listUpdate(const QUrlInfo&)));
 
+}
+
+
+void UpdateMonitor::startMonitoring()
+{
+  if( m_monitorStatus == Monitoring )
+    throw MonitorException( "Already Monitoring FTP" );
+
+  m_monitorStatus = Monitoring;
+
+}
+
+void UpdateMonitor::stopMonitoring()
+{
+
+  if( m_monitorStatus == Waiting )
+    throw MonitorException( "Already Stopped" );
+
+  m_monitorStatus = Waiting;
 }
 
 void UpdateMonitor::commandStart( int id )
@@ -39,6 +61,22 @@ void UpdateMonitor::listUpdate( const QUrlInfo& i )
 
 }
 
+///  Getters and Setters Below Here
+
+
+void UpdateMonitor::setHostname( const QString& host )
+{
+  // TODO: Check if this is different from our current host
+  //  and if so, disconnect from the current one
+  m_hostName = host;
+
+}
+
+const QString& UpdateMonitor::getHostname() const
+{
+  return m_hostName;
+}
+
 void UpdateMonitor::setRemoteDirectory( const QString& dir )
 {
   m_remoteDir = dir;
@@ -49,4 +87,14 @@ const QString& UpdateMonitor::getRemoteDirectory() const
   return m_remoteDir;
 }
 
+void UpdateMonitor::setLocalDirectory( const QString& dir )
+{
+  m_localDir = dir;
+}
 
+const QString& UpdateMonitor::getLocalDirectory() const
+{
+  return m_localDir;
+}
+
+} // END OF SIGGAME_UPDATE namespace

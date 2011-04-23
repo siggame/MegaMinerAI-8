@@ -8,13 +8,17 @@
 #include "updatemonitor.h"
 
 using namespace std;
+
+using namespace SIGGAME_UPDATE;
+
 int main( int argc, char *argv[] )
 {
 
   QApplication app (argc, argv, false);
 
-  UpdateMonitor *ftp = new UpdateMonitor( "r99acm.device.mst.edu", &app );
-  ftp->setRemoteDirectory( "/visualizer" );
+  UpdateMonitor *updater = new UpdateMonitor( "r99acm.device.mst.edu", &app );
+  updater->setRemoteDirectory( "/visualizer" );
+  updater->setLocalDirectory( "./" );
 
   cout << "Connecting?" << endl;
 
