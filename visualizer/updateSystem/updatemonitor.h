@@ -35,19 +35,27 @@ public:
   void setLocalDirectory( const QString& dir );
   const QString& getLocalDirectory() const;
 
+  void setMonitorInterval( const int& msec ); 
+  const int& getMonitorInterval() const;
+
 public slots:
   void commandDone( int id, bool error );
   void commandStart( int id );
   void stateChange( int state );
   void listUpdate( const QUrlInfo &i );
 
+  void checkForUpdate();
+
 private:
   QString m_hostName;
   QString m_remoteDir;
   QString m_localDir;
-  QFtp::State currentState;
+  QFtp::State m_ftpState;
   MonitorStatus m_monitorStatus; 
 
+  QTimer *m_monitorTimer;
+  int m_monitorTimeout;
+  bool m_waitingForFtp;
 
 };
 
