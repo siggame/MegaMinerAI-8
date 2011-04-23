@@ -47,7 +47,7 @@ void UpdateMonitor::stopMonitoring()
 
 void UpdateMonitor::commandStart( int id )
 {
-  cout << "Command Started: " << id << endl;
+  //cout << "Command Started: " << id << endl;
 }
 
 const UpdateMonitor::MonitorStatus& UpdateMonitor::status() const
@@ -58,7 +58,7 @@ const UpdateMonitor::MonitorStatus& UpdateMonitor::status() const
 void UpdateMonitor::commandDone( int id, bool error )
 {
 
-  cout << "Command Finished: " << id << ", Error: " << error << endl;
+  //cout << "Command Finished: " << id << ", Error: " << error << endl;
 }
 
 void UpdateMonitor::stateChange( int state )
@@ -73,9 +73,9 @@ void UpdateMonitor::stateChange( int state )
 
 void UpdateMonitor::listUpdate( const QUrlInfo& i )
 {
-  if( i.name() == QString( "visualizer.exe" ) )
+  if( i.name() == QString( "update.lst" ) )
   {
-    cout << qPrintable( i.lastModified().toString( "dd.MM.yyyy:hh:mm:ss.zzz" ) ) << endl;
+    cout << qPrintable( i.name() + QString( " Time: " ) + i.lastModified().toString( "dd.MM.yyyy:hh:mm:ss.zzz" ) ) << endl;
   }
 
 }
@@ -90,7 +90,8 @@ void UpdateMonitor::checkForUpdate()
   }
 
   // Logged In
-  list( "/" );
+  list( m_remoteDir );
+  cout << "START LISTING" << endl;
 
 
 }

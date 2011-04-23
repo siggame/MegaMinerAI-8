@@ -16,10 +16,10 @@ int main( int argc, char *argv[] )
 
   QApplication app (argc, argv, false);
 
-  UpdateMonitor *updater = new UpdateMonitor( "ftp://r99acm.device.mst.edu", &app );
-  updater->setRemoteDirectory( "/visualizer" );
+  UpdateMonitor *updater = new UpdateMonitor( "r99acm.device.mst.edu", &app );
+  updater->setRemoteDirectory( "./visualizer" );
   updater->setLocalDirectory( "./" );
-  //updater->setMonitorInterval( 50 );
+  updater->setMonitorInterval( 50 );
   updater->checkForUpdate();
   updater->startMonitoring();
 
