@@ -41,6 +41,11 @@ void UpdateMonitor::commandStart( int id )
   cout << "Command Started: " << id << endl;
 }
 
+const UpdateMonitor::MonitorStatus& UpdateMonitor::status() const
+{
+  return m_monitorStatus;
+}
+
 void UpdateMonitor::commandDone( int id, bool error )
 {
 

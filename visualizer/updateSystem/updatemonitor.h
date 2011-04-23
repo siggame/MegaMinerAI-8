@@ -2,6 +2,7 @@
 #define UPDATEMONITOR_H 
 #include <QFtp>
 #include <QTimer>
+#include "updatemonitor_exceptions.h"
 
 namespace SIGGAME_UPDATE
 {
@@ -21,7 +22,7 @@ public:
     Waiting
   };
 
-  void status();
+  const MonitorStatus& status() const;
 
 public:
   // Getters/Setters
