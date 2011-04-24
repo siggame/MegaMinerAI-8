@@ -20,27 +20,9 @@ int main(int argc, char *argv[])
 	if (!OptionsMan::create())
 	    return 1;
 
-	if (!GUI::create())
-	    return 1;
-
-	if (!ResourceMan::create())
-	    return 1;
-
 	if (!Mutex::create())
 	    return 1;
 
-	if (!Threadler::create())
-	    return 1;
-
-	if (!ObjectManager::create())
-	    return 1;
-
-
-	if (!ObjectLoader::create())
-	    return 1;
-
-	if (!TimeManager::create())
-	    return 1;
 
 	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
 	{
@@ -56,6 +38,26 @@ int main(int argc, char *argv[])
 		ObjectLoader::destroy();
 		return 1;
 	}
+
+	if (!GUI::create())
+	    return 1;
+
+	if (!ResourceMan::create())
+	    return 1;
+
+	if (!Threadler::create())
+	    return 1;
+
+	if (!ObjectManager::create())
+	    return 1;
+
+
+	if (!ObjectLoader::create())
+	    return 1;
+
+	if (!TimeManager::create())
+	    return 1;
+
 
 	// initialize global options
 	OptionsMan::addInt("numTurns",1);

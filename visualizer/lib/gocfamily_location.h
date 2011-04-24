@@ -8,10 +8,10 @@ class GOCFamily_Location :public GOComponent
 public:
     GOCFamily_Location()
     {
-	m_x = 0;
-	m_y = 0;
-	m_z = 0;
-	m_dir = 0;
+      m_x = 0;
+      m_y = 0;
+      m_z = 0;
+      m_dir = 0;
     }
 
     const GOC_IDType familyID() const

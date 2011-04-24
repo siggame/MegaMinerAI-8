@@ -14,6 +14,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     TimeManager()
     {
       m_sleepTime = -1;
+      m_awakeTime = -2;
     }
     enum mode
     {
@@ -59,6 +60,7 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     int m_lastTime;
     int m_hash;
     int m_sleepTime;
+    int m_awakeTime;
     int m_time;
 };
 

@@ -8,6 +8,7 @@
 #include <set>
 #include <QTableWidget>
 #include <GL/gl.h>
+#include <string>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
 #include "../objectmanager/objectmanager.h"
@@ -26,6 +27,12 @@ typedef GameObject renderObj;
 #define renderDirsName  "renderDirections"
 
 class RenderWidget;
+
+struct Talks
+{
+  int id;
+  string message;
+};
 
 struct Stats
 {
