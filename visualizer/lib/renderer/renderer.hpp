@@ -548,11 +548,10 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
             loc->y() <= y2 )
           {
             temp.selected = true;
+
             #if 1
             int id = it->first;
             Single::get()->selectedUnitIds.insert( id );
-
-            stringstream ss;
             #endif
           } else 
           {
@@ -614,6 +613,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
         {
           if( !treasure )
           {
+            
             switch( owner )
             {
               case 0:
@@ -628,6 +628,14 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
               case 3:
                 p3 += tStats;
                 break;
+            }
+            
+            //Selected Pirate
+            if(((ObjectType*)goc)->type() == POT_PIRATE)
+            {
+              //Talk
+              
+              
             }
           } else {
             selected += tStats;
@@ -697,6 +705,12 @@ template<typename DupObject>
 void Renderer<DupObject>::printGlobalSelected( int r, int c, QString str )
 {
   printToTable( GUI::getMultipleStats(), c, r, str );
+}
+
+template<typename DupObject>
+void Renderer<DupObject>::appendToConsole( string str )
+{
+  GUI::appendConsole( str );
 }
 
 template<typename DupObject>

@@ -146,6 +146,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
     void printGlobalSelected( int c, int r, QString str );
     void printIndividuals( int c, int r, QString str );
     void printToTable( QTableWidget *w, int c, int r, QString str );
+    void appendToConsole( string str );
 
     static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
       const unsigned int & time, DupObject obj);
