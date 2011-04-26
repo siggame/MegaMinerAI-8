@@ -19,11 +19,15 @@ int main( int argc, char *argv[] )
   UpdateMonitor *updater = new UpdateMonitor( "r99acm.device.mst.edu", &app );
   updater->setRemoteDirectory( "./visualizer" );
   updater->setLocalDirectory( "./" );
-  updater->setMonitorInterval( 1000 );
+  updater->setMonitorInterval( 500000 );
   updater->checkForUpdate();
   updater->startMonitoring();
 
-  cout << "Connecting?" << endl;
+  QProcess *binary = new QProcess( &app );
+  // visualizer for linux
+  // visualizer.exe for windows
+  binary->start( "../visualizer" );
+  binary->waitForFinished();
 
   app.exec();
 
