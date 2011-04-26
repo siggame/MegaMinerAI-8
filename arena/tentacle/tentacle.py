@@ -26,20 +26,11 @@ config = open("config.cfg",'r').read().split()
 startport = int(config[0])
 tentacle = config[1]
 webserver=WebServerInterface('megaminerai.com')
-count = 0
 rootdir = '/tmp/'+tentacle+'/'
 
 repositories = dict()
 
 working_copies=dict()
-
-Popen("rm -rf "+rootdir+"/*", shell = True).wait()
-Popen("cp -r "+ "/home/ubuntu/megaminer7/server "+rootdir, shell = True).wait()
-
-def getPort():
-  global count
-  count = count + 1
-  return startport+count
 
 def update(program):
   print "updating",program
@@ -54,6 +45,7 @@ def update(program):
   if not exists(rootdir+repositories[program]):
     p = pexpect.spawn('rm -rf '+rootdir+split(path)[1][:-4])
     i = p.expect([pexpect.EOF])
+    p.close(True)
     print 'cloning'
     command = "git clone ssh://mmweb@r99acm.device.mst.edu:2222" + path
     cwd = rootdir
@@ -61,9 +53,11 @@ def update(program):
     #first git clean
     p = pexpect.spawn("git checkout master", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
+    p.close(True)
     #print p.before
     p = pexpect.spawn("git clean -f", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
+    p.close(True)
     #print p.before
     print 'pulling'
     command = "git pull"
@@ -77,10 +71,12 @@ def update(program):
     if i == 1:
       print "error in git"
       print p.before
+      p.close(True)
       return "Git clone timed out for "+program
   else:
     print "ERROR, can't clone git directory of",program
     print p.before
+    p.close(True)
     return "Git clone timed out for "+program
   if commit != None:
     p = pexpect.spawn("git checkout "+commit,cwd = rootdir+repositories[program])
@@ -88,16 +84,20 @@ def update(program):
     if i == 0:
       print "failed to get the build",commit
       print p.before
+      p.close(True)
       return "Failed to get commit "+str(commit)+" for "+program
+  p.close(True)
   
   if program != 'server':
     p = pexpect.spawn("make", cwd = rootdir+repositories[program])
     i = p.expect(['Error',pexpect.EOF], timeout = 60)
+    p.close(True)
     if i == 0:
       print "failed to make"
       return "Faild to make "+program
     p = pexpect.spawn("chmod +x run", cwd = rootdir+repositories[program])
     i = p.expect([pexpect.EOF])
+    p.close(True)
   return "good!"
 
 @task
@@ -187,6 +187,8 @@ def run_game(client1, client2, name):
     print "wat?",result
     return ("Error","Unknown results from server:"+result)
   serverp.close(True)
+  client1p.kill()
+  client2p.kill()
   #client1p.close(True)
   #client2p.close(True)
 

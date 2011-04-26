@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 from subprocess import Popen
-Popen("rm -rf /tmp/1", shell = True).wait()
-Popen("rm -rf /tmp/2", shell = True).wait()
-Popen("rm -rf /tmp/3", shell = True).wait()
-Popen("rm -rf /tmp/4", shell = True).wait()
 
-Popen("mkdir /tmp/1", shell = True).wait()
-Popen("mkdir /tmp/2", shell = True).wait()
-Popen("mkdir /tmp/3", shell = True).wait()
-Popen("mkdir /tmp/4", shell = True).wait()
-Popen("celeryd --concurrency=1 --time-limit=600", shell = True, cwd="/home/ubuntu/megaminer7/arena/competition/t1")
-Popen("celeryd --concurrency=1 --time-limit=600" , shell = True, cwd="/home/ubuntu/megaminer7/arena/competition/t2")
-Popen("celeryd --concurrency=1 --time-limit=600", shell = True, cwd="/home/ubuntu/megaminer7/arena/competition/t3")
-Popen("celeryd --concurrency=1 --time-limit=600", shell = True, cwd="/home/ubuntu/megaminer7/arena/competition/t4")
+NUM_TENTACLES = 2
+
+for i in range(NUM_TENTACLES):
+  Popen("rm -rf /tmp/"+str(i), shell = True).wait()
+  Popen("mkdir /tmp/"+str(i), shell = True).wait()
+  f = open("/tmp/"+str(i)+"/config.cfg",'w')
+  f.write(str(19000+1000*i)+'\n')
+  f.write(str(i)+'\n')
+  f.close()
+  Popen("cp tentacle.py celeryconfig.py WebServerInterface.py /tmp/"+str(i),shell = True).wait()
+  Popen("cp -r "+"server /tmp/"+str(i),shell = True, cwd = "../..").wait()
+  Popen("celeryd --concurrency=1 --time-limit=600", shell = True, cwd="/tmp/"+str(i))

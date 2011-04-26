@@ -1,9 +1,0 @@
-BROKER_HOST = '10.85.129.91'
-BROKER_PORT = 5672
-BROKER_USER = 'mastercontroller'
-BROKER_PASSWORD = 'XSPnDy5G'
-BROKER_VHOST = 'arena'
-
-CELERY_RESULT_BACKEND = 'amqp'
-
-CELERY_IMPORTS = ("tentacle", )
