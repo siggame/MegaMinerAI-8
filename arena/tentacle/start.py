@@ -13,4 +13,4 @@ for i in range(NUM_TENTACLES):
   f.close()
   Popen("cp tentacle.py celeryconfig.py WebServerInterface.py /tmp/"+str(i),shell = True).wait()
   Popen("cp -r "+"server /tmp/"+str(i),shell = True, cwd = "../..").wait()
-  Popen("celeryd --concurrency=1 --time-limit=600", shell = True, cwd="/tmp/"+str(i))
+  Popen("celeryd -n tentacle."+str(i), shell = True, cwd="/tmp/"+str(i))
