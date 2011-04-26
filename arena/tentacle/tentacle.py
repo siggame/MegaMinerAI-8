@@ -120,8 +120,9 @@ def run_game(client1, client2, name):
     if i == 0 or i == 3 or i == 2:
       #print "bad socket"
       port += 1
+      serverp.close(True)
     elif i == 1:
-      print tentacle,"server should be started on port",port
+      print tentacle+" server should be started on port "+str(port)
       servergood = True
     else:
       print 'THE WORLD IS AT AN END'
@@ -133,10 +134,10 @@ def run_game(client1, client2, name):
   #i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   i = serverp.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
-    print tentacle,"game created!"
+    print tentacle+" game created!"
   else:
-    print client1p.returncode
-    print tentacle,"game failed to create:",i
+    #print client1p.returncode
+    print tentacle+" game failed to create:"+i
     return ("Error","Game failed to create "+client1)
   #and client 2...
   client2p = Popen(['/bin/bash ./run localhost:'+str(port) + ' 0'], cwd = rootdir+repositories[client2], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
@@ -146,7 +147,7 @@ def run_game(client1, client2, name):
   #if i == 0:
   #  print client2,"couldn't connect"
   #  return ("Error",client2+" couldn't connect to server")
-  print tentacle,"game started!"
+  print tentacle+" game started! (" + client1 + " vs. " + client2 + ")"
   result = ''
   while time.time() < startTime + 600 and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
@@ -165,8 +166,8 @@ def run_game(client1, client2, name):
     except:
       pass
   #result = serverp.readlines()
-  print result
-  print tentacle,"game completed!"
+  #print result
+  print tentacle+" game completed!"
   c1_score = 0
   c2_score = 0
   if "1" in result:# == "1 Wins!":
