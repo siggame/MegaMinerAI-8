@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 from networking.sexpr.sexpr import *
 import bz2
 import os
@@ -25,5 +26,6 @@ class Scribe:
     compressedLog = bz2.BZ2File("%s.bz2"%(self.logPath,), "w")
     log = open(self.logPath, "r")
     compressedLog.write(log.read())
+    compressedLog.close()
 
 
