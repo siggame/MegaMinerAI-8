@@ -6,7 +6,7 @@ import time
 from tentacle import run_game
 #from boto.s3.key import Key
 from subprocess import Popen
-from random import choice
+from random import choice,randint
 
 AWS_ACCESS_KEY = "AKIAICYAQREP6CMTOZ7Q" 
 AWS_SECRET_KEY = "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"
@@ -73,7 +73,8 @@ def next_game(priorities):
   priorities[match] = 0
   for m in priorities:
     if m[0] in match or m[1] in match:
-      priorities[m] -= 1
+      pass
+      priorities[m] -= randint(0,1)
     else:
       priorities[m] += 1
   return match
@@ -81,7 +82,7 @@ def next_game(priorities):
 priorities = {}
 for p in versions:
   for o in versions:
-    priorities[o,p] = 0
+    priorities[o,p] = 100
 
 counter = 0
 recent = None
@@ -92,7 +93,7 @@ while True:
   newPriorities = priority_update(players, priorities, versions, newVersions)
   versions = newVersions
   priorities = newPriorities
-  print "TICK: max priority", priorities[max(priorities, key=lambda x: priorities[x])]
+  print '.',#"TICK: max priority", priorities[max(priorities, key=lambda x: priorities[x])]
   #print priorities
   while len(games) < len(players)*2:
     nextg = next_game(priorities)
@@ -104,7 +105,7 @@ while True:
       try:
         print g[0].result,g[1]
         if g[0].result[0].lower() != 'error':
-          print "WILL VISUALIZE:",g[0].result[1]
+          #print "WILL VISUALIZE:",g[0].result[1]
           recent = g[0].result[1]
       except:
         pass

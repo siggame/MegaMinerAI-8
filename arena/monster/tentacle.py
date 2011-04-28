@@ -12,6 +12,7 @@ from WebServerInterface import *
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from celery.task import task
+from celery.exceptions import SoftTimeLimitExceeded
 import pexpect
 from os import remove
 from subprocess import Popen
@@ -88,16 +89,29 @@ def update(program):
       return "Failed to get commit "+str(commit)+" for "+program
   p.close(True)
   
-  if program != 'server':
-    p = pexpect.spawn("make", cwd = rootdir+repositories[program])
-    i = p.expect(['Error',pexpect.EOF], timeout = 60)
-    p.close(True)
-    if i == 0:
-      #print "failed to make"
-      return "Faild to make "+program
-    p = pexpect.spawn("chmod +x run", cwd = rootdir+repositories[program])
-    i = p.expect([pexpect.EOF])
-    p.close(True)
+  p = pexpect.spawn("make", cwd = rootdir+repositories[program])
+  #makelog = open(rootdir+"make.log", 'w')
+  #p.logfile = makelog
+  i = p.expect(['Error',pexpect.EOF], timeout = 60)
+  p.close(True)
+  #makelog.close()
+  if i == 0:
+    #print "failed to make"
+    #Popen('bzip2 '+rootdir+'make.log', shell = True).wait()
+    #s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
+    #logbucket = s3conn.get_bucket("megaminer7")
+    #newkey = Key(logbucket)
+    #logname = 'logs/arena/'+str(tentacle)+'-'+str(time.time())+'.make.log.bz2'
+    #newkey.key = logname
+    #newkey.set_contents_from_filename(rootdir+"make.log.bz2")
+    #webserver.set_game_stat(program, "make", 0, 1, working_copies[program], None, logname)
+    #print program, working_copies[program], logname
+    #remove(rootdir+"make.log.bz2")
+    return "Faild to make "+program
+  #Popen("rm "+rootdir+"make.log", shell = True).wait()
+  p = pexpect.spawn("chmod +x run", cwd = rootdir+repositories[program])
+  i = p.expect([pexpect.EOF])
+  p.close(True)
   return "good!"
 
 @task
@@ -114,6 +128,7 @@ def run_game(client1, client2, name):
   #now start the server...
   servergood = False
   port = startport
+  #slog = open(rootdir+"server.log","w")
   while not servergood:
     serverp = pexpect.spawn('python main.py '+str(port), cwd = rootdir+'server/', timeout = 600)
     i = serverp.expect(['Unable to open socket!','Server Started',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
@@ -122,11 +137,12 @@ def run_game(client1, client2, name):
       port += 1
       serverp.close(True)
     elif i == 1:
-      print tentacle+" server should be started on port "+str(port)
+      #print tentacle+" server should be started on port "+str(port)
       servergood = True
     else:
       print 'THE WORLD IS AT AN END'
       return ("Error","fail")
+  #serverp.logfile = slog
   time.sleep(2)
   #now client 1..
   client1p = Popen('/bin/bash ./run localhost:'+str(port), cwd = rootdir+repositories[client1], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
@@ -134,22 +150,24 @@ def run_game(client1, client2, name):
   #i = client1p.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   i = serverp.expect(['Creating game 1',pexpect.EOF,pexpect.TIMEOUT], timeout = 10)
   if i == 0:
-    print tentacle+" game created!"
+    pass
+    #print tentacle+" game created!"
   else:
     #print client1p.returncode
-    print tentacle+" game failed to create:"+i
+    #print tentacle+" game failed to create:"+str(i)
     return ("Error","Game failed to create "+client1)
   #and client 2...
   client2p = Popen(['/bin/bash ./run localhost:'+str(port) + ' 0'], cwd = rootdir+repositories[client2], shell=True, stdout = file('/dev/null', 'w'), stderr = file('/dev/null', 'w'))
   #client2p = pexpect.spawn('/bin/bash ./run localhost:'+str(port)+' 0 > /dev/null 2>&1', cwd = rootdir+repositories[client2], timeout = 600)
   #i = client2p.expect([pexpect.EOF,pexpect.TIMEOUT],timeout=5)
-  #i = serverp.expect(['start',pexpect.EOF,pexpect.TIMEOUT], timeout = 5)
-  #if i == 0:
-  #  print client2,"couldn't connect"
-  #  return ("Error",client2+" couldn't connect to server")
-  print tentacle+" game started! (" + client1 + " vs. " + client2 + ")"
+  i = serverp.expect(['Starting',pexpect.EOF,pexpect.TIMEOUT], timeout = 5)
+  if i != 0:
+    #print tentacle+' '+client2+" couldn't connect"
+    return ("Error",client2+" couldn't connect to server")
+  print tentacle+" game started! (" + client1 + " vs. " + client2 + " on port "+str(port)+")"
   result = ''
-  while time.time() < startTime + 600 and len(result) < 5:
+  try:
+    while time.time() < startTime + 600 and len(result) < 5:
     #result = serverp.expect(["Tie game!", "1 Wins!", "2 Wins", pexpect.TIMEOUT], timeout = 5)
     #try:
     #  client1p.read_nonblocking(1024, timeout = 0)
@@ -159,15 +177,21 @@ def run_game(client1, client2, name):
     #  client2p.read_nonblocking(1024, timeout = 0)
     #except:
     #  pass
-    try:
-      result = serverp.readline()
-      if "win" not in result.lower() and "tie" not in result.lower():
-        result = ''
-    except:
-      pass
+      try:
+        result = serverp.readline()
+        if "win" not in result.lower() and "tie" not in result.lower():
+          result = ''
+      except pexpect.TIMEOUT:
+        pass
+  except SoftTimeLimitExceeded:
+    print tentacle+" TIMEOUT!"
+    serverp.close(True)
+    client1p.kill()
+    client2p.kill()
+    return ("Error","Timeout!")
   #result = serverp.readlines()
   #print result
-  print tentacle+" game completed!"
+  #print tentacle+" game completed!"
   c1_score = 0
   c2_score = 0
   if "1" in result:# == "1 Wins!":
@@ -191,11 +215,12 @@ def run_game(client1, client2, name):
   serverp.close(True)
   client1p.kill()
   client2p.kill()
+  #slog.close()
   #client1p.close(True)
   #client2p.close(True)
-
-  logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
-  log = logfile.read()
+  #Popen("cp "+rootdir+"server.log ~/"+tentacle+str(time.time())+".server.log", shell = True).wait()
+  #logfile = open(rootdir+'server/logs/1.gamelog.bz2','rb')
+  #log = logfile.read()
   s3conn = S3Connection(AWS_ACCESS_KEY, AWS_SECRET_KEY)
   logbucket = s3conn.get_bucket("megaminer7")
   newkey = Key(logbucket)
