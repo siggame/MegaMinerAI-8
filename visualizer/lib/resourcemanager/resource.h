@@ -2,15 +2,13 @@
 #define RESOURCE_H
 #include <set>
 #include <string>
+#include "typedefs.h"
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-enum ResourceType
-{
-	RT_NONE, RT_TEXTURE
-};
+
 
 class Resource
 {
@@ -22,9 +20,9 @@ class Resource
 		}
 
 		/** Default destructor */
-		virtual ~Resource();
+		virtual ~Resource(){}
 
-		virtual bool load() = 0;
+		virtual bool load(const std::string & filename) = 0;
 		virtual bool unload()
 		{
 			return true;
@@ -94,9 +92,11 @@ class Resource
             return false;
         }
 
+
 	protected:
 	ResourceType m_type;
 	std::set<std::string> m_references;
+	std::string filename;
 	private:
 };
 

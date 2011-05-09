@@ -2,16 +2,17 @@
 #include "../renderer/renderer.h"
 #include "../parser/parser.h"
 #include <QDesktopServices>
-#include "../../piracy/boatdata.h"
-#include "../../piracy/boatrender.h"
-#include "../../piracy/piratedata.h"
-#include "../../piracy/piraterender.h"
+#include <Qt>
 #include "../../piracy/piratemap.h"
-#include "../../piracy/treasuredata.h"
-#include "../../piracy/treasurerender.h"
+#include "../../piracy/dupObj.h"
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cmath>
+#include <iostream>
+#include <fstream>
+
 using namespace std;
 
 GUI::~GUI()
@@ -49,7 +50,9 @@ bool GUI::setup()
   if( !isInit() )
     return false;
 
-  return get()->doSetup();
+
+  get()->m_isSetup = get()->doSetup();
+  return get()->m_isSetup;
 }
 
 bool GUI::clear()
@@ -76,7 +79,9 @@ bool GUI::create()
 {
   if( !Singleton<GUI>::create() )
     return false;
-  return setup();
+
+
+  return true;
 }
 
 bool GUI::destroy()
@@ -114,124 +119,11 @@ void GUI::dragEnterEvent( QDragEnterEvent* evt )
 using namespace std;
 void GUI::loadGamelog( std::string gamelog )
 {
-  Game g;
-  if( !parseFile( g, gamelog.c_str() ) )
-  {
-    throw "Cannot Load Gamelog";
-  }
-
-  // Gamespecific stuff which need a removing
-
-  if( !Renderer::isSetup() )
-  {
-    Renderer::create();
-  }
-
-  int pirateId = 0;
-  int boatId = 0;
-  int treasureId = 0;
-  int boats = 0;
-  int pirates = 0;
-  int treasures = 0;
-
-  GameObject *go = new GameObject( -1 );
-  PirateMap *pm = new PirateMap();
-  pm->generateMap( g );
-  pm->setOwner( go );
-  go->setGOC( pm );
-  Renderer::reg( -1, go );
-
-  optionsMan::setInt( "numTurns", g.states.size() );
-
-
-  //cout << "Number of Turns: " << g.states.size() << endl;
-
-  for( int i = 0; i < g.states.size(); i++ )
-  {
-#if 0
-    cout << "Turn: " << i << endl;
-    cout << " -Mapp: " << g.states[i].mappables.size() << endl;
-    cout << " -Unit: " << g.states[i].units.size() << endl;
-    cout << " -Pyrt: " << g.states[i].pirates.size() << endl;
-    cout << " -Plyr: " << g.states[i].players.size() << endl;
-    cout << " -Ship: " << g.states[i].ships.size() << endl;
-    cout << " -Tile: " << g.states[i].tiles.size() << endl;
-    cout << " -Trea: " << g.states[i].treasures.size() << endl << endl;;
-#else
-    for( std::map<int,Pirate>::iterator p = g.states[i].pirates.begin();
-        p != g.states[i].pirates.end();
-        p++
-       )
+    if (!ObjectLoader::loadGamelog(gamelog))
     {
-      if( p->second.id > pirateId )
-      {
-        pirateId = p->second.id;
-        go = new GameObject( pirateId );
-        PirateData *pd = new PirateData();
-        pd->parsePirate( g, pirateId );
-        PirateRender *pr = new PirateRender();
-        pd->setOwner( go );
-        pr->setOwner( go );
-        go->setGOC( pd );
-        go->setGOC( pr );
-        Renderer::reg( pirateId, go );
-
-        pirates++;
-
-      }
+	std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
     }
-
-    for( std::map<int,Ship>::iterator s = g.states[i].ships.begin();
-        s != g.states[i].ships.end();
-        s++ )
-    {
-      if( s->second.id > boatId )
-      {
-        boatId = s->second.id;
-        go  = new GameObject( boatId );
-        BoatData *bd = new BoatData();
-        bd->parseBoat( g, boatId );
-        BoatRender *br = new BoatRender();
-        
-        bd->setOwner( go );
-        br->setOwner( go );
-        go->setGOC( bd );
-        go->setGOC( br );
-
-        Renderer::reg( boatId, go );
-
-        boats++;
-      }
-    }
-      
-  for( std::map<int,Treasure>::iterator t = g.states[i].treasures.begin();
-        t != g.states[i].treasures.end();
-        t++ )
-    {
-      if( t->second.id > treasureId )
-      {
-        treasureId = t->second.id;
-        go  = new GameObject( treasureId );
-        TreasureData *td = new TreasureData();
-        td->parseTreasure( g, treasureId );
-        TreasureRender *tr = new TreasureRender();
-        
-        td->setOwner( go );
-        tr->setOwner( go );
-        go->setGOC( td );
-        go->setGOC( tr );
-
-        Renderer::reg( treasureId, go );
-
-        treasures++;
-      }
-    }
-#endif
-
-  }
-
-  cout << "Boats: " << boats << ", Pirates: " << pirates << endl;
-
+  return; //! @todo throw shitfit
 }
 
 void GUI::update()
@@ -250,17 +142,52 @@ void GUI::dropEvent( QDropEvent* evt )
 
 }
 
+void GUI::appendConsole( string line )
+{
+  QString param;
+  param.append( line.c_str() );
+  appendConsole( param );
+}
+
+void GUI::appendConsole( QString line )
+{
+  GUI::get()->m_consoleArea->append( line );
+}
+
+void GUI::clearConsole()
+{
+
+  GUI::get()->m_consoleArea->clear();
+}
+
 void GUI::resizeEvent( QResizeEvent* evt )
 {
+  if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
+  {
+    int w = Singleton<GUI>::get()->width();
+    int h = Renderer<DupObj>::height();
+
+    if( h > w )
+    {
+      int temp = w;
+      w = h;
+      h = temp;
+    }
+
+    //m_dockWidget->resize( Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), -1 );
+#if 1
+    m_dockWidget->setMinimumWidth( w - h);
+#endif
+  }
   QMainWindow::resizeEvent( evt );
 }
 
 void GUI::helpContents()
 {
-  if( optionsMan::isInit() &&
-      optionsMan::exists( "helpURL" ) )
+  if( OptionsMan::isInit() &&
+      OptionsMan::exists( "helpURL" ) )
   {
-    QDesktopServices::openUrl( QUrl( optionsMan::getStr( "helpURL" ).c_str() ) );
+    QDesktopServices::openUrl( QUrl( OptionsMan::getStr( "helpURL" ).c_str() ) );
   } else
   {
     QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
@@ -269,16 +196,40 @@ void GUI::helpContents()
 
 void GUI::fileOpen()
 {
+	ifstream dirinfoIN;
+	dirinfoIN.open("dirinfo.txt");	
+	if (dirinfoIN.is_open())
+  {
+  	string line;
+    while ( dirinfoIN.good() )
+    {
+      getline (dirinfoIN,line);
+      m_previousDirectory.clear();
+      m_previousDirectory.append(QString::fromStdString(line));
+    }
+    dirinfoIN.close();
+  }
 
-  string filename = QFileDialog::getOpenFileName( 
-      this, 
+
+  QFileDialog fileDialog;
+	  
+	
+  QString filename = fileDialog.getOpenFileName(
+      this,
       tr( "Open Gamelog" ),
-      QDir::currentPath(),
+      m_previousDirectory,
       tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
-    loadGamelog( filename );
+		m_previousDirectory = filename;
+		
+		ofstream dirinfoOUT;
+		dirinfoOUT.open("dirinfo.txt");
+		dirinfoOUT << m_previousDirectory.toStdString();
+		dirinfoOUT.close();
+    cout << filename.toStdString() << endl;
+    loadGamelog( filename.toStdString() );
   }
 
 }
@@ -291,24 +242,40 @@ bool GUI::doSetup()
   m_centralWidget = new CentralWidget( this );
   setCentralWidget( m_centralWidget );
   createActions();
-  createMenus();
-
-  buildToolSet();
   buildControlBar();
 
-  setWindowState( 
-      windowState() 
-      | Qt::WindowActive 
-      | Qt::WindowMaximized 
+  createMenus();
+  buildToolSet();
+
+    // If we're not arenaMode, don't even bother setting this up
+  if(
+      !OptionsMan::isInit() ||
+      !OptionsMan::exists( "arenaMode" ) ||
+      OptionsMan::getBool( "arenaMode" )
+    )
+    {
+      menuBar()->hide();
+      setFullScreen(true);
+      m_dockWidget->hide();
+    }
+
+  setWindowState(
+      windowState()
+      | Qt::WindowActive
+      | Qt::WindowMaximized
       );
 
   show();
+  
+  m_previousDirectory = QDir::homePath();
+  
   return true;
 }
 
 void GUI::buildControlBar()
 {
   m_statusBar = statusBar();
+  m_statusBar -> setMaximumHeight(20);
   m_controlBar = new ControlBar( this );
 
   m_statusBar->addPermanentWidget( m_controlBar, 100 );
@@ -319,25 +286,48 @@ void GUI::createActions()
 {
   m_helpContents = new QAction( tr( "&Contents" ), this );
   m_helpContents->setShortcut( tr( "F1" ) );
-  m_helpContents->setStatusTip( 
-      tr( "Open Online Help For This Game" ) 
+  m_helpContents->setStatusTip(
+      tr( "Open Online Help For This Game" )
       );
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
   m_fileOpen = new QAction( tr( "&Open" ), this );
   m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
-  m_fileOpen->setStatusTip( 
+  m_fileOpen->setStatusTip(
       tr( "Open A Gamelog" )
       );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
-  m_fileExit = new QAction( tr( "E&xit" ), this );
-  m_fileExit->setShortcut( tr( "Ctrl+X" ) );
-  m_fileExit->setStatusTip( 
+  toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
+  toggleFullScreenAct->setShortcut( tr("F11" ) );
+  toggleFullScreenAct->setStatusTip( tr("Toggle Fullscreen Mode") );
+  connect( toggleFullScreenAct, SIGNAL(triggered()), this, SLOT(toggleFullScreen()) );
+
+  m_fileExit = new QAction( tr( "&Quit" ), this );
+  m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
+  m_fileExit->setStatusTip(
       tr( "Close the Visualizer" )
       );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
+  (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
+  (void) new QShortcut( QKeySequence( tr( "Ctrl+F" ) ), this, SLOT( fastForwardShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Ctrl+R" ) ), this, SLOT( rewindShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
+  (void) new QShortcut( QKeySequence( tr("Escape") ), this, SLOT( catchEscapeKey() ) );
+ 
+  //Ugly hack
+  (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_2 ), this, SLOT( turnPercentageShortcut2() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_3 ), this, SLOT( turnPercentageShortcut3() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_4 ), this, SLOT( turnPercentageShortcut4() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) ); 
+  (void) new QShortcut( QKeySequence( Qt::Key_6 ), this, SLOT( turnPercentageShortcut6() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_7 ), this, SLOT( turnPercentageShortcut7() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_8 ), this, SLOT( turnPercentageShortcut8() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_9 ), this, SLOT( turnPercentageShortcut9() ) );
+  (void) new QShortcut( QKeySequence( Qt::Key_0 ), this, SLOT( turnPercentageShortcut0() ) );
 }
 
 void GUI::createMenus()
@@ -351,52 +341,198 @@ void GUI::createMenus()
   menu = menuBar()->addMenu( tr( "&Edit" ) );
 
   menu = menuBar()->addMenu( tr( "&View" ) );
+  menu->addAction(toggleFullScreenAct);
 
   menu = menuBar()->addMenu( tr( "&Help" ) );
   menu->addAction( m_helpContents );
-  
+
 }
 
 void GUI::buildToolSet()
 {
-  // Get the toolset widget if it exists 
+  // Get the toolset widget if it exists
   m_toolSetWidget =
     (GOCFamily_GUIToolSet*)GUI::getGUIObject( "ToolSet" );
 
-  // If we're in arenaMode, don't even bother setting this up 
-  if( 
-      !optionsMan::isInit() || 
-      !optionsMan::exists( "arenaMode" ) ||
-      !optionsMan::getBool( "arenaMode" )
-    )  
+  // Create the dock
+  m_dockWidget = new QDockWidget( this );
+  // Give it a frame to hold a layout
+  m_dockLayoutFrame = new QFrame( m_dockWidget );
+  // Give this frame a layout
+  m_dockLayout = new QVBoxLayout( m_dockLayoutFrame );
+  // Console area to the left
+  m_consoleArea = new QTextEdit( m_dockLayoutFrame );
+  m_consoleArea -> setReadOnly(1);
+
+  // Allow users to stupidly move this as small as they like
+  m_dockWidget->setMinimumHeight( 0 );
+  m_dockWidget->setMinimumWidth( 0 );
+
+  // Add Buffer so we don't feel claustrophobic
+  m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
+
+  // Add the console to the layout
+  m_dockLayout->addWidget( m_consoleArea );
+
+  //Add Unit Stats to the layout
+  initUnitStats();
+
+  // If we have our tools for this game, add those bitches
+  if( m_toolSetWidget )
   {
-    // Create the dock
-    m_dockWidget = new QDockWidget( this );
-    // Give it a frame to hold a layout
-    m_dockLayoutFrame = new QFrame( m_dockWidget );
-    // Give this frame a layout
-    m_dockLayout = new QHBoxLayout( m_dockLayoutFrame );
-    // Console area to the left
-    m_consoleArea = new QTextEdit( m_dockLayoutFrame );
-    // Allow users to stupidly move this as small as they like
-    m_dockWidget->setMinimumHeight( 0 );
+    m_dockLayout->addWidget( m_toolSetWidget );
+  }
 
-    // Add Buffer so we don't feel clausterphobic
-    m_dockLayout->setContentsMargins( 2, 0, 2, 0 );
+  // Add the frame to the actual dock
+  m_dockWidget->setWidget( m_dockLayoutFrame );
+  // Add the dock to the main window
+  addDockWidget( Qt::RightDockWidgetArea, m_dockWidget );
 
-    // Add the console to the layout
-    m_dockLayout->addWidget( m_consoleArea );
+}
 
-    // If we have our tools for this game, add those bitches
-    if( m_toolSetWidget )
-    {
-      m_dockLayout->addWidget( m_toolSetWidget );
-    }
+void GUI::closeGUI()
+{
+  GUI::get() -> close();
+}
 
-    // Add the frame to the actual dock
-    m_dockWidget->setWidget( m_dockLayoutFrame );
-    // Add the dock to the main window
-    addDockWidget( Qt::BottomDockWidgetArea, m_dockWidget );
+void GUI::toggleFullScreen()
+{
+  setFullScreen(!fullScreen);
+}
 
+void GUI::togglePlayPause()
+{
+  m_controlBar -> play();
+}
+
+void GUI::fastForwardShortcut()
+{
+  m_controlBar -> fastForward();
+}
+
+void GUI::rewindShortcut()
+{
+  m_controlBar -> rewind();
+}
+
+void GUI::turnPercentageCalc(int value)
+{
+  float turnPercent = value /9.0;
+  TimeManager::setTurn((int) floor(turnPercent * TimeManager::getNumTurns()));
+}
+
+void GUI::stepTurnForwardShortcut()
+{
+  if(TimeManager::getTurn() < TimeManager::getNumTurns()-1)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() + 1);
   }
 }
+
+void GUI::stepTurnBackShortcut()
+{
+  if(TimeManager::getTurn() > 0)
+  {
+    TimeManager::setTurn(TimeManager::getTurn() - 1);
+  }
+}
+
+//Prepares the tabs and tables for the unit stats area
+void GUI::initUnitStats()
+{
+  //TODO: Move this game-specific code out of GUI
+
+  //Create unit Stats tab area
+  m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
+
+  //Create tables to fill tabs
+  m_multipleStats = new QTableWidget(m_unitStatsArea);
+  m_individualStats = new QTableWidget(m_unitStatsArea);
+
+  //Create headers for tables
+  m_multipleStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
+    <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
+  m_multipleStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
+
+  m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
+    <<"movesLeft"<<"attacksLeft";
+  m_individualStatsHorizontalLabels<<".";
+
+  //Set table properties and headers
+  m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
+  m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
+  m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
+  m_multipleStats->setHorizontalHeaderLabels( m_multipleStatsHorizontalLabels );
+
+  m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
+  m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
+  m_individualStats->setVerticalHeaderLabels ( m_individualStatsVerticalLabels );
+  m_individualStats->setHorizontalHeaderLabels( m_individualStatsHorizontalLabels );
+
+  //Add tabs of tables to tab area
+  m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
+  m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
+
+  //Add tab area to dockLayout
+  m_dockLayout->addWidget( m_unitStatsArea );
+}
+
+ControlBar * GUI::getControlBar()
+{
+  return get()->m_controlBar;
+}
+
+void GUI::catchEscapeKey()
+{
+  if(getFullScreen())
+  {
+    setFullScreen(false);
+  }
+}
+
+bool GUI::getFullScreen()
+{
+  return fullScreen; 
+}
+
+void GUI::setFullScreen(bool value)
+{
+  fullScreen = value;
+  if(fullScreen)
+  {
+  	m_normalWindowGeometry = geometry();
+    showFullScreen();
+  }
+  else
+  {
+    showNormal();
+    setGeometry(m_normalWindowGeometry);
+  }
+  show();
+  
+} 
+
+  void GUI::turnPercentageShortcut1(){turnPercentageCalc(0);};
+  void GUI::turnPercentageShortcut2(){turnPercentageCalc(1);};
+  void GUI::turnPercentageShortcut3(){turnPercentageCalc(2);};
+  void GUI::turnPercentageShortcut4(){turnPercentageCalc(3);};
+  void GUI::turnPercentageShortcut5(){turnPercentageCalc(4);};
+  void GUI::turnPercentageShortcut6(){turnPercentageCalc(5);};
+  void GUI::turnPercentageShortcut7(){turnPercentageCalc(6);};
+  void GUI::turnPercentageShortcut8(){turnPercentageCalc(7);};
+  void GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};  
+  void GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
+
+QTableWidget * GUI::getIndividualStats()
+{
+  return get()->m_individualStats;
+}
+
+
+
+QTableWidget * GUI::getMultipleStats()
+{
+  return get()->m_multipleStats;
+}
+
+

@@ -10,7 +10,6 @@
 
 /** @todo merge this into the options manager... maybe **/
 
-typedef std::string ResID_t;
 
 class ResourceMan : protected Manager <ResID_t,Resource*>
 {
@@ -20,22 +19,24 @@ class ResourceMan : protected Manager <ResID_t,Resource*>
 		/** Default destructor */
 		virtual ~ResourceMan();
 
-        static Resource * reference(const std::string & rName, const std::string & referencer);
-        static bool release(const std::string & rName, const std::string & referencer);
+    static Resource * reference(const std::string & rName, const std::string & referencer);
+    static bool release(const std::string & rName, const std::string & referencer);
 
 		template<class T, ResourceType RT>
 		static bool reg(const ResID_t & rName, const T & value);
-		static bool reg(const ResID_t & rName, const std::string & filename);
+		static bool regFile(const ResID_t & rName, const std::string & filename);
 		static bool del(const ResID_t & rName);
 
-		static bool loadResourceFile(const ResID_t & filename);
-		static bool saveResourceFile(const ResID_t & filename);
+		static bool loadResourceFile(const std::string & filename);
+		static bool saveResourceFile(const std::string & filename);
 
 		static bool exists(const ResID_t & rName);
 
 		static std::vector<std::string> listResourceNames();
 
 		static bool destroy();
+		static bool create(){return Manager <ResID_t,Resource*>::create();}
+		static bool isInit(){return Manager<ResID_t,Resource*>::isInit();}
 
 	protected:
 	private:

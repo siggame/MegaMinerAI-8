@@ -21,14 +21,13 @@ class GOCFamily_Data : public GOComponent
       return GOC_IDType( "DataFamily" );
     };		
 
-    T * getDataAt(const unsigned int & turn, const unsigned int & frame)
+    T * getData()
     {
-      return m_timeline( turn, frame );
+      return &m_data;
     }
 
 	protected:
-		typedef Timeline<T> TimelineType;
-		TimelineType m_timeline;
+	    T m_data;
 
 	private:
 };

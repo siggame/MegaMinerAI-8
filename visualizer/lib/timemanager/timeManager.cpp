@@ -1,18 +1,22 @@
-#include "timeManager.h" 
+#include "timeManager.h"
 #include "../renderer/renderer.h"
+#include "../gui/gui.h"
+#include "../../piracy/dupObj.h"
+
+#include <ctime>
 
 const int& TimeManager::getTurn()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
   get()->updateFrames();
   return get()->m_turn;
 }
 
-const int& TimeManager::getFrame() 
+const int& TimeManager::getFrame()
 {
   if( !isInit() )
-    throw 0;
+    return 0;
   get()->updateFrames();
   return get()->m_frame;
 }
@@ -21,81 +25,159 @@ void TimeManager::setTurn( const int& turn )
 {
   if( !isInit() )
     throw 0;
+
   get()->m_turn = turn;
   get()->m_frame = 0;
+
+  //update renderer
+  Renderer<DupObj>::update(turn,0);
+
+
+  if( GUI::getControlBar() )
+    GUI::getControlBar()->update();
 }
 
-const int& TimeManager::getSpeed()
+const float& TimeManager::getSpeed()
+{
+  if( !isInit() )
+    return 0;
+  float multi = OptionsMan::getFloat( "speed" );
+  return get()->m_speed*multi;
+}
+
+void TimeManager::setSpeed( const float& speed )
 {
   if( !isInit() )
     throw 0;
-  return get()->m_speed;
+
+  float multi = OptionsMan::getFloat( "speed" );
+  get()->m_speed = speed/multi;
 }
 
-void TimeManager::setSpeed( const int& speed )
+int TimeManager::timeHash()
+{
+  if (!isInit())
+    return 0;
+  return get()->m_hash;
+}
+
+TimeManager::mode TimeManager::getMode()
+{
+  if( !isInit() )
+    return mode();
+  return get()->m_mode;
+}
+
+const int& TimeManager::getNumTurns()
+{
+  if( !isInit() )
+    return 0;
+
+  return get()->m_numTurns;
+}
+
+void TimeManager::setNumTurns( const int& numTurns )
 {
   if( !isInit() )
     throw 0;
-  get()->m_speed = speed;
-}
+  get()->m_numTurns = numTurns;
 
-void TimeManager::create()
-{
-  if( !isInit() )
+  if(GUI::isSetup())
   {
-    if( !Singleton<TimeManager>::create() )
-      throw 0;
+    if( GUI::getControlBar() )
+    {
+      GUI::getControlBar()->update();//m_slider->setMaximum ( numTurns );
+    }
   }
-  get()->setup();
+}
+
+
+bool TimeManager::create()
+{
+  if( !Singleton<TimeManager>::create() )
+    return false;
+
+  Singleton<TimeManager>::get()->setup();
+   return true;
 }
 
 void TimeManager::setup()
 {
-  m_lastTime = 0;
+  m_lastTime = clock();
   m_framesPerTurn = 100;
   m_turn = 0;
   m_frame = 0;
 
-  timer = new QTimer( this );
-  connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-  timer->start( 10 );
 }
+
+void TimeManager::start()
+{
+    get()->timer = new QTimer( this );
+    connect( get()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
+    get()->timer->start( 35 );
+
+}
+
+void TimeManager::timerStart()
+{
+    get()->start();
+}
+
 
 #include <iostream>
 using namespace std;
 
 void TimeManager::updateFrames()
 {
-  if( !optionsMan::exists( "sliderDragging" ) )
-    optionsMan::setBool( "sliderDragging", false );
+  m_turn += m_frame / m_framesPerTurn;
+  m_frame %= m_framesPerTurn;
 
-  if( optionsMan::getBool( "sliderDragging" ) )
+
+#if 0
+
+  //Idiot check low
+  if (m_turn < 0)
   {
-    m_turn = optionsMan::getInt( "currentTurn" );
+    m_turn = 0;
     m_frame = 0;
-  } else {
-    optionsMan::setInt( "currentTurn", m_turn );
-  }
-  int t = 0;
-  int frames;
-  if( t > m_lastTime+m_speed )
-  {
-    frames = (t-m_lastTime)%m_speed;
-    m_lastTime = t;
-    m_frame += frames;
   }
 
-  while( m_frame > m_framesPerTurn )
+  //Idiot check high
+  if (m_turn >= m_numTurns)
   {
-    m_turn++;
-    m_frame -= m_framesPerTurn;
+    m_turn = m_numTurns-1;
+    m_frame = m_framesPerTurn-1;
+  }
+#endif
+
+  //If in arena mode, show winner for a few secs at end
+  if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
+  {
+    if( m_sleepTime == -1 )
+      m_sleepTime = clock();
+    else
+    {
+      if( clock() - m_sleepTime > 1000000 )
+      {
+        GUI::closeGUI();
+      }
+    }
+  } 
+
+  if(GUI::isSetup())
+  {
+
+    GUI::getControlBar()->m_slider->setValue ( m_turn );
   }
 }
 
 void TimeManager::timerUpdate()
 {
-  m_lastTime -= 100;
+  m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
+  m_hash++;
+  m_frame += m_time * m_speed;
   updateFrames();
-  Renderer::refresh();
+  Renderer<DupObj>::refresh();
+  Renderer<DupObj>::update(m_turn,0);
 }
 

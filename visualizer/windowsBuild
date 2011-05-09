@@ -1,8 +1,19 @@
 #!/bin/bash
 
-# First compile parser for windows
+# Run the codegen and get the files
+
+# Get to the codegen
+cd ../codegen/
+
+# Run it
+python main.py templates
+
+# Copy the appropriate files over
+cp -f -r ./output/visualizer/* ../visualizer/lib/parser/
+
+# First compile parser for linux
 # Get to Parser directory:
-cd ./lib/parser
+cd ../visualizer/lib/parser
 
 # We want to remove all linux binaries and helper files
 make clean
@@ -38,3 +49,9 @@ cd ./lib/parser
 make clean
 
 # Congrats, you're done
+cd ../..
+
+mkdir release/piracy
+cp -r ./piracy/textures ./release/piracy
+cp ./options.cfg ./release/
+cp ./textures.r ./release/

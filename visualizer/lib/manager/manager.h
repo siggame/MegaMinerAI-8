@@ -4,20 +4,7 @@
 #include "../singleton.h"
 #include <map>
 
-/**
-  *This is just a helper class because I cant get it to work any other way, ignore this
-  *
-  */
-template < typename IdType, typename DataType >
-class ManagerBase
-{
-	template <typename idType = IdType,typename dataType = DataType>
-	friend class Manager;
-	typedef std::map<IdType,DataType> DataTable;
-	DataTable m_data;
-	public:
-	DataTable * data(){return &m_data;}
-};
+
 
 
 /**
@@ -25,10 +12,11 @@ class ManagerBase
   * be derrived from (A manager is a souped up map class, with special singleton powers)
   */
 template < typename IdType, typename DataType >
-class Manager : public Singleton < ManagerBase<IdType,DataType> >
+class Manager : public Singleton < Manager<IdType,DataType> >
 {
 	public:
 
+		typedef std::map<IdType,DataType> DataTable;
 		static bool reg(const IdType & id, const DataType & data);
 		static bool del(const IdType & id);
 		static bool delPointer(const IdType & id);
@@ -41,11 +29,14 @@ class Manager : public Singleton < ManagerBase<IdType,DataType> >
 		static DataType * getItem(const IdType & id);
 		static bool setItem(const IdType & id);
 
+		DataTable * data() { return &m_data; }
+
 	protected:
-		typedef Singleton < ManagerBase<IdType,DataType> > ManagerSingleton;
-		typedef ManagerBase<IdType,DataType> BaseType;
+		DataTable m_data;
+		//typedef Singleton < ManagerBase<IdType,DataType> > ManagerSingleton;
+		//typedef ManagerBase<IdType,DataType> BaseType;
 		typedef Manager<IdType,DataType> ManagerType;
-		typedef std::map<IdType,DataType> DataTable;
+		//typedef std::map<IdType,DataType> DataTable;
 	private:
 };
 

@@ -13,7 +13,7 @@ std::vector<ResID_t> ResourceMan::listResourceNames()
 
     std::vector<ResID_t> names;
     DataTable::iterator it = get()->data()->begin();
-    for (it; it != get()->data()->end(); it++)
+    for (; it != get()->data()->end(); it++)
     {
         names.push_back(it->first);
     }
@@ -28,73 +28,6 @@ std::vector<ResID_t> ResourceMan::listResourceNames()
 bool ResourceMan::exists(const ResID_t & rName)
 {
     return ManagerType::exists(rName);
-}
-
-/** @brief saveResourceFile
-  * save the resources to a file
-  * @param filename the name of the file to save to
-  * @return true if it is successful
-  */
-bool ResourceMan::saveResourceFile(const std::string & filename)
-{
-
-}
-
-/** @brief loadResourceFile
-  * load a resource file
-  * @param filename the name of the file to load from
-  * @return true on success
-  */
-bool ResourceMan::loadResourceFile(const std::string & filename)
-{
-
-}
-
-/** @brief reg
-  * register a value within the resource manager
-  * @param rName the name to regster the value at
-  * @param value the value to register
-  * @return true if the value didnt previously exist
-  */
-template<class T, ResourceType RT>
-bool ResourceMan::reg(const ResID_t & rName, const T & value)
-{
-	if (!exists(rName))
-    {
-        //load File
-
-
-        return true;
-    }
-
-	#ifdef DEBUG
-    std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
-    #endif
-    return false;
-}
-
-
-
-/** @brief reg
-  * register a value from a file
-  * @param rName the id to register the resource with
-  * @param filename the value exists at (ex: mypic.png)
-  * @return true if the file load was successful and the id didnt exist
-  */
-bool ResourceMan::reg(const ResID_t & rName, const std::string & filename)
-{
-    if (!exists(rName))
-    {
-        //load File
-
-
-        return true;
-    }
-
-	#ifdef DEBUG
-    std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
-    #endif
-    return false;
 }
 
 
@@ -126,6 +59,10 @@ bool ResourceMan::del(const ResID_t & rName)
     return delPointer(rName);
 }
 
+#include <iostream>
+        using namespace std;
+
+
 /** @brief destroy
   * destroy the resource manager
   * @return true on success
@@ -137,22 +74,65 @@ bool ResourceMan::destroy()
 		return false;
 	}
 	DataTable::iterator it = get()->data()->begin();
-    for (it; it != get()->data()->end(); )
+    for (; it != get()->data()->end(); it++)
     {
-        #ifdef DEBUG
+
+      //if( it->second )
         if (it->second->numReferences())
         {
+			#ifdef DEBUG
             std::cout << "Resource \"" << it->first << "\" still has a reference:\n";
             it->second->printReferences();
+			#endif
             return false;
         }
-        #endif
-        delete it->second;
-        get()->data()->erase(it);
-        it = get()->data()->begin();
+
+    //if( it->second )
+      if (!it->second->unload())
+        return false;
+
+		delete it->second;
+    it->second = 0;
+
     }
 
     return ManagerType::destroy();
 }
 
+Resource * ResourceMan::reference(const std::string & rName, const std::string & referencer)
+{
+    if (!ManagerType::isInit())
+	return NULL;
+    Resource ** res = ManagerType::getItem(rName);
+    if (!res)
+	return NULL;
 
+    if (!*res)
+	return NULL;
+
+    if ((*res)->reference(referencer))
+	return *res;
+
+    return NULL;
+
+}
+
+bool ResourceMan::release(const std::string &rName, const std::string &referencer)
+{
+    if (!ManagerType::isInit())
+	return false;
+
+    Resource ** res = ManagerType::getItem(rName);
+
+    if (!res)
+	return false;
+
+    if (!*res)
+	return false;
+
+    if ((*res)->deReference(referencer))
+	return true;
+
+    return false;
+
+}
