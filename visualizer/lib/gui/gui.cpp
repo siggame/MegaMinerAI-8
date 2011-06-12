@@ -537,7 +537,10 @@ QTableWidget * GUI::getIndividualStats()
   return get()->m_individualStats;
 }
 
-
+QTableWidget * GUI::getSelectionStats()
+{
+  return get()->m_selectionStats;
+}
 
 QTableWidget * GUI::getGlobalStats()
 {
