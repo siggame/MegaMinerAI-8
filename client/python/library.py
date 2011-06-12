@@ -170,11 +170,14 @@ library.unitGetHealth.argtypes = [c_void_p]
 library.unitGetStrength.restype = c_int
 library.unitGetStrength.argtypes = [c_void_p]
 
-library.unitGetHasMoved.restype = c_int
-library.unitGetHasMoved.argtypes = [c_void_p]
+library.unitGetMovesLeft.restype = c_int
+library.unitGetMovesLeft.argtypes = [c_void_p]
 
-library.unitGetHasAttacked.restype = c_int
-library.unitGetHasAttacked.argtypes = [c_void_p]
+library.unitGetAttacksLeft.restype = c_int
+library.unitGetAttacksLeft.argtypes = [c_void_p]
+
+library.unitGetGold.restype = c_int
+library.unitGetGold.argtypes = [c_void_p]
 
 library.pirateGetId.restype = c_int
 library.pirateGetId.argtypes = [c_void_p]
@@ -194,11 +197,14 @@ library.pirateGetHealth.argtypes = [c_void_p]
 library.pirateGetStrength.restype = c_int
 library.pirateGetStrength.argtypes = [c_void_p]
 
-library.pirateGetHasMoved.restype = c_int
-library.pirateGetHasMoved.argtypes = [c_void_p]
+library.pirateGetMovesLeft.restype = c_int
+library.pirateGetMovesLeft.argtypes = [c_void_p]
 
-library.pirateGetHasAttacked.restype = c_int
-library.pirateGetHasAttacked.argtypes = [c_void_p]
+library.pirateGetAttacksLeft.restype = c_int
+library.pirateGetAttacksLeft.argtypes = [c_void_p]
+
+library.pirateGetGold.restype = c_int
+library.pirateGetGold.argtypes = [c_void_p]
 
 library.playerGetId.restype = c_int
 library.playerGetId.argtypes = [c_void_p]
@@ -242,11 +248,14 @@ library.shipGetHealth.argtypes = [c_void_p]
 library.shipGetStrength.restype = c_int
 library.shipGetStrength.argtypes = [c_void_p]
 
-library.shipGetHasMoved.restype = c_int
-library.shipGetHasMoved.argtypes = [c_void_p]
+library.shipGetMovesLeft.restype = c_int
+library.shipGetMovesLeft.argtypes = [c_void_p]
 
-library.shipGetHasAttacked.restype = c_int
-library.shipGetHasAttacked.argtypes = [c_void_p]
+library.shipGetAttacksLeft.restype = c_int
+library.shipGetAttacksLeft.argtypes = [c_void_p]
+
+library.shipGetGold.restype = c_int
+library.shipGetGold.argtypes = [c_void_p]
 
 library.tileGetId.restype = c_int
 library.tileGetId.argtypes = [c_void_p]
@@ -269,11 +278,16 @@ library.treasureGetX.argtypes = [c_void_p]
 library.treasureGetY.restype = c_int
 library.treasureGetY.argtypes = [c_void_p]
 
-library.treasureGetPirateID.restype = c_int
-library.treasureGetPirateID.argtypes = [c_void_p]
-
-library.treasureGetAmount.restype = c_int
-library.treasureGetAmount.argtypes = [c_void_p]
+library.treasureGetGold.restype = c_int
+library.treasureGetGold.argtypes = [c_void_p]
 
 
-#Properties
+#utils
+library.getPathSize.restype = c_int
+library.getPathSize.argtypes = []
+
+library.getPathStep.restype = c_int
+library.getPathStep.argtypes = [c_int]
+
+library.findPath.restype = c_int
+library.findPath.argtypes = [c_void_p, c_void_p, c_int]

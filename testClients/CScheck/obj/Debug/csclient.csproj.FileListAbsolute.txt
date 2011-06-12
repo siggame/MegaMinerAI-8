@@ -1,0 +1,15 @@
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\codegen\output\CS\bin\Debug\csclient.exe
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\codegen\output\CS\bin\Debug\csclient.pdb
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\codegen\output\CS\obj\Debug\ResolveAssemblyReference.cache
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\codegen\output\CS\obj\Debug\csclient.exe
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\codegen\output\CS\obj\Debug\csclient.pdb
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.exe
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.pdb
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\obj\Debug\ResolveAssemblyReference.cache
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.exe
+\\minerfiles.mst.edu\dfs\Users\dkn2n4\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.pdb
+S:\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.exe
+S:\megaminer\megaminer7\testClients\CScheck\obj\Debug\csclient.pdb
+S:\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.exe
+S:\megaminer\megaminer7\testClients\CScheck\bin\Debug\csclient.pdb
+S:\megaminer\megaminer7\testClients\CScheck\obj\Debug\ResolveAssemblyReference.cache

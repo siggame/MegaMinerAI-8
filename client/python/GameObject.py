@@ -53,7 +53,7 @@ class Unit(Mappable):
     
     self.id = library.unitGetId(ptr)
 
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.unitMove(self.ptr, x, y)
@@ -63,7 +63,7 @@ class Unit(Mappable):
     self.validify()
     return library.unitTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -86,30 +86,35 @@ class Unit(Mappable):
     self.validify()
     return library.unitGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.unitGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.unitGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.unitGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.unitGetHasMoved(self.ptr)
+    return library.unitGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.unitGetHasAttacked(self.ptr)
+    return library.unitGetAttacksLeft(self.ptr)
+
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.unitGetGold(self.ptr)
 
 
   def __str__(self):
@@ -121,11 +126,12 @@ class Unit(Mappable):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
-##A generic pirate
+##A basic pirate. These units are bound to land unless aboard a ship. they can pickup and drop treasure as well as build ports and fight other pirates.
 class Pirate(Unit):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -146,7 +152,7 @@ class Pirate(Unit):
         self.iteration = BaseAI.iteration
         return True
     raise ExistentialError()
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.pirateMove(self.ptr, x, y)
@@ -156,7 +162,7 @@ class Pirate(Unit):
     self.validify()
     return library.pirateTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -169,12 +175,12 @@ class Pirate(Unit):
     self.validify()
     return library.piratePickupTreasure(self.ptr, amount)
 
-  ##Allows the pirate to drop treasure on the groud.
+  ##Allows the pirate to drop treasure they are carrying.
   def dropTreasure(self, amount):
     self.validify()
     return library.pirateDropTreasure(self.ptr, amount)
 
-  ##Pirate builds a port on a land tile with water tile adjacent
+  ##Pirate builds a port on a land tile with water tile adjacent. Cannot be within three spaces of another port!
   def buildPort(self):
     self.validify()
     return library.pirateBuildPort(self.ptr)
@@ -194,30 +200,35 @@ class Pirate(Unit):
     self.validify()
     return library.pirateGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.pirateGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.pirateGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.pirateGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.pirateGetHasMoved(self.ptr)
+    return library.pirateGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.pirateGetHasAttacked(self.ptr)
+    return library.pirateGetAttacksLeft(self.ptr)
+
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.pirateGetGold(self.ptr)
 
 
   def __str__(self):
@@ -229,8 +240,9 @@ class Pirate(Unit):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
 ##
@@ -284,7 +296,7 @@ class Player(GameObject):
     ret += "time: %s\n" % self.getTime()
     return ret
 
-##A generic port
+##A basic port. The port can create new pirates and ships and is used when pirates need to deposit money.
 class Port(Mappable):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -345,7 +357,7 @@ class Port(Mappable):
     ret += "owner: %s\n" % self.getOwner()
     return ret
 
-##A generic ship
+##A basic ship. They can only travel by sea and attack other ships. Whenever the ship moves, any pirates on his tile go with it
 class Ship(Unit):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -366,7 +378,7 @@ class Ship(Unit):
         self.iteration = BaseAI.iteration
         return True
     raise ExistentialError()
-  ##Move the unit to the designated X and Y coordinates
+  ##Move the unit to the designated X and Y coordinates if possible
   def move(self, x, y):
     self.validify()
     return library.shipMove(self.ptr, x, y)
@@ -376,7 +388,7 @@ class Ship(Unit):
     self.validify()
     return library.shipTalk(self.ptr, message)
 
-  ##Attempt to attack the given unit
+  ##Attempt to attack the input target if possible
   def attack(self, Target):
     self.validify()
     if not isinstance(Target, Unit):
@@ -399,30 +411,35 @@ class Ship(Unit):
     self.validify()
     return library.shipGetY(self.ptr)
 
-  ##The owner of the unit
+  ##Represents the owner of the unit.
   def getOwner(self):
     self.validify()
     return library.shipGetOwner(self.ptr)
 
-  ##health of the unit
+  ##Current ealth of the unit
   def getHealth(self):
     self.validify()
     return library.shipGetHealth(self.ptr)
 
-  ##attacking strength of the unit
+  ##Attacking strength of the unit (Each point of strength deals 1 health of damage)
   def getStrength(self):
     self.validify()
     return library.shipGetStrength(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasMoved(self):
+  ##Displays the remaining moves for this unit this turn
+  def getMovesLeft(self):
     self.validify()
-    return library.shipGetHasMoved(self.ptr)
+    return library.shipGetMovesLeft(self.ptr)
 
-  ##checks if the unit has moved this turn
-  def getHasAttacked(self):
+  ##Displays the remaining attacks for this unit this turn
+  def getAttacksLeft(self):
     self.validify()
-    return library.shipGetHasAttacked(self.ptr)
+    return library.shipGetAttacksLeft(self.ptr)
+
+  ##Amount of gold carried by the unit.
+  def getGold(self):
+    self.validify()
+    return library.shipGetGold(self.ptr)
 
 
   def __str__(self):
@@ -434,8 +451,9 @@ class Ship(Unit):
     ret += "owner: %s\n" % self.getOwner()
     ret += "health: %s\n" % self.getHealth()
     ret += "strength: %s\n" % self.getStrength()
-    ret += "hasMoved: %s\n" % self.getHasMoved()
-    ret += "hasAttacked: %s\n" % self.getHasAttacked()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "attacksLeft: %s\n" % self.getAttacksLeft()
+    ret += "gold: %s\n" % self.getGold()
     return ret
 
 ##A basic tile
@@ -489,7 +507,7 @@ class Tile(Mappable):
     ret += "type: %s\n" % self.getType()
     return ret
 
-##A treasure
+##This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth
 class Treasure(Mappable):
   def __init__(self, ptr):
     from BaseAI import BaseAI
@@ -525,15 +543,10 @@ class Treasure(Mappable):
     self.validify()
     return library.treasureGetY(self.ptr)
 
-  ##The ID of the pirate carrying this treasure, 0 if not carried
-  def getPirateID(self):
+  ##The amount of gold currently with this treasure
+  def getGold(self):
     self.validify()
-    return library.treasureGetPirateID(self.ptr)
-
-  ##The amount of gold in this treaure
-  def getAmount(self):
-    self.validify()
-    return library.treasureGetAmount(self.ptr)
+    return library.treasureGetGold(self.ptr)
 
 
   def __str__(self):
@@ -542,6 +555,5 @@ class Treasure(Mappable):
     ret += "id: %s\n" % self.getId()
     ret += "x: %s\n" % self.getX()
     ret += "y: %s\n" % self.getY()
-    ret += "pirateID: %s\n" % self.getPirateID()
-    ret += "amount: %s\n" % self.getAmount()
+    ret += "gold: %s\n" % self.getGold()
     return ret

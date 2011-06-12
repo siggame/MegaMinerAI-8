@@ -94,38 +94,56 @@ public abstract class BaseAI
 
 
   ///How many turns it has been since the beginning of the game
-  int turnNumber()
+  public int turnNumber()
   {
     return Client.getTurnNumber(connection);
   }
-  ///Player Number; either 0 or 1
-  int playerID()
+  ///Player Number; either 0 or 1 (0 is player 1, 1 is player 2)
+  public int playerID()
   {
     return Client.getPlayerID(connection);
   }
   ///What number game this is for the server
-  int gameNumber()
+  public int gameNumber()
   {
     return Client.getGameNumber(connection);
   }
   ///The cost of a pirate
-  int pirateCost()
+  public int pirateCost()
   {
     return Client.getPirateCost(connection);
   }
   ///The cost of a ship
-  int shipCost()
+  public int shipCost()
   {
     return Client.getShipCost(connection);
   }
   ///The cost to build a new port
-  int portCost()
+  public int portCost()
   {
     return Client.getPortCost(connection);
   }
   ///The boards width and height
-  int mapSize()
+  public int mapSize()
   {
     return Client.getMapSize(connection);
+  }
+
+  public Tile[] getPath(int startx, int starty, int endx, int endy, int type)
+  {
+    IntPtr start = tiles[starty * mapSize() + startx].ptr;
+    IntPtr end = tiles[endy * mapSize() + starty].ptr;
+
+    Client.findPath(start, end, type);
+    int size = Client.getPathSize();
+
+    Tile[] path = new Tile[size];
+
+    for(int i = 0; i < size; i++)
+    {
+      path[i] = tiles[Client.getPathStep(i)];
+    }
+
+    return path;
   }
 }

@@ -4,6 +4,7 @@ from collections import defaultdict
 from functools import wraps
 import string
 import traceback
+import WebServerAuthenticator
 
 import config.config
 
@@ -50,7 +51,8 @@ class BaseApp(object):
       command = self.__class__._mapper[coms[0]]
       return command(self, *coms[1:])
     except KeyError as e:
-      return "invalid-command: %s" % coms[0]
+      traceback.print_exc()
+      return "invalid-command",  coms[0]
     except Exception as e:
       traceback.print_exc()
       return "unknown-error", ("command", coms[0]), ("arguments", coms[1:])
@@ -65,12 +67,30 @@ class AccountsAppMixin(object):
   
   @protocolmethod
   def login(self, name, password):
-    validNames = config.config.readConfig("config/login.cfg")
-    if (name in validNames and validNames[name]["password"] == password):
-      self.logged_in = True
-      self.name = name
-      return ["login-accepted"]
-    return ["login-denied"]
+    #THIS IS THE OLD CODE FOR VERIFYING LOGIN STUFFz
+    #validNames = config.config.readConfig("config/login.cfg")
+    #if (name in validNames and validNames[name]["password"] == password):
+    #  self.logged_in = True
+    #  self.name = name
+    #  return ["login-accepted"]
+    #return ["login-denied"]
+    
+    
+    #THIS IS THE NEW CODE THAT VERIFIES LOGIN WITH AWESOME WEB SERVER!!!
+    
+    webAuth = WebServerAuthenticator.WebServerAuthenticator("megaminerai.com")
+    
+    try:
+      val = webAuth.auth_team(name, password)
+      if (val):
+        self.logged_in = True
+        self.name = str(val)
+        return ["login-accepted"]
+      else:
+        return ["login-denied"]
+    except WebServerAuthenticator.WebServerException:
+      return ["login-denied"]
+    
 
   @protocolmethod
   def logout(self):

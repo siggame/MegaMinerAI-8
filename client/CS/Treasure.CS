@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 
 
-///A treasure
+///This is the source of your wealth. When dropped on the ground it will build interest baed on its distance to pirates, if dropped on a port it is added to your ooverall wealth
 public class Treasure: Mappable 
 {
   
@@ -55,17 +55,11 @@ public class Treasure: Mappable
     validify();
     return Client.treasureGetY(ptr);
   }
-  ///The ID of the pirate carrying this treasure, 0 if not carried
-  public int getPirateID()
+  ///The amount of gold currently with this treasure
+  public int getGold()
   {
     validify();
-    return Client.treasureGetPirateID(ptr);
-  }
-  ///The amount of gold in this treaure
-  public int getAmount()
-  {
-    validify();
-    return Client.treasureGetAmount(ptr);
+    return Client.treasureGetGold(ptr);
   }
 
 }

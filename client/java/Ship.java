@@ -1,6 +1,6 @@
 import com.sun.jna.Pointer;
 
-///A generic ship
+///A basic ship. They can only travel by sea and attack other ships. Whenever the ship moves, any pirates on his tile go with it
 class Ship extends Unit 
 {
   public Ship(Pointer p)
@@ -24,7 +24,7 @@ class Ship extends Unit
     
     //commands
     
-  ///Move the unit to the designated X and Y coordinates
+  ///Move the unit to the designated X and Y coordinates if possible
   int move(int x, int y)
   {
     validify();
@@ -36,7 +36,7 @@ class Ship extends Unit
     validify();
     return Client.INSTANCE.shipTalk(ptr, message);
   }
-  ///Attempt to attack the given unit
+  ///Attempt to attack the input target if possible
   int attack(Unit Target)
   {
     validify();
@@ -64,35 +64,41 @@ class Ship extends Unit
     validify();
     return Client.INSTANCE.shipGetY(ptr);
   }
-  ///The owner of the unit
+  ///Represents the owner of the unit.
   public int getOwner()
   {
     validify();
     return Client.INSTANCE.shipGetOwner(ptr);
   }
-  ///health of the unit
+  ///Current ealth of the unit
   public int getHealth()
   {
     validify();
     return Client.INSTANCE.shipGetHealth(ptr);
   }
-  ///attacking strength of the unit
+  ///Attacking strength of the unit (Each point of strength deals 1 health of damage)
   public int getStrength()
   {
     validify();
     return Client.INSTANCE.shipGetStrength(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasMoved()
+  ///Displays the remaining moves for this unit this turn
+  public int getMovesLeft()
   {
     validify();
-    return Client.INSTANCE.shipGetHasMoved(ptr);
+    return Client.INSTANCE.shipGetMovesLeft(ptr);
   }
-  ///checks if the unit has moved this turn
-  public int getHasAttacked()
+  ///Displays the remaining attacks for this unit this turn
+  public int getAttacksLeft()
   {
     validify();
-    return Client.INSTANCE.shipGetHasAttacked(ptr);
+    return Client.INSTANCE.shipGetAttacksLeft(ptr);
+  }
+  ///Amount of gold carried by the unit.
+  public int getGold()
+  {
+    validify();
+    return Client.INSTANCE.shipGetGold(ptr);
   }
 
 }
