@@ -227,7 +227,7 @@ public:
 
 private:
   
-  QTableWidget * m_multipleStats;
+  QTableWidget * m_globalStats;
   QTableWidget * m_individualStats;
 
   /// Container for the objects in the GUI
@@ -255,8 +255,8 @@ private:
 
   /// Unit Stats Area
   QTabWidget * m_unitStatsArea;
-  QStringList m_multipleStatsVerticalLabels;
-  QStringList m_multipleStatsHorizontalLabels;
+  QStringList m_globalStatsVerticalLabels;
+  QStringList m_globalStatsHorizontalLabels;
 
   QStringList m_individualStatsVerticalLabels;
   QStringList m_individualStatsHorizontalLabels;

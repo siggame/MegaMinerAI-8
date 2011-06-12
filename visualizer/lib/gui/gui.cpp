@@ -446,23 +446,23 @@ void GUI::initUnitStats()
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
 
   //Create tables to fill tabs
-  m_multipleStats = new QTableWidget(m_unitStatsArea);
+  m_globalStats = new QTableWidget(m_unitStatsArea);
   m_individualStats = new QTableWidget(m_unitStatsArea);
 
   //Create headers for tables
-  m_multipleStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
+  m_globalStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
     <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
-  m_multipleStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
+  m_globalStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
 
   m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
     <<"movesLeft"<<"attacksLeft";
   m_individualStatsHorizontalLabels<<".";
 
   //Set table properties and headers
-  m_multipleStats->setRowCount(m_multipleStatsVerticalLabels.size());
-  m_multipleStats->setColumnCount(m_multipleStatsHorizontalLabels.size());
-  m_multipleStats->setVerticalHeaderLabels ( m_multipleStatsVerticalLabels );
-  m_multipleStats->setHorizontalHeaderLabels( m_multipleStatsHorizontalLabels );
+  m_globalStats->setRowCount(m_globalStatsVerticalLabels.size());
+  m_globalStats->setColumnCount(m_globalStatsHorizontalLabels.size());
+  m_globalStats->setVerticalHeaderLabels ( m_globalStatsVerticalLabels );
+  m_globalStats->setHorizontalHeaderLabels( m_globalStatsHorizontalLabels );
 
   m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
   m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
@@ -470,8 +470,8 @@ void GUI::initUnitStats()
   m_individualStats->setHorizontalHeaderLabels( m_individualStatsHorizontalLabels );
 
   //Add tabs of tables to tab area
-  m_unitStatsArea->addTab( m_multipleStats, "Total Units Stats" );
-  m_unitStatsArea->addTab( m_individualStats, "Selected Units Stats" );
+  m_unitStatsArea->addTab( m_globalStats, "Global Stats" );
+  m_unitStatsArea->addTab( m_individualStats, "Individual Unit Stats" );
 
   //Add tab area to dockLayout
   m_dockLayout->addWidget( m_unitStatsArea );
@@ -532,7 +532,7 @@ QTableWidget * GUI::getIndividualStats()
 
 QTableWidget * GUI::getMultipleStats()
 {
-  return get()->m_multipleStats;
+  return get()->m_globalStats;
 }
 
 
