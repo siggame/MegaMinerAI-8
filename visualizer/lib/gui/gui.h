@@ -222,7 +222,7 @@ private slots:
 
 public:
 
-  static QTableWidget* getMultipleStats();
+  static QTableWidget* getGlobalStats();
   static QTableWidget* getIndividualStats();
 
 private:

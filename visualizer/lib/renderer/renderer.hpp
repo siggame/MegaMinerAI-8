@@ -704,7 +704,7 @@ void Renderer<DupObject>::printIndividuals( int c, int r, QString str )
 template<typename DupObject>
 void Renderer<DupObject>::printGlobalSelected( int r, int c, QString str )
 {
-  printToTable( GUI::getMultipleStats(), c, r, str );
+  printToTable( GUI::getGlobalStats(), c, r, str );
 }
 
 template<typename DupObject>

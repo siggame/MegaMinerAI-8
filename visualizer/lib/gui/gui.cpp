@@ -539,7 +539,7 @@ QTableWidget * GUI::getIndividualStats()
 
 
 
-QTableWidget * GUI::getMultipleStats()
+QTableWidget * GUI::getGlobalStats()
 {
   return get()->m_globalStats;
 }
