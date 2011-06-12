@@ -22,9 +22,8 @@ std::ostream& operator<<(std::ostream& stream, Unit ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "movesLeft: " << ob.movesLeft  <<'\n';
-  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
-  stream << "gold: " << ob.gold  <<'\n';
+  stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
   return stream;
 }
 
@@ -37,9 +36,8 @@ std::ostream& operator<<(std::ostream& stream, Pirate ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "movesLeft: " << ob.movesLeft  <<'\n';
-  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
-  stream << "gold: " << ob.gold  <<'\n';
+  stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
   return stream;
 }
 
@@ -72,9 +70,8 @@ std::ostream& operator<<(std::ostream& stream, Ship ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "health: " << ob.health  <<'\n';
   stream << "strength: " << ob.strength  <<'\n';
-  stream << "movesLeft: " << ob.movesLeft  <<'\n';
-  stream << "attacksLeft: " << ob.attacksLeft  <<'\n';
-  stream << "gold: " << ob.gold  <<'\n';
+  stream << "hasMoved: " << ob.hasMoved  <<'\n';
+  stream << "hasAttacked: " << ob.hasAttacked  <<'\n';
   return stream;
 }
 
@@ -94,38 +91,11 @@ std::ostream& operator<<(std::ostream& stream, Treasure ob)
   stream << "id: " << ob.id  <<'\n';
   stream << "x: " << ob.x  <<'\n';
   stream << "y: " << ob.y  <<'\n';
-  stream << "gold: " << ob.gold  <<'\n';
+  stream << "pirateID: " << ob.pirateID  <<'\n';
+  stream << "amount: " << ob.amount  <<'\n';
   return stream;
 }
 
-
-
-std::ostream& operator<<(std::ostream& stream, Attack ob)
-{
-  stream << "Attack" << "\n";
-  stream << "attacker: " << ob.attacker  <<'\n';
-  stream << "victim: " << ob.victim  <<'\n';
-  return stream;
-}
-
-
-std::ostream& operator<<(std::ostream& stream, Move ob)
-{
-  stream << "Move" << "\n";
-  stream << "unit: " << ob.unit  <<'\n';
-  stream << "x: " << ob.x  <<'\n';
-  stream << "y: " << ob.y  <<'\n';
-  return stream;
-}
-
-
-std::ostream& operator<<(std::ostream& stream, Talk ob)
-{
-  stream << "Talk" << "\n";
-  stream << "speaker: " << ob.speaker  <<'\n';
-  stream << "message: " << ob.message  <<'\n';
-  return stream;
-}
 
 
 std::ostream& operator<<(std::ostream& stream, GameState ob)
@@ -165,15 +135,7 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "\nAnimation\n";
   for(std::vector<Animation*>::iterator i = ob.animations.begin(); i != ob.animations.end(); i++)
   {
-    if((**i).type == ATTACK)
-      stream << *((Attack*)*i) << "\n";
-    if((**i).type == MOVE)
-      stream << *((Move*)*i) << "\n";
-    if((**i).type == TALK)
-      stream << *((Talk*)*i) << "\n";
   }
-  
-  return stream;
 }
 
 Game::Game()

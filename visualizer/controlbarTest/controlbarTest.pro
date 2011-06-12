@@ -1,4 +1,6 @@
-SOURCES += main.cpp 
+
+SOURCES += main.cpp \
+gui.cpp
 MOC = moc
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg

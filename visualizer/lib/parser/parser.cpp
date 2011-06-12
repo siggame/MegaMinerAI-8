@@ -77,17 +77,12 @@ static bool parseUnit(Unit& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.movesLeft = atoi(sub->val);
+  object.hasMoved = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.attacksLeft = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.gold = atoi(sub->val);
+  object.hasAttacked = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -134,17 +129,12 @@ static bool parsePirate(Pirate& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.movesLeft = atoi(sub->val);
+  object.hasMoved = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.attacksLeft = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.gold = atoi(sub->val);
+  object.hasAttacked = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -257,17 +247,12 @@ static bool parseShip(Ship& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.movesLeft = atoi(sub->val);
+  object.hasMoved = atoi(sub->val);
   sub = sub->next;
 
   if ( !sub ) goto ERROR;
 
-  object.attacksLeft = atoi(sub->val);
-  sub = sub->next;
-
-  if ( !sub ) goto ERROR;
-
-  object.gold = atoi(sub->val);
+  object.hasAttacked = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -331,7 +316,12 @@ static bool parseTreasure(Treasure& object, sexp_t* expression)
 
   if ( !sub ) goto ERROR;
 
-  object.gold = atoi(sub->val);
+  object.pirateID = atoi(sub->val);
+  sub = sub->next;
+
+  if ( !sub ) goto ERROR;
+
+  object.amount = atoi(sub->val);
   sub = sub->next;
 
   return true;
@@ -341,72 +331,6 @@ static bool parseTreasure(Treasure& object, sexp_t* expression)
   return false;
 }
 
-static bool parseAttack(Attack& object, sexp_t* expression)
-{
-  sexp_t* sub;
-  if ( !expression ) return false;
-  object.type = ATTACK;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.attacker = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.victim = atoi(sub->val);
-  sub = sub->next;
-  return true;
-
-
-  ERROR:
-  cerr << "Error in parseAttack.\n Parsing: " << *expression << endl;
-  return false;
-}
-static bool parseMove(Move& object, sexp_t* expression)
-{
-  sexp_t* sub;
-  if ( !expression ) return false;
-  object.type = MOVE;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.unit = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.x = new char[strlen(sub->val)+1];
-  strncpy(object.x, sub->val, strlen(sub->val));
-  object.x[strlen(sub->val)] = 0;
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.y = new char[strlen(sub->val)+1];
-  strncpy(object.y, sub->val, strlen(sub->val));
-  object.y[strlen(sub->val)] = 0;
-  sub = sub->next;
-  return true;
-
-
-  ERROR:
-  cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
-  return false;
-}
-static bool parseTalk(Talk& object, sexp_t* expression)
-{
-  sexp_t* sub;
-  if ( !expression ) return false;
-  object.type = TALK;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.speaker = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.message = new char[strlen(sub->val)+1];
-  strncpy(object.message, sub->val, strlen(sub->val));
-  object.message[strlen(sub->val)] = 0;
-  sub = sub->next;
-  return true;
-
-
-  ERROR:
-  cerr << "Error in parseTalk.\n Parsing: " << *expression << endl;
-  return false;
-}
 
 static bool parseSexp(Game& game, sexp_t* expression)
 {
@@ -562,27 +486,6 @@ static bool parseSexp(Game& game, sexp_t* expression)
       expression = expression->next;
       sub = expression->list;
       if ( !sub ) return false;
-      if(string(sub->val) == "attack")
-      {
-        Attack* animation = new Attack;
-        if ( !parseAttack(*animation, expression) )
-          return false;
-        animations.push_back(animation);
-      }
-      if(string(sub->val) == "move")
-      {
-        Move* animation = new Move;
-        if ( !parseMove(*animation, expression) )
-          return false;
-        animations.push_back(animation);
-      }
-      if(string(sub->val) == "talk")
-      {
-        Talk* animation = new Talk;
-        if ( !parseTalk(*animation, expression) )
-          return false;
-        animations.push_back(animation);
-      }
     }
     game.states[game.states.size()-1].animations = animations;
   }
@@ -627,9 +530,9 @@ static bool parseSexp(Game& game, sexp_t* expression)
 
 bool parseFile(Game& game, const char* filename)
 {
-  //bool value;
+  bool value;
   FILE* in = fopen(filename, "r");
-  //int size;
+  int size;
   if(!in)
     return false;
 
@@ -637,7 +540,7 @@ bool parseFile(Game& game, const char* filename)
 
   sexp_t* st = NULL;
 
-  while((st = parse()))
+  while(st = parse())
   {
     if( !parseSexp(game, st) )
     {

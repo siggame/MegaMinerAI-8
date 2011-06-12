@@ -9,9 +9,6 @@
 #include <map>
 #include <string>
 
-const int ATTACK = 0;
-const int MOVE = 1;
-const int TALK = 2;
 
 struct Mappable
 {
@@ -27,9 +24,8 @@ struct Unit: public Mappable
   int owner;
   int health;
   int strength;
-  int movesLeft;
-  int attacksLeft;
-  int gold;
+  int hasMoved;
+  int hasAttacked;
 
   friend std::ostream& operator<<(std::ostream& stream, Unit obj);
 };
@@ -72,7 +68,8 @@ struct Tile: public Mappable
 
 struct Treasure: public Mappable 
 {
-  int gold;
+  int pirateID;
+  int amount;
 
   friend std::ostream& operator<<(std::ostream& stream, Treasure obj);
 };
@@ -81,31 +78,6 @@ struct Treasure: public Mappable
 struct Animation
 {
   int type;
-};
-
-struct Attack : public Animation
-{
-  int attacker;
-  int victim;
-
-  friend std::ostream& operator<<(std::ostream& stream, Attack obj);
-};
-
-struct Move : public Animation
-{
-  int unit;
-  char* x;
-  char* y;
-
-  friend std::ostream& operator<<(std::ostream& stream, Move obj);
-};
-
-struct Talk : public Animation
-{
-  int speaker;
-  char* message;
-
-  friend std::ostream& operator<<(std::ostream& stream, Talk obj);
 };
 
 
