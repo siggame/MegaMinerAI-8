@@ -3,6 +3,10 @@
 #include "../gocfamily_render.h"
 #include "../singleton.h"
 
+/* The SelectionRender object assists with drawing the selection box that 
+ * appears when clicking and dragging to highlight interesting units.
+ */
+
 class SelectionRender : public GOCFamily_Render, Singleton <SelectionRender>
 {
 	public:
