@@ -447,13 +447,16 @@ void GUI::initUnitStats()
 
   //Create tables to fill tabs
   m_globalStats = new QTableWidget(m_unitStatsArea);
+  m_selectionStats = new QTableWidget(m_unitStatsArea);
   m_individualStats = new QTableWidget(m_unitStatsArea);
 
   //Create headers for tables
   m_globalStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
     <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
   m_globalStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
-
+  m_selectionStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
+    <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
+  m_selectionStatsHorizontalLabels<<"Global"<<"P0"<<"P1"<<"Selection"<<"P2"<<"P3";
   m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
     <<"movesLeft"<<"attacksLeft";
   m_individualStatsHorizontalLabels<<".";
@@ -463,6 +466,11 @@ void GUI::initUnitStats()
   m_globalStats->setColumnCount(m_globalStatsHorizontalLabels.size());
   m_globalStats->setVerticalHeaderLabels ( m_globalStatsVerticalLabels );
   m_globalStats->setHorizontalHeaderLabels( m_globalStatsHorizontalLabels );
+  
+  m_selectionStats->setRowCount(m_selectionStatsVerticalLabels.size());
+  m_selectionStats->setColumnCount(m_selectionStatsHorizontalLabels.size());
+  m_selectionStats->setVerticalHeaderLabels ( m_selectionStatsVerticalLabels );
+  m_selectionStats->setHorizontalHeaderLabels( m_selectionStatsHorizontalLabels );
 
   m_individualStats->setRowCount(m_individualStatsVerticalLabels.size());
   m_individualStats->setColumnCount(m_individualStatsHorizontalLabels.size());
@@ -471,6 +479,7 @@ void GUI::initUnitStats()
 
   //Add tabs of tables to tab area
   m_unitStatsArea->addTab( m_globalStats, "Global Stats" );
+  m_unitStatsArea->addTab( m_selectionStats, "Selection Stats" );
   m_unitStatsArea->addTab( m_individualStats, "Individual Unit Stats" );
 
   //Add tab area to dockLayout
