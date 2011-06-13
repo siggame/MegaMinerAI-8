@@ -465,7 +465,8 @@ unsigned int Renderer<DupObject>::depth()
 template <typename DupObject>
 bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
 {
-  Stats global, p0, p1, p2, p3, selected;
+  Stats globalTotal, globalP0, globalP1, globalP2, globalP3; 
+  Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3; 
   int health;
 
   if (!Single::isInit())
@@ -611,39 +612,58 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
         if( temp.selected )
         {
-          if( !treasure )
+          if( !treasure ) //Is Pirate or Ship, check for owner
           {
-            
             switch( owner )
             {
               case 0:
-                p0 += tStats;
+                selectedP0 += tStats;
                 break;
               case 1:
-                p1 += tStats;
+                selectedP1 += tStats;
                 break;
               case 2:
-                p2 += tStats;
+                selectedP2 += tStats;
                 break;
               case 3:
-                p3 += tStats;
+                selectedP3 += tStats;
                 break;
             }
             
             //Selected Pirate
             if(((ObjectType*)goc)->type() == POT_PIRATE)
             {
-              //Talk
-              
-              
+              //Check for and display talk to console
             }
-          } else {
-            selected += tStats;
+          } else { //Is treasure; buried treasure has no owner
+            selectedTotal += tStats;
           }
-        } else
-        {
-          global += tStats;
-        }
+          
+        } else { //Not selected, add to global
+        
+          if( !treasure ) //Is Pirate or Ship, check for owner
+            {
+              switch( owner )
+              {
+                case 0:
+                  globalP0 += tStats;
+                  break;
+                case 1:
+                  globalP1 += tStats;
+                  break;
+                case 2:
+                  globalP2 += tStats;
+                  break;
+                case 3:
+                  globalP3 += tStats;
+                  break;
+              }
+              
+            } else { //Is treasure; buried treasure has no owner
+              globalTotal += tStats;
+            }
+
+        }//Global only, not selected
 
 
         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
@@ -658,29 +678,45 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
 
   }
 
-  selected += p0;
-  selected += p1;
-  selected += p2;
-  selected += p3;
+  //Total selected
+  selectedTotal += selectedP0;
+  selectedTotal += selectedP1;
+  selectedTotal += selectedP2;
+  selectedTotal += selectedP3;
 
-  global += selected;
+  //Total global (add selected to unselected)
+  globalP0 += selectedP0;
+  globalP1 += selectedP1;
+  globalP2 += selectedP2;
+  globalP3 += selectedP3;
 
-  p0.final();
-  p1.final();
-  p2.final();
-  p3.final();
-  selected.final();
-  global.final();
+  globalTotal += selectedTotal;
 
-  Single::get()->multipleUnitStatColumnPopulate (global, 0);
-  Single::get()->multipleUnitStatColumnPopulate (p0, 1);
-  Single::get()->multipleUnitStatColumnPopulate (p1, 2);
-  Single::get()->multipleUnitStatColumnPopulate (selected, 3);
-  Single::get()->multipleUnitStatColumnPopulate (p2, 4);
-  Single::get()->multipleUnitStatColumnPopulate (p3, 5);
+  selectedP0.final();
+  selectedP1.final();
+  selectedP2.final();
+  selectedP3.final();
+  selectedTotal.final();
+  
+  globalP0.final();
+  globalP1.final();
+  globalP2.final();
+  globalP3.final();
+  globalTotal.final();
 
+  Single::get()->globalStatColumnPopulate (globalTotal, 0);
+  Single::get()->globalStatColumnPopulate (globalP0, 1);
+  Single::get()->globalStatColumnPopulate (globalP1, 2);
+  Single::get()->globalStatColumnPopulate (globalP2, 3);
+  Single::get()->globalStatColumnPopulate (globalP3, 4);
+
+  Single::get()->selectionStatColumnPopulate (selectedTotal, 0);
+  Single::get()->selectionStatColumnPopulate (selectedP0, 1);
+  Single::get()->selectionStatColumnPopulate (selectedP1, 2);
+  Single::get()->selectionStatColumnPopulate (selectedP2, 3);
+  Single::get()->selectionStatColumnPopulate (selectedP3, 4);
+  
   return true;
-
 }
 
 template<typename DupObject>
@@ -702,7 +738,13 @@ void Renderer<DupObject>::printIndividuals( int c, int r, QString str )
 }
 
 template<typename DupObject>
-void Renderer<DupObject>::printGlobalSelected( int r, int c, QString str )
+void Renderer<DupObject>::printSelectedStats( int r, int c, QString str )
+{
+  printToTable( GUI::getSelectionStats(), c, r, str );
+}
+
+template<typename DupObject>
+void Renderer<DupObject>::printGlobalStats( int r, int c, QString str )
 {
   printToTable( GUI::getGlobalStats(), c, r, str );
 }
@@ -714,19 +756,30 @@ void Renderer<DupObject>::appendToConsole( string str )
 }
 
 template<typename DupObject>
-void Renderer<DupObject>::multipleUnitStatColumnPopulate (Stats multi, int column)
+void Renderer<DupObject>::selectionStatColumnPopulate (Stats multi, int column)
 {
+  Single::get()->printSelectedStats( column, 1, QString::number(multi.pirates));
+  Single::get()->printSelectedStats( column, 2, QString::number(multi.avgPirateHealth));
+  Single::get()->printSelectedStats( column, 3, QString::number(multi.avgPirateGold));
+  Single::get()->printSelectedStats( column, 4, QString::number(multi.gold));
+  Single::get()->printSelectedStats( column, 5, QString::number(multi.ships));
+  Single::get()->printSelectedStats( column, 6, QString::number(multi.avgShipHealth));
+  Single::get()->printSelectedStats( column, 7, QString::number(multi.avgShipGold));
+  Single::get()->printSelectedStats( column, 8, QString::number(multi.treasures));
+  //Single::get()->printSelectedStats( column, 0, QString::number(0));
+}
 
-
-
-  Single::get()->printGlobalSelected( column, 1, QString::number(multi.pirates));
-  Single::get()->printGlobalSelected( column, 2, QString::number(multi.avgPirateHealth));
-  Single::get()->printGlobalSelected( column, 3, QString::number(multi.avgPirateGold));
-  Single::get()->printGlobalSelected( column, 4, QString::number(multi.gold));
-  Single::get()->printGlobalSelected( column, 5, QString::number(multi.ships));
-  Single::get()->printGlobalSelected( column, 6, QString::number(multi.avgShipHealth));
-  Single::get()->printGlobalSelected( column, 7, QString::number(multi.avgShipGold));
-  Single::get()->printGlobalSelected( column, 8, QString::number(multi.treasures));
-  //Single::get()->printGlobalSelected( column, 0, QString::number(0));
+template<typename DupObject>
+void Renderer<DupObject>::globalStatColumnPopulate (Stats multi, int column)
+{
+  Single::get()->printGlobalStats( column, 1, QString::number(multi.pirates));
+  Single::get()->printGlobalStats( column, 2, QString::number(multi.avgPirateHealth));
+  Single::get()->printGlobalStats( column, 3, QString::number(multi.avgPirateGold));
+  Single::get()->printGlobalStats( column, 4, QString::number(multi.gold));
+  Single::get()->printGlobalStats( column, 5, QString::number(multi.ships));
+  Single::get()->printGlobalStats( column, 6, QString::number(multi.avgShipHealth));
+  Single::get()->printGlobalStats( column, 7, QString::number(multi.avgShipGold));
+  Single::get()->printGlobalStats( column, 8, QString::number(multi.treasures));
+  //Single::get()->printGlobalStats( column, 0, QString::number(0));
 }
 #endif

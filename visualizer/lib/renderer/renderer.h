@@ -142,8 +142,10 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
     std::map<int, renderObj*> m_renderConstant;
 
-    void multipleUnitStatColumnPopulate( Stats multi, int column );
-    void printGlobalSelected( int c, int r, QString str );
+    void selectionStatColumnPopulate( Stats multi, int column );
+    void globalStatColumnPopulate( Stats multi, int column );
+    void printGlobalStats( int c, int r, QString str );
+    void printSelectedStats( int c, int r, QString str );    
     void printIndividuals( int c, int r, QString str );
     void printToTable( QTableWidget *w, int c, int r, QString str );
     void appendToConsole( string str );
