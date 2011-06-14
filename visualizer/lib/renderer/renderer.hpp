@@ -566,7 +566,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
           health = ((GOCFamily_Health*)goc)->currentHealth();
         }
 
-        Stats tStats;
+        Stats tStats; //temporary variable for summing the stats
         goc = it->second->data->getGOC( "ObjectType" );
         bool treasure = false;
         if( goc )
