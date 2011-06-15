@@ -632,10 +632,13 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                 break;
             }
             
+            std::cout<<"Got to just before talk pirate test.\n";
             //Add anything this pirate is saying to the console
             if(((ObjectType*)goc)->type() == POT_PIRATE)
             {
+              std::cout<<"Is pirate for talking.\n";
               goc = it->second->data->getGOC( "TalkFamily" );
+              std::cout<<"Say: "<<((GOCFamily_Talk*)goc)->message()<<"\n";
               Single::get()->appendToConsole( ((GOCFamily_Talk*)goc)->message() );
             }
             
