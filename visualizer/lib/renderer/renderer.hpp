@@ -5,6 +5,7 @@
 #include "../selectionrender/selectionrender.h"
 #include "../goc_owner.h"
 #include <sstream>
+#include "../gocfamily_talk.h"
 using namespace std;
 
 // TODO: REMOVE LATER FOR NON_GAME SPECIFIC
@@ -12,6 +13,7 @@ using namespace std;
 #include "../../piracy/piratehealth.h"
 #include "../../piracy/shiphealth.h"
 #include "../../piracy/gold.h"
+
 
 /** @brief resize
  * resize and refresh the projection  and modelview matricies
@@ -630,11 +632,16 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
                 break;
             }
             
-            //Selected Pirate
+            std::cout<<"Got to just before talk pirate test.\n";
+            //Add anything this pirate is saying to the console
             if(((ObjectType*)goc)->type() == POT_PIRATE)
             {
-              //Check for and display talk to console
+              std::cout<<"Is pirate for talking.\n";
+              goc = it->second->data->getGOC( "TalkFamily" );
+              std::cout<<"Say: "<<((GOCFamily_Talk*)goc)->message()<<"\n";
+              Single::get()->appendToConsole( ((GOCFamily_Talk*)goc)->message() );
             }
+            
           } else { //Is treasure; buried treasure has no owner
             selectedTotal += tStats;
           }

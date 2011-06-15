@@ -115,7 +115,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
     static void setParent( RenderWidget *parent );
 
     static bool refresh();
-    static bool resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth = 1);
+    static bool resize(const unsigned int & width, const unsigned int & height, 
+      const unsigned int & depth = 1);
 
     //static unsigned int numObjects();
 
@@ -150,7 +151,8 @@ class Renderer : public Singleton< Renderer< DupObject > >
     void printToTable( QTableWidget *w, int c, int r, QString str );
     void appendToConsole( string str );
 
-    static void updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir,
+    static void updateLocation(const unsigned int & x, const unsigned int & y, 
+      const unsigned int & z, const unsigned int & dir, 
       const unsigned int & time, DupObject obj);
 
     typedef Singleton<Renderer<DupObject> > Single;
