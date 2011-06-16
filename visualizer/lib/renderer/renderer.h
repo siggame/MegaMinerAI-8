@@ -79,8 +79,8 @@ struct Stats
   {
     if( pirates )
     {
-      avgPirateGold = pirates;
-      avgPirateHealth = pirates;
+      avgPirateGold /= pirates;
+      avgPirateHealth /= pirates;
     }
 
     if( ships )
