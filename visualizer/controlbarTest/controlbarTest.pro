@@ -1,6 +1,7 @@
 HEADERS += coolslider.h
 SOURCES += main.cpp \
-gui.cpp 
+gui.cpp \
+coolslider.cpp
 
 MOC = moc
 QMAKE_CFLAGS_DEBUG += -pg

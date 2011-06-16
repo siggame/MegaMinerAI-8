@@ -1,30 +1,40 @@
 #ifndef COOLSLIDER_H
 #define COOLSLIDER_H
 
-#include <QtGui/qabstractslider.h>
 
-QT_BEGIN_HEADER
-QT_BEGIN_NAMESPACE
+#include <QWidget>
+#include <QtGui>
+#include <QPushButton>
 
-QT_MODULE(Gui)
+#include <list>
 
-#ifndef QT_NO_SLIDER
+using namespace std;
 
-class QSliderPrivate;
-class QSliderOptionSlider;
-class Q_GUI_EXPORT CoolSlider : public QAbstractSlider
+typedef unsigned short int frame_t16;
+
+
+class GranolaBar : public QWidget 
 {
-  Q_OBJECT;
-  Q_ENUMS(TickPosition);
-  Q_PROPERTY( TickPosition tickPosition READ tickPosition WRITE setTickPosition );
-  Q_PROPERTY( int tickInterval READ tickInterval WRITE setTickInterval );
-
 public:
+  GranolaBar( QWidget *parent );
+  void paintEvent( QPaintEvent * );
 
+  void setMaxFrame( frame_t16 frameNum );
+  void addDebugPoint( frame_t16 frame, frame_t16 subframe );
+  void addBookmark( frame_t16 frame, frame_t16 subframe );
+  void setNumSubframes( frame_t16 frameNum, frame_t16 subframeCnt );
 
+private:
+  QPushButton *m_sliderControl;
+  QColor      *m_borderStyle;
+  QBrush      *m_grooveStyle;
+  QWidget     *m_parent;
+
+  frame_t16   m_maxFrame;
+  list<frame_t16> 
+              m_bookmarkFrames;
+  list<frame_t16>
+              m_debugPointFrames;
 };
-
-
-#endif
 
 #endif
