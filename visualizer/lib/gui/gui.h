@@ -182,7 +182,7 @@ public:
   void dropEvent( QDropEvent* evt );
   void resizeEvent( QResizeEvent* evt );
 
-  /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE>
+  /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
   static void loadGamelog( std::string gamelog );
 
   static void update();
