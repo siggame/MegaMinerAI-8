@@ -2,7 +2,7 @@
 #define PIRATEHEALTH_H
 #include "../lib/gocfamily_health.h"
 
-//class PirateHealth : public GOCFamily_Health
+class PirateHealth : public GOCFamily_Health
 {
   public:
     PirateHealth(GameObject*parent, const int & currentHealth, const int & maxHealth):GOCFamily_Health(parent,currentHealth,maxHealth){}
