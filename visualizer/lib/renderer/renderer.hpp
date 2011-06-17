@@ -678,9 +678,9 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
         std::cout << "no location for obj type: " << temp.objType << '\n';
       }
 
-    }
+    }//if it->second
 
-  }
+  }//for Bucket
 
   //Total selected
   selectedTotal += selectedP0;
