@@ -149,6 +149,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
     void printGlobalStats( int c, int r, QString str );
     void printSelectedStats( int c, int r, QString str );
     void printIndividuals( int c, int r, QString str );
+    void setNumIndividuals( int num );
     void printToTable( QTableWidget *w, int c, int r, QString str );
     void appendToConsole( string str );
 

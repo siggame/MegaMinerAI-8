@@ -798,4 +798,11 @@ void Renderer<DupObject>::globalStatColumnPopulate (Stats multi, int column)
   Single::get()->printGlobalStats( column, 8, QString::number(multi.treasures));
   //Single::get()->printGlobalStats( column, 0, QString::number(0));
 }
+
+template<typename DupObject>
+void Renderer<DupObject>::setNumIndividuals( int num )
+{
+  GUI::getIndividualStats()->setColumnCount(num);
+}
+
 #endif
