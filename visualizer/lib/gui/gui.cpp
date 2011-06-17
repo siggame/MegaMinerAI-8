@@ -457,8 +457,7 @@ void GUI::initUnitStats()
   m_selectionStatsVerticalLabels<<"Player Gold"<<"Pirates"<<"Avg Pirate Health"<<"Avg Pirate Gold"
     <<"Total Pirate Gold"<<"Ships"<<"Avg Ship Health"<<"Avg Ship Gold"<<"Treasure Boxes";
   m_selectionStatsHorizontalLabels<<"Total"<<"P0"<<"P1"<<"P2"<<"P3";
-  m_individualStatsVerticalLabels<<"ID"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y"
-    <<"movesLeft"<<"attacksLeft";
+  m_individualStatsVerticalLabels<<"ID"<<"Owner"<<"Type"<<"Health"<<"Gold"<<"X"<<"Y";
   m_individualStatsHorizontalLabels<<".";
 
   //Set table properties and headers

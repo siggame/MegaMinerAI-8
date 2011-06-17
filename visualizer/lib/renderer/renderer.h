@@ -143,6 +143,7 @@ class Renderer : public Singleton< Renderer< DupObject > >
 
     std::map<int, renderObj*> m_renderConstant;
 
+    void individualStatColumnPopulate(int id, DupObject unit, int column );
     void selectionStatColumnPopulate( Stats multi, int column );
     void globalStatColumnPopulate( Stats multi, int column );
     void printGlobalStats( int c, int r, QString str );

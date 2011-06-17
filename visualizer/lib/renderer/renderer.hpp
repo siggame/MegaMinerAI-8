@@ -760,6 +760,19 @@ void Renderer<DupObject>::appendToConsole( string str )
 }
 
 template<typename DupObject>
+void Renderer<DupObject>::individualStatColumnPopulate (int id, DupObject unit, int column)
+{
+  Single::get()->printSelectedStats( column, 1, QString::number(id));
+  Single::get()->printSelectedStats( column, 2, QString::number(unit.owner));
+  Single::get()->printSelectedStats( column, 3, QString::number(unit.objType));
+  Single::get()->printSelectedStats( column, 4, QString::number(unit.health));
+  Single::get()->printSelectedStats( column, 5, QString::number(unit.gold));
+  Single::get()->printSelectedStats( column, 6, QString::number(unit.x));
+  Single::get()->printSelectedStats( column, 7, QString::number(unit.y));
+  Single::get()->printSelectedStats( column, 8, QString::number(unit.treasures));
+}
+
+template<typename DupObject>
 void Renderer<DupObject>::selectionStatColumnPopulate (Stats multi, int column)
 {
   Single::get()->printSelectedStats( column, 1, QString::number(multi.pirates));
