@@ -247,7 +247,7 @@ bool GUI::doSetup()
   createMenus();
   buildToolSet();
 
-    // If we're not arenaMode, don't even bother setting this up
+  // If we're in arenaMode, change some settings
   if(
       !OptionsMan::isInit() ||
       !OptionsMan::exists( "arenaMode" ) ||
