@@ -266,7 +266,9 @@ bool GUI::doSetup()
       OptionsMan::getBool( "demonstrationMode" )
     )
     {
-      std::cout<<"In demo mode.\n";
+      menuBar()->hide();
+      setFullScreen(true);
+      m_dockWidget->hide();
     }
 
   setWindowState(
