@@ -196,6 +196,10 @@ void GUI::helpContents()
 
 void GUI::fileOpen()
 {
+  /* The following is almost entirely a dirty hack to persistently keep the 
+   * most recent directory to be default for the "Open Gamelog" dialog.
+   * This works WONDERS for usability. 
+   */
 	ifstream dirinfoIN;
 	dirinfoIN.open("dirinfo.txt");	
 	if (dirinfoIN.is_open())
