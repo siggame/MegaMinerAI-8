@@ -247,11 +247,23 @@ bool GUI::doSetup()
   createMenus();
   buildToolSet();
 
-    // If we're not arenaMode, don't even bother setting this up
+  // If we're in arenaMode, change some settings
   if(
       !OptionsMan::isInit() ||
       !OptionsMan::exists( "arenaMode" ) ||
       OptionsMan::getBool( "arenaMode" )
+    )
+    {
+      menuBar()->hide();
+      setFullScreen(true);
+      m_dockWidget->hide();
+    }
+  
+  //If we're in demonstrationMode, change different settings
+  if(
+      !OptionsMan::isInit() ||
+      !OptionsMan::exists( "demonstrationMode" ) ||
+      OptionsMan::getBool( "demonstrationMode" )
     )
     {
       menuBar()->hide();
