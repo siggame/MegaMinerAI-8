@@ -258,6 +258,16 @@ bool GUI::doSetup()
       setFullScreen(true);
       m_dockWidget->hide();
     }
+  
+  //If we're in demonstrationMode, change different settings
+  if(
+      !OptionsMan::isInit() ||
+      !OptionsMan::exists( "demonstrationMode" ) ||
+      OptionsMan::getBool( "demonstrationMode" )
+    )
+    {
+      std::cout<<"In demo mode.\n";
+    }
 
   setWindowState(
       windowState()
