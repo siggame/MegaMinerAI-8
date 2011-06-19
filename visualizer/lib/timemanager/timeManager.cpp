@@ -1,13 +1,12 @@
 #include "timeManager.h"
-#include "../renderer/renderer.h"
-#include "../gui/gui.h"
-#include "../../piracy/dupObj.h"
+#include "../optionsmanager/optionsman.h"
 
 #include <ctime>
 
 const int& TimeManager::getTurn()
 {
   if( !isInit() )
+    // FIXME: This is bad.  Returns a reference to an integer which will be immediately destroyed
     return 0;
   get()->updateFrames();
   return get()->m_turn;
@@ -16,6 +15,7 @@ const int& TimeManager::getTurn()
 const int& TimeManager::getFrame()
 {
   if( !isInit() )
+    // FIXME: Returning ref to temporary.
     return 0;
   get()->updateFrames();
   return get()->m_frame;
@@ -29,12 +29,15 @@ void TimeManager::setTurn( const int& turn )
   get()->m_turn = turn;
   get()->m_frame = 0;
 
+
+  // TODO: Update Requesters
+
   //update renderer
-  Renderer<DupObj>::update(turn,0);
+  //Renderer<DupObj>::update(turn,0);
 
 
-  if( GUI::getControlBar() )
-    GUI::getControlBar()->update();
+  //if( GUI::getControlBar() )
+  //  GUI::getControlBar()->update();
 }
 
 const float& TimeManager::getSpeed()
@@ -82,6 +85,9 @@ void TimeManager::setNumTurns( const int& numTurns )
     throw 0;
   get()->m_numTurns = numTurns;
 
+  // FIXME: Must update control bar
+
+#if 0
   if(GUI::isSetup())
   {
     if( GUI::getControlBar() )
@@ -89,6 +95,7 @@ void TimeManager::setNumTurns( const int& numTurns )
       GUI::getControlBar()->update();//m_slider->setMaximum ( numTurns );
     }
   }
+#endif
 }
 
 
@@ -123,33 +130,15 @@ void TimeManager::timerStart()
     get()->start();
 }
 
-
-#include <iostream>
-using namespace std;
-
 void TimeManager::updateFrames()
 {
   m_turn += m_frame / m_framesPerTurn;
   m_frame %= m_framesPerTurn;
 
+  // FIXME: Fix this so that we check the time manager to see if we're ready to close
+  // instead of having the time manager tell us
 
 #if 0
-
-  //Idiot check low
-  if (m_turn < 0)
-  {
-    m_turn = 0;
-    m_frame = 0;
-  }
-
-  //Idiot check high
-  if (m_turn >= m_numTurns)
-  {
-    m_turn = m_numTurns-1;
-    m_frame = m_framesPerTurn-1;
-  }
-#endif
-
   //If in arena mode, show winner for a few secs at end
   if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
   {
@@ -169,6 +158,12 @@ void TimeManager::updateFrames()
 
     GUI::getControlBar()->m_slider->setValue ( m_turn );
   }
+#endif
+}
+
+void TimeManager::requestUpdate( UpdateNeeded* requester )
+{
+  m_updateRequesters.push_back( requester );
 }
 
 void TimeManager::timerUpdate()
@@ -177,7 +172,19 @@ void TimeManager::timerUpdate()
   m_hash++;
   m_frame += m_time * m_speed;
   updateFrames();
+
+  for( 
+      std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin();
+      i != m_updateRequesters.end();
+      i++
+     )
+  {
+    (*i)->update();
+  }
+
+#if 0
   Renderer<DupObj>::refresh();
   Renderer<DupObj>::update(m_turn,0);
+#endif
 }
 

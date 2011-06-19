@@ -3,8 +3,14 @@
 
 #include <QTimer>
 #include <time.h>
+#include <list>
 #include "../singleton.h"
-#include "../gui/controlbar.h"
+
+class UpdateNeeded
+{
+public:
+  virtual void update() = 0;
+};
 
 class TimeManager : public QObject, public Singleton<TimeManager>
 {
@@ -44,6 +50,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     void start();
     static void timerStart();
 
+    void requestUpdate( UpdateNeeded* requester );
+
   private slots:
     void timerUpdate();
 
@@ -62,7 +70,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     int m_sleepTime;
     int m_awakeTime;
     int m_time;
-};
 
+    std::list< UpdateNeeded* > m_updateRequesters;
+};
 
 #endif

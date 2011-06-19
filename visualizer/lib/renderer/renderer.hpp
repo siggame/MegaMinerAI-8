@@ -313,25 +313,6 @@ bool Renderer<DupObject>::clear()
   if (!Single::isInit())
     return false;
 
-  #if 0
-  if (Single::get()->m_duplicateList)
-  {
-    for (unsigned int x = 0; x < width(); x++)
-    {
-      for (unsigned int y = 0; y < height(); y++)
-      {
-        for (unsigned int z = 0; z < depth(); z++)
-        {
-          delete Single::get()->m_duplicateList[x][y][z];
-        }
-        delete [] Single::get()->m_duplicateList[x][y];
-      }
-      delete [] Single::get()->m_duplicateList[x];
-    }
-    delete [] Single::get()->m_duplicateList;
-  }
-  #endif
-
   Single::get()->m_duplicateList = NULL;
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
