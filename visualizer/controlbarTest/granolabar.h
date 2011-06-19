@@ -1,10 +1,16 @@
-#ifndef COOLSLIDER_H
-#define COOLSLIDER_H
+#ifndef GRANOLABAR_H 
+#define GRANOLABAR_H 
 
+// GRANularity 
+// Over
+// Limited 
+// Action set
+// BAR
+
+#include "granolabutton.h"
 
 #include <QWidget>
 #include <QtGui>
-#include <QPushButton>
 
 #include <list>
 
@@ -25,16 +31,18 @@ public:
   void setNumSubframes( frame_t16 frameNum, frame_t16 subframeCnt );
 
 private:
-  QPushButton *m_sliderControl;
-  QColor      *m_borderStyle;
-  QBrush      *m_grooveStyle;
-  QWidget     *m_parent;
+  GranolaButton *m_sliderControl;
+  QColor        *m_borderStyle;
+  QBrush        *m_grooveStyle;
+  QBrush        *m_bookmarkStyle;
+  QBrush        *m_debugPointStyle;
+  QWidget       *m_parent;
 
-  frame_t16   m_maxFrame;
+  frame_t16     m_maxFrame;
   list<frame_t16> 
-              m_bookmarkFrames;
+                m_bookmarkFrames;
   list<frame_t16>
-              m_debugPointFrames;
+                m_debugPointFrames;
 };
 
 #endif

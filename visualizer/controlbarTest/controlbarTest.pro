@@ -1,7 +1,9 @@
-HEADERS += coolslider.h
+HEADERS += granolabar.h \
+granolabutton.h
 SOURCES += main.cpp \
 gui.cpp \
-coolslider.cpp
+granolabar.cpp \
+granolabutton.cpp
 
 MOC = moc
 QMAKE_CFLAGS_DEBUG += -pg

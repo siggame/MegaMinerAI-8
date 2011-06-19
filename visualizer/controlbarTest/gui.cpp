@@ -1,5 +1,5 @@
 #include "gui.h"
-#include "coolslider.h"
+#include "granolabar.h"
 
 const int bookmarks[] =
 {
@@ -23,8 +23,8 @@ GUI::GUI()
     m_slider->addBookmark( i*500/30,  0 );
   }
 
-  for( int i =0; i < 250; i++ )
+  for( int i =0; i < 125; i++ )
   {
-    m_slider->addDebugPoint( i*2, 0 );
+    m_slider->addDebugPoint( i*5, 0 );
   }
 }
