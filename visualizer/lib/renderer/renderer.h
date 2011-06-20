@@ -146,27 +146,6 @@ class Renderer : public Singleton< Renderer >, public UpdateNeeded
     bool m_isSetup;
 
     std::map<int, renderObj*> m_renderConstant;
-#if 0
-    DupObject **** m_duplicateList;
-    unsigned int m_dupListDirs;
-    std::vector<DupObject*> m_renderList;
-
-    void individualStatColumnPopulate(int id, DupObject unit, int column );
-    void selectionStatColumnPopulate( Stats multi, int column );
-    void globalStatColumnPopulate( Stats multi, int column );
-    void printGlobalStats( int c, int r, QString str );
-    void printSelectedStats( int c, int r, QString str );
-    void printIndividuals( int c, int r, QString str );
-    void setNumIndividuals( int num );
-    void printToTable( QTableWidget *w, int c, int r, QString str );
-    void appendToConsole( string str );
-
-    static void updateLocation(const unsigned int & x, const unsigned int & y, 
-      const unsigned int & z, const unsigned int & dir, 
-      const unsigned int & time, DupObject obj);
-
-    set<int> selectedUnitIds;
-#endif
 
     typedef Singleton<Renderer > Single;
     //typedef Renderer<DupObject> Render;

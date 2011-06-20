@@ -8,7 +8,6 @@ const int& TimeManager::getTurn()
   if( !isInit() )
     // FIXME: This is bad.  Returns a reference to an integer which will be immediately destroyed
     return 0;
-  get()->updateFrames();
   return get()->m_turn;
 }
 
@@ -17,7 +16,6 @@ const int& TimeManager::getFrame()
   if( !isInit() )
     // FIXME: Returning ref to temporary.
     return 0;
-  get()->updateFrames();
   return get()->m_frame;
 }
 
@@ -163,14 +161,19 @@ void TimeManager::timerUpdate()
   updateChildren();
 }
 
+#include <iostream>
+using namespace std;
+
 void TimeManager::updateChildren()
 {
+  int count =1;
   for( 
       std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin();
       i != m_updateRequesters.end();
       i++
      )
   {
+    cout << "Update " << count++ << endl;
     (*i)->update();
   }
 }

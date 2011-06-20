@@ -60,6 +60,8 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
   setLayout( layout );
 
+  TimeManager::requestUpdate( this );
+
   update();
 }
 

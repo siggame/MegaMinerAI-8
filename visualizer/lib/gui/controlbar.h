@@ -5,8 +5,9 @@
 #include <QPushButton>
 #include <QLabel>
 #include "../optionsmanager/optionsman.h"
+#include "../timemanager/timeManager.h"
 
-class ControlBar : public QWidget 
+class ControlBar : public QWidget, public UpdateNeeded
 {
   friend class GUI;
   friend class TimeManager;
