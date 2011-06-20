@@ -27,6 +27,7 @@ SOURCES += main.cpp \
     ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
+    ./lib/renderer/*.cpp \
     ./lib/renderer/textRenderer/*.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \

@@ -177,5 +177,4 @@ class Renderer : public Singleton< Renderer >, public UpdateNeeded
     //static void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
-#include "renderer.hpp"
 #endif                           // RENDERER_H

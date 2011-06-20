@@ -1,6 +1,3 @@
-#ifndef RENDERER_HPP
-#define RENDERER_HPP
-
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
 #include "../goc_owner.h"
@@ -780,4 +777,3 @@ void Renderer::setNumIndividuals( int num )
 }
 #endif
 
-#endif
