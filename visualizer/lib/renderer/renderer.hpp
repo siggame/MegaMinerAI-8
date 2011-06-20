@@ -22,8 +22,7 @@ using namespace std;
  * @param depth the z depth of the render area. default 10
  * @return true if successful resize
  */
-template <typename DupObject>
-bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
+bool Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
 {
   if (!Single::isInit())
     return false;
@@ -50,8 +49,7 @@ bool Renderer<DupObject>::resize(const unsigned int & width, const unsigned int 
  *	draw objects on screen
  * @return true if successful
  */
-template <typename DupObject>
-bool Renderer<DupObject>::refresh()
+bool Renderer::refresh()
 {
 
   if (!Single::isInit())
@@ -69,7 +67,6 @@ bool Renderer<DupObject>::refresh()
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
 
-  #if 1
   for( ; it != Single::get()->m_renderConstant.end(); it++ )
   {
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
@@ -78,12 +75,12 @@ bool Renderer<DupObject>::refresh()
       r->renderAt( TimeManager::getTurn(), 0 );
     }
   }
-  #endif
 
   glPushMatrix();
   float mapSize = (float)OptionsMan::getInt("mapSize");
   glScalef( height()/mapSize, height()/mapSize, 1 );
 
+#if 0
   typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
   for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
   {
@@ -91,6 +88,7 @@ bool Renderer<DupObject>::refresh()
     (*renderIt)->render();
     glPopMatrix();
   }
+#endif
 
   glPopMatrix();
 
@@ -105,8 +103,7 @@ bool Renderer<DupObject>::refresh()
 }
 
 
-template <typename DupObject>
-void Renderer<DupObject>::setParent( RenderWidget *parent )
+void Renderer::setParent( RenderWidget *parent )
 {
   if (!Single::isInit())
     return;                      //! @todo throw error
@@ -118,8 +115,7 @@ void Renderer<DupObject>::setParent( RenderWidget *parent )
  * destroy the singleton
  * @return true on success
  */
-template <typename DupObject>
-bool Renderer<DupObject>::destroy()
+bool Renderer::destroy()
 {
   if(!Single::isInit())
     return false;
@@ -134,8 +130,7 @@ bool Renderer<DupObject>::destroy()
  * create the singleton and setup the render area
  * @return true on success
  */
-template <typename DupObject>
-bool Renderer<DupObject>::create()
+bool Renderer::create()
 {
   if (!Single::create())
     return false;
@@ -144,8 +139,8 @@ bool Renderer<DupObject>::create()
   Single::get()->m_height = 0;
   Single::get()->m_width  = 0;
   Single::get()->m_depth  = 10;
-  Single::get()->m_dupListDirs = 0;
-  Single::get()-> m_duplicateList = NULL;
+  //Single::get()->m_dupListDirs = 0;
+  //Single::get()-> m_duplicateList = NULL;
 
   return true;
 }
@@ -174,8 +169,7 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
  * @return true if successful
  * @todo add more to the render setup
  */
-template <typename DupObject>
-bool Renderer<DupObject>::setup()
+bool Renderer::setup()
 {
   if (!Single::isInit())
   {
@@ -219,6 +213,7 @@ bool Renderer<DupObject>::setup()
 
   std::cout << "Renderer width: " << rwidth << " height: " << rheight << " depth: " << rdepth << '\n';
 
+#if 0
   if (Single::get()->m_dupListDirs)
   {
     Single::get()->m_duplicateList = new DupObject***[rwidth];
@@ -269,6 +264,7 @@ bool Renderer<DupObject>::setup()
     }
     Single::get()->m_dupListDirs = 1;
   }
+#endif
 
   /// @TODO: Move this to the appropriate spot
   glShadeModel( GL_SMOOTH );
@@ -285,6 +281,9 @@ bool Renderer<DupObject>::setup()
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
   refresh();
+
+  TimeManager::requestUpdate( Singleton<Renderer>::get()  );
+
   return Single::get()->m_isSetup;
 }
 
@@ -293,8 +292,7 @@ bool Renderer<DupObject>::setup()
  * access if the module has been set up
  * @return true if set up
  */
-template <typename DupObject>
-bool Renderer<DupObject>::isSetup()
+bool Renderer::isSetup()
 {
   if (!Single::isInit())
     return false;
@@ -307,13 +305,12 @@ bool Renderer<DupObject>::isSetup()
  * clear all references to render objects
  * @return true on success
  */
-template <typename DupObject>
-bool Renderer<DupObject>::clear()
+bool Renderer::clear()
 {
   if (!Single::isInit())
     return false;
 
-  Single::get()->m_duplicateList = NULL;
+  //Single::get()->m_duplicateList = NULL;
 
   std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
   for(; it!=Single::get()->m_renderConstant.end(); it++ )
@@ -326,9 +323,7 @@ bool Renderer<DupObject>::clear()
   return true;
 }
 
-
-template<typename DupObject>
-bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj* obj )
+bool Renderer::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
   if (!Single::isInit())
   {
@@ -347,9 +342,9 @@ bool Renderer<DupObject>::registerConstantObj( const unsigned int& id, renderObj
 }
 
 
-template<typename DupObject>
-bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
+bool Renderer::deleteConstantObj( const unsigned int& id )
 {
+#if 0
   std::map<int,renderObj*> it = Single::get()->m_renderConstant.find( id );
   if( it != Single::get()->m_renderConstant.end() )
   {
@@ -360,16 +355,17 @@ bool Renderer<DupObject>::deleteConstantObj( const unsigned int& id )
   {
     return false;
   }
-
+#endif
+  return false;
 }
 
 
+#if 0
 /** @brief updateLocation
  *
  * @todo: document this function
  */
-template <typename DupObject>
-void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
+void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, const unsigned int & z, const unsigned int & dir, const unsigned int & time, DupObject obj)
 {
   //std::cout << "updateLocation Called\n";
 
@@ -401,13 +397,13 @@ void Renderer<DupObject>::updateLocation(const unsigned int & x, const unsigned 
     //std::cout << "Gets to add\n";
   }
 }
+#endif
 
 
 /**
  * @todo doxyment
  */
-template <typename DupObject>
-unsigned int Renderer<DupObject>::width()
+unsigned int Renderer::width()
 {
   if (isSetup())
     return Single::get()->m_width;
@@ -419,8 +415,7 @@ unsigned int Renderer<DupObject>::width()
 /**
  * @todo doxyment
  */
-template <typename DupObject>
-unsigned int Renderer<DupObject>::height()
+unsigned int Renderer::height()
 {
   if (isSetup())
     return Single::get()->m_height;
@@ -432,8 +427,7 @@ unsigned int Renderer<DupObject>::height()
 /**
  * @todo doxyment
  */
-template <typename DupObject>
-unsigned int Renderer<DupObject>::depth()
+unsigned int Renderer::depth()
 {
   if (isSetup())
     return Single::get()->m_depth;
@@ -441,12 +435,17 @@ unsigned int Renderer<DupObject>::depth()
   return 0;
 }
 
+void Renderer::update()
+{
+  Renderer::refresh();
+  Renderer::update( TimeManager::getTurn(), 0 );
+}
+
 
 /**
  * @todo doxyment
  */
-template <typename DupObject>
-bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int & frame)
+bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
 {
   Stats globalTotal, globalP0, globalP1, globalP2, globalP3; 
   Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3; 
@@ -467,7 +466,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
     return false;
   }
 
-  Single::get()->m_renderList.clear();
+//  Single::get()->m_renderList.clear();
   int time = TimeManager::timeHash();
 
   bool selectUpdate = SelectionRender::get()->getUpdated();
@@ -479,6 +478,7 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
   int y1 = 0;
   int y2 = 0;
 
+#if 0
   if( selectUpdate )
   {
 
@@ -700,12 +700,13 @@ bool Renderer<DupObject>::update(const unsigned int & turn, const unsigned int &
   Single::get()->selectionStatColumnPopulate (selectedP1, 2);
   Single::get()->selectionStatColumnPopulate (selectedP2, 3);
   Single::get()->selectionStatColumnPopulate (selectedP3, 4);
+#endif
   
   return true;
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::printToTable( QTableWidget *w, int c, int r, QString str )
+#if 0
+void Renderer::printToTable( QTableWidget *w, int c, int r, QString str )
 {
   if( w->itemAt( c, r ) )
   {
@@ -716,32 +717,27 @@ void Renderer<DupObject>::printToTable( QTableWidget *w, int c, int r, QString s
 
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::printIndividuals( int c, int r, QString str )
+void Renderer::printIndividuals( int c, int r, QString str )
 {
   printToTable( GUI::getIndividualStats(), c, r, str );
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::printSelectedStats( int r, int c, QString str )
+void Renderer::printSelectedStats( int r, int c, QString str )
 {
   printToTable( GUI::getSelectionStats(), c, r, str );
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::printGlobalStats( int r, int c, QString str )
+void Renderer::printGlobalStats( int r, int c, QString str )
 {
   printToTable( GUI::getGlobalStats(), c, r, str );
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::appendToConsole( string str )
+void Renderer::appendToConsole( string str )
 {
   GUI::appendConsole( str );
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::individualStatColumnPopulate (int id, DupObject unit, int column)
+void Renderer::individualStatColumnPopulate (int id, DupObject unit, int column)
 {
   Single::get()->printIndividuals( column, 1, QString::number(id));
   Single::get()->printIndividuals( column, 2, QString::number(unit.owner));
@@ -752,8 +748,7 @@ void Renderer<DupObject>::individualStatColumnPopulate (int id, DupObject unit, 
   Single::get()->printIndividuals( column, 7, QString::number(unit.y));
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::selectionStatColumnPopulate (Stats multi, int column)
+void Renderer::selectionStatColumnPopulate (Stats multi, int column)
 {
   Single::get()->printSelectedStats( column, 1, QString::number(multi.pirates));
   Single::get()->printSelectedStats( column, 2, QString::number(multi.avgPirateHealth));
@@ -766,8 +761,7 @@ void Renderer<DupObject>::selectionStatColumnPopulate (Stats multi, int column)
   //Single::get()->printSelectedStats( column, 0, QString::number(0));
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::globalStatColumnPopulate (Stats multi, int column)
+void Renderer::globalStatColumnPopulate (Stats multi, int column)
 {
   Single::get()->printGlobalStats( column, 1, QString::number(multi.pirates));
   Single::get()->printGlobalStats( column, 2, QString::number(multi.avgPirateHealth));
@@ -780,10 +774,10 @@ void Renderer<DupObject>::globalStatColumnPopulate (Stats multi, int column)
   //Single::get()->printGlobalStats( column, 0, QString::number(0));
 }
 
-template<typename DupObject>
-void Renderer<DupObject>::setNumIndividuals( int num )
+void Renderer::setNumIndividuals( int num )
 {
   GUI::getIndividualStats()->setColumnCount(num);
 }
+#endif
 
 #endif

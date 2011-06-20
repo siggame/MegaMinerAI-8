@@ -20,15 +20,15 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
-  Renderer<DupObj>::setParent( this );
+  Renderer::setParent( this );
   QGLWidget::initializeGL();
-  Renderer<DupObj>::create();
+  Renderer::create();
   cout << "VALID: " << isValid() << endl;
 }
 
 void RenderWidget::resizeEvent( QResizeEvent *evt )
 {
-  Renderer<DupObj>::resize( evt->size().width(), evt->size().height() );
+  Renderer::resize( evt->size().width(), evt->size().height() );
 }
 
 void RenderWidget::mousePressEvent( QMouseEvent *e )
@@ -73,7 +73,7 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
 		SelectionRender::get()->setUpdated(true); 
 		SelectionRender::get()->setDragging(false); 		   
 
-    Renderer<DupObj>::update( TimeManager::getTurn(), 0 );
+    Renderer::update( TimeManager::getTurn(), 0 );
 
 }
 

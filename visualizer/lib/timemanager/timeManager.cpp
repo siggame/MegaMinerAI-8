@@ -29,15 +29,8 @@ void TimeManager::setTurn( const int& turn )
   get()->m_turn = turn;
   get()->m_frame = 0;
 
+  Singleton<TimeManager>::get()->updateChildren();
 
-  // TODO: Update Requesters
-
-  //update renderer
-  //Renderer<DupObj>::update(turn,0);
-
-
-  //if( GUI::getControlBar() )
-  //  GUI::getControlBar()->update();
 }
 
 const float& TimeManager::getSpeed()
@@ -86,16 +79,7 @@ void TimeManager::setNumTurns( const int& numTurns )
   get()->m_numTurns = numTurns;
 
   // FIXME: Must update control bar
-
-#if 0
-  if(GUI::isSetup())
-  {
-    if( GUI::getControlBar() )
-    {
-      GUI::getControlBar()->update();//m_slider->setMaximum ( numTurns );
-    }
-  }
-#endif
+  Singleton<TimeManager>::get()->updateChildren();
 }
 
 
@@ -137,6 +121,8 @@ void TimeManager::updateFrames()
 
   // FIXME: Fix this so that we check the time manager to see if we're ready to close
   // instead of having the time manager tell us
+  
+  Singleton< TimeManager >::get()->updateChildren();
 
 #if 0
   //If in arena mode, show winner for a few secs at end
@@ -163,7 +149,7 @@ void TimeManager::updateFrames()
 
 void TimeManager::requestUpdate( UpdateNeeded* requester )
 {
-  m_updateRequesters.push_back( requester );
+  Singleton< TimeManager >::get()->m_updateRequesters.push_back( requester );
 }
 
 void TimeManager::timerUpdate()
@@ -171,8 +157,14 @@ void TimeManager::timerUpdate()
   m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
   m_hash++;
   m_frame += m_time * m_speed;
+
   updateFrames();
 
+  updateChildren();
+}
+
+void TimeManager::updateChildren()
+{
   for( 
       std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin();
       i != m_updateRequesters.end();
@@ -181,10 +173,5 @@ void TimeManager::timerUpdate()
   {
     (*i)->update();
   }
-
-#if 0
-  Renderer<DupObj>::refresh();
-  Renderer<DupObj>::update(m_turn,0);
-#endif
 }
 

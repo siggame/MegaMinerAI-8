@@ -165,7 +165,7 @@ void GUI::resizeEvent( QResizeEvent* evt )
   if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
   {
     int w = Singleton<GUI>::get()->width();
-    int h = Renderer<DupObj>::height();
+    int h = Renderer::height();
 
     if( h > w )
     {

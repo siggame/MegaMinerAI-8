@@ -16,6 +16,7 @@
 #include "../gocfamily_location.h"
 #include "../gui/gui.h"
 #include "../gui/renderwidget.h"
+
 #include "../timemanager/timeManager.h"
 
 //this is a place holder
@@ -92,8 +93,7 @@ struct Stats
 
 };
 
-template <typename DupObject>
-class Renderer : public Singleton< Renderer< DupObject > >
+class Renderer : public Singleton< Renderer >, public UpdateNeeded
 {
   //BOOST_CONCEPT_ASSERT((UnsignedInteger<DupObject::index>));
 
@@ -115,10 +115,12 @@ class Renderer : public Singleton< Renderer< DupObject > >
     static void setParent( RenderWidget *parent );
 
     static bool refresh();
-    static bool resize(const unsigned int & width, const unsigned int & height, 
-      const unsigned int & depth = 1);
-
-    //static unsigned int numObjects();
+    static bool resize
+      (
+        const unsigned int & width, 
+        const unsigned int & height, 
+        const unsigned int & depth = 1
+      );
 
     static bool isSetup();
 
@@ -126,7 +128,13 @@ class Renderer : public Singleton< Renderer< DupObject > >
     static unsigned int width();
     static unsigned int depth();
 
-    static bool update(const unsigned int & turn, const unsigned int & frame);
+    static bool update
+      (
+        const unsigned int & turn, 
+        const unsigned int & frame
+      );
+
+    void update();
 
   protected:
   private:
@@ -137,11 +145,11 @@ class Renderer : public Singleton< Renderer< DupObject > >
     unsigned int m_depth;
     bool m_isSetup;
 
+    std::map<int, renderObj*> m_renderConstant;
+#if 0
     DupObject **** m_duplicateList;
     unsigned int m_dupListDirs;
     std::vector<DupObject*> m_renderList;
-
-    std::map<int, renderObj*> m_renderConstant;
 
     void individualStatColumnPopulate(int id, DupObject unit, int column );
     void selectionStatColumnPopulate( Stats multi, int column );
@@ -157,12 +165,14 @@ class Renderer : public Singleton< Renderer< DupObject > >
       const unsigned int & z, const unsigned int & dir, 
       const unsigned int & time, DupObject obj);
 
-    typedef Singleton<Renderer<DupObject> > Single;
-    typedef Renderer<DupObject> Render;
+    set<int> selectedUnitIds;
+#endif
+
+    typedef Singleton<Renderer > Single;
+    //typedef Renderer<DupObject> Render;
 
     RenderWidget *m_parent;
 
-    set<int> selectedUnitIds;
 
     //static void multipleUnitStatColumnPopulate (Stats multi, int column);
 };

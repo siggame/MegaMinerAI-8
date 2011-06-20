@@ -13,7 +13,7 @@
 
 int main(int argc, char *argv[])
 {
-	typedef Renderer<DupObj> Render;
+	typedef Renderer Render;
 
 	QApplication app( argc, argv );
 

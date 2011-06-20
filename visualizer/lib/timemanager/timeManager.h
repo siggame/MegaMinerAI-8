@@ -50,7 +50,8 @@ class TimeManager : public QObject, public Singleton<TimeManager>
     void start();
     static void timerStart();
 
-    void requestUpdate( UpdateNeeded* requester );
+    static void requestUpdate( UpdateNeeded* requester );
+    void updateChildren();
 
   private slots:
     void timerUpdate();
