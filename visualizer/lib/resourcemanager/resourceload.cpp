@@ -28,11 +28,12 @@ ResourceType getResTypeFromStr(const std::string & typeBuff)
   */
 bool ResourceMan::loadResourceFile(const std::string & filename)
 {
+#if 0
 	if (!isInit())
 	{
 		return false;
 	}
-
+#endif
 
 	/* if we allow multiple loading we can combine files easily
 	if (get()->m_options.size())

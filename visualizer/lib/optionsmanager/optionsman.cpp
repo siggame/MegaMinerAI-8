@@ -507,7 +507,7 @@ T OptionsMan::getVar(const std::string & oName)
 	}
 
 	Mutex::lock(oName);
-	T temp (((Option<T,OT>*)(instance()->m_options[oName]))->instance());;
+	T temp (((Option<T,OT>*)(instance()->m_options[oName]))->get());
 	Mutex::unlock(oName);
 	return temp;
 }

@@ -23,91 +23,100 @@ GUI::~GUI()
 
 bool GUI::reg( const std::string& id, guiObj *obj )
 {
+#if 0
   if( !isInit() )
     return false;
+#endif
 
-  if( get()->m_objects.find( id ) != get()->m_objects.end() )
+  if( instance()->m_objects.find( id ) != instance()->m_objects.end() )
     return false;
 
-  get()->m_objects[id] = obj;
+  instance()->m_objects[id] = obj;
   return true;
 }
 
 bool GUI::del( const std::string& id )
 {
+#if 0
   if( !isInit() )
     return false;
+#endif
 
-  if( get()->m_objects.find(id) == get()->m_objects.end() )
+  if( instance()->m_objects.find(id) == instance()->m_objects.end() )
     return false;
 
-  get()->m_objects.erase( id );
+  instance()->m_objects.erase( id );
   return true;
 }
 
 bool GUI::setup()
 {
+#if 0
   if( !isInit() )
     return false;
+#endif
 
-
-  get()->m_isSetup = get()->doSetup();
-  return get()->m_isSetup;
+  instance()->m_isSetup = instance()->doSetup();
+  return instance()->m_isSetup;
 }
 
 bool GUI::clear()
 {
+#if 0
   if( !isInit() )
     return false;
+#endif
 
-  get()->m_objects.clear();
+  instance()->m_objects.clear();
   return true;
 }
 
 guiObj* GUI::getGUIObject( const std::string& id )
 {
+#if 0
   if( !isInit() )
     return NULL;
+#endif
 
-  if( get()->m_objects.find(id) == get()->m_objects.end() )
+  if( instance()->m_objects.find(id) == instance()->m_objects.end() )
     return NULL;
 
-  return get()->m_objects[id];
+  return instance()->m_objects[id];
 }
 
 bool GUI::create()
 {
-  if( !Singleton<GUI>::create() )
-    return false;
-
 
   return true;
 }
 
 bool GUI::destroy()
 {
-  if( !isInit() )
-    return false;
   if( !clear() )
     return false;
 
-  return Singleton<GUI>::destroy();
+  Singleton::destroy();
+  return true;
 }
 
 unsigned int GUI::numObjects()
 {
+#if 0
   if( !isInit() )
     return 0;
+#endif
 
-  return get()->m_objects.size();
+  return instance()->m_objects.size();
 }
 
 bool GUI::isSetup()
 {
+#if 0
   if( !isInit() )
     return false;
+#endif 
 
-  return get()->m_isSetup;
+  return instance()->m_isSetup;
 }
 void GUI::dragEnterEvent( QDragEnterEvent* evt )
 {
@@ -128,7 +137,7 @@ void GUI::loadGamelog( std::string gamelog )
 
 void GUI::update()
 {
-  get()->m_controlBar->update();
+  instance()->m_controlBar->update();
 }
 
 void GUI::dropEvent( QDropEvent* evt )
@@ -151,20 +160,20 @@ void GUI::appendConsole( string line )
 
 void GUI::appendConsole( QString line )
 {
-  GUI::get()->m_consoleArea->append( line );
+  GUI::instance()->m_consoleArea->append( line );
 }
 
 void GUI::clearConsole()
 {
 
-  GUI::get()->m_consoleArea->clear();
+  GUI::instance()->m_consoleArea->clear();
 }
 
 void GUI::resizeEvent( QResizeEvent* evt )
 {
   if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
   {
-    int w = Singleton<GUI>::get()->width();
+    int w = Singleton<GUI>::instance()->width();
     int h = Renderer::height();
 
     if( h > w )
@@ -174,7 +183,7 @@ void GUI::resizeEvent( QResizeEvent* evt )
       h = temp;
     }
 
-    //m_dockWidget->resize( Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), -1 );
+    //m_dockWidget->resize( Singleton<GUI>::instance()->width() - Renderer<DupObj>::height(), -1 );
 #if 1
     m_dockWidget->setMinimumWidth( w - h);
 #endif
@@ -184,8 +193,7 @@ void GUI::resizeEvent( QResizeEvent* evt )
 
 void GUI::helpContents()
 {
-  if( OptionsMan::isInit() &&
-      OptionsMan::exists( "helpURL" ) )
+  if( OptionsMan::exists( "helpURL" ) )
   {
     QDesktopServices::openUrl( QUrl( OptionsMan::getStr( "helpURL" ).c_str() ) );
   } else
@@ -253,7 +261,6 @@ bool GUI::doSetup()
 
   // If we're in arenaMode, change some settings
   if(
-      !OptionsMan::isInit() ||
       !OptionsMan::exists( "arenaMode" ) ||
       OptionsMan::getBool( "arenaMode" )
     )
@@ -265,7 +272,6 @@ bool GUI::doSetup()
   
   //If we're in demonstrationMode, change different settings
   if(
-      !OptionsMan::isInit() ||
       !OptionsMan::exists( "demonstrationMode" ) ||
       OptionsMan::getBool( "demonstrationMode" )
     )
@@ -408,7 +414,7 @@ void GUI::buildToolSet()
 
 void GUI::closeGUI()
 {
-  GUI::get() -> close();
+  GUI::instance() -> close();
 }
 
 void GUI::toggleFullScreen()
@@ -503,7 +509,7 @@ void GUI::initUnitStats()
 
 ControlBar * GUI::getControlBar()
 {
-  return get()->m_controlBar;
+  return instance()->m_controlBar;
 }
 
 void GUI::catchEscapeKey()
@@ -549,17 +555,17 @@ void GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
 
 QTableWidget * GUI::getIndividualStats()
 {
-  return get()->m_individualStats;
+  return instance()->m_individualStats;
 }
 
 QTableWidget * GUI::getSelectionStats()
 {
-  return get()->m_selectionStats;
+  return instance()->m_selectionStats;
 }
 
 QTableWidget * GUI::getGlobalStats()
 {
-  return get()->m_globalStats;
+  return instance()->m_globalStats;
 }
 
 

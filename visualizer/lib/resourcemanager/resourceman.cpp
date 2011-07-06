@@ -6,14 +6,16 @@
   */
 std::vector<ResID_t> ResourceMan::listResourceNames()
 {
+#if 0
 	if (!isInit())
 	{
 		return std::vector<ResID_t>();
 	}
+#endif
 
     std::vector<ResID_t> names;
-    DataTable::iterator it = get()->data()->begin();
-    for (; it != get()->data()->end(); it++)
+    DataTable::iterator it = instance()->data()->begin();
+    for (; it != instance()->data()->end(); it++)
     {
         names.push_back(it->first);
     }
@@ -44,7 +46,7 @@ bool ResourceMan::del(const ResID_t & rName)
         return false;
     }
 
-    DataTable * dt = get()->data();
+    DataTable * dt = instance()->data();
     Resource * ref = (*(dt))[rName];
     if (ref->numReferences())
     {
@@ -69,12 +71,14 @@ bool ResourceMan::del(const ResID_t & rName)
   */
 bool ResourceMan::destroy()
 {
+#if 0
 	if (!isInit())
 	{
 		return false;
 	}
-	DataTable::iterator it = get()->data()->begin();
-    for (; it != get()->data()->end(); it++)
+#endif
+	DataTable::iterator it = instance()->data()->begin();
+    for (; it != instance()->data()->end(); it++)
     {
 
       //if( it->second )
@@ -96,13 +100,16 @@ bool ResourceMan::destroy()
 
     }
 
-    return ManagerType::destroy();
+    ResourceMan::destroy();
+    return true;
 }
 
 Resource * ResourceMan::reference(const std::string & rName, const std::string & referencer)
 {
+#if 0
     if (!ManagerType::isInit())
 	return NULL;
+#endif
     Resource ** res = ManagerType::getItem(rName);
     if (!res)
 	return NULL;
@@ -119,8 +126,10 @@ Resource * ResourceMan::reference(const std::string & rName, const std::string &
 
 bool ResourceMan::release(const std::string &rName, const std::string &referencer)
 {
+#if 0
     if (!ManagerType::isInit())
 	return false;
+#endif
 
     Resource ** res = ManagerType::getItem(rName);
 

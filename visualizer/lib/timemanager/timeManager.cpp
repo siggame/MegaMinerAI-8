@@ -5,88 +5,110 @@
 
 const int& TimeManager::getTurn()
 {
+#if 0
   if( !isInit() )
     // FIXME: This is bad.  Returns a reference to an integer which will be immediately destroyed
     return 0;
-  return get()->m_turn;
+#endif
+  return instance()->m_turn;
 }
 
 const int& TimeManager::getFrame()
 {
+#if 0
   if( !isInit() )
     // FIXME: Returning ref to temporary.
     return 0;
-  return get()->m_frame;
+#endif
+  return instance()->m_frame;
 }
 
 void TimeManager::setTurn( const int& turn )
 {
+#if 0
   if( !isInit() )
     throw 0;
+#endif
 
-  get()->m_turn = turn;
-  get()->m_frame = 0;
+  instance()->m_turn = turn;
+  instance()->m_frame = 0;
 
-  Singleton<TimeManager>::get()->updateChildren();
+  Singleton<TimeManager>::instance()->updateChildren();
 
 }
 
 const float& TimeManager::getSpeed()
 {
+#if 0
   if( !isInit() )
     return 0;
+#endif
+
   float multi = OptionsMan::getFloat( "speed" );
-  return get()->m_speed*multi;
+  return TimeManager::instance()->m_speed * multi;
 }
 
 void TimeManager::setSpeed( const float& speed )
 {
+#if 0
   if( !isInit() )
     throw 0;
+#endif
 
   float multi = OptionsMan::getFloat( "speed" );
-  get()->m_speed = speed/multi;
+  instance()->m_speed = speed/multi;
 }
 
 int TimeManager::timeHash()
 {
+#if 0
   if (!isInit())
     return 0;
-  return get()->m_hash;
+#endif
+
+  return instance()->m_hash;
 }
 
 TimeManager::mode TimeManager::getMode()
 {
+#if 0
   if( !isInit() )
     return mode();
-  return get()->m_mode;
+#endif
+  return instance()->m_mode;
 }
 
 const int& TimeManager::getNumTurns()
 {
+#if 0
   if( !isInit() )
     return 0;
+#endif
 
-  return get()->m_numTurns;
+  return instance()->m_numTurns;
 }
 
 void TimeManager::setNumTurns( const int& numTurns )
 {
+#if 0
   if( !isInit() )
     throw 0;
-  get()->m_numTurns = numTurns;
+#endif
+  instance()->m_numTurns = numTurns;
 
   // FIXME: Must update control bar
-  Singleton<TimeManager>::get()->updateChildren();
+  Singleton<TimeManager>::instance()->updateChildren();
 }
 
 
 bool TimeManager::create()
 {
+#if 0
   if( !Singleton<TimeManager>::create() )
     return false;
+#endif
 
-  Singleton<TimeManager>::get()->setup();
+  Singleton<TimeManager>::instance()->setup();
    return true;
 }
 
@@ -101,15 +123,15 @@ void TimeManager::setup()
 
 void TimeManager::start()
 {
-    get()->timer = new QTimer( this );
-    connect( get()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-    get()->timer->start( 35 );
+    instance()->timer = new QTimer( this );
+    connect( instance()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
+    instance()->timer->start( 35 );
 
 }
 
 void TimeManager::timerStart()
 {
-    get()->start();
+    instance()->start();
 }
 
 void TimeManager::updateFrames()
@@ -120,7 +142,7 @@ void TimeManager::updateFrames()
   // FIXME: Fix this so that we check the time manager to see if we're ready to close
   // instead of having the time manager tell us
   
-  Singleton< TimeManager >::get()->updateChildren();
+  Singleton< TimeManager >::instance()->updateChildren();
 
 #if 0
   //If in arena mode, show winner for a few secs at end
@@ -147,7 +169,7 @@ void TimeManager::updateFrames()
 
 void TimeManager::requestUpdate( UpdateNeeded* requester )
 {
-  Singleton< TimeManager >::get()->m_updateRequesters.push_back( requester );
+  Singleton< TimeManager >::instance()->m_updateRequesters.push_back( requester );
 }
 
 void TimeManager::timerUpdate()
