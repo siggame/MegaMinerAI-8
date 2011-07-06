@@ -11,7 +11,7 @@
 /** @todo merge this into the options manager... maybe **/
 
 
-class ResourceMan : protected Manager <ResID_t,Resource*>
+class ResourceMan : protected Manager< ResID_t, Resource* >
 {
 	public:
 		/** Default constructor */
@@ -35,8 +35,8 @@ class ResourceMan : protected Manager <ResID_t,Resource*>
 		static std::vector<std::string> listResourceNames();
 
 		static bool destroy();
-		static bool create(){return Manager <ResID_t,Resource*>::create();}
-		static bool isInit(){return Manager<ResID_t,Resource*>::isInit();}
+//		static bool create(){return Manager <ResID_t,Resource*>::create();}
+//		static bool isInit(){return Manager<ResID_t,Resource*>::isInit();}
 
 	protected:
 	private:

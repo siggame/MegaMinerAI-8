@@ -1,38 +1,3 @@
-#ifndef SINGLETON_H
-#define SINGLETON_H
-
-template<class T>
-class Singleton
-{
-public:
-  
-  static T* instance()
-  {
-    if( !m_pInstance )
-    {
-      m_pInstance = new T;
-    }
-    return m_pInstance;
-  }
-
-  static void destroy()
-  {
-    delete m_pInstance;
-    m_pInstance = 0;
-  }
-  
-private:
-  static T* m_pInstance;
-
-};
-
-template<class T>
-T* Singleton<T>::m_pInstance = 0;
-
-
-#endif
-
-#if 0
 /************************************
 *This file contains a templated
 *singleton class.
@@ -180,4 +145,3 @@ bool Singleton<T>::m_isInit = false;
 
 
 #endif // SINGLETON_H
-#endif

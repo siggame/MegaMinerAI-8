@@ -13,23 +13,17 @@ class ObjectManager : public Singleton<ObjectManager>
 public:
     static void setSize(const unsigned int & turns, const unsigned int & frames)
     {
-	if (!Singleton<ObjectManager>::isInit())
-	    return;
-	Singleton<ObjectManager>::get()->m_objects.setSize(turns,frames);
+      ObjectManager::instance()->m_objects.setSize( turns, frames );
     }
 
     static unsigned int frames()
     {
-	if (!Singleton<ObjectManager>::isInit())
-	    return 0;
-	return Singleton<ObjectManager>::get()->m_objects.getFrames();
+      return ObjectManager::instance()->m_objects.getFrames();
     }
 
     static unsigned int turns()
     {
-      if (!Singleton<ObjectManager>::isInit())
-          return 0;
-      return Singleton<ObjectManager>::get()->m_objects.getTurns();
+      return ObjectManager::instance()->m_objects.getTurns();
     }
 
 
@@ -40,11 +34,7 @@ public:
     static LookupNode<GameObject *,ObjIdType> * get(const ObjIdType & id, const unsigned int & turn, const unsigned int & frame);
     static std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > * getBucket(const unsigned int & turn, const unsigned int & frame)
     {
-	if (Single::isInit())
-	    return Single::get()->m_objects.bucket(turn,frame);
-
-	std::cout << "idiot check for buckets\n";
-	return NULL;
+      return ObjectManager::instance()->m_objects.bucket( turn, frame );
     }
 
     static bool exists(const ObjIdType &, const unsigned int &, const unsigned int &);

@@ -79,7 +79,7 @@ struct DupObj
     glTranslatef(x,y,0);
     #endif
     bool flag = false;
-    if (ResourceMan::isInit())
+    if ( 1 )
     {                            //! @todo: textures here
       glEnable(GL_TEXTURE_2D);
       Resource * res;

@@ -23,12 +23,18 @@ class SelectionRender : public GOCFamily_Render, Singleton <SelectionRender>
 		bool getDragging();
 		void setDragging(bool);
 		
-		static SelectionRender * get(){
+		static SelectionRender * get()
+    {
+
+#if 0
       if( !Singleton<SelectionRender>::isInit() )
       {
         Singleton<SelectionRender>::create();
       }
-      return Singleton <SelectionRender>::get();}
+      return Singleton <SelectionRender>::get();
+#endif
+      return SelectionRender::instance();
+    }
 
       const GOC_IDType componentID() const
       {

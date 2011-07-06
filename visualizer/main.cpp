@@ -17,11 +17,13 @@ int main(int argc, char *argv[])
 
 	QApplication app( argc, argv );
 
+#if 0
 	if (!OptionsMan::create())
 	    return 1;
 
 	if (!Mutex::create())
 	    return 1;
+#endif
 
 
 	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
@@ -39,6 +41,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+#if 0
 	if (!GUI::create())
 	    return 1;
 
@@ -57,6 +60,7 @@ int main(int argc, char *argv[])
 
 	if (!TimeManager::create())
 	    return 1;
+#endif
 
 
 	// initialize global options
