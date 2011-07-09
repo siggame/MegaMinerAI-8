@@ -21,8 +21,10 @@ using namespace std;
  */
 bool Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
 {
+#if 0
   if (!Single::isInit())
     return false;
+#endif
 
   unsigned int _height = height?height:1;
 
@@ -34,9 +36,9 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  Single::get()->m_height = _height;
-  Single::get()->m_width = width;
-  Single::get()->m_depth = depth;
+  Single::instance()->m_height = _height;
+  Single::instance()->m_width = width;
+  Single::instance()->m_depth = depth;
   refresh();
   return true;
 }
@@ -48,23 +50,24 @@ bool Renderer::resize(const unsigned int & width, const unsigned int & height, c
  */
 bool Renderer::refresh()
 {
-
+#if 0
   if (!Single::isInit())
     return false;
+#endif
 
   if (!isSetup())
     return false;
 
-  if(SelectionRender::get()->getUpdated())
+  if( SelectionRender::instance()->getUpdated() )
   {
     update( TimeManager::getTurn(), 0 );
   }
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
+  std::map<int, renderObj*>::iterator it = Single::instance()->m_renderConstant.begin();
 
-  for( ; it != Single::get()->m_renderConstant.end(); it++ )
+  for( ; it != Single::instance()->m_renderConstant.end(); it++ )
   {
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
@@ -78,8 +81,8 @@ bool Renderer::refresh()
   glScalef( height()/mapSize, height()/mapSize, 1 );
 
 #if 0
-  typename std::vector<DupObject*>::iterator renderIt = Single::get()->m_renderList.begin();
-  for (; renderIt != Single::get()->m_renderList.end(); renderIt++)
+  typename std::vector<DupObject*>::iterator renderIt = Single::instance()->m_renderList.begin();
+  for (; renderIt != Single::instance()->m_renderList.end(); renderIt++)
   {
     glPushMatrix();
     (*renderIt)->render();
@@ -89,12 +92,12 @@ bool Renderer::refresh()
 
   glPopMatrix();
 
-  if( Single::get()->m_parent )
+  if( Single::instance()->m_parent )
   {
-    Single::get()->m_parent->swapBuffers();
+    Single::instance()->m_parent->swapBuffers();
   }
 
-  SelectionRender::get()->setUpdated(false);
+  SelectionRender::instance()->setUpdated(false);
 
   return true;
 }
@@ -102,9 +105,11 @@ bool Renderer::refresh()
 
 void Renderer::setParent( RenderWidget *parent )
 {
+#if 0
   if (!Single::isInit())
     return;                      //! @todo throw error
-  Single::get()->m_parent = parent;
+#endif
+  Single::instance()->m_parent = parent;
 }
 
 
@@ -114,12 +119,14 @@ void Renderer::setParent( RenderWidget *parent )
  */
 bool Renderer::destroy()
 {
+#if 0
   if(!Single::isInit())
     return false;
+#endif
   if (!clear())
     return false;
 
-  return Single::destroy();
+  return Renderer::destroy();
 }
 
 
@@ -129,15 +136,17 @@ bool Renderer::destroy()
  */
 bool Renderer::create()
 {
+#if 0
   if (!Single::create())
     return false;
+#endif
 
-  Single::get()->m_parent = 0;
-  Single::get()->m_height = 0;
-  Single::get()->m_width  = 0;
-  Single::get()->m_depth  = 10;
-  //Single::get()->m_dupListDirs = 0;
-  //Single::get()-> m_duplicateList = NULL;
+  Single::instance()->m_parent = 0;
+  Single::instance()->m_height = 0;
+  Single::instance()->m_width  = 0;
+  Single::instance()->m_depth  = 10;
+  //Single::instance()->m_dupListDirs = 0;
+  //Single::instance()-> m_duplicateList = NULL;
 
   return true;
 }
@@ -154,10 +163,10 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
   if (!isInit())
     return NULL;
 
-  if (get()->m_objects.find(id) == get()->m_objects.end())
+  if (instance()->m_objects.find(id) == instance()->m_objects.end())
     return NULL;
 
-  return get()->m_objects[id];
+  return instance()->m_objects[id];
 }*/
 
 /** @brief setup
@@ -168,22 +177,24 @@ renderObj* Renderer::getRenderObject(const unsigned int id)
  */
 bool Renderer::setup()
 {
+#if 0
   if (!Single::isInit())
   {
     std::cout << "Renderer Error: Trying to set up an uninitialized Renderer\n";
     return false;
   }
+#endif
 
   /** @todo fill this in with more setup information */
-  if ( Single::get()->m_width && Single::get()->m_height && Single::get()->m_depth )
+  if ( Single::instance()->m_width && Single::instance()->m_height && Single::instance()->m_depth )
   {
-    resize( Single::get()->m_width, Single::get()->m_height, Single::get()->m_depth );
+    resize( Single::instance()->m_width, Single::instance()->m_height, Single::instance()->m_depth );
   }
-  else if ( Single::get()->m_width && Single::get()->m_height )
+  else if ( Single::instance()->m_width && Single::instance()->m_height )
   {
-    resize( Single::get()->m_width, Single::get()->m_height );
+    resize( Single::instance()->m_width, Single::instance()->m_height );
   }
-  else if ( OptionsMan::isInit() )
+  else
   {
     if ( OptionsMan::exists(renderHeightName) && OptionsMan::optionType(renderDepthName) == OT_INT &&
       OptionsMan::exists(renderWidthName) && OptionsMan::optionType(renderWidthName) == OT_INT )
@@ -211,55 +222,55 @@ bool Renderer::setup()
   std::cout << "Renderer width: " << rwidth << " height: " << rheight << " depth: " << rdepth << '\n';
 
 #if 0
-  if (Single::get()->m_dupListDirs)
+  if (Single::instance()->m_dupListDirs)
   {
-    Single::get()->m_duplicateList = new DupObject***[rwidth];
+    Single::instance()->m_duplicateList = new DupObject***[rwidth];
     for (unsigned int x = 0; x < width(); x++)
     {
-      Single::get()->m_duplicateList[x] = new DupObject**[rheight];
+      Single::instance()->m_duplicateList[x] = new DupObject**[rheight];
       for (unsigned int y = 0; y < height(); y++)
       {
-        Single::get()->m_duplicateList[x][y] = new DupObject*[rdepth];
+        Single::instance()->m_duplicateList[x][y] = new DupObject*[rdepth];
         for (unsigned int z = 0; z < rdepth; z++)
         {
-          Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
+          Single::instance()->m_duplicateList[x][y][z] = new DupObject[Single::instance()->m_dupListDirs];
         }
       }
     }
   }
   else if (OptionsMan::exists(renderDirsName) && OptionsMan::optionType(renderDirsName) == OT_INT)
   {
-    Single::get()->m_dupListDirs = OptionsMan::getInt(renderDirsName);
-    Single::get()->m_duplicateList = new DupObject***[width()];
+    Single::instance()->m_dupListDirs = OptionsMan::getInt(renderDirsName);
+    Single::instance()->m_duplicateList = new DupObject***[width()];
     for (unsigned int x = 0; x < width(); x++)
     {
-      Single::get()->m_duplicateList[x] = new DupObject**[height()];
+      Single::instance()->m_duplicateList[x] = new DupObject**[height()];
       for (unsigned int y = 0; y < height(); y++)
       {
-        Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
+        Single::instance()->m_duplicateList[x][y] = new DupObject*[depth()];
         for (unsigned int z = 0; z < depth(); z++)
         {
-          Single::get()->m_duplicateList[x][y][z] = new DupObject[Single::get()->m_dupListDirs];
+          Single::instance()->m_duplicateList[x][y][z] = new DupObject[Single::instance()->m_dupListDirs];
         }
       }
     }
   }
   else
   {
-    Single::get()->m_duplicateList = new DupObject***[width()];
+    Single::instance()->m_duplicateList = new DupObject***[width()];
     for (unsigned int x = 0; x < width(); x++)
     {
-      Single::get()->m_duplicateList[x] = new DupObject**[height()];
+      Single::instance()->m_duplicateList[x] = new DupObject**[height()];
       for (unsigned int y = 0; y < height(); y++)
       {
-        Single::get()->m_duplicateList[x][y] = new DupObject*[depth()];
+        Single::instance()->m_duplicateList[x][y] = new DupObject*[depth()];
         for (unsigned int z = 0; z < depth(); z++)
         {
-          Single::get()->m_duplicateList[x][y][z] = new DupObject[1];
+          Single::instance()->m_duplicateList[x][y][z] = new DupObject[1];
         }
       }
     }
-    Single::get()->m_dupListDirs = 1;
+    Single::instance()->m_dupListDirs = 1;
   }
 #endif
 
@@ -271,7 +282,7 @@ bool Renderer::setup()
   glEnable( GL_DEPTH_TEST );
   glDepthFunc( GL_LEQUAL );
 
-  Single::get()->m_isSetup = true;
+  Single::instance()->m_isSetup = true;
 
   glDisable( GL_TEXTURE_2D );
   glEnable( GL_BLEND );
@@ -279,9 +290,9 @@ bool Renderer::setup()
 
   refresh();
 
-  TimeManager::requestUpdate( Singleton<Renderer>::get()  );
+  TimeManager::requestUpdate( Singleton<Renderer>::instance()  );
 
-  return Single::get()->m_isSetup;
+  return Single::instance()->m_isSetup;
 }
 
 
@@ -291,10 +302,12 @@ bool Renderer::setup()
  */
 bool Renderer::isSetup()
 {
+#if 0
   if (!Single::isInit())
     return false;
+#endif
 
-  return Single::get()->m_isSetup;
+  return Renderer::instance()->m_isSetup;
 }
 
 
@@ -304,36 +317,40 @@ bool Renderer::isSetup()
  */
 bool Renderer::clear()
 {
+#if 0
   if (!Single::isInit())
     return false;
+#endif
 
-  //Single::get()->m_duplicateList = NULL;
+  //Single::instance()->m_duplicateList = NULL;
 
-  std::map<int, renderObj*>::iterator it = Single::get()->m_renderConstant.begin();
-  for(; it!=Single::get()->m_renderConstant.end(); it++ )
+  std::map<int, renderObj*>::iterator it = Single::instance()->m_renderConstant.begin();
+  for(; it!=Single::instance()->m_renderConstant.end(); it++ )
   {
     delete (it->second);
   }
 
-  Single::get()->m_renderConstant.clear();
+  Single::instance()->m_renderConstant.clear();
 
   return true;
 }
 
 bool Renderer::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
+#if 0
   if (!Single::isInit())
   {
     return false;
   }
+#endif
 
-  if( Single::get()->m_renderConstant.find( id ) != Single::get()->m_renderConstant.end() )
+  if( Single::instance()->m_renderConstant.find( id ) != Single::instance()->m_renderConstant.end() )
   {
     return false;
-    delete Single::get()->m_renderConstant[id];
+    delete Single::instance()->m_renderConstant[id];
   }
 
-  Single::get()->m_renderConstant[id] = obj;
+  Single::instance()->m_renderConstant[id] = obj;
 
   return true;
 }
@@ -342,11 +359,11 @@ bool Renderer::registerConstantObj( const unsigned int& id, renderObj* obj )
 bool Renderer::deleteConstantObj( const unsigned int& id )
 {
 #if 0
-  std::map<int,renderObj*> it = Single::get()->m_renderConstant.find( id );
-  if( it != Single::get()->m_renderConstant.end() )
+  std::map<int,renderObj*> it = Single::instance()->m_renderConstant.find( id );
+  if( it != Single::instance()->m_renderConstant.end() )
   {
-    delete Single::get()->m_renderConstant[id];
-    Single::get()->m_renderConstant.erase( it );
+    delete Single::instance()->m_renderConstant[id];
+    Single::instance()->m_renderConstant.erase( it );
     return true;
   } else
   {
@@ -372,7 +389,7 @@ void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, co
   if (!isSetup())
     return;
 
-  if (x > width() || y > height() || z > depth() || dir > Single::get()->m_dupListDirs)
+  if (x > width() || y > height() || z > depth() || dir > Single::instance()->m_dupListDirs)
     return;                      //! @todo throw an error
 
   bool sameFlag = false;
@@ -386,11 +403,11 @@ void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, co
   obj.y = y;
 
   obj.time = time;
-  Single::get()->m_duplicateList[x][y][z][dir] += obj;
+  Single::instance()->m_duplicateList[x][y][z][dir] += obj;
 
   if (!sameFlag)
   {
-    Single::get()->m_renderList.push_back(&(Single::get()->m_duplicateList[x][y][z][dir]));
+    Single::instance()->m_renderList.push_back(&(Single::instance()->m_duplicateList[x][y][z][dir]));
     //std::cout << "Gets to add\n";
   }
 }
@@ -403,7 +420,7 @@ void Renderer::updateLocation(const unsigned int & x, const unsigned int & y, co
 unsigned int Renderer::width()
 {
   if (isSetup())
-    return Single::get()->m_width;
+    return Single::instance()->m_width;
 
   return 0;
 }
@@ -415,7 +432,7 @@ unsigned int Renderer::width()
 unsigned int Renderer::height()
 {
   if (isSetup())
-    return Single::get()->m_height;
+    return Single::instance()->m_height;
 
   return 0;
 }
@@ -427,7 +444,7 @@ unsigned int Renderer::height()
 unsigned int Renderer::depth()
 {
   if (isSetup())
-    return Single::get()->m_depth;
+    return Single::instance()->m_depth;
 
   return 0;
 }
@@ -448,11 +465,13 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
   Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3; 
   int health;
 
+#if 0
   if (!Single::isInit())
   {
     std::cout << "Update Failed: Renderer is not inititalized or setup\n";
     return false;
   }                              //! @todo fuck off
+#endif
 
   typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
   Bucket * bucket = ObjectManager::getBucket(turn,frame);
@@ -463,10 +482,10 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
     return false;
   }
 
-//  Single::get()->m_renderList.clear();
+//  Single::instance()->m_renderList.clear();
   int time = TimeManager::timeHash();
 
-  bool selectUpdate = SelectionRender::get()->getUpdated();
+  bool selectUpdate = SelectionRender::instance()->getUpdated();
   float mapSize = (float)OptionsMan::getInt("mapSize");
   float unitSize  = height()/mapSize;
 
@@ -479,8 +498,8 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
   if( selectUpdate )
   {
 
-    x1 = SelectionRender::get()->getX1()/unitSize;
-    x2 = SelectionRender::get()->getX2()/unitSize;
+    x1 = SelectionRender::instance()->getX1()/unitSize;
+    x2 = SelectionRender::instance()->getX2()/unitSize;
     if( x2 < x1 )
     {
       int temp;
@@ -489,8 +508,8 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
       x1 = temp;
     }
 
-    y1 = SelectionRender::get()->getY1()/unitSize;
-    y2 = SelectionRender::get()->getY2()/unitSize;
+    y1 = SelectionRender::instance()->getY1()/unitSize;
+    y2 = SelectionRender::instance()->getY2()/unitSize;
 
     if( y2 < y1 )
     {
@@ -500,7 +519,7 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
       y2 = temp;
     }
   
-    Single::get()->selectedUnitIds.clear();
+    Single::instance()->selectedUnitIds.clear();
   }
 
   Bucket::iterator it = bucket->begin();
@@ -532,7 +551,7 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
 
             #if 1
             int id = it->first;
-            Single::get()->selectedUnitIds.insert( id );
+            Single::instance()->selectedUnitIds.insert( id );
             #endif
           } else 
           {
@@ -581,7 +600,7 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
         }
 
 
-        if( Single::get()->selectedUnitIds.find( it->first ) != Single::get()->selectedUnitIds.end() )
+        if( Single::instance()->selectedUnitIds.find( it->first ) != Single::instance()->selectedUnitIds.end() )
         {
           temp.selected = true;
         }
@@ -614,7 +633,7 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
             goc = it->second->data->getGOC( "TalkFamily" );
             if( goc )
             {
-              Single::get()->appendToConsole( ((GOCFamily_Talk*)goc)->message() );
+              Single::instance()->appendToConsole( ((GOCFamily_Talk*)goc)->message() );
             }
             
           } else { //Is treasure; buried treasure has no owner
@@ -686,17 +705,17 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
   globalP3.final();
   globalTotal.final();
 
-  Single::get()->globalStatColumnPopulate (globalTotal, 0);
-  Single::get()->globalStatColumnPopulate (globalP0, 1);
-  Single::get()->globalStatColumnPopulate (globalP1, 2);
-  Single::get()->globalStatColumnPopulate (globalP2, 3);
-  Single::get()->globalStatColumnPopulate (globalP3, 4);
+  Single::instance()->globalStatColumnPopulate (globalTotal, 0);
+  Single::instance()->globalStatColumnPopulate (globalP0, 1);
+  Single::instance()->globalStatColumnPopulate (globalP1, 2);
+  Single::instance()->globalStatColumnPopulate (globalP2, 3);
+  Single::instance()->globalStatColumnPopulate (globalP3, 4);
 
-  Single::get()->selectionStatColumnPopulate (selectedTotal, 0);
-  Single::get()->selectionStatColumnPopulate (selectedP0, 1);
-  Single::get()->selectionStatColumnPopulate (selectedP1, 2);
-  Single::get()->selectionStatColumnPopulate (selectedP2, 3);
-  Single::get()->selectionStatColumnPopulate (selectedP3, 4);
+  Single::instance()->selectionStatColumnPopulate (selectedTotal, 0);
+  Single::instance()->selectionStatColumnPopulate (selectedP0, 1);
+  Single::instance()->selectionStatColumnPopulate (selectedP1, 2);
+  Single::instance()->selectionStatColumnPopulate (selectedP2, 3);
+  Single::instance()->selectionStatColumnPopulate (selectedP3, 4);
 #endif
   
   return true;
@@ -736,39 +755,39 @@ void Renderer::appendToConsole( string str )
 
 void Renderer::individualStatColumnPopulate (int id, DupObject unit, int column)
 {
-  Single::get()->printIndividuals( column, 1, QString::number(id));
-  Single::get()->printIndividuals( column, 2, QString::number(unit.owner));
-  Single::get()->printIndividuals( column, 3, QString::number(unit.objType));
-  Single::get()->printIndividuals( column, 4, QString::number(unit.health));
-  Single::get()->printIndividuals( column, 5, QString::number(unit.gold));
-  Single::get()->printIndividuals( column, 6, QString::number(unit.x));
-  Single::get()->printIndividuals( column, 7, QString::number(unit.y));
+  Single::instance()->printIndividuals( column, 1, QString::number(id));
+  Single::instance()->printIndividuals( column, 2, QString::number(unit.owner));
+  Single::instance()->printIndividuals( column, 3, QString::number(unit.objType));
+  Single::instance()->printIndividuals( column, 4, QString::number(unit.health));
+  Single::instance()->printIndividuals( column, 5, QString::number(unit.gold));
+  Single::instance()->printIndividuals( column, 6, QString::number(unit.x));
+  Single::instance()->printIndividuals( column, 7, QString::number(unit.y));
 }
 
 void Renderer::selectionStatColumnPopulate (Stats multi, int column)
 {
-  Single::get()->printSelectedStats( column, 1, QString::number(multi.pirates));
-  Single::get()->printSelectedStats( column, 2, QString::number(multi.avgPirateHealth));
-  Single::get()->printSelectedStats( column, 3, QString::number(multi.avgPirateGold));
-  Single::get()->printSelectedStats( column, 4, QString::number(multi.gold));
-  Single::get()->printSelectedStats( column, 5, QString::number(multi.ships));
-  Single::get()->printSelectedStats( column, 6, QString::number(multi.avgShipHealth));
-  Single::get()->printSelectedStats( column, 7, QString::number(multi.avgShipGold));
-  Single::get()->printSelectedStats( column, 8, QString::number(multi.treasures));
-  //Single::get()->printSelectedStats( column, 0, QString::number(0));
+  Single::instance()->printSelectedStats( column, 1, QString::number(multi.pirates));
+  Single::instance()->printSelectedStats( column, 2, QString::number(multi.avgPirateHealth));
+  Single::instance()->printSelectedStats( column, 3, QString::number(multi.avgPirateGold));
+  Single::instance()->printSelectedStats( column, 4, QString::number(multi.gold));
+  Single::instance()->printSelectedStats( column, 5, QString::number(multi.ships));
+  Single::instance()->printSelectedStats( column, 6, QString::number(multi.avgShipHealth));
+  Single::instance()->printSelectedStats( column, 7, QString::number(multi.avgShipGold));
+  Single::instance()->printSelectedStats( column, 8, QString::number(multi.treasures));
+  //Single::instance()->printSelectedStats( column, 0, QString::number(0));
 }
 
 void Renderer::globalStatColumnPopulate (Stats multi, int column)
 {
-  Single::get()->printGlobalStats( column, 1, QString::number(multi.pirates));
-  Single::get()->printGlobalStats( column, 2, QString::number(multi.avgPirateHealth));
-  Single::get()->printGlobalStats( column, 3, QString::number(multi.avgPirateGold));
-  Single::get()->printGlobalStats( column, 4, QString::number(multi.gold));
-  Single::get()->printGlobalStats( column, 5, QString::number(multi.ships));
-  Single::get()->printGlobalStats( column, 6, QString::number(multi.avgShipHealth));
-  Single::get()->printGlobalStats( column, 7, QString::number(multi.avgShipGold));
-  Single::get()->printGlobalStats( column, 8, QString::number(multi.treasures));
-  //Single::get()->printGlobalStats( column, 0, QString::number(0));
+  Single::instance()->printGlobalStats( column, 1, QString::number(multi.pirates));
+  Single::instance()->printGlobalStats( column, 2, QString::number(multi.avgPirateHealth));
+  Single::instance()->printGlobalStats( column, 3, QString::number(multi.avgPirateGold));
+  Single::instance()->printGlobalStats( column, 4, QString::number(multi.gold));
+  Single::instance()->printGlobalStats( column, 5, QString::number(multi.ships));
+  Single::instance()->printGlobalStats( column, 6, QString::number(multi.avgShipHealth));
+  Single::instance()->printGlobalStats( column, 7, QString::number(multi.avgShipGold));
+  Single::instance()->printGlobalStats( column, 8, QString::number(multi.treasures));
+  //Single::instance()->printGlobalStats( column, 0, QString::number(0));
 }
 
 void Renderer::setNumIndividuals( int num )

@@ -7,7 +7,7 @@
  * appears when clicking and dragging to highlight interesting units.
  */
 
-class SelectionRender : public GOCFamily_Render, Singleton <SelectionRender>
+class SelectionRender : public GOCFamily_Render, public Singleton <SelectionRender>
 {
 	public:
 		void setSelectionBox(int, int, int, int); //X1, Y1, X2, Y2 Screen Resolution

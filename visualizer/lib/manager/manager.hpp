@@ -32,8 +32,10 @@ void Manager<IdType,DataType>::clear()
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::exists(const IdType & id)
 {
+#if 0
 	if (!Manager::isInit())
 		return false;
+#endif
 
 	if (Manager::instance()->m_data.find(id) != Manager::instance()->m_data.end())
 		return true;
@@ -50,8 +52,10 @@ bool Manager<IdType,DataType>::exists(const IdType & id)
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::del(const IdType & id)
 {
+#if 0
 	if (!Manager::isInit())
 		return false;
+#endif
 
 	typename DataTable::iterator it = Manager::instance()->m_data.find(id);
 	if (it == Manager::instance()->m_data.end())
@@ -109,8 +113,10 @@ DataType * Manager<IdType,DataType>::getItem(const IdType & id)
 template < typename IdType, typename DataType >
 bool Manager<IdType,DataType>::delPointer(const IdType & id)
 {
+#if 0
 	if (!Manager::isInit())
 		return false;
+#endif
 
 	typename DataTable::iterator it = Manager::instance()->m_data.find(id);
 	if (it == Manager::instance()->m_data.end())
@@ -132,8 +138,10 @@ bool Manager<IdType,DataType>::delPointer(const IdType & id)
 template < typename IdType, typename DataType >
 void Manager< IdType,DataType >::clearPointers()
 {
+#if 0
 	if (!Manager::isInit())
 		return false;
+#endif
 
 	typename DataTable::iterator it = Manager::instance()->m_data.begin();
 	for (;it != Manager::instance()->m_data.end(); it = Manager::instance()->m_data.begin())

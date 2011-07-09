@@ -136,8 +136,18 @@ void TimeManager::timerStart()
 
 void TimeManager::updateFrames()
 {
-  m_turn += m_frame / m_framesPerTurn;
-  m_frame %= m_framesPerTurn;
+  if( m_framesPerTurn )
+  {
+    m_turn += m_frame / m_framesPerTurn;
+    m_frame %= m_framesPerTurn;
+  }
+  else
+  {
+    m_turn = 0;
+    m_frame = 0;
+  }
+
+
 
   // FIXME: Fix this so that we check the time manager to see if we're ready to close
   // instead of having the time manager tell us
