@@ -440,22 +440,22 @@ void GUI::rewindShortcut()
 void GUI::turnPercentageCalc(int value)
 {
   float turnPercent = value /9.0;
-  TimeManager::setTurn((int) floor(turnPercent * TimeManager::getNumTurns()));
+  TimeManager.setTurn((int) floor(turnPercent * TimeManager.getNumTurns()));
 }
 
 void GUI::stepTurnForwardShortcut()
 {
-  if(TimeManager::getTurn() < TimeManager::getNumTurns()-1)
+  if(TimeManager.getTurn() < TimeManager.getNumTurns()-1)
   {
-    TimeManager::setTurn(TimeManager::getTurn() + 1);
+    TimeManager.setTurn(TimeManager.getTurn() + 1);
   }
 }
 
 void GUI::stepTurnBackShortcut()
 {
-  if(TimeManager::getTurn() > 0)
+  if(TimeManager.getTurn() > 0)
   {
-    TimeManager::setTurn(TimeManager::getTurn() - 1);
+    TimeManager.setTurn(TimeManager.getTurn() - 1);
   }
 }
 

@@ -60,7 +60,7 @@ bool Renderer::refresh()
 
   if( SelectionRender::instance()->getUpdated() )
   {
-    update( TimeManager::getTurn(), 0 );
+    update( TimeManager.getTurn(), 0 );
   }
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -72,7 +72,7 @@ bool Renderer::refresh()
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
     {
-      r->renderAt( TimeManager::getTurn(), 0 );
+      r->renderAt( TimeManager.getTurn(), 0 );
     }
   }
 
@@ -290,7 +290,7 @@ bool Renderer::setup()
 
   refresh();
 
-  TimeManager::requestUpdate( Singleton<Renderer>::instance()  );
+  TimeManager.requestUpdate( Singleton<Renderer>::instance()  );
 
   return Single::instance()->m_isSetup;
 }
@@ -452,7 +452,7 @@ unsigned int Renderer::depth()
 void Renderer::update()
 {
   Renderer::refresh();
-  Renderer::update( TimeManager::getTurn(), 0 );
+  Renderer::update( TimeManager.getTurn(), 0 );
 }
 
 
@@ -483,7 +483,7 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
   }
 
 //  Single::instance()->m_renderList.clear();
-  int time = TimeManager::timeHash();
+  int time = TimeManager.timeHash();
 
   bool selectUpdate = SelectionRender::instance()->getUpdated();
   float mapSize = (float)OptionsMan::getInt("mapSize");

@@ -9,9 +9,9 @@ class RenderDataInfo
 
     void update()
     {
-      if( m_updateHash != TimeManager::timeHash() )
+      if( m_updateHash != TimeManager.timeHash() )
       {
-        m_updateHash = TimeManager::timeHash();
+        m_updateHash = TimeManager.timeHash();
         clear();
       }
     }

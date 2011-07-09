@@ -73,7 +73,7 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
 		SelectionRender::get()->setUpdated(true); 
 		SelectionRender::get()->setDragging(false); 		   
 
-    Renderer::update( TimeManager::getTurn(), 0 );
+    Renderer::update( TimeManager.getTurn(), 0 );
 
 }
 

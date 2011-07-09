@@ -12,12 +12,12 @@ public:
   virtual void update() = 0;
 };
 
-class TimeManager : public QObject, public Singleton<TimeManager>
+class _TimeManager : public QObject//, public Singleton<TimeManager>
 {
   Q_OBJECT
   public:
  
-    TimeManager()
+    _TimeManager()
     {
       m_sleepTime = -1;
       m_awakeTime = -2;
@@ -30,27 +30,27 @@ class TimeManager : public QObject, public Singleton<TimeManager>
       Rewind = 2
     };   
     
-    static const int& getTurn();
-    static const int& getFrame();
-    static void setTurn( const int& turn );
+    const int& getTurn();
+    const int& getFrame();
+    void setTurn( const int& turn );
 
-    static const int& getNumTurns();
-    static void setNumTurns( const int& numTurns );
+    const int& getNumTurns();
+    void setNumTurns( const int& numTurns );
 
-    static const float& getSpeed();
-    static void setSpeed( const float& speed );
+    const float& getSpeed();
+    void setSpeed( const float& speed );
 
-    static int timeHash();
-    static mode getMode();
+    int timeHash();
+    mode getMode();
 
-    static bool create();
+    bool create();
     void setup();
 
     void updateFrames();
     void start();
-    static void timerStart();
+    void timerStart();
 
-    static void requestUpdate( UpdateNeeded* requester );
+    void requestUpdate( UpdateNeeded* requester );
     void updateChildren();
 
   private slots:
@@ -74,5 +74,6 @@ class TimeManager : public QObject, public Singleton<TimeManager>
 
     std::list< UpdateNeeded* > m_updateRequesters;
 };
+extern _TimeManager TimeManager;
 
 #endif

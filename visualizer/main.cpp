@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
-		TimeManager::destroy();
+		//TimeManager::destroy();
 		OptionsMan::destroy();
 		ResourceMan::destroy();
 		Mutex::destroy();
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 	OptionsMan::addInt( "currentTurn", 0 );
 	// done initializing
 
-	TimeManager::setSpeed( 1 );
+	TimeManager.setSpeed( 1 );
 
 	GUI::setup();
 	Render::setup();
@@ -77,7 +77,6 @@ int main(int argc, char *argv[])
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;
-		TimeManager::destroy();
 		OptionsMan::destroy();
 		ResourceMan::destroy();
 		Mutex::destroy();
@@ -94,12 +93,11 @@ int main(int argc, char *argv[])
 	    GUI::loadGamelog( argv[1] );
 	}
 
-  TimeManager::timerStart();
+  TimeManager.timerStart();
 
 	int retval = app.exec();
 
 	Render::destroy();
-	TimeManager::destroy();
 	GUI::destroy();
 	OptionsMan::destroy();
 	ResourceMan::destroy();

@@ -20,6 +20,11 @@ public:
     delete m_pInstance;
     m_pInstance = 0;
   }
+
+  T* operator -> ()
+  {
+    return m_pInstance;
+  }
   
 private:
   static T* m_pInstance;

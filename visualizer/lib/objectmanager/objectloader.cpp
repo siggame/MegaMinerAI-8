@@ -56,8 +56,8 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
     ObjectManager::setSize(numTurns,numFrames);
 
-    TimeManager::setTurn(0);
-    TimeManager::setNumTurns( numTurns );
+    TimeManager.setTurn(0);
+    TimeManager.setNumTurns( numTurns );
     std::map<idtype, LookupSet<GameObject*,idtype> > looksets;
 
     unsigned int id;

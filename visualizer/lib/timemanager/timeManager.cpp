@@ -3,116 +3,69 @@
 
 #include <ctime>
 
-const int& TimeManager::getTurn()
+_TimeManager TimeManager;
+
+const int& _TimeManager::getTurn()
 {
-#if 0
-  if( !isInit() )
-    // FIXME: This is bad.  Returns a reference to an integer which will be immediately destroyed
-    return 0;
-#endif
-  return instance()->m_turn;
+  return m_turn;
 }
 
-const int& TimeManager::getFrame()
+const int& _TimeManager::getFrame()
 {
-#if 0
-  if( !isInit() )
-    // FIXME: Returning ref to temporary.
-    return 0;
-#endif
-  return instance()->m_frame;
+  return m_frame;
 }
 
-void TimeManager::setTurn( const int& turn )
+void _TimeManager::setTurn( const int& turn )
 {
-#if 0
-  if( !isInit() )
-    throw 0;
-#endif
+  m_turn = turn;
+  m_frame = 0;
 
-  instance()->m_turn = turn;
-  instance()->m_frame = 0;
-
-  Singleton<TimeManager>::instance()->updateChildren();
-
+  updateChildren();
 }
 
-const float& TimeManager::getSpeed()
+const float& _TimeManager::getSpeed()
 {
-#if 0
-  if( !isInit() )
-    return 0;
-#endif
-
   float multi = OptionsMan::getFloat( "speed" );
-  return TimeManager::instance()->m_speed * multi;
+  return m_speed * multi;
 }
 
-void TimeManager::setSpeed( const float& speed )
+void _TimeManager::setSpeed( const float& speed )
 {
-#if 0
-  if( !isInit() )
-    throw 0;
-#endif
-
   float multi = OptionsMan::getFloat( "speed" );
-  instance()->m_speed = speed/multi;
+  m_speed = speed/multi;
 }
 
-int TimeManager::timeHash()
+int _TimeManager::timeHash()
 {
-#if 0
-  if (!isInit())
-    return 0;
-#endif
-
-  return instance()->m_hash;
+  return m_hash;
 }
 
-TimeManager::mode TimeManager::getMode()
+_TimeManager::mode _TimeManager::getMode()
 {
-#if 0
-  if( !isInit() )
-    return mode();
-#endif
-  return instance()->m_mode;
+  return m_mode;
 }
 
-const int& TimeManager::getNumTurns()
+const int& _TimeManager::getNumTurns()
 {
-#if 0
-  if( !isInit() )
-    return 0;
-#endif
-
-  return instance()->m_numTurns;
+  return m_numTurns;
 }
 
-void TimeManager::setNumTurns( const int& numTurns )
+void _TimeManager::setNumTurns( const int& numTurns )
 {
-#if 0
-  if( !isInit() )
-    throw 0;
-#endif
-  instance()->m_numTurns = numTurns;
+  m_numTurns = numTurns;
 
   // FIXME: Must update control bar
-  Singleton<TimeManager>::instance()->updateChildren();
+  updateChildren();
 }
 
 
-bool TimeManager::create()
+bool _TimeManager::create()
 {
-#if 0
-  if( !Singleton<TimeManager>::create() )
-    return false;
-#endif
-
-  Singleton<TimeManager>::instance()->setup();
+   setup();
    return true;
 }
 
-void TimeManager::setup()
+void _TimeManager::setup()
 {
   m_lastTime = clock();
   m_framesPerTurn = 100;
@@ -121,20 +74,20 @@ void TimeManager::setup()
 
 }
 
-void TimeManager::start()
+void _TimeManager::start()
 {
-    instance()->timer = new QTimer( this );
-    connect( instance()->timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-    instance()->timer->start( 35 );
+    timer = new QTimer( this );
+    connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
+    timer->start( 35 );
 
 }
 
-void TimeManager::timerStart()
+void _TimeManager::timerStart()
 {
-    instance()->start();
+    start();
 }
 
-void TimeManager::updateFrames()
+void _TimeManager::updateFrames()
 {
   if( m_framesPerTurn )
   {
@@ -152,7 +105,7 @@ void TimeManager::updateFrames()
   // FIXME: Fix this so that we check the time manager to see if we're ready to close
   // instead of having the time manager tell us
   
-  Singleton< TimeManager >::instance()->updateChildren();
+  updateChildren();
 
 #if 0
   //If in arena mode, show winner for a few secs at end
@@ -177,12 +130,12 @@ void TimeManager::updateFrames()
 #endif
 }
 
-void TimeManager::requestUpdate( UpdateNeeded* requester )
+void _TimeManager::requestUpdate( UpdateNeeded* requester )
 {
-  Singleton< TimeManager >::instance()->m_updateRequesters.push_back( requester );
+  Singleton< _TimeManager >::instance()->m_updateRequesters.push_back( requester );
 }
 
-void TimeManager::timerUpdate()
+void _TimeManager::timerUpdate()
 {
   m_time = ((clock() - m_lastTime) / CLOCKS_PER_SEC) * 1000;
   m_hash++;
@@ -196,7 +149,7 @@ void TimeManager::timerUpdate()
 #include <iostream>
 using namespace std;
 
-void TimeManager::updateChildren()
+void _TimeManager::updateChildren()
 {
   int count =1;
   for( 

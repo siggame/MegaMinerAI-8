@@ -60,48 +60,48 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 
   setLayout( layout );
 
-  TimeManager::requestUpdate( this );
+  TimeManager.requestUpdate( this );
 
   update();
 }
 
 void ControlBar::sliderDrag()
 {
-	originalTimeManagerSpeed = TimeManager::getSpeed();
-  TimeManager::setSpeed(0); //So it's not moving under you.
+	originalTimeManagerSpeed = TimeManager.getSpeed();
+  TimeManager.setSpeed(0); //So it's not moving under you.
 }
 
 void ControlBar::sliderRelease()
 {
-  TimeManager::setSpeed(originalTimeManagerSpeed);
+  TimeManager.setSpeed(originalTimeManagerSpeed);
 }
 
 void ControlBar::sliderChanged( int value )
 {
-  TimeManager::setTurn(value);
+  TimeManager.setTurn(value);
 }
 
 void ControlBar::update()
 {
-  m_slider->setSliderPosition( TimeManager::getTurn() );
-  m_slider->setMaximum( TimeManager::getNumTurns()-1 );
-  turnLabel->setText( QString::number( TimeManager::getTurn() ) );
+  m_slider->setSliderPosition( TimeManager.getTurn() );
+  m_slider->setMaximum( TimeManager.getNumTurns()-1 );
+  turnLabel->setText( QString::number( TimeManager.getTurn() ) );
 }
 
 void ControlBar::rewind()
 {
-  if(TimeManager::getSpeed() > 0) //Going forward
+  if(TimeManager.getSpeed() > 0) //Going forward
   {
-    TimeManager::setSpeed(-1);
+    TimeManager.setSpeed(-1);
     rewindButton->setText("<<");
     playButton->setText(">");
     fastForwardButton->setText("->>");
   }
-  else if((float)TimeManager::getSpeed() == 0)
+  else if((float)TimeManager.getSpeed() == 0)
   {
 	  if(originalTimeManagerSpeed < 0) //Was going Rewind
 		{
-			TimeManager::setSpeed(originalTimeManagerSpeed); //Resume
+			TimeManager.setSpeed(originalTimeManagerSpeed); //Resume
 		}
 		else //Was not going Rewind
 		{
@@ -110,24 +110,24 @@ void ControlBar::rewind()
   }
   else //Already Rewinding
   {
-    int speed = TimeManager::getSpeed();
+    int speed = TimeManager.getSpeed();
     speed = (speed > -64 ? speed * 2 : -128);
     QString symbol = "<-";
     for(int i = -1; i != speed; i*=2)
     {
       symbol += "-";
     }
-    TimeManager::setSpeed(speed);
+    TimeManager.setSpeed(speed);
     rewindButton->setText(symbol);
   }
 }
 
 void ControlBar::play()
 {
-  if(TimeManager::getSpeed() == 1)//Is playing
+  if(TimeManager.getSpeed() == 1)//Is playing
   {
-		originalTimeManagerSpeed = TimeManager::getSpeed(); //Store previous speed
-    TimeManager::setSpeed(0);//Pause
+		originalTimeManagerSpeed = TimeManager.getSpeed(); //Store previous speed
+    TimeManager.setSpeed(0);//Pause
     playButton->setText(">");//Set button to "will play if pressed"
   }
   else //Something other than normal playback speed
@@ -135,41 +135,41 @@ void ControlBar::play()
     rewindButton->setText("<<");
     playButton->setText("||");
     fastForwardButton->setText("->>");
-    TimeManager::setSpeed(1); //Start again at normal playback speed
+    TimeManager.setSpeed(1); //Start again at normal playback speed
   }
 }
 
 void ControlBar::fastForward()
 {
 	
-	if(TimeManager::getSpeed() == 0) //Paused
+	if(TimeManager.getSpeed() == 0) //Paused
 	{
 		if(originalTimeManagerSpeed >= 2) //Was going FF
 		{
-			TimeManager::setSpeed(originalTimeManagerSpeed); //Resume
+			TimeManager.setSpeed(originalTimeManagerSpeed); //Resume
 		}
 		else //Was not going FF
 		{
 			//Do nothing
 		}
 	}
-  else if(TimeManager::getSpeed() < 2) //Not going FF
+  else if(TimeManager.getSpeed() < 2) //Not going FF
   {
-    TimeManager::setSpeed(2); //Hyperspeed!
+    TimeManager.setSpeed(2); //Hyperspeed!
     rewindButton->setText("<<");
     playButton->setText(">");
     fastForwardButton->setText("-->>");
   }
   else //Going FF already
   {
-    int speed = TimeManager::getSpeed();
+    int speed = TimeManager.getSpeed();
     speed = (speed < 64 ? speed * 2 : 128);
     QString symbol = "-";
     for(int i = 1; i != speed; i*=2)
     {
       symbol += "-";
     }
-    TimeManager::setSpeed(speed);
+    TimeManager.setSpeed(speed);
     fastForwardButton->setText(symbol + ">>");
   }
 }
