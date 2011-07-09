@@ -153,29 +153,29 @@ typedef GOCFamily_GUI guiObj;
 /// @return   None
 ////////////////////////////////////////////////////////////////
 
-class GUI : public QMainWindow, public Singleton<GUI>
+class _GUI : public QMainWindow// , public Singleton<GUI>
 {
   Q_OBJECT
   
   friend class RenderWidget;
   
 public:
-  GUI() : m_isSetup(false) {};
-  ~GUI();
-  static bool reg( const std::string& id, guiObj *obj );
-  static bool del( const std::string& id );
+  _GUI() : m_isSetup(false) {};
+  ~_GUI();
+  bool reg( const std::string& id, guiObj *obj );
+  bool del( const std::string& id );
 
   static bool setup();
-  static bool clear();
+  bool clear();
 
-  static guiObj *getGUIObject( const std::string& id );
+  guiObj *getGUIObject( const std::string& id );
 
-  static bool create();
-  static bool destroy();
+  bool create();
+  bool destroy();
 
-  static unsigned int numObjects();
+  unsigned int numObjects();
 
-  static bool isSetup();
+  bool isSetup();
 
   /// EVENTS
   void dragEnterEvent( QDragEnterEvent *evt );
@@ -183,16 +183,16 @@ public:
   void resizeEvent( QResizeEvent* evt );
 
   /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
-  static void loadGamelog( std::string gamelog );
+  void loadGamelog( std::string gamelog );
 
-  static void update();
-  static void closeGUI();
+  void update();
+  void closeGUI();
   
-  static ControlBar * getControlBar();
+  ControlBar * getControlBar();
 
-  static void appendConsole( string line );
-  static void appendConsole( QString line );
-  static void clearConsole();
+  void appendConsole( string line );
+  void appendConsole( QString line );
+  void clearConsole();
   
   bool getFullScreen();
   void setFullScreen(bool);
@@ -222,9 +222,9 @@ private slots:
 
 public:
 
-  static QTableWidget* getGlobalStats();
-  static QTableWidget* getSelectionStats();
-  static QTableWidget* getIndividualStats();
+  QTableWidget* getGlobalStats();
+  QTableWidget* getSelectionStats();
+  QTableWidget* getIndividualStats();
 
 private:
   
@@ -295,5 +295,7 @@ private:
 	QRect m_normalWindowGeometry;
 
 };
+
+extern _GUI *GUI;
 
 #endif

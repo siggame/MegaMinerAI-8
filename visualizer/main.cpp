@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
 		Mutex::destroy();
 		Threadler::destroy();
 		Render::destroy();
-		GUI::destroy();
 		ObjectManager::destroy();
 		ObjectLoader::destroy();
 		return 1;
@@ -60,8 +59,8 @@ int main(int argc, char *argv[])
 
 	if (!TimeManager::create())
 	    return 1;
-#endif
 
+#endif
 
 	// initialize global options
 	OptionsMan::addInt("numTurns",1);
@@ -71,7 +70,7 @@ int main(int argc, char *argv[])
 
 	TimeManager.setSpeed( 1 );
 
-	GUI::setup();
+	_GUI::setup();
 	Render::setup();
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
@@ -81,7 +80,6 @@ int main(int argc, char *argv[])
 		ResourceMan::destroy();
 		Mutex::destroy();
 		Threadler::destroy();
-		GUI::destroy();
 		Render::destroy();
 		ObjectManager::destroy();
 		ObjectLoader::destroy();
@@ -90,7 +88,7 @@ int main(int argc, char *argv[])
 
 	if( argc > 1 )
 	{
-	    GUI::loadGamelog( argv[1] );
+	    GUI->loadGamelog( argv[1] );
 	}
 
   TimeManager.timerStart();
@@ -98,7 +96,6 @@ int main(int argc, char *argv[])
 	int retval = app.exec();
 
 	Render::destroy();
-	GUI::destroy();
 	OptionsMan::destroy();
 	ResourceMan::destroy();
 	Mutex::destroy();

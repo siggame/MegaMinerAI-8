@@ -9,8 +9,8 @@
 
 class ControlBar : public QWidget, public UpdateNeeded
 {
-  friend class GUI;
-  friend class TimeManager;
+  friend class _GUI;
+  friend class _TimeManager;
   Q_OBJECT
 public:
   ControlBar( QWidget *parent = 0 );

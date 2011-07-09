@@ -25,7 +25,7 @@ CentralWidget::CentralWidget( QWidget* /*parent*/ )
 void CentralWidget::buildControlBar()
 {  
   m_controlBarWidget = 
-    (GOCFamily_ControlBar*)GUI::getGUIObject( "ControlBar" );
+    (GOCFamily_ControlBar*)GUI->getGUIObject( "ControlBar" );
 
   if( m_controlBarWidget && 
       (
