@@ -1,24 +1,31 @@
 #include "optionsman.h"
 #include <iostream>
 
+_OptionsMan *OptionsMan = 0;
+
 /** @brief exists
   * check to see if the string is a valid option name
   * @param oName The name of the option to check
   * @return true if it exists
   */
-bool OptionsMan::exists(const std::string & oName)
+bool _OptionsMan::exists(const std::string & oName)
 {
-#if 0
-	if (!isInit())
-		return false;
-#endif
-
-
-	if ( instance()->m_options.find(oName) != instance()->m_options.end() )
+	if ( m_options.find(oName) != m_options.end() )
 	{
 		return true;
 	}
 	return false;
+}
+
+void _OptionsMan::setup()
+{
+  if( !OptionsMan )
+  {
+    OptionsMan = new _OptionsMan;
+  } else
+  {
+    throw "Options Manager is already initialized";
+  }
 }
 
 /** @brief operator()
@@ -26,10 +33,10 @@ bool OptionsMan::exists(const std::string & oName)
   * @param oName the name of the option to access
   * @return a pointer to the option if it exists, otherwise NULL
   */
-OptionBase * OptionsMan::operator()(const std::string & oName)
+OptionBase * _OptionsMan::operator()(const std::string & oName)
 {
 	if (exists(oName))
-		return instance()->m_options[oName];
+		return m_options[oName];
 
 	return NULL;
 }
@@ -40,7 +47,7 @@ OptionBase * OptionsMan::operator()(const std::string & oName)
   * @return true if all goes well
   * @todo: clean this function up a bit
   */
-bool OptionsMan::loadOptionFile(const std::string & filename)
+bool _OptionsMan::loadOptionFile(const std::string & filename)
 {
 #if 0
 	if (!isInit())
@@ -51,7 +58,7 @@ bool OptionsMan::loadOptionFile(const std::string & filename)
 
 
 	/* if we allow multiple loading we can combine files easily
-	if (instance()->m_options.size())
+	if (m_options.size())
 	{
 		//obviously this is the second time you are loading the damn thing
 		return false;
@@ -132,7 +139,7 @@ bool OptionsMan::loadOptionFile(const std::string & filename)
   * @param val the value to attempt to get an enum from
   * @return OT_INT, OT_FLOAT, OT_STRING, or OT_BOOL when valid. OT_NONE when not valid
   */
-OptionType OptionsMan::getTypeFromStr(const std::string & val)
+OptionType _OptionsMan::getTypeFromStr(const std::string & val)
 {
 	if (val == "float")
 	{
@@ -159,7 +166,7 @@ OptionType OptionsMan::getTypeFromStr(const std::string & val)
   * @param val the value to find a bool from
   * @return true or false if valid, will throw an exception of type std::string on failure
   */
-bool OptionsMan::strToBool(const std::string & val)
+bool _OptionsMan::strToBool(const std::string & val)
 {
 	if (val == "yes" || val == "Yes" || val == "YES" ||
 		val == "true" || val == "True" || val == "TRUE" ||
@@ -189,7 +196,7 @@ bool OptionsMan::strToBool(const std::string & val)
   * @param lineNum the number of the line this is happening on
   * @return true on a success otherwise false
   */
-bool OptionsMan::addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+bool _OptionsMan::addBool(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
 #if 0
 	if (!isInit())
@@ -202,8 +209,8 @@ bool OptionsMan::addBool(const std::string & namebuff, std::stringstream & ss, c
 		try
 		{
 			bool retval = strToBool(valbuff);
-			instance()->m_options[namebuff] = new Option<bool,OT_BOOL>(retval);
-      Mutex::instance()->createMutex(namebuff);
+			m_options[namebuff] = new Option<bool,OT_BOOL>(retval);
+      Mutex::createMutex(namebuff);
 		}
 		catch (std::string s)
 		{
@@ -222,7 +229,7 @@ bool OptionsMan::addBool(const std::string & namebuff, std::stringstream & ss, c
   * @param lineNum the number of the line this is happening on
   * @return true on a success otherwise false
   */
-bool OptionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+bool _OptionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
 #if 0
 	if (!isInit())
@@ -232,8 +239,8 @@ bool OptionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, 
 	float val;
 	if (ss >> val)
 	{
-		instance()->m_options[namebuff] = new Option<float,OT_FLOAT>(val);
-    Mutex::instance()->createMutex(namebuff);
+		m_options[namebuff] = new Option<float,OT_FLOAT>(val);
+    Mutex::createMutex(namebuff);
 		return true;
 	}
 
@@ -248,7 +255,7 @@ bool OptionsMan::addFloat(const std::string & namebuff, std::stringstream & ss, 
   * @param lineNum the number of the line this is happening on
   * @return true on a success otherwise false
   */
-bool OptionsMan::addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+bool _OptionsMan::addInt(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
 #if 0
 	if (!isInit())
@@ -259,8 +266,8 @@ bool OptionsMan::addInt(const std::string & namebuff, std::stringstream & ss, co
 
 	if (ss >> val)
 	{
-		instance()->m_options[namebuff] = new Option<int,OT_INT>(val);
-    Mutex::instance()->createMutex(namebuff);
+		m_options[namebuff] = new Option<int,OT_INT>(val);
+    Mutex::createMutex(namebuff);
 		return true;
 	}
 
@@ -275,7 +282,7 @@ bool OptionsMan::addInt(const std::string & namebuff, std::stringstream & ss, co
   * @param lineNum the number of the line this is happening on
   * @return true on a success otherwise false
   */
-bool OptionsMan::addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
+bool _OptionsMan::addString(const std::string & namebuff, std::stringstream & ss, const unsigned int & lineNum)
 {
 #if 0
 	if (!isInit())
@@ -293,8 +300,8 @@ bool OptionsMan::addString(const std::string & namebuff, std::stringstream & ss,
 		}
 
 
-		instance()->m_options[namebuff] = new Option<std::string,OT_STRING>(val);
-    Mutex::instance()->createMutex(namebuff);
+		m_options[namebuff] = new Option<std::string,OT_STRING>(val);
+    Mutex::createMutex(namebuff);
 		return true;
 	}
 		std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
@@ -312,7 +319,7 @@ bool OptionsMan::addString(const std::string & namebuff, std::stringstream & ss,
   * @todo find a way to maintain comments and white space
   * @todo better error checking
   */
-bool OptionsMan::saveOptionFile(const std::string & filename)
+bool _OptionsMan::saveOptionFile(const std::string & filename)
 {
 #if 0
 	if (!isInit())
@@ -323,9 +330,9 @@ bool OptionsMan::saveOptionFile(const std::string & filename)
 
 	std::ofstream output(filename.c_str());
 
-	std::map<std::string,OptionBase*>::iterator it = instance()->m_options.begin();
+	std::map<std::string,OptionBase*>::iterator it = m_options.begin();
 
-	for (; it != instance()->m_options.end(); it++)
+	for (; it != m_options.end(); it++)
 	{
 		OptionType optType = it->second->type();
 
@@ -371,7 +378,7 @@ bool OptionsMan::saveOptionFile(const std::string & filename)
   * @param oName the name of the option to be modified
   * @param val the value to change the option to
   */
-void OptionsMan::setStr(const std::string & oName,const std::string & val)
+void _OptionsMan::setStr(const std::string & oName,const std::string & val)
 {
 	setVar<std::string,OT_STRING>(oName,val);
 }
@@ -382,7 +389,7 @@ void OptionsMan::setStr(const std::string & oName,const std::string & val)
   * @return the value of the option or a default variable value if it
 		doesnt exist
   */
-std::string OptionsMan::getStr(const std::string & oName)
+std::string _OptionsMan::getStr(const std::string & oName)
 {
 	return getVar<std::string,OT_STRING>(oName);
 }
@@ -392,7 +399,7 @@ std::string OptionsMan::getStr(const std::string & oName)
   * @param oName the name of the option to be modified
   * @param val the value to change the option to
   */
-void OptionsMan::setBool(const std::string & oName,const bool & val)
+void _OptionsMan::setBool(const std::string & oName,const bool & val)
 {
 	setVar<bool,OT_BOOL>(oName,val);
 }
@@ -403,7 +410,7 @@ void OptionsMan::setBool(const std::string & oName,const bool & val)
   * @return the value of the option or a default variable value if it
 		doesnt exist
   */
-bool OptionsMan::getBool(const std::string & oName)
+bool _OptionsMan::getBool(const std::string & oName)
 {
 	return getVar<bool,OT_BOOL>(oName);
 }
@@ -414,7 +421,7 @@ bool OptionsMan::getBool(const std::string & oName)
   * @return the value of the option or a default variable value if it
 		doesnt exist
   */
-float OptionsMan::getFloat(const std::string & oName)
+float _OptionsMan::getFloat(const std::string & oName)
 {
 	return getVar<float,OT_FLOAT>(oName);
 }
@@ -424,7 +431,7 @@ float OptionsMan::getFloat(const std::string & oName)
   * @param oName the name of the option to be modified
   * @param val the value to change the option to
   */
-void OptionsMan::setInt(const std::string & oName,const int & val)
+void _OptionsMan::setInt(const std::string & oName,const int & val)
 {
 	setVar<int,OT_INT>(oName,val);
 }
@@ -435,7 +442,7 @@ void OptionsMan::setInt(const std::string & oName,const int & val)
   * @return the value of the option or a default variable value if it
 		doesnt exist
   */
-int OptionsMan::getInt(const std::string & oName)
+int _OptionsMan::getInt(const std::string & oName)
 {
 	return getVar<int,OT_INT>(oName);
 }
@@ -445,7 +452,7 @@ int OptionsMan::getInt(const std::string & oName)
   * @param oName the name of the option to be modified
   * @param val the value to change the option to
   */
-void OptionsMan::setFloat(const std::string & oName,const float & val)
+void _OptionsMan::setFloat(const std::string & oName,const float & val)
 {
 	setVar<float,OT_FLOAT>(oName,val);
 }
@@ -455,10 +462,10 @@ void OptionsMan::setFloat(const std::string & oName,const float & val)
   * @param oName the name of the option
   * @return the type of the option if it exists, otherwise OT_NONE
   */
-OptionType OptionsMan::optionType(const std::string & oName)
+OptionType _OptionsMan::optionType(const std::string & oName)
 {
 	if (exists(oName))
-		return instance()->m_options[oName]->type();
+		return m_options[oName]->type();
 
 	return OT_NONE;
 }
@@ -467,21 +474,15 @@ OptionType OptionsMan::optionType(const std::string & oName)
   * destroy the options manager
   * @return true if all goes well
   */
-bool OptionsMan::destroy()
+bool _OptionsMan::destroy()
 {
-#if 0
-	if (!isInit())
-		return false;
-#endif
+	std::map<std::string, OptionBase*>::iterator it = m_options.begin();
 
-	std::map<std::string, OptionBase*>::iterator it = instance()->m_options.begin();
-
-	for (; it != instance()->m_options.end(); it++)
+	for (; it != m_options.end(); it++)
 	{
 		delete it->second;
 	}
 
-  Singleton::destroy();
   return true;
 }
 
@@ -492,7 +493,7 @@ bool OptionsMan::destroy()
 		doesnt exist
   */
 template<class T, OptionType OT>
-T OptionsMan::getVar(const std::string & oName)
+T _OptionsMan::getVar(const std::string & oName)
 {
 	if (!exists(oName))
 	{
@@ -507,7 +508,7 @@ T OptionsMan::getVar(const std::string & oName)
 	}
 
 	Mutex::lock(oName);
-	T temp (((Option<T,OT>*)(instance()->m_options[oName]))->get());
+	T temp (((Option<T,OT>*)(m_options[oName]))->get());
 	Mutex::unlock(oName);
 	return temp;
 }
@@ -518,7 +519,7 @@ T OptionsMan::getVar(const std::string & oName)
   * @param val the value to change the option to
   */
 template<class T, OptionType OT>
-void OptionsMan::setVar(const std::string & oName, const T & val)
+void _OptionsMan::setVar(const std::string & oName, const T & val)
 {
 	if (!exists(oName))
 	{
@@ -533,12 +534,12 @@ void OptionsMan::setVar(const std::string & oName, const T & val)
 	}
 
 	Mutex::lock(oName);
-	((Option<T,OT>*)(instance()->m_options[oName]))->set(val);
+	((Option<T,OT>*)(m_options[oName]))->set(val);
 	Mutex::unlock(oName);
 }
 
 
-bool OptionsMan::addString(const OptID_t & oName, const std::string & val)
+bool _OptionsMan::addString(const OptID_t & oName, const std::string & val)
 {
 #if 0
 	if (!isInit())
@@ -548,8 +549,8 @@ bool OptionsMan::addString(const OptID_t & oName, const std::string & val)
 	if (exists(oName))
 		return false;
 
-	instance()->m_options[oName] = new Option<std::string,OT_STRING>(val);
-  Mutex::instance()->createMutex(oName);
+	m_options[oName] = new Option<std::string,OT_STRING>(val);
+  Mutex::createMutex(oName);
 
 	setStr(oName,val);
 
@@ -557,7 +558,7 @@ bool OptionsMan::addString(const OptID_t & oName, const std::string & val)
 }
 
 
-bool OptionsMan::addInt(const OptID_t & oName, const int & val)
+bool _OptionsMan::addInt(const OptID_t & oName, const int & val)
 {
 #if 0
 	if (!isInit())
@@ -567,15 +568,15 @@ bool OptionsMan::addInt(const OptID_t & oName, const int & val)
 	if (exists(oName))
 		return false;
 
-	instance()->m_options[oName] = new Option<int,OT_INT>(val);
-  Mutex::instance()->createMutex(oName);
+	m_options[oName] = new Option<int,OT_INT>(val);
+  Mutex::createMutex(oName);
 
 	setInt(oName,val);
 
 	return true;
 }
 
-bool OptionsMan::addFloat(const OptID_t & oName, const float & val)
+bool _OptionsMan::addFloat(const OptID_t & oName, const float & val)
 {
 #if 0
 	if (!isInit())
@@ -585,15 +586,15 @@ bool OptionsMan::addFloat(const OptID_t & oName, const float & val)
 	if (exists(oName))
 		return false;
 
-	instance()->m_options[oName] = new Option<float,OT_FLOAT>(val);
-  Mutex::instance()->createMutex(oName);
+	m_options[oName] = new Option<float,OT_FLOAT>(val);
+  Mutex::createMutex(oName);
 
 	setFloat(oName,val);
 
 	return true;
 }
 
-bool OptionsMan::addBool(const OptID_t & oName, const bool & val)
+bool _OptionsMan::addBool(const OptID_t & oName, const bool & val)
 {
 #if 0
 	if (!isInit())
@@ -603,8 +604,8 @@ bool OptionsMan::addBool(const OptID_t & oName, const bool & val)
 	if (exists(oName))
 		return false;
 
-	instance()->m_options[oName] = new Option<bool,OT_BOOL>(val);
-  Mutex::instance()->createMutex(oName);
+	m_options[oName] = new Option<bool,OT_BOOL>(val);
+  Mutex::createMutex(oName);
 
 	setBool(oName,val);
 

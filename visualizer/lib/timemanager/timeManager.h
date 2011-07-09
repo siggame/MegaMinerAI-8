@@ -37,14 +37,14 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
     const int& getNumTurns();
     void setNumTurns( const int& numTurns );
 
-    const float& getSpeed();
+    const float getSpeed();
     void setSpeed( const float& speed );
 
     int timeHash();
     mode getMode();
 
-    bool create();
-    void setup();
+    static void setup();
+    void _setup();
 
     void updateFrames();
     void start();
@@ -74,6 +74,6 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
 
     std::list< UpdateNeeded* > m_updateRequesters;
 };
-extern _TimeManager TimeManager;
+extern _TimeManager *TimeManager;
 
 #endif

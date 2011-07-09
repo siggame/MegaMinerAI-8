@@ -140,7 +140,7 @@ const int& radius )
 {
 
 	float *gaussian = new float[radius*2+1];
-	//float sigma = OptionsMan::getFloat( "sigma" );
+	//float sigma = OptionsMan->getFloat( "sigma" );
 
 	#if 0
 	for( int i = -radius; i < radius+1; i++ )
@@ -268,7 +268,7 @@ const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8
 void PirateMap::generateMap( Game& g )
 {
 
-	int pixels = OptionsMan::getInt( "unitSize" );
+	int pixels = OptionsMan->getInt( "unitSize" );
 	int mapSize = g.states[0].mapSize;
 	int mWidth = m_width = mapSize*pixels;
 	int mHeight = m_width = mapSize*pixels;
@@ -326,7 +326,7 @@ void PirateMap::generateMap( Game& g )
 		}
 	}
 
-	boxBlur( depthMap, mWidth, mHeight, OptionsMan::getInt( "blurRadius" ) );
+	boxBlur( depthMap, mWidth, mHeight, OptionsMan->getInt( "blurRadius" ) );
 
 	for( int x = 0; x < mWidth; x++ )
 	{
@@ -350,30 +350,30 @@ void PirateMap::generateMap( Game& g )
 	QImage textures[10];
 	std::string textureNames[10] =
 	{
-		OptionsMan::getStr( "proc1" ),
-		OptionsMan::getStr( "proc2" ),
-		OptionsMan::getStr( "proc3" ),
-		OptionsMan::getStr( "proc4" ),
-		OptionsMan::getStr( "proc5" ),
-		OptionsMan::getStr( "proc6" ),
-		OptionsMan::getStr( "proc7" ),
-		OptionsMan::getStr( "proc8" ),
-		OptionsMan::getStr( "proc9" ),
-		OptionsMan::getStr( "proc10" )
+		OptionsMan->getStr( "proc1" ),
+		OptionsMan->getStr( "proc2" ),
+		OptionsMan->getStr( "proc3" ),
+		OptionsMan->getStr( "proc4" ),
+		OptionsMan->getStr( "proc5" ),
+		OptionsMan->getStr( "proc6" ),
+		OptionsMan->getStr( "proc7" ),
+		OptionsMan->getStr( "proc8" ),
+		OptionsMan->getStr( "proc9" ),
+		OptionsMan->getStr( "proc10" )
 	};
 
 	int depths[10] =
 	{
-		OptionsMan::getInt( "depth1" ),
-		OptionsMan::getInt( "depth2" ),
-		OptionsMan::getInt( "depth3" ),
-		OptionsMan::getInt( "depth4" ),
-		OptionsMan::getInt( "depth5" ),
-		OptionsMan::getInt( "depth6" ),
-		OptionsMan::getInt( "depth7" ),
-		OptionsMan::getInt( "depth8" ),
-		OptionsMan::getInt( "depth9" ),
-		OptionsMan::getInt( "depth10" )
+		OptionsMan->getInt( "depth1" ),
+		OptionsMan->getInt( "depth2" ),
+		OptionsMan->getInt( "depth3" ),
+		OptionsMan->getInt( "depth4" ),
+		OptionsMan->getInt( "depth5" ),
+		OptionsMan->getInt( "depth6" ),
+		OptionsMan->getInt( "depth7" ),
+		OptionsMan->getInt( "depth8" ),
+		OptionsMan->getInt( "depth9" ),
+		OptionsMan->getInt( "depth10" )
 	};
 
 	for( int i = 0; i < 10; i++ )
@@ -502,7 +502,7 @@ const unsigned int&	/*frame*/
 
 	glTranslatef( -2, 2, 0 );
 
-	float size = ((float)Renderer<DupObj>::height())/OptionsMan::getInt("mapSize");
+	float size = ((float)Renderer<DupObj>::height())/OptionsMan->getInt("mapSize");
 	for( int i = 0; i < 41; i++ )
 	{
 		glBegin( GL_QUADS );

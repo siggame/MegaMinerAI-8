@@ -12,61 +12,66 @@
 
 typedef std::string OptID_t;
 
-class OptionsMan : public Singleton <OptionsMan>
+class _OptionsMan //: public Singleton <OptionsMan>
 {
 	public:
 
-		static bool loadOptionFile(const std::string & filename);
-		static bool saveOptionFile(const std::string & filename);
+		bool loadOptionFile(const std::string & filename);
+		bool saveOptionFile(const std::string & filename);
 
 		OptionBase * operator()(const OptID_t & oName);
 
-		static bool exists(const OptID_t & oName);
+		bool exists(const OptID_t & oName);
 
-		static int getInt(const OptID_t & oName);
-		static void setInt(const OptID_t & oName,const int & val);
+		int getInt(const OptID_t & oName);
+		void setInt(const OptID_t & oName,const int & val);
 
-		static float getFloat(const OptID_t & oName);
-		static void setFloat(const OptID_t & oName,const float & val);
+		float getFloat(const OptID_t & oName);
+		void setFloat(const OptID_t & oName,const float & val);
 
-		static bool getBool(const OptID_t & oName);
-		static void setBool(const OptID_t & oName,const bool & val);
+		bool getBool(const OptID_t & oName);
+		void setBool(const OptID_t & oName,const bool & val);
 
-		static std::string getStr(const OptID_t & oName);
-		static void setStr(const OptID_t & oName,const std::string & val);
+		std::string getStr(const OptID_t & oName);
+		void setStr(const OptID_t & oName,const std::string & val);
 
-		static OptionType optionType(const OptID_t & oName);
+		OptionType optionType(const OptID_t & oName);
 
-		static bool destroy();
+		bool destroy();
 
 		//general adding functions
-		static bool addString(const OptID_t & oName, const std::string & val);
-		static bool addInt(const OptID_t & oName, const int & val);
-		static bool addFloat(const OptID_t & oName, const float & val);
-		static bool addBool(const OptID_t & oName, const bool & val);
+		bool addString(const OptID_t & oName, const std::string & val);
+		bool addInt(const OptID_t & oName, const int & val);
+		bool addFloat(const OptID_t & oName, const float & val);
+		bool addBool(const OptID_t & oName, const bool & val);
+
+    static void setup();
 
 
 	protected:
 	private:
 		template<class T, OptionType OT>
-		static T getVar(const OptID_t & oName);
+		T getVar(const OptID_t & oName);
 
 		template<class T, OptionType OT>
-		static void setVar(const OptID_t & oName, const T & val);
+		void setVar(const OptID_t & oName, const T & val);
 
 
 
-		static bool strToBool(const std::string & val);
+		bool strToBool(const std::string & val);
 
-		static OptionType getTypeFromStr(const std::string & val);
+		OptionType getTypeFromStr(const std::string & val);
 
 		//helper fxns
-		static bool addString(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
-		static bool addInt(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
-		static bool addFloat(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
-		static bool addBool(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
+		bool addString(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
+		bool addInt(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
+		bool addFloat(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
+		bool addBool(const OptID_t & oName, std::stringstream & ss, const unsigned int & lineNum);
 
 		std::map<OptID_t, OptionBase* > m_options; //!< Member variable "m_options"
 };
+
+extern _OptionsMan *OptionsMan;
+
 
 #endif // OPTIONSMAN_H

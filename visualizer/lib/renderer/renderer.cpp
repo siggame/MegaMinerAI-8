@@ -60,7 +60,7 @@ bool Renderer::refresh()
 
   if( SelectionRender::instance()->getUpdated() )
   {
-    update( TimeManager.getTurn(), 0 );
+    update( TimeManager->getTurn(), 0 );
   }
 
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -72,12 +72,12 @@ bool Renderer::refresh()
     GOCFamily_Render *r = (GOCFamily_Render*)it->second->getGOC( "RenderFamily" );
     if( r )
     {
-      r->renderAt( TimeManager.getTurn(), 0 );
+      r->renderAt( TimeManager->getTurn(), 0 );
     }
   }
 
   glPushMatrix();
-  float mapSize = (float)OptionsMan::getInt("mapSize");
+  float mapSize = (float)OptionsMan->getInt("mapSize");
   glScalef( height()/mapSize, height()/mapSize, 1 );
 
 #if 0
@@ -196,19 +196,19 @@ bool Renderer::setup()
   }
   else
   {
-    if ( OptionsMan::exists(renderHeightName) && OptionsMan::optionType(renderDepthName) == OT_INT &&
-      OptionsMan::exists(renderWidthName) && OptionsMan::optionType(renderWidthName) == OT_INT )
+    if ( OptionsMan->exists(renderHeightName) && OptionsMan->optionType(renderDepthName) == OT_INT &&
+      OptionsMan->exists(renderWidthName) && OptionsMan->optionType(renderWidthName) == OT_INT )
     {
-      if ( OptionsMan::exists(renderDepthName) && OptionsMan::optionType(renderDepthName) == OT_INT)
+      if ( OptionsMan->exists(renderDepthName) && OptionsMan->optionType(renderDepthName) == OT_INT)
       {
-        resize( OptionsMan::getInt(renderWidthName),
-          OptionsMan::getInt(renderHeightName),
-          OptionsMan::getInt(renderDepthName) );
+        resize( OptionsMan->getInt(renderWidthName),
+          OptionsMan->getInt(renderHeightName),
+          OptionsMan->getInt(renderDepthName) );
       }
       else
       {
-        resize( OptionsMan::getInt(renderWidthName),
-          OptionsMan::getInt(renderHeightName) );
+        resize( OptionsMan->getInt(renderWidthName),
+          OptionsMan->getInt(renderHeightName) );
       }
     }
   }
@@ -238,9 +238,9 @@ bool Renderer::setup()
       }
     }
   }
-  else if (OptionsMan::exists(renderDirsName) && OptionsMan::optionType(renderDirsName) == OT_INT)
+  else if (OptionsMan->exists(renderDirsName) && OptionsMan->optionType(renderDirsName) == OT_INT)
   {
-    Single::instance()->m_dupListDirs = OptionsMan::getInt(renderDirsName);
+    Single::instance()->m_dupListDirs = OptionsMan->getInt(renderDirsName);
     Single::instance()->m_duplicateList = new DupObject***[width()];
     for (unsigned int x = 0; x < width(); x++)
     {
@@ -290,7 +290,7 @@ bool Renderer::setup()
 
   refresh();
 
-  TimeManager.requestUpdate( Singleton<Renderer>::instance()  );
+  TimeManager->requestUpdate( Singleton<Renderer>::instance()  );
 
   return Single::instance()->m_isSetup;
 }
@@ -452,7 +452,7 @@ unsigned int Renderer::depth()
 void Renderer::update()
 {
   Renderer::refresh();
-  Renderer::update( TimeManager.getTurn(), 0 );
+  Renderer::update( TimeManager->getTurn(), 0 );
 }
 
 
@@ -483,10 +483,10 @@ bool Renderer::update(const unsigned int & turn, const unsigned int & frame)
   }
 
 //  Single::instance()->m_renderList.clear();
-  int time = TimeManager.timeHash();
+  int time = TimeManager->timeHash();
 
   bool selectUpdate = SelectionRender::instance()->getUpdated();
-  float mapSize = (float)OptionsMan::getInt("mapSize");
+  float mapSize = (float)OptionsMan->getInt("mapSize");
   float unitSize  = height()/mapSize;
 
   int x1 = 0;

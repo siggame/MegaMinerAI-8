@@ -62,7 +62,7 @@ void Scoreboard::renderAt( const unsigned int& turn, const unsigned int& frame )
     return;
   }
 
-  if( turn == TimeManager.getNumTurns() )
+  if( turn == TimeManager->getNumTurns() )
   {
     drawEnd();
     return;

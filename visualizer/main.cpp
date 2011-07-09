@@ -15,60 +15,36 @@ int main(int argc, char *argv[])
 {
 	typedef Renderer Render;
 
-	QApplication app( argc, argv );
+  ///////////////////////////////////////////////////////////////////
+  // Must initialize things based on their dependency graphs
+  ///////////////////////////////////////////////////////////////////
 
-#if 0
-	if (!OptionsMan::create())
-	    return 1;
+  ///////////////////////////////////////////////////////////////////
+  // Options Manager Depends On Absolutely Nothing.  INIT FIRST
+  ///////////////////////////////////////////////////////////////////
 
-	if (!Mutex::create())
-	    return 1;
-#endif
-
-
-	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
+  _OptionsMan::setup();
+	if( !OptionsMan->loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
-		//TimeManager::destroy();
-		OptionsMan::destroy();
-		ResourceMan::destroy();
-		Mutex::destroy();
-		Threadler::destroy();
-		Render::destroy();
-		ObjectManager::destroy();
-		ObjectLoader::destroy();
 		return 1;
 	}
 
-#if 0
-	if (!GUI::create())
-	    return 1;
-
-	if (!ResourceMan::create())
-	    return 1;
-
-	if (!Threadler::create())
-	    return 1;
-
-	if (!ObjectManager::create())
-	    return 1;
-
-
-	if (!ObjectLoader::create())
-	    return 1;
-
-	if (!TimeManager::create())
-	    return 1;
-
-#endif
-
 	// initialize global options
-	OptionsMan::addInt("numTurns",1);
-	OptionsMan::addBool("sliderDragging", false );
-	OptionsMan::addInt( "currentTurn", 0 );
-	// done initializing
+	OptionsMan->addInt("numTurns",1);
+	OptionsMan->addBool("sliderDragging", false );
+	OptionsMan->addInt( "currentTurn", 0 );
 
-	TimeManager.setSpeed( 1 );
+  ///////////////////////////////////////////////////////////////////
+  // Time Manager Depends On Options Manager
+  ///////////////////////////////////////////////////////////////////
+
+  _TimeManager::setup();
+
+	QApplication app( argc, argv );
+
+
+	TimeManager->setSpeed( 1 );
 
 	_GUI::setup();
 	Render::setup();
@@ -76,7 +52,7 @@ int main(int argc, char *argv[])
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;
-		OptionsMan::destroy();
+		OptionsMan->destroy();
 		ResourceMan::destroy();
 		Mutex::destroy();
 		Threadler::destroy();
@@ -91,12 +67,12 @@ int main(int argc, char *argv[])
 	    GUI->loadGamelog( argv[1] );
 	}
 
-  TimeManager.timerStart();
+  TimeManager->timerStart();
 
 	int retval = app.exec();
 
 	Render::destroy();
-	OptionsMan::destroy();
+	OptionsMan->destroy();
 	ResourceMan::destroy();
 	Mutex::destroy();
 	Threadler::destroy();

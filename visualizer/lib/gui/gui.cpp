@@ -202,9 +202,9 @@ void _GUI::resizeEvent( QResizeEvent* evt )
 
 void _GUI::helpContents()
 {
-  if( OptionsMan::exists( "helpURL" ) )
+  if( OptionsMan->exists( "helpURL" ) )
   {
-    QDesktopServices::openUrl( QUrl( OptionsMan::getStr( "helpURL" ).c_str() ) );
+    QDesktopServices::openUrl( QUrl( OptionsMan->getStr( "helpURL" ).c_str() ) );
   } else
   {
     QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
@@ -270,8 +270,8 @@ bool _GUI::doSetup()
 
   // If we're in arenaMode, change some settings
   if(
-      !OptionsMan::exists( "arenaMode" ) ||
-      OptionsMan::getBool( "arenaMode" )
+      !OptionsMan->exists( "arenaMode" ) ||
+      OptionsMan->getBool( "arenaMode" )
     )
     {
       menuBar()->hide();
@@ -281,8 +281,8 @@ bool _GUI::doSetup()
   
   //If we're in demonstrationMode, change different settings
   if(
-      !OptionsMan::exists( "demonstrationMode" ) ||
-      OptionsMan::getBool( "demonstrationMode" )
+      !OptionsMan->exists( "demonstrationMode" ) ||
+      OptionsMan->getBool( "demonstrationMode" )
     )
     {
       menuBar()->hide();
@@ -449,22 +449,22 @@ void _GUI::rewindShortcut()
 void _GUI::turnPercentageCalc(int value)
 {
   float turnPercent = value /9.0;
-  TimeManager.setTurn((int) floor(turnPercent * TimeManager.getNumTurns()));
+  TimeManager->setTurn((int) floor(turnPercent * TimeManager->getNumTurns()));
 }
 
 void _GUI::stepTurnForwardShortcut()
 {
-  if(TimeManager.getTurn() < TimeManager.getNumTurns()-1)
+  if(TimeManager->getTurn() < TimeManager->getNumTurns()-1)
   {
-    TimeManager.setTurn(TimeManager.getTurn() + 1);
+    TimeManager->setTurn(TimeManager->getTurn() + 1);
   }
 }
 
 void _GUI::stepTurnBackShortcut()
 {
-  if(TimeManager.getTurn() > 0)
+  if(TimeManager->getTurn() > 0)
   {
-    TimeManager.setTurn(TimeManager.getTurn() - 1);
+    TimeManager->setTurn(TimeManager->getTurn() - 1);
   }
 }
 

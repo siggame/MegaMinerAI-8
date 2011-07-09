@@ -29,17 +29,17 @@ void CentralWidget::buildControlBar()
 
   if( m_controlBarWidget && 
       (
-       !OptionsMan::exists( "arenaMode" ) ||
-       !OptionsMan::getBool( "arenaMode" )
+       !OptionsMan->exists( "arenaMode" ) ||
+       !OptionsMan->getBool( "arenaMode" )
       )
     )
   {
     if( 
-	OptionsMan::exists("maxControlHeight")
+	OptionsMan->exists("maxControlHeight")
       )
     {
       m_controlBarWidget->setMaximumHeight( 
-	  OptionsMan::getInt( "maxControlHeight" )
+	      OptionsMan->getInt( "maxControlHeight" )
           );
     }
     m_widgetLayout->addWidget( m_controlBarWidget );

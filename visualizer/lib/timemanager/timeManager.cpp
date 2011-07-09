@@ -3,7 +3,7 @@
 
 #include <ctime>
 
-_TimeManager TimeManager;
+_TimeManager *TimeManager = 0;
 
 const int& _TimeManager::getTurn()
 {
@@ -23,15 +23,15 @@ void _TimeManager::setTurn( const int& turn )
   updateChildren();
 }
 
-const float& _TimeManager::getSpeed()
+const float _TimeManager::getSpeed()
 {
-  float multi = OptionsMan::getFloat( "speed" );
+  float multi = OptionsMan->getFloat( "speed" );
   return m_speed * multi;
 }
 
 void _TimeManager::setSpeed( const float& speed )
 {
-  float multi = OptionsMan::getFloat( "speed" );
+  float multi = OptionsMan->getFloat( "speed" );
   m_speed = speed/multi;
 }
 
@@ -58,14 +58,19 @@ void _TimeManager::setNumTurns( const int& numTurns )
   updateChildren();
 }
 
-
-bool _TimeManager::create()
+void _TimeManager::setup()
 {
-   setup();
-   return true;
+  if( !TimeManager )
+  {
+    TimeManager = new _TimeManager;
+    TimeManager->_setup();
+  } else
+  {
+    throw "Time Manager already initialized";
+  }
 }
 
-void _TimeManager::setup()
+void _TimeManager::_setup()
 {
   m_lastTime = clock();
   m_framesPerTurn = 100;
@@ -109,7 +114,7 @@ void _TimeManager::updateFrames()
 
 #if 0
   //If in arena mode, show winner for a few secs at end
-  if (OptionsMan::getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
+  if (OptionsMan->getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
   {
     if( m_sleepTime == -1 )
       m_sleepTime = clock();
