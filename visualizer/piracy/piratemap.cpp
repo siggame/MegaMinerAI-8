@@ -484,13 +484,13 @@ const unsigned int&	/*frame*/
 	glVertex3f( 0, 0, 0 );
 
 	glTexCoord2f( 1-tex, 1);
-	glVertex3f( Renderer::height(), 0, 0 );
+	glVertex3f( Renderer->height(), 0, 0 );
 
 	glTexCoord2f( 1-tex, tex );
-	glVertex3f( Renderer::height(), Renderer::height(), 0 );
+	glVertex3f( Renderer->height(), Renderer->height(), 0 );
 
 	glTexCoord2f( 0, tex );
-	glVertex3f( 1, Renderer::height(), 0 );
+	glVertex3f( 1, Renderer->height(), 0 );
 	glEnd();
 
 	glDisable( GL_BLEND);

@@ -9,6 +9,7 @@ using namespace std;
 RenderWidget::RenderWidget( QWidget *parent )
 : QGLWidget( QGLFormat( QGL::SampleBuffers ), parent )
 {
+  Renderer->setup();
   glInit();
   initializeGL();
 
@@ -20,15 +21,14 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
-  Renderer::setParent( this );
+  Renderer->create();
+  Renderer->setParent( this );
   QGLWidget::initializeGL();
-  Renderer::create();
-  cout << "VALID: " << isValid() << endl;
 }
 
 void RenderWidget::resizeEvent( QResizeEvent *evt )
 {
-  Renderer::resize( evt->size().width(), evt->size().height() );
+  Renderer->resize( evt->size().width(), evt->size().height() );
 }
 
 void RenderWidget::mousePressEvent( QMouseEvent *e )
@@ -73,7 +73,7 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
 		SelectionRender::get()->setUpdated(true); 
 		SelectionRender::get()->setDragging(false); 		   
 
-    Renderer::update( TimeManager->getTurn(), 0 );
+    Renderer->update( TimeManager->getTurn(), 0 );
 
 }
 

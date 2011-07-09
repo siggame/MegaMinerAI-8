@@ -54,3 +54,4 @@ QT += opengl
 SUBDIRS += parser \
     tools
 OTHER_FILES += 
+debug:DEFINES += __DEBUG__

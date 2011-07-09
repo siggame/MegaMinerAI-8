@@ -2,12 +2,7 @@
 #define RENDERWIDGET_H
 
 #include <QtOpenGL>
-//#include "../renderer/renderer.h"
 #include "../selectionrender/selectionrender.h"
-//#include "../../piracy/dupObj.h"
-
-
-
 
 class RenderWidget: public QGLWidget
 {

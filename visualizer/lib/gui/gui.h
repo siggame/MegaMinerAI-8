@@ -153,7 +153,7 @@ typedef GOCFamily_GUI guiObj;
 /// @return   None
 ////////////////////////////////////////////////////////////////
 
-class _GUI : public QMainWindow// , public Singleton<GUI>
+class _GUI : public QMainWindow
 {
   Q_OBJECT
   

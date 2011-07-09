@@ -25,11 +25,6 @@ _GUI::~_GUI()
 
 bool _GUI::reg( const std::string& id, guiObj *obj )
 {
-#if 0
-  if( !isInit() )
-    return false;
-#endif
-
   if( m_objects.find( id ) != m_objects.end() )
     return false;
 
@@ -39,11 +34,6 @@ bool _GUI::reg( const std::string& id, guiObj *obj )
 
 bool _GUI::del( const std::string& id )
 {
-#if 0
-  if( !isInit() )
-    return false;
-#endif
-
   if( m_objects.find(id) == m_objects.end() )
     return false;
 
@@ -53,11 +43,6 @@ bool _GUI::del( const std::string& id )
 
 bool _GUI::setup()
 {
-#if 0
-  if( !isInit() )
-    return false;
-#endif
-
   if( !GUI )
   {
     GUI = new _GUI;
@@ -72,22 +57,12 @@ bool _GUI::setup()
 
 bool _GUI::clear()
 {
-#if 0
-  if( !isInit() )
-    return false;
-#endif
-
   m_objects.clear();
   return true;
 }
 
 guiObj* _GUI::getGUIObject( const std::string& id )
 {
-#if 0
-  if( !isInit() )
-    return NULL;
-#endif
-
   if( m_objects.find(id) == m_objects.end() )
     return NULL;
 
@@ -110,21 +85,11 @@ bool _GUI::destroy()
 
 unsigned int _GUI::numObjects()
 {
-#if 0
-  if( !isInit() )
-    return 0;
-#endif
-
   return m_objects.size();
 }
 
 bool _GUI::isSetup()
 {
-#if 0
-  if( !isInit() )
-    return false;
-#endif 
-
   return m_isSetup;
 }
 void _GUI::dragEnterEvent( QDragEnterEvent* evt )

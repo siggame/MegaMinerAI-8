@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "lib/gui/gui.h"
 #include "lib/optionsmanager/optionsman.h"
@@ -13,8 +12,6 @@
 
 int main(int argc, char *argv[])
 {
-	typedef Renderer Render;
-
   ///////////////////////////////////////////////////////////////////
   // Must initialize things based on their dependency graphs
   ///////////////////////////////////////////////////////////////////
@@ -23,7 +20,8 @@ int main(int argc, char *argv[])
   // Options Manager Depends On Absolutely Nothing.  INIT FIRST
   ///////////////////////////////////////////////////////////////////
 
-  _OptionsMan::setup();
+  OptionsMan->setup();
+
 	if( !OptionsMan->loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
@@ -39,26 +37,25 @@ int main(int argc, char *argv[])
   // Time Manager Depends On Options Manager
   ///////////////////////////////////////////////////////////////////
 
-  _TimeManager::setup();
-
-	QApplication app( argc, argv );
-
+  TimeManager->setup();
 
 	TimeManager->setSpeed( 1 );
 
-	_GUI::setup();
-	Render::setup();
+  ///////////////////////////////////////////////////////////////////
+  // GUI Depends On This Runing, but it doens't depend on anything.
+  ///////////////////////////////////////////////////////////////////
+	QApplication app( argc, argv );
+
+  ///////////////////////////////////////////////////////////////////
+  // GUI Depends On Options Manager, Time Manager and QApplication
+  // running already
+  // GUI also depends on the renderer, but starts it  automagically.
+  ///////////////////////////////////////////////////////////////////
+	GUI->setup();
 
 	if ( !ResourceMan::loadResourceFile("./textures.r") )
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;
-		OptionsMan->destroy();
-		ResourceMan::destroy();
-		Mutex::destroy();
-		Threadler::destroy();
-		Render::destroy();
-		ObjectManager::destroy();
-		ObjectLoader::destroy();
 		return 1;
 	}
 
@@ -71,12 +68,16 @@ int main(int argc, char *argv[])
 
 	int retval = app.exec();
 
-	Render::destroy();
+  GUI->destroy();
+	Renderer->destroy();
+  TimeManager->destroy();
 	OptionsMan->destroy();
+#if 0
 	ResourceMan::destroy();
 	Mutex::destroy();
 	Threadler::destroy();
 	ObjectManager::destroy();
 	ObjectLoader::destroy();
+#endif
 	return retval;
 }

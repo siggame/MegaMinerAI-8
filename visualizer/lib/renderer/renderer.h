@@ -19,6 +19,8 @@
 
 #include "../timemanager/timeManager.h"
 
+#include "../common.h"
+
 //this is a place holder
 typedef GameObject renderObj;
 
@@ -93,42 +95,40 @@ struct Stats
 
 };
 
-class Renderer : public Singleton< Renderer >, public UpdateNeeded
+class _Renderer : public UpdateNeeded, public Module
 {
-  //BOOST_CONCEPT_ASSERT((UnsignedInteger<DupObject::index>));
-
   public:
-    //static bool reg(const unsigned int & id, renderObj * obj);
-    //static bool del(const unsigned int & id);
 
-    static bool registerConstantObj( const unsigned int& id, renderObj* obj );
-    static bool deleteConstantObj( const unsigned int& id );
+    bool registerConstantObj( const unsigned int& id, renderObj* obj );
+    bool deleteConstantObj( const unsigned int& id );
 
-    static bool setup(/**@todo make options*/);
-    static bool clear();
+    static void setup();
+    static void destroy();
+    void _setup();
 
-    //static renderObj * getRenderObject(const unsigned int id);
+    bool clear();
 
-    static bool create();
-    static bool destroy();
+    //renderObj * getRenderObject(const unsigned int id);
 
-    static void setParent( RenderWidget *parent );
+    bool create();
 
-    static bool refresh();
-    static bool resize
+    void setParent( RenderWidget *parent );
+
+    bool refresh();
+    bool resize
       (
         const unsigned int & width, 
         const unsigned int & height, 
         const unsigned int & depth = 1
       );
 
-    static bool isSetup();
+    bool isSetup();
 
-    static unsigned int height();
-    static unsigned int width();
-    static unsigned int depth();
+    unsigned int height();
+    unsigned int width();
+    unsigned int depth();
 
-    static bool update
+    bool update
       (
         const unsigned int & turn, 
         const unsigned int & frame
@@ -147,13 +147,14 @@ class Renderer : public Singleton< Renderer >, public UpdateNeeded
 
     std::map<int, renderObj*> m_renderConstant;
 
-    typedef Singleton<Renderer > Single;
     //typedef Renderer<DupObject> Render;
 
     RenderWidget *m_parent;
 
 
-    //static void multipleUnitStatColumnPopulate (Stats multi, int column);
+    //void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
+
+extern _Renderer *Renderer;
 
 #endif                           // RENDERER_H

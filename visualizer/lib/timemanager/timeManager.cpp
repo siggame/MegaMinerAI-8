@@ -70,6 +70,12 @@ void _TimeManager::setup()
   }
 }
 
+void _TimeManager::destroy()
+{
+  delete TimeManager;
+  TimeManager = 0;
+}
+
 void _TimeManager::_setup()
 {
   m_lastTime = clock();

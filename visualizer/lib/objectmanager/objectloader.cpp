@@ -33,12 +33,12 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     pm->generateMap( game );
     pm->setOwner( go );
     go->setGOC( pm );
-    Renderer::registerConstantObj( 1, go );
+    Renderer->registerConstantObj( 1, go );
 
     go = new GameObject( 2 );
     go->setGOC( SelectionRender::get() );
     SelectionRender::get()->setOwner( go );
-    Renderer::registerConstantObj( 2, go );
+    Renderer->registerConstantObj( 2, go );
 
     go = new GameObject( 3 );
     Scoreboard *sb = new Scoreboard();
@@ -49,7 +49,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
 
     sb->setOwner( go );
     go->setGOC( sb );
-    Renderer::registerConstantObj( 3, go );
+    Renderer->registerConstantObj( 3, go );
 
     unsigned int numTurns = game.states.size();
     unsigned int numFrames = OptionsMan->getInt("numFrames");

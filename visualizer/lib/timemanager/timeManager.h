@@ -44,6 +44,7 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
     mode getMode();
 
     static void setup();
+    static void destroy();
     void _setup();
 
     void updateFrames();
