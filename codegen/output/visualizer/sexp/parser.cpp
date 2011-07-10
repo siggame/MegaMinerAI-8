@@ -12,6 +12,8 @@
 #define LPAREN 3
 #define RPAREN 4
 
+static YY_BUFFER_STATE* buffer = NULL;
+
 static char* unescapeString(const char* string)
 {
   char* result = NULL;
@@ -142,5 +144,11 @@ Sexp* parse()
 
 void parseFile(FILE* in)
 {
-  yyset_in(in);
+  YY_BUFFER_STATE* tmp =  new YY_BUFFER_STATE;
+  *tmp = yy_create_buffer(in, YY_BUF_SIZE);
+  yy_switch_to_buffer(*tmp);
+  if(buffer)
+    yy_delete_buffer(*buffer);
+    delete buffer;
+  buffer = tmp;
 }
