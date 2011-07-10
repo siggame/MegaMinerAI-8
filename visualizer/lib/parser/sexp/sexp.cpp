@@ -18,7 +18,6 @@ std::ostream& operator <<(std::ostream &os,const Sexp &obj)
   return os;
 }
 
-
 void destroySexp(Sexp* s)
 {
   Sexp* next;

@@ -22,7 +22,7 @@ struct Mappable
   friend std::ostream& operator<<(std::ostream& stream, Mappable obj);
 };
 
-struct Unit: public Mappable
+struct Unit: public Mappable 
 {
   int owner;
   int health;
@@ -34,7 +34,7 @@ struct Unit: public Mappable
   friend std::ostream& operator<<(std::ostream& stream, Unit obj);
 };
 
-struct Pirate: public Unit
+struct Pirate: public Unit 
 {
 
   friend std::ostream& operator<<(std::ostream& stream, Pirate obj);
@@ -50,32 +50,33 @@ struct Player
   friend std::ostream& operator<<(std::ostream& stream, Player obj);
 };
 
-struct Port: public Mappable
+struct Port: public Mappable 
 {
   int owner;
 
   friend std::ostream& operator<<(std::ostream& stream, Port obj);
 };
 
-struct Ship: public Unit
+struct Ship: public Unit 
 {
 
   friend std::ostream& operator<<(std::ostream& stream, Ship obj);
 };
 
-struct Tile: public Mappable
+struct Tile: public Mappable 
 {
   int type;
 
   friend std::ostream& operator<<(std::ostream& stream, Tile obj);
 };
 
-struct Treasure: public Mappable
+struct Treasure: public Mappable 
 {
   int gold;
 
   friend std::ostream& operator<<(std::ostream& stream, Treasure obj);
 };
+
 
 struct Animation
 {
@@ -107,6 +108,7 @@ struct Talk : public Animation
   friend std::ostream& operator<<(std::ostream& stream, Talk obj);
 };
 
+
 struct GameState
 {
   std::map<int,Mappable> mappables;
@@ -135,8 +137,9 @@ struct Game
   std::vector<GameState> states;
   std::string players[2];
   int winner;
-  std::string winReason;
+	std::string winReason;
 
   Game();
 };
+
 #endif

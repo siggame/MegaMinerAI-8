@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 static bool parseMappable(Mappable& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -38,8 +39,6 @@ static bool parseMappable(Mappable& object, sexp_t* expression)
   cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseUnit(Unit& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -97,8 +96,6 @@ static bool parseUnit(Unit& object, sexp_t* expression)
   cerr << "Error in parseUnit.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parsePirate(Pirate& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -156,8 +153,6 @@ static bool parsePirate(Pirate& object, sexp_t* expression)
   cerr << "Error in parsePirate.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parsePlayer(Player& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -192,8 +187,6 @@ static bool parsePlayer(Player& object, sexp_t* expression)
   cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parsePort(Port& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -226,8 +219,6 @@ static bool parsePort(Port& object, sexp_t* expression)
   cerr << "Error in parsePort.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseShip(Ship& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -285,8 +276,6 @@ static bool parseShip(Ship& object, sexp_t* expression)
   cerr << "Error in parseShip.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseTile(Tile& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -319,8 +308,6 @@ static bool parseTile(Tile& object, sexp_t* expression)
   cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseTreasure(Treasure& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -354,7 +341,6 @@ static bool parseTreasure(Treasure& object, sexp_t* expression)
   return false;
 }
 
-
 static bool parseAttack(Attack& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -369,12 +355,11 @@ static bool parseAttack(Attack& object, sexp_t* expression)
   sub = sub->next;
   return true;
 
+
   ERROR:
   cerr << "Error in parseAttack.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseMove(Move& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -396,12 +381,11 @@ static bool parseMove(Move& object, sexp_t* expression)
   sub = sub->next;
   return true;
 
+
   ERROR:
   cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
   return false;
 }
-
-
 static bool parseTalk(Talk& object, sexp_t* expression)
 {
   sexp_t* sub;
@@ -418,11 +402,11 @@ static bool parseTalk(Talk& object, sexp_t* expression)
   sub = sub->next;
   return true;
 
+
   ERROR:
   cerr << "Error in parseTalk.\n Parsing: " << *expression << endl;
   return false;
 }
-
 
 static bool parseSexp(Game& game, sexp_t* expression)
 {
@@ -440,28 +424,28 @@ static bool parseSexp(Game& game, sexp_t* expression)
       if ( !sub ) return false;
       if(string(sub->val) == "game")
       {
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.turnNumber = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.playerID = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.gameNumber = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.pirateCost = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.shipCost = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.portCost = atoi(sub->val);
-        sub = sub->next;
-        if ( !sub ) return false;
-        gs.mapSize = atoi(sub->val);
-        sub = sub->next;
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.turnNumber = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.playerID = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.gameNumber = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.pirateCost = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.shipCost = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.portCost = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.mapSize = atoi(sub->val);
+          sub = sub->next;
       }
       else if(string(sub->val) == "Mappable")
       {
@@ -632,9 +616,9 @@ static bool parseSexp(Game& game, sexp_t* expression)
     expression = expression->next;
     if ( !expression ) return false;
     game.winner = atoi(expression->val);
-    expression = expression->next;
-    if( !expression ) return false;
-    game.winReason = expression->val;
+		expression = expression->next;
+		if( !expression ) return false;
+		game.winReason = expression->val;
   }
 
   return true;
@@ -657,7 +641,7 @@ bool parseFile(Game& game, const char* filename)
   {
     if( !parseSexp(game, st) )
     {
-      while(parse());            //empty the file, keep Lex happy.
+      while(parse()); //empty the file, keep Lex happy.
       fclose(in);
       return false;
     }

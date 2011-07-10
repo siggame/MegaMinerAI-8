@@ -8,7 +8,6 @@ void destroy_sexp(Sexp* s)
   destroySexp(s);
 }
 
-
 Sexp* extract_sexpr(const char* in)
 {
   Sexp* ret;
@@ -17,7 +16,6 @@ Sexp* extract_sexpr(const char* in)
   yypop_buffer_state();
   return ret;
 }
-
 
 int sexp_list_length(Sexp* s)
 {

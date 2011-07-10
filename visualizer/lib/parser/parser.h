@@ -5,4 +5,5 @@
 
 bool parseFile(Game& game, const char* filename);
 bool parseString(Game& game, const char* string);
+
 #endif
