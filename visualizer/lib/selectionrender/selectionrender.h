@@ -1,7 +1,7 @@
 #ifndef SELECTIONRENDER_H
 #define SELECTIONRENDER_H
 #include "../gocfamily_render.h"
-//#include "../singleton.h"
+#include "common.h"
 
 /* The SelectionRender object assists with drawing the selection box that
  * appears when clicking and dragging to highlight interesting units.

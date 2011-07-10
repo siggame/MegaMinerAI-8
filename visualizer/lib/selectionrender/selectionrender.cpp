@@ -78,6 +78,6 @@ void _SelectionRender::setup()
   }
   else
   {
-    throw "Selection Render Already Initialized";
+    THROW( Exception, "Selection Render Already Initialized" );
   }
 }

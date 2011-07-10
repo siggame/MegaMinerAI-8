@@ -10,7 +10,7 @@ void _Games::setup()
   }
   else
   {
-    throw "Games Loader is already initialized.";
+    THROW( Exception, "Games Loader is already initialized." );
   }
 
   Games->_setup();

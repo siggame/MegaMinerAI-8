@@ -55,12 +55,12 @@ void _ResourceMan::destroy()
       #ifdef __DEBUG__
       //it->second->printReferences();
       #endif
-      throw "Resource Manager still contains some references";
+      THROW( Exception, "Resource Manager still contains some references" );
     }
 
     //if( it->second )
     if (!it->second->unload())
-      throw "Problem Unloading ResourceManager";
+      THROW( Exception, "Problem Unloading ResourceManager" );
 
     delete it->second;
     it->second = 0;
@@ -98,7 +98,7 @@ void _ResourceMan::setup()
   }
   else
   {
-    throw "Resource Manager already initialized";
+    THROW( Exception, "Resource Manager already initialized" );
   }
 
 }

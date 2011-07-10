@@ -52,7 +52,7 @@ bool _GUI::setup()
     GUI = new _GUI;
   } else
   {
-    throw "GUI Already Setup";
+    THROW( Exception, "GUI Already Setup" );
   }
 
   GUI->m_isSetup = GUI->doSetup();

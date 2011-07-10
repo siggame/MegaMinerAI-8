@@ -25,7 +25,7 @@ void _OptionsMan::setup()
     OptionsMan = new _OptionsMan;
   } else
   {
-    throw "Options Manager is already initialized";
+    THROW( Exception, "Options Manager is already initialized" );
   }
 }
 
@@ -185,8 +185,7 @@ bool _OptionsMan::strToBool(const std::string & val)
     return false;
   }
 
-  throw (std::string("Invalid bool value"));
-  return false;
+  THROW( Exception, (std::string("Invalid bool value"))) ;
 }
 
 

@@ -55,7 +55,7 @@ void _ObjectManager::setup()
   }
   else
   {
-    throw "Object Manager already initialized";
+    THROW( Exception, "Object Manager already initialized" );
   }
 }
 

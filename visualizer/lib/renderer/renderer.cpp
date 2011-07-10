@@ -98,7 +98,7 @@ void _Renderer::destroy()
 {
 
   if (!Renderer->clear())
-    throw "FILL IN EXCEPTION DETAILS HERE";
+    THROW( Exception, "FILL IN EXCEPTION DETAILS HERE" );
 
   delete Renderer;
   Renderer = 0;
@@ -126,7 +126,7 @@ void _Renderer::setup()
   }
   else
   {
-    throw "Renderer Already Initialized";
+    THROW( Exception, "Renderer Already Initialized" );
   }
 
   Renderer->_setup();
@@ -192,7 +192,7 @@ void _Renderer::_setup()
 
   if( !m_isSetup )
   {
-    throw "Renderer Didn't Set Up Properly";
+    THROW( Exception, "Renderer Didn't Set Up Properly" );
   }
 
 }

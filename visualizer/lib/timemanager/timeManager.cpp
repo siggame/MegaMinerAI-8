@@ -75,7 +75,7 @@ void _TimeManager::setup()
     TimeManager->_setup();
   } else
   {
-    throw "Time Manager already initialized";
+    THROW( Exception, "Time Manager already initialized" );
   }
 }
 
