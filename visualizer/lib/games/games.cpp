@@ -26,16 +26,16 @@ void _Games::_setup()
   pluginsDir.cd( "plugins" );
   foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
   {
-    cout << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+#if __DEBUG__
+    cerr << "Loading Plugin: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+#endif
     QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
     QObject *plugin = pluginLoader.instance();
     if( plugin )
     {
-      cout << "PLUGIN" << endl;
       game = qobject_cast<IGame *>( plugin );
       if( game )
       {
-        cout << "GAME" << endl;
         game->loadGamelog( "log" );
         m_gameList.push_back( game );
       }
