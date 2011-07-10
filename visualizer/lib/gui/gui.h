@@ -15,9 +15,10 @@
 #include <QString>
 #include <map>
 #include <string>
-using namespace std;
 
-typedef GOCFamily_GUI guiObj;
+#include "../../interfaces/igui.h"
+
+using namespace std;
 
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
@@ -151,7 +152,7 @@ typedef GOCFamily_GUI guiObj;
 /// @return   None
 ////////////////////////////////////////////////////////////////
 
-class _GUI : public QMainWindow
+class _GUI : public QMainWindow, public IGUI
 {
   Q_OBJECT
 
