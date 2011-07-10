@@ -15,18 +15,18 @@
 static char* unescapeString(const char* string)
 {
   char* result = NULL;
-  
+
   int size = 0;
   for(int i = 1; string[i]; i++)
   {
     if(string[i] == '\\' && (string[i+1] == '\\' || string[i+1] == '"'))
       i++;
-    
+
     size++;
   }
   size--;
   result = new char[size+1];
-  
+
   int index = 0;
   for(int i = 1; string[i]; i++)
   {
@@ -41,11 +41,12 @@ static char* unescapeString(const char* string)
     }
   }
   result[index-1] = 0;
-  
+
   assert(index == size+1);
-  
+
   return result;
 }
+
 
 static char* copyString(const char* string)
 {
@@ -56,6 +57,7 @@ static char* copyString(const char* string)
   return copy;
 }
 
+
 Sexp* parseList()
 {
   Sexp* ret = new Sexp;
@@ -64,7 +66,7 @@ Sexp* parseList()
   ret->next = NULL;
   Sexp* last = NULL;
   Sexp* next = NULL;
-  
+
   int t = yylex();
   while(true)
   {
@@ -72,7 +74,7 @@ Sexp* parseList()
     {
       return ret;
     }
-    
+
     if(t == TOKEN)
     {
       next = new Sexp;
@@ -80,7 +82,7 @@ Sexp* parseList()
       next->next = NULL;
       next->list = NULL;
     }
-    
+
     if(t == STRING)
     {
       next = new Sexp;
@@ -88,12 +90,12 @@ Sexp* parseList()
       next->next = NULL;
       next->list = NULL;
     }
-    
+
     if(t == LPAREN)
     {
       next = parseList();
     }
-    
+
     if(!last)
     {
       ret->list = next;
@@ -107,6 +109,7 @@ Sexp* parseList()
   }
 }
 
+
 Sexp* parse()
 {
   Sexp* ret;
@@ -118,7 +121,7 @@ Sexp* parse()
     ret->next = NULL;
     ret->list = NULL;
   }
-  
+
   else if(t == STRING)
   {
     ret = new Sexp;
@@ -126,19 +129,20 @@ Sexp* parse()
     ret->next = NULL;
     ret->list = NULL;
   }
-  
+
   else if(t == LPAREN)
   {
     ret = parseList();
   }
-  
+
   else
   {
     ret = NULL;
   }
-  
+
   return ret;
 }
+
 
 void parseFile(FILE* in)
 {

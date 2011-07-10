@@ -10,10 +10,12 @@ const int& _TimeManager::getTurn()
   return m_turn;
 }
 
+
 const int& _TimeManager::getFrame()
 {
   return m_frame;
 }
+
 
 void _TimeManager::setTurn( const int& turn )
 {
@@ -23,11 +25,13 @@ void _TimeManager::setTurn( const int& turn )
   updateChildren();
 }
 
+
 float _TimeManager::getSpeed()
 {
   float multi = OptionsMan->getFloat( "speed" );
   return m_speed * multi;
 }
+
 
 void _TimeManager::setSpeed( const float& speed )
 {
@@ -35,20 +39,24 @@ void _TimeManager::setSpeed( const float& speed )
   m_speed = speed/multi;
 }
 
+
 int _TimeManager::timeHash()
 {
   return m_hash;
 }
+
 
 _TimeManager::mode _TimeManager::getMode()
 {
   return m_mode;
 }
 
+
 const int& _TimeManager::getNumTurns()
 {
   return m_numTurns;
 }
+
 
 void _TimeManager::setNumTurns( const int& numTurns )
 {
@@ -57,6 +65,7 @@ void _TimeManager::setNumTurns( const int& numTurns )
   // FIXME: Must update control bar
   updateChildren();
 }
+
 
 void _TimeManager::setup()
 {
@@ -70,11 +79,13 @@ void _TimeManager::setup()
   }
 }
 
+
 void _TimeManager::destroy()
 {
   delete TimeManager;
   TimeManager = 0;
 }
+
 
 void _TimeManager::_setup()
 {
@@ -85,18 +96,21 @@ void _TimeManager::_setup()
 
 }
 
+
 void _TimeManager::start()
 {
-    timer = new QTimer( this );
-    connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-    timer->start( 35 );
+  timer = new QTimer( this );
+  connect( timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
+  timer->start( 35 );
 
 }
+
 
 void _TimeManager::timerStart()
 {
-    start();
+  start();
 }
+
 
 void _TimeManager::updateFrames()
 {
@@ -111,14 +125,12 @@ void _TimeManager::updateFrames()
     m_frame = 0;
   }
 
-
-
   // FIXME: Fix this so that we check the time manager to see if we're ready to close
   // instead of having the time manager tell us
-  
+
   updateChildren();
 
-#if 0
+  #if 0
   //If in arena mode, show winner for a few secs at end
   if (OptionsMan->getBool("arenaMode") && m_turn == m_numTurns-1 && m_numTurns > 5)
   {
@@ -131,20 +143,22 @@ void _TimeManager::updateFrames()
         GUI::closeGUI();
       }
     }
-  } 
+  }
 
   if(GUI::isSetup())
   {
 
     GUI::getControlBar()->m_slider->setValue ( m_turn );
   }
-#endif
+  #endif
 }
+
 
 void _TimeManager::requestUpdate( UpdateNeeded* requester )
 {
   Singleton< _TimeManager >::instance()->m_updateRequesters.push_back( requester );
 }
+
 
 void _TimeManager::timerUpdate()
 {
@@ -157,20 +171,20 @@ void _TimeManager::timerUpdate()
   updateChildren();
 }
 
+
 #include <iostream>
 using namespace std;
 
 void _TimeManager::updateChildren()
 {
   int count =1;
-  for( 
-      std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin();
-      i != m_updateRequesters.end();
-      i++
-     )
+  for(
+    std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin();
+    i != m_updateRequesters.end();
+    i++
+    )
   {
     cout << "Update " << count++ << endl;
     (*i)->update();
   }
 }
-

@@ -5,7 +5,7 @@
 
 class GOCFamily_Location :public GOComponent
 {
-public:
+  public:
     GOCFamily_Location()
     {
       m_x = 0;
@@ -16,7 +16,7 @@ public:
 
     const GOC_IDType familyID() const
     {
-    return GOC_IDType( "LocationFamily" );
+      return GOC_IDType( "LocationFamily" );
     };
 
     int x(){return m_x;}
@@ -26,11 +26,8 @@ public:
 
     void update(){}
 
-    protected:
+  protected:
     int m_x, m_y, m_z, m_dir;
 
 };
-
-
-
-#endif // GOCFAMILY_LOCATION_H
+#endif                           // GOCFAMILY_LOCATION_H

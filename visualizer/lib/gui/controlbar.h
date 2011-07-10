@@ -12,26 +12,25 @@ class ControlBar : public QWidget, public UpdateNeeded
   friend class _GUI;
   friend class _TimeManager;
   Q_OBJECT
-public:
-  ControlBar( QWidget *parent = 0 );
+    public:
+    ControlBar( QWidget *parent = 0 );
 
-  void update();
+    void update();
 
-private slots:
-  void sliderDrag();
-  void sliderRelease();
-  void sliderChanged(int value);
-  void rewind();
-  void play();
-  void fastForward();
+  private slots:
+    void sliderDrag();
+    void sliderRelease();
+    void sliderChanged(int value);
+    void rewind();
+    void play();
+    void fastForward();
 
-private:
-  QLabel* turnLabel;
-  QSlider* m_slider;
-  QPushButton* rewindButton;
-  QPushButton* playButton;
-  QPushButton* fastForwardButton;
-  float originalTimeManagerSpeed;
+  private:
+    QLabel* turnLabel;
+    QSlider* m_slider;
+    QPushButton* rewindButton;
+    QPushButton* playButton;
+    QPushButton* fastForwardButton;
+    float originalTimeManagerSpeed;
 };
-
 #endif

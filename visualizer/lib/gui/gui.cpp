@@ -23,6 +23,7 @@ _GUI::~_GUI()
   delete m_centralWidget;
 }
 
+
 bool _GUI::reg( const std::string& id, guiObj *obj )
 {
   if( m_objects.find( id ) != m_objects.end() )
@@ -32,6 +33,7 @@ bool _GUI::reg( const std::string& id, guiObj *obj )
   return true;
 }
 
+
 bool _GUI::del( const std::string& id )
 {
   if( m_objects.find(id) == m_objects.end() )
@@ -40,6 +42,7 @@ bool _GUI::del( const std::string& id )
   m_objects.erase( id );
   return true;
 }
+
 
 bool _GUI::setup()
 {
@@ -55,11 +58,13 @@ bool _GUI::setup()
   return GUI->m_isSetup;
 }
 
+
 bool _GUI::clear()
 {
   m_objects.clear();
   return true;
 }
+
 
 guiObj* _GUI::getGUIObject( const std::string& id )
 {
@@ -69,11 +74,13 @@ guiObj* _GUI::getGUIObject( const std::string& id )
   return m_objects[id];
 }
 
+
 bool _GUI::create()
 {
 
   return true;
 }
+
 
 bool _GUI::destroy()
 {
@@ -83,36 +90,43 @@ bool _GUI::destroy()
   return true;
 }
 
+
 unsigned int _GUI::numObjects()
 {
   return m_objects.size();
 }
 
+
 bool _GUI::isSetup()
 {
   return m_isSetup;
 }
+
+
 void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 {
   // We may want to filter what's dropped on the window at some point
   evt->acceptProposedAction();
 }
 
+
 #include <iostream>
 using namespace std;
 void _GUI::loadGamelog( std::string gamelog )
 {
-    if (!ObjectLoader::loadGamelog(gamelog))
-    {
-	std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
-    }
-  return; //! @todo throw shitfit
+  if (!ObjectLoader::loadGamelog(gamelog))
+  {
+    std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
+  }
+  return;                        //! @todo throw shitfit
 }
+
 
 void _GUI::update()
 {
   m_controlBar->update();
 }
+
 
 void _GUI::dropEvent( QDropEvent* evt )
 {
@@ -125,6 +139,7 @@ void _GUI::dropEvent( QDropEvent* evt )
 
 }
 
+
 void _GUI::appendConsole( string line )
 {
   QString param;
@@ -132,16 +147,19 @@ void _GUI::appendConsole( string line )
   appendConsole( param );
 }
 
+
 void _GUI::appendConsole( QString line )
 {
   _GUI::m_consoleArea->append( line );
 }
+
 
 void _GUI::clearConsole()
 {
 
   _GUI::m_consoleArea->clear();
 }
+
 
 void _GUI::resizeEvent( QResizeEvent* evt )
 {
@@ -158,12 +176,13 @@ void _GUI::resizeEvent( QResizeEvent* evt )
     }
 
     //m_dockWidget->resize( Singleton<_GUI>::width() - Renderer<DupObj>::height(), -1 );
-#if 1
+    #if 1
     m_dockWidget->setMinimumWidth( w - h);
-#endif
+    #endif
   }
   QMainWindow::resizeEvent( evt );
 }
+
 
 void _GUI::helpContents()
 {
@@ -176,17 +195,18 @@ void _GUI::helpContents()
   }
 }
 
+
 void _GUI::fileOpen()
 {
-  /* The following is almost entirely a dirty hack to persistently keep the 
+  /* The following is almost entirely a dirty hack to persistently keep the
    * most recent directory to be default for the "Open Gamelog" dialog.
-   * This works WONDERS for usability. 
+   * This works WONDERS for usability.
    */
-	ifstream dirinfoIN;
-	dirinfoIN.open("dirinfo.txt");	
-	if (dirinfoIN.is_open())
+  ifstream dirinfoIN;
+  dirinfoIN.open("dirinfo.txt");
+  if (dirinfoIN.is_open())
   {
-  	string line;
+    string line;
     while ( dirinfoIN.good() )
     {
       getline (dirinfoIN,line);
@@ -196,29 +216,28 @@ void _GUI::fileOpen()
     dirinfoIN.close();
   }
 
-
   QFileDialog fileDialog;
-	  
-	
+
   QString filename = fileDialog.getOpenFileName(
-      this,
-      tr( "Open Gamelog" ),
-      m_previousDirectory,
-      tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+    this,
+    tr( "Open Gamelog" ),
+    m_previousDirectory,
+    tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
-		m_previousDirectory = filename;
-		
-		ofstream dirinfoOUT;
-		dirinfoOUT.open("dirinfo.txt");
-		dirinfoOUT << m_previousDirectory.toStdString();
-		dirinfoOUT.close();
+    m_previousDirectory = filename;
+
+    ofstream dirinfoOUT;
+    dirinfoOUT.open("dirinfo.txt");
+    dirinfoOUT << m_previousDirectory.toStdString();
+    dirinfoOUT.close();
     cout << filename.toStdString() << endl;
     loadGamelog( filename.toStdString() );
   }
 
 }
+
 
 bool _GUI::doSetup()
 {
@@ -235,38 +254,39 @@ bool _GUI::doSetup()
 
   // If we're in arenaMode, change some settings
   if(
-      !OptionsMan->exists( "arenaMode" ) ||
-      OptionsMan->getBool( "arenaMode" )
+    !OptionsMan->exists( "arenaMode" ) ||
+    OptionsMan->getBool( "arenaMode" )
     )
-    {
-      menuBar()->hide();
-      setFullScreen(true);
-      m_dockWidget->hide();
-    }
-  
+  {
+    menuBar()->hide();
+    setFullScreen(true);
+    m_dockWidget->hide();
+  }
+
   //If we're in demonstrationMode, change different settings
   if(
-      !OptionsMan->exists( "demonstrationMode" ) ||
-      OptionsMan->getBool( "demonstrationMode" )
+    !OptionsMan->exists( "demonstrationMode" ) ||
+    OptionsMan->getBool( "demonstrationMode" )
     )
-    {
-      menuBar()->hide();
-      setFullScreen(true);
-      m_dockWidget->hide();
-    }
+  {
+    menuBar()->hide();
+    setFullScreen(true);
+    m_dockWidget->hide();
+  }
 
   setWindowState(
-      windowState()
-      | Qt::WindowActive
-      | Qt::WindowMaximized
-      );
+    windowState()
+    | Qt::WindowActive
+    | Qt::WindowMaximized
+    );
 
   show();
-  
+
   m_previousDirectory = QDir::homePath();
-  
+
   return true;
 }
+
 
 void _GUI::buildControlBar()
 {
@@ -278,20 +298,21 @@ void _GUI::buildControlBar()
 
 }
 
+
 void _GUI::createActions()
 {
   m_helpContents = new QAction( tr( "&Contents" ), this );
   m_helpContents->setShortcut( tr( "F1" ) );
   m_helpContents->setStatusTip(
-      tr( "Open Online Help For This Game" )
-      );
+    tr( "Open Online Help For This Game" )
+    );
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
   m_fileOpen = new QAction( tr( "&Open" ), this );
   m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
   m_fileOpen->setStatusTip(
-      tr( "Open A Gamelog" )
-      );
+    tr( "Open A Gamelog" )
+    );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
   toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
@@ -302,8 +323,8 @@ void _GUI::createActions()
   m_fileExit = new QAction( tr( "&Quit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
   m_fileExit->setStatusTip(
-      tr( "Close the Visualizer" )
-      );
+    tr( "Close the Visualizer" )
+    );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
   (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
@@ -312,19 +333,20 @@ void _GUI::createActions()
   (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
   (void) new QShortcut( QKeySequence( tr("Escape") ), this, SLOT( catchEscapeKey() ) );
- 
+
   //Ugly hack
   (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_2 ), this, SLOT( turnPercentageShortcut2() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_3 ), this, SLOT( turnPercentageShortcut3() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_4 ), this, SLOT( turnPercentageShortcut4() ) );
-  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) ); 
+  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_6 ), this, SLOT( turnPercentageShortcut6() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_7 ), this, SLOT( turnPercentageShortcut7() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_8 ), this, SLOT( turnPercentageShortcut8() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_9 ), this, SLOT( turnPercentageShortcut9() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_0 ), this, SLOT( turnPercentageShortcut0() ) );
 }
+
 
 void _GUI::createMenus()
 {
@@ -343,6 +365,7 @@ void _GUI::createMenus()
   menu->addAction( m_helpContents );
 
 }
+
 
 void _GUI::buildToolSet()
 {
@@ -386,36 +409,43 @@ void _GUI::buildToolSet()
 
 }
 
+
 void _GUI::closeGUI()
 {
   close();
 }
+
 
 void _GUI::toggleFullScreen()
 {
   setFullScreen(!fullScreen);
 }
 
+
 void _GUI::togglePlayPause()
 {
   m_controlBar->play();
 }
+
 
 void _GUI::fastForwardShortcut()
 {
   m_controlBar->fastForward();
 }
 
+
 void _GUI::rewindShortcut()
 {
   m_controlBar -> rewind();
 }
+
 
 void _GUI::turnPercentageCalc(int value)
 {
   float turnPercent = value /9.0;
   TimeManager->setTurn((int) floor(turnPercent * TimeManager->getNumTurns()));
 }
+
 
 void _GUI::stepTurnForwardShortcut()
 {
@@ -425,6 +455,7 @@ void _GUI::stepTurnForwardShortcut()
   }
 }
 
+
 void _GUI::stepTurnBackShortcut()
 {
   if(TimeManager->getTurn() > 0)
@@ -432,6 +463,7 @@ void _GUI::stepTurnBackShortcut()
     TimeManager->setTurn(TimeManager->getTurn() - 1);
   }
 }
+
 
 //Prepares the tabs and tables for the unit stats area
 void _GUI::initUnitStats()
@@ -461,7 +493,7 @@ void _GUI::initUnitStats()
   m_globalStats->setColumnCount(m_globalStatsHorizontalLabels.size());
   m_globalStats->setVerticalHeaderLabels ( m_globalStatsVerticalLabels );
   m_globalStats->setHorizontalHeaderLabels( m_globalStatsHorizontalLabels );
-  
+
   m_selectionStats->setRowCount(m_selectionStatsVerticalLabels.size());
   m_selectionStats->setColumnCount(m_selectionStatsHorizontalLabels.size());
   m_selectionStats->setVerticalHeaderLabels ( m_selectionStatsVerticalLabels );
@@ -481,10 +513,12 @@ void _GUI::initUnitStats()
   m_dockLayout->addWidget( m_unitStatsArea );
 }
 
+
 ControlBar * _GUI::getControlBar()
 {
   return m_controlBar;
 }
+
 
 void _GUI::catchEscapeKey()
 {
@@ -494,17 +528,19 @@ void _GUI::catchEscapeKey()
   }
 }
 
+
 bool _GUI::getFullScreen()
 {
-  return fullScreen; 
+  return fullScreen;
 }
+
 
 void _GUI::setFullScreen(bool value)
 {
   fullScreen = value;
   if(fullScreen)
   {
-  	m_normalWindowGeometry = geometry();
+    m_normalWindowGeometry = geometry();
     showFullScreen();
   }
   else
@@ -513,8 +549,9 @@ void _GUI::setFullScreen(bool value)
     setGeometry(m_normalWindowGeometry);
   }
   show();
-  
-} 
+
+}
+
 
 void _GUI::turnPercentageShortcut1(){turnPercentageCalc(0);};
 void _GUI::turnPercentageShortcut2(){turnPercentageCalc(1);};
@@ -524,7 +561,7 @@ void _GUI::turnPercentageShortcut5(){turnPercentageCalc(4);};
 void _GUI::turnPercentageShortcut6(){turnPercentageCalc(5);};
 void _GUI::turnPercentageShortcut7(){turnPercentageCalc(6);};
 void _GUI::turnPercentageShortcut8(){turnPercentageCalc(7);};
-void _GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};  
+void _GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};
 void _GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
 
 QTableWidget * _GUI::getIndividualStats()
@@ -532,14 +569,14 @@ QTableWidget * _GUI::getIndividualStats()
   return m_individualStats;
 }
 
+
 QTableWidget * _GUI::getSelectionStats()
 {
   return m_selectionStats;
 }
 
+
 QTableWidget * _GUI::getGlobalStats()
 {
   return m_globalStats;
 }
-
-

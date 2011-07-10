@@ -4,7 +4,6 @@
 
 #include <iostream>
 
-
 std::ostream& operator<<(std::ostream& stream, Mappable ob)
 {
   stream << "id: " << ob.id  <<'\n';
@@ -99,7 +98,6 @@ std::ostream& operator<<(std::ostream& stream, Treasure ob)
 }
 
 
-
 std::ostream& operator<<(std::ostream& stream, Attack ob)
 {
   stream << "Attack" << "\n";
@@ -172,9 +170,10 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
     if((**i).type == TALK)
       stream << *((Talk*)*i) << "\n";
   }
-  
+
   return stream;
 }
+
 
 Game::Game()
 {

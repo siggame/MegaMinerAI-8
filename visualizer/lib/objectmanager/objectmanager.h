@@ -10,9 +10,10 @@
 
 typedef int ObjIdType;
 
-class _ObjectManager : public Module //Singleton<ObjectManager>
+                                 //Singleton<ObjectManager>
+class _ObjectManager : public Module
 {
-public:
+  public:
     void setSize(const unsigned int & turns, const unsigned int & frames)
     {
       m_objects.setSize( turns, frames );
@@ -27,7 +28,6 @@ public:
     {
       return m_objects.getTurns();
     }
-
 
     bool reg(const ObjIdType & id, LookupSet<GameObject*,ObjIdType> & objset);
     bool reg(const ObjIdType & id, GameObject * obj, const unsigned int & turn, const unsigned int & frame);
@@ -44,11 +44,10 @@ public:
     static void setup();
     static void destroy();
 
-private:
+  private:
     typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType> > Bucket;
     LookupTable<GameObject*,ObjIdType> m_objects;
 };
 
 extern _ObjectManager *ObjectManager;
-
 #endif

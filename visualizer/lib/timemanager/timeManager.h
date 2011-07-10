@@ -8,15 +8,16 @@
 
 class UpdateNeeded
 {
-public:
-  virtual void update() = 0;
+  public:
+    virtual void update() = 0;
 };
 
-class _TimeManager : public QObject//, public Singleton<TimeManager>
+                                 //, public Singleton<TimeManager>
+class _TimeManager : public QObject
 {
   Q_OBJECT
-  public:
- 
+    public:
+
     _TimeManager()
     {
       m_sleepTime = -1;
@@ -26,10 +27,10 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
     {
       Play = 0,
       Pause = 1,
-      Stop = 1, // Don't feel the need to differentiate at this point
+      Stop = 1,                  // Don't feel the need to differentiate at this point
       Rewind = 2
-    };   
-    
+    };
+
     const int& getTurn();
     const int& getFrame();
     void setTurn( const int& turn );
@@ -76,5 +77,4 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
     std::list< UpdateNeeded* > m_updateRequesters;
 };
 extern _TimeManager *TimeManager;
-
 #endif

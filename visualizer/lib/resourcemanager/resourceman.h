@@ -12,34 +12,33 @@
 
 class ResourceMan : protected _Manager< ResID_t, Resource* >
 {
-	public:
-		/** Default constructor */
-		ResourceMan();
-		/** Default destructor */
-		virtual ~ResourceMan();
+  public:
+    /** Default constructor */
+    ResourceMan();
+    /** Default destructor */
+    virtual ~ResourceMan();
 
     static Resource * reference(const std::string & rName, const std::string & referencer);
     static bool release(const std::string & rName, const std::string & referencer);
 
-		template<class T, ResourceType RT>
-		static bool reg(const ResID_t & rName, const T & value);
-		static bool regFile(const ResID_t & rName, const std::string & filename);
-		static bool del(const ResID_t & rName);
+    template<class T, ResourceType RT>
+      static bool reg(const ResID_t & rName, const T & value);
+    static bool regFile(const ResID_t & rName, const std::string & filename);
+    static bool del(const ResID_t & rName);
 
-		static bool loadResourceFile(const std::string & filename);
-		static bool saveResourceFile(const std::string & filename);
+    static bool loadResourceFile(const std::string & filename);
+    static bool saveResourceFile(const std::string & filename);
 
-		static bool exists(const ResID_t & rName);
+    static bool exists(const ResID_t & rName);
 
-		static std::vector<std::string> listResourceNames();
+    static std::vector<std::string> listResourceNames();
 
-		static bool destroy();
+    static bool destroy();
 
-	protected:
-	private:
+  protected:
+  private:
 
-		ResourceType findFileType(const std::string & filename);
+    ResourceType findFileType(const std::string & filename);
 
 };
-
-#endif // RESOURCEMAN_H
+#endif                           // RESOURCEMAN_H

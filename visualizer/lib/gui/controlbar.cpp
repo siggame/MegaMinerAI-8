@@ -20,7 +20,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   m_slider = new QSlider( Qt::Horizontal, this );
   m_slider->setMinimum( 0 );
   //maximum set by TimeManager
-  m_slider->setTickInterval( 50 ); 
+  m_slider->setTickInterval( 50 );
   m_slider->setStyleSheet( "\
 			QSlider::groove:horizontal {\
 			height: 8px;\
@@ -42,7 +42,7 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 		  }	");
 
   m_slider->setTracking( true );
- 	originalTimeManagerSpeed = 0;
+  originalTimeManagerSpeed = 0;
 
   connect( m_slider, SIGNAL(sliderPressed()), this, SLOT(sliderDrag()) );
   connect( m_slider, SIGNAL(sliderReleased()), this, SLOT(sliderRelease()) );
@@ -65,21 +65,25 @@ ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
   update();
 }
 
+
 void ControlBar::sliderDrag()
 {
-	originalTimeManagerSpeed = TimeManager->getSpeed();
-  TimeManager->setSpeed(0); //So it's not moving under you.
+  originalTimeManagerSpeed = TimeManager->getSpeed();
+  TimeManager->setSpeed(0);      //So it's not moving under you.
 }
+
 
 void ControlBar::sliderRelease()
 {
   TimeManager->setSpeed(originalTimeManagerSpeed);
 }
 
+
 void ControlBar::sliderChanged( int value )
 {
   TimeManager->setTurn(value);
 }
+
 
 void ControlBar::update()
 {
@@ -88,9 +92,10 @@ void ControlBar::update()
   turnLabel->setText( QString::number( TimeManager->getTurn() ) );
 }
 
+
 void ControlBar::rewind()
 {
-  if(TimeManager->getSpeed() > 0) //Going forward
+  if(TimeManager->getSpeed() > 0)//Going forward
   {
     TimeManager->setSpeed(-1);
     rewindButton->setText("<<");
@@ -99,16 +104,18 @@ void ControlBar::rewind()
   }
   else if((float)TimeManager->getSpeed() == 0)
   {
-	  if(originalTimeManagerSpeed < 0) //Was going Rewind
-		{
-			TimeManager->setSpeed(originalTimeManagerSpeed); //Resume
-		}
-		else //Was not going Rewind
-		{
-			//Do nothing
-		}
+                                 //Was going Rewind
+    if(originalTimeManagerSpeed < 0)
+    {
+                                 //Resume
+      TimeManager->setSpeed(originalTimeManagerSpeed);
+    }
+    else                         //Was not going Rewind
+    {
+      //Do nothing
+    }
   }
-  else //Already Rewinding
+  else                           //Already Rewinding
   {
     int speed = TimeManager->getSpeed();
     speed = (speed > -64 ? speed * 2 : -128);
@@ -122,45 +129,53 @@ void ControlBar::rewind()
   }
 }
 
+
 void ControlBar::play()
 {
-  if(TimeManager->getSpeed() == 1)//Is playing
+                                 //Is playing
+  if(TimeManager->getSpeed() == 1)
   {
-		originalTimeManagerSpeed = TimeManager->getSpeed(); //Store previous speed
-    TimeManager->setSpeed(0);//Pause
-    playButton->setText(">");//Set button to "will play if pressed"
+                                 //Store previous speed
+    originalTimeManagerSpeed = TimeManager->getSpeed();
+    TimeManager->setSpeed(0);    //Pause
+    playButton->setText(">");    //Set button to "will play if pressed"
   }
-  else //Something other than normal playback speed
+  else                           //Something other than normal playback speed
   {
     rewindButton->setText("<<");
     playButton->setText("||");
     fastForwardButton->setText("->>");
-    TimeManager->setSpeed(1); //Start again at normal playback speed
+    TimeManager->setSpeed(1);    //Start again at normal playback speed
   }
 }
 
+
 void ControlBar::fastForward()
 {
-	
-	if(TimeManager->getSpeed() == 0) //Paused
-	{
-		if(originalTimeManagerSpeed >= 2) //Was going FF
-		{
-			TimeManager->setSpeed(originalTimeManagerSpeed); //Resume
-		}
-		else //Was not going FF
-		{
-			//Do nothing
-		}
-	}
-  else if(TimeManager->getSpeed() < 2) //Not going FF
+
+                                 //Paused
+  if(TimeManager->getSpeed() == 0)
   {
-    TimeManager->setSpeed(2); //Hyperspeed!
+                                 //Was going FF
+    if(originalTimeManagerSpeed >= 2)
+    {
+                                 //Resume
+      TimeManager->setSpeed(originalTimeManagerSpeed);
+    }
+    else                         //Was not going FF
+    {
+      //Do nothing
+    }
+  }
+                                 //Not going FF
+  else if(TimeManager->getSpeed() < 2)
+  {
+    TimeManager->setSpeed(2);    //Hyperspeed!
     rewindButton->setText("<<");
     playButton->setText(">");
     fastForwardButton->setText("-->>");
   }
-  else //Going FF already
+  else                           //Going FF already
   {
     int speed = TimeManager->getSpeed();
     speed = (speed < 64 ? speed * 2 : 128);
@@ -173,5 +188,3 @@ void ControlBar::fastForward()
     fastForwardButton->setText(symbol + ">>");
   }
 }
-
-

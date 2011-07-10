@@ -12,7 +12,7 @@ class RenderWidget: public QGLWidget
     void initializeGL();
 
     void resizeEvent( QResizeEvent *evt );
-  
+
   private:
     //Old unit selection code we're bringing forward
     void mousePressEvent( QMouseEvent *event );
@@ -31,5 +31,4 @@ class RenderWidget: public QGLWidget
     static const int m_DRAG_DISTANCE = 6;
 
 };
-
 #endif

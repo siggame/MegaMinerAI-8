@@ -10,6 +10,7 @@ CentralWidget::~CentralWidget()
 
 }
 
+
 CentralWidget::CentralWidget( QWidget* /*parent*/ )
 {
   m_renderWidget = new RenderWidget( this );
@@ -22,27 +23,27 @@ CentralWidget::CentralWidget( QWidget* /*parent*/ )
   setLayout( m_widgetLayout );
 }
 
+
 void CentralWidget::buildControlBar()
-{  
-  m_controlBarWidget = 
+{
+  m_controlBarWidget =
     (GOCFamily_ControlBar*)GUI->getGUIObject( "ControlBar" );
 
-  if( m_controlBarWidget && 
-      (
-       !OptionsMan->exists( "arenaMode" ) ||
-       !OptionsMan->getBool( "arenaMode" )
-      )
+  if( m_controlBarWidget &&
+    (
+    !OptionsMan->exists( "arenaMode" ) ||
+    !OptionsMan->getBool( "arenaMode" )
+    )
     )
   {
-    if( 
-	OptionsMan->exists("maxControlHeight")
+    if(
+      OptionsMan->exists("maxControlHeight")
       )
     {
-      m_controlBarWidget->setMaximumHeight( 
-	      OptionsMan->getInt( "maxControlHeight" )
-          );
+      m_controlBarWidget->setMaximumHeight(
+        OptionsMan->getInt( "maxControlHeight" )
+        );
     }
     m_widgetLayout->addWidget( m_controlBarWidget );
   }
 }
-

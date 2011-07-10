@@ -8,7 +8,6 @@
 #include "../gocfamily_gui.h"
 #include "../objectmanager/objectloader.h"
 
-
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
@@ -156,146 +155,144 @@ typedef GOCFamily_GUI guiObj;
 class _GUI : public QMainWindow
 {
   Q_OBJECT
-  
-  friend class RenderWidget;
-  
-public:
-  _GUI() : m_isSetup(false) {};
-  ~_GUI();
-  bool reg( const std::string& id, guiObj *obj );
-  bool del( const std::string& id );
 
-  static bool setup();
-  bool clear();
+    friend class RenderWidget;
 
-  guiObj *getGUIObject( const std::string& id );
+  public:
+    _GUI() : m_isSetup(false) {};
+    ~_GUI();
+    bool reg( const std::string& id, guiObj *obj );
+    bool del( const std::string& id );
 
-  bool create();
-  bool destroy();
+    static bool setup();
+    bool clear();
 
-  unsigned int numObjects();
+    guiObj *getGUIObject( const std::string& id );
 
-  bool isSetup();
+    bool create();
+    bool destroy();
 
-  /// EVENTS
-  void dragEnterEvent( QDragEnterEvent *evt );
-  void dropEvent( QDropEvent* evt );
-  void resizeEvent( QResizeEvent* evt );
+    unsigned int numObjects();
 
-  /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
-  void loadGamelog( std::string gamelog );
+    bool isSetup();
 
-  void update();
-  void closeGUI();
-  
-  ControlBar * getControlBar();
+    /// EVENTS
+    void dragEnterEvent( QDragEnterEvent *evt );
+    void dropEvent( QDropEvent* evt );
+    void resizeEvent( QResizeEvent* evt );
 
-  void appendConsole( string line );
-  void appendConsole( QString line );
-  void clearConsole();
-  
-  bool getFullScreen();
-  void setFullScreen(bool);
-  
-private slots:
-  void helpContents();
-  void fileOpen();
-  void toggleFullScreen();
-  void togglePlayPause();
-  void fastForwardShortcut();
-  void rewindShortcut();
-  void stepTurnForwardShortcut();
-  void stepTurnBackShortcut();
+    /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
+    void loadGamelog( std::string gamelog );
 
-  void catchEscapeKey();
-  
-  void turnPercentageShortcut1();
-  void turnPercentageShortcut2();
-  void turnPercentageShortcut3();
-  void turnPercentageShortcut4();
-  void turnPercentageShortcut5();
-  void turnPercentageShortcut6();
-  void turnPercentageShortcut7();
-  void turnPercentageShortcut8();
-  void turnPercentageShortcut9();
-  void turnPercentageShortcut0();
+    void update();
+    void closeGUI();
 
-public:
+    ControlBar * getControlBar();
 
-  QTableWidget* getGlobalStats();
-  QTableWidget* getSelectionStats();
-  QTableWidget* getIndividualStats();
+    void appendConsole( string line );
+    void appendConsole( QString line );
+    void clearConsole();
 
-private:
-  
-  QTableWidget * m_globalStats;
-  QTableWidget * m_selectionStats;
-  QTableWidget * m_individualStats;
+    bool getFullScreen();
+    void setFullScreen(bool);
 
-  /// Container for the objects in the GUI
-  std::map<std::string, guiObj*> m_objects;
-  /// Setup?
-  bool m_isSetup;
+  private slots:
+    void helpContents();
+    void fileOpen();
+    void toggleFullScreen();
+    void togglePlayPause();
+    void fastForwardShortcut();
+    void rewindShortcut();
+    void stepTurnForwardShortcut();
+    void stepTurnBackShortcut();
 
-  //In full screen mode or not?
-  bool fullScreen;
+    void catchEscapeKey();
 
-  /// Main widget for this window
-  CentralWidget *m_centralWidget;
+    void turnPercentageShortcut1();
+    void turnPercentageShortcut2();
+    void turnPercentageShortcut3();
+    void turnPercentageShortcut4();
+    void turnPercentageShortcut5();
+    void turnPercentageShortcut6();
+    void turnPercentageShortcut7();
+    void turnPercentageShortcut8();
+    void turnPercentageShortcut9();
+    void turnPercentageShortcut0();
 
-  /// Dock Widget For Debugging Info
-  QDockWidget *m_dockWidget;
+  public:
 
-  /// Frame used to hold layout for widgets in dock
-  QFrame *m_dockLayoutFrame;
+    QTableWidget* getGlobalStats();
+    QTableWidget* getSelectionStats();
+    QTableWidget* getIndividualStats();
 
-  /// Layout For the Dock Widget
-  QVBoxLayout *m_dockLayout;
+  private:
 
-  /// Console Area
-  QTextEdit *m_consoleArea;
+    QTableWidget * m_globalStats;
+    QTableWidget * m_selectionStats;
+    QTableWidget * m_individualStats;
 
-  /// Unit Stats Area
-  QTabWidget * m_unitStatsArea;
-  QStringList m_globalStatsVerticalLabels;
-  QStringList m_globalStatsHorizontalLabels;
-  QStringList m_selectionStatsVerticalLabels;
-  QStringList m_selectionStatsHorizontalLabels;
-  QStringList m_individualStatsVerticalLabels;
-  QStringList m_individualStatsHorizontalLabels;
+    /// Container for the objects in the GUI
+    std::map<std::string, guiObj*> m_objects;
+    /// Setup?
+    bool m_isSetup;
 
-  /// Status Bar
-  QStatusBar *m_statusBar;
+    //In full screen mode or not?
+    bool fullScreen;
 
-  /// Control Bar
-  ControlBar *m_controlBar;
+    /// Main widget for this window
+    CentralWidget *m_centralWidget;
 
-  /// Debugging Toolset Widget Within the Dock
-  GOCFamily_GUIToolSet *m_toolSetWidget;
+    /// Dock Widget For Debugging Info
+    QDockWidget *m_dockWidget;
 
-  bool doSetup();
-  void buildControlBar();
-  void createActions();
-  void createMenus();
-  void buildToolSet();
-  void initUnitStats();
+    /// Frame used to hold layout for widgets in dock
+    QFrame *m_dockLayoutFrame;
 
-  void turnPercentageCalc(int);
+    /// Layout For the Dock Widget
+    QVBoxLayout *m_dockLayout;
 
+    /// Console Area
+    QTextEdit *m_consoleArea;
 
-  // Actions
-  QAction *m_helpContents; /// Help->Contents
+    /// Unit Stats Area
+    QTabWidget * m_unitStatsArea;
+    QStringList m_globalStatsVerticalLabels;
+    QStringList m_globalStatsHorizontalLabels;
+    QStringList m_selectionStatsVerticalLabels;
+    QStringList m_selectionStatsHorizontalLabels;
+    QStringList m_individualStatsVerticalLabels;
+    QStringList m_individualStatsHorizontalLabels;
 
-  QAction *m_fileOpen; /// File->Open
-  QAction *m_fileExit; /// File->Exit
+    /// Status Bar
+    QStatusBar *m_statusBar;
 
-  QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
-  
-  QString m_previousDirectory;
-	QRect m_normalWindowGeometry;
+    /// Control Bar
+    ControlBar *m_controlBar;
+
+    /// Debugging Toolset Widget Within the Dock
+    GOCFamily_GUIToolSet *m_toolSetWidget;
+
+    bool doSetup();
+    void buildControlBar();
+    void createActions();
+    void createMenus();
+    void buildToolSet();
+    void initUnitStats();
+
+    void turnPercentageCalc(int);
+
+    // Actions
+    QAction *m_helpContents;     /// Help->Contents
+
+    QAction *m_fileOpen;         /// File->Open
+    QAction *m_fileExit;         /// File->Exit
+
+    QAction *toggleFullScreenAct;/// View -> Toggle Full Screen
+
+    QString m_previousDirectory;
+    QRect m_normalWindowGeometry;
 
 };
 
 extern _GUI *GUI;
-
 #endif

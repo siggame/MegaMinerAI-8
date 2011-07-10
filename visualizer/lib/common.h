@@ -9,16 +9,12 @@
 #else
 
 #define SETUP(x)
-
-
-#endif /* __DEBUG__ */
+#endif                           /* __DEBUG__ */
 
 class Module
 {
-public:
-  static void setup();
-  static void destroy();
+  public:
+    static void setup();
+    static void destroy();
 };
-
-
 #endif

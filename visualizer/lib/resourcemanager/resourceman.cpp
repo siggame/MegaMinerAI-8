@@ -1,140 +1,141 @@
 #include "resourceman.h"
 
 /** @brief listResourceNames
-  * get a list of all of the resources
-  * @return a list of all of the ids of the resources
-  */
+ * get a list of all of the resources
+ * @return a list of all of the ids of the resources
+ */
 std::vector<ResID_t> ResourceMan::listResourceNames()
 {
-    std::vector<ResID_t> names;
-    DataTable::iterator it = instance()->data()->begin();
-    for (; it != instance()->data()->end(); it++)
-    {
-        names.push_back(it->first);
-    }
-    return names;
+  std::vector<ResID_t> names;
+  DataTable::iterator it = instance()->data()->begin();
+  for (; it != instance()->data()->end(); it++)
+  {
+    names.push_back(it->first);
+  }
+  return names;
 }
+
 
 /** @brief exists
-  * check if an object exists
-  * @param rName the name of the resource in question
-  * @return true if it exists
-  */
+ * check if an object exists
+ * @param rName the name of the resource in question
+ * @return true if it exists
+ */
 bool ResourceMan::exists(const ResID_t & rName)
 {
-    return ManagerType::exists(rName);
+  return ManagerType::exists(rName);
 }
-
 
 
 /** @brief del
-  *	delete a value from the resource manager
-  * @param rName the value to delete
-  * @return true if it existed
-  */
+ *	delete a value from the resource manager
+ * @param rName the value to delete
+ * @return true if it existed
+ */
 bool ResourceMan::del(const ResID_t & rName)
 {
-    if (!exists(rName))
-    {
-        return false;
-    }
+  if (!exists(rName))
+  {
+    return false;
+  }
 
-    DataTable * dt = instance()->data();
-    Resource * ref = (*(dt))[rName];
-    if (ref->numReferences())
-    {
-        #ifdef DEBUG
-        std::cout << "Resource \"" << rName << "\" still has a reference:\n";
-        ref->printReferences();
-        #endif
-        return false;
-    }
+  DataTable * dt = instance()->data();
+  Resource * ref = (*(dt))[rName];
+  if (ref->numReferences())
+  {
+    #ifdef DEBUG
+    std::cout << "Resource \"" << rName << "\" still has a reference:\n";
+    ref->printReferences();
+    #endif
+    return false;
+  }
 
-
-    return delPointer(rName);
+  return delPointer(rName);
 }
+
 
 #include <iostream>
-        using namespace std;
-
+using namespace std;
 
 /** @brief destroy
-  * destroy the resource manager
-  * @return true on success
-  */
+ * destroy the resource manager
+ * @return true on success
+ */
 bool ResourceMan::destroy()
 {
-#if 0
-	if (!isInit())
-	{
-		return false;
-	}
-#endif
-	DataTable::iterator it = instance()->data()->begin();
-    for (; it != instance()->data()->end(); it++)
-    {
-
-      //if( it->second )
-        if (it->second->numReferences())
-        {
-			#ifdef DEBUG
-            std::cout << "Resource \"" << it->first << "\" still has a reference:\n";
-            it->second->printReferences();
-			#endif
-            return false;
-        }
+  #if 0
+  if (!isInit())
+  {
+    return false;
+  }
+  #endif
+  DataTable::iterator it = instance()->data()->begin();
+  for (; it != instance()->data()->end(); it++)
+  {
 
     //if( it->second )
-      if (!it->second->unload())
-        return false;
-
-		delete it->second;
-    it->second = 0;
-
+    if (it->second->numReferences())
+    {
+      #ifdef DEBUG
+      std::cout << "Resource \"" << it->first << "\" still has a reference:\n";
+      it->second->printReferences();
+      #endif
+      return false;
     }
 
-    ResourceMan::destroy();
-    return true;
+    //if( it->second )
+    if (!it->second->unload())
+      return false;
+
+    delete it->second;
+    it->second = 0;
+
+  }
+
+  ResourceMan::destroy();
+  return true;
 }
+
 
 Resource * ResourceMan::reference(const std::string & rName, const std::string & referencer)
 {
-#if 0
-    if (!ManagerType::isInit())
-	return NULL;
-#endif
-    Resource ** res = ManagerType::getItem(rName);
-    if (!res)
-	return NULL;
-
-    if (!*res)
-	return NULL;
-
-    if ((*res)->reference(referencer))
-	return *res;
-
+  #if 0
+  if (!ManagerType::isInit())
     return NULL;
+  #endif
+  Resource ** res = ManagerType::getItem(rName);
+  if (!res)
+    return NULL;
+
+  if (!*res)
+    return NULL;
+
+  if ((*res)->reference(referencer))
+    return *res;
+
+  return NULL;
 
 }
 
+
 bool ResourceMan::release(const std::string &rName, const std::string &referencer)
 {
-#if 0
-    if (!ManagerType::isInit())
-	return false;
-#endif
-
-    Resource ** res = ManagerType::getItem(rName);
-
-    if (!res)
-	return false;
-
-    if (!*res)
-	return false;
-
-    if ((*res)->deReference(referencer))
-	return true;
-
+  #if 0
+  if (!ManagerType::isInit())
     return false;
+  #endif
+
+  Resource ** res = ManagerType::getItem(rName);
+
+  if (!res)
+    return false;
+
+  if (!*res)
+    return false;
+
+  if ((*res)->deReference(referencer))
+    return true;
+
+  return false;
 
 }

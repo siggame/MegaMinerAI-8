@@ -117,9 +117,9 @@ class _Renderer : public UpdateNeeded, public Module
     bool refresh();
     bool resize
       (
-        const unsigned int & width, 
-        const unsigned int & height, 
-        const unsigned int & depth = 1
+      const unsigned int & width,
+      const unsigned int & height,
+      const unsigned int & depth = 1
       );
 
     bool isSetup();
@@ -130,8 +130,8 @@ class _Renderer : public UpdateNeeded, public Module
 
     bool update
       (
-        const unsigned int & turn, 
-        const unsigned int & frame
+      const unsigned int & turn,
+      const unsigned int & frame
       );
 
     void update();
@@ -151,10 +151,8 @@ class _Renderer : public UpdateNeeded, public Module
 
     RenderWidget *m_parent;
 
-
     //void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
 extern _Renderer *Renderer;
-
 #endif                           // RENDERER_H

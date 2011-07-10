@@ -10,5 +10,4 @@ void destroy_sexp(Sexp*);
 Sexp* extract_sexpr(const char*);
 
 int sexp_list_length(Sexp*);
-
 #endif

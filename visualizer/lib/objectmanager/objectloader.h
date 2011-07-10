@@ -9,15 +9,14 @@
 
 class ObjectLoader : public Singleton<ObjectLoader>
 {
-public:
+  public:
     //! @todo load definitions file for translation
     // bool loadDefs(const std::string & filename);
 
     static bool loadGamelog(const std::string & filename);
 
-private:
+  private:
     //! @todo make this object-v
     //LoadLogic m_logic;
 };
-
-#endif // OBJECTLOADER_H
+#endif                           // OBJECTLOADER_H

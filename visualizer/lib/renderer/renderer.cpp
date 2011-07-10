@@ -33,6 +33,7 @@ bool _Renderer::resize(const unsigned int & width, const unsigned int & height, 
   return true;
 }
 
+
 bool _Renderer::refresh()
 {
   if (!isSetup())
@@ -60,7 +61,7 @@ bool _Renderer::refresh()
   float mapSize = (float)OptionsMan->getInt("mapSize");
   glScalef( height()/mapSize, height()/mapSize, 1 );
 
-#if 0
+  #if 0
   typename std::vector<DupObject*>::iterator renderIt = m_renderList.begin();
   for (; renderIt != m_renderList.end(); renderIt++)
   {
@@ -68,7 +69,7 @@ bool _Renderer::refresh()
     (*renderIt)->render();
     glPopMatrix();
   }
-#endif
+  #endif
 
   glPopMatrix();
 
@@ -82,14 +83,16 @@ bool _Renderer::refresh()
   return true;
 }
 
+
 void _Renderer::setParent( RenderWidget *parent )
 {
-#if 0
+  #if 0
   if (!Single::isInit())
     return;                      //! @todo throw error
-#endif
+  #endif
   m_parent = parent;
 }
+
 
 void _Renderer::destroy()
 {
@@ -102,6 +105,7 @@ void _Renderer::destroy()
 
 }
 
+
 bool _Renderer::create()
 {
   m_parent = 0;
@@ -111,6 +115,7 @@ bool _Renderer::create()
 
   return true;
 }
+
 
 void _Renderer::setup()
 {
@@ -127,6 +132,7 @@ void _Renderer::setup()
   Renderer->_setup();
 
 }
+
 
 void _Renderer::_setup()
 {
@@ -191,10 +197,12 @@ void _Renderer::_setup()
 
 }
 
+
 bool _Renderer::isSetup()
 {
   return m_isSetup;
 }
+
 
 bool _Renderer::clear()
 {
@@ -208,6 +216,7 @@ bool _Renderer::clear()
 
   return true;
 }
+
 
 bool _Renderer::registerConstantObj( const unsigned int& id, renderObj* obj )
 {
@@ -228,6 +237,7 @@ bool _Renderer::deleteConstantObj( const unsigned int& id )
   return false;
 }
 
+
 unsigned int _Renderer::width()
 {
   if (isSetup())
@@ -235,6 +245,7 @@ unsigned int _Renderer::width()
 
   return 0;
 }
+
 
 unsigned int _Renderer::height()
 {
@@ -244,6 +255,7 @@ unsigned int _Renderer::height()
   return 0;
 }
 
+
 unsigned int _Renderer::depth()
 {
   if (isSetup())
@@ -252,16 +264,18 @@ unsigned int _Renderer::depth()
   return 0;
 }
 
+
 void _Renderer::update()
 {
   _Renderer::refresh();
   _Renderer::update( TimeManager->getTurn(), 0 );
 }
 
+
 bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
 {
-  Stats globalTotal, globalP0, globalP1, globalP2, globalP3; 
-  Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3; 
+  Stats globalTotal, globalP0, globalP1, globalP2, globalP3;
+  Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3;
   int health;
 
   typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
@@ -273,7 +287,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
     return false;
   }
 
-//  m_renderList.clear();
+  //  m_renderList.clear();
   int time = TimeManager->timeHash();
 
   bool selectUpdate = SelectionRender::instance()->getUpdated();
@@ -285,7 +299,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   int y1 = 0;
   int y2 = 0;
 
-#if 0
+  #if 0
   if( selectUpdate )
   {
 
@@ -309,7 +323,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
       y1 = y2;
       y2 = temp;
     }
-  
+
     selectedUnitIds.clear();
   }
 
@@ -344,11 +358,11 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
             int id = it->first;
             selectedUnitIds.insert( id );
             #endif
-          } else 
+          } else
           {
             temp.selected = false;
           }
-        } 
+        }
 
         goc = it->second->data->getGOC( "HealthFamily" );
         if( goc )
@@ -356,7 +370,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
           health = ((GOCFamily_Health*)goc)->currentHealth();
         }
 
-        Stats tStats; //temporary variable for summing the stats
+        Stats tStats;            //temporary variable for summing the stats
         goc = it->second->data->getGOC( "ObjectType" );
         bool treasure = false;
         if( goc )
@@ -390,7 +404,6 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
           }
         }
 
-
         if( selectedUnitIds.find( it->first ) != selectedUnitIds.end() )
         {
           temp.selected = true;
@@ -402,7 +415,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
 
         if( temp.selected )
         {
-          if( !treasure ) //Is Pirate or Ship, check for owner
+          if( !treasure )        //Is Pirate or Ship, check for owner
           {
             switch( owner )
             {
@@ -419,44 +432,49 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
                 selectedP3 += tStats;
                 break;
             }
-            
+
             //Add anything selected pirate is saying to the console
             goc = it->second->data->getGOC( "TalkFamily" );
             if( goc )
             {
               appendToConsole( ((GOCFamily_Talk*)goc)->message() );
             }
-            
-          } else { //Is treasure; buried treasure has no owner
+
+          }                      //Is treasure; buried treasure has no owner
+          else
+          {
             selectedTotal += tStats;
           }
-          
-        } else { //Not selected, add to global
-        
-          if( !treasure ) //Is Pirate or Ship, check for owner
+
+        }                        //Not selected, add to global
+        else
+        {
+
+          if( !treasure )        //Is Pirate or Ship, check for owner
+          {
+            switch( owner )
             {
-              switch( owner )
-              {
-                case 0:
-                  globalP0 += tStats;
-                  break;
-                case 1:
-                  globalP1 += tStats;
-                  break;
-                case 2:
-                  globalP2 += tStats;
-                  break;
-                case 3:
-                  globalP3 += tStats;
-                  break;
-              }
-              
-            } else { //Is treasure; buried treasure has no owner
-              globalTotal += tStats;
+              case 0:
+                globalP0 += tStats;
+                break;
+              case 1:
+                globalP1 += tStats;
+                break;
+              case 2:
+                globalP2 += tStats;
+                break;
+              case 3:
+                globalP3 += tStats;
+                break;
             }
 
-        }//Global only, not selected
+          }                      //Is treasure; buried treasure has no owner
+          else
+          {
+            globalTotal += tStats;
+          }
 
+        }                        //Global only, not selected
 
         updateLocation(loc->x(),loc->y(),loc->z(),loc->dir(),time,temp);
 
@@ -466,9 +484,9 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
         std::cout << "no location for obj type: " << temp.objType << '\n';
       }
 
-    }//if it->second
+    }                            //if it->second
 
-  }//for Bucket
+  }                              //for Bucket
 
   //Total selected
   selectedTotal += selectedP0;
@@ -489,7 +507,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   selectedP2.final();
   selectedP3.final();
   selectedTotal.final();
-  
+
   globalP0.final();
   globalP1.final();
   globalP2.final();
@@ -507,10 +525,11 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   selectionStatColumnPopulate (selectedP1, 2);
   selectionStatColumnPopulate (selectedP2, 3);
   selectionStatColumnPopulate (selectedP3, 4);
-#endif
-  
+  #endif
+
   return true;
 }
+
 
 #if 0
 void _Renderer::printToTable( QTableWidget *w, int c, int r, QString str )
@@ -518,31 +537,38 @@ void _Renderer::printToTable( QTableWidget *w, int c, int r, QString str )
   if( w->itemAt( c, r ) )
   {
     w->itemAt( c, r )->setText( str );
-  } else {
+  }
+  else
+  {
     w->setItem( c, r, new QTableWidgetItem( str ) );
   }
 
 }
+
 
 void _Renderer::printIndividuals( int c, int r, QString str )
 {
   printToTable( GUI::getIndividualStats(), c, r, str );
 }
 
+
 void _Renderer::printSelectedStats( int r, int c, QString str )
 {
   printToTable( GUI::getSelectionStats(), c, r, str );
 }
+
 
 void _Renderer::printGlobalStats( int r, int c, QString str )
 {
   printToTable( GUI::getGlobalStats(), c, r, str );
 }
 
+
 void _Renderer::appendToConsole( string str )
 {
   GUI::appendConsole( str );
 }
+
 
 void _Renderer::individualStatColumnPopulate (int id, DupObject unit, int column)
 {
@@ -554,6 +580,7 @@ void _Renderer::individualStatColumnPopulate (int id, DupObject unit, int column
   printIndividuals( column, 6, QString::number(unit.x));
   printIndividuals( column, 7, QString::number(unit.y));
 }
+
 
 void _Renderer::selectionStatColumnPopulate (Stats multi, int column)
 {
@@ -568,6 +595,7 @@ void _Renderer::selectionStatColumnPopulate (Stats multi, int column)
   //printSelectedStats( column, 0, QString::number(0));
 }
 
+
 void _Renderer::globalStatColumnPopulate (Stats multi, int column)
 {
   printGlobalStats( column, 1, QString::number(multi.pirates));
@@ -581,9 +609,9 @@ void _Renderer::globalStatColumnPopulate (Stats multi, int column)
   //printGlobalStats( column, 0, QString::number(0));
 }
 
+
 void _Renderer::setNumIndividuals( int num )
 {
   GUI::getIndividualStats()->setColumnCount(num);
 }
 #endif
-
