@@ -1,17 +1,15 @@
 #ifndef OPTIONSMAN_H
 #define OPTIONSMAN_H
 
-#include "option.h"
 #include "../mutex/Mutex.h"
 #include <iostream>
 #include <map>
-#include <string>
 #include <fstream>
 #include <sstream>
 
-typedef std::string OptID_t;
+#include "../../interfaces/ioptionsman.h"
 
-class _OptionsMan                //: public Singleton <OptionsMan>
+class _OptionsMan: public IOptionsMan
 {
   public:
 

@@ -1,7 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-// TODO: Add more includes.  Not nearly enough
 #include <map>
 #include <list>
 #include <set>
@@ -18,10 +17,8 @@
 
 #include "../timemanager/timeManager.h"
 
+#include "../../interfaces/irenderer.h"
 #include "../common.h"
-
-//this is a place holder
-typedef GameObject renderObj;
 
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"
@@ -94,7 +91,7 @@ struct Stats
 
 };
 
-class _Renderer : public UpdateNeeded, public Module
+class _Renderer : public UpdateNeeded, public Module, public IRenderer
 {
   public:
 
