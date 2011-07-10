@@ -8,6 +8,7 @@
 #include "lib/resourcemanager/texture.h"
 #include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
+#include "lib/games/games.h"
 #include "piracy/dupObj.h"
 
 int main(int argc, char *argv[])
@@ -67,7 +68,15 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
 	GUI->setup();
 
+  ///////////////////////////////////////////////////////////////////
+  // Resource Manager depends on _______________________
+  ///////////////////////////////////////////////////////////////////
   ResourceMan->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // Initalize the Games
+  ///////////////////////////////////////////////////////////////////
+  Games->setup();
 
 	if ( !ResourceMan->loadResourceFile("./textures.r") )
 	{

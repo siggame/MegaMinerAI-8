@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "../games/games.h"
 #include "../renderer/renderer.h"
 #include "../parser/parser.h"
 #include <QDesktopServices>

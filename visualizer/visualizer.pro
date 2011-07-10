@@ -21,6 +21,7 @@ SOURCES += main.cpp \
     ./lib/threadler/*.cpp \
     ./lib/optionsmanager/*.cpp \
     ./lib/gui/*.cpp \
+    ./lib/games/*.cpp \
     ./lib/timemanager/*.cpp \
     ./lib/parser/parser.cpp \
     ./lib/parser/structures.cpp \
