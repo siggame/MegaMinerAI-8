@@ -13,10 +13,12 @@ std::vector<ResID_t> _ResourceMan::listResourceNames()
   return names;
 }
 
+
 bool _ResourceMan::exists(const ResID_t & rName)
 {
   return ManagerType::exists(rName);
 }
+
 
 bool _ResourceMan::del(const ResID_t & rName)
 {
@@ -38,6 +40,7 @@ bool _ResourceMan::del(const ResID_t & rName)
 
   return delPointer(rName);
 }
+
 
 void _ResourceMan::destroy()
 {
@@ -69,6 +72,7 @@ void _ResourceMan::destroy()
 
 }
 
+
 Resource * _ResourceMan::reference(const std::string & rName, const std::string & referencer)
 {
   Resource ** res = ManagerType::getItem(rName);
@@ -85,6 +89,7 @@ Resource * _ResourceMan::reference(const std::string & rName, const std::string 
 
 }
 
+
 void _ResourceMan::setup()
 {
   if( !ResourceMan )
@@ -97,6 +102,7 @@ void _ResourceMan::setup()
   }
 
 }
+
 
 bool _ResourceMan::release(const std::string &rName, const std::string &referencer)
 {

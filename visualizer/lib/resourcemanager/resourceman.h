@@ -23,8 +23,8 @@ class _ResourceMan : protected _Manager< ResID_t, Resource* >
     Resource * reference(const std::string & rName, const std::string & referencer);
     bool release(const std::string & rName, const std::string & referencer);
 
-//template<class T, ResourceType RT>
-//    bool reg(const ResID_t & rName, const T & value);
+    //template<class T, ResourceType RT>
+    //    bool reg(const ResID_t & rName, const T & value);
     bool regFile(const ResID_t & rName, const std::string & filename);
     bool del(const ResID_t & rName);
 
@@ -46,5 +46,4 @@ class _ResourceMan : protected _Manager< ResID_t, Resource* >
 };
 
 extern _ResourceMan *ResourceMan;
-
 #endif                           // RESOURCEMAN_H

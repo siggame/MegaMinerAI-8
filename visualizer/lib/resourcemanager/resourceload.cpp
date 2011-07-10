@@ -21,20 +21,8 @@ ResourceType getResTypeFromStr(const std::string & typeBuff)
 }
 
 
-/** @brief loadResourceFile
- * load a resource file
- * @param filename the name of the file to load from
- * @return true on success
- */
 bool _ResourceMan::loadResourceFile(const std::string & filename)
 {
-  #if 0
-  if (!isInit())
-  {
-    return false;
-  }
-  #endif
-
   /* if we allow multiple loading we can combine files easily
   if (get()->m_options.size())
   {
