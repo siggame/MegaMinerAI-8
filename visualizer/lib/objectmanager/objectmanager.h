@@ -1,15 +1,13 @@
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "../gameobject/gameobject.h"
 #include "../timeline/timeline.h"
+#include "../../interfaces/iobjectmanager.h"
 
 #include "../common.h"
 #include <iostream>
 
-typedef int ObjIdType;
-
-class _ObjectManager : public Module
+class _ObjectManager : public Module, public IObjectManager
 {
   public:
     void setSize(const unsigned int & turns, const unsigned int & frames)
