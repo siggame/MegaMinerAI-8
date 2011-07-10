@@ -1,15 +1,13 @@
 #ifndef RESOURCEMAN_H
 #define RESOURCEMAN_H
 
-#include "resource.h"
 #include "../manager/manager.h"
+#include "../../interfaces/iresourceman.h"
 #include <map>
-#include <string>
-#include <vector>
 
 /** @todo merge this into the options manager... maybe **/
 
-class _ResourceMan : protected _Manager< ResID_t, Resource* >
+class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceMan
 {
   public:
     /** Default constructor */
