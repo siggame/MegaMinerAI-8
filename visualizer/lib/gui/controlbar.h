@@ -17,7 +17,7 @@ class ControlBar : public QWidget, public UpdateNeeded
 
     void update();
 
-  private slots:
+  public slots:
     void sliderDrag();
     void sliderRelease();
     void sliderChanged(int value);

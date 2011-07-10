@@ -5,14 +5,9 @@
 #include <time.h>
 #include <list>
 
-class UpdateNeeded
-{
-  public:
-    virtual void update() = 0;
-};
+#include "../../interfaces/itimemanager.h"
 
-                                 //, public Singleton<TimeManager>
-class _TimeManager : public QObject
+class _TimeManager : public QObject, public ITimeManager
 {
   Q_OBJECT
     public:
@@ -22,13 +17,6 @@ class _TimeManager : public QObject
       m_sleepTime = -1;
       m_awakeTime = -2;
     }
-    enum mode
-    {
-      Play = 0,
-      Pause = 1,
-      Stop = 1,                  // Don't feel the need to differentiate at this point
-      Rewind = 2
-    };
 
     const int& getTurn();
     const int& getFrame();
@@ -75,5 +63,7 @@ class _TimeManager : public QObject
 
     std::list< UpdateNeeded* > m_updateRequesters;
 };
+
 extern _TimeManager *TimeManager;
+
 #endif

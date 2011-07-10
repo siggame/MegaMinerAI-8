@@ -5,8 +5,9 @@
 #include "renderwidget.h"
 #include "../gocfamily_controlbar.h"
 #include "../gocfamily_guitoolset.h"
+#include "../../interfaces/icentralwidget.h"
 
-class CentralWidget: public QWidget
+class CentralWidget: public QWidget, public ICentralWidget
 {
   public:
     CentralWidget( QWidget *parent = 0 );
@@ -24,4 +25,5 @@ class CentralWidget: public QWidget
     void buildControlBar();
 
 };
+
 #endif
