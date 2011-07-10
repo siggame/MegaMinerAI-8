@@ -54,7 +54,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     unsigned int numTurns = game.states.size();
     unsigned int numFrames = OptionsMan->getInt("numFrames");
 
-    ObjectManager::setSize(numTurns,numFrames);
+    ObjectManager->setSize(numTurns,numFrames);
 
     TimeManager->setTurn(0);
     TimeManager->setNumTurns( numTurns );
@@ -250,7 +250,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
     {
 	//
 	//std::cout << "add ships & shit\n";
-    	if (!ObjectManager::reg(it->first,it->second))
+    	if (!ObjectManager->reg(it->first,it->second))
 	    std::cout << "Object load error: id " << it->first << '\n';
     }
 

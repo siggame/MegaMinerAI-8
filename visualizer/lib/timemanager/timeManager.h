@@ -37,7 +37,7 @@ class _TimeManager : public QObject//, public Singleton<TimeManager>
     const int& getNumTurns();
     void setNumTurns( const int& numTurns );
 
-    const float getSpeed();
+    float getSpeed();
     void setSpeed( const float& speed );
 
     int timeHash();

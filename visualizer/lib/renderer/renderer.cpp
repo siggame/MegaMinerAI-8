@@ -265,7 +265,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   int health;
 
   typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
-  Bucket * bucket = ObjectManager::getBucket(turn,frame);
+  Bucket * bucket = ObjectManager->getBucket(turn,frame);
 
   if (!bucket)
   {

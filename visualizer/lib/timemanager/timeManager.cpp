@@ -23,7 +23,7 @@ void _TimeManager::setTurn( const int& turn )
   updateChildren();
 }
 
-const float _TimeManager::getSpeed()
+float _TimeManager::getSpeed()
 {
   float multi = OptionsMan->getFloat( "speed" );
   return m_speed * multi;

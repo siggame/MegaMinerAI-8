@@ -42,14 +42,19 @@ int main(int argc, char *argv[])
 	TimeManager->setSpeed( 1 );
 
   ///////////////////////////////////////////////////////////////////
+  // ObjectManager depends on OptionsManager 
+  ///////////////////////////////////////////////////////////////////
+  ObjectManager->setup();
+
+  ///////////////////////////////////////////////////////////////////
   // GUI Depends On This Runing, but it doens't depend on anything.
   ///////////////////////////////////////////////////////////////////
 	QApplication app( argc, argv );
 
   ///////////////////////////////////////////////////////////////////
-  // GUI Depends On Options Manager, Time Manager and QApplication
-  // running already
-  // GUI also depends on the renderer, but starts it  automagically.
+  // GUI Depends On Options Manager, Time Manager, Objectmanager,
+  // and QApplication running already.
+  // GUI also depends on the renderer, but starts it automagically.
   ///////////////////////////////////////////////////////////////////
 	GUI->setup();
 
@@ -70,6 +75,7 @@ int main(int argc, char *argv[])
 
   GUI->destroy();
 	Renderer->destroy();
+  ObjectManager->destroy();
   TimeManager->destroy();
 	OptionsMan->destroy();
 #if 0
