@@ -18,6 +18,7 @@ typedef int idtype;
 
 bool ObjectLoader::loadGamelog(const std::string & filename)
 {
+#if 0
   //! @todo PUT THE LOADING LOGIC HERE!!
   Game game;
 
@@ -247,5 +248,7 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
       std::cout << "Object load error: id " << it->first << '\n';
   }
 
+  return true;
+#endif
   return true;
 }

@@ -114,7 +114,7 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 using namespace std;
 void _GUI::loadGamelog( std::string gamelog )
 {
-  if (!ObjectLoader::loadGamelog(gamelog))
+  if( !ObjectLoader::loadGamelog( gamelog ) )
   {
     std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
   }
