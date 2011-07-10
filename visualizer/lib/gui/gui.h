@@ -4,17 +4,13 @@
 #include "centralwidget.h"
 #include "controlbar.h"
 #include "../timemanager/timeManager.h"
-#include "../gocfamily_gui.h"
 #include "../objectmanager/objectloader.h"
 
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
-#include <QTableWidget>
 #include <QStringList>
-#include <QString>
 #include <map>
-#include <string>
 
 #include "../../interfaces/igui.h"
 
