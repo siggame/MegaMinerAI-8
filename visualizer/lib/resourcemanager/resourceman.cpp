@@ -6,13 +6,6 @@
   */
 std::vector<ResID_t> ResourceMan::listResourceNames()
 {
-#if 0
-	if (!isInit())
-	{
-		return std::vector<ResID_t>();
-	}
-#endif
-
     std::vector<ResID_t> names;
     DataTable::iterator it = instance()->data()->begin();
     for (; it != instance()->data()->end(); it++)

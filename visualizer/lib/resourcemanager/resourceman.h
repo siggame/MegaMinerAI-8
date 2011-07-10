@@ -10,7 +10,7 @@
 
 /** @todo merge this into the options manager... maybe **/
 
-class ResourceMan : protected Manager< ResID_t, Resource* >
+class ResourceMan : protected _Manager< ResID_t, Resource* >
 {
 	public:
 		/** Default constructor */

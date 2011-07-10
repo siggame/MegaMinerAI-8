@@ -2,17 +2,15 @@
 #define MANAGER_H
 
 #include "../singleton.h"
+#include "../common.h"
 #include <map>
-
-
-
 
 /**
   * This is the class where most manager functionality should
   * be derrived from (A manager is a souped up map class, with special singleton powers)
   */
 template < typename IdType, typename DataType >
-class Manager : public Singleton < Manager<IdType,DataType> >
+class _Manager : public Module //: public Singleton < Manager<IdType,DataType> >
 {
 	public:
 
@@ -35,7 +33,7 @@ class Manager : public Singleton < Manager<IdType,DataType> >
 		DataTable m_data;
 		//typedef Singleton < ManagerBase<IdType,DataType> > ManagerSingleton;
 		//typedef ManagerBase<IdType,DataType> BaseType;
-		typedef Manager<IdType,DataType> ManagerType;
+		typedef _Manager<IdType,DataType> ManagerType;
 		//typedef std::map<IdType,DataType> DataTable;
 	private:
 };
