@@ -18,7 +18,6 @@ class _Games: public Module
   private:
     std::vector< IGame* > m_gameList;
 
-
 };
 
 extern _Games *Games;

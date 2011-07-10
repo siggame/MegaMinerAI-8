@@ -5,6 +5,7 @@
 
 class Piracy: public QObject, public IGame
 {
+  Q_OBJECT
   Q_INTERFACES( IGame );
   public:
     LogRegex logFileInfo();

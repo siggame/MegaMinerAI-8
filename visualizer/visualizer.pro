@@ -27,7 +27,6 @@ SOURCES += main.cpp \
     ./lib/parser/structures.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
-    ./piracy/*.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/renderer/*.cpp \
@@ -46,7 +45,6 @@ HEADERS += ./lib/manager/*.h \
     ./lib/goc_controlbar.h \
     ./lib/*.h \
     ./lib/selectionrender/*.h \
-    ./piracy/*.h \
     ./lib/resourcemanager/*.h \
     ./lib/renderer/textRenderer/*.h \
     ./interfaces/*.h

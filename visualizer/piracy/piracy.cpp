@@ -10,7 +10,9 @@ LogRegex Piracy::logFileInfo()
 
 void Piracy::loadGamelog( std::string gamelog )
 {
+  std::cerr << gamelog << std::endl;
   std::cout << "Loading Piracy Gamelog" << std::endl;
+  throw "LOADING PIRACY GAMELOG";
 }
 
 Q_EXPORT_PLUGIN2( piracy, Piracy );
