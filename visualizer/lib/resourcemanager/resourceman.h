@@ -1,7 +1,6 @@
 #ifndef RESOURCEMAN_H
 #define RESOURCEMAN_H
 
-#include "../singleton.h"
 #include "resource.h"
 #include "../manager/manager.h"
 #include <map>

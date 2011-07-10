@@ -1,7 +1,6 @@
 #ifndef MUTEX_H
 #define MUTEX_H
 
-#include "../singleton.h"
 #include <map>
 #include <string>
 #include <iostream>
@@ -35,20 +34,25 @@ typedef std::string MutexID_t;
   3) to unlock use:
     Mutex::unlock(mutexName);
   */
-class Mutex : public Singleton<Mutex>
+class _Mutex 
 {
   public:
-    static bool createMutex(const MutexID_t & mutexName);
-    static bool lock(const MutexID_t & mutexName);
-    static bool unlock(const MutexID_t & mutexName);
-    static bool mutexExists(const MutexID_t & mutexName);
+    bool createMutex(const MutexID_t & mutexName);
+    bool lock(const MutexID_t & mutexName);
+    bool unlock(const MutexID_t & mutexName);
+    bool mutexExists(const MutexID_t & mutexName);
+
+    static void setup();
+    static void destroy();
 
     //Warning: only use this when qualifying with #ifdef SYSTEM_NAME
-    static MutexHandle getMutex(const MutexID_t & mutexName);
+    MutexHandle getMutex(const MutexID_t & mutexName);
 
   protected:
     std::map<MutexID_t,MutexHandle> m_mutexes;
 
   private:
 };
+
+extern _Mutex *Mutex;
 #endif                           // MUTEX_H

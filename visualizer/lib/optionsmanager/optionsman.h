@@ -2,7 +2,6 @@
 #define OPTIONSMAN_H
 
 #include "option.h"
-#include "../singleton.h"
 #include "../mutex/Mutex.h"
 #include <iostream>
 #include <map>

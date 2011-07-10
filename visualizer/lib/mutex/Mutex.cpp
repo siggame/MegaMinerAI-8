@@ -1,11 +1,13 @@
 #include "Mutex.h"
 
-/** @brief getMutex
+_Mutex *Mutex = 0;
+
+/** @brief get_Mutex
  * get a handle to a mutex
  * @param mutexName the name of the mutex
  * @return a handle to the mutex
  */
-MutexHandle Mutex::getMutex(const MutexID_t & mutexName)
+MutexHandle _Mutex::getMutex(const MutexID_t & mutexName)
 {
   #if 0
   if (!isInit())
@@ -15,9 +17,9 @@ MutexHandle Mutex::getMutex(const MutexID_t & mutexName)
   }
   #endif
 
-  if ( instance()->m_mutexes.find(mutexName) != instance()->m_mutexes.end())
+  if ( m_mutexes.find(mutexName) != m_mutexes.end())
   {
-    return instance()->m_mutexes[mutexName];
+    return m_mutexes[mutexName];
   }
 
   return MutexHandle();
@@ -29,7 +31,7 @@ MutexHandle Mutex::getMutex(const MutexID_t & mutexName)
  * @param mutexName the name of the mutex to unlock
  * @return true if the lock was successfully released
  */
-bool Mutex::unlock(const MutexID_t & mutexName)
+bool _Mutex::unlock(const MutexID_t & mutexName)
 {
   #if 0
   if (!isInit())
@@ -38,12 +40,12 @@ bool Mutex::unlock(const MutexID_t & mutexName)
     return false;
   }
   #endif
-  if ( instance()->m_mutexes.find(mutexName) != instance()->m_mutexes.end())
+  if ( m_mutexes.find(mutexName) != m_mutexes.end())
   {
     #ifdef WIN32
-    ReleaseMutex( instance()->m_mutexes[mutexName] );
+    Release_Mutex( m_mutexes[mutexName] );
     #else
-    pthread_mutex_unlock( &instance()->m_mutexes[mutexName] );
+    pthread_mutex_unlock( &m_mutexes[mutexName] );
     #endif
     return true;
   }
@@ -58,7 +60,7 @@ bool Mutex::unlock(const MutexID_t & mutexName)
  * @param mutexName the name of the mutex to lock
  * @return true if the lock was successfully grabbed
  */
-bool Mutex::lock(const MutexID_t & mutexName)
+bool _Mutex::lock(const MutexID_t & mutexName)
 {
   #if 0
   if (!isInit())
@@ -68,12 +70,12 @@ bool Mutex::lock(const MutexID_t & mutexName)
   }
   #endif
 
-  if ( instance()->m_mutexes.find(mutexName) != instance()->m_mutexes.end() )
+  if ( m_mutexes.find(mutexName) != m_mutexes.end() )
   {
     #ifdef WIN32
-    WaitForSingleObject( instance()->m_mutexes[mutexName], INFINITE );
+    WaitForSingleObject( m_mutexes[mutexName], INFINITE );
     #else
-    pthread_mutex_lock( &( instance()->m_mutexes[mutexName] ) );
+    pthread_mutex_lock( &( m_mutexes[mutexName] ) );
     #endif
     return true;
   }
@@ -83,12 +85,12 @@ bool Mutex::lock(const MutexID_t & mutexName)
 }
 
 
-/** @brief createMutex
+/** @brief create_Mutex
  * create a mutex
  * @param mutexName the name of the mutex to create
  * @return true if the creation was successful
  */
-bool Mutex::createMutex(const MutexID_t & mutexName)
+bool _Mutex::createMutex(const MutexID_t & mutexName)
 {
   #if 0
   if (!isInit())
@@ -97,13 +99,13 @@ bool Mutex::createMutex(const MutexID_t & mutexName)
     return false;
   }
   #endif
-  if ( instance()->m_mutexes.find(mutexName) == instance()->m_mutexes.end() )
+  if ( m_mutexes.find(mutexName) == m_mutexes.end() )
   {
     #ifdef WIN32
-    instance()->m_mutexes[mutexName] = CreateMutex( NULL, false, NULL );
+    m_mutexes[mutexName] = Create_Mutex( NULL, false, NULL );
     #else
     pthread_mutex_t temp = PTHREAD_MUTEX_INITIALIZER;
-    instance()->m_mutexes[mutexName] = temp;
+    m_mutexes[mutexName] = temp;
     #endif
     return true;
   }
@@ -111,3 +113,23 @@ bool Mutex::createMutex(const MutexID_t & mutexName)
   std::cout <<"\"" << mutexName << "\" already exists\n";
   return false;
 }
+
+void _Mutex::setup()
+{
+  if( !Mutex )
+  {
+    Mutex = new _Mutex;
+  }
+  else
+  {
+    throw "Mutex already initialized.";
+  }
+}
+
+void _Mutex::destroy()
+{
+  delete Mutex;
+  Mutex = 0;
+
+}
+

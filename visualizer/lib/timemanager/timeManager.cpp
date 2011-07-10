@@ -156,7 +156,7 @@ void _TimeManager::updateFrames()
 
 void _TimeManager::requestUpdate( UpdateNeeded* requester )
 {
-  Singleton< _TimeManager >::instance()->m_updateRequesters.push_back( requester );
+  m_updateRequesters.push_back( requester );
 }
 
 

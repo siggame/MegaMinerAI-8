@@ -43,7 +43,7 @@ void RenderWidget::mousePressEvent( QMouseEvent *e )
     initialX = e->x();
     initialY = e->y();
 
-    SelectionRender::get()->setSelectionBox(initialX, initialY, initialX+1, initialY+1);
+    SelectionRender->setSelectionBox(initialX, initialY, initialX+1, initialY+1);
     //+1 guarantees we create a box, rather than a point.
 
     //line.clear();
@@ -71,8 +71,8 @@ void RenderWidget::mouseReleaseEvent( QMouseEvent *e )
   currentY = e->y()+1;
   //+1 guarantees we create a box, rather than a point.
 
-  SelectionRender::get()->setUpdated(true);
-  SelectionRender::get()->setDragging(false);
+  SelectionRender->setUpdated(true);
+  SelectionRender->setDragging(false);
 
   Renderer->update( TimeManager->getTurn(), 0 );
 
@@ -89,7 +89,7 @@ void RenderWidget::mouseMoveEvent( QMouseEvent *e )
     abs(currentX-initialX)+abs(currentY-initialY) > m_DRAG_DISTANCE )
   {
     leftButtonDrag = true;
-    SelectionRender::get()->setDragging(true);
-    SelectionRender::get()->setSelectionBox(initialX, initialY, currentX, currentY);
+    SelectionRender->setDragging(true);
+    SelectionRender->setSelectionBox(initialX, initialY, currentX, currentY);
   }
 }

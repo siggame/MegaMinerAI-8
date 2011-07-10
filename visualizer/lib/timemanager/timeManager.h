@@ -4,7 +4,6 @@
 #include <QTimer>
 #include <time.h>
 #include <list>
-#include "../singleton.h"
 
 class UpdateNeeded
 {

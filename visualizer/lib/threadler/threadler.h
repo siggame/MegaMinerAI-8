@@ -10,8 +10,6 @@
 #ifndef THREADLER_H
 #define THREADLER_H
 
-#include "../singleton.h"
-
 #ifdef WIN32
 #include <windows.h>
 #else
@@ -50,21 +48,21 @@ typedef unsigned int ThreadID_t;
   + To wait for another thread to end use:
   Threadler::joinThread(fxnIndex);
   */
-class Threadler : public Singleton<Threadler>
+class Threadler
 {
   public:
-    static ThreadID_t createThread(ThreadFxnType fxn(ThreadArgType),ThreadArgType args);
+    ThreadID_t createThread(ThreadFxnType fxn(ThreadArgType),ThreadArgType args);
 
-    static ThreadHandle getThread(const ThreadID_t & index);
-    static ThreadHandle getCurrentThread();
+    ThreadHandle getThread(const ThreadID_t & index);
+    ThreadHandle getCurrentThread();
 
-    static bool destroyThread(const ThreadID_t & index);
-    static void exitThread(const int & exitVal);
+    bool destroyThread(const ThreadID_t & index);
+    void exitThread(const int & exitVal);
 
-    static bool snoozeThread(const ThreadID_t & index);
-    static bool wakeThread(const ThreadID_t & index);
+    bool snoozeThread(const ThreadID_t & index);
+    bool wakeThread(const ThreadID_t & index);
 
-    static bool joinThread(const ThreadID_t & index);
+    bool joinThread(const ThreadID_t & index);
 
   protected:
     /**

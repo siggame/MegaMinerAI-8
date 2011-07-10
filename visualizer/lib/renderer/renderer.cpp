@@ -39,7 +39,7 @@ bool _Renderer::refresh()
   if (!isSetup())
     return false;
 
-  if( SelectionRender::instance()->getUpdated() )
+  if( SelectionRender->getUpdated() )
   {
     update( TimeManager->getTurn(), 0 );
   }
@@ -78,7 +78,7 @@ bool _Renderer::refresh()
     m_parent->swapBuffers();
   }
 
-  SelectionRender::instance()->setUpdated(false);
+  SelectionRender->setUpdated(false);
 
   return true;
 }
@@ -188,7 +188,7 @@ void _Renderer::_setup()
 
   refresh();
 
-  TimeManager->requestUpdate( Singleton<_Renderer>::instance()  );
+  TimeManager->requestUpdate( Renderer );
 
   if( !m_isSetup )
   {
@@ -290,7 +290,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   //  m_renderList.clear();
   int time = TimeManager->timeHash();
 
-  bool selectUpdate = SelectionRender::instance()->getUpdated();
+  bool selectUpdate = SelectionRender->getUpdated();
   float mapSize = (float)OptionsMan->getInt("mapSize");
   float unitSize  = height()/mapSize;
 
@@ -303,8 +303,8 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   if( selectUpdate )
   {
 
-    x1 = SelectionRender::instance()->getX1()/unitSize;
-    x2 = SelectionRender::instance()->getX2()/unitSize;
+    x1 = SelectionRender->getX1()/unitSize;
+    x2 = SelectionRender->getX2()/unitSize;
     if( x2 < x1 )
     {
       int temp;
@@ -313,8 +313,8 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
       x1 = temp;
     }
 
-    y1 = SelectionRender::instance()->getY1()/unitSize;
-    y2 = SelectionRender::instance()->getY2()/unitSize;
+    y1 = SelectionRender->getY1()/unitSize;
+    y2 = SelectionRender->getY2()/unitSize;
 
     if( y2 < y1 )
     {

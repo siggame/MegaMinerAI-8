@@ -1,7 +1,6 @@
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
-#include "../singleton.h"
 #include "../gameobject/gameobject.h"
 #include "../timeline/timeline.h"
 
@@ -10,7 +9,6 @@
 
 typedef int ObjIdType;
 
-                                 //Singleton<ObjectManager>
 class _ObjectManager : public Module
 {
   public:

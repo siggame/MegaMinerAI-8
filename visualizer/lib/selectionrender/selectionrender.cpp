@@ -2,7 +2,9 @@
 #include <GL/gl.h>
 using namespace std;
 
-void SelectionRender::setSelectionBox(int X1, int Y1, int X2, int Y2)
+_SelectionRender *SelectionRender = 0;
+
+void _SelectionRender::setSelectionBox(int X1, int Y1, int X2, int Y2)
 {
   m_X1 = X1;
   m_Y1 = Y1;
@@ -11,31 +13,31 @@ void SelectionRender::setSelectionBox(int X1, int Y1, int X2, int Y2)
 }
 
 
-bool SelectionRender::getUpdated()
+bool _SelectionRender::getUpdated()
 {
   return m_updated;
 }
 
 
-void SelectionRender::setUpdated(bool updated)
+void _SelectionRender::setUpdated(bool updated)
 {
   m_updated = updated;
 }
 
 
-bool SelectionRender::getDragging()
+bool _SelectionRender::getDragging()
 {
   return m_dragging;
 }
 
 
-void SelectionRender::setDragging(bool dragging)
+void _SelectionRender::setDragging(bool dragging)
 {
   m_dragging = dragging;
 }
 
 
-void SelectionRender::renderAt(const unsigned int & turn, const unsigned int & frame)
+void _SelectionRender::renderAt(const unsigned int & turn, const unsigned int & frame)
 {
   if(getDragging())
   {
@@ -66,3 +68,16 @@ void SelectionRender::renderAt(const unsigned int & turn, const unsigned int & f
     glEnable(GL_TEXTURE);
   }
 }
+
+void _SelectionRender::setup()
+{
+  if( !SelectionRender )
+  {
+    SelectionRender = new _SelectionRender;
+  }
+  else
+  {
+    throw "Selection Render Already Initialized";
+  }
+}
+

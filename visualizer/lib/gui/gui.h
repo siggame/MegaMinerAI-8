@@ -4,7 +4,6 @@
 #include "centralwidget.h"
 #include "controlbar.h"
 #include "../timemanager/timeManager.h"
-#include "../singleton.h"
 #include "../gocfamily_gui.h"
 #include "../objectmanager/objectloader.h"
 

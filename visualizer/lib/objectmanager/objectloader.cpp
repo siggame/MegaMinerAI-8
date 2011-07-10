@@ -34,8 +34,8 @@ bool ObjectLoader::loadGamelog(const std::string & filename)
   Renderer->registerConstantObj( 1, go );
 
   go = new GameObject( 2 );
-  go->setGOC( SelectionRender::get() );
-  SelectionRender::get()->setOwner( go );
+  go->setGOC( SelectionRender );
+  SelectionRender->setOwner( go );
   Renderer->registerConstantObj( 2, go );
 
   go = new GameObject( 3 );

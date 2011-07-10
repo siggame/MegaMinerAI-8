@@ -1,13 +1,13 @@
 #ifndef SELECTIONRENDER_H
 #define SELECTIONRENDER_H
 #include "../gocfamily_render.h"
-#include "../singleton.h"
+//#include "../singleton.h"
 
 /* The SelectionRender object assists with drawing the selection box that
  * appears when clicking and dragging to highlight interesting units.
  */
 
-class SelectionRender : public GOCFamily_Render, public Singleton <SelectionRender>
+class _SelectionRender : public GOCFamily_Render
 {
   public:
                                  //X1, Y1, X2, Y2 Screen Resolution
@@ -23,24 +23,14 @@ class SelectionRender : public GOCFamily_Render, public Singleton <SelectionRend
     bool getDragging();
     void setDragging(bool);
 
-    static SelectionRender * get()
-    {
-
-    #if 0
-      if( !Singleton<SelectionRender>::isInit() )
-      {
-        Singleton<SelectionRender>::create();
-      }
-      return Singleton <SelectionRender>::get();
-    #endif
-      return SelectionRender::instance();
-    }
-
     const GOC_IDType componentID() const
     {
       return GOC_IDType( "SelectionRender" );
     }
     void update() {};
+
+    static void setup();
+    static void destroy();
 
   private:
     void renderAt(const unsigned int & turn, const unsigned int & frame);
@@ -50,4 +40,7 @@ class SelectionRender : public GOCFamily_Render, public Singleton <SelectionRend
 
     int m_X1, m_Y1, m_X2, m_Y2;
 };
+
+extern _SelectionRender *SelectionRender;
+
 #endif

@@ -1,13 +1,12 @@
 #ifndef OBJECTLOADER_H
 #define OBJECTLOADER_H
-#include "../singleton.h"
 #include "objectmanager.h"
 #include "../timemanager/timeManager.h"
 #include "../optionsmanager/optionsman.h"
 #include "../parser/parser.h"
 #include <string>
 
-class ObjectLoader : public Singleton<ObjectLoader>
+class ObjectLoader 
 {
   public:
     //! @todo load definitions file for translation

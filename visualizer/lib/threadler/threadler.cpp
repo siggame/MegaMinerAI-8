@@ -35,10 +35,10 @@ bool Threadler::destroyThread(const ThreadID_t & index)
   #endif
 
   #ifdef WIN32
-  return TerminateThread( instance()->m_threads[index], 0 );
+  return TerminateThread( m_threads[index], 0 );
   #else
 
-  return pthread_cancel( instance()->m_threads[index] );
+  return pthread_cancel( m_threads[index] );
   #endif
 }
 
@@ -93,7 +93,7 @@ ThreadHandle Threadler::getThread(const ThreadID_t & index)
     return ThreadHandle();
   #endif
 
-  return instance()->m_threads[index];
+  return m_threads[index];
 }
 
 
@@ -112,13 +112,13 @@ unsigned int Threadler::createThread(ThreadFxnType fxn(ThreadArgType), ThreadArg
 
   #ifdef WIN32
   HANDLE thread = CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)fxn, args, 0, NULL );
-  instance()->m_threads.push_back( thread );
-  return instance()->m_threads.size()-1;
+  m_threads.push_back( thread );
+  return m_threads.size()-1;
   #else
   pthread_t thread;
   pthread_create(&thread,NULL,fxn,args);
-  instance()->m_threads.push_back(thread);
-  return instance()->m_threads.size()-1;
+  m_threads.push_back(thread);
+  return m_threads.size()-1;
   #endif
 }
 
@@ -137,12 +137,12 @@ bool Threadler::joinThread(const ThreadID_t & index)
 
   #ifdef WIN32
   bool retval = (WaitForSingleObject(get()->m_threads[index], INFINITE) == WAIT_OBJECT_0);
-  instance()->m_threads.erase( instance()->m_threads.begin() + index );
+  m_threads.erase( m_threads.begin() + index );
   return retval;
   #else
   void * temp;
-  bool retval = pthread_join( instance()->m_threads[index], &temp );
-  instance()->m_threads.erase( instance()->m_threads.begin()+index );
+  bool retval = pthread_join( m_threads[index], &temp );
+  m_threads.erase( m_threads.begin()+index );
   return retval;
   #endif
 }

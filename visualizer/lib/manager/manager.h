@@ -1,7 +1,6 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "../singleton.h"
 #include "../common.h"
 #include <map>
 
@@ -10,7 +9,7 @@
  * be derrived from (A manager is a souped up map class, with special singleton powers)
  */
 template < typename IdType, typename DataType >
-class _Manager : public Module   //: public Singleton < Manager<IdType,DataType> >
+class _Manager : public Module
 {
   public:
 

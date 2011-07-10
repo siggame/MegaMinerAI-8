@@ -2,7 +2,6 @@
 #define RENDERER_H
 
 // TODO: Add more includes.  Not nearly enough
-#include "../singleton.h"
 #include <map>
 #include <list>
 #include <set>
