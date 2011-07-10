@@ -10,30 +10,33 @@
 
 /** @todo merge this into the options manager... maybe **/
 
-class ResourceMan : protected _Manager< ResID_t, Resource* >
+class _ResourceMan : protected _Manager< ResID_t, Resource* >
 {
   public:
     /** Default constructor */
-    ResourceMan();
+    _ResourceMan()
+    {
+    };
     /** Default destructor */
-    virtual ~ResourceMan();
+    ~_ResourceMan() {};
 
-    static Resource * reference(const std::string & rName, const std::string & referencer);
-    static bool release(const std::string & rName, const std::string & referencer);
+    Resource * reference(const std::string & rName, const std::string & referencer);
+    bool release(const std::string & rName, const std::string & referencer);
 
-    template<class T, ResourceType RT>
-      static bool reg(const ResID_t & rName, const T & value);
-    static bool regFile(const ResID_t & rName, const std::string & filename);
-    static bool del(const ResID_t & rName);
+//template<class T, ResourceType RT>
+//    bool reg(const ResID_t & rName, const T & value);
+    bool regFile(const ResID_t & rName, const std::string & filename);
+    bool del(const ResID_t & rName);
 
-    static bool loadResourceFile(const std::string & filename);
-    static bool saveResourceFile(const std::string & filename);
+    bool loadResourceFile(const std::string & filename);
+    bool saveResourceFile(const std::string & filename);
 
-    static bool exists(const ResID_t & rName);
+    static void setup();
+    static void destroy();
 
-    static std::vector<std::string> listResourceNames();
+    bool exists(const ResID_t & rName);
 
-    static bool destroy();
+    std::vector<std::string> listResourceNames();
 
   protected:
   private:
@@ -41,4 +44,7 @@ class ResourceMan : protected _Manager< ResID_t, Resource* >
     ResourceType findFileType(const std::string & filename);
 
 };
+
+extern _ResourceMan *ResourceMan;
+
 #endif                           // RESOURCEMAN_H

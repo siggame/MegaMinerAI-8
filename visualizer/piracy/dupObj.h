@@ -135,7 +135,7 @@ struct DupObj
           //std::cout << "B Bad Object Type\n";
       }
 
-      res = ResourceMan::reference(textureName,"dupObject");
+      res = ResourceMan->reference(textureName,"dupObject");
       if (res)
       {
 
@@ -151,7 +151,7 @@ struct DupObj
 
         glEnd();
 
-        ResourceMan::release(textureName,"dupObject");
+        ResourceMan->release(textureName,"dupObject");
 
       }
       else

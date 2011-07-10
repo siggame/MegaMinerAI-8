@@ -8,7 +8,7 @@ template < typename IdType, typename DataType >
 unsigned int _Manager<IdType,DataType>::size()
 {
   if (_Manager::isInit())
-    _Manager::instance()->m_data.size();
+    m_data.size();
 
   return 0;
 }
@@ -22,7 +22,7 @@ template < typename IdType, typename DataType >
 void _Manager<IdType,DataType>::clear()
 {
   if (_Manager::isInit())
-    _Manager::instance()->m_data.clear();
+    m_data.clear();
 }
 
 
@@ -39,7 +39,7 @@ bool _Manager<IdType,DataType>::exists(const IdType & id)
     return false;
   #endif
 
-  if (_Manager::instance()->m_data.find(id) != _Manager::instance()->m_data.end())
+  if (m_data.find(id) != m_data.end())
     return true;
 
   return false;
@@ -60,11 +60,11 @@ bool _Manager<IdType,DataType>::del(const IdType & id)
     return false;
   #endif
 
-  typename DataTable::iterator it = _Manager::instance()->m_data.find(id);
-  if (it == _Manager::instance()->m_data.end())
+  typename DataTable::iterator it = m_data.find(id);
+  if (it == m_data.end())
     return false;
 
-  _Manager::instance()->m_data.erase(it);
+  m_data.erase(it);
 
   return true;
 }
@@ -79,15 +79,11 @@ bool _Manager<IdType,DataType>::del(const IdType & id)
 template < typename IdType, typename DataType >
 bool _Manager<IdType,DataType>::reg(const IdType & id, const DataType & data)
 {
-  #if 0
-  if (!_Manager::isInit())
-    return false;
-  #endif
-  typename DataTable::iterator it = _Manager::instance()->m_data.find(id);
-  if (it != _Manager::instance()->m_data.end())
+  typename DataTable::iterator it = m_data.find(id);
+  if (it != m_data.end())
     return false;
 
-  _Manager::instance()->m_data[id] = data;
+  m_data[id] = data;
   return true;
 }
 
@@ -101,8 +97,8 @@ template < typename IdType, typename DataType >
 DataType * _Manager<IdType,DataType>::getItem(const IdType & id)
 {
 
-  typename DataTable::iterator it = _Manager::instance()->m_data.find(id);
-  if (it == _Manager::instance()->m_data.end())
+  typename DataTable::iterator it = m_data.find(id);
+  if (it == m_data.end())
     return NULL;
 
   return &it->second;
@@ -124,14 +120,14 @@ bool _Manager<IdType,DataType>::delPointer(const IdType & id)
     return false;
   #endif
 
-  typename DataTable::iterator it = _Manager::instance()->m_data.find(id);
-  if (it == _Manager::instance()->m_data.end())
+  typename DataTable::iterator it = m_data.find(id);
+  if (it == m_data.end())
     return false;
 
   if (it->second != NULL)
     delete it->second;
 
-  _Manager::instance()->m_data.erase(it);
+  m_data.erase(it);
 
   return true;
 }
@@ -145,13 +141,13 @@ bool _Manager<IdType,DataType>::delPointer(const IdType & id)
 template < typename IdType, typename DataType >
 void _Manager< IdType,DataType >::clearPointers()
 {
-  typename DataTable::iterator it = _Manager::instance()->m_data.begin();
-  for (;it != _Manager::instance()->m_data.end(); it = _Manager::instance()->m_data.begin())
+  typename DataTable::iterator it = m_data.begin();
+  for (;it != m_data.end(); it = m_data.begin())
   {
     if (it->second)
       delete it->second;
 
-    _Manager::instance()->m_data.erase(it);
+    m_data.erase(it);
   }
 
   return true;

@@ -58,7 +58,9 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
 	GUI->setup();
 
-	if ( !ResourceMan::loadResourceFile("./textures.r") )
+  ResourceMan->setup();
+
+	if ( !ResourceMan->loadResourceFile("./textures.r") )
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;
 		return 1;

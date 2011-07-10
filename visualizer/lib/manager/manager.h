@@ -15,17 +15,17 @@ class _Manager : public Module   //: public Singleton < Manager<IdType,DataType>
   public:
 
     typedef std::map<IdType,DataType> DataTable;
-    static bool reg(const IdType & id, const DataType & data);
-    static bool del(const IdType & id);
-    static bool delPointer(const IdType & id);
+    bool reg(const IdType & id, const DataType & data);
+    bool del(const IdType & id);
+    bool delPointer(const IdType & id);
 
-    static bool exists(const IdType & id);
-    static void clear();
-    static void clearPointers();
-    static unsigned int size();
+    bool exists(const IdType & id);
+    void clear();
+    void clearPointers();
+    unsigned int size();
 
-    static DataType * getItem(const IdType & id);
-    static bool setItem(const IdType & id);
+    DataType * getItem(const IdType & id);
+    bool setItem(const IdType & id);
 
     DataTable * data() { return &m_data; }
 
