@@ -25,5 +25,4 @@ class CentralWidget: public QWidget, public ICentralWidget
     void buildControlBar();
 
 };
-
 #endif

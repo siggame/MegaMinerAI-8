@@ -65,5 +65,4 @@ class _TimeManager : public QObject, public ITimeManager
 };
 
 extern _TimeManager *TimeManager;
-
 #endif
