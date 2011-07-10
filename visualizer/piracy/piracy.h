@@ -3,7 +3,7 @@
 
 #include "igame.h"
 
-class Piracy: public IGame
+class Piracy: public QObject, public IGame
 {
   Q_INTERFACES( IGame );
   public:

@@ -5,12 +5,12 @@ LogRegex Piracy::logFileInfo()
 {
   LogRegex lr;
   
-
   return lr;
 };
 
 void Piracy::loadGamelog( std::string gamelog )
 {
   std::cout << "Loading Piracy Gamelog" << std::endl;
-
 }
+
+Q_EXPORT_PLUGIN2( piracy, Piracy );

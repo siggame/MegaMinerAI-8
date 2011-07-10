@@ -114,10 +114,13 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 using namespace std;
 void _GUI::loadGamelog( std::string gamelog )
 {
+
+#if 0
   if( !ObjectLoader::loadGamelog( gamelog ) )
   {
     std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
   }
+#endif
   return;                        //! @todo throw shitfit
 }
 

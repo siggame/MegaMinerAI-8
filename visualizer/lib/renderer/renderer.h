@@ -18,7 +18,7 @@
 #include "../timemanager/timeManager.h"
 
 #include "../../interfaces/irenderer.h"
-#include "../common.h"
+#include "common.h"
 
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"
