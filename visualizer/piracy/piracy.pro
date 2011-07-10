@@ -6,7 +6,7 @@ win32:LIBS += ../lib/parser/sexp/sexpXP.a
 else:LIBS += ../lib/parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
-SOURCES += *.cpp
+SOURCES += piracy.cpp
 HEADERS += *.h
 
 QMAKE_CFLAGS_DEBUG += -pg
@@ -16,3 +16,4 @@ CONFIG += debug plugin
 QT += opengl
 
 debug:DEFINES += __DEBUG__
+DESTDIR = ../plugins/
