@@ -2,6 +2,7 @@ Visualizer Operation
 1) Run visualizer
 2) Open gamelog (Ctrl + O)
 3) Watch gamelog
+4) Enjoy
 
 Visualizer keyboard shortcuts:
 File options
