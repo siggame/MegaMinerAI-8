@@ -114,6 +114,7 @@ bool _Mutex::createMutex(const MutexID_t & mutexName)
   return false;
 }
 
+
 void _Mutex::setup()
 {
   if( !Mutex )
@@ -126,10 +127,10 @@ void _Mutex::setup()
   }
 }
 
+
 void _Mutex::destroy()
 {
   delete Mutex;
   Mutex = 0;
 
 }
-

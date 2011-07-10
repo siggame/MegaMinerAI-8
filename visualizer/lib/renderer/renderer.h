@@ -137,8 +137,6 @@ class _Renderer : public UpdateNeeded, public Module
 
   protected:
   private:
-    //std::map<unsigned int,renderObj*> m_objects; //!< Member variable "m_objects"
-    //LookupTable<renderObj> m_lookupTable;
     unsigned int m_height;
     unsigned int m_width;
     unsigned int m_depth;
@@ -146,11 +144,8 @@ class _Renderer : public UpdateNeeded, public Module
 
     std::map<int, renderObj*> m_renderConstant;
 
-    //typedef Renderer<DupObject> Render;
-
     RenderWidget *m_parent;
 
-    //void multipleUnitStatColumnPopulate (Stats multi, int column);
 };
 
 extern _Renderer *Renderer;

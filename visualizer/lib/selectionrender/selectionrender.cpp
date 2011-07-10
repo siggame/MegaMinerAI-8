@@ -69,6 +69,7 @@ void _SelectionRender::renderAt(const unsigned int & turn, const unsigned int & 
   }
 }
 
+
 void _SelectionRender::setup()
 {
   if( !SelectionRender )
@@ -80,4 +81,3 @@ void _SelectionRender::setup()
     throw "Selection Render Already Initialized";
   }
 }
-

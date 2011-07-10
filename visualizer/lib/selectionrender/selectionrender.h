@@ -42,5 +42,4 @@ class _SelectionRender : public GOCFamily_Render
 };
 
 extern _SelectionRender *SelectionRender;
-
 #endif

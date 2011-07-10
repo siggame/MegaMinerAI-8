@@ -34,7 +34,7 @@ typedef std::string MutexID_t;
   3) to unlock use:
     Mutex::unlock(mutexName);
   */
-class _Mutex 
+class _Mutex
 {
   public:
     bool createMutex(const MutexID_t & mutexName);

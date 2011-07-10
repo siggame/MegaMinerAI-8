@@ -6,7 +6,7 @@
 #include "../parser/parser.h"
 #include <string>
 
-class ObjectLoader 
+class ObjectLoader
 {
   public:
     //! @todo load definitions file for translation
