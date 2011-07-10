@@ -6,7 +6,7 @@ win32:LIBS += ../lib/parser/sexp/sexpXP.a
 else:LIBS += ../lib/parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
-SOURCES += main.cpp 
+SOURCES += *.cpp
 HEADERS += *.h
 
 QMAKE_CFLAGS_DEBUG += -pg
