@@ -93,6 +93,7 @@ struct Stats
 
 class _Renderer : public UpdateNeeded, public Module, public IRenderer
 {
+  Q_INTERFACES( IRenderer );
   public:
 
     bool registerConstantObj( const unsigned int& id, renderObj* obj );

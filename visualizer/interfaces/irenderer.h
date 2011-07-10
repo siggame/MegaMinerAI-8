@@ -1,6 +1,7 @@
 #ifndef IRENDER_H
 #define IRENDER_H
 
+#include <QtPlugin>
 //this is a place holder
 typedef GameObject renderObj;
 
@@ -33,5 +34,7 @@ class IRenderer
     virtual void update() = 0;
     
 };
+
+Q_DECLARE_INTERFACE( IRenderer, "siggame.vis2.renderer/0.1" );
 
 #endif

@@ -12,7 +12,7 @@
 #include <QStringList>
 #include <map>
 
-#include "../../interfaces/igui.h"
+#include "igui.h"
 
 using namespace std;
 
@@ -145,14 +145,15 @@ using namespace std;
 /// @brief    Build the menus for this window
 /// @pre      None
 /// @post     Menus will be built
-/// @return   None
+/// @return   None 
 ////////////////////////////////////////////////////////////////
 
 class _GUI : public QMainWindow, public IGUI
 {
   Q_OBJECT
+  Q_INTERFACES( IGUI );
 
-    friend class RenderWidget;
+  friend class RenderWidget;
 
   public:
     _GUI() : m_isSetup(false) {};

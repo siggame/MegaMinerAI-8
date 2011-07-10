@@ -2,6 +2,7 @@
 #define IOBJECTMANAGER_H
 
 #include "../lib/gameobject/gameobject.h"
+#include <QtPlugin>
 typedef int ObjIdType;
 
 class IObjectManager
@@ -38,8 +39,8 @@ class IObjectManager
       const unsigned int&, 
       const unsigned int&
       ) = 0;
-
 };
 
+Q_DECLARE_INTERFACE( IObjectManager, "siggame.vis2.objectmanager/0.1" );
 
 #endif 

@@ -9,6 +9,7 @@
 
 class _ObjectManager : public Module, public IObjectManager
 {
+  Q_INTERFACES( IObjectManager );
   public:
     void setSize(const unsigned int & turns, const unsigned int & frames)
     {

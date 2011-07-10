@@ -9,6 +9,7 @@
 
 class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceMan
 {
+  Q_INTERFACES( IResourceMan );
   public:
     /** Default constructor */
     _ResourceMan()

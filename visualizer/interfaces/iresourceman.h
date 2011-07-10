@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "../lib/resourcemanager/resource.h"
+#include <QtPlugin>
 
 class IResourceMan
 {
@@ -21,5 +22,7 @@ class IResourceMan
     virtual std::vector<std::string> listResourceNames() = 0;
 
 };
+
+Q_DECLARE_INTERFACE( IResourceMan, "siggame.vis2.resourceman/0.1" );
 
 #endif

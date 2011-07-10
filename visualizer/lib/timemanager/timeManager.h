@@ -10,7 +10,8 @@
 class _TimeManager : public QObject, public ITimeManager
 {
   Q_OBJECT
-    public:
+  Q_INTERFACES( ITimeManager );
+  public:
 
     _TimeManager()
     {

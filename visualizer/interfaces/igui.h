@@ -5,6 +5,7 @@
 #include <QString>
 #include <string>
 #include "../lib/gocfamily_gui.h"
+#include <QtPlugin>
 typedef GOCFamily_GUI guiObj;
 
 class IGUI
@@ -32,7 +33,8 @@ class IGUI
     virtual QTableWidget* getGlobalStats() = 0;
     virtual QTableWidget* getSelectionStats() = 0;
     virtual QTableWidget* getIndividualStats() = 0;
-
 };
+
+Q_DECLARE_INTERFACE( IGUI, "siggame.vis2.gui/0.1" );
 
 #endif

@@ -2,6 +2,7 @@
 #define ITIMEMANAGER_H
 
 #include "../lib/updateneeded.h"
+#include <QtPlugin>
 
 class ITimeManager
 {    
@@ -37,5 +38,7 @@ class ITimeManager
     virtual void updateChildren() = 0;
 
 };
+
+Q_DECLARE_INTERFACE( ITimeManager, "siggame.vis2.timemanager/0.1" );
 
 #endif

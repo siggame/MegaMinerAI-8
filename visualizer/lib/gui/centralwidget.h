@@ -9,6 +9,7 @@
 
 class CentralWidget: public QWidget, public ICentralWidget
 {
+  Q_INTERFACES( ICentralWidget );
   public:
     CentralWidget( QWidget *parent = 0 );
     ~CentralWidget();

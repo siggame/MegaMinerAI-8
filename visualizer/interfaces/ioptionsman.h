@@ -3,6 +3,8 @@
 
 #include "../lib/optionsmanager/option.h"
 #include <string>
+#include <QtPlugin>
+
 
 typedef std::string OptID_t;
 
@@ -21,7 +23,8 @@ class IOptionsMan
     virtual bool addFloat( const OptID_t& oName, const float& val ) = 0;
     virtual bool addBool( const OptID_t& oName, const bool& val ) = 0;
 
-
 };
+
+Q_DECLARE_INTERFACE( IOptionsMan, "siggame.vis2.optionsman/0.1" );
 
 #endif
