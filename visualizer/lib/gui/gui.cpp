@@ -115,14 +115,27 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 using namespace std;
 void _GUI::loadGamelog( std::string gamelog )
 {
-
-#if 0
-  if( !ObjectLoader::loadGamelog( gamelog ) )
+  bool parserFound = false;
+  for
+    ( 
+    std::vector<IGame*>::iterator i = Games->gameList().begin(); 
+    i != Games->gameList().end() && !parserFound;
+    i++ 
+    )
   {
-    std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
+    QRegExp rx( (*i)->logFileInfo().regex.c_str() );
+    if( rx.exactMatch( gamelog.c_str() ) )
+    {
+      (*i)->loadGamelog( gamelog );
+      parserFound = true;
+    }
   }
-#endif
-  return;                        //! @todo throw shitfit
+
+  if( !parserFound )
+  {
+    THROW( Exception, "An appropriate game player could not be found!" );
+  }
+
 }
 
 
@@ -134,13 +147,9 @@ void _GUI::update()
 
 void _GUI::dropEvent( QDropEvent* evt )
 {
-
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
   loadGamelog( data );
-
-  // TODO: Open the gamelog with the appropriate plugins
-
 }
 
 

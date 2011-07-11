@@ -15,6 +15,8 @@ class _Games: public Module
     void _setup();
     static void destroy();
 
+    std::vector< IGame* > gameList();
+
   private:
     std::vector< IGame* > m_gameList;
 

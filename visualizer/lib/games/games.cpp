@@ -22,6 +22,7 @@ using namespace std;
 void _Games::_setup()
 {
   IGame *game = 0;
+  bool pluginFound;
   QDir pluginsDir( qApp->applicationDirPath() );
   pluginsDir.cd( "plugins" );
   foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
@@ -31,16 +32,27 @@ void _Games::_setup()
 #endif
     QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
     QObject *plugin = pluginLoader.instance();
+    pluginFound = false;
     if( plugin )
     {
       game = qobject_cast<IGame *>( plugin );
       if( game )
       {
-        game->loadGamelog( "log" );
+        pluginFound = true;
         m_gameList.push_back( game );
       }
     }
+
+    if( !pluginFound )
+    {
+      THROW( Exception, "The Above Plugin Did Not Load Correctly" );
+    }
   }
+}
+
+std::vector< IGame* > _Games::gameList()
+{
+  return m_gameList;
 }
 
 void _Games::destroy()

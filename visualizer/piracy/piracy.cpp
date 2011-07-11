@@ -1,23 +1,28 @@
 #include "piracy.h"
 #include "common.h"
+#include "parser/parser.h"
+#include "parser/structures.h"
 #include <iostream>
 
 LogRegex Piracy::logFileInfo()
 {
   LogRegex lr;
+  lr.regex = "";
+
   
   return lr;
 };
 
 void Piracy::loadGamelog( std::string gamelog )
 {
-#if 0
-  std::cerr << gamelog << std::endl;
-  std::cout << "Loading Piracy Gamelog" << std::endl;
-  throw "LOADING PIRACY GAMELOG";
-#endif
+  Game game;
+  if( !parseFile( game, gamelog.c_str() ) )
+  {
+    THROW( Exception, "Cannot Load The Gamelog" );
+  }
 
-  THROW( Exception, "LOADING PIRACY GAMELOG" );
+
+  //THROW( Exception, "LOADING PIRACY GAMELOG" );
 
 }
 
