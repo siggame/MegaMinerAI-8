@@ -24,6 +24,15 @@ void _Games::_setup()
   IGame *game = 0;
   bool pluginFound;
   QDir pluginsDir( qApp->applicationDirPath() );
+  Interfaces intf;
+
+  intf.gui = GUI;
+  intf.objectManager = ObjectManager;
+  intf.options = OptionsMan;
+  intf.renderer = Renderer;
+  intf.resourceManager = ResourceMan;
+  intf.timeManager = TimeManager;
+
   pluginsDir.cd( "plugins" );
   foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
   {

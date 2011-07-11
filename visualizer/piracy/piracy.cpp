@@ -13,6 +13,11 @@ LogRegex Piracy::logFileInfo()
   return lr;
 };
 
+void Piracy::registerInterfaces( Interfaces intf ) 
+{
+  m_intf = intf;
+}
+
 void Piracy::loadGamelog( std::string gamelog )
 {
   Game game;
@@ -21,9 +26,14 @@ void Piracy::loadGamelog( std::string gamelog )
     THROW( Exception, "Cannot Load The Gamelog" );
   }
 
+  GameObject *go = new GameObject( 1 );
+#if 0
+  PirateMap *pm = new PirateMap();
+#endif
+
+
 
   //THROW( Exception, "LOADING PIRACY GAMELOG" );
-
 }
 
 Q_EXPORT_PLUGIN2( piracy, Piracy );

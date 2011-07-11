@@ -5,7 +5,11 @@
 
 #include "common.h"
 #include "igame.h"
-
+#include "../gui/gui.h"
+#include "../objectmanager/objectmanager.h"
+#include "../optionsmanager/optionsman.h"
+#include "../renderer/renderer.h"
+#include "../resourcemanager/resourceman.h"
 
 class _Games: public Module
 {

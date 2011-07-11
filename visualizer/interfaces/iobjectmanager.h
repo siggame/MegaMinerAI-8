@@ -1,6 +1,7 @@
 #ifndef IOBJECTMANAGER_H
 #define IOBJECTMANAGER_H
 
+#include "../lib/timeline/timeline.h"
 #include "../lib/gameobject/gameobject.h"
 #include <QtPlugin>
 typedef int ObjIdType;

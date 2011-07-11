@@ -10,7 +10,10 @@ class Piracy: public QObject, public IGame
   public:
     LogRegex logFileInfo();
     void loadGamelog( std::string gamelog );
+    void registerInterfaces( Interfaces intf );
 
+  private:
+    Interfaces m_intf;
 };
 
 #endif
