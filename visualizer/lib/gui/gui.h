@@ -4,7 +4,6 @@
 #include "centralwidget.h"
 #include "controlbar.h"
 #include "../timemanager/timeManager.h"
-#include "../objectmanager/objectloader.h"
 
 #include <QtGui>
 #include <QMainWindow>
