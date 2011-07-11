@@ -3,7 +3,6 @@
 #include "objectmanager.h"
 #include "../timemanager/timeManager.h"
 #include "../optionsmanager/optionsman.h"
-#include "../parser/parser.h"
 #include <string>
 
 class ObjectLoader

@@ -1,4 +1,5 @@
 #include "objectloader.h"
+#if 0
 #include "../../piracy/piratemap.h"
 #include "../../piracy/renderdata.h"
 #include "../../piracy/piracylocations.h"
@@ -13,6 +14,7 @@
 #include "../../piracy/dupObj.h"
 #include "../selectionrender/selectionrender.h"
 #include "../gui/controlbar.h"
+#endif 
 
 typedef int idtype;
 
