@@ -3,6 +3,9 @@
 
 #include <QtPlugin>
 
+namespace visualizer
+{
+
 // Useless for now
 class ICentralWidget
 {
@@ -11,5 +14,6 @@ class ICentralWidget
 
 Q_DECLARE_INTERFACE( ICentralWidget, "siggame.vis2.centralwidget/0.1" );
 
+} // visualizer
 
 #endif

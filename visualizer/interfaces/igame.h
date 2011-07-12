@@ -11,6 +11,9 @@
 #include <QtPlugin>
 #include <string>
 
+namespace visualizer
+{
+
 struct LogRegex
 {
   unsigned int  startSize;
@@ -39,5 +42,7 @@ class IGame
 };
 
 Q_DECLARE_INTERFACE( IGame, "siggame.vis2.game/0.1" );
+
+} // visualizer
 
 #endif

@@ -4,6 +4,9 @@
 #include "../lib/updateneeded.h"
 #include <QtPlugin>
 
+namespace visualizer
+{
+
 class ITimeManager
 {    
   public:
@@ -40,5 +43,7 @@ class ITimeManager
 };
 
 Q_DECLARE_INTERFACE( ITimeManager, "siggame.vis2.timemanager/0.1" );
+
+} // visualizer
 
 #endif

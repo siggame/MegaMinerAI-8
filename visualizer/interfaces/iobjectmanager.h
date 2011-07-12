@@ -4,6 +4,10 @@
 #include "../lib/timeline/timeline.h"
 #include "../lib/gameobject/gameobject.h"
 #include <QtPlugin>
+
+namespace visualizer
+{
+
 typedef int ObjIdType;
 
 class IObjectManager
@@ -43,5 +47,7 @@ class IObjectManager
 };
 
 Q_DECLARE_INTERFACE( IObjectManager, "siggame.vis2.objectmanager/0.1" );
+
+} // visualizer
 
 #endif 

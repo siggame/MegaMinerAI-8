@@ -9,7 +9,7 @@
 #include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
 #include "lib/games/games.h"
-#include "piracy/dupObj.h"
+//#include "piracy/dupObj.h"
 
 namespace visualizer
 {

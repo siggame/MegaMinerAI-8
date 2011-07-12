@@ -6,6 +6,9 @@
 #include "../lib/resourcemanager/resource.h"
 #include <QtPlugin>
 
+namespace visualizer
+{
+
 class IResourceMan
 {
   public:
@@ -24,5 +27,7 @@ class IResourceMan
 };
 
 Q_DECLARE_INTERFACE( IResourceMan, "siggame.vis2.resourceman/0.1" );
+
+} // visualizer
 
 #endif

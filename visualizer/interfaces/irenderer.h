@@ -2,6 +2,10 @@
 #define IRENDER_H
 
 #include <QtPlugin>
+
+namespace visualizer
+{
+
 //this is a place holder
 typedef GameObject renderObj;
 
@@ -36,5 +40,7 @@ class IRenderer
 };
 
 Q_DECLARE_INTERFACE( IRenderer, "siggame.vis2.renderer/0.1" );
+
+} // visualizer
 
 #endif

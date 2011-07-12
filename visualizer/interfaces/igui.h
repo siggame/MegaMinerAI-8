@@ -6,6 +6,10 @@
 #include <string>
 #include "../lib/gocfamily_gui.h"
 #include <QtPlugin>
+
+namespace visualizer
+{
+
 typedef GOCFamily_GUI guiObj;
 
 class IGUI
@@ -36,5 +40,7 @@ class IGUI
 };
 
 Q_DECLARE_INTERFACE( IGUI, "siggame.vis2.gui/0.1" );
+
+}
 
 #endif

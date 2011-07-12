@@ -5,6 +5,8 @@
 #include <string>
 #include <QtPlugin>
 
+namespace visualizer
+{
 
 typedef std::string OptID_t;
 
@@ -26,5 +28,7 @@ class IOptionsMan
 };
 
 Q_DECLARE_INTERFACE( IOptionsMan, "siggame.vis2.optionsman/0.1" );
+
+} // visualizer
 
 #endif
