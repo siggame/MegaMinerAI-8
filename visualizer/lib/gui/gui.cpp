@@ -1,11 +1,8 @@
 #include "gui.h"
 #include "../games/games.h"
 #include "../renderer/renderer.h"
-#include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-#include "../../piracy/piratemap.h"
-#include "../../piracy/dupObj.h"
 
 #include <iostream>
 #include <string>

@@ -39,8 +39,8 @@ class IRenderer
     
 };
 
-Q_DECLARE_INTERFACE( IRenderer, "siggame.vis2.renderer/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::IRenderer, "siggame.vis2.renderer/0.1" );
 
 #endif

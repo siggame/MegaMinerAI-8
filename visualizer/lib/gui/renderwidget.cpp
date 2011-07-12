@@ -1,5 +1,4 @@
 #include "renderwidget.h"
-#include "../../piracy/dupObj.h"
 #include "../renderer/renderer.h"
 #include "gui.h"
 

@@ -46,8 +46,8 @@ class IObjectManager
       ) = 0;
 };
 
-Q_DECLARE_INTERFACE( IObjectManager, "siggame.vis2.objectmanager/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::IObjectManager, "siggame.vis2.objectmanager/0.1" );
 
 #endif 

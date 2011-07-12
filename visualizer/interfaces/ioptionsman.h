@@ -27,8 +27,8 @@ class IOptionsMan
 
 };
 
-Q_DECLARE_INTERFACE( IOptionsMan, "siggame.vis2.optionsman/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::IOptionsMan, "siggame.vis2.optionsman/0.1" );
 
 #endif

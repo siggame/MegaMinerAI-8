@@ -42,8 +42,8 @@ class ITimeManager
 
 };
 
-Q_DECLARE_INTERFACE( ITimeManager, "siggame.vis2.timemanager/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::ITimeManager, "siggame.vis2.timemanager/0.1" );
 
 #endif

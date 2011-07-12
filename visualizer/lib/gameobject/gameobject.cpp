@@ -1,4 +1,6 @@
 #include "gameobject.h"
+#include <iostream>
+using namespace std;
 
 namespace visualizer
 {
@@ -48,10 +50,6 @@ void GameObject::clearGOCs()
   }
   m_components.clear();
 }
-
-
-#include <iostream>
-using namespace std;
 
 /** @brief setGOC
  *

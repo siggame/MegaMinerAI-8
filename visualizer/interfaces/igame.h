@@ -41,8 +41,9 @@ class IGame
     virtual void registerInterfaces( Interfaces intf ) = 0;
 };
 
-Q_DECLARE_INTERFACE( IGame, "siggame.vis2.game/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::IGame, "siggame.vis2.game/0.1" );
+
 
 #endif

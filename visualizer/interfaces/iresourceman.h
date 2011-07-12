@@ -26,8 +26,8 @@ class IResourceMan
 
 };
 
-Q_DECLARE_INTERFACE( IResourceMan, "siggame.vis2.resourceman/0.1" );
-
 } // visualizer
+
+Q_DECLARE_INTERFACE( visualizer::IResourceMan, "siggame.vis2.resourceman/0.1" );
 
 #endif

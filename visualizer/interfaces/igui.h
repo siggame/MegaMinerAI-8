@@ -39,8 +39,8 @@ class IGUI
     virtual QTableWidget* getIndividualStats() = 0;
 };
 
-Q_DECLARE_INTERFACE( IGUI, "siggame.vis2.gui/0.1" );
+} // visualizer
 
-}
+Q_DECLARE_INTERFACE( visualizer::IGUI, "siggame.vis2.gui/0.1" );
 
 #endif

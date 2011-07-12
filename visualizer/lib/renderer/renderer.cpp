@@ -6,12 +6,6 @@
 #include "../common.h"
 using namespace std;
 
-// TODO: REMOVE LATER FOR NON_GAME SPECIFIC
-#include "../../piracy/objecttype.h"
-#include "../../piracy/piratehealth.h"
-#include "../../piracy/shiphealth.h"
-#include "../../piracy/gold.h"
-
 namespace visualizer
 {
 
