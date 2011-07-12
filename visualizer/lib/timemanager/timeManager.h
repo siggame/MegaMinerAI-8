@@ -13,7 +13,7 @@ namespace visualizer
 class _TimeManager : public QObject, public ITimeManager
 {
   Q_OBJECT
-  Q_INTERFACES( ITimeManager );
+  Q_INTERFACES( visualizer::ITimeManager );
   public:
 
     _TimeManager()

@@ -1,7 +1,5 @@
 INCLUDEPATH += ./interfaces/ \
     ./lib
-win32:LIBS += ./lib/parser/sexp/sexpXP.a
-else:LIBS += ./lib/parser/sexp/sexp.a
 PPATHS += ./lib/gameobject/ \
     ./lib/manager/ \
     ./lib/mutex/ \

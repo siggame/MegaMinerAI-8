@@ -153,7 +153,7 @@ namespace visualizer
 class _GUI : public QMainWindow, public IGUI
 {
   Q_OBJECT
-  Q_INTERFACES( IGUI );
+  Q_INTERFACES( visualizer::IGUI );
 
   friend class RenderWidget;
 
