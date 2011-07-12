@@ -10,6 +10,9 @@
 
 #include "../../interfaces/ioptionsman.h"
 
+namespace visualizer
+{
+
 class _OptionsMan: public IOptionsMan
 {
   public:
@@ -68,4 +71,7 @@ class _OptionsMan: public IOptionsMan
 };
 
 extern _OptionsMan *OptionsMan;
+
+} // visualizer
+
 #endif                           // OPTIONSMAN_H

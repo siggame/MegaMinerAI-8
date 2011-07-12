@@ -7,6 +7,9 @@
 #include "../common.h"
 #include <iostream>
 
+namespace visualizer
+{
+
 class _ObjectManager : public Module, public IObjectManager
 {
   Q_INTERFACES( IObjectManager );
@@ -78,4 +81,7 @@ class _ObjectManager : public Module, public IObjectManager
 };
 
 extern _ObjectManager *ObjectManager;
+
+} // visualizer
+
 #endif

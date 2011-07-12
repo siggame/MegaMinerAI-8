@@ -2,6 +2,9 @@
 #define GOCTEMPLATE_H
 #include "gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCTemplate
 {
   public:
@@ -17,4 +20,7 @@ class GOCTemplate
   protected:
   private:
 };
+
+} // visualizer
+
 #endif                           // GOCTEMPLATE_H

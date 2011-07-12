@@ -2,6 +2,9 @@
 #define GOCFAMILY_HEALTH_H
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCFamily_Health : public GOComponent
 {
   public:
@@ -26,4 +29,7 @@ class GOCFamily_Health : public GOComponent
     unsigned int m_currentHealth;
     unsigned int m_maxHealth;
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_HEALTH_H

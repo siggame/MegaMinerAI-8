@@ -1,4 +1,9 @@
 #include "games.h"
+#include <iostream>
+using namespace std;
+
+namespace visualizer
+{
 
 _Games *Games = 0;
 
@@ -15,9 +20,6 @@ void _Games::setup()
 
   Games->_setup();
 }
-
-#include <iostream>
-using namespace std;
 
 void _Games::_setup()
 {
@@ -70,3 +72,5 @@ void _Games::destroy()
   Games = 0;
 
 }
+
+} // visualizer

@@ -1,6 +1,9 @@
 #ifndef OPTION_H
 #define OPTION_H
 
+namespace visualizer
+{
+
 enum OptionType
 {
   OT_NONE,
@@ -33,4 +36,7 @@ class Option : public OptionBase
   protected:
     T m_data;
 };
+
+} // visualizer
+
 #endif                           // OPTION_H

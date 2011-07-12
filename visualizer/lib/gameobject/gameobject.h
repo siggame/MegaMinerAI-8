@@ -6,6 +6,9 @@
 
 #include "gocomponent.h"
 
+namespace visualizer
+{
+
 class Transform{};
 class GOComponent;
 typedef std::string GOC_IDType ;
@@ -42,4 +45,7 @@ class GameObject
 
   private:
 };
+
+} // visualizer
+
 #endif                           // GAMEOBJECT_H

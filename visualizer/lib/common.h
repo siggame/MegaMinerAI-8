@@ -3,6 +3,9 @@
 
 #include "exception.h"
 
+namespace visualizer 
+{
+
 #if __DEBUG__
 
 #include <iostream>
@@ -22,4 +25,7 @@ class Module
     static void setup();
     static void destroy();
 };
+
+} // visualizer
+
 #endif

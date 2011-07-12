@@ -5,6 +5,9 @@
 #include "gameobject/gocomponent.h"
 #include "timeline/timeline.h"
 
+namespace visualizer
+{
+
 template <class T>
 class GOCFamily_Data : public GOComponent
 {
@@ -31,4 +34,7 @@ class GOCFamily_Data : public GOComponent
 
   private:
 };
+
+} // visualizer
+
 #endif

@@ -1,5 +1,8 @@
 #include "gocomponent.h"
 
+namespace visualizer
+{
+
 GOComponent::GOComponent() : m_owner(0)
 {
 }
@@ -20,3 +23,5 @@ GameObject* GOComponent::getOwner()
 {
   return m_owner;
 }
+
+} // visualizer

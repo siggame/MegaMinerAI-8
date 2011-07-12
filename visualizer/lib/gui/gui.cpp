@@ -16,6 +16,9 @@
 
 using namespace std;
 
+namespace visualizer
+{
+
 _GUI *GUI = 0;
 
 _GUI::~_GUI()
@@ -593,3 +596,5 @@ QTableWidget * _GUI::getGlobalStats()
 {
   return m_globalStats;
 }
+
+} // visualizer

@@ -4,6 +4,9 @@
 #include <string>
 using namespace std;
 
+namespace visualizer
+{
+
 class GOCFamily_Talk : public GOComponent
 {
   public:
@@ -22,4 +25,7 @@ class GOCFamily_Talk : public GOComponent
   protected:
     string m_message;
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_HEALTH_H

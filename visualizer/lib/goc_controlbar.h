@@ -4,6 +4,9 @@
 
 #include "gocfamily_controlbar.h"
 
+namespace visualizer
+{
+
 class GOC_ControlBar : public GOCFamily_ControlBar
 {
   public:
@@ -30,4 +33,7 @@ class GOC_ControlBar : public GOCFamily_ControlBar
   protected:
   private:
 };
+
+} // visualizer
+
 #endif                           // GOC_CONTROLBAR_H

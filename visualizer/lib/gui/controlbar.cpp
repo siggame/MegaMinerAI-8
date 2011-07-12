@@ -2,6 +2,9 @@
 #include "../timemanager/timeManager.h"
 #include <QHBoxLayout>
 
+namespace visualizer
+{
+
 ControlBar::ControlBar( QWidget *parent ) : QWidget( parent)
 {
   setContentsMargins( 0, 0, 0, 0 );
@@ -188,3 +191,5 @@ void ControlBar::fastForward()
     fastForwardButton->setText(symbol + ">>");
   }
 }
+
+} // visualizer

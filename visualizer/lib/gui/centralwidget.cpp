@@ -2,6 +2,9 @@
 #include "gui.h"
 #include <QLabel>
 
+namespace visualizer
+{
+
 CentralWidget::~CentralWidget()
 {
   delete m_controlBarWidget;
@@ -47,3 +50,5 @@ void CentralWidget::buildControlBar()
     m_widgetLayout->addWidget( m_controlBarWidget );
   }
 }
+
+} // visualizer

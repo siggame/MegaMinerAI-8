@@ -1,5 +1,8 @@
 #include "manager.h"
 
+namespace visualizer
+{
+
 /** @brief size
  * the amount of stuff stored in the manager
  * @return The size of the manager map
@@ -152,3 +155,5 @@ void _Manager< IdType,DataType >::clearPointers()
 
   return true;
 }
+
+} // visualizer

@@ -1,5 +1,8 @@
 #include "objectmanager.h"
 
+namespace visualizer
+{
+
 _ObjectManager *ObjectManager;
 
 bool _ObjectManager::reg(const ObjIdType & id, GameObject * obj, const unsigned int & turn, const unsigned int & frame)
@@ -66,3 +69,5 @@ void _ObjectManager::destroy()
   ObjectManager = 0;
   //return _ObjectManager::destroy();
 }
+
+} // visualizer

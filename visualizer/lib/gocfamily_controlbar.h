@@ -5,6 +5,9 @@
 #include "gameobject/gocomponent.h"
 #include <QWidget>
 
+namespace visualizer
+{
+
 class GOCFamily_ControlBar : public GOComponent, public QWidget
 {
   public:
@@ -27,4 +30,7 @@ class GOCFamily_ControlBar : public GOComponent, public QWidget
   protected:
   private:
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_CONTROLBAR_H

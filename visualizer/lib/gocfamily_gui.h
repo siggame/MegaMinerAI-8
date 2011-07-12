@@ -3,6 +3,9 @@
 
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCFamily_GUI: public GOComponent
 {
   public:
@@ -18,4 +21,7 @@ class GOCFamily_GUI: public GOComponent
     virtual void renderAt( const unsigned int& turn, const unsigned int& frame ) = 0;
 
 };
+
+} // visualizer
+
 #endif

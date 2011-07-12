@@ -3,6 +3,9 @@
 
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCFamily_Render : public GOComponent
 {
   public:
@@ -20,4 +23,7 @@ class GOCFamily_Render : public GOComponent
   protected:
   private:
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_RENDER_H

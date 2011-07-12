@@ -4,6 +4,9 @@
 #include <QtOpenGL>
 #include "../selectionrender/selectionrender.h"
 
+namespace visualizer
+{
+
 class RenderWidget: public QGLWidget
 {
   public:
@@ -31,4 +34,7 @@ class RenderWidget: public QGLWidget
     static const int m_DRAG_DISTANCE = 6;
 
 };
+
+} // visualizer
+
 #endif

@@ -7,6 +7,9 @@
 #include "../optionsmanager/optionsman.h"
 #include "../timemanager/timeManager.h"
 
+namespace visualizer
+{
+
 class ControlBar : public QWidget, public UpdateNeeded
 {
   friend class _GUI;
@@ -33,4 +36,7 @@ class ControlBar : public QWidget, public UpdateNeeded
     QPushButton* fastForwardButton;
     float originalTimeManagerSpeed;
 };
+
+} //visualizer
+
 #endif

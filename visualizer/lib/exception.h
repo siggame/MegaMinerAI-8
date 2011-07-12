@@ -5,6 +5,9 @@
 #include <string>
 using namespace std;
 
+namespace visualizer
+{
+
 class Exception
 {
   public:
@@ -17,5 +20,7 @@ class Exception
       cerr << endl;
     }
 };
+
+} // visualizer
 
 #endif

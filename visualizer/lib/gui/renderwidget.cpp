@@ -6,6 +6,9 @@
 #include <iostream>
 using namespace std;
 
+namespace visualizer
+{
+
 RenderWidget::RenderWidget( QWidget *parent )
 : QGLWidget( QGLFormat( QGL::SampleBuffers ), parent )
 {
@@ -93,3 +96,5 @@ void RenderWidget::mouseMoveEvent( QMouseEvent *e )
     SelectionRender->setSelectionBox(initialX, initialY, currentX, currentY);
   }
 }
+
+} // visualizer

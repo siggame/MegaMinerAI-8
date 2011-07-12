@@ -1,5 +1,8 @@
 #include "gameobject.h"
 
+namespace visualizer
+{
+
 unsigned int GameObject::id()
 {
   return m_id;
@@ -139,3 +142,5 @@ bool GameObject::hasComponentFam(const GOC_IDType & familyID)
   }
   return false;
 }
+
+} // visualizer

@@ -5,6 +5,9 @@
 #include "gameobject/gocomponent.h"
 #include <QWidget>
 
+namespace visualizer
+{
+
 class GOCFamily_GUIToolSet : public GOComponent, public QWidget
 {
   public:
@@ -18,4 +21,7 @@ class GOCFamily_GUIToolSet : public GOComponent, public QWidget
   protected:
   private:
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_GUITOOLSET_H

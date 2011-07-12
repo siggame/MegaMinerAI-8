@@ -4,6 +4,9 @@
 #include "../common.h"
 #include <map>
 
+namespace visualizer
+{
+
 /**
  * This is the class where most manager functionality should
  * be derrived from (A manager is a souped up map class, with special singleton powers)
@@ -37,5 +40,8 @@ class _Manager : public Module
   private:
 };
 
+} // visualizer
+
 #include "manager.hpp"
+
 #endif                           // MANAGER_H

@@ -11,6 +11,9 @@
 #include "../renderer/renderer.h"
 #include "../resourcemanager/resourceman.h"
 
+namespace visualizer
+{
+
 class _Games: public Module
 {
   public:
@@ -27,5 +30,7 @@ class _Games: public Module
 };
 
 extern _Games *Games;
+
+} // visualizer
 
 #endif

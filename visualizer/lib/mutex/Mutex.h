@@ -11,6 +11,9 @@
 #include <pthread.h>
 #endif
 
+namespace visualizer
+{
+
 //To keep things cleaner
 #ifdef WIN32
 typedef HANDLE MutexHandle;
@@ -55,4 +58,7 @@ class _Mutex
 };
 
 extern _Mutex *Mutex;
+
+} // visualizer 
+
 #endif                           // MUTEX_H

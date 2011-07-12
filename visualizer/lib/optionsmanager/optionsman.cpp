@@ -1,6 +1,9 @@
 #include "optionsman.h"
 #include <iostream>
 
+namespace visualizer
+{
+
 _OptionsMan *OptionsMan = 0;
 
 /** @brief exists
@@ -619,3 +622,6 @@ bool _OptionsMan::addBool(const OptID_t & oName, const bool & val)
 
   return true;
 }
+
+} // visualizer
+

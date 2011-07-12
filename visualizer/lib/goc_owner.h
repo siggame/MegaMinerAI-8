@@ -2,6 +2,9 @@
 #define GOC_OWNER_H
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOC_Owner :public GOComponent
 {
   public:
@@ -18,4 +21,7 @@ class GOC_Owner :public GOComponent
   protected:
     int m_owner;
 };
+
+} // visualizer
+
 #endif                           // GOC_OWNER_H

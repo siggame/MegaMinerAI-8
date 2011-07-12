@@ -5,6 +5,9 @@
 #include "gameobject.h"
 //to make changing the id type easy
 
+namespace visualizer
+{
+
 class GameObject;
 typedef std::string GOC_IDType ;
 
@@ -31,4 +34,7 @@ class GOComponent
   private:
     GameObject * m_owner;
 };
+
+} // visualizer
+
 #endif                           // GOCOMPONENT_H

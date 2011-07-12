@@ -3,6 +3,9 @@
 
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCFamily_Location :public GOComponent
 {
   public:
@@ -30,4 +33,7 @@ class GOCFamily_Location :public GOComponent
     int m_x, m_y, m_z, m_dir;
 
 };
+
+} // visualizer
+
 #endif                           // GOCFAMILY_LOCATION_H

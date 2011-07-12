@@ -1,5 +1,8 @@
 #include "Mutex.h"
 
+namespace visualizer
+{
+
 _Mutex *Mutex = 0;
 
 /** @brief get_Mutex
@@ -134,3 +137,5 @@ void _Mutex::destroy()
   Mutex = 0;
 
 }
+
+} // visualizer

@@ -7,6 +7,9 @@
 #include "../gocfamily_guitoolset.h"
 #include "../../interfaces/icentralwidget.h"
 
+namespace visualizer
+{
+
 class CentralWidget: public QWidget, public ICentralWidget
 {
   Q_INTERFACES( ICentralWidget );
@@ -26,4 +29,7 @@ class CentralWidget: public QWidget, public ICentralWidget
     void buildControlBar();
 
 };
+
+} // visualizer
+
 #endif

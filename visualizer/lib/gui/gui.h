@@ -15,6 +15,9 @@
 
 using namespace std;
 
+namespace visualizer
+{
+
 ////////////////////////////////////////////////////////////////
 /// @class    GUI
 /// @brief    GUI object for drawing debugging info along with
@@ -291,4 +294,6 @@ class _GUI : public QMainWindow, public IGUI
 };
 
 extern _GUI *GUI;
+
+}
 #endif
