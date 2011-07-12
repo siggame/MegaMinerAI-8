@@ -20,6 +20,9 @@
 #include "../../interfaces/irenderer.h"
 #include "common.h"
 
+namespace visualizer
+{
+
 #define renderHeightName "renderHeight"
 #define renderWidthName "renderWidth"
 #define renderDepthName "renderDepth"
@@ -147,4 +150,7 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 };
 
 extern _Renderer *Renderer;
+
+} // visualizer
+
 #endif                           // RENDERER_H

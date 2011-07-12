@@ -1,5 +1,8 @@
 #include "resourceman.h"
 
+namespace visualizer
+{
+
 _ResourceMan *ResourceMan = 0;
 
 std::vector<ResID_t> _ResourceMan::listResourceNames()
@@ -120,3 +123,6 @@ bool _ResourceMan::release(const std::string &rName, const std::string &referenc
   return false;
 
 }
+
+} // visualizer
+

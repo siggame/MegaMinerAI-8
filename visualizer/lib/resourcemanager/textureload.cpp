@@ -11,6 +11,9 @@
 #include <GL/glu.h>
 #include <iostream>
 
+namespace visualizer
+{
+
 enum IMAGE_TYPE
 {
   IMG_NONE, IMG_TIFF, IMG_PNG, IMG_TGA, IMG_BMP
@@ -231,4 +234,7 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 
   return true;
 }
+
+} // visualizer
+
 #endif

@@ -6,6 +6,9 @@
 #include <QPainter>
 #include <QString>
 
+namespace visualizer
+{
+
 //prototypes
 bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
 bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
@@ -40,4 +43,7 @@ class ResTexture : public Resource
       return texId;
     }
 };
+
+} // visualizer
+
 #endif

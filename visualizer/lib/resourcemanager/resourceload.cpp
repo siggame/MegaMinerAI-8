@@ -12,6 +12,9 @@
 #include <fstream>
 #include <sstream>
 
+namespace visualizer
+{
+
 ResourceType getResTypeFromStr(const std::string & typeBuff)
 {
   if ("texture" == typeBuff)
@@ -139,3 +142,6 @@ bool _ResourceMan::saveResourceFile(const std::string& /*filename*/)
 
   return false;
 }
+
+} // visualizer
+

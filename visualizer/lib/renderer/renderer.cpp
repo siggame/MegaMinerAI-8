@@ -12,6 +12,9 @@ using namespace std;
 #include "../../piracy/shiphealth.h"
 #include "../../piracy/gold.h"
 
+namespace visualizer
+{
+
 _Renderer *Renderer = 0;
 
 bool _Renderer::resize(const unsigned int & width, const unsigned int & height, const unsigned int & depth)
@@ -615,3 +618,6 @@ void _Renderer::setNumIndividuals( int num )
   GUI::getIndividualStats()->setColumnCount(num);
 }
 #endif
+
+} // visualizer
+

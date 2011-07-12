@@ -8,6 +8,9 @@
 
 using namespace std;
 
+namespace visualizer
+{
+
 struct Color
 {
   Color( float R, float G, float B )
@@ -78,4 +81,7 @@ class DrawGLFont
 
     int alignment;
 };
+
+} // visualizer
+
 #endif

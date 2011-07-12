@@ -8,6 +8,9 @@
 #include <iostream>
 #endif
 
+namespace visualizer
+{
+
 class Resource
 {
   public:
@@ -96,4 +99,7 @@ class Resource
     std::string filename;
   private:
 };
+
+} // visualizer
+
 #endif                           // RESOURCE_H

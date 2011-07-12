@@ -4,6 +4,9 @@
 #include <sstream>
 using namespace std;
 
+namespace visualizer
+{
+
 DrawGLFont::DrawGLFont()
 {
 
@@ -215,3 +218,5 @@ void DrawGLFont::drawCharacter( unsigned char c )
   glEnd();
 
 }
+
+} // visualizer

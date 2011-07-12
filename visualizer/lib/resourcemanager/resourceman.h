@@ -5,6 +5,9 @@
 #include "../../interfaces/iresourceman.h"
 #include <map>
 
+namespace visualizer
+{
+
 /** @todo merge this into the options manager... maybe **/
 
 class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceMan
@@ -44,4 +47,7 @@ class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceM
 };
 
 extern _ResourceMan *ResourceMan;
+
+} // visualizer
+
 #endif                           // RESOURCEMAN_H
