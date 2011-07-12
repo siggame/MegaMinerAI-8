@@ -3,6 +3,9 @@
 #include "../gocfamily_render.h"
 #include "common.h"
 
+namespace visualizer
+{
+
 /* The SelectionRender object assists with drawing the selection box that
  * appears when clicking and dragging to highlight interesting units.
  */
@@ -42,4 +45,7 @@ class _SelectionRender : public GOCFamily_Render
 };
 
 extern _SelectionRender *SelectionRender;
+
+} // visualizer
+
 #endif

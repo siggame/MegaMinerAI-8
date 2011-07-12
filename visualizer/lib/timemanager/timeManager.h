@@ -7,6 +7,9 @@
 
 #include "../../interfaces/itimemanager.h"
 
+namespace visualizer
+{
+
 class _TimeManager : public QObject, public ITimeManager
 {
   Q_OBJECT
@@ -66,4 +69,7 @@ class _TimeManager : public QObject, public ITimeManager
 };
 
 extern _TimeManager *TimeManager;
+
+} // visualizer
+
 #endif

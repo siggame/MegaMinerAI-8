@@ -3,6 +3,9 @@
 
 #include <ctime>
 
+namespace visualizer
+{
+
 _TimeManager *TimeManager = 0;
 
 const int& _TimeManager::getTurn()
@@ -188,3 +191,6 @@ void _TimeManager::updateChildren()
     (*i)->update();
   }
 }
+
+} // visualizer
+

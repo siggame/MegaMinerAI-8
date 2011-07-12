@@ -2,6 +2,9 @@
 #include <GL/gl.h>
 using namespace std;
 
+namespace visualizer
+{
+
 _SelectionRender *SelectionRender = 0;
 
 void _SelectionRender::setSelectionBox(int X1, int Y1, int X2, int Y2)
@@ -81,3 +84,6 @@ void _SelectionRender::setup()
     THROW( Exception, "Selection Render Already Initialized" );
   }
 }
+
+} // visualizer
+

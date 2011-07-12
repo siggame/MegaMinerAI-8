@@ -1,5 +1,8 @@
 #include "threadler.h"
 
+namespace visualizer
+{
+
 /** @brief wakeThread
  *
  * @todo: document this function
@@ -146,3 +149,5 @@ bool Threadler::joinThread(const ThreadID_t & index)
   return retval;
   #endif
 }
+
+} // visualizer

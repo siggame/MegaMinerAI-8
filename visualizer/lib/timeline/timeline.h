@@ -4,6 +4,9 @@
 #include <map>
 #include <cstdlib>
 
+namespace visualizer
+{
+
 //! @todo move shit to .hpp
 template <typename T, typename idtype>
 struct LookupNode
@@ -160,6 +163,8 @@ class LookupTable
     unsigned int m_turns;
   private:
 };
+
+} // visualizer
 
 #include "timeline.hpp"
 #endif                           // LOOKUPTABLE_H

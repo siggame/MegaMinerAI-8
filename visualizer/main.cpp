@@ -11,6 +11,9 @@
 #include "lib/games/games.h"
 #include "piracy/dupObj.h"
 
+namespace visualizer
+{
+
 int main(int argc, char *argv[])
 {
   ///////////////////////////////////////////////////////////////////
@@ -107,3 +110,5 @@ int main(int argc, char *argv[])
 #endif
 	return retval;
 }
+
+} // visualizer

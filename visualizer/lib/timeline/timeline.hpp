@@ -1,6 +1,9 @@
 #include "timeline.h"
 #include <iostream>
 
+namespace visualizer
+{
+
 /** @brief ~LookupTable
  * destructor!
  */
@@ -187,3 +190,5 @@ bool LookupTable<T,idtype>::add(Set & set)
   }
   return true;
 }
+
+} // visualizer

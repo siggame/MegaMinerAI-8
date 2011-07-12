@@ -18,6 +18,9 @@
 
 #include <vector>
 
+namespace visualizer
+{
+
 #ifdef WIN32
 typedef HANDLE ThreadHandle;
 typedef DWORD WINAPI ThreadFxnType;
@@ -71,4 +74,7 @@ class Threadler
     std::vector<ThreadHandle> m_threads;
   private:
 };
+
+} // visualizer
+
 #endif                           // THREADLER_H
