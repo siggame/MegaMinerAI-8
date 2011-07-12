@@ -1,12 +1,15 @@
 #ifndef SCOREBOARD_H
 #define SCOREBOARD_H
+#include "./parser/structures.h"
 #include "../lib/gocfamily_render.h"
-#include "../lib/parser/structures.h"
 #include "../lib/renderer/textRenderer/drawGLFont.h"
 #include <QWaitCondition>
 #include <list>
 #include <iostream>
 using namespace std;
+
+namespace visualizer
+{
 
 struct Score
 {
@@ -42,4 +45,7 @@ class Scoreboard : public GOCFamily_Render
     DrawGLFont fnt;
 
 };
+
+} // visualizer
+
 #endif
