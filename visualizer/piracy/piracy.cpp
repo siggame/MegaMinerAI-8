@@ -4,6 +4,9 @@
 #include "parser/structures.h"
 #include <iostream>
 
+namespace visualizer
+{
+
 LogRegex Piracy::logFileInfo()
 {
   LogRegex lr;
@@ -36,4 +39,6 @@ void Piracy::loadGamelog( std::string gamelog )
   //THROW( Exception, "LOADING PIRACY GAMELOG" );
 }
 
-Q_EXPORT_PLUGIN2( piracy, Piracy );
+} // visualizer
+
+Q_EXPORT_PLUGIN2( piracy, visualizer::Piracy );
