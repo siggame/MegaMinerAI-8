@@ -3,14 +3,24 @@
 
 #include "exception.h"
 
+#if __DEBUG__
+
+#include <stdio.h>
+#include <iostream>
+
+#endif
+
 namespace visualizer 
 {
 
 #if __DEBUG__
-
-#include <iostream>
 #define SETUP(x) std::cout << x << " initialized at line " << __LINE__ << "." << endl;
-#define THROW( x, y ) throw x( y, __FILE__, __LINE__ )
+#define THROW( x, y, ... ) \
+  { \
+  char message[512]; \
+  sprintf( message, y, ##__VA_ARGS__ ); \
+  throw x( message, __FILE__, __LINE__ ); \
+  } 
 
 #else
 

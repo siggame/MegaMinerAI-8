@@ -188,7 +188,7 @@ bool _OptionsMan::strToBool(const std::string & val)
     return false;
   }
 
-  THROW( Exception, (std::string("Invalid bool value"))) ;
+  THROW( Exception, "Invalid bool value" ) ;
 }
 
 

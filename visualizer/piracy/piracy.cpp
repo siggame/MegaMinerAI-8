@@ -9,6 +9,8 @@
 
 #include <iostream>
 
+typedef int idtype;
+
 namespace visualizer
 {
 
@@ -54,6 +56,20 @@ void Piracy::loadGamelog( std::string gamelog )
   go->setGOC( sb );
 
   Renderer->registerConstantObj( 3, go );
+
+  unsigned int numTurns = game.states.size();
+  unsigned int numFrames = OptionsMan->getInt( "numFrames" );
+
+  ObjectManager->setSize( numTurns, numFrames );
+
+  TimeManager->setTurn( 0 );
+  TimeManager->setNumTurns( numTurns );
+
+  std::map<idtype, LookupSet<GameObject*, idtype> > looksets;
+  unsigned int id;
+  for( unsigned int turn = 0; turn < game.states.size(); turn++ )
+  {
+  }
 
   //THROW( Exception, "LOADING PIRACY GAMELOG" );
 }

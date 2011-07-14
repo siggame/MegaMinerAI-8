@@ -38,17 +38,17 @@ void _Games::_setup()
   pluginsDir.cd( "plugins" );
   foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
   {
-#if __DEBUG__
-    cerr << "Loading Plugin: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
-#endif
     QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
     QObject *plugin = pluginLoader.instance();
     pluginFound = false;
     if( plugin )
     {
-      game = qobject_cast<IGame *>( plugin );
+      game = qobject_cast<visualizer::IGame *>( plugin );
       if( game )
       {
+#if __DEBUG__
+      cerr << "Plugin Loaded: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+#endif
         pluginFound = true;
         m_gameList.push_back( game );
       }
@@ -56,7 +56,12 @@ void _Games::_setup()
 
     if( !pluginFound )
     {
-      THROW( Exception, "The Above Plugin Did Not Load Correctly" );
+      THROW
+        ( 
+        Exception, 
+        "Plugin: Did Not Load Correctly\n Path:  %s", 
+        qPrintable( pluginsDir.absoluteFilePath( fileName ) )
+        );
     }
   }
 }
