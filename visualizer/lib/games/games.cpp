@@ -40,10 +40,9 @@ void _Games::_setup()
   {
     QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
     QObject *plugin = pluginLoader.instance();
-    pluginFound = false;
     if( plugin )
     {
-      game = qobject_cast<visualizer::IGame *>( plugin );
+      game = qobject_cast<IGame *>( plugin );
       if( game )
       {
 #if __DEBUG__
@@ -51,16 +50,26 @@ void _Games::_setup()
 #endif
         pluginFound = true;
         m_gameList.push_back( game );
+      } 
+      else
+      {
+        THROW
+          ( 
+          Exception, 
+          "Plugin Is Not Valid For Usage\n Path:  %s\n Error String: \n  %s", 
+          qPrintable( pluginsDir.absoluteFilePath( fileName ) ),
+          qPrintable( pluginLoader.errorString() )
+          );
       }
     }
-
-    if( !pluginFound )
+    else
     {
       THROW
         ( 
         Exception, 
-        "Plugin: Did Not Load Correctly\n Path:  %s", 
-        qPrintable( pluginsDir.absoluteFilePath( fileName ) )
+        "Plugin Could Not Be Loaded Into Memory\n Path:  %s\n Error String: \n  %s", 
+        qPrintable( pluginsDir.absoluteFilePath( fileName ) ),
+        qPrintable( pluginLoader.errorString() )
         );
     }
   }

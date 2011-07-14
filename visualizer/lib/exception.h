@@ -14,7 +14,7 @@ class Exception
     Exception( std::string e, std::string fileName, unsigned int lineNum )
     {
       cerr << endl;
-      cerr << "============= General Exception ============= " << endl;
+      cerr << "=================== General Exception =================== " << endl;
       cerr << " Error: " << e << endl;
       cerr << " File:  " << fileName << ":" << lineNum << endl;
       cerr << endl;

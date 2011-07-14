@@ -6,9 +6,9 @@
 namespace visualizer 
 {
 
-class Piracy: public QObject, public IGame
+class Piracy: public QObject, public visualizer::IGame
 {
-  Q_OBJECT
+  Q_OBJECT;
   Q_INTERFACES( visualizer::IGame );
   public:
     LogRegex logFileInfo();

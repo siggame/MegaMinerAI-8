@@ -41,6 +41,7 @@ void Piracy::loadGamelog( std::string gamelog )
   PirateMap *pm = new PirateMap();
 #endif
 
+#if 0
   go = new GameObject( 2 );
   go->setGOC( SelectionRender );
   SelectionRender->setOwner( go );
@@ -71,9 +72,11 @@ void Piracy::loadGamelog( std::string gamelog )
   {
   }
 
+#endif
   //THROW( Exception, "LOADING PIRACY GAMELOG" );
 }
 
 } // visualizer
 
 Q_EXPORT_PLUGIN2( piracy, visualizer::Piracy );
+
