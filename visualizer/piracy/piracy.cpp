@@ -7,6 +7,8 @@
 #include "selectionrender/selectionrender.h"
 #include "scoreboard.h"
 
+#include "stacks.h"
+
 #include <iostream>
 
 typedef int idtype;
@@ -36,6 +38,7 @@ void Piracy::loadGamelog( std::string gamelog )
     THROW( Exception, "Cannot Load The Gamelog" );
   }
 
+#if 0
   GameObject *go = new GameObject( 1 );
 #if 0
   PirateMap *pm = new PirateMap();
@@ -67,11 +70,20 @@ void Piracy::loadGamelog( std::string gamelog )
 
   std::map<idtype, LookupSet<GameObject*, idtype> > looksets;
   unsigned int id;
-  for( unsigned int turn = 0; turn < game.states.size(); turn++ )
-  {
-  }
+#endif
 
-  //THROW( Exception, "LOADING PIRACY GAMELOG" );
+  Timeline t;
+  Turn b;
+
+  for
+    (
+    std::vector<GameState>::iterator i = game.states.begin();
+    i != game.states.end(); 
+    i++ 
+    )
+  {
+
+  }
 }
 
 } // visualizer

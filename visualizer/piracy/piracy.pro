@@ -7,7 +7,8 @@ else:LIBS += ./parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
 TARGET = piracy
-SOURCES += piracy.cpp
+SOURCES += piracy.cpp \
+  stacks.cpp
 HEADERS += *.h
 
 QMAKE_CFLAGS_DEBUG += -pg
