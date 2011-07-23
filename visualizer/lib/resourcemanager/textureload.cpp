@@ -6,6 +6,8 @@
 #include <GL/glu.h>
 #include <iostream>
 
+#if 0
+
 namespace visualizer
 {
 
@@ -211,5 +213,7 @@ bool loadBMP(const QString & path, unsigned int & texId, QImage & texture)
 }
 
 } // visualizer
+
+#endif
 
 #endif

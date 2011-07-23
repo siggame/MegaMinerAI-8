@@ -2,7 +2,8 @@
 #define RESOURCEMAN_H
 
 #include "../manager/manager.h"
-#include "../../interfaces/iresourceman.h"
+#include "iresourceman.h"
+#include "itextureloader.h"
 #include <map>
 
 namespace visualizer

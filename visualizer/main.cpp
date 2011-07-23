@@ -9,6 +9,7 @@
 #include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
 #include "lib/games/games.h"
+#include "lib/resourcemanager/textureloader.h"
 //#include "piracy/dupObj.h"
 
 using namespace visualizer;
@@ -80,6 +81,11 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
   Games->setup();
 
+  ///////////////////////////////////////////////////////////////////
+  // Initialize Texture Loader
+  ///////////////////////////////////////////////////////////////////
+  TextureLoader->setup();
+ 
 	if ( !ResourceMan->loadResourceFile("./textures.r") )
 	{
 		std::cerr << "Could Not Load resource.cfg" << std::endl;

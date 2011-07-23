@@ -7,6 +7,7 @@
 #include "resourceman.h"
 #include "texture.h"
 #include "typedefs.h"
+#include "textureloader.h"
 #include <QString>
 #include <iostream>
 #include <fstream>
@@ -71,20 +72,24 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
             switch (rt)
             {
               case RT_TEXTURE:
-                res = (Resource*)(new ResTexture());
+              {
+                QImage texture;
 
+#if 0
                 if (res->load(pathBuff.c_str()))
+#endif
+                if( TextureLoader->load( pathBuff.c_str(), texture ) )
                 {
+                  res = (Resource*)(new ResTexture( texture ));
                   reg(namebuff,(Resource*)res);
                 }
                 else
                 {
-                  delete res;
                   std::cout << "Resource Load Error Line " << lineNum << ": Texture \"" << namebuff << "\" at path \"" << pathBuff << "\" didn't load right.\n";
                 }
 
                 break;
-
+              }
               default:
                 std::cout << "Resource Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
             }

@@ -1,35 +1,39 @@
 #ifndef TEXTURELOADER_H
 #define TEXTURELOADER_H
 
+#include "itextureloader.h"
+#include <QtPlugin>
+#include <QImage>
+#include <QString>
+
 namespace visualizer
 {
 
-enum IMAGE_TYPE
-{
-  IMG_NONE, IMG_TIFF, IMG_PNG, IMG_TGA, IMG_BMP
-};
+  enum IMAGE_TYPE
+  {
+    IMG_NONE, IMG_TIFF, IMG_PNG, IMG_TGA, IMG_BMP
+  };
 
-IMAGE_TYPE getImageType(const QString & path)
-{
-  if ( path.endsWith(".tif"))
-    return IMG_TIFF;
-  if ( path.endsWith(".png"))
-    return IMG_PNG;
-  if ( path.endsWith(".tga"))
-    return IMG_TGA;
-  if ( path.endsWith(".bmp"))
-    return IMG_BMP;
+  class _TextureLoader: public Module, public ITextureLoader
+  {
+    
+    Q_INTERFACES( ITextureLoader );
+    public:
 
-  return IMG_NONE;
-}
+    int load( const std::string& path, QImage& texture );
+    void loadTIFF( const std::string& path, unsigned int& texId, QImage& texture );
+    void loadPNG( const std::string& path, unsigned int& texId, QImage& texture );
+    void loadTGA( const std::string& path, unsigned int& texId, QImage& texture );
+    void loadBMP( const std::string& path, unsigned int& texId, QImage& texture );
+
+    static void setup();
+    static void destroy();
 
 
-class _TextureLoader: public Module, public ITextureLoader
-{
-  Q_INTERFACES( ITextureLoader );
-  public:
 
-};
+  };
+
+  extern _TextureLoader *TextureLoader;
 
 }
 
