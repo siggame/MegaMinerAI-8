@@ -10,6 +10,7 @@
 #include "../optionsmanager/optionsman.h"
 #include "../renderer/renderer.h"
 #include "../resourcemanager/resourceman.h"
+#include "../resourcemanager/textureloader.h"
 
 namespace visualizer
 {

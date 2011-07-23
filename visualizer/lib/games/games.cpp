@@ -33,6 +33,7 @@ void _Games::_setup()
   intf.options = OptionsMan;
   intf.renderer = Renderer;
   intf.resourceManager = ResourceMan;
+  intf.textureLoader = TextureLoader;
   intf.timeManager = TimeManager;
 
   pluginsDir.cd( "plugins" );

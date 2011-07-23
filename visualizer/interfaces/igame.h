@@ -7,6 +7,7 @@
 #include "icentralwidget.h"
 #include "igui.h"
 #include "ioptionsman.h"
+#include "itextureloader.h"
 #include "itimemanager.h"
 #include <QtPlugin>
 #include <string>
@@ -27,6 +28,7 @@ struct Interfaces
   IOptionsMan *options;
   IRenderer *renderer;
   IResourceMan *resourceManager;
+  ITextureLoader *textureLoader;
   ITimeManager *timeManager;
 };
 
