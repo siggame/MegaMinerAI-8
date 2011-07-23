@@ -15,33 +15,33 @@
 namespace visualizer
 {
 
-struct LogRegex
-{
-  unsigned int  startSize;
-  std::string   regex;
-};
+  struct LogRegex
+  {
+    unsigned int  startSize;
+    std::string   regex;
+  };
 
-struct Interfaces
-{
-  IGUI *gui;
-  IObjectManager *objectManager;
-  IOptionsMan *options;
-  IRenderer *renderer;
-  IResourceMan *resourceManager;
-  ITextureLoader *textureLoader;
-  ITimeManager *timeManager;
-};
+  struct Interfaces
+  {
+    IGUI *gui;
+    IObjectManager *objectManager;
+    IOptionsMan *options;
+    IRenderer *renderer;
+    IResourceMan *resourceManager;
+    ITextureLoader *textureLoader;
+    ITimeManager *timeManager;
+  };
 
-// This will act as the initial interface between the visualizer
-// and the game specific code.
+  // This will act as the initial interface between the visualizer
+  // and the game specific code.
 
-class IGame
-{
-  public:
-    virtual LogRegex logFileInfo() = 0;
-    virtual void loadGamelog( std::string gamelog ) = 0;
-    virtual void registerInterfaces( Interfaces intf ) = 0;
-};
+  class IGame
+  {
+    public:
+      virtual LogRegex logFileInfo() = 0;
+      virtual void loadGamelog( std::string gamelog ) = 0;
+      virtual void registerInterfaces( Interfaces intf ) = 0;
+  };
 
 } // visualizer
 

@@ -15,22 +15,22 @@
 namespace visualizer
 {
 
-class _Games: public Module
-{
-  public:
-  
-    static void setup();
-    void _setup();
-    static void destroy();
+  class _Games: public Module
+  {
+    public:
+    
+      static void setup();
+      void _setup();
+      static void destroy();
 
-    std::vector< IGame* > gameList();
+      std::vector< IGame* > gameList();
 
-  private:
-    std::vector< IGame* > m_gameList;
+    private:
+      std::vector< IGame* > m_gameList;
 
-};
+  };
 
-extern _Games *Games;
+  extern _Games *Games;
 
 } // visualizer
 
