@@ -111,8 +111,6 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 }
 
 
-#include <iostream>
-using namespace std;
 void _GUI::loadGamelog( std::string gamelog )
 {
   bool parserFound = false;
@@ -123,11 +121,30 @@ void _GUI::loadGamelog( std::string gamelog )
     i++ 
     )
   {
-    QRegExp rx( (*i)->logFileInfo().regex.c_str() );
-    if( rx.exactMatch( gamelog.c_str() ) )
+    ifstream file_gamelog( gamelog.c_str(), ifstream::in );
+    if( file_gamelog.is_open() )
     {
-      (*i)->loadGamelog( gamelog );
-      parserFound = true;
+      QRegExp rx( (*i)->logFileInfo().regex.c_str() );
+      rx.setPatternSyntax( QRegExp::RegExp2 );
+      char *logStart = new char[ (*i)->logFileInfo().startSize+1 ];
+      file_gamelog.get( logStart, (*i)->logFileInfo().startSize );
+
+      if( rx.indexIn( logStart ) )
+      {
+        (*i)->loadGamelog( gamelog );
+        parserFound = true;
+      }
+
+      delete logStart;
+    }
+    else
+    {
+      THROW
+        (
+        FileException,
+        "Could Not Find/Open Gamelog\n Path:  %s", 
+        gamelog.c_str()
+        )
     }
   }
 

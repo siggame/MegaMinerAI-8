@@ -2,8 +2,8 @@ sources = lex.yy.cpp $(wildcard *.cpp)
 objects = $(sources:%.cpp=%.o)
 libclient_objects = $(sources:%.cpp=libclient_%.o)
 
-CFLAGS = -g
-CXXFLAGS= -g
+CFLAGS = -g -fPIC
+CXXFLAGS= -g -fPIC
 
 ifeq ($(TARGET),mingw)
 CXX:=i586-mingw32-g++

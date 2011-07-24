@@ -8,8 +8,11 @@ MOC = moc
 TEMPLATE = lib
 TARGET = piracy
 SOURCES += piracy.cpp \
-  stacks.cpp
-HEADERS += *.h
+  stacks.cpp \
+  parser/*.cpp
+  
+HEADERS += *.h \
+  parser/*.h
 
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
