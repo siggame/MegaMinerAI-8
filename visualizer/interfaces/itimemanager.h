@@ -3,6 +3,7 @@
 
 #include "../lib/updateneeded.h"
 #include <QtPlugin>
+#include <QMutex>
 
 namespace visualizer
 {
@@ -39,6 +40,8 @@ class ITimeManager
 
     virtual void requestUpdate( UpdateNeeded* requester ) = 0;
     virtual void updateChildren() = 0;
+
+    virtual QMutex& getMutex() = 0;
 
 };
 

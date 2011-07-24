@@ -46,6 +46,8 @@ class _TimeManager : public QObject, public ITimeManager
     void requestUpdate( UpdateNeeded* requester );
     void updateChildren();
 
+    QMutex& getMutex();
+
   private slots:
     void timerUpdate();
 
@@ -64,6 +66,8 @@ class _TimeManager : public QObject, public ITimeManager
     int m_sleepTime;
     int m_awakeTime;
     int m_time;
+
+    QMutex m_timeMutex;
 
     std::list< UpdateNeeded* > m_updateRequesters;
 };

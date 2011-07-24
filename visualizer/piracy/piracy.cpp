@@ -1,7 +1,5 @@
 #include "piracy.h"
 #include "common.h"
-#include "parser/parser.h"
-#include "parser/structures.h"
 #include "renderer/renderer.h"
 #include "resourcemanager/texture.h"
 #include "selectionrender/selectionrender.h"
@@ -24,29 +22,23 @@ namespace visualizer
     lr.startSize = 9;
     
     return lr;
-  };
+  } /* Piracy::logFileInfo() */
 
   void Piracy::registerInterfaces( Interfaces intf ) 
   {
     m_intf = intf;
-  }
+  } /* Piracy::registerInterfaces() */
 
   void Piracy::loadGamelog( std::string gamelog )
   {
-    Game game;
-    QTime time;
-    time.start();
-    if( !parseFile( game, gamelog.c_str() ) )
+    m_game = new Game;
+    if( !parseFile( *m_game, gamelog.c_str() ) )
     {
+      delete m_game;
       THROW( GameException, "Cannot Load The Gamelog" );
     }
-    THROW
-      (
-      Exception,
-      "Time Elapsed: %i", 
-      time.elapsed()
-      );
 
+    start();
 
 #if 0
     GameObject *go = new GameObject( 1 );
@@ -85,6 +77,7 @@ namespace visualizer
     Timeline t;
     Turn b;
 
+#if 0
     for
       (
       std::vector<GameState>::iterator i = game.states.begin();
@@ -94,7 +87,52 @@ namespace visualizer
     {
 
     }
-  }
+#endif
+
+  } /* Piracy::loadGamelog() */
+
+  void Piracy::run()
+  {
+    QTime time;
+    time.start();
+
+    for
+      (
+      std::vector<GameState>::iterator i = m_game->states.begin();
+      i != m_game->states.end();
+      i++
+      )
+    {
+      for
+        (
+        std::map<int,Pirate>::iterator j = i->pirates.begin();
+        j != i->pirates.end();
+        j++
+        )
+      {
+
+      }
+
+      for
+        (
+        std::map<int,Ship>::iterator j = i->ships.begin();
+        j != i->ships.end();
+        j++ 
+        )
+      {
+
+      }
+    }
+
+    delete m_game;
+    THROW
+      (
+      Exception,
+      "Time Elapsed: %i", 
+      time.elapsed()
+      );
+
+  } /* Piracy::run() */
 
 } // visualizer
 
