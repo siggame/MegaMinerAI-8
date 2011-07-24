@@ -23,7 +23,7 @@ namespace visualizer
       void _setup();
       static void destroy();
 
-      std::vector< IGame* > gameList();
+      std::vector< IGame* >& gameList();
 
     private:
       std::vector< IGame* > m_gameList;

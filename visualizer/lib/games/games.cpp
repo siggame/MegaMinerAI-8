@@ -47,7 +47,7 @@ namespace visualizer
         if( game )
         {
 #if __DEBUG__
-        cerr << "Plugin Loaded: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+          cerr << "Plugin Loaded: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
 #endif
           pluginFound = true;
           m_gameList.push_back( game );
@@ -76,7 +76,7 @@ namespace visualizer
     }
   }
 
-  std::vector< IGame* > _Games::gameList()
+  std::vector< IGame* >& _Games::gameList()
   {
     return m_gameList;
   }
