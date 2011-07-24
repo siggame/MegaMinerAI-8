@@ -10,6 +10,7 @@
 #include "stacks.h"
 
 #include <iostream>
+#include <time.h>
 
 typedef int idtype;
 
@@ -33,10 +34,19 @@ namespace visualizer
   void Piracy::loadGamelog( std::string gamelog )
   {
     Game game;
+    QTime time;
+    time.start();
     if( !parseFile( game, gamelog.c_str() ) )
     {
       THROW( GameException, "Cannot Load The Gamelog" );
     }
+    THROW
+      (
+      Exception,
+      "Time Elapsed: %i", 
+      time.elapsed()
+      );
+
 
 #if 0
     GameObject *go = new GameObject( 1 );

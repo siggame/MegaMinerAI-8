@@ -167,8 +167,6 @@ void _Renderer::_setup()
   unsigned int rheight = height();
   unsigned int rdepth = depth();
 
-  std::cout << "_Renderer width: " << rwidth << " height: " << rheight << " depth: " << rdepth << '\n';
-
   /// @TODO: Move this to the appropriate spot
   glShadeModel( GL_SMOOTH );
   glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -280,7 +278,7 @@ bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
 
   if (!bucket)
   {
-    std::cout << "Bucket Requested at (" << turn <<","<<frame << ") does not exist\n";
+    //std::cout << "Bucket Requested at (" << turn <<","<<frame << ") does not exist\n";
     return false;
   }
 

@@ -187,7 +187,6 @@ void _TimeManager::updateChildren()
     i++
     )
   {
-    cout << "Update " << count++ << endl;
     (*i)->update();
   }
 }
