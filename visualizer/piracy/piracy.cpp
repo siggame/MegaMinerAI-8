@@ -93,34 +93,84 @@ namespace visualizer
 
   } /* Piracy::loadGamelog() */
 
+  MoveList Piracy::animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims )
+  {
+    std::vector<MoveList::_Move> moves;
+    int mx = x;
+    int my = y;
+    for( std::vector<Animation*>::const_iterator i = anims.begin(); i != anims.end(); i++ )
+    {
+      if( (*i)->type == MOVE )
+      {
+        Move* m = ((Move*)*i);
+        // Assuming only cardinal directions
+        if( m->x > mx )
+        {
+          // RIGHT
+          moves.push_back( MoveList::Right );
+          mx++;
+        } 
+        else if( m->x < mx )
+        {
+          // LEFT
+          moves.push_back( MoveList::Left );
+          mx--;
+        } 
+        else if( m->y > my )
+        {
+          // DOWN 
+          moves.push_back( MoveList::Down );
+          my++;
+
+        }
+        else
+        {
+          // UP
+          moves.push_back( MoveList::Up );
+          my--;
+        }
+      }
+    }
+
+    return MoveList( x, y, moves );
+  }
+
   void Piracy::run()
   {
     QTime time;
     time.start();
 
-    StackOrganizer<int, int> so;
+    StackOrganizer<MoveList, Stack> so;
 
     for
       (
-      std::vector<GameState>::iterator i = m_game->states.begin();
-      i != m_game->states.end();
-      i++
+      std::vector<GameState>::iterator state = m_game->states.begin();
+      state != m_game->states.end();
+      state++
       )
     {
       for
         (
-        std::map<int,Pirate>::iterator j = i->pirates.begin();
-        j != i->pirates.end();
+        std::map<int,Pirate>::iterator j = state->pirates.begin();
+        j != state->pirates.end();
         j++
         )
       {
+        Stack *s;
+        std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( j->second.id );
+        if( a != state->animations.end() )
+        {
+          MoveList ml = animationsToMoves( j->second.x, j->second.y, a->second );
+
+          s = &so.getStack( ml );
+        }
 
       }
 
       for
         (
-        std::map<int,Ship>::iterator j = i->ships.begin();
-        j != i->ships.end();
+        std::map<int,Ship>::iterator j = state->ships.begin();
+        j != state->ships.end();
         j++ 
         )
       {

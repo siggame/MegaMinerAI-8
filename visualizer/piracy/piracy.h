@@ -4,8 +4,10 @@
 #include "igame.h"
 #include "parser/parser.h"
 #include "parser/structures.h"
+#include "stacks.h"
 
 #include <QThread>
+#include <vector>
 
 namespace visualizer 
 {
@@ -23,8 +25,9 @@ namespace visualizer
 
     private:
       Game *m_game;
-      
       Interfaces m_intf;
+
+      MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
   };
 
 } // visualizer
