@@ -74,8 +74,10 @@ namespace visualizer
     unsigned int id;
 #endif
 
+#if 0
     Timeline t;
     Turn b;
+#endif
 
 #if 0
     for
@@ -95,6 +97,8 @@ namespace visualizer
   {
     QTime time;
     time.start();
+
+    StackOrganizer<int, int> so;
 
     for
       (
@@ -120,7 +124,6 @@ namespace visualizer
         j++ 
         )
       {
-
       }
     }
 

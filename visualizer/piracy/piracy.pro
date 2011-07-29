@@ -8,7 +8,6 @@ MOC = moc
 TEMPLATE = lib
 TARGET = piracy
 SOURCES += piracy.cpp \
-  stacks.cpp \
   parser/*.cpp
   
 HEADERS += *.h \

@@ -105,7 +105,7 @@ Treasure = Model('Treasure',
 )
 
 move = Animation("Move",
-  data = [Variable("unit", Unit), Variable("x", str), Variable("y",str)]
+  data = [Variable("unit", Unit), Variable("x", int), Variable("y",int)]
   )
 
 attack = Animation("Attack",

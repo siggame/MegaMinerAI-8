@@ -23,6 +23,7 @@ namespace visualizer
 
     private:
       Game *m_game;
+      
       Interfaces m_intf;
   };
 

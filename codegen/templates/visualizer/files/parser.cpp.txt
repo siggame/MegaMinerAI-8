@@ -123,7 +123,7 @@ static bool parseSexp(Game& game, sexp_t* expression)
   }
   else if(string(expression->val) == "animations")
   {
-    std::vector<Animation*> animations;
+    std::map< int, std::vector<Animation*> > animations;
     while(expression->next)
     {
       expression = expression->next;
@@ -135,7 +135,8 @@ static bool parseSexp(Game& game, sexp_t* expression)
         ${animation.name}* animation = new ${animation.name};
         if ( !parse${capitalize(animation.name)}(*animation, expression) )
           return false;
-        animations.push_back(animation);
+
+        animations[ ((AnimOwner*)animation)->owner ] = std::vector<Animation*>();//.push_back( animation );
       }
 % endfor
     }
