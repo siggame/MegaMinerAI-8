@@ -13,7 +13,6 @@ namespace visualizer
     {
       // Already exists.  What are the chances?!
       p = i->second;
-      
     }
     else
     {

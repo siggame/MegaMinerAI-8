@@ -130,6 +130,9 @@ namespace visualizer
     // list
     std::map<key, stackType*, compare > m_stackMap;
     // This represents all the stacks that are present in the current frame.
+    // We had to change to list instead of vector because when the vector
+    // resizes, the pointers in m_stackMap became invalid because each element
+    // in the vector had a new pointer.  
     std::list<stackType> m_stacks;
   };
     

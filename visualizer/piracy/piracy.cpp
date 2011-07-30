@@ -14,7 +14,6 @@ typedef int idtype;
 
 namespace visualizer
 {
-
   LogRegex Piracy::logFileInfo()
   {
     LogRegex lr;
@@ -150,10 +149,37 @@ namespace visualizer
 
   void Piracy::run()
   {
+
+// Undefine qt foreach macros
+#undef foreach
+// Special locally defined macros for iterating
+// through our stl::maps
+#define foreach( type, var, it ) \
+  for \
+    ( \
+    std::map<int, type>::iterator it = state->var.begin(); \
+    it != state->var.end(); \
+    it++ \
+    )
+
     QTime time;
     time.start();
 
-      StackOrganizer<int, Stack> so;
+
+    StackOrganizer<MoveList, Stack> so;
+
+    if( m_game->states.size() >= 1 )
+    {
+      for
+        ( 
+        // Get the first tile in the first state
+        std::map<int, Tile>::iterator i = m_game->states.begin()->tiles.begin(); 
+        i != m_game->states.begin()->tiles.end();
+        i++
+        )
+        {
+        }
+    }
 
     for
       (
@@ -163,36 +189,26 @@ namespace visualizer
       )
     {
 
-      for
-        (
-        std::map<int,Pirate>::iterator j = state->pirates.begin();
-        j != state->pirates.end();
-        j++
-        )
+      foreach( Pirate, pirates, i ) 
       {
-
-       // Stack &s = 
-        //so.getStack( getMoves( j->second, state ) ).reference++;
-        so.getStack( j->second.id%10 ).reference++;
-
-#if 0
-        s.reference++;
-        if( s.reference > 1 )
-          cout << s.reference << endl;
-#endif
-        
-      }
-      cout << "Stack Done" << endl;
-
-      for
-        (
-        std::map<int,Ship>::iterator j = state->ships.begin();
-        j != state->ships.end();
-        j++ 
-        )
-      {
+        Stack &s = so.getStack( getMoves( i->second, state ) );
       }
 
+      foreach( Ship, ships, i )
+      {
+        Stack &s = so.getStack( getMoves( i->second, state ) );
+      } 
+
+      foreach( Port, ports, i )
+      {
+        // Ports don't animate.  Don't need to run getMoves on this one
+
+      }
+
+      foreach( Treasure, treasures, i )
+      {
+        // Treasure doesn't animate.  Don't need to run getMoves on this one
+      }
     }
 
     delete m_game;
