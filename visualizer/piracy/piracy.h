@@ -28,6 +28,7 @@ namespace visualizer
       Interfaces m_intf;
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
+      MoveList getMoves( const Mappable& unit, const std::vector<GameState>::iterator& state );
   };
 
 } // visualizer

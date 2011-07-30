@@ -135,12 +135,25 @@ namespace visualizer
     return MoveList( x, y, moves );
   }
 
+  MoveList Piracy::getMoves( const Mappable& unit, const std::vector<GameState>::iterator& state )
+  {
+    std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
+    if( a != state->animations.end() )
+    {
+      return animationsToMoves( unit.x, unit.y, a->second );
+    }
+    else
+    {
+      return MoveList( unit.x, unit.y );
+    }
+  }
+
   void Piracy::run()
   {
     QTime time;
     time.start();
 
-    StackOrganizer<MoveList, Stack> so;
+      StackOrganizer<int, Stack> so;
 
     for
       (
@@ -149,6 +162,7 @@ namespace visualizer
       state++
       )
     {
+
       for
         (
         std::map<int,Pirate>::iterator j = state->pirates.begin();
@@ -156,16 +170,19 @@ namespace visualizer
         j++
         )
       {
-        Stack *s;
-        std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( j->second.id );
-        if( a != state->animations.end() )
-        {
-          MoveList ml = animationsToMoves( j->second.x, j->second.y, a->second );
 
-          s = &so.getStack( ml );
-        }
+       // Stack &s = 
+        //so.getStack( getMoves( j->second, state ) ).reference++;
+        so.getStack( j->second.id%10 ).reference++;
 
+#if 0
+        s.reference++;
+        if( s.reference > 1 )
+          cout << s.reference << endl;
+#endif
+        
       }
+      cout << "Stack Done" << endl;
 
       for
         (
@@ -175,6 +192,7 @@ namespace visualizer
         )
       {
       }
+
     }
 
     delete m_game;

@@ -1,6 +1,7 @@
 #ifndef STACKS_H
 #define STACKS_H
 
+#include <iostream>
 #include <vector>
 #include <map>
 #include <list>
@@ -31,6 +32,12 @@ namespace visualizer
       m_y = y;
 
       m_moves = moves;
+    }
+
+    MoveList( const float& x, const float& y )
+    {
+      m_x = x;
+      m_y = y;
     }
 
     bool operator < ( const MoveList& moveList ) const
@@ -97,7 +104,6 @@ namespace visualizer
     {
       return !(*this == moveList);
     }
-
   };
 
 
@@ -117,20 +123,25 @@ namespace visualizer
   public:
     // Get stack will search for the existing stack
     // or create a new one if necessary
-    stackType& getStack( key& index );
+    stackType& getStack( const key& index );
 
   private:
     // This represents the map which will point to a particular point in the 
     // list
     std::map<key, stackType*, compare > m_stackMap;
     // This represents all the stacks that are present in the current frame.
-    std::vector<stackType> m_stacks;
-
+    std::list<stackType> m_stacks;
   };
     
   class Stack
   {
-
+    public:
+      Stack()
+      {
+        reference = 0;
+      }
+      int reference;
+    
   };
 
 

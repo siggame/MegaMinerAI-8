@@ -136,7 +136,7 @@ static bool parseSexp(Game& game, sexp_t* expression)
         if ( !parse${capitalize(animation.name)}(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ] = std::vector<Animation*>();//.push_back( animation );
+        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
       }
 % endfor
     }
