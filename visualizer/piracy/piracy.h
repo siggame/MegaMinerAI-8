@@ -27,6 +27,7 @@ namespace visualizer
 
     private:
       Game *m_game;
+      std::vector<std::list<Stack> > m_stackFrames;
       Interfaces m_intf;
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );

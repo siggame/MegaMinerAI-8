@@ -125,6 +125,8 @@ namespace visualizer
     // or create a new one if necessary
     stackType& getStack( const key& index );
 
+    const std::list<stackType>& returnStackList() const;
+
   private:
     // This represents the map which will point to a particular point in the 
     // list
@@ -134,6 +136,7 @@ namespace visualizer
     // resizes, the pointers in m_stackMap became invalid because each element
     // in the vector had a new pointer.  
     std::list<stackType> m_stacks;
+
   };
     
   struct Stack
@@ -168,6 +171,7 @@ namespace visualizer
 
       float m_x;
       float m_y;
+
     
   };
 

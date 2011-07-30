@@ -179,9 +179,6 @@ namespace visualizer
     QTime time;
     time.start();
 
-
-    StackOrganizer<MoveList, Stack> so;
-
     if( m_game->states.size() >= 1 )
     {
       for
@@ -203,6 +200,8 @@ namespace visualizer
       state++
       )
     {
+      StackOrganizer<MoveList, Stack> so;
+
       foreach( Pirate, pirates, i ) 
       {
         Stack &s = so.getStack( getMoves( i->second, state ) );
@@ -215,6 +214,7 @@ namespace visualizer
         s.m_x         = i->second.x;
         s.m_y         = i->second.y;
         s.m_pirateIds.push_back( i->first );
+
       }
 
       foreach( Ship, ships, i )
@@ -229,7 +229,6 @@ namespace visualizer
         s.m_x         = i->second.x;
         s.m_y         = i->second.y;
         s.m_shipIds.push_back( i->first );
-
       } 
 
       foreach( Port, ports, i )
@@ -247,8 +246,14 @@ namespace visualizer
       foreach( Treasure, treasures, i )
       {
         // Treasure doesn't animate.  Don't need to run getMoves on this one
-        Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
+        Stack &s  = so.getStack( MoveList( i->second.x, i->second.y ) );
+        s.m_gold  += i->second.gold;
+        s.m_x     = i->second.x;
+        s.m_y     = i->second.y;
+        s.m_goldIds.push_back( i->first );
       }
+
+      m_stackFrames.push_back( so.returnStackList() );
     }
 
     THROW

@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/renderer/*.cpp \
-    ./lib/renderer/textRenderer/*.cpp
+    ./lib/renderer/textRenderer/*.cpp \
+    ./lib/animationengine/*.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
@@ -39,6 +40,7 @@ HEADERS += ./lib/manager/*.h \
     ./lib/selectionrender/*.h \
     ./lib/resourcemanager/*.h \
     ./lib/renderer/textRenderer/*.h \
+    ./lib/animationengine/*.h \
     ./interfaces/*.h
 QMAKE_CFLAGS_DEBUG += -pg -rdynamic
 QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic

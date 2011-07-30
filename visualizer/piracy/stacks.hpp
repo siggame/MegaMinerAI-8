@@ -26,5 +26,11 @@ namespace visualizer
 
   }
 
+  template<class key, class stackType, class compare>
+  const std::list<stackType>& StackOrganizer<key, stackType, compare>::returnStackList() const
+  {
+    return m_stacks;
+  }
+
 
 }
