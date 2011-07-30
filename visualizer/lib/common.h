@@ -22,10 +22,13 @@ namespace visualizer
   throw x( message, __FILE__, __LINE__ ); \
   } 
 
+#define DBG_MSG( x ) std::cout << "DEBUG MSG: " << x << endl;
+
 #else
 
 #define SETUP(x)
 #define THROW( x, y )
+#define DBG_MSG( x )
 
 #endif                           /* __DEBUG__ */
 

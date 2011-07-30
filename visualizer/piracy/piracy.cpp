@@ -10,6 +10,9 @@
 #include <iostream>
 #include <time.h>
 
+#define PIRATE_HEALTH 3
+#define SHIP_HEALTH 12
+
 typedef int idtype;
 
 namespace visualizer
@@ -30,6 +33,7 @@ namespace visualizer
 
   void Piracy::loadGamelog( std::string gamelog )
   {
+    delete m_game;
     m_game = new Game;
     if( !parseFile( *m_game, gamelog.c_str() ) )
     {
@@ -91,6 +95,16 @@ namespace visualizer
 #endif
 
   } /* Piracy::loadGamelog() */
+
+  Piracy::Piracy()
+  {
+    m_game = 0;
+  }
+
+  Piracy::~Piracy()
+  {
+    delete m_game;
+  }
 
   MoveList Piracy::animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims )
   {
@@ -178,6 +192,7 @@ namespace visualizer
         i++
         )
         {
+          // Load the background map
         }
     }
 
@@ -188,30 +203,54 @@ namespace visualizer
       state++
       )
     {
-
       foreach( Pirate, pirates, i ) 
       {
         Stack &s = so.getStack( getMoves( i->second, state ) );
+        s.m_pirates++;
+        s.m_owner     =   i->second.owner;
+        s.m_health    +=  i->second.health;
+        s.m_maxHealth +=  PIRATE_HEALTH;
+        s.m_gold      +=  i->second.gold;
+        s.m_strength  +=  i->second.strength;
+        s.m_x         = i->second.x;
+        s.m_y         = i->second.y;
+        s.m_pirateIds.push_back( i->first );
       }
 
       foreach( Ship, ships, i )
       {
         Stack &s = so.getStack( getMoves( i->second, state ) );
+        s.m_ships++;
+        s.m_owner     =   i->second.owner;
+        s.m_health    +=  i->second.health;
+        s.m_maxHealth +=  SHIP_HEALTH;
+        s.m_gold      +=  i->second.gold;
+        s.m_strength  +=  i->second.strength;
+        s.m_x         = i->second.x;
+        s.m_y         = i->second.y;
+        s.m_shipIds.push_back( i->first );
+
       } 
 
       foreach( Port, ports, i )
       {
         // Ports don't animate.  Don't need to run getMoves on this one
+        Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
+        s.m_ports++;
+        s.m_owner = i->second.owner;
+        s.m_x     = i->second.x;
+        s.m_y     = i->second.y;
+        s.m_portIds.push_back( i->first );
 
       }
 
       foreach( Treasure, treasures, i )
       {
         // Treasure doesn't animate.  Don't need to run getMoves on this one
+        Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
       }
     }
 
-    delete m_game;
     THROW
       (
       Exception,

@@ -17,6 +17,8 @@ namespace visualizer
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
     public:
+      Piracy();
+      ~Piracy();
       LogRegex logFileInfo();
       void loadGamelog( std::string gamelog );
       void registerInterfaces( Interfaces intf );
