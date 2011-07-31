@@ -22,6 +22,11 @@ namespace visualizer
     AnimationEngine = 0;
   }
 
+  SmartPointer<IAnimator> _AnimationEngine::getAnimator()
+  {
+    return new Animator();
+  }
+
 } // visualizer
 
 

@@ -1,6 +1,7 @@
 #ifndef ANIMATIONENGINE_H
 #define ANIMATIONENGINE_H
 
+#include "animator.h"
 #include "../../interfaces/ianimationengine.h"
 #include "../common.h"
 
@@ -13,6 +14,7 @@ namespace visualizer
     public:
       static void setup();
       static void destroy();
+      SmartPointer<IAnimator> getAnimator();
     private:
      
   };
