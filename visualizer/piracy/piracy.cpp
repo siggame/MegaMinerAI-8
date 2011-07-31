@@ -3,6 +3,7 @@
 #include "renderer/renderer.h"
 #include "resourcemanager/texture.h"
 #include "selectionrender/selectionrender.h"
+#include "animations.h"
 #include "scoreboard.h"
 
 #include "stacks.h"
@@ -159,7 +160,33 @@ namespace visualizer
     {
       return MoveList( unit.x, unit.y );
     }
+  } /* Piracy::getMoves() */
+
+  void Piracy::updateAnimations
+    (
+    const Mappable& unit,
+    const std::vector<GameState>::iterator& state,
+    Stack& s
+    )
+  {
+
+    if( s.m_animList.size() )
+    {
+      s.m_animList.push_back( new StartAnim( &s ) );
+      s.m_animList.push_back( new DrawStack( &s ) );
+    }
+    
+    std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
+    if( a != state->animations.end() )
+    {
+      
+    }
+    else
+    {
+
+    }
   }
+
 
   void Piracy::run()
   {
@@ -215,6 +242,7 @@ namespace visualizer
         s.m_y         = i->second.y;
         s.m_pirateIds.push_back( i->first );
 
+        updateAnimations( i->second, state, s );
       }
 
       foreach( Ship, ships, i )
@@ -229,6 +257,8 @@ namespace visualizer
         s.m_x         = i->second.x;
         s.m_y         = i->second.y;
         s.m_shipIds.push_back( i->first );
+
+        updateAnimations( i->second, state, s );
       } 
 
       foreach( Port, ports, i )
@@ -241,6 +271,7 @@ namespace visualizer
         s.m_y     = i->second.y;
         s.m_portIds.push_back( i->first );
 
+        updateAnimations( i->second, state, s );
       }
 
       foreach( Treasure, treasures, i )
@@ -251,6 +282,8 @@ namespace visualizer
         s.m_x     = i->second.x;
         s.m_y     = i->second.y;
         s.m_goldIds.push_back( i->first );
+
+        updateAnimations( i->second, state, s );
       }
 
       m_stackFrames.push_back( so.returnStackList() );
@@ -264,6 +297,85 @@ namespace visualizer
       );
 
   } /* Piracy::run() */
+
+  MoveList::MoveList( const float& x, const float& y, const vector<_Move>& moves )
+  {
+    m_x = x;
+    m_y = y;
+
+    m_moves = moves;
+  } /* MoveList::MoveList() */
+
+  MoveList::MoveList( const float& x, const float& y )
+  {
+    m_x = x;
+    m_y = y;
+  } /* MoveList::MoveList() */
+
+  bool MoveList::operator < ( const MoveList& moveList ) const
+  {
+    size_t s1 = m_moves.size();
+    size_t s2 = moveList.m_moves.size();
+    if( s1 == s2 )
+    {
+      if( moveList.m_x == m_x )
+      {
+        if( moveList.m_y == m_y )
+        {
+          for( size_t i = 0; i < s1; i++ )
+          {
+            if( m_moves[ i ] < moveList.m_moves[ i ] )
+            {
+              return true;
+            }
+          }
+        }
+        else
+        {
+          return m_y < moveList.m_y;
+        }
+      }
+      else
+      {
+        return m_x < moveList.m_x;
+      }
+    } else
+    {
+      return s1 < s2;
+    }
+
+    return false;
+  }
+
+  bool MoveList::operator == ( const MoveList& moveList ) const
+  {
+    size_t s1 = m_moves.size();
+    size_t s2 = moveList.m_moves.size();
+    if( s1 == s2 )
+    {
+      if( moveList.m_x == m_x )
+      {
+        if( moveList.m_y == m_y )
+        {
+          for( size_t i = 0; i < s1; i++ )
+          {
+            if( m_moves[ i ] != moveList.m_moves[ i ] )
+            {
+              return false;
+            }
+          }
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  bool MoveList::operator != ( const MoveList& moveList ) const
+  {
+    return !(*this == moveList);
+  }
 
 } // visualizer
 

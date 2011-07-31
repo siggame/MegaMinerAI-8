@@ -9,6 +9,7 @@ TEMPLATE = lib
 TARGET = piracy
 SOURCES += piracy.cpp \
   animations.cpp \
+  piracyStack.cpp \
   parser/*.cpp
   
 HEADERS += *.h \

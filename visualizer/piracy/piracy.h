@@ -4,6 +4,7 @@
 #include "igame.h"
 #include "parser/parser.h"
 #include "parser/structures.h"
+#include "piracyStack.h"
 #include "stacks.h"
 
 #include <QThread>
@@ -11,6 +12,31 @@
 
 namespace visualizer 
 {
+  class MoveList
+  {
+  public:
+    enum _Move
+    {
+      Left,
+      Right,
+      Up,
+      Down
+    };
+
+  private: 
+    vector<_Move> m_moves;
+    float m_x; 
+    float m_y;
+
+  public:
+    MoveList( const float& x, const float& y, const vector<_Move>& moves );
+    MoveList( const float& x, const float& y );
+
+    bool operator < ( const MoveList& moveList ) const;
+    bool operator == ( const MoveList& moveList ) const;
+    bool operator != ( const MoveList& moveList ) const;
+
+  };
 
   class Piracy: public QThread, public visualizer::IGame
   {
@@ -32,6 +58,12 @@ namespace visualizer
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
       MoveList getMoves( const Mappable& unit, const std::vector<GameState>::iterator& state );
+      void updateAnimations
+        ( 
+        const Mappable& unit, 
+        const std::vector<GameState>::iterator& state, 
+        Stack& s
+        );
   };
 
 } // visualizer

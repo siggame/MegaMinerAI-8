@@ -32,5 +32,4 @@ namespace visualizer
     return m_stacks;
   }
 
-
 }
