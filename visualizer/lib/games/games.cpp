@@ -19,7 +19,7 @@ namespace visualizer
     }
 
     Games->_setup();
-  }
+  } // _Games::setup()
 
   void _Games::_setup()
   {
@@ -75,18 +75,18 @@ namespace visualizer
           );
       }
     }
-  }
+  } // _Games::_setup()
 
   std::vector< IGame* >& _Games::gameList()
   {
     return m_gameList;
-  }
+  } // _Games::gameList()
 
   void _Games::destroy()
   {
     delete Games;
     Games = 0;
 
-  }
+  } // _Games::destroy()
 
 } // visualizer

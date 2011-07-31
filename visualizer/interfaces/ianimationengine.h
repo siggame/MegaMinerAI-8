@@ -13,23 +13,23 @@ namespace visualizer
     virtual float totalDuration() const = 0;
     float startTime; 
     float endTime;
-  };
+  }; // Anim
 
   struct IAnimator
   {
     virtual void addKeyFrame( const SmartPointer<Anim>& a ) = 0;
-    virtual void addSubFrame( const int& keyFrame, const SmartPointer<Anim>& a ) = 0;
-  };
+    virtual void addSubFrame( const size_t& keyFrame, const SmartPointer<Anim>& a ) = 0;
+  }; // IAnimator
 
   class IAnimationEngine
   {
     public:
       virtual SmartPointer<IAnimator> getAnimator() = 0;
-  };
+  }; // IAnimationEngine
 
   struct AnimData
   {
-  };
+  }; // AnimData
 
 } // visualizer
 

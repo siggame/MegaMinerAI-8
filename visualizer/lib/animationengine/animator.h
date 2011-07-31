@@ -7,13 +7,13 @@ namespace visualizer
 {
   struct Animator: public IAnimator
   {
-    Animator() {}
-    ~Animator() {}
     void addKeyFrame( const SmartPointer<Anim>& a );
-    void addSubFrame( const int& keyFrame, const SmartPointer<Anim>& a );
+    void addSubFrame( const size_t& keyFrame, const SmartPointer<Anim>& a );
 
-    std::list<SmartPointer<Anim> > m_animList;
-  };
+    const size_t& numKeyFrames();
+
+    std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > >  > m_animList;
+  }; // Animator 
 
 } // visualizer
 
