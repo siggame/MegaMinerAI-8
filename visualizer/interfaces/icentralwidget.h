@@ -6,11 +6,11 @@
 namespace visualizer
 {
 
-// Useless for now
-class ICentralWidget
-{
-  public:
-};
+  // Useless for now
+  class ICentralWidget
+  {
+    public:
+  };
 
 } // visualizer
 

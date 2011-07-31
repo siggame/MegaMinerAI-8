@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "igame.h"
+#include "../animationengine/animationengine.h"
 #include "../gui/gui.h"
 #include "../objectmanager/objectmanager.h"
 #include "../optionsmanager/optionsman.h"

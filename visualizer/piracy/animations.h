@@ -71,8 +71,21 @@ namespace visualizer
 
   class TalkAnim: public Anim
   {
+    private:
+      string m_msg;
     public:
+      TalkAnim( const char* msg )
+      {
+        m_msg = msg;
+      }
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 0.0f; }
+
+      float totalDuration() const
+      { return 0.4f; }
+
   };
 
   class DrawStack: public Anim

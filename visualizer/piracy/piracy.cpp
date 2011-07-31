@@ -43,58 +43,6 @@ namespace visualizer
     }
 
     start();
-
-#if 0
-    GameObject *go = new GameObject( 1 );
-#if 0
-    PirateMap *pm = new PirateMap();
-#endif
-
-    go = new GameObject( 2 );
-    go->setGOC( SelectionRender );
-    SelectionRender->setOwner( go );
-
-    go = new GameObject( 3 );
-    Scoreboard *sb = new Scoreboard();
-    ResTexture res;
-    res.load( "./textures/font1.png" );
-    sb->loadFont( res.getTexture(), "./textures/font1.dat" );
-    sb->parseScores( game );
-
-    sb->setOwner( go );
-    go->setGOC( sb );
-
-    Renderer->registerConstantObj( 3, go );
-
-    unsigned int numTurns = game.states.size();
-    unsigned int numFrames = OptionsMan->getInt( "numFrames" );
-
-    ObjectManager->setSize( numTurns, numFrames );
-
-    TimeManager->setTurn( 0 );
-    TimeManager->setNumTurns( numTurns );
-
-    std::map<idtype, LookupSet<GameObject*, idtype> > looksets;
-    unsigned int id;
-#endif
-
-#if 0
-    Timeline t;
-    Turn b;
-#endif
-
-#if 0
-    for
-      (
-      std::vector<GameState>::iterator i = game.states.begin();
-      i != game.states.end(); 
-      i++ 
-      )
-    {
-
-    }
-#endif
-
   } /* Piracy::loadGamelog() */
 
   Piracy::Piracy()
@@ -169,22 +117,60 @@ namespace visualizer
     Stack& s
     )
   {
+    bool newList = false;
+    int keyFrame = 0;
     //new DrawStack();
 
     if( !s.m_animList.size() )
     {
-      // Need a good way of marking animations and easily inserting new ones.
-      s.m_animList.push_back( new StartAnim( &s ) );
-      s.m_animList.push_back( new DrawStack( &s ) );
+      newList = true;
+      //s.addKeyFrame( new StartAnim( &s ) );
     }
     
     std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
     if( a != state->animations.end() )
     {
+      for
+        ( 
+        std::vector<Animation*>::iterator i = a->second.begin();
+        i != a->second.end();
+        i++
+        )
+      {
+        if( newList )
+        {
+          // Add everything
+        }
+        else
+        {
+          if( (*i)->type != MOVE )
+          {
+            switch( (*i)->type )
+            {
+              case TALK:
+                s.addSubFrame( keyFrame, new TalkAnim( ((Talk*)(*i))->message ) );
+                break;
+              case ATTACK:
 
+                break;
+              default:
+                THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
+                break;
+
+            }
+          }
+          else
+          {
+            keyFrame++;
+          }
+        }
+      }
+      
     } 
-    else 
-    { // No Animations, just drawing
+
+    if( newList )
+    {
+      s.addKeyFrame( new DrawStack( &s ) );
     }
     
 

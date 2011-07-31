@@ -1,6 +1,7 @@
 #ifndef IGAME_H
 #define IGAME_H
 
+#include "ianimationengine.h"
 #include "iobjectmanager.h"
 #include "irenderer.h"
 #include "iresourceman.h"
@@ -23,6 +24,7 @@ namespace visualizer
 
   struct Interfaces
   {
+    IAnimationEngine *animationEngine;
     IGUI *gui;
     IObjectManager *objectManager;
     IOptionsMan *options;

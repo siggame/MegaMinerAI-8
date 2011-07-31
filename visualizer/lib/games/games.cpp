@@ -29,6 +29,7 @@ namespace visualizer
     Interfaces intf;
 
     intf.gui = GUI;
+    intf.animationEngine = AnimationEngine;
     intf.objectManager = ObjectManager;
     intf.options = OptionsMan;
     intf.renderer = Renderer;

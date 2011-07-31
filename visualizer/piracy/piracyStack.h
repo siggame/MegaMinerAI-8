@@ -8,7 +8,7 @@
 
 namespace visualizer
 {
-  struct Stack: public Animator
+  struct Stack
   {
     public:
       Stack()
