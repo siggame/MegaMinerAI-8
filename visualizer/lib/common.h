@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include "exception.h"
+#include "smartpointer.h"
 
 #if __DEBUG__
 

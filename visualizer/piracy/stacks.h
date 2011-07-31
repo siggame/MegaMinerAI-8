@@ -21,7 +21,7 @@ namespace visualizer
   // would the 2d array.
 
   template<class key, class stackType, class compare = less<key> >
-  class StackOrganizer: public Animator 
+  class StackOrganizer
   {
   public:
     // Get stack will search for the existing stack

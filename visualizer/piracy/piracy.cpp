@@ -169,9 +169,11 @@ namespace visualizer
     Stack& s
     )
   {
+    //new DrawStack();
 
-    if( s.m_animList.size() )
+    if( !s.m_animList.size() )
     {
+      // Need a good way of marking animations and easily inserting new ones.
       s.m_animList.push_back( new StartAnim( &s ) );
       s.m_animList.push_back( new DrawStack( &s ) );
     }
@@ -179,12 +181,13 @@ namespace visualizer
     std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
     if( a != state->animations.end() )
     {
-      
-    }
-    else
-    {
 
+    } 
+    else 
+    { // No Animations, just drawing
     }
+    
+
   }
 
 

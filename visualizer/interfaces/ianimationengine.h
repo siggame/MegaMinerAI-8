@@ -2,7 +2,7 @@
 #define IANIMATIONENGINE_H
 
 #include <list>
-#include "smartpointer.h"
+#include "common.h"
 
 namespace visualizer
 {
@@ -19,8 +19,8 @@ namespace visualizer
 
   struct Anim
   {
-    virtual const float& controlDuration() const = 0;
-    virtual const float& totalDuration() const = 0;
+    virtual float controlDuration() const = 0;
+    virtual float totalDuration() const = 0;
     float startTime;
     float endTime;
   };
@@ -28,6 +28,7 @@ namespace visualizer
   struct Animator
   {
     std::list<SmartPointer<Anim> > m_animList;
+    //std::list<int > m_animList;
   };
 
 } // visualizer

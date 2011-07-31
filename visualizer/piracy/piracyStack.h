@@ -13,9 +13,11 @@ namespace visualizer
     public:
       Stack()
       {
-        // Set everything in here to 0
-        // Not sure how this reacts to m_ids
-        memset( this, 0, sizeof( Stack ) );
+        m_owner = m_pirates =
+        m_ships = m_ports = 
+        m_health = m_maxHealth =
+        m_strength = m_maxStrength =
+        m_gold = 0;
       }
 
       void updateAnim( const std::vector<Animation*>& animList );
@@ -40,6 +42,7 @@ namespace visualizer
       std::vector<int> m_shipIds;
       std::vector<int> m_portIds;
       std::vector<int> m_goldIds;
+
 
       float m_x;
       float m_y;
