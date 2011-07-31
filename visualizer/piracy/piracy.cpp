@@ -121,6 +121,7 @@ namespace visualizer
     int keyFrame = 0;
     //new DrawStack();
 
+#if 0
     if( !s.m_animList.size() )
     {
       newList = true;
@@ -172,6 +173,7 @@ namespace visualizer
     {
       s.addKeyFrame( new DrawStack( &s ) );
     }
+#endif
     
 
   }
