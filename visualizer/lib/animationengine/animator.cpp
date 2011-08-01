@@ -20,6 +20,7 @@ namespace visualizer
     if( keyFrame >= numKeyFrames() )
       THROW( Exception, "Adding Subframe to nonexistent keyframe" );
     std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > >  >::iterator j = m_animList.begin();
+
     for
       ( 
       int i = 0; 
@@ -28,6 +29,7 @@ namespace visualizer
       )
     {
     }
+
 
     j->second.push_back( a );
 

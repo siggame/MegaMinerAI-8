@@ -17,7 +17,7 @@ namespace visualizer
       SmartPointer<IAnimator> getAnimator();
     private:
      
-  };
+  }; // _AnimationEngine
 
   extern _AnimationEngine *AnimationEngine;
 

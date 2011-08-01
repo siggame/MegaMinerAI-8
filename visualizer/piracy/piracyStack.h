@@ -8,7 +8,13 @@
 
 namespace visualizer
 {
-  struct Stack
+  struct pirateData: public AnimData
+  {
+    float x;
+    float y;
+  };
+
+  struct Stack: public Animatable
   {
     public:
       Stack()
@@ -21,6 +27,11 @@ namespace visualizer
       }
 
       void updateAnim( const std::vector<Animation*>& animList );
+
+      AnimData *getData()
+      {
+        return &m_pirateData;
+      }
 
       int m_owner;
       int m_pirates;
@@ -46,6 +57,9 @@ namespace visualizer
 
       float m_x;
       float m_y;
+
+      pirateData m_pirateData;
+
   };
 
 

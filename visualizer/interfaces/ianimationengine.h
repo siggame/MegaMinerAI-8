@@ -15,21 +15,30 @@ namespace visualizer
     float endTime;
   }; // Anim
 
+  struct AnimData
+  {
+  }; // AnimData
+
   struct IAnimator
   {
     virtual void addKeyFrame( const SmartPointer<Anim>& a ) = 0;
     virtual void addSubFrame( const size_t& keyFrame, const SmartPointer<Anim>& a ) = 0;
-  }; // IAnimator
 
+  }; // IAnimator
+  
   class IAnimationEngine
   {
     public:
       virtual SmartPointer<IAnimator> getAnimator() = 0;
   }; // IAnimationEngine
-
-  struct AnimData
+  
+  class Animatable
   {
-  }; // AnimData
+    public:
+      SmartPointer<IAnimator> m_anims;
+      virtual AnimData* getData() = 0; 
+
+  };
 
 } // visualizer
 
