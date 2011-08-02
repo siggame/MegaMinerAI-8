@@ -15,7 +15,6 @@ namespace visualizer
   // and passing a temp variable that we also declare that we pass to 
   // each class 
 
-
   // Ok, we're passing a storage structure each frame, but we need a way
   // to initialize it properly 
   class StartAnim: public Anim

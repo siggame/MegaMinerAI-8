@@ -52,6 +52,7 @@ namespace visualizer
 #endif
           pluginFound = true;
           m_gameList.push_back( game );
+          game->registerInterfaces( intf );
         } 
         else
         {

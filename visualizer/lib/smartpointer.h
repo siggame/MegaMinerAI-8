@@ -63,6 +63,12 @@ class SmartPointer
 
       return *this;
     }
+
+    operator bool()
+    {
+      return m_data != 0;
+    }
+
 };
 
 #endif

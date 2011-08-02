@@ -119,7 +119,8 @@ namespace visualizer
   {
     bool newList = false;
     int keyFrame = 0;
-    //new DrawStack();
+
+    s.getAnimationSequence( m_intf.animationEngine );
 
 #if 0
     if( !s.m_animList.size() )
