@@ -117,10 +117,86 @@ namespace visualizer
     Stack& s
     )
   {
-    bool newList = false;
+    bool newAnim = false;
     int keyFrame = 0;
 
-    s.getAnimationSequence( m_intf.animationEngine );
+    IAnimator& animator = s.getAnimationSequence( m_intf.animationEngine );
+
+    if( !animator.numKeyFrames() )
+    {
+      newAnim = true;
+      animator.addKeyFrame( new StartAnim( &s ) );
+    }
+
+    // @TODO: Typedef stuff like this.  This is rediculous
+    std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
+
+    int x = s.m_x;
+    int y = s.m_y;
+
+    // No aminations.
+    if( a != state->animations.end() )
+    {
+      for
+        (
+        std::vector<Animation*>::iterator i = a->second.begin();
+        i != a->second.end();
+        i++
+        )
+      {
+        switch( (*i)->type )
+        {
+          case MOVE:
+            if( newAnim )
+            {
+              Move* m = ((Move*)(*i));
+              if( m->x > x )
+              {
+                animator.addKeyFrame( new RightAnim() );
+                x++;
+              }
+              else if( m->x < x )
+              {
+                animator.addKeyFrame( new LeftAnim() );
+                x--;
+              }
+              else if( m->y > y )
+              {
+                animator.addKeyFrame( new DownAnim() );
+                y++;
+              }
+              else
+              {
+                animator.addKeyFrame( new UpAnim() );
+                y--;
+              }
+            }
+            keyFrame++;
+            break;
+          case TALK:
+            {
+              Talk* t = ((Talk*)(*i));
+              animator.addSubFrame( keyFrame, new TalkAnim( t->message ) );
+            } break;
+          case ATTACK:
+            {
+              Attack* t = ((Attack*)(*i));
+              animator.addSubFrame
+                ( 
+                keyFrame, 
+                new AttackAnim
+                  ( 
+                  state->mappables[ t->victim ].x, 
+                  state->mappables[ t->victim ].y 
+                  ) 
+                );
+            } break;
+          default:
+            THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
+            break;
+        }
+      }
+    }
 
 #if 0
     if( !s.m_animList.size() )

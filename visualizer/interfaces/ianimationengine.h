@@ -24,6 +24,8 @@ namespace visualizer
     virtual void addKeyFrame( const SmartPointer<Anim>& a ) = 0;
     virtual void addSubFrame( const size_t& keyFrame, const SmartPointer<Anim>& a ) = 0;
 
+    virtual const size_t& numKeyFrames() = 0;
+
   }; // IAnimator
   
   class IAnimationEngine
@@ -54,13 +56,13 @@ namespace visualizer
   class Animatable
   {
     public:
-      SmartPointer<IAnimator>& getAnimationSequence( IAnimationEngine* animEngine )
+      IAnimator& getAnimationSequence( IAnimationEngine* animEngine )
       {
         if( !m_animationSequence )
         {
           m_animationSequence = animEngine->getAnimator();
         }
-        return m_animationSequence;
+        return *m_animationSequence;
       }
 
       virtual AnimData* getData() = 0; 
@@ -73,6 +75,6 @@ namespace visualizer
 } // visualizer
 
 Q_DECLARE_INTERFACE( visualizer::IAnimationEngine, "siggame.vis2.animationengine/0.1" );
-//Q_DECLARE_INTERFACE( visualizer::IAnimator, "siggame.vis2.animator/0.1" );
+Q_DECLARE_INTERFACE( visualizer::IAnimator, "siggame.vis2.animator/0.1" );
 
 #endif

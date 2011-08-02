@@ -38,6 +38,11 @@ namespace visualizer
   {
     public:
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
    
   };
 
@@ -45,24 +50,53 @@ namespace visualizer
   {
     public: 
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+   
   };
 
   class UpAnim: public Anim
   {
     public:
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+   
   };
 
   class DownAnim: public Anim
   {
     public: 
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+   
   };
 
   class AttackAnim: public Anim
   {
     public:
+      AttackAnim( float x, float y )
+      {
+        m_targetX = x;
+        m_targetY = y;
+      }
       void animate( float t, AnimData *d );
+
+      float controlDuration() const
+      { return 0.1; }
+      float totalDuration() const
+      { return 1; }
+   
     private:
       float m_targetX;
       float m_targetY;
