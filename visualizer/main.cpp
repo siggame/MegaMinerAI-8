@@ -110,18 +110,17 @@ int main(int argc, char *argv[])
 
 	int retval = app.exec();
 
+  Games->destroy();
+  AnimationEngine->destroy();
+  TextureLoader->destroy();
+  ResourceMan->destroy();
+
   GUI->destroy();
 	Renderer->destroy();
   ObjectManager->destroy();
   TimeManager->destroy();
 	OptionsMan->destroy();
-#if 0
-	ResourceMan::destroy();
-	Mutex::destroy();
-	Threadler::destroy();
-	ObjectManager::destroy();
-	ObjectLoader::destroy();
-#endif
+
 	return retval;
 }
 
