@@ -17,6 +17,10 @@ namespace visualizer
     // When these bleed over into another move animation, the ship won't appear
     // to slow down, but just smoothly continue on.  It can't be too long, or 
     // ships will collide with each other on turns. 
+    //
+    // Eventually we should move this stuff into configuration that can be 
+    // modified with a tool.
+    // Hard coding animations are a thing of the past.
     PirateData& data = ((PirateData&)*d);
     // if( m_ships > 0 )
     /*

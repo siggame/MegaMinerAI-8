@@ -3,6 +3,7 @@
 
 #include <QtPlugin>
 #include <list>
+#include <vector>
 #include "common.h"
 
 namespace visualizer
@@ -71,6 +72,17 @@ namespace visualizer
       SmartPointer<IAnimator> m_animationSequence;
 
   }; // Animatable
+
+  class AnimSequence
+  {
+    public:
+      void addFrame( const std::list<SmartPointer<Animatable> >& frame )
+      {
+        m_frames.push_back( frame );
+      }
+    private:
+      std::vector<std::list<SmartPointer<Animatable> > > m_frames;
+  };
 
 } // visualizer
 

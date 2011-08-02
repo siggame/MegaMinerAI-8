@@ -28,17 +28,17 @@ namespace visualizer
     // or create a new one if necessary
     stackType& getStack( const key& index );
 
-    const std::list<stackType>& returnStackList() const;
+    const std::list<SmartPointer<Animatable> >& returnStackList() const;
 
   private:
     // This represents the map which will point to a particular point in the 
     // list
-    std::map<key, stackType*, compare > m_stackMap;
+    std::map<key, SmartPointer<Animatable>, compare > m_stackMap;
     // This represents all the stacks that are present in the current frame.
     // We had to change to list instead of vector because when the vector
     // resizes, the pointers in m_stackMap became invalid because each element
     // in the vector had a new pointer.  
-    std::list<stackType> m_stacks;
+    std::list<SmartPointer<Animatable> > m_stacks;
 
   };
    

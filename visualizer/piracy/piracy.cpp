@@ -198,63 +198,7 @@ namespace visualizer
       }
     }
 
-#if 0
-    if( !s.m_animList.size() )
-    {
-      newList = true;
-      //s.addKeyFrame( new StartAnim( &s ) );
-    }
-    
-    std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
-    if( a != state->animations.end() )
-    {
-      for
-        ( 
-        std::vector<Animation*>::iterator i = a->second.begin();
-        i != a->second.end();
-        i++
-        )
-      {
-        if( newList )
-        {
-          // Add everything
-        }
-        else
-        {
-          if( (*i)->type != MOVE )
-          {
-            switch( (*i)->type )
-            {
-              case TALK:
-                s.addSubFrame( keyFrame, new TalkAnim( ((Talk*)(*i))->message ) );
-                break;
-              case ATTACK:
-
-                break;
-              default:
-                THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
-                break;
-
-            }
-          }
-          else
-          {
-            keyFrame++;
-          }
-        }
-      }
-      
-    } 
-
-    if( newList )
-    {
-      s.addKeyFrame( new DrawStack( &s ) );
-    }
-#endif
-    
-
   }
-
 
   void Piracy::run()
   {
@@ -354,7 +298,10 @@ namespace visualizer
         updateAnimations( i->second, state, s );
       }
 
-      m_stackFrames.push_back( so.returnStackList() );
+      // @TODO: Add animators for the score, team names, etc. 
+
+      addFrame( so.returnStackList() );
+
     }
 
     THROW

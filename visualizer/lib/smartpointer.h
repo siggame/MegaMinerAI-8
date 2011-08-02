@@ -69,6 +69,11 @@ class SmartPointer
       return m_data != 0;
     }
 
+    T* ptr()
+    {
+      return m_data();
+    }
+
 };
 
 #endif

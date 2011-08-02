@@ -38,7 +38,7 @@ namespace visualizer
 
   };
 
-  class Piracy: public QThread, public visualizer::IGame
+  class Piracy: public QThread, public AnimSequence, public visualizer::IGame
   {
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
@@ -53,7 +53,7 @@ namespace visualizer
 
     private:
       Game *m_game;
-      std::vector<std::list<Stack> > m_stackFrames;
+      //std::vector<std::list<SmartPointer<Animatable> > > m_stackFrames;
       Interfaces m_intf;
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
