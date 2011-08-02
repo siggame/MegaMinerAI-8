@@ -124,27 +124,20 @@ namespace visualizer
   class DrawStack: public Anim
   {
     public:
-      DrawStack()
-      {
-        THROW( Exception, "Must pass a stack pointer to the constructor." );
-      }
-
-
       DrawStack( Stack *s )
       {
         m_stack = s;
       }
 
     private:
-      void animate( float t, AnimData *d )
-      {
-      }
+      void animate( float t, AnimData *d );
 
       float controlDuration() const
-      { return 0.2f; }
+      { return 0.0f; }
 
+// Total Duration is 0 because it doesn't affect the animation lengths in anyway.  
       float totalDuration() const
-      { return 0.2f; }
+      { return 0.0f; }
 
       Stack *m_stack;
 

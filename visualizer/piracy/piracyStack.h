@@ -8,7 +8,7 @@
 
 namespace visualizer
 {
-  struct pirateData: public AnimData
+  struct PirateData: public AnimData
   {
     float x;
     float y;
@@ -58,7 +58,7 @@ namespace visualizer
       float m_x;
       float m_y;
 
-      pirateData m_pirateData;
+      PirateData m_pirateData;
 
   };
 
