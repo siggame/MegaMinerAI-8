@@ -99,6 +99,11 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
   Q_INTERFACES( IRenderer );
   public:
 
+    _Renderer()
+    {
+      m_frames = 0;
+    }
+
     bool registerConstantObj( const unsigned int& id, renderObj* obj );
     bool deleteConstantObj( const unsigned int& id );
 
@@ -136,6 +141,8 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 
     void update();
 
+    void registerFrameContainer( std::vector<std::list<SmartPointer<Animatable> > >* frameList );
+
   protected:
   private:
     unsigned int m_height;
@@ -144,6 +151,9 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
     bool m_isSetup;
 
     std::map<int, renderObj*> m_renderConstant;
+    // We're going to want to put this in a dedicated class so we can allow a mutex
+    // to automatically lock and unlock around it.
+    std::vector<std::list<SmartPointer<Animatable> > >* m_frames;
 
     RenderWidget *m_parent;
 

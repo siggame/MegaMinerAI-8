@@ -46,6 +46,11 @@ class _TimeManager : public QObject, public ITimeManager
     void requestUpdate( UpdateNeeded* requester );
     void updateChildren();
 
+    void updateProgress( float progress )
+    {
+      m_progress = progress;
+    }
+
     QMutex& getMutex();
 
   private slots:
@@ -61,6 +66,7 @@ class _TimeManager : public QObject, public ITimeManager
     QTimer *timer;
 
     float m_speed;
+    float m_progress;
     int m_lastTime;
     int m_hash;
     int m_sleepTime;

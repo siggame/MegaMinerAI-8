@@ -42,6 +42,8 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
+    m_intf.renderer->registerFrameContainer( getFrameList() );
+
     start();
   } /* Piracy::loadGamelog() */
 
@@ -217,6 +219,7 @@ namespace visualizer
 
     QTime time;
     time.start();
+    size_t frameNum = 0;
 
     if( m_game->states.size() >= 1 )
     {
@@ -299,8 +302,9 @@ namespace visualizer
       }
 
       // @TODO: Add animators for the score, team names, etc. 
-
       addFrame( so.returnStackList() );
+      frameNum++;
+      m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
 
     }
 

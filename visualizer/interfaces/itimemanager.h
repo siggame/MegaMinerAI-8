@@ -41,6 +41,8 @@ class ITimeManager
     virtual void requestUpdate( UpdateNeeded* requester ) = 0;
     virtual void updateChildren() = 0;
 
+    virtual void updateProgress( float progress ) = 0;
+
     virtual QMutex& getMutex() = 0;
 
 };

@@ -80,6 +80,12 @@ namespace visualizer
       {
         m_frames.push_back( frame );
       }
+
+      std::vector<std::list<SmartPointer<Animatable> > >* getFrameList()
+      {
+        return &m_frames;
+      }
+
     private:
       std::vector<std::list<SmartPointer<Animatable> > > m_frames;
   };
