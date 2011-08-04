@@ -150,11 +150,9 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
     unsigned int m_depth;
     bool m_isSetup;
 
-    std::map<int, renderObj*> m_renderConstant;
-    // We're going to want to put this in a dedicated class so we can allow a mutex
-    // to automatically lock and unlock around it.
-    std::vector<std::list<SmartPointer<Animatable> > >* m_frames;
+    FrameContainer m_frames;
 
+    std::map<int, renderObj*> m_renderConstant;
     RenderWidget *m_parent;
 
 };
