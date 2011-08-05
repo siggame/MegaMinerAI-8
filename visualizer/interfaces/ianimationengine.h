@@ -35,6 +35,17 @@ namespace visualizer
       virtual SmartPointer<IAnimator> getAnimator() = 0;
   }; // IAnimationEngine
 
+  class IFrame
+  {
+    public:
+  }; // IFrame
+
+  class IFrameContainer
+  {
+    public:
+      
+  }; // IFrameContainer
+
 /////////////////////////////////////////////////
 /// @class Animatable 
 /// @brief Base Class for any object you want to associate animations with.
@@ -76,6 +87,7 @@ namespace visualizer
   class AnimSequence
   {
     public:
+    //TODO: Update to Frame
       void addFrame( const std::list<SmartPointer<Animatable> >& frame )
       {
         m_frames.push_back( frame );

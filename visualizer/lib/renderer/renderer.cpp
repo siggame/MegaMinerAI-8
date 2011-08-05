@@ -58,11 +58,13 @@ namespace visualizer
     float mapSize = (float)OptionsMan->getInt("mapSize");
     glScalef( height()/mapSize, height()/mapSize, 1 );
 
+#if 0
     if( m_frames )
     {
       cout << m_frames->size() << endl;
       // Check to make sure the game is still loaded;
     }
+#endif
 
 
     #if 0
@@ -271,7 +273,7 @@ namespace visualizer
   {
     // Do we want to delete m_frames?
     // Probably not. 
-    m_frames = frameList;
+    //m_frames = frameList;
 
   }
 

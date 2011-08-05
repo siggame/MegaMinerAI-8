@@ -101,7 +101,7 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 
     _Renderer()
     {
-      m_frames = 0;
+      //m_frames = 0;
     }
 
     bool registerConstantObj( const unsigned int& id, renderObj* obj );
@@ -150,7 +150,7 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
     unsigned int m_depth;
     bool m_isSetup;
 
-    FrameContainer m_frames;
+    //FrameContainer m_frames;
 
     std::map<int, renderObj*> m_renderConstant;
     RenderWidget *m_parent;
