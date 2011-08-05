@@ -11,7 +11,7 @@ namespace visualizer
     public:
       void addAnimatable( const SmartPointer<Animatable>& animatable );
       std::list<SmartPointer<Animatable> >& getFrame();
-      const size_t& size() const;
+      const size_t size() const;
 
     private:
       std::list<SmartPointer<Animatable> > m_frame;
@@ -19,6 +19,5 @@ namespace visualizer
   }; // Frame
 
 } // visualizer
-
 
 #endif

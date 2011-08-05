@@ -88,18 +88,18 @@ namespace visualizer
   {
     public:
     //TODO: Update to Frame
-      void addFrame( const std::list<SmartPointer<Animatable> >& frame )
+      void addFrame( const Frame& frame )
       {
         m_frames.push_back( frame );
       }
 
-      std::vector<std::list<SmartPointer<Animatable> > >* getFrameList()
+      const size_t size() const
       {
-        return &m_frames;
+        return m_frames.size();
       }
 
-    private:
-      std::vector<std::list<SmartPointer<Animatable> > > m_frames;
+     private:
+      std::list<Frame> m_frames;
   };
 
 } // visualizer
