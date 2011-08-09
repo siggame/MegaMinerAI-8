@@ -84,6 +84,7 @@ namespace visualizer
 
   }; // Animatable
 
+#if 0
   class AnimSequence
   {
     public:
@@ -101,6 +102,7 @@ namespace visualizer
      private:
       std::list<Frame> m_frames;
   };
+#endif
 
 } // visualizer
 
