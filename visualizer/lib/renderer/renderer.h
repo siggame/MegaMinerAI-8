@@ -16,6 +16,7 @@
 #include "../gui/renderwidget.h"
 
 #include "../timemanager/timeManager.h"
+#include "animsequence.h"
 #include "animatable.h"
 
 #include "../../interfaces/irenderer.h"
@@ -142,7 +143,7 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 
     void update();
 
-    void registerFrameContainer( std::vector<std::list<SmartPointer<Animatable> > >* frameList );
+    void registerFrameContainer( AnimSequence* frameList );
 
   protected:
   private:

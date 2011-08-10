@@ -21,7 +21,7 @@ namespace visualizer
       }
 
      private:
-      std::list<IFrame> m_frames;
+      std::list<Frame> m_frames;
 
   }; // AnimSequence
 

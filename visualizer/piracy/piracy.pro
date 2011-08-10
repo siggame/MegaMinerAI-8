@@ -1,7 +1,8 @@
 INCLUDEPATH += ../interfaces \
   ../parser \
   ../parser/sexp \
-  ../lib/
+  ../lib/ \
+  ../common/
 win32:LIBS += ./parser/sexp/sexpXP.a
 else:LIBS += ./parser/sexp/sexp.a
 MOC = moc

@@ -2,6 +2,7 @@
 #define PIRACY_H
 
 #include "igame.h"
+#include "animsequence.h"
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "piracyStack.h"

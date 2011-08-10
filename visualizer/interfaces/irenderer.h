@@ -2,7 +2,7 @@
 #define IRENDER_H
 
 #include <QtPlugin>
-#include "animatable.h"
+#include "animsequence.h"
 
 namespace visualizer
 {
@@ -40,7 +40,7 @@ class IRenderer
 
     // @TODO: Change this to a smart pointer or something similar so we know when the game is dead and 
     // we don't accidentally use it once Piracy has been destroyed.
-    virtual void registerFrameContainer( std::vector<std::list<SmartPointer<Animatable> > >* frameList ) = 0;
+    virtual void registerFrameContainer( AnimSequence* frameList ) = 0;
     
 };
 

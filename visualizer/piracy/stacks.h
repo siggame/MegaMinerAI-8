@@ -5,7 +5,8 @@
 #include <vector>
 #include <map>
 #include <list>
-#include "../interfaces/ianimationengine.h"
+//#include "../interfaces/ianimationengine.h"
+#include "frame.h"
 using namespace std;
 
 namespace visualizer
@@ -28,7 +29,7 @@ namespace visualizer
     // or create a new one if necessary
     stackType& getStack( const key& index );
 
-    const std::list<SmartPointer<Animatable> >& returnStackList() const;
+    const Frame& returnStackList() const;
 
   private:
     // This represents the map which will point to a particular point in the 
@@ -38,7 +39,8 @@ namespace visualizer
     // We had to change to list instead of vector because when the vector
     // resizes, the pointers in m_stackMap became invalid because each element
     // in the vector had a new pointer.  
-    std::list<SmartPointer<Animatable> > m_stacks;
+
+    Frame m_frame;
 
   };
    

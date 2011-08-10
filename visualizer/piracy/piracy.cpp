@@ -42,7 +42,7 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
-    m_intf.renderer->registerFrameContainer( getFrameList() );
+    m_intf.renderer->registerFrameContainer( this );
 
     start();
   } /* Piracy::loadGamelog() */

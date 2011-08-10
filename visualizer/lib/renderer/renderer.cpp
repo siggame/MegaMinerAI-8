@@ -268,7 +268,7 @@ namespace visualizer
   }
 
 
-  void _Renderer::registerFrameContainer( std::vector<std::list<SmartPointer<Animatable> > >* frameList )
+  void _Renderer::registerFrameContainer( AnimSequence* frameList )
   {
     // Do we want to delete m_frames?
     // Probably not. 

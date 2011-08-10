@@ -16,9 +16,11 @@ namespace visualizer
     }
     else
     {
-      m_stacks.push_back( new stackType() );
+      //m_stacks.push_back( new stackType() );
+      p = new stackType();
+      m_frame.addAnimatable( p );
       // Return pointer to last element in list
-      m_stackMap[ index ] = p = (stackType*)&*m_stacks.back();
+      m_stackMap[ index ] = p; // = (stackType*)&*m_stacks.back();
     }
 
     return *p;
@@ -26,9 +28,9 @@ namespace visualizer
   }
 
   template<class key, class stackType, class compare>
-  const std::list<SmartPointer<Animatable> >& StackOrganizer<key, stackType, compare>::returnStackList() const
+  const Frame& StackOrganizer<key, stackType, compare>::returnStackList() const
   {
-    return m_stacks;
+    return m_frame;
   }
 
 }

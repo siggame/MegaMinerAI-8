@@ -4,7 +4,7 @@
 #include <string.h>
 #include <vector>
 #include "parser/structures.h"
-#include "../interfaces/ianimationengine.h"
+#include "animatable.h"
 
 namespace visualizer
 {
