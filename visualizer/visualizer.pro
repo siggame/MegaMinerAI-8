@@ -1,5 +1,6 @@
 INCLUDEPATH += ./interfaces/ \
-    ./lib
+    ./lib \
+    ./common
 PPATHS += ./lib/gameobject/ \
     ./lib/manager/ \
     ./lib/mutex/ \
@@ -24,6 +25,7 @@ SOURCES += main.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/renderer/*.cpp \
     ./lib/renderer/textRenderer/*.cpp \
+    ./common/*.cpp \
     ./lib/animationengine/*.cpp
 MOC = moc
 HEADERS += ./lib/manager/*.h \
@@ -41,6 +43,7 @@ HEADERS += ./lib/manager/*.h \
     ./lib/resourcemanager/*.h \
     ./lib/renderer/textRenderer/*.h \
     ./lib/animationengine/*.h \
+    ./common/*.h \
     ./interfaces/*.h
 QMAKE_CFLAGS_DEBUG += -pg -rdynamic
 QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic

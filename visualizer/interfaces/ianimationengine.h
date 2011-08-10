@@ -35,74 +35,11 @@ namespace visualizer
       virtual SmartPointer<IAnimator> getAnimator() = 0;
   }; // IAnimationEngine
 
-  class IFrame
-  {
-    public:
-  }; // IFrame
-
   class IFrameContainer
   {
     public:
       
   }; // IFrameContainer
-
-/////////////////////////////////////////////////
-/// @class Animatable 
-/// @brief Base Class for any object you want to associate animations with.
-/////////////////////////////////////////////////
-
-/////////////////////////////////////////////////
-/// @fn Animatable::getAnimationSequence( IAnimationEngine* animEngine )
-/// @brief Gets the IAnimator defined by the core engine and saves it.
-/// @param animEngine The interface to the core engine passed through on 
-///  initialization.
-/////////////////////////////////////////////////
-
-/////////////////////////////////////////////////
-/// @fn Animatable::getData()
-/// @brief Virtual function which gets the 
-/// animation specific storage structure the 
-/// animator uses. 
-////////////////////////////////////////////////
-
-  class Animatable
-  {
-    public:
-      IAnimator& getAnimationSequence( IAnimationEngine* animEngine )
-      {
-        if( !m_animationSequence )
-        {
-          m_animationSequence = animEngine->getAnimator();
-        }
-        return *m_animationSequence;
-      }
-
-      virtual AnimData* getData() = 0; 
-
-    private:
-      SmartPointer<IAnimator> m_animationSequence;
-
-  }; // Animatable
-
-#if 0
-  class AnimSequence
-  {
-    public:
-    //TODO: Update to Frame
-      void addFrame( const Frame& frame )
-      {
-        m_frames.push_back( frame );
-      }
-
-      const size_t size() const
-      {
-        return m_frames.size();
-      }
-
-     private:
-      std::list<Frame> m_frames;
-  };
-#endif
 
 } // visualizer
 

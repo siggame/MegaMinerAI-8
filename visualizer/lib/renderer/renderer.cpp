@@ -3,7 +3,6 @@
 #include "../goc_owner.h"
 #include <sstream>
 #include "../gocfamily_talk.h"
-#include "../common.h"
 using namespace std;
 
 namespace visualizer

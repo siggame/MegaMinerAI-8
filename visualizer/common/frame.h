@@ -2,11 +2,12 @@
 #define FRAME_H
 
 #include "common.h"
-#include "animationengine.h"
+#include "ianimationengine.h"
+#include "animatable.h"
 
 namespace visualizer
 {
-  class Frame: public IFrame
+  class Frame
   {
     public:
       void addAnimatable( const SmartPointer<Animatable>& animatable );

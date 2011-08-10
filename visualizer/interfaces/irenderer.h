@@ -2,7 +2,7 @@
 #define IRENDER_H
 
 #include <QtPlugin>
-#include "ianimationengine.h"
+#include "animatable.h"
 
 namespace visualizer
 {

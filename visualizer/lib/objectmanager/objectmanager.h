@@ -4,7 +4,7 @@
 #include "../timeline/timeline.h"
 #include "../../interfaces/iobjectmanager.h"
 
-#include "../common.h"
+#include "common.h"
 #include <iostream>
 
 namespace visualizer

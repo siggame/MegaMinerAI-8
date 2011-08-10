@@ -1,3 +1,4 @@
+#if 0
 #ifndef FRAMECONTAINER_H
 #define FRAMECONTAINER_H
 
@@ -37,4 +38,5 @@ namespace visualizer
 } // visualizer
 
 
+#endif
 #endif

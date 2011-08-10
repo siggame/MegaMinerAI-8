@@ -16,6 +16,7 @@
 #include "../gui/renderwidget.h"
 
 #include "../timemanager/timeManager.h"
+#include "animatable.h"
 
 #include "../../interfaces/irenderer.h"
 #include "common.h"

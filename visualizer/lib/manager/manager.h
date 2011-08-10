@@ -1,7 +1,7 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
-#include "../common.h"
+#include "common.h"
 #include <map>
 
 namespace visualizer

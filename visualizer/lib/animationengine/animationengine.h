@@ -3,7 +3,7 @@
 
 #include "animator.h"
 #include "../../interfaces/ianimationengine.h"
-#include "../common.h"
+#include "common.h"
 
 namespace visualizer
 {
