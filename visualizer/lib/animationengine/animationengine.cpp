@@ -44,13 +44,13 @@ namespace visualizer
       float exT;
       for
         (
-        IAnimator::Iiterator& j = *anim.begin();
-        j.done();
-        j++
+        SmartPointer<IAnimator::Iiterator> j = anim.begin();
+        (*j).done();
+        (*j)++
         )
       {
-        totalDuration += j->controlDuration();
-        exT = j->totalDuration() - j->controlDuration();
+        totalDuration += (*j)->controlDuration();
+        exT = (*j)->totalDuration() - (*j)->controlDuration();
         extraTime = extraTime > exT ? extraTime : exT;
       }
 
@@ -58,13 +58,13 @@ namespace visualizer
       float start = 0;
       for
         (
-        IAnimator::Iiterator& j = *anim.begin();
-        j.done();
-        j++
+        SmartPointer<IAnimator::Iiterator> j = anim.begin();
+        (*j).done();
+        (*j)++
         )
       {
-        j->startTime = start;
-        start = j->endTime = j->startTime + (j->controlDuration()/fullTime);
+        (*j)->startTime = start;
+        start = (*j)->endTime = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
     }
   }

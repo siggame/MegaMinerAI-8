@@ -39,7 +39,7 @@ namespace visualizer
 
   SmartPointer<IAnimator::Iiterator> Animator::begin()
   {
-    return new iterator( m_animList.begin(), m_animList.end() );
+    return SmartPointer<IAnimator::Iiterator>(new iterator( m_animList.begin(), m_animList.end() ));
   }
 
   SmartPointer<IAnimator::Iiterator> Animator::end()
