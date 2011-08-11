@@ -66,7 +66,6 @@ namespace visualizer
     {
       m_keyFrame = false;
       m_subIter = m_iter->second.begin();
-
     }
     else
     {
@@ -88,12 +87,20 @@ namespace visualizer
 
   SmartPointer<Anim> Animator::iterator::operator -> ()
   {
+    if( m_keyFrame )
+    {
+      return m_iter->first;
+    }
+    else
+    {
+      return *m_subIter;
+    }
 
   }
 
   bool Animator::iterator::done()
   {
-    
+    return m_done;
   }
 
 } // visualizer
