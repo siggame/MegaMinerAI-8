@@ -1,7 +1,7 @@
 #ifndef ANIMATABLE_H
 #define ANIMATABLE_H
 
-#include "ianimationengine.h"
+#include "ianimator.h"
 
 /////////////////////////////////////////////////
 /// @class Animatable 
@@ -24,18 +24,11 @@
 
 namespace visualizer
 {
+  class IAnimationEngine;
   class Animatable
   {
     public:
-      IAnimator& getAnimationSequence( IAnimationEngine* animEngine )
-      {
-        if( !m_animationSequence )
-        {
-          m_animationSequence = animEngine->getAnimator();
-        }
-        return *m_animationSequence;
-      }
-
+      IAnimator& getAnimationSequence( IAnimationEngine* animEngine );
       virtual AnimData* getData() = 0; 
 
     private:

@@ -29,7 +29,7 @@ namespace visualizer
     // or create a new one if necessary
     stackType& getStack( const key& index );
 
-    const Frame& returnStackList() const;
+    Frame& returnStackList();
 
   private:
     // This represents the map which will point to a particular point in the 

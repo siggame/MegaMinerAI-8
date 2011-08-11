@@ -11,10 +11,12 @@ TARGET = piracy
 SOURCES += piracy.cpp \
   animations.cpp \
   piracyStack.cpp \
+  ../common/*.cpp \
   parser/*.cpp
   
 HEADERS += *.h \
-  parser/*.h
+  parser/*.h \
+  ../common/*.h
 
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg

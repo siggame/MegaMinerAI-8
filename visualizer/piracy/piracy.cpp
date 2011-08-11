@@ -302,6 +302,7 @@ namespace visualizer
       }
 
       // @TODO: Add animators for the score, team names, etc. 
+      m_intf.animationEngine->buildAnimations( so.returnStackList() );
       addFrame( so.returnStackList() );
       frameNum++;
       m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );

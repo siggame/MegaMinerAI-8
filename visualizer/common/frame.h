@@ -2,8 +2,8 @@
 #define FRAME_H
 
 #include "common.h"
-#include "ianimationengine.h"
 #include "animatable.h"
+#include <list>
 
 namespace visualizer
 {

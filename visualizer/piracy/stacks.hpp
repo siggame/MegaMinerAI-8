@@ -28,7 +28,7 @@ namespace visualizer
   }
 
   template<class key, class stackType, class compare>
-  const Frame& StackOrganizer<key, stackType, compare>::returnStackList() const
+  Frame& StackOrganizer<key, stackType, compare>::returnStackList() 
   {
     return m_frame;
   }

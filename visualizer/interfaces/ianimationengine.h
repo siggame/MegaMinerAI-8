@@ -5,32 +5,11 @@
 #include <list>
 #include <vector>
 #include "common.h"
-
-class Frame;
+#include "frame.h"
+#include "ianimator.h"
 
 namespace visualizer
 {
-  struct Anim
-  {
-    virtual float controlDuration() const = 0;
-    virtual float totalDuration() const = 0;
-    float startTime; 
-    float endTime;
-  }; // Anim
-
-  struct AnimData
-  {
-  }; // AnimData
-
-  struct IAnimator
-  {
-    virtual void addKeyFrame( const SmartPointer<Anim>& a ) = 0;
-    virtual void addSubFrame( const size_t& keyFrame, const SmartPointer<Anim>& a ) = 0;
-
-    virtual const size_t& numKeyFrames() = 0;
-
-  }; // IAnimator
-  
   class IAnimationEngine
   {
     public:
