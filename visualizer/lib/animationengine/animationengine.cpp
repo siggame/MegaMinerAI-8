@@ -39,13 +39,13 @@ namespace visualizer
       IAnimator& anim = (*i)->getAnimationSequence( 0 );
       for
         (
-        SmartPointer<IAnimator::Iiterator> j = anim.begin();
-        j->done();
-        (*j)++
+        IAnimator::Iiterator& j = *anim.begin();
+        j.done();
+        j++
         )
       {
-      }
 
+      }
     }
   }
 
