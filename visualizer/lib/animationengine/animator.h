@@ -15,10 +15,20 @@ namespace visualizer
     class iterator: public Iiterator
     {
       public:
+        iterator
+          ( 
+            std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > > >::iterator i,
+            std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > > >::iterator end 
+          );
         void operator ++ ( int );
         SmartPointer<Anim> operator -> ();
         bool done();
       private:
+        std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > > >::iterator m_iter;
+        std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > > >::iterator m_end;
+        std::list< SmartPointer<Anim> >::iterator m_subIter;
+        bool m_keyFrame;
+        bool m_done;
     };
 
     SmartPointer<Iiterator> begin();
