@@ -20,6 +20,18 @@ namespace visualizer
 
     virtual const size_t& numKeyFrames() = 0;
 
+    class Iiterator
+    {
+      public:
+        virtual void operator ++ ( int ) = 0;
+        virtual SmartPointer<Anim> operator -> () = 0;
+        virtual bool done() = 0;
+
+    }; // iterator
+
+    virtual SmartPointer<Iiterator> begin() = 0;
+    virtual SmartPointer<Iiterator> end() = 0;
+
   }; // IAnimator
  
   struct AnimData

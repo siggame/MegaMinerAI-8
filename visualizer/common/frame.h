@@ -11,7 +11,7 @@ namespace visualizer
   {
     public:
       void addAnimatable( const SmartPointer<Animatable>& animatable );
-      std::list<SmartPointer<Animatable> >& getFrame();
+      std::list<SmartPointer<Animatable> >& getAnimations();
       const size_t size() const;
 
     private:

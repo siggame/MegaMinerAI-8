@@ -7,7 +7,7 @@ namespace visualizer
     m_frame.push_back( animatable );
   }
 
-  std::list<SmartPointer<Animatable> >& Frame::getFrame()
+  std::list<SmartPointer<Animatable> >& Frame::getAnimations()
   {
     return m_frame;
   }

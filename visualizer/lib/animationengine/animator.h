@@ -12,6 +12,18 @@ namespace visualizer
 
     const size_t& numKeyFrames();
 
+    class iterator: public Iiterator
+    {
+      public:
+        void operator ++ ( int );
+        SmartPointer<Anim> operator -> ();
+        bool done();
+      private:
+    };
+
+    SmartPointer<Iiterator> begin();
+    SmartPointer<Iiterator> end();
+
     std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > >  > m_animList;
   }; // Animator 
 

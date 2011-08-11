@@ -29,6 +29,16 @@ namespace visualizer
 
   void _AnimationEngine::buildAnimations( Frame& frame )
   {
+    for
+      ( 
+      std::list<SmartPointer<Animatable> >::iterator i = frame.getAnimations().begin();
+      i != frame.getAnimations().end();
+      i++ 
+      )
+    {
+      IAnimator& anim = (*i)->getAnimationSequence( 0 );
+
+    }
   }
 
 } // visualizer
