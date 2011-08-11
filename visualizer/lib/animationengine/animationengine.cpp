@@ -27,6 +27,10 @@ namespace visualizer
     return new Animator();
   }
 
+  void _AnimationEngine::buildAnimations( Frame& frame )
+  {
+  }
+
 } // visualizer
 
 

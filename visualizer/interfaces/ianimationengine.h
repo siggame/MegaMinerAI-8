@@ -6,6 +6,8 @@
 #include <vector>
 #include "common.h"
 
+class Frame;
+
 namespace visualizer
 {
   struct Anim
@@ -33,6 +35,7 @@ namespace visualizer
   {
     public:
       virtual SmartPointer<IAnimator> getAnimator() = 0;
+      virtual void buildAnimations( Frame& frame ) = 0;
   }; // IAnimationEngine
 
   class IFrameContainer
