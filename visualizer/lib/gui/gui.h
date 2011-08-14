@@ -50,7 +50,53 @@ namespace visualizer
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @function _GUI::update()
-/// @brief
+/// @brief When triggered tell the control bar to update
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::closeGUI()
+/// @brief When triggered, the visualizer closes.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::getControlBar()
+/// @brief This returns the current control bar being used if we decide to go
+/// for a modular approach to this.
+/// @note May be removed in future versions of the visualizer.
+/// @return guiObj* A pointer to a control bar guiObj
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::appendConsole( string line ) 
+/// @brief This function appends text to the console, like talks and debugging
+/// commands.
+/// @param line The line to be outputted to the console.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::appendConsole( QString line ) 
+/// @brief This function appends text to the console, like talks and debugging
+/// commands.
+/// @param line The line to be outputted to the console.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::clearConsole()
+/// @brief This function clears the console completely.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::getFullScreen()
+/// @brief Returns whether or not the visualizer is in fullscreen mode or not.
+/// @return bool Representing the fullscreeniness of the visualizer.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+/// @function _GUI::setFullscreen( bool full )
+/// @brief Sets puts the visualizer in fullscreen mode or releases it from
+/// it.
+/// @param full If true is passed, the visualizer is put into fullscreen mode.
+/// If false is passed, the visualizer is released from fullscreen mode.
 ///////////////////////////////////////////////////////////////////////////////
 
 /// @TODO: Turn this into a module
@@ -95,6 +141,7 @@ class _GUI : public QMainWindow, public IGUI
     void update();
     void closeGUI();
 
+    /// @TODO: Revise or remove until we decide we want to switch out control bars
     ControlBar * getControlBar();
 
     void appendConsole( string line );
@@ -129,6 +176,7 @@ class _GUI : public QMainWindow, public IGUI
 
   public:
 
+    /// @TODO: This will probably have to change.
     QTableWidget* getGlobalStats();
     QTableWidget* getSelectionStats();
     QTableWidget* getIndividualStats();
