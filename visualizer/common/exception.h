@@ -4,9 +4,11 @@
 #include <iostream>
 #include <string>
 
-#ifdef __GNUC__
+#ifdef __GNUC__ 
+#ifndef __MINGW32__
 #include <execinfo.h>
 #define __STACKTRACE__
+#endif
 #endif
 
 using namespace std;
