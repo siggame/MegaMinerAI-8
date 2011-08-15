@@ -22,7 +22,6 @@ class ITimeManager
 
   public:
     virtual const int& getTurn() = 0;
-    virtual const int& getFrame() = 0;
 
 #if 0
     virtual void setTurn( const int& turn ) = 0;
