@@ -21,6 +21,7 @@ class ITimeManager
     };
 
   public:
+#if 0
     virtual const int& getTurn() = 0;
     virtual const int& getFrame() = 0;
     virtual void setTurn( const int& turn ) = 0;
@@ -44,6 +45,7 @@ class ITimeManager
     virtual void updateProgress( float progress ) = 0;
 
     virtual QMutex& getMutex() = 0;
+#endif
 
 };
 

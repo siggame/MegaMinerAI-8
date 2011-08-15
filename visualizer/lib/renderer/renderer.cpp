@@ -175,7 +175,7 @@ namespace visualizer
     unsigned int rheight = height();
     unsigned int rdepth = depth();
 
-    /// @TODO: Move this to the appropriate spot
+    /// @TODO Move this to the appropriate spot
     glShadeModel( GL_SMOOTH );
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClearDepth( 1.0f );
@@ -299,7 +299,6 @@ namespace visualizer
     }
 
     //  m_renderList.clear();
-    int time = TimeManager->timeHash();
 
     bool selectUpdate = SelectionRender->getUpdated();
     float mapSize = (float)OptionsMan->getInt("mapSize");

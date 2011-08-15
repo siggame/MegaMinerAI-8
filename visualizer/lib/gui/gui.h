@@ -29,12 +29,12 @@ namespace visualizer
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::_clear();
+/// @fn _GUI::_clear();
 /// @brief Clears all the objects registered
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::dropEvent( QDropEvent* evt )
+/// @fn _GUI::dropEvent( QDropEvent* evt )
 /// @brief This function is triggered automatically by Qt when an object, 
 /// typically a file, is dropped onto the visualizer.  If the object dropped 
 /// on the visualizer is a gamelog, then the visualizer will open it.
@@ -43,23 +43,23 @@ namespace visualizer
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::dragEnterEvent( QDragEnterEvent *evt )
+/// @fn _GUI::dragEnterEvent( QDragEnterEvent *evt )
 /// @brief This function is triggered automatically by Qt when an object 
 /// is dragged over the visualizer.  
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::update()
+/// @fn _GUI::update()
 /// @brief When triggered tell the control bar to update
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::closeGUI()
+/// @fn _GUI::closeGUI()
 /// @brief When triggered, the visualizer closes.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::getControlBar()
+/// @fn _GUI::getControlBar()
 /// @brief This returns the current control bar being used if we decide to go
 /// for a modular approach to this.
 /// @note May be removed in future versions of the visualizer.
@@ -67,39 +67,39 @@ namespace visualizer
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::appendConsole( string line ) 
+/// @fn _GUI::appendConsole( string line ) 
 /// @brief This function appends text to the console, like talks and debugging
 /// commands.
 /// @param line The line to be outputted to the console.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::appendConsole( QString line ) 
+/// @fn _GUI::appendConsole( QString line ) 
 /// @brief This function appends text to the console, like talks and debugging
 /// commands.
 /// @param line The line to be outputted to the console.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::clearConsole()
+/// @fn _GUI::clearConsole()
 /// @brief This function clears the console completely.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::getFullScreen()
+/// @fn _GUI::getFullScreen()
 /// @brief Returns whether or not the visualizer is in fullscreen mode or not.
 /// @return bool Representing the fullscreeniness of the visualizer.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function _GUI::setFullscreen( bool full )
+/// @fn _GUI::setFullscreen( bool full )
 /// @brief Sets puts the visualizer in fullscreen mode or releases it from
 /// it.
 /// @param full If true is passed, the visualizer is put into fullscreen mode.
 /// If false is passed, the visualizer is released from fullscreen mode.
 ///////////////////////////////////////////////////////////////////////////////
 
-/// @TODO: Turn this into a module
+/// @TODO Turn this into a module
 class _GUI : public QMainWindow, public IGUI
 {
   Q_OBJECT
@@ -110,24 +110,24 @@ class _GUI : public QMainWindow, public IGUI
   public:
     _GUI() : m_isSetup(false) {};
     ~_GUI();
-    /// @TODO:  Remove these or revise these
+    /// @TODO  Remove these or revise these
     bool reg( const std::string& id, guiObj *obj );
     bool del( const std::string& id );
 
-    /// @TODO: Revise
+    /// @TODO Revise
     static bool setup();
-    /// @NOTE: Why does this return a boolean?  
+    /// @NOTE Why does this return a boolean?  
     bool clear();
 
-    /// @TODO: Remove or revise
+    /// @TODO Remove or revise
     guiObj *getGUIObject( const std::string& id );
 
-    /// @TODO: Revise
+    /// @TODO Revise
     bool create();
     bool destroy();
     unsigned int numObjects();
 
-    /// @TODO: Remove
+    /// @TODO Remove
     bool isSetup();
 
     /// EVENTS
@@ -141,7 +141,7 @@ class _GUI : public QMainWindow, public IGUI
     void update();
     void closeGUI();
 
-    /// @TODO: Revise or remove until we decide we want to switch out control bars
+    /// @TODO Revise or remove until we decide we want to switch out control bars
     ControlBar * getControlBar();
 
     void appendConsole( string line );
@@ -176,7 +176,7 @@ class _GUI : public QMainWindow, public IGUI
 
   public:
 
-    /// @TODO: This will probably have to change.
+    /// @TODO This will probably have to change.
     QTableWidget* getGlobalStats();
     QTableWidget* getSelectionStats();
     QTableWidget* getIndividualStats();

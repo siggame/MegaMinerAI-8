@@ -2,6 +2,7 @@
 #define TIMEMANAGER_H
 
 #include <QTimer>
+#include <QTime>
 #include <time.h>
 #include <list>
 
@@ -15,66 +16,39 @@ class _TimeManager : public QObject, public ITimeManager
   Q_OBJECT
   Q_INTERFACES( visualizer::ITimeManager );
   public:
-
-    _TimeManager()
-    {
-      m_sleepTime = -1;
-      m_awakeTime = -2;
-    }
-
-    const int& getTurn();
-    const int& getFrame();
-    void setTurn( const int& turn );
-
-    const int& getNumTurns();
-    void setNumTurns( const int& numTurns );
-
-    float getSpeed();
-    void setSpeed( const float& speed );
-
-    int timeHash();
-    mode getMode();
-
     static void setup();
     static void destroy();
     void _setup();
 
-    void updateFrames();
-    void start();
+    void updateProgress( float progress );
+
+    float getSpeed();
+    void setSpeed( const float& speed );
+
     void timerStart();
+    void start();
 
     void requestUpdate( UpdateNeeded* requester );
     void updateChildren();
 
-    void updateProgress( float progress )
-    {
-      m_progress = progress;
-    }
+    // @NOTE These four will probably have their names changed
+    void setTurn( const int& turn );
+    const int& getTurn();
 
-    QMutex& getMutex();
+    const int& getNumTurns();
+    void setNumTurns( const int& numTurns );
 
   private slots:
     void timerUpdate();
 
   private:
-    int m_turn;
-    int m_numTurns;
-    int m_frame;
-    int m_framesPerTurn;
-    mode m_mode;
-
-    QTimer *timer;
-
+    QTimer *m_timer;
+    QTime m_time;
     float m_speed;
     float m_progress;
+    int m_turn;
+    int m_numTurns;
     int m_lastTime;
-    int m_hash;
-    int m_sleepTime;
-    int m_awakeTime;
-    int m_time;
-
-    QMutex m_timeMutex;
-
     std::list< UpdateNeeded* > m_updateRequesters;
 };
 

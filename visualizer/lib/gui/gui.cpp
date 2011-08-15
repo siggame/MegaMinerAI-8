@@ -166,7 +166,7 @@ void _GUI::dropEvent( QDropEvent* evt )
 {
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
-  /// @TODO: Make sure this is a gamelog before opening it
+  /// @TODO Make sure this is a gamelog before opening it
   /// if we do that, we can open the possibility of 
   /// having other dropped objects handled by the visualizer
   /// such as movies and images
@@ -502,7 +502,7 @@ void _GUI::stepTurnBackShortcut()
 //Prepares the tabs and tables for the unit stats area
 void _GUI::initUnitStats()
 {
-  //TODO: Move this game-specific code out of _GUI
+  //TODO Move this game-specific code out of _GUI
 
   //Create unit Stats tab area
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );

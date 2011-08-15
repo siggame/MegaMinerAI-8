@@ -16,12 +16,12 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-/// @function RenderWidget::initializeGL()
+/// @fn RenderWidget::initializeGL()
 /// @brief Does all the set up related to rendering
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-/// @function RenderWidget::resizeEvent( QResizeEvent *evt )
+/// @fn RenderWidget::resizeEvent( QResizeEvent *evt )
 /// @brief Event that is typically triggered when the rendering area 
 /// has been resized in some way.  It re-adjusts the parameters so that
 /// everything still looks correct
@@ -30,7 +30,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-/// @function RenderWidget::mousePressEvent( QMouseEvent *event )
+/// @fn RenderWidget::mousePressEvent( QMouseEvent *event )
 /// @brief This event is automatically triggered when the user has pressed
 /// but not released his mouse within the render area.  Currently, this is
 /// being used only for selection boxes, but could be expanded to dragging 
@@ -40,7 +40,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-/// @function RenderWidget::mouseReleaseEvent( QMouseEvent *event )
+/// @fn RenderWidget::mouseReleaseEvent( QMouseEvent *event )
 /// @brief This event is automatically triggered when the user has released 
 /// the button on his mouse within the render area.  Currently, this is
 /// being used only for selection boxes, but could be expanded to dragging 
@@ -50,7 +50,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////
-/// @function RenderWidget::mouseMoveEvent( QMouseEvent *event )
+/// @fn RenderWidget::mouseMoveEvent( QMouseEvent *event )
 /// @brief This event is automatically triggered when the user has moved his
 /// mouse within the render area.  Currently, this is being used only for
 /// selection boxes, but could be expanded to dragging the render area.
@@ -72,7 +72,7 @@ namespace visualizer
       void resizeEvent( QResizeEvent *evt );
 
     private:
-      /// @TODO: Need to send the result of the selection
+      /// @TODO Need to send the result of the selection
       /// events to the loaded game module for unit selection
       void mousePressEvent( QMouseEvent *event );
       void mouseReleaseEvent( QMouseEvent *event );

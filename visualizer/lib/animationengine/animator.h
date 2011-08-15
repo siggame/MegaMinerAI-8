@@ -7,7 +7,10 @@
 #define ANIMATOR_H
 
 #include "ianimationengine.h"
-// @TODO: Probably should make m_anims private.
+// @TODO Probably should make m_anims private.
+
+namespace visualizer
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @class Animator
@@ -17,14 +20,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::addKeyFrame( const SmartPointer<Anim>& a )
+/// @fn Animator::addKeyFrame( const SmartPointer<Anim>& a )
 /// @brief Adds a keyframe to the timeline.  Any drawn object should probably
 /// have a Start and an End keyframe.
 /// @param a The animation type to put on the timeline.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::addSubFrame
+/// @fn Animator::addSubFrame
 ///     ( const size_t& keyFrame, const SmartPointer<Anim>& a )
 /// @brief Adds a subframe attached to an existing keyframe on the timeline.
 /// @pre The keyFrame must already exist.
@@ -32,19 +35,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::numKeyFrames()
+/// @fn Animator::numKeyFrames()
 /// @brief Returns the number of key frames currently present on the timeline
 /// @return size_t& Represents the number of key frames present.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::begin()
+/// @fn Animator::begin()
 /// @brief Returns an iterator pointing to the first animation on the timeline
 /// @return SmartPointer<Iiterator> Iterator
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::end()
+/// @fn Animator::end()
 /// @brief Returns nothing.  Do Not Use.
 /// @pre DON'T USE.  SCHEDULED FOR REMOVAL
 /// @post KERPOW
@@ -57,27 +60,26 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::iterator::operator ++ ( int )
+/// @fn Animator::iterator::operator ++ ( int )
 /// @brief Post-order increment operator which goes to the next anim on the
 /// list.
 /// @pre Must not already be pointing to the last item on the list.
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::iterator::operator ->()
+/// @fn Animator::iterator::operator ->()
 /// @brief Arrow operator overload accessing the Anim under the iterator.
 /// @return SmartPointer<Anim> pointing to the desired Anim
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @function Animator::iterator::done()
+/// @fn Animator::iterator::done()
 /// @brief Returns true/false based on whether we've looped through everything
 /// or not.
 /// @return bool representing if we're done or not.
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace visualizer
-{
+
   struct Animator: public IAnimator
   {
     void addKeyFrame( const SmartPointer<Anim>& a );

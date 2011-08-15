@@ -29,7 +29,7 @@ namespace visualizer
 
   void _AnimationEngine::buildAnimations( Frame& frame )
   {
-    // @NOTE: Can we simplify this looping any?  Not a huge issue since it's internal
+    // @NOTE Can we simplify this looping any?  Not a huge issue since it's internal
     // if this were on the piracy side, I'd be a little more worried
     for
       ( 
