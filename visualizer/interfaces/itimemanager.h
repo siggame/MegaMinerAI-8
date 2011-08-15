@@ -21,31 +21,27 @@ class ITimeManager
     };
 
   public:
-#if 0
     virtual const int& getTurn() = 0;
     virtual const int& getFrame() = 0;
+
+#if 0
     virtual void setTurn( const int& turn ) = 0;
+#endif
 
     virtual const int& getNumTurns() = 0;
     virtual void setNumTurns( const int& numTurns ) = 0;
 
+    /// @TODO Determine whether the visualizer should have exclusive
+    /// ability to change speed.
+#if 0
     virtual float getSpeed() = 0;
     virtual void setSpeed( const float& speed ) = 0;
-
-    virtual int timeHash() = 0;
-    virtual mode getMode() = 0;
-
-    virtual void updateFrames() = 0;
-    virtual void start() = 0;
-    virtual void timerStart() = 0;
+#endif
 
     virtual void requestUpdate( UpdateNeeded* requester ) = 0;
     virtual void updateChildren() = 0;
 
     virtual void updateProgress( float progress ) = 0;
-
-    virtual QMutex& getMutex() = 0;
-#endif
 
 };
 
