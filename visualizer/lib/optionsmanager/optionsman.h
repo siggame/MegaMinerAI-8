@@ -1,7 +1,6 @@
 #ifndef OPTIONSMAN_H
 #define OPTIONSMAN_H
 
-#include "../mutex/Mutex.h"
 #include <iostream>
 #include <map>
 #include <fstream>
