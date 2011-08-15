@@ -359,7 +359,8 @@ namespace visualizer
       {
         return m_x < moveList.m_x;
       }
-    } else
+    } 
+    else
     {
       return s1 < s2;
     }
