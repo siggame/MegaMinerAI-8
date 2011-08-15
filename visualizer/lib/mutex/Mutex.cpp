@@ -46,7 +46,8 @@ bool _Mutex::unlock(const MutexID_t & mutexName)
   if ( m_mutexes.find(mutexName) != m_mutexes.end())
   {
     #ifdef WIN32
-    Release_Mutex( m_mutexes[mutexName] );
+    // @FIXME This does not compile on windows
+    //Release_Mutex( m_mutexes[mutexName] );
     #else
     pthread_mutex_unlock( &m_mutexes[mutexName] );
     #endif
@@ -105,7 +106,8 @@ bool _Mutex::createMutex(const MutexID_t & mutexName)
   if ( m_mutexes.find(mutexName) == m_mutexes.end() )
   {
     #ifdef WIN32
-    m_mutexes[mutexName] = Create_Mutex( NULL, false, NULL );
+    /// @FIXME This does not compile on windows
+    //m_mutexes[mutexName] = Create_Mutex( NULL, false, NULL );
     #else
     pthread_mutex_t temp = PTHREAD_MUTEX_INITIALIZER;
     m_mutexes[mutexName] = temp;
