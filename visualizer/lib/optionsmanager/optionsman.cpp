@@ -213,7 +213,7 @@ bool _OptionsMan::addBool(const std::string & namebuff, std::stringstream & ss, 
     {
       bool retval = strToBool(valbuff);
       m_options[namebuff] = new Option<bool,OT_BOOL>(retval);
-      Mutex->createMutex(namebuff);
+      //Mutex->createMutex(namebuff);
     }
     catch (std::string s)
     {
@@ -244,7 +244,7 @@ bool _OptionsMan::addFloat(const std::string & namebuff, std::stringstream & ss,
   if (ss >> val)
   {
     m_options[namebuff] = new Option<float,OT_FLOAT>(val);
-    Mutex->createMutex(namebuff);
+    //Mutex->createMutex(namebuff);
     return true;
   }
 
@@ -272,7 +272,7 @@ bool _OptionsMan::addInt(const std::string & namebuff, std::stringstream & ss, c
   if (ss >> val)
   {
     m_options[namebuff] = new Option<int,OT_INT>(val);
-    Mutex->createMutex(namebuff);
+    //Mutex->createMutex(namebuff);
     return true;
   }
 
@@ -306,7 +306,7 @@ bool _OptionsMan::addString(const std::string & namebuff, std::stringstream & ss
     }
 
     m_options[namebuff] = new Option<std::string,OT_STRING>(val);
-    Mutex->createMutex(namebuff);
+    //Mutex->createMutex(namebuff);
     return true;
   }
   std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
@@ -520,9 +520,9 @@ T _OptionsMan::getVar(const std::string & oName)
     return T();
   }
 
-  Mutex->lock(oName);
+  //Mutex->lock(oName);
   T temp (((Option<T,OT>*)(m_options[oName]))->get());
-  Mutex->unlock(oName);
+  //Mutex->unlock(oName);
   return temp;
 }
 
@@ -547,9 +547,9 @@ void _OptionsMan::setVar(const std::string & oName, const T & val)
     return;
   }
 
-  Mutex->lock(oName);
+  //Mutex->lock(oName);
   ((Option<T,OT>*)(m_options[oName]))->set(val);
-  Mutex->unlock(oName);
+  //Mutex->unlock(oName);
 }
 
 
@@ -564,7 +564,7 @@ bool _OptionsMan::addString(const OptID_t & oName, const std::string & val)
     return false;
 
   m_options[oName] = new Option<std::string,OT_STRING>(val);
-  Mutex->createMutex(oName);
+  //Mutex->createMutex(oName);
 
   setStr(oName,val);
 
@@ -583,7 +583,7 @@ bool _OptionsMan::addInt(const OptID_t & oName, const int & val)
     return false;
 
   m_options[oName] = new Option<int,OT_INT>(val);
-  Mutex->createMutex(oName);
+  //Mutex->createMutex(oName);
 
   setInt(oName,val);
 
@@ -602,7 +602,7 @@ bool _OptionsMan::addFloat(const OptID_t & oName, const float & val)
     return false;
 
   m_options[oName] = new Option<float,OT_FLOAT>(val);
-  Mutex->createMutex(oName);
+  //Mutex->createMutex(oName);
 
   setFloat(oName,val);
 
@@ -616,7 +616,7 @@ bool _OptionsMan::addBool(const OptID_t & oName, const bool & val)
     return false;
 
   m_options[oName] = new Option<bool,OT_BOOL>(val);
-  Mutex->createMutex(oName);
+  //Mutex->createMutex(oName);
 
   setBool(oName,val);
 

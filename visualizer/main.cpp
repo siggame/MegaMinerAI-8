@@ -2,8 +2,6 @@
 #include "lib/gui/gui.h"
 #include "lib/optionsmanager/optionsman.h"
 #include "lib/timemanager/timeManager.h"
-#include "lib/mutex/Mutex.h"
-#include "lib/threadler/threadler.h"
 #include "lib/resourcemanager/resourceman.h"
 #include "lib/resourcemanager/texture.h"
 #include "lib/objectmanager/objectmanager.h"
@@ -19,11 +17,6 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
   // Must initialize things based on their dependency graphs
   ///////////////////////////////////////////////////////////////////
-
-  ///////////////////////////////////////////////////////////////////
-  // Mutex Depends on Nothing  
-  ///////////////////////////////////////////////////////////////////
-  Mutex->setup();
 
   ///////////////////////////////////////////////////////////////////
   // Options Manager Depends On Mutex
