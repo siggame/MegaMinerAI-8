@@ -55,6 +55,7 @@ namespace visualizer
 
   void _TimeManager::start()
   {
+    m_timer = new QTimer( this );
     connect( m_timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
     m_timer->start( 35 );
 

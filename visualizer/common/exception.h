@@ -46,7 +46,6 @@ namespace visualizer
         cerr << " Stack Trace: " << endl;
         size = backtrace( array, 10 );
         backtrace_symbols_fd( array, size, 2 );
-
 #endif
         cerr << endl;
       }
