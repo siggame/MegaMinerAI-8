@@ -2,6 +2,7 @@
 #include "../optionsmanager/optionsman.h"
 
 #include <ctime>
+#include <cmath>
 
 namespace visualizer
 {
@@ -30,7 +31,12 @@ namespace visualizer
 
   void _TimeManager::_setup()
   {
+    /// @FIXME There's really no reason this shouldn't all be in a constructor
     m_turn = 0;
+    m_progress = 0;
+    m_speed = OptionsMan->getFloat( "speed" );
+    m_turnCompletion = 0;
+    m_numTurns = 0;
 
   } // _TimeManager::_setup()
 
@@ -105,32 +111,51 @@ namespace visualizer
   const int& _TimeManager::nextTurn()
   {
     pause();
+    m_turnCompletion = 0;
     m_turn++;
     return getTurn();
-  }
+
+  } // _TimeManager::nextTurn()
 
   const int& _TimeManager::prevTurn()
   {
     pause();
+    m_turnCompletion = 0;
     m_turn--;
     return getTurn();
-  }
+
+  } // _TimeManager::prevTurn()
 
   void _TimeManager::play()
   {
-  }
+    m_speed = OptionsMan->getFloat( "speed" );
+
+  } // _TimeManager::play()
 
   void _TimeManager::pause()
   {
-  }
+    m_speed = 0;
+
+  } // _TimeManager::pause()
 
   void _TimeManager::fastForward()
   {
-  }
+    THROW( Exception, "" );
+
+  } // _TimeManager::fastForward()
 
   void _TimeManager::rewind()
   {
-  }
+    if( m_speed >= 0 )
+    {
+      m_speed = -OptionsMan->getFloat( "speed" );
+    }
+    else
+    {
+      THROW( Exception, "" );
+    }
+
+  } // _TimeManager::rewind()
 
   const int& _TimeManager::getNumTurns()
   {
@@ -149,8 +174,7 @@ namespace visualizer
 
   float _TimeManager::getSpeed()
   {
-    float multi = OptionsMan->getFloat( "speed" );
-    return m_speed * multi;
+    return m_speed;
 
   } // _TimeManager::getSpeed()
 
@@ -159,8 +183,25 @@ namespace visualizer
     // m_time.restart() returns the number of milliseconds
     // since it was last called.
 
-    /// @FIXME Need to check if we're actually playing or not
-    m_turn += m_time.restart() * m_speed;
+    float secElapsed = (float)m_time.restart()/1000;
+    /// we're alwaying going to floor the final turn result for this calculation
+    m_turnCompletion += m_speed * secElapsed;
+
+    // Unless we're lagging badly or our speed is ungodly high, 
+    // this loop should only occur once
+    while( abs( m_turnCompletion ) > 1 )
+    {
+      if( m_turnCompletion > 0 )
+      {
+        m_turnCompletion--;
+        m_turn++;
+      }
+      else
+      {
+        m_turnCompletion++;
+        m_turn--;
+      }
+    }
 
     updateChildren();
 

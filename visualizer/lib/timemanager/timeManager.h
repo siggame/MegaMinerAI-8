@@ -105,9 +105,16 @@ namespace visualizer
       QTime m_time;
       float m_speed;
       float m_progress;
+
+      /// This is the amount of the current turn that has been 
+      /// achieved.
+      /// If we're halfway through turn 30
+      /// m_turn == 30
+      /// m_turnCompletion == .5
+      float m_turnCompletion;
+
       int m_turn;
       int m_numTurns;
-      int m_lastTime;
       std::list< UpdateNeeded* > m_updateRequesters;
   };
 
