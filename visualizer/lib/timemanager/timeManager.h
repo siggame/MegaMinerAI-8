@@ -79,9 +79,10 @@ namespace visualizer
 
       void requestUpdate( UpdateNeeded* requester );
 
-      // @NOTE These four will probably have their names changed
+      // @NOTE These five will probably have their names changed
       void setTurn( const int& turn );
       const int& getTurn();
+      const float& getTurnPercent();
 
       const int& nextTurn();
       const int& prevTurn();
@@ -105,6 +106,8 @@ namespace visualizer
       QTime m_time;
       float m_speed;
       float m_progress;
+
+      /// @TODO Rename this variable.  It's not a good name at all
 
       /// This is the amount of the current turn that has been 
       /// achieved.

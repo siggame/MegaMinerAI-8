@@ -100,6 +100,12 @@ namespace visualizer
 
   } // _TimeManager::getTurn()
 
+  const float& _TimeManager::getTurnPercent()
+  {
+    return m_turnCompletion;
+
+  } // _TimeManager::getTurnPercent()
+
   void _TimeManager::setTurn( const int& turn )
   {
     m_turn = turn;
