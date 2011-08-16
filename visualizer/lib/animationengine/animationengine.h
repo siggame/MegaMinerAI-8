@@ -44,6 +44,10 @@ namespace visualizer
       SmartPointer<IAnimator> getAnimator();
       
       void buildAnimations( Frame& frame );
+
+      void draw();
+
+      void registerFrameContainer( AnimSequence* frameList );
     private:
      
   }; // _AnimationEngine

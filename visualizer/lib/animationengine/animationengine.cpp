@@ -14,18 +14,18 @@ namespace visualizer
     {
       THROW( Exception, "Animation Engine already initialized." );
     }
-  }
+  } // _AnimationEngine::setup()
 
   void _AnimationEngine::destroy()
   {
     delete AnimationEngine;
     AnimationEngine = 0;
-  }
+  } // _AnimationEngine::destroy()
 
   SmartPointer<IAnimator> _AnimationEngine::getAnimator()
   {
     return new Animator();
-  }
+  } // _AnimationEngine::getAnimator()
 
   void _AnimationEngine::buildAnimations( Frame& frame )
   {
@@ -67,7 +67,16 @@ namespace visualizer
         start = (*j)->endTime = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
     }
-  }
+  } // _AnimationEngine::buildAnimations()
+
+  void _AnimationEngine::draw()
+  {
+
+  } // _AnimationEngine::draw()
+
+  void _AnimationEngine::registerFrameContainer( AnimSequence* frameList )
+  {
+  } // _AnimationEngine::registerFrameContainer()
 
 } // visualizer
 

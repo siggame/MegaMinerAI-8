@@ -14,10 +14,9 @@
 #include "../gocfamily_location.h"
 #include "../gui/gui.h"
 #include "../gui/renderwidget.h"
+#include "../animationengine/animationengine.h"
 
 #include "../timemanager/timeManager.h"
-#include "animsequence.h"
-#include "animatable.h"
 
 #include "../../interfaces/irenderer.h"
 #include "common.h"
@@ -143,7 +142,7 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 
     void update();
 
-    void registerFrameContainer( AnimSequence* frameList );
+    //void registerFrameContainer( AnimSequence* frameList );
 
   protected:
   private:

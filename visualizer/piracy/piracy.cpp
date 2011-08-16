@@ -42,7 +42,9 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
-    m_intf.renderer->registerFrameContainer( this );
+    /// @TODO We really need a good way of cleaning this up
+    /// after a gamelog is done
+    m_intf.animationEngine->registerFrameContainer( this );
 
     start();
   } /* Piracy::loadGamelog() */

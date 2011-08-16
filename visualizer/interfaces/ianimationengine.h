@@ -7,6 +7,7 @@
 #include "common.h"
 #include "frame.h"
 #include "ianimator.h"
+#include "animsequence.h"
 
 namespace visualizer
 {
@@ -15,6 +16,11 @@ namespace visualizer
     public:
       virtual SmartPointer<IAnimator> getAnimator() = 0;
       virtual void buildAnimations( Frame& frame ) = 0;
+
+      // @TODO: Change this to a smart pointer or something similar so we know when the game is dead and 
+      // we don't accidentally use it once Piracy has been destroyed.
+      virtual void registerFrameContainer( AnimSequence* frameList ) = 0;
+ 
   }; // IAnimationEngine
 
   class IFrameContainer

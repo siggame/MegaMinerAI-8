@@ -53,28 +53,12 @@ namespace visualizer
       }
     }
 
+    /// @TODO Need to clean up this code a bit.
     glPushMatrix();
     float mapSize = (float)OptionsMan->getInt("mapSize");
     glScalef( height()/mapSize, height()/mapSize, 1 );
 
-#if 0
-    if( m_frames )
-    {
-      cout << m_frames->size() << endl;
-      // Check to make sure the game is still loaded;
-    }
-#endif
-
-
-    #if 0
-    typename std::vector<DupObject*>::iterator renderIt = m_renderList.begin();
-    for (; renderIt != m_renderList.end(); renderIt++)
-    {
-      glPushMatrix();
-      (*renderIt)->render();
-      glPopMatrix();
-    }
-    #endif
+    AnimationEngine->draw();
 
     glPopMatrix();
 
@@ -265,15 +249,6 @@ namespace visualizer
       return m_depth;
 
     return 0;
-  }
-
-
-  void _Renderer::registerFrameContainer( AnimSequence* frameList )
-  {
-    // Do we want to delete m_frames?
-    // Probably not. 
-    //m_frames = frameList;
-
   }
 
   void _Renderer::update()
