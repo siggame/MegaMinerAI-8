@@ -34,9 +34,9 @@ namespace visualizer
     /// @FIXME There's really no reason this shouldn't all be in a constructor
     m_turn = 0;
     m_progress = 0;
-    m_speed = OptionsMan->getFloat( "speed" );
+    m_speed = 0;
     m_turnCompletion = 0;
-    m_numTurns = 0;
+    m_numTurns = 500;
 
   } // _TimeManager::_setup()
 
@@ -71,7 +71,7 @@ namespace visualizer
     int maxFPS = 60;
     // Determines the refresh rate based off of the max number of frames/sec.
     m_timer->start( (float)1000/maxFPS );
-
+    m_time.start();
 
   } // _TimeManager::start()
 
@@ -178,7 +178,7 @@ namespace visualizer
 
   } // _TimeManager::setNumTurns()
 
-  float _TimeManager::getSpeed()
+  const float& _TimeManager::getSpeed()
   {
     return m_speed;
 
@@ -190,32 +190,34 @@ namespace visualizer
     // since it was last called.
 
     float secElapsed = (float)m_time.restart()/1000;
-    m_turnCompletion += m_speed * secElapsed;
+    m_turnCompletion += getSpeed() * secElapsed;
 
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );
       m_turnCompletion -= floor( m_turnCompletion );
+
+      if( m_turn >= m_numTurns )
+      {
+        m_turn = m_numTurns-1;
+        m_turnCompletion = 0;
+        pause();
+      }
+
     }
-    else if( m_turnCompletion < 1 )
+    else if( m_turnCompletion < -1 )
     {
       m_turn -= ceil( m_turnCompletion );
       m_turnCompletion += ceil( m_turnCompletion );
-    }
 
-    if( m_turn >= m_numTurns )
-    {
-      m_turn = m_numTurns-1;
-      m_turnCompletion = 0;
-      pause();
-    }
-    else if( m_turn <= 0 )
-    {
-      m_turn = 0;
-      m_turnCompletion = 0;
-      pause();
-    }
+      if( m_turn <= 0 )
+      {
+        m_turn = 0;
+        m_turnCompletion = 0;
+        pause();
+      }
 
+    }
     updateChildren();
 
   } // _TimeManager::timerUpdate()

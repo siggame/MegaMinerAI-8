@@ -69,7 +69,7 @@ namespace visualizer
 
       void updateProgress( float progress );
 
-      float getSpeed();
+      const float& getSpeed();
       /// @TODO This should change the default speed or a new 
       /// function should be made to do it.
       void setSpeed( const float& speed );

@@ -46,6 +46,8 @@ namespace visualizer
     /// after a gamelog is done
     m_intf.animationEngine->registerFrameContainer( this );
 
+    m_intf.timeManager->setNumTurns( 500 );
+    m_intf.timeManager->play();
     start();
   } /* Piracy::loadGamelog() */
 
@@ -310,6 +312,8 @@ namespace visualizer
       m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
 
     }
+
+    m_intf.timeManager->play();
 
 #if 0
     THROW
