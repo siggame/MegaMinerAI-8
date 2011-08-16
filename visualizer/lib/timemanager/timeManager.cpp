@@ -146,7 +146,7 @@ namespace visualizer
 
   void _TimeManager::fastForward()
   {
-    THROW( Exception, "" );
+    IMPLEMENT_ME;
 
   } // _TimeManager::fastForward()
 
@@ -158,7 +158,7 @@ namespace visualizer
     }
     else
     {
-      THROW( Exception, "" );
+      IMPLEMENT_ME;
     }
 
   } // _TimeManager::rewind()
@@ -201,6 +201,19 @@ namespace visualizer
     {
       m_turn -= ceil( m_turnCompletion );
       m_turnCompletion += ceil( m_turnCompletion );
+    }
+
+    if( m_turn >= m_numTurns )
+    {
+      m_turn = m_numTurns-1;
+      m_turnCompletion = 0;
+      pause();
+    }
+    else if( m_turn <= 0 )
+    {
+      m_turn = 0;
+      m_turnCompletion = 0;
+      pause();
     }
 
     updateChildren();

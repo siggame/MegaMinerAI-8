@@ -39,6 +39,8 @@ namespace visualizer
   class _AnimationEngine: public Module, public IAnimationEngine
   {
     public:
+      _AnimationEngine();
+
       static void setup();
       static void destroy();
       SmartPointer<IAnimator> getAnimator();
@@ -48,7 +50,9 @@ namespace visualizer
       void draw();
 
       void registerFrameContainer( AnimSequence* frameList );
+
     private:
+      AnimSequence *m_frameList;
      
   }; // _AnimationEngine
 

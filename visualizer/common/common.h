@@ -22,6 +22,7 @@ namespace visualizer
   sprintf( message, y, ##__VA_ARGS__ ); \
   throw x( message, __FILE__, __LINE__ ); \
   } 
+#define IMPLEMENT_ME THROW( Exception, "This Feature Is Not Yet Implemented." );
 
 #define DBG_MSG( x ) std::cout << "DEBUG MSG: " << x << endl;
 
