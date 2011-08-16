@@ -309,12 +309,14 @@ namespace visualizer
 
     }
 
+#if 0
     THROW
       (
       Exception,
       "Time Elapsed: %i", 
       time.elapsed()
       );
+#endif
 
   } /* Piracy::run() */
 

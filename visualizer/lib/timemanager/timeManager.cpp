@@ -42,8 +42,13 @@ namespace visualizer
 
   void _TimeManager::setSpeed( const float& speed )
   {
-    float multi = OptionsMan->getFloat( "speed" );
-    m_speed = speed/multi;
+    /// Speed will be measured in turns / time (s).
+    /// Setting the speed to 1 would mean 1 turn / second
+    /// .5 would mean 1 turn / 2 seconds
+    /// 1.5 would mean 3 turns / 2 seconds
+    /// etc. etc.
+    
+    OptionsMan->setFloat( "speed", speed );
 
   } // _TimeManager::setSpeed()
 
@@ -57,7 +62,10 @@ namespace visualizer
   {
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL(timeout()), this, SLOT(timerUpdate()) );
-    m_timer->start( 35 );
+    int maxFPS = 60;
+    // Determines the refresh rate based off of the max number of frames/sec.
+    m_timer->start( (float)1000/maxFPS );
+
 
   } // _TimeManager::start()
 
@@ -93,6 +101,36 @@ namespace visualizer
     updateChildren();
 
   } // _TimeManager::setTurn()
+
+  const int& _TimeManager::nextTurn()
+  {
+    pause();
+    m_turn++;
+    return getTurn();
+  }
+
+  const int& _TimeManager::prevTurn()
+  {
+    pause();
+    m_turn--;
+    return getTurn();
+  }
+
+  void _TimeManager::play()
+  {
+  }
+
+  void _TimeManager::pause()
+  {
+  }
+
+  void _TimeManager::fastForward()
+  {
+  }
+
+  void _TimeManager::rewind()
+  {
+  }
 
   const int& _TimeManager::getNumTurns()
   {

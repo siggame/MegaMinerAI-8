@@ -15,6 +15,11 @@ namespace visualizer
 class _OptionsMan: public IOptionsMan
 {
   public:
+   
+    /// @TODO Add bracket [] overload here which will
+    /// return each config item wrapped up in another class
+    /// which has the assignment operator overloaded for
+    /// all of our data types
 
     bool loadOptionFile(const std::string & filename);
     bool saveOptionFile(const std::string & filename);
@@ -23,16 +28,16 @@ class _OptionsMan: public IOptionsMan
 
     bool exists(const OptID_t & oName);
 
-    int getInt(const OptID_t & oName);
+    const int& getInt(const OptID_t & oName);
     void setInt(const OptID_t & oName,const int & val);
 
-    float getFloat(const OptID_t & oName);
+    const float& getFloat(const OptID_t & oName);
     void setFloat(const OptID_t & oName,const float & val);
 
-    bool getBool(const OptID_t & oName);
+    const bool& getBool(const OptID_t & oName);
     void setBool(const OptID_t & oName,const bool & val);
 
-    std::string getStr(const OptID_t & oName);
+    const std::string& getStr(const OptID_t & oName);
     void setStr(const OptID_t & oName,const std::string & val);
 
     OptionType optionType(const OptID_t & oName);
@@ -50,7 +55,7 @@ class _OptionsMan: public IOptionsMan
   protected:
   private:
     template<class T, OptionType OT>
-      T getVar(const OptID_t & oName);
+      const T& getVar(const OptID_t & oName);
 
     template<class T, OptionType OT>
       void setVar(const OptID_t & oName, const T & val);

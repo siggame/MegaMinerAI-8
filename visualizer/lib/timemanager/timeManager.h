@@ -1,3 +1,7 @@
+///////////////////////////////////////////////////////////////////////////////
+/// @file timemanager.h
+/// @brief Contains the class definitions for the time manager.
+///////////////////////////////////////////////////////////////////////////////
 #ifndef TIMEMANAGER_H
 #define TIMEMANAGER_H
 
@@ -11,48 +15,103 @@
 namespace visualizer
 {
 
-class _TimeManager : public QObject, public ITimeManager
-{
-  Q_OBJECT
-  Q_INTERFACES( visualizer::ITimeManager );
-  public:
-    static void setup();
-    static void destroy();
-    void _setup();
+///////////////////////////////////////////////////////////////////////////////
+/// @class _TimeManager
+/// @brief This class is the module in the visualizer for controlling time
+/// and keeping track of what turn we're on.
+///
+/// In the future we may abstract a '_TurnManager' module from '_TimeManager'
+///////////////////////////////////////////////////////////////////////////////
 
-    void updateProgress( float progress );
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::nextTurn()
+/// @brief Tells the time manager to pause the visualizer and go to the next 
+/// turn.
+/// @return const int& representing the turn it was changed to.
+///////////////////////////////////////////////////////////////////////////////
 
-    float getSpeed();
-    void setSpeed( const float& speed );
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::prevTurn()
+/// @brief Tells the time manager to pause the visualizer and go back one turn.
+/// @return const int& representing the turn it was changed to
+///////////////////////////////////////////////////////////////////////////////
 
-    void timerStart();
-    void start();
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::play()
+/// @brief Tells the time manager to start playing at normal speed.
+///////////////////////////////////////////////////////////////////////////////
 
-    void requestUpdate( UpdateNeeded* requester );
-    void updateChildren();
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::pause()
+/// @brief Tells the time menager to pause play 
+///////////////////////////////////////////////////////////////////////////////
 
-    // @NOTE These four will probably have their names changed
-    void setTurn( const int& turn );
-    const int& getTurn();
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::fastForward()
+/// @brief Tells the time manager to start playing and increase the speed by
+/// 25%
+///////////////////////////////////////////////////////////////////////////////
 
-    const int& getNumTurns();
-    void setNumTurns( const int& numTurns );
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _TimeManager::rewind()
+/// @brief Tells the time manager to start playing in reverse and increase
+/// the speed by 25%
+///////////////////////////////////////////////////////////////////////////////
 
-  private slots:
-    void timerUpdate();
+  class _TimeManager : public QObject, public ITimeManager
+  {
+    Q_OBJECT
+    Q_INTERFACES( visualizer::ITimeManager );
+    public:
+      static void setup();
+      static void destroy();
+      void _setup();
 
-  private:
-    QTimer *m_timer;
-    QTime m_time;
-    float m_speed;
-    float m_progress;
-    int m_turn;
-    int m_numTurns;
-    int m_lastTime;
-    std::list< UpdateNeeded* > m_updateRequesters;
-};
+      void updateProgress( float progress );
 
-extern _TimeManager *TimeManager;
+      float getSpeed();
+      /// @TODO This should change the default speed or a new 
+      /// function should be made to do it.
+      void setSpeed( const float& speed );
+
+      void timerStart();
+      void start();
+
+      void requestUpdate( UpdateNeeded* requester );
+
+      // @NOTE These four will probably have their names changed
+      void setTurn( const int& turn );
+      const int& getTurn();
+
+      const int& nextTurn();
+      const int& prevTurn();
+
+      void play();
+      void pause();
+
+      void fastForward();
+      void rewind();
+
+      const int& getNumTurns();
+      void setNumTurns( const int& numTurns );
+
+    private slots:
+      void timerUpdate();
+
+    private:
+      void updateChildren();
+
+      QTimer *m_timer;
+      QTime m_time;
+      float m_speed;
+      float m_progress;
+      int m_turn;
+      int m_numTurns;
+      int m_lastTime;
+      std::list< UpdateNeeded* > m_updateRequesters;
+  };
+
+  extern _TimeManager *TimeManager;
 
 } // visualizer
 

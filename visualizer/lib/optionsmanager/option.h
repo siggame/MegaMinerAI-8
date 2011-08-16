@@ -31,7 +31,7 @@ class Option : public OptionBase
   public:
     Option(const T & data):OptionBase(ot),m_data(data){}
     Option():OptionBase(ot){}
-    T get(){return m_data;}
+    const T& get(){return m_data;}
     void set(const T & data){m_data = data;}
   protected:
     T m_data;
