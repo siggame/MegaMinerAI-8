@@ -174,7 +174,8 @@ namespace visualizer
     m_numTurns = numTurns;
 
     // @FIXME Must update control bar
-    updateChildren();
+    // @FIXME 
+    //updateChildren();
 
   } // _TimeManager::setNumTurns()
 
