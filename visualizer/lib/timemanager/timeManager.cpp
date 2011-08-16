@@ -190,23 +190,17 @@ namespace visualizer
     // since it was last called.
 
     float secElapsed = (float)m_time.restart()/1000;
-    /// we're alwaying going to floor the final turn result for this calculation
     m_turnCompletion += m_speed * secElapsed;
 
-    // Unless we're lagging badly or our speed is ungodly high, 
-    // this loop should only occur once
-    while( abs( m_turnCompletion ) > 1 )
+    if( m_turnCompletion > 1 )
     {
-      if( m_turnCompletion > 0 )
-      {
-        m_turnCompletion--;
-        m_turn++;
-      }
-      else
-      {
-        m_turnCompletion++;
-        m_turn--;
-      }
+      m_turn += floor( m_turnCompletion );
+      m_turnCompletion -= floor( m_turnCompletion );
+    }
+    else if( m_turnCompletion < 1 )
+    {
+      m_turn -= ceil( m_turnCompletion );
+      m_turnCompletion += ceil( m_turnCompletion );
     }
 
     updateChildren();
