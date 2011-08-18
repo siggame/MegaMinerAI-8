@@ -6,6 +6,7 @@
 #define ANIMATIONENGINE_H
 
 #include "animator.h"
+#include "../timemanager/timeManager.h"
 #include "../../interfaces/ianimationengine.h"
 #include "common.h"
 
@@ -48,6 +49,7 @@ namespace visualizer
       void buildAnimations( Frame& frame );
 
       void draw();
+      void drawAnim( IAnimator& animator );
 
       void registerFrameContainer( AnimSequence* frameList );
 

@@ -125,12 +125,10 @@ namespace visualizer
     bool newAnim = false;
     int keyFrame = 0;
 
-    IAnimator& animator = s.getAnimationSequence( m_intf.animationEngine );
-
-    if( !animator.numKeyFrames() )
+    if( !s.numKeyFrames() )
     {
       newAnim = true;
-      animator.addKeyFrame( new StartAnim( &s ) );
+      s.addKeyFrame( StartAnim( &s ) );
     }
 
     // @TODO: Typedef stuff like this.  This is rediculous
@@ -157,22 +155,22 @@ namespace visualizer
               Move* m = ((Move*)(*i));
               if( m->x > x )
               {
-                animator.addKeyFrame( new RightAnim() );
+                s.addKeyFrame( RightAnim() );
                 x++;
               }
               else if( m->x < x )
               {
-                animator.addKeyFrame( new LeftAnim() );
+                s.addKeyFrame( LeftAnim() );
                 x--;
               }
               else if( m->y > y )
               {
-                animator.addKeyFrame( new DownAnim() );
+                s.addKeyFrame( DownAnim() );
                 y++;
               }
               else
               {
-                animator.addKeyFrame( new UpAnim() );
+                s.addKeyFrame( UpAnim() );
                 y--;
               }
             }
@@ -181,15 +179,15 @@ namespace visualizer
           case TALK:
             {
               Talk* t = ((Talk*)(*i));
-              animator.addSubFrame( keyFrame, new TalkAnim( t->message ) );
+              s.addSubFrame( keyFrame, TalkAnim( t->message ) );
             } break;
           case ATTACK:
             {
               Attack* t = ((Attack*)(*i));
-              animator.addSubFrame
+              s.addSubFrame
                 ( 
                 keyFrame, 
-                new AttackAnim
+                AttackAnim
                   ( 
                   state->mappables[ t->victim ].x, 
                   state->mappables[ t->victim ].y 
@@ -203,7 +201,7 @@ namespace visualizer
       }
     }
 
-  }
+  } // Piracy::updateAnimations()
 
   void Piracy::run()
   {
@@ -324,7 +322,7 @@ namespace visualizer
       );
 #endif
 
-  } /* Piracy::run() */
+  } // Piracy::run() 
 
   MoveList::MoveList( const float& x, const float& y, const vector<_Move>& moves )
   {
@@ -332,13 +330,13 @@ namespace visualizer
     m_y = y;
 
     m_moves = moves;
-  } /* MoveList::MoveList() */
+  } // MoveList::MoveList() 
 
   MoveList::MoveList( const float& x, const float& y )
   {
     m_x = x;
     m_y = y;
-  } /* MoveList::MoveList() */
+  } // MoveList::MoveList() 
 
   bool MoveList::operator < ( const MoveList& moveList ) const
   {

@@ -8,7 +8,8 @@ PPATHS += ./lib/gameobject/ \
     ./lib/resourcemanager/ \
     ./lib/timemanager/ \
     ./lib/gameobject/ \
-    ./lib/gui/ 
+    ./lib/gui/ \
+    ./common/
 SOURCES += main.cpp \
     ./lib/gameobject/*.cpp \
     ./lib/optionsmanager/*.cpp \

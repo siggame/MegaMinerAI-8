@@ -32,6 +32,8 @@ class SmartPointer
       {
         delete m_data;
         delete m_ref;
+        m_data = 0;
+        m_ref = 0;
       }
     }
 
@@ -71,7 +73,7 @@ class SmartPointer
 
     T* ptr()
     {
-      return m_data();
+      return m_data;
     }
 
 };

@@ -32,7 +32,7 @@ namespace visualizer
 
   SmartPointer<IAnimator> _AnimationEngine::getAnimator()
   {
-    return new Animator();
+    return SmartPointer<IAnimator>( new Animator() );
 
   } // _AnimationEngine::getAnimator()
 
@@ -47,6 +47,7 @@ namespace visualizer
       i++ 
       )
     {
+#if 0
       IAnimator& anim = (*i)->getAnimationSequence( 0 );
       float totalDuration = 0;
       float extraTime = 0;
@@ -75,6 +76,7 @@ namespace visualizer
         (*j)->startTime = start;
         start = (*j)->endTime = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
+#endif
     }
 
   } // _AnimationEngine::buildAnimations()
@@ -83,9 +85,39 @@ namespace visualizer
   {
     if( m_frameList )
     {
+#if 0
+      cout << "Turn: " << TimeManager->getTurn() << endl;
+      Frame& frame = (*m_frameList)[TimeManager->getTurn()];
+      std::list<SmartPointer<Animatable> >& anims = frame.getAnimations();
+
+      for
+        (
+        std::list<SmartPointer<Animatable> >::iterator i = anims.begin();
+        i != anims.end();
+        i++
+        )
+      {
+        IAnimator& s = (*i)->getAnimationSequence( 0 );
+        drawAnim( s );
+      }
+#endif
     }
 
   } // _AnimationEngine::draw()
+
+  void _AnimationEngine::drawAnim( IAnimator& animator )
+  {
+    for
+      (
+      SmartPointer<IAnimator::Iiterator> i = animator.begin();
+      !i->done();
+      (*i)++
+      )
+    {
+
+    }
+
+  } // _AnimationEngine::drawAnim()
 
   void _AnimationEngine::registerFrameContainer( AnimSequence* frameList )
   {
