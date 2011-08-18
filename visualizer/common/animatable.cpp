@@ -25,18 +25,37 @@ namespace visualizer
   } // Animatable::getAnimationSequence()
 #endif
 
-  void Animatable::addKeyFrame( const Anim& anim )
+  void Animatable::addKeyFrame( Anim* anim )
   {
+    m_frames.push_back( SmartPointer<Anim>( anim ) );
+    std::list<SmartPointer<Anim> >::iterator i = m_frames.end();
+    i--;
+    m_keyFrames.push_back( i );
 
   } // Animatable::addKeyFrame()
 
-  void Animatable::addSubFrame( const int& subFrame, const Anim& anim )
+  void Animatable::addSubFrame( const size_t& subFrame, Anim* anim )
   {
+    m_frames.insert( m_keyFrames[ subFrame ], SmartPointer<Anim>( anim ) );
 
   } // Animatable::addSubFrame()
 
-  const int& Animatable::numKeyFrames() const
+  const size_t& Animatable::numKeyFrames() const
   {
+    return m_keyFrames.size();
+
   } // Animatable::numKeyFrames()
+
+  const size_t& Animatable::numFrames() const
+  {
+    return m_frames.size();
+
+  } // Animatable::numFrames()
+
+  std::list<SmartPointer<Anim> >& Animatable::getFrames()
+  {
+    return m_frames;
+
+  } // Animatable::getFrames()
 
 } // visualizer

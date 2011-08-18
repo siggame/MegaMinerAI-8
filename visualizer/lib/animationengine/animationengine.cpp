@@ -41,36 +41,35 @@ namespace visualizer
       i++ 
       )
     {
-#if 0
-      IAnimator& anim = (*i)->getAnimationSequence( 0 );
       float totalDuration = 0;
       float extraTime = 0;
       float exT;
       for
         (
-        SmartPointer<IAnimator::Iiterator> j = anim.begin();
-        (*j).done();
-        (*j)++
+        std::list<SmartPointer<Anim> >::iterator j = (*i)->getFrames().begin();
+        j != (*i)->getFrames().end();
+        j++
         )
       {
         totalDuration += (*j)->controlDuration();
         exT = (*j)->totalDuration() - (*j)->controlDuration();
         extraTime = extraTime > exT ? extraTime : exT;
+
       }
 
       float fullTime = totalDuration + extraTime;
       float start = 0;
       for
         (
-        SmartPointer<IAnimator::Iiterator> j = anim.begin();
-        (*j).done();
-        (*j)++
+        std::list<SmartPointer<Anim> >::iterator j = (*i)->getFrames().begin();
+        j != (*i)->getFrames().end();
+        j++
         )
       {
         (*j)->startTime = start;
         start = (*j)->endTime = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
-#endif
+
     }
 
   } // _AnimationEngine::buildAnimations()

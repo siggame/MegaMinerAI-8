@@ -128,7 +128,7 @@ namespace visualizer
     if( !s.numKeyFrames() )
     {
       newAnim = true;
-      s.addKeyFrame( StartAnim( &s ) );
+      s.addKeyFrame( new StartAnim( &s ) );
     }
 
     // @TODO: Typedef stuff like this.  This is rediculous
@@ -155,22 +155,22 @@ namespace visualizer
               Move* m = ((Move*)(*i));
               if( m->x > x )
               {
-                s.addKeyFrame( RightAnim() );
+                s.addKeyFrame( new RightAnim() );
                 x++;
               }
               else if( m->x < x )
               {
-                s.addKeyFrame( LeftAnim() );
+                s.addKeyFrame( new LeftAnim() );
                 x--;
               }
               else if( m->y > y )
               {
-                s.addKeyFrame( DownAnim() );
+                s.addKeyFrame( new DownAnim() );
                 y++;
               }
               else
               {
-                s.addKeyFrame( UpAnim() );
+                s.addKeyFrame( new UpAnim() );
                 y--;
               }
             }
@@ -179,7 +179,7 @@ namespace visualizer
           case TALK:
             {
               Talk* t = ((Talk*)(*i));
-              s.addSubFrame( keyFrame, TalkAnim( t->message ) );
+              s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
             } break;
           case ATTACK:
             {
@@ -187,7 +187,7 @@ namespace visualizer
               s.addSubFrame
                 ( 
                 keyFrame, 
-                AttackAnim
+                new AttackAnim
                   ( 
                   state->mappables[ t->victim ].x, 
                   state->mappables[ t->victim ].y 

@@ -2,6 +2,8 @@
 #define ANIMATABLE_H
 
 #include "ianimator.h"
+#include <vector>
+#include <list>
 
 namespace visualizer
 {
@@ -32,12 +34,16 @@ namespace visualizer
       //IAnimator& getAnimationSequence( IAnimationEngine* animEngine );
       virtual AnimData* getData() = 0; 
 
-      void addKeyFrame( const Anim& anim );
-      void addSubFrame( const int& subFrame, const Anim& anim );
-      const int& numKeyFrames() const;
+      void addKeyFrame( Anim* anim );
+      void addSubFrame( const size_t& subFrame, Anim* anim );
 
+      const size_t& numKeyFrames() const;
+      const size_t& numFrames() const;
+
+      std::list<SmartPointer<Anim> >& getFrames();
     private:
-      //SmartPointer<IAnimator> m_animationSequence;
+      std::vector< std::list<SmartPointer<Anim> >::iterator > m_keyFrames;
+      std::list<SmartPointer<Anim> > m_frames;
 
   }; // Animatable
 
