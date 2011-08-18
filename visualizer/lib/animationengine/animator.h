@@ -12,6 +12,7 @@
 namespace visualizer
 {
 
+#if 0
   ///////////////////////////////////////////////////////////////////////////////
   /// @class Animator
   /// @description The animator holds a timeline.  Each keyFrame in the timeline
@@ -110,6 +111,7 @@ namespace visualizer
 
     std::list< pair<SmartPointer<Anim>, std::list<SmartPointer<Anim> > >  > m_animList;
   }; // Animator 
+#endif
 
 } // visualizer
 

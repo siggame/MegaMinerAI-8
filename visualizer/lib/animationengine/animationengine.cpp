@@ -30,12 +30,6 @@ namespace visualizer
 
   } // _AnimationEngine::destroy()
 
-  SmartPointer<IAnimator> _AnimationEngine::getAnimator()
-  {
-    return SmartPointer<IAnimator>( new Animator() );
-
-  } // _AnimationEngine::getAnimator()
-
   void _AnimationEngine::buildAnimations( Frame& frame )
   {
     // @NOTE Can we simplify this looping any?  Not a huge issue since it's internal
@@ -105,8 +99,9 @@ namespace visualizer
 
   } // _AnimationEngine::draw()
 
-  void _AnimationEngine::drawAnim( IAnimator& animator )
+  void _AnimationEngine::drawAnim( const Animatable& animator )
   {
+#if 0
     for
       (
       SmartPointer<IAnimator::Iiterator> i = animator.begin();
@@ -116,6 +111,7 @@ namespace visualizer
     {
 
     }
+#endif
 
   } // _AnimationEngine::drawAnim()
 

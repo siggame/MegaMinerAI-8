@@ -37,7 +37,7 @@ namespace visualizer
       const int& numKeyFrames() const;
 
     private:
-      SmartPointer<IAnimator> m_animationSequence;
+      //SmartPointer<IAnimator> m_animationSequence;
 
   }; // Animatable
 

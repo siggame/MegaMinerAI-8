@@ -27,10 +27,12 @@ namespace visualizer
 
   void Animatable::addKeyFrame( const Anim& anim )
   {
+
   } // Animatable::addKeyFrame()
 
   void Animatable::addSubFrame( const int& subFrame, const Anim& anim )
   {
+
   } // Animatable::addSubFrame()
 
   const int& Animatable::numKeyFrames() const

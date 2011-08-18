@@ -44,12 +44,11 @@ namespace visualizer
 
       static void setup();
       static void destroy();
-      SmartPointer<IAnimator> getAnimator();
       
       void buildAnimations( Frame& frame );
 
       void draw();
-      void drawAnim( IAnimator& animator );
+      void drawAnim( const Animatable& animator );
 
       void registerFrameContainer( AnimSequence* frameList );
 

@@ -3,6 +3,7 @@
 namespace visualizer
 {
 
+#if 0
   void Animator::addKeyFrame( const SmartPointer<Anim>& a )
   {
     m_animList.push_back
@@ -102,5 +103,6 @@ namespace visualizer
   {
     return m_done;
   }
+#endif
 
 } // visualizer

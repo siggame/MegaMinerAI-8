@@ -13,6 +13,7 @@ namespace visualizer
     float endTime;
   }; // Anim
 
+#if 0
   struct IAnimator
   {
     virtual void addKeyFrame( const SmartPointer<Anim>& a ) = 0;
@@ -33,6 +34,7 @@ namespace visualizer
     virtual SmartPointer<Iiterator> end() = 0;
 
   }; // IAnimator
+#endif
  
   struct AnimData
   {
