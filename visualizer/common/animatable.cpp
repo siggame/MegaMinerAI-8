@@ -58,4 +58,10 @@ namespace visualizer
 
   } // Animatable::getFrames()
 
+  const std::list<SmartPointer<Anim> >& Animatable::getFrames() const
+  {
+    return m_frames;
+
+  } // Animatable::getFrames() const
+
 } // visualizer

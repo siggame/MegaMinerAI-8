@@ -78,20 +78,20 @@ namespace visualizer
   {
     if( m_frameList )
     {
-#if 0
+#if 1
       cout << "Turn: " << TimeManager->getTurn() << endl;
       Frame& frame = (*m_frameList)[TimeManager->getTurn()];
-      std::list<SmartPointer<Animatable> >& anims = frame.getAnimations();
+
 
       for
         (
-        std::list<SmartPointer<Animatable> >::iterator i = anims.begin();
-        i != anims.end();
+        std::list<SmartPointer<Animatable> >::iterator i = frame.getAnimations().begin();
+        i != frame.getAnimations().end();
         i++
         )
       {
-        IAnimator& s = (*i)->getAnimationSequence( 0 );
-        drawAnim( s );
+        //IAnimator& s = (*i)->getAnimationSequence( 0 );
+        drawAnim( *(*i) );
       }
 #endif
     }
@@ -100,6 +100,14 @@ namespace visualizer
 
   void _AnimationEngine::drawAnim( const Animatable& animator )
   {
+    for
+      (
+      std::list<SmartPointer<Anim> >::const_iterator i = animator.getFrames().begin();
+      i != animator.getFrames().end();
+      i++
+      )
+      {
+      }
 #if 0
     for
       (

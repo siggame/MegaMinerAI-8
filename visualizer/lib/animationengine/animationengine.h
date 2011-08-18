@@ -62,4 +62,4 @@ namespace visualizer
 } // visualizer
 
 
-#endif
+#endif // ANIMATIONENGINE_H
