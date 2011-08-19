@@ -52,11 +52,13 @@ namespace visualizer
 
   Piracy::Piracy()
   {
+    cout << "Piracy is here" << endl;
     m_game = 0;
   }
 
   Piracy::~Piracy()
   {
+    cout << "Piracy is done" << endl;
     delete m_game;
   }
 
@@ -137,7 +139,6 @@ namespace visualizer
     int x = s.m_x;
     int y = s.m_y;
 
-    // No aminations.
     if( a != state->animations.end() )
     {
       for
@@ -150,6 +151,7 @@ namespace visualizer
         switch( (*i)->type )
         {
           case MOVE:
+          cout << "Move" << endl;
             if( newAnim )
             {
               Move* m = ((Move*)(*i));
@@ -200,6 +202,12 @@ namespace visualizer
         }
       }
     }
+    else
+    {
+      cout << "No animations? " << endl;
+    }
+
+    cout << "KeyFRAMES: " << s.numKeyFrames() << endl;
 
   } // Piracy::updateAnimations()
 
@@ -306,6 +314,7 @@ namespace visualizer
       m_intf.animationEngine->buildAnimations( so.returnStackList() );
       addFrame( so.returnStackList() );
       frameNum++;
+      //cout << frameNum << endl;
       m_intf.timeManager->setNumTurns( frameNum );
       m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
 

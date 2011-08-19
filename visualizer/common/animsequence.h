@@ -15,7 +15,7 @@ namespace visualizer
         m_frames.push_back( frame );
       }
 
-      const size_t size() const
+      const size_t& size() const
       {
         return m_frames.size();
       }

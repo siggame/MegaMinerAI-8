@@ -79,9 +79,11 @@ namespace visualizer
     if( m_frameList )
     {
 #if 1
-      cout << "Turn: " << TimeManager->getTurn() << endl;
-      Frame& frame = (*m_frameList)[TimeManager->getTurn()];
+      //cout << "Turn: " << TimeManager->getTurn() << endl;
+      Frame& frame = (*m_frameList)[ TimeManager->getTurn() ];
 
+      //cout << "Frame size: " << frame.size() << endl;
+      //cout << "Anims: " << frame.getAnimations().size() << endl;
 
       for
         (
@@ -90,7 +92,7 @@ namespace visualizer
         i++
         )
       {
-        //IAnimator& s = (*i)->getAnimationSequence( 0 );
+        cout << "Draw: " << (*i)->numKeyFrames() << endl;
         drawAnim( *(*i) );
       }
 #endif
@@ -100,31 +102,24 @@ namespace visualizer
 
   void _AnimationEngine::drawAnim( const Animatable& animator )
   {
+    int c = 0;
     for
       (
       std::list<SmartPointer<Anim> >::const_iterator i = animator.getFrames().begin();
       i != animator.getFrames().end();
       i++
       )
-      {
-      }
-#if 0
-    for
-      (
-      SmartPointer<IAnimator::Iiterator> i = animator.begin();
-      !i->done();
-      (*i)++
-      )
     {
-
+      cout << "C: " << c++ << endl;
     }
-#endif
 
   } // _AnimationEngine::drawAnim()
 
   void _AnimationEngine::registerFrameContainer( AnimSequence* frameList )
   {
+    cout << "REGISTERED" << endl;
     m_frameList = frameList;
+    cout << "mSize: " << m_frameList->size() << endl;
   } // _AnimationEngine::registerFrameContainer()
 
 } // visualizer

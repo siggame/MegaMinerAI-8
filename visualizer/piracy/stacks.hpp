@@ -18,9 +18,10 @@ namespace visualizer
     {
       //m_stacks.push_back( new stackType() );
       p = new stackType();
-      m_frame.addAnimatable( p );
+      SmartPointer<Animatable> s_p( p, "carl" );
+      m_frame.addAnimatable( s_p );
       // Return pointer to last element in list
-      m_stackMap[ index ] = p; // = (stackType*)&*m_stacks.back();
+      m_stackMap[ index ] = s_p; // = (stackType*)&*m_stacks.back();
     }
 
     return *p;

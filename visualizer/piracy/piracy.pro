@@ -3,6 +3,7 @@ INCLUDEPATH += ../interfaces \
   ../parser/sexp \
   ../lib/ \
   ../common/
+DEPENDPATH += ../common/
 win32:LIBS += ./parser/sexp/sexpXP.a
 else:LIBS += ./parser/sexp/sexp.a
 MOC = moc
@@ -12,7 +13,7 @@ SOURCES += piracy.cpp \
   animations.cpp \
   piracyStack.cpp \
   ../common/*.cpp \
-  parser/*.cpp
+  parser/*.cpp 
   
 HEADERS += *.h \
   parser/*.h \

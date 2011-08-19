@@ -7,14 +7,23 @@ class SmartPointer
   private:
     T* m_data;
     int *m_ref;
+    string msg;
   public:
     SmartPointer() : m_data(0)
     {
       m_ref = new int;
       *m_ref = 1;
+      msg = "";
     }
 
     SmartPointer( T* data ) : m_data( data )
+    {
+      m_ref = new int;
+      *m_ref = 1;
+      msg = "";
+    }
+
+    SmartPointer( T* data, string mesg ) : m_data( data ), msg( mesg )
     {
       m_ref = new int;
       *m_ref = 1;
@@ -23,6 +32,7 @@ class SmartPointer
     SmartPointer( const SmartPointer<T>& data ) : m_data( data.m_data ), m_ref( data.m_ref )
     {
       (*m_ref)++;
+      msg = data.msg;
     }
 
     ~SmartPointer()
@@ -34,6 +44,7 @@ class SmartPointer
         delete m_ref;
         m_data = 0;
         m_ref = 0;
+ 
       }
     }
 
@@ -43,6 +54,11 @@ class SmartPointer
     }
 
     T* operator -> ()
+    {
+      return m_data;
+    }
+
+    const T* operator -> () const
     {
       return m_data;
     }
@@ -60,6 +76,7 @@ class SmartPointer
 
         m_data = sp.m_data;
         m_ref = sp.m_ref;
+        msg = sp.msg;
         (*m_ref)++;
       }
 

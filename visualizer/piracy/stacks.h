@@ -25,6 +25,10 @@ namespace visualizer
   class StackOrganizer
   {
   public:
+    ~StackOrganizer()
+    {
+  //    cout << "Destroy" << endl;
+    }
     // Get stack will search for the existing stack
     // or create a new one if necessary
     stackType& getStack( const key& index );

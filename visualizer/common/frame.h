@@ -10,7 +10,20 @@ namespace visualizer
   class Frame
   {
     public:
+      Frame()
+      {
+      }
+
+      Frame( const Frame& frame )
+      {
+        /// @TODO Remove me
+//        cout << "Copy Frame" << endl;
+        m_frame = frame.m_frame;
+
+      }
+
       void addAnimatable( const SmartPointer<Animatable>& animatable );
+
       /// @TODO Should probably return a wrapped object
       std::list<SmartPointer<Animatable> >& getAnimations();
       const size_t size() const;
