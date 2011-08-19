@@ -87,8 +87,6 @@ namespace visualizer
         i++
         )
       {
-        if( (*i)->numFrames() > 2 ) 
-          cout << "Draw: " << (*i)->numFrames() << endl;
         drawAnim( *(*i) );
       }
     }

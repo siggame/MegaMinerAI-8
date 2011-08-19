@@ -142,6 +142,22 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
 
     void update();
 
+    void setColor
+      (
+      const float& r,
+      const float& g, 
+      const float& b,
+      const float& a = 1.0f
+      ) const;
+
+    void drawQuad
+      (
+      const float& x,
+      const float& y,
+      const float& w,
+      const float& h,
+      const float& z = 0.0f
+      ) const;
     //void registerFrameContainer( AnimSequence* frameList );
 
   protected:

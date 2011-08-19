@@ -39,7 +39,22 @@ namespace visualizer
 
       virtual void update() = 0;
 
-     
+      virtual void setColor
+        ( 
+        const float& r, 
+        const float& g,
+        const float& b,
+        const float& a = 1.0f
+        ) const = 0;
+
+      virtual void drawQuad
+        (
+        const float& x,
+        const float& y,
+        const float& w,
+        const float& h,
+        const float& z = 0.0f
+        ) const = 0;
   };
 
 } // visualizer

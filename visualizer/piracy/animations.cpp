@@ -68,6 +68,18 @@ namespace visualizer
   void DrawStack::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
+    IRenderer &r = *m_stack->Renderer;
+
+    r.setColor( 1, 0, 0, 1 );
+
+#if 0
+    cout << endl 
+      << "X: " << data.x  << " Y: " << data.y << endl;
+ 
+#endif
+    r.drawQuad( data.x*10, data.y*10, 10, 10 );
+    r.drawQuad( data.x, data.y, 1, 1 );
+
     if( m_stack->m_ships )
     {
       if( m_stack->m_pirates )
@@ -98,6 +110,7 @@ namespace visualizer
       // Draw a pirate
       cout << "pirate" << endl;
     }
+
 
   }
 
