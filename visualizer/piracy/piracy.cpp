@@ -220,35 +220,44 @@ namespace visualizer
             x = (state-1)->pirates[ unit.id ].x;
             y = (state-1)->pirates[ unit.id ].y;
 
-            while( x != unit.x || y != unit.y )
+          }
+          else if( (state-1)->ships.find( unit.id ) != (state-1)->ships.end() )
+          {
+            x = (state-1)->ships[ unit.id ].x;
+            y = (state-1)->ships[ unit.id ].y;
+          }
+          else
+          {
+            x = unit.x;
+            y = unit.y;
+          }
+
+          while( x != unit.x || y != unit.y )
+          {
+            if( unit.x > x )
             {
-              if( unit.x > x )
-              {
-                x++;
-                s.a_x--;
-                s.addKeyFrame( new RightAnim() );
-              }
-              else if( unit.x < x )
-              {
-                x--;
-                s.a_x++;
-                s.addKeyFrame( new LeftAnim() );
-              }
-              else if( unit.y > y )
-              {
-                y++;
-                s.a_y--;
-                s.addKeyFrame( new DownAnim() );
-              }
-              else if( unit.y < y )
-              {
-                y--;
-                s.a_y++;
-                s.addKeyFrame( new UpAnim() );
-              }
+              x++;
+              s.a_x--;
+              s.addKeyFrame( new RightAnim() );
             }
-
-
+            else if( unit.x < x )
+            {
+              x--;
+              s.a_x++;
+              s.addKeyFrame( new LeftAnim() );
+            }
+            else if( unit.y > y )
+            {
+              y++;
+              s.a_y--;
+              s.addKeyFrame( new DownAnim() );
+            }
+            else if( unit.y < y )
+            {
+              y--;
+              s.a_y++;
+              s.addKeyFrame( new UpAnim() );
+            }
           }
         } 
       }
