@@ -59,6 +59,10 @@ namespace visualizer
       float m_x;
       float m_y;
 
+      // Animation x and y
+      float a_x;
+      float a_y;
+
       PirateData m_pirateData;
       IRenderer *Renderer;
 
