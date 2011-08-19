@@ -116,13 +116,12 @@ namespace visualizer
     else
       r.setColor( 0, 0, 1 );
 
-
 #if 0
     cout << endl 
       << "X: " << data.x  << " Y: " << data.y << endl;
  
 #endif
-    r.drawQuad( data.x, data.y, 1, 1 );
+    r.drawTexturedQuad( data.x, data.y, 1, 1, "shipGreen" );
 
     if( m_stack->m_ships )
     {

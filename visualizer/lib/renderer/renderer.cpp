@@ -311,5 +311,33 @@ namespace visualizer
     
   } // _Renderer::drawQuad()
 
+  void _Renderer::drawTexturedQuad
+    (
+    const float& x,
+    const float& y,
+    const float& w,
+    const float& h,
+    const std::string& resource,
+    const float& z
+    ) const
+  {
+    glEnable( GL_BLEND );
+    glEnable( GL_TEXTURE );
+    ResTexture *r = (ResTexture*)ResourceMan->reference( resource, "renderer" );
+   
+    glBindTexture( GL_TEXTURE_2D, r->getTexture() );
+    glBegin( GL_QUADS );
+      glTexCoord2f( 0, 0 ); glVertex3f( x, y, z );
+      glTexCoord2f( 1, 0 ); glVertex3f( x+w, y, z );
+      glTexCoord2f( 1, 1 ); glVertex3f( x+w, y+h, z );
+      glTexCoord2f( 0, 1 ); glVertex3f( x, y+h, z );
+    glEnd();
+
+    ResourceMan->release( resource, "renderer" );
+    glDisable( GL_TEXTURE );
+    glDisable( GL_BLEND );
+    
+  }
+
 } // visualizer
 

@@ -55,6 +55,16 @@ namespace visualizer
         const float& h,
         const float& z = 0.0f
         ) const = 0;
+
+      virtual void drawTexturedQuad
+        (
+        const float& x,
+        const float& y,
+        const float& w, 
+        const float& h, 
+        const std::string& resource,
+        const float& z = 0.0f
+        ) const = 0;
   };
 
 } // visualizer

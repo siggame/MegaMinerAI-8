@@ -15,6 +15,7 @@
 #include "../gui/gui.h"
 #include "../gui/renderwidget.h"
 #include "../animationengine/animationengine.h"
+#include "../resourcemanager/resourceman.h"
 
 #include "../timemanager/timeManager.h"
 
@@ -158,6 +159,17 @@ class _Renderer : public UpdateNeeded, public Module, public IRenderer
       const float& h,
       const float& z = 0.0f
       ) const;
+
+    void drawTexturedQuad
+      (
+      const float& x,
+      const float& y,
+      const float& w, 
+      const float& h, 
+      const std::string& resource,
+      const float& z = 0.0f
+      ) const;
+
     //void registerFrameContainer( AnimSequence* frameList );
 
   protected:
