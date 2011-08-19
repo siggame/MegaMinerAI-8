@@ -24,6 +24,11 @@ namespace visualizer
 
   struct Interfaces
   {
+    Interfaces()
+    {
+      memset( this, 0, sizeof( Interfaces ) );
+    }
+    
     IAnimationEngine *animationEngine;
     IGUI *gui;
     IObjectManager *objectManager;

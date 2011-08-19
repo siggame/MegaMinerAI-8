@@ -1,6 +1,7 @@
 INCLUDEPATH += ./interfaces/ \
     ./lib \
     ./common
+DEPENDPATH += ./common
 PPATHS += ./lib/gameobject/ \
     ./lib/manager/ \
     ./lib/optionsmanager/ \

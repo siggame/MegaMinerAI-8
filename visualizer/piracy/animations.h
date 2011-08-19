@@ -3,7 +3,7 @@
 
 #include <string.h>
 #include "../interfaces/ianimationengine.h"
-#include "piracyStack.h"
+#include "piracy.h"
 #include "stacks.h"
 
 namespace visualizer

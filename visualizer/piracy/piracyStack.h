@@ -5,6 +5,7 @@
 #include <vector>
 #include "parser/structures.h"
 #include "animatable.h"
+#include "irenderer.h"
 
 namespace visualizer
 {
@@ -59,6 +60,7 @@ namespace visualizer
       float m_y;
 
       PirateData m_pirateData;
+      IRenderer *Renderer;
 
   };
 

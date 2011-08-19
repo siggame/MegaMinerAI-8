@@ -3,6 +3,7 @@
 
 #include <QtPlugin>
 #include "animsequence.h"
+#include "iobjectmanager.h"
 
 namespace visualizer
 {
