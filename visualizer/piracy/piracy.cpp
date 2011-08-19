@@ -131,17 +131,15 @@ namespace visualizer
     {
       newAnim = true;
       s.addKeyFrame( new StartAnim( &s ) );
-      s.addKeyFrame( new RightAnim() );
-      s.addKeyFrame( new UpAnim() );
-      s.addKeyFrame( new LeftAnim() );
-      s.addKeyFrame( new DownAnim() );
+      s.a_x = s.m_x;
+      s.a_y = s.m_y;
     }
 
     // @TODO: Typedef stuff like this.  This is rediculous
     std::map< int, std::vector<Animation*> >::iterator a = state->animations.find( unit.id );
 
-    int x = s.m_x;
-    int y = s.m_y;
+    int x = s.a_x;
+    int y = s.a_y;
 
     if( a != state->animations.end() )
     {
@@ -160,21 +158,25 @@ namespace visualizer
               Move* m = ((Move*)(*i));
               if( m->x > x )
               {
+                s.a_x--;
                 s.addKeyFrame( new RightAnim() );
                 x++;
               }
               else if( m->x < x )
               {
+                s.a_x++;
                 s.addKeyFrame( new LeftAnim() );
                 x--;
               }
               else if( m->y > y )
               {
+                s.a_y--;
                 s.addKeyFrame( new DownAnim() );
                 y++;
               }
               else
               {
+                s.a_y++;
                 s.addKeyFrame( new UpAnim() );
                 y--;
               }
@@ -203,6 +205,61 @@ namespace visualizer
             THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
             break;
         }
+      }
+    }
+    else
+    {
+      if( state->turnNumber > 0 )
+      {
+        if( newAnim )
+        {
+          if( (state-1)->pirates.find( unit.id ) != (state-1)->pirates.end() )
+          {
+            // Unit existed in last frame.  
+            // Let's see if it moved
+            x = (state-1)->pirates[ unit.id ].x;
+            y = (state-1)->pirates[ unit.id ].y;
+
+          }
+          else if( (state-1)->ships.find( unit.id ) != (state-1)->ships.end() )
+          {
+            x = (state-1)->ships[ unit.id ].x;
+            y = (state-1)->ships[ unit.id ].y;
+          }
+          else
+          {
+            x = unit.x;
+            y = unit.y;
+          }
+
+          while( x != unit.x || y != unit.y )
+          {
+            if( unit.x > x )
+            {
+              x++;
+              s.a_x--;
+              s.addKeyFrame( new RightAnim() );
+            }
+            else if( unit.x < x )
+            {
+              x--;
+              s.a_x++;
+              s.addKeyFrame( new LeftAnim() );
+            }
+            else if( unit.y > y )
+            {
+              y++;
+              s.a_y--;
+              s.addKeyFrame( new DownAnim() );
+            }
+            else if( unit.y < y )
+            {
+              y--;
+              s.a_y++;
+              s.addKeyFrame( new UpAnim() );
+            }
+          }
+        } 
       }
     }
 
@@ -264,8 +321,8 @@ namespace visualizer
         s.m_maxHealth +=  PIRATE_HEALTH;
         s.m_gold      +=  i->second.gold;
         s.m_strength  +=  i->second.strength;
-        s.m_x         = i->second.x;
-        s.m_y         = i->second.y;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
         s.m_pirateIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
@@ -281,8 +338,8 @@ namespace visualizer
         s.m_maxHealth +=  SHIP_HEALTH;
         s.m_gold      +=  i->second.gold;
         s.m_strength  +=  i->second.strength;
-        s.m_x         = i->second.x;
-        s.m_y         = i->second.y;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
         s.m_shipIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
@@ -294,9 +351,9 @@ namespace visualizer
         // Ports don't animate.  Don't need to run getMoves on this one
         Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
         s.m_ports++;
-        s.m_owner = i->second.owner;
-        s.m_x     = i->second.x;
-        s.m_y     = i->second.y;
+        s.m_owner     = i->second.owner;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
         s.m_portIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
@@ -306,10 +363,10 @@ namespace visualizer
       foreach( Treasure, treasures, i )
       {
         // Treasure doesn't animate.  Don't need to run getMoves on this one
-        Stack &s  = so.getStack( MoveList( i->second.x, i->second.y ) );
-        s.m_gold  += i->second.gold;
-        s.m_x     = i->second.x;
-        s.m_y     = i->second.y;
+        Stack &s      = so.getStack( MoveList( i->second.x, i->second.y ) );
+        s.m_gold      += i->second.gold;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
         s.m_goldIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
@@ -320,7 +377,6 @@ namespace visualizer
       m_intf.animationEngine->buildAnimations( so.returnStackList() );
       addFrame( so.returnStackList() );
       frameNum++;
-      //cout << frameNum << endl;
       m_intf.timeManager->setNumTurns( frameNum );
       m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
 

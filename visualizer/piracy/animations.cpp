@@ -7,8 +7,10 @@ namespace visualizer
   void StartAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
-    data.x = m_stack->m_x;
-    data.y = m_stack->m_y;
+    data.x = m_stack->a_x;
+    data.y = m_stack->a_y;
+    if( data.x != m_stack->m_x )
+      cout << "DIFFY: " << data.x << ", " << m_stack->m_x << endl;
 
   }
 
@@ -30,6 +32,7 @@ namespace visualizer
     }
     else if( t >= startTime )
     {
+      //cout << "LEFT: " << (t-startTime)/(endTime-startTime) << endl;
       data.x -= (t-startTime)/(endTime-startTime);
     }
 
@@ -106,7 +109,13 @@ namespace visualizer
     PirateData& data = ((PirateData&)*d);
     IRenderer &r = *m_stack->Renderer;
 
-    r.setColor( 1, 0, 0, 0.4f );
+    if( m_stack->m_owner == 0 )
+      r.setColor( 1, 0, 0 );
+    else if( m_stack->m_owner == 1 )
+      r.setColor( 0, 1, 0 );
+    else
+      r.setColor( 0, 0, 1 );
+
 
 #if 0
     cout << endl 
@@ -143,7 +152,6 @@ namespace visualizer
     else if( m_stack->m_pirates )
     {
       // Draw a pirate
-      cout << "pirate" << endl;
     }
 
 
