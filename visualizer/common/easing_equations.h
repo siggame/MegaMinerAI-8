@@ -1,29 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// @file animationengine.h
-/// @description Contains the class declaration for the Core Animation engine
+/// @file easing_equations.h
+/// @description Contains a group of movement easing equations.
 ///////////////////////////////////////////////////////////////////////////////
-
-  ///////////////////////////////////////////////////////////////////////////////
-  /// @class _AnimationEngine
-  /// @brief The core animation engine for the visualizer.  
-  ///////////////////////////////////////////////////////////////////////////////
-
-  ///////////////////////////////////////////////////////////////////////////////
-  /// @fn _AnimationEngine::getAnimator()
-  /// @brief This function follows the abstract factory pattern.  It returns the 
-  /// latest and greatest animator class.
-  /// @return SmartPointer<IAnimator> is a smart pointer which holds an instance 
-  /// of an actual animator
-  ///////////////////////////////////////////////////////////////////////////////
-
-  ///////////////////////////////////////////////////////////////////////////////
-  /// @fn _AnimationEngine::buildAnimation( Frame& frame )
-  /// @brief This function must be applied to any frame before the animation 
-  /// engine can handle it properly.  It segments the animations for use in the 
-  /// renderer
-  /// @param frame The Frame that we're going to loop through the animations in 
-  /// and segment.
-  ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef EASING_EQUATIONS_H
 #define EASING_EQUATIONS_H
@@ -300,6 +278,33 @@ namespace EasingEquations
   /// @param d The duration.
   /// @param s Controls the amount of overshoot. The greater the s, the greater
   ///          the overshoot.
+  /////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////
+  /// @fn easeInBounce( double t, double b, double c, double d )
+  /// @brief Exponentially increasing parabolic bounce.
+  /// @param t The current time.
+  /// @param b The beginning value.
+  /// @param c The change in value.
+  /// @param d The duration.
+  /////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////
+  /// @fn easeOutBounce( double t, double b, double c, double d )
+  /// @brief Exponentially decreasing parabolic bounce.
+  /// @param t The current time.
+  /// @param b The beginning value.
+  /// @param c The change in value.
+  /// @param d The duration.
+  /////////////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////////////
+  /// @fn easeInOutBounce( double t, double b, double c, double d )
+  /// @brief Parabolic bounces increasing halfway, and then decreasing to 0.
+  /// @param t The current time.
+  /// @param b The beginning value.
+  /// @param c The change in value.
+  /// @param d The duration.
   /////////////////////////////////////////////////////////////////////////////
 
   double linearTween(double t, double b, double c, double d);
