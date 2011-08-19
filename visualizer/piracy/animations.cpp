@@ -24,6 +24,16 @@ namespace visualizer
     // modified with a tool.
     // Hard coding animations are a thing of the past.
     PirateData& data = ((PirateData&)*d);
+    if( t >= endTime )
+    {
+      data.x--;
+    }
+    else if( t >= startTime )
+    {
+      data.x -= (t-startTime)/(endTime-startTime);
+    }
+
+
     // if( m_ships > 0 )
     /*
     {
@@ -43,16 +53,42 @@ namespace visualizer
   void RightAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
+    if( t >= endTime )
+    {
+      data.x++;
+    }
+    else if( t >= startTime )
+    {
+      data.x += (t-startTime)/(endTime-startTime);
+    }
   }
 
   void UpAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
+    if( t >= endTime )
+    {
+      data.y--;
+    }
+    else if( t >= startTime )
+    {
+      data.y -= (t-startTime)/(endTime-startTime);
+    }
+
   }
 
   void DownAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
+    if( t >= endTime )
+    {
+      data.y++;
+    }
+    else if( t >= startTime )
+    {
+      data.y += (t-startTime)/(endTime-startTime);
+    }
+
   }
 
   void AttackAnim::animate( const float& t, AnimData *d )
@@ -70,14 +106,13 @@ namespace visualizer
     PirateData& data = ((PirateData&)*d);
     IRenderer &r = *m_stack->Renderer;
 
-    r.setColor( 1, 0, 0, 1 );
+    r.setColor( 1, 0, 0, 0.4f );
 
 #if 0
     cout << endl 
       << "X: " << data.x  << " Y: " << data.y << endl;
  
 #endif
-    r.drawQuad( data.x*10, data.y*10, 10, 10 );
     r.drawQuad( data.x, data.y, 1, 1 );
 
     if( m_stack->m_ships )

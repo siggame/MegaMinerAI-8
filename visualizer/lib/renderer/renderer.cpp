@@ -268,8 +268,6 @@ namespace visualizer
     float mapSize = (float)OptionsMan->getInt("mapSize");
     float unitSize  = height()/mapSize;
 
-
-
     int x1 = 0;
     int x2 = 0;
     int y1 = 0;

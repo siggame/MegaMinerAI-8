@@ -132,6 +132,9 @@ namespace visualizer
       newAnim = true;
       s.addKeyFrame( new StartAnim( &s ) );
       s.addKeyFrame( new RightAnim() );
+      s.addKeyFrame( new UpAnim() );
+      s.addKeyFrame( new LeftAnim() );
+      s.addKeyFrame( new DownAnim() );
     }
 
     // @TODO: Typedef stuff like this.  This is rediculous
