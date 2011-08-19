@@ -78,12 +78,7 @@ namespace visualizer
   {
     if( m_frameList )
     {
-#if 1
-      //cout << "Turn: " << TimeManager->getTurn() << endl;
       Frame& frame = (*m_frameList)[ TimeManager->getTurn() ];
-
-      //cout << "Frame size: " << frame.size() << endl;
-      //cout << "Anims: " << frame.getAnimations().size() << endl;
 
       for
         (
@@ -92,25 +87,26 @@ namespace visualizer
         i++
         )
       {
-        cout << "Draw: " << (*i)->numKeyFrames() << endl;
+        if( (*i)->numFrames() > 2 ) 
+          cout << "Draw: " << (*i)->numFrames() << endl;
         drawAnim( *(*i) );
       }
-#endif
     }
 
   } // _AnimationEngine::draw()
 
-  void _AnimationEngine::drawAnim( const Animatable& animator )
+  void _AnimationEngine::drawAnim( Animatable& animator )
   {
     int c = 0;
     for
       (
-      std::list<SmartPointer<Anim> >::const_iterator i = animator.getFrames().begin();
+      std::list<SmartPointer<Anim> >::iterator i = animator.getFrames().begin();
       i != animator.getFrames().end();
       i++
       )
     {
-      cout << "C: " << c++ << endl;
+      animator.getData();
+      (*i)->animate( TimeManager->getTurnPercent(), animator.getData() );
     }
 
   } // _AnimationEngine::drawAnim()

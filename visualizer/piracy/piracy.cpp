@@ -151,7 +151,6 @@ namespace visualizer
         switch( (*i)->type )
         {
           case MOVE:
-          cout << "Move" << endl;
             if( newAnim )
             {
               Move* m = ((Move*)(*i));
@@ -202,12 +201,11 @@ namespace visualizer
         }
       }
     }
-    else
-    {
-      cout << "No animations? " << endl;
-    }
 
-    cout << "KeyFRAMES: " << s.numKeyFrames() << endl;
+    if( newAnim )
+    {
+      s.addKeyFrame( new DrawStack( &s ) );
+    }
 
   } // Piracy::updateAnimations()
 

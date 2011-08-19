@@ -4,13 +4,13 @@ namespace visualizer
 {
 
 // A Macros may be useful for c++ shadows a parameterthis.  I dunno.
-  void StartAnim::animate( float t, AnimData *d )
+  void StartAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
 
   }
 
-  void LeftAnim::animate( float t, AnimData *d )
+  void LeftAnim::animate( const float& t, AnimData *d )
   {
     // An interesting idea for ship animations is letting the ship animations 
     // sort of draw out at the end past their controlled duration time. 
@@ -38,32 +38,32 @@ namespace visualizer
     //interpolate_sigmoid( param, m_startTime, m_endTime, t );
   }
 
-  void RightAnim::animate( float t, AnimData *d )
+  void RightAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }
 
-  void UpAnim::animate( float t, AnimData *d )
+  void UpAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }
 
-  void DownAnim::animate( float t, AnimData *d )
+  void DownAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }
 
-  void AttackAnim::animate( float t, AnimData *d )
+  void AttackAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }
 
-  void TalkAnim::animate( float t, AnimData *d )
+  void TalkAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }
 
-  void DrawStack::animate( float t, AnimData *d )
+  void DrawStack::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
   }

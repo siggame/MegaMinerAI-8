@@ -11,9 +11,9 @@ namespace visualizer
   class ITimeManager
   {    
     public:
-      virtual const int& getTurn() = 0;
-      virtual const float& getTurnPercent() = 0;
-      virtual const int& getNumTurns() = 0;
+      virtual const int& getTurn() const = 0;
+      virtual const float& getTurnPercent() const = 0;
+      virtual const int& getNumTurns() const = 0;
 
       virtual void setNumTurns( const int& numTurns ) = 0;
 

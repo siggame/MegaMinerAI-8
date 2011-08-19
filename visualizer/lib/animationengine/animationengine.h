@@ -48,7 +48,7 @@ namespace visualizer
       void buildAnimations( Frame& frame );
 
       void draw();
-      void drawAnim( const Animatable& animator );
+      void drawAnim( Animatable& animator );
 
       void registerFrameContainer( AnimSequence* frameList );
 

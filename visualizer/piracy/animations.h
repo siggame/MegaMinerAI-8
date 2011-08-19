@@ -24,7 +24,7 @@ namespace visualizer
       {
         m_stack = s;
       }
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
       float controlDuration() const
       { return 0; }
       float totalDuration() const
@@ -37,7 +37,7 @@ namespace visualizer
   class LeftAnim: public Anim
   {
     public:
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
@@ -49,7 +49,7 @@ namespace visualizer
   class RightAnim: public Anim
   {
     public: 
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
@@ -61,7 +61,7 @@ namespace visualizer
   class UpAnim: public Anim
   {
     public:
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
@@ -73,7 +73,7 @@ namespace visualizer
   class DownAnim: public Anim
   {
     public: 
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
@@ -85,12 +85,12 @@ namespace visualizer
   class AttackAnim: public Anim
   {
     public:
-      AttackAnim( float x, float y )
+      AttackAnim( const float& x, const float& y )
       {
         m_targetX = x;
         m_targetY = y;
       }
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 0.1; }
@@ -111,7 +111,7 @@ namespace visualizer
       {
         m_msg = msg;
       }
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 0.0f; }
@@ -130,7 +130,7 @@ namespace visualizer
       }
 
     private:
-      void animate( float t, AnimData *d );
+      void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 0.0f; }

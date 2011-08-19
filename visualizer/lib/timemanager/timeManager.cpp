@@ -94,13 +94,13 @@ namespace visualizer
 
   } // _TimeManager::updateChildren()
 
-  const int& _TimeManager::getTurn()
+  const int& _TimeManager::getTurn() const
   {
     return m_turn;
 
   } // _TimeManager::getTurn()
 
-  const float& _TimeManager::getTurnPercent()
+  const float& _TimeManager::getTurnPercent() const
   {
     return m_turnCompletion;
 
@@ -163,7 +163,7 @@ namespace visualizer
 
   } // _TimeManager::rewind()
 
-  const int& _TimeManager::getNumTurns()
+  const int& _TimeManager::getNumTurns() const
   {
     return m_numTurns;
 

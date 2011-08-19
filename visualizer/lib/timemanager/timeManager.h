@@ -81,8 +81,8 @@ namespace visualizer
 
       // @NOTE These five will probably have their names changed
       void setTurn( const int& turn );
-      const int& getTurn();
-      const float& getTurnPercent();
+      const int& getTurn() const;
+      const float& getTurnPercent() const;
 
       const int& nextTurn();
       const int& prevTurn();
@@ -93,7 +93,7 @@ namespace visualizer
       void fastForward();
       void rewind();
 
-      const int& getNumTurns();
+      const int& getNumTurns() const;
       void setNumTurns( const int& numTurns );
 
     private slots:

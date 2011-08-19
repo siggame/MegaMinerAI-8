@@ -5,12 +5,19 @@
 
 namespace visualizer
 {
+
+  struct AnimData
+  {
+  }; // AnimData
+ 
   struct Anim
   {
     virtual float controlDuration() const = 0;
     virtual float totalDuration() const = 0;
     float startTime; 
     float endTime;
+
+    virtual void animate( const float& t, AnimData *d ) = 0;
   }; // Anim
 
 #if 0
@@ -35,10 +42,6 @@ namespace visualizer
 
   }; // IAnimator
 #endif
- 
-  struct AnimData
-  {
-  }; // AnimData
  
 } // visualizer
 
