@@ -324,25 +324,13 @@ namespace visualizer
     glEnable( GL_BLEND );
     glEnable( GL_TEXTURE_2D );
     ResTexture *r = (ResTexture*)ResourceMan->reference( resource, "renderer" );
-#if 1
-   	GLenum errCode;
-    const GLubyte *errString;
-
-    if ((errCode = glGetError()) != GL_NO_ERROR)
-    {
-      errString = gluErrorString(errCode);
-      fprintf (stderr, "OpenGL Error: %s\n", errString);
-    }
-#endif
-
-    cout << r->getTexture() << endl;
 
     glBindTexture( GL_TEXTURE_2D, r->getTexture() );
     glBegin( GL_QUADS );
-      glTexCoord2f( 0, 0 ); glVertex3f( x, y, z );
-      glTexCoord2f( 1, 0 ); glVertex3f( x+w, y, z );
-      glTexCoord2f( 1, 1 ); glVertex3f( x+w, y+h, z );
-      glTexCoord2f( 0, 1 ); glVertex3f( x, y+h, z );
+      glTexCoord2f( 1, 1 ); glVertex3f( x, y, z );
+      glTexCoord2f( 0, 1 ); glVertex3f( x+w, y, z );
+      glTexCoord2f( 0, 0 ); glVertex3f( x+w, y+h, z );
+      glTexCoord2f( 1, 0 ); glVertex3f( x, y+h, z );
     glEnd();
 
     ResourceMan->release( resource, "renderer" );
