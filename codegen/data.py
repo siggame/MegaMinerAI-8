@@ -108,10 +108,14 @@ move = Animation("Move",
   data = [Variable("unit", Unit), Variable("x", int), Variable("y",int)]
   )
 
-attack = Animation("Attack",
+shipAttack = Animation("ShipAttack",
   data = [Variable("attacker", Unit), Variable("victim", Unit)]
   )
-  
+ 
+pirateAttack = Animation("PirateAttack",
+  data = [Variable("attacker", Unit), Variable("victim", Unit)]
+  )
+   
 talk = Animation("Talk",
   data = [Variable("speaker", Unit), Variable("message", str)]
   ) 

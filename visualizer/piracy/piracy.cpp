@@ -155,37 +155,6 @@ namespace visualizer
         switch( (*i)->type )
         {
           case MOVE:
-            if( newAnim )
-            {
-#if 0
-              cout << "MOVE" << endl;
-              Move* m = ((Move*)(*i));
-              if( m->x > x )
-              {
-                s.a_x--;
-                s.addKeyFrame( new RightAnim() );
-                x++;
-              }
-              else if( m->x < x )
-              {
-                s.a_x++;
-                s.addKeyFrame( new LeftAnim() );
-                x--;
-              }
-              else if( m->y > y )
-              {
-                s.a_y--;
-                s.addKeyFrame( new DownAnim() );
-                y++;
-              }
-              else
-              {
-                s.a_y++;
-                s.addKeyFrame( new UpAnim() );
-                y--;
-              }
-#endif
-            }
             keyFrame++;
             break;
           case TALK:
