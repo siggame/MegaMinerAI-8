@@ -3,16 +3,14 @@
 namespace visualizer
 {
 
-// A Macros may be useful for c++ shadows a parameterthis.  I dunno.
+  // A Macros may be useful for this.  I dunno.
   void StartAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
     data.x = m_stack->a_x;
     data.y = m_stack->a_y;
-    if( data.x != m_stack->m_x )
-      cout << "DIFFY: " << data.x << ", " << m_stack->m_x << endl;
 
-  }
+  } // StartAnim::animate()
 
   void LeftAnim::animate( const float& t, AnimData *d )
   {

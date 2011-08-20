@@ -85,13 +85,6 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
   Games->setup();
 
-
-	if ( !ResourceMan->loadResourceFile("./textures.r") )
-	{
-		std::cerr << "Could Not Load resource.cfg" << std::endl;
-		return 1;
-	}
-
 	if( argc > 1 )
 	{
 	    GUI->loadGamelog( argv[1] );

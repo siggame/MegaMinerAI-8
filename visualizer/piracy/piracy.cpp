@@ -42,6 +42,8 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
+    m_intf.resourceManager->loadResourceFile( "./plugins/piracy/textures.r" );
+
     /// @TODO We really need a good way of cleaning this up
     /// after a gamelog is done
     m_intf.animationEngine->registerFrameContainer( this );

@@ -8,6 +8,8 @@
 #include "texture.h"
 #include "typedefs.h"
 #include "textureloader.h"
+#include <QDir>
+#include <QFileInfo>
 #include <QString>
 #include <iostream>
 #include <fstream>
@@ -33,12 +35,26 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
     //obviously this is the second time you are loading the damn thing
     return false;
   }*/
+  QFileInfo fInfo( filename.c_str() );
 
   std::ifstream input(filename.c_str());
 
+  if( !input.is_open() )
+  {    
+    THROW
+      (
+      FileException, 
+      "Unable to load resource file: \n  %s", filename.c_str()
+      );
+  } 
+
   if (input.eof())
   {
-    return false;
+    THROW
+      (
+      FileException,
+      "Resource file is empty: \n  %s", filename.c_str()
+      );
   }
 
   std::string buffer;
@@ -65,8 +81,11 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
         {
           if (!exists(namebuff))
           {
-            std::string pathBuff;
-            ss >> pathBuff;
+            std::string tempPath, pathBuff;
+            ss >> tempPath; //pathBuff;
+            pathBuff = qPrintable( fInfo.dir().path() );// + '/'; //+ tempPath;
+            pathBuff += "/";
+            pathBuff += tempPath;
             Resource * res = NULL;
 
             switch (rt)
@@ -75,9 +94,6 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
               {
                 QImage texture;
 
-#if 0
-                if (res->load(pathBuff.c_str()))
-#endif
                 if( TextureLoader->load( pathBuff.c_str(), texture ) )
                 {
                   res = (Resource*)(new ResTexture( texture ));
