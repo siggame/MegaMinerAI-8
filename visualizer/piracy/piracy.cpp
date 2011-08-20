@@ -157,6 +157,8 @@ namespace visualizer
           case MOVE:
             if( newAnim )
             {
+#if 0
+              cout << "MOVE" << endl;
               Move* m = ((Move*)(*i));
               if( m->x > x )
               {
@@ -182,6 +184,7 @@ namespace visualizer
                 s.addKeyFrame( new UpAnim() );
                 y--;
               }
+#endif
             }
             keyFrame++;
             break;
@@ -209,60 +212,58 @@ namespace visualizer
         }
       }
     }
-    else
+
+    if( state->turnNumber > 0 )
     {
-      if( state->turnNumber > 0 )
+      if( newAnim )
       {
-        if( newAnim )
+        if( (state-1)->pirates.find( unit.id ) != (state-1)->pirates.end() )
         {
-          if( (state-1)->pirates.find( unit.id ) != (state-1)->pirates.end() )
-          {
-            // Unit existed in last frame.  
-            // Let's see if it moved
-            x = (state-1)->pirates[ unit.id ].x;
-            y = (state-1)->pirates[ unit.id ].y;
+          // Unit existed in last frame.  
+          // Let's see if it moved
+          x = (state-1)->pirates[ unit.id ].x;
+          y = (state-1)->pirates[ unit.id ].y;
 
-          }
-          else if( (state-1)->ships.find( unit.id ) != (state-1)->ships.end() )
-          {
-            x = (state-1)->ships[ unit.id ].x;
-            y = (state-1)->ships[ unit.id ].y;
-          }
-          else
-          {
-            x = unit.x;
-            y = unit.y;
-          }
+        }
+        else if( (state-1)->ships.find( unit.id ) != (state-1)->ships.end() )
+        {
+          x = (state-1)->ships[ unit.id ].x;
+          y = (state-1)->ships[ unit.id ].y;
+        }
+        else
+        {
+          x = unit.x;
+          y = unit.y;
+        }
 
-          while( x != unit.x || y != unit.y )
+        while( x != unit.x || y != unit.y )
+        {
+          if( unit.x > x )
           {
-            if( unit.x > x )
-            {
-              x++;
-              s.a_x--;
-              s.addKeyFrame( new RightAnim() );
-            }
-            else if( unit.x < x )
-            {
-              x--;
-              s.a_x++;
-              s.addKeyFrame( new LeftAnim() );
-            }
-            else if( unit.y > y )
-            {
-              y++;
-              s.a_y--;
-              s.addKeyFrame( new DownAnim() );
-            }
-            else if( unit.y < y )
-            {
-              y--;
-              s.a_y++;
-              s.addKeyFrame( new UpAnim() );
-            }
+            x++;
+            s.a_x--;
+            s.addKeyFrame( new RightAnim() );
           }
-        } 
-      }
+          else if( unit.x < x )
+          {
+            x--;
+            s.a_x++;
+            s.addKeyFrame( new LeftAnim() );
+          }
+          else if( unit.y > y )
+          {
+            y++;
+            s.a_y--;
+            s.addKeyFrame( new DownAnim() );
+          }
+          else if( unit.y < y )
+          {
+            y--;
+            s.a_y++;
+            s.addKeyFrame( new UpAnim() );
+          }
+        }
+      } 
     }
 
     if( newAnim )

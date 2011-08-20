@@ -116,12 +116,6 @@ namespace visualizer
 
     r.setColor( 1, 1, 1 );
 
-#if 0
-    cout << endl 
-      << "X: " << data.x  << " Y: " << data.y << endl;
- 
-#endif
-    r.drawTexturedQuad( data.x, data.y, 1, 1, "shipGreen" );
 
     if( m_stack->m_ships )
     {
@@ -132,24 +126,41 @@ namespace visualizer
       }
       // Draw Ship
 
-#if 0
-      cout << "Pirates: " << endl;
-      for
-        ( 
-        std::vector<int>::iterator i = m_stack->m_pirateIds.begin();
-        i != m_stack->m_pirateIds.end();
-        i++ 
-        )
+      if( m_stack->m_owner == 0 )
       {
-        cout << *i << ", ";
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "shipGreen" );
+      } 
+      else if( m_stack->m_owner == 1 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "shipRed" );
       }
-
-      cout << endl 
-        << "X: " << data.x  << " Y: " << data.y << endl;
-#endif
+      else if( m_stack->m_owner == 2 || m_stack->m_owner == 3 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "shipNPC" );
+      }
+      else
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+      }
     }
     else if( m_stack->m_pirates )
     {
+      if( m_stack->m_owner == 0 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "pirateGreen" );
+      } 
+      else if( m_stack->m_owner == 1 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "pirateRed" );
+      }
+      else if( m_stack->m_owner == 2 || m_stack->m_owner == 3 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "pirateNPC" );
+      }
+      else
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+      }     
       // Draw a pirate
     }
 
