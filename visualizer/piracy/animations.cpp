@@ -114,6 +114,8 @@ namespace visualizer
     else
       r.setColor( 0, 0, 1 );
 
+    r.setColor( 1, 1, 1 );
+
 #if 0
     cout << endl 
       << "X: " << data.x  << " Y: " << data.y << endl;

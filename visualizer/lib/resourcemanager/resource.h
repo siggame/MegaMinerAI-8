@@ -115,8 +115,8 @@ namespace visualizer
         : Resource(RT_TEXTURE), texId(0)
       {}
 
-      ResTexture(const QImage &image )
-        : Resource(RT_TEXTURE)
+      ResTexture(const QImage &image, const int& id )
+        : Resource(RT_TEXTURE), texId( id )
       {
         texture = image;
       }

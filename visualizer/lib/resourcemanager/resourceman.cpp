@@ -80,13 +80,33 @@ Resource * _ResourceMan::reference(const std::string & rName, const std::string 
 {
   Resource ** res = ManagerType::getItem(rName);
   if (!res)
+  {
+    THROW
+      (
+      Exception,
+      "Resource Could Not Be Found: \n  %s", rName.c_str()
+      );
     return NULL;
+  }
 
   if (!*res)
+  {
+    THROW
+      (
+      Exception,
+      "Resource Could Not Be Found: \n  %s", rName.c_str()
+      );
     return NULL;
+  }
 
   if ((*res)->reference(referencer))
     return *res;
+
+  THROW
+    (
+    Exception,
+    "THIS EXCEPTION"
+    );
 
   return NULL;
 

@@ -93,10 +93,11 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
               case RT_TEXTURE:
               {
                 QImage texture;
+                int id = 0;
 
-                if( TextureLoader->load( pathBuff.c_str(), texture ) )
+                if( (id = TextureLoader->load( pathBuff.c_str(), texture ) ) )
                 {
-                  res = (Resource*)(new ResTexture( texture ));
+                  res = (Resource*)(new ResTexture( texture, id ));
                   reg(namebuff,(Resource*)res);
                 }
                 else

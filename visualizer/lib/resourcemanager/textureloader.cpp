@@ -25,7 +25,6 @@ namespace visualizer
   int _TextureLoader::load( const std::string& path, QImage& texture )
   {
     unsigned int texId;
-    glEnable( GL_TEXTURE );
     glEnable( GL_TEXTURE_2D );
 
     switch( getImageType( path.c_str() ) )
@@ -80,6 +79,14 @@ namespace visualizer
 
     texture = QGLWidget::convertToGLFormat( fixed );
     glGenTextures( 1, &texId );
+    if( texId == 0 )
+    {
+      THROW
+        (
+        Exception,
+        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
+        );
+    }
 
     glBindTexture( GL_TEXTURE_2D, texId );
 
@@ -98,6 +105,7 @@ namespace visualizer
       GL_UNSIGNED_BYTE, 
       texture.bits() 
       );
+      
     //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 
   }
@@ -118,6 +126,8 @@ namespace visualizer
     }
 
     QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+    cout << path << endl;
+    cout << "w: " << buffer.width() << " h: " << buffer.height() << endl;
     QPainter painter(&fixed);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -129,12 +139,20 @@ namespace visualizer
     texture = QGLWidget::convertToGLFormat( fixed );
 
     glGenTextures( 1, &texId );
+    if( texId == 0 )
+    {
+      THROW
+        (
+        Exception,
+        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
+        );
+    }
 
     glBindTexture( GL_TEXTURE_2D, texId );
     //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
     glTexImage2D
       ( 
@@ -178,6 +196,14 @@ namespace visualizer
 
     texture = QGLWidget::convertToGLFormat( fixed );
     glGenTextures( 1, &texId );
+    if( texId == 0 )
+    {
+      THROW
+        (
+        Exception,
+        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
+        );
+    }
 
     glBindTexture( GL_TEXTURE_2D, texId );
     //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
@@ -227,6 +253,14 @@ namespace visualizer
 
     texture = QGLWidget::convertToGLFormat( fixed );
     glGenTextures( 1, &texId );
+    if( texId == 0 )
+    {
+      THROW
+        (
+        Exception,
+        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
+        );
+    }
 
     glBindTexture( GL_TEXTURE_2D, texId );
     //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
