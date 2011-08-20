@@ -335,7 +335,6 @@ namespace visualizer
 
     ResourceMan->release( resource, "renderer" );
     glDisable( GL_TEXTURE_2D );
-    //glDisable( GL_TEXTURE );
     glDisable( GL_BLEND );
     
   }
