@@ -54,4 +54,4 @@ cd ../..
 mkdir release/piracy
 cp -r ./piracy/textures ./release/piracy
 cp ./options.cfg ./release/
-cp ./textures.r ./release/
+#cp ./textures.r ./release/
