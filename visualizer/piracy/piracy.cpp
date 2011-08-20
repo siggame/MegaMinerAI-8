@@ -162,9 +162,10 @@ namespace visualizer
               Talk* t = ((Talk*)(*i));
               s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
             } break;
-          case ATTACK:
+          case PIRATEATTACK:
+          case SHIPATTACK:
             {
-              Attack* t = ((Attack*)(*i));
+              Pirateattack* t = ((Pirateattack*)(*i));
               s.addSubFrame
                 ( 
                 keyFrame, 

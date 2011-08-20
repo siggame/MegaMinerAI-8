@@ -11,6 +11,15 @@
 
 using namespace std;
 
+char *ToLower( char *str )
+{
+  for( int i = 0; i < strlen( str ); i++ )
+  {
+    str[ i ] = tolower( str[ i ] );
+  }
+  return str;
+}
+
 
 % for model in models:
 static bool parse${model.name}(${model.name}& object, sexp_t* expression)
@@ -130,7 +139,7 @@ static bool parseSexp(Game& game, sexp_t* expression)
       sub = expression->list;
       if ( !sub ) return false;
 % for animation in animations:
-      if(string(sub->val) == "${dashify(animation.name)}")
+      if(string(ToLower( sub->val ) ) == "${dashify(animation.name)}")
       {
         ${animation.name}* animation = new ${animation.name};
         if ( !parse${capitalize(animation.name)}(*animation, expression) )
