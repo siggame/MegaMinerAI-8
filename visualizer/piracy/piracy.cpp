@@ -48,7 +48,6 @@ namespace visualizer
     /// @TODO We really need a good way of cleaning this up
     /// after a gamelog is done
 
-    m_intf.timeManager->play();
     start();
   } /* Piracy::loadGamelog() */
 
@@ -291,6 +290,8 @@ namespace visualizer
     {
       StackOrganizer<MoveList, Stack> so;
 
+      so.getStack( MoveList( -3.14, 3.14 ) );
+
       foreach( Pirate, pirates, i ) 
       {
         Stack &s = so.getStack( getMoves( i->second, state ) );
@@ -362,11 +363,11 @@ namespace visualizer
       if( frameNum <= 1 )
       {
         m_intf.animationEngine->registerFrameContainer( this );
+        m_intf.timeManager->play();
       }
 
     }
 
-    m_intf.timeManager->play();
 
 #if 0
     THROW

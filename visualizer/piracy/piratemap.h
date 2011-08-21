@@ -61,6 +61,25 @@ namespace visualizer
         Orientation orient 
         );
 
+      QRgb interpolate
+        (
+        int x,
+        int y,
+        int size,
+        QImage *images,
+        int *depths,
+        int depth 
+        );
+
+      float interp
+        (
+        float x,
+        float x0,
+        float x1,
+        float y0,
+        float y1  
+        );
+
 
 #if 0
       PirateMap();
@@ -68,23 +87,7 @@ namespace visualizer
 
 
       static void drawTGA( std::string filename );
-
-      float interp(
-        float x,
-        float x0,
-        float x1,
-        float y0,
-        float y1  );
-
-      QRgb interpolate(
-        int x,
-        int y,
-        int size,
-        QImage *images,
-        int *depths,
-        int depth );
       int m_width;
-      int m_power;
 
       void update();
       virtual void renderAt(

@@ -10,6 +10,7 @@ using namespace std;
 namespace visualizer
 {
 
+  const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384, 32728, 65536 };
   void PirateMap::generateMap( Game& g, Interfaces& intf )
   {
 
@@ -17,6 +18,7 @@ namespace visualizer
     int mapSize = g.states[0].mapSize;
     int mWidth /*= m_width*/ = mapSize*pixels;
     int mHeight /*= m_width*/ = mapSize*pixels;
+    int m_power;
 
     int **depthMap = new int*[mWidth];
     int tx = 0;
@@ -118,28 +120,20 @@ namespace visualizer
     intf.resourceManager->release( "proc9", "pirateMap" );
     intf.resourceManager->release( "proc10", "pirateMap" );
 
-#if 0
 
     int depths[10] =
     {
-      OptionsMan->getInt( "depth1" ),
-      OptionsMan->getInt( "depth2" ),
-      OptionsMan->getInt( "depth3" ),
-      OptionsMan->getInt( "depth4" ),
-      OptionsMan->getInt( "depth5" ),
-      OptionsMan->getInt( "depth6" ),
-      OptionsMan->getInt( "depth7" ),
-      OptionsMan->getInt( "depth8" ),
-      OptionsMan->getInt( "depth9" ),
-      OptionsMan->getInt( "depth10" )
+      intf.options->getInt( "depth1" ),
+      intf.options->getInt( "depth2" ),
+      intf.options->getInt( "depth3" ),
+      intf.options->getInt( "depth4" ),
+      intf.options->getInt( "depth5" ),
+      intf.options->getInt( "depth6" ),
+      intf.options->getInt( "depth7" ),
+      intf.options->getInt( "depth8" ),
+      intf.options->getInt( "depth9" ),
+      intf.options->getInt( "depth10" )
     };
-
-    for( int i = 0; i < 10; i++ )
-    {
-      r.load( textureNames[i] );
-      textures[i] = r.getQImage();
-    }
-
 
     int temp;
     for( temp = 0; temp<16; temp++ )
@@ -162,26 +156,16 @@ namespace visualizer
       }
     }
 
-    //mapTexture.load( result );
-
-    GLenum errCode;
-    const GLubyte *errString;
-
-    if ((errCode = glGetError()) != GL_NO_ERROR)
-    {
-      errString = gluErrorString(errCode);
-      fprintf (stderr, "OpenGL Error: %s\n", errString);
-    }
+    intf.resourceManager->loadTexture( result, "mapTexture" );
 
     for( int x = 0; x < mWidth; x++ )
     {
       delete [] depthMap[x];
     }
 
-#endif
     delete [] depthMap;
 
-  }
+  } // PirateMap::GenerateMap()
 
 
   int PirateMap::distToTile
@@ -223,7 +207,7 @@ namespace visualizer
     }
 
     return smallest;
-  }
+  } // PirateMap::distToTile()
 
 
   void PirateMap::boxBlur
@@ -254,7 +238,8 @@ namespace visualizer
     #endif
 
     delete [] gaussian;
-  }
+
+  } // PirateMap::boxBlur()
 
   void PirateMap::blur
     (
@@ -352,31 +337,9 @@ namespace visualizer
         }
       }
     }
-  }
 
+  } // PirateMap::blur()
 
-
-#if 0
-  PirateMap::PirateMap()
-  {
-  }
-
-
-  PirateMap::~PirateMap()
-  {
-  }
-
-#define PI 3.1415926535897932384626433832795028841971
-
-  float PirateMap::interp( float x,  float x0, float x1, float y0, float y1  )
-  {
-
-    return y0 + (x-x0)*((y1-y0)/(x1-x0));
-
-  }
-
-
-  unsigned char **images;
 
   QRgb PirateMap::interpolate( int x, int y, int size, QImage *images, int *depths, int depth )
   {
@@ -428,9 +391,31 @@ namespace visualizer
 
     return color;
 
+  } // PirateMap::interpolate()
+
+
+  float PirateMap::interp( float x,  float x0, float x1, float y0, float y1  )
+  {
+
+    return y0 + (x-x0)*((y1-y0)/(x1-x0));
+
+  } // PirateMap::interp()
+
+
+
+#if 0
+  PirateMap::PirateMap()
+  {
   }
 
-  const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384, 32728, 65536 };
+
+  PirateMap::~PirateMap()
+  {
+  }
+
+#define PI 3.1415926535897932384626433832795028841971
+
+  unsigned char **images;
 
 #if 1
   void PirateMap::drawTGA( std::string filename )
