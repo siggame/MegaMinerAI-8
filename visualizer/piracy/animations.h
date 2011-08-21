@@ -5,6 +5,7 @@
 #include "../interfaces/ianimationengine.h"
 #include "piracy.h"
 #include "stacks.h"
+#include "piratemap.h"
 
 namespace visualizer
 {
@@ -140,7 +141,23 @@ namespace visualizer
       { return 0.0f; }
 
       Stack *m_stack;
+  };
 
+  class DrawMap: public Anim
+  {
+    public:
+      DrawMap( PirateMap *m )
+      {
+        m_map = m;
+      }
+
+      void animate( const float& t, AnimData *d );
+      float controlDuration() const
+      { return 0.0f; }
+      float totalDuration() const
+      { return 0.0f; }
+
+      PirateMap *m_map;
   };
 
 } // visualizer

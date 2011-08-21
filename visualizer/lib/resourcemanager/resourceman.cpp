@@ -167,8 +167,15 @@ namespace visualizer
 
   } // _ResourceMan::loadTexture()
 
-  void _ResourceMan::loadTexture( const QImage& image, const std::string& name )
+  void _ResourceMan::loadTexture( QImage& image, const std::string& name )
   {
+    unsigned int id;
+    Resource * res = NULL;
+
+    TextureLoader->loadQImage( id, image );
+
+    res = (Resource*)(new ResTexture( image, id ));
+    reg( name, (Resource*)res );
 
   } // _ResourceMan::loadTexture()
 

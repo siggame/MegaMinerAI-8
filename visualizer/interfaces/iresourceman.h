@@ -25,7 +25,7 @@ class IResourceMan
     virtual std::vector<std::string> listResourceNames() = 0;
 
     virtual void loadTexture( const std::string& filename, const std::string& name ) = 0;
-    virtual void loadTexture( const QImage& image, const std::string& name ) = 0;
+    virtual void loadTexture( QImage& image, const std::string& name ) = 0;
 
 };
 

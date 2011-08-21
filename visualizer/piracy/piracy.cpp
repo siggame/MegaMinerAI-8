@@ -1,5 +1,4 @@
 #include "piracy.h"
-#include "piratemap.h"
 #include "common.h"
 #include "renderer/renderer.h"
 #include "resourcemanager/texture.h"
@@ -45,8 +44,9 @@ namespace visualizer
 
     m_intf.resourceManager->loadResourceFile( "./plugins/piracy/textures.r" );
 
-    /// @TODO We really need a good way of cleaning this up
-    /// after a gamelog is done
+    m_theMap = new PirateMap;
+    m_theMap->generateMap( *m_game, m_intf );
+    m_theMap->addKeyFrame( new DrawMap( &*m_theMap ) );
 
     start();
   } /* Piracy::loadGamelog() */
@@ -261,26 +261,6 @@ namespace visualizer
     time.start();
     size_t frameNum = 0;
 
-    PirateMap p;
-    p.generateMap( *m_game, m_intf );
-
-
-#if 0
-    if( m_game->states.size() >= 1 )
-    {
-      for
-        ( 
-        // Get the first tile in the first state
-        std::map<int, Tile>::iterator i = m_game->states.begin()->tiles.begin(); 
-        i != m_game->states.begin()->tiles.end();
-        i++
-        )
-        {
-          // Load the background map
-        }
-    }
-#endif
-
     for
       (
       std::vector<GameState>::iterator state = m_game->states.begin();
@@ -290,7 +270,6 @@ namespace visualizer
     {
       StackOrganizer<MoveList, Stack> so;
 
-      so.getStack( MoveList( -3.14, 3.14 ) );
 
       foreach( Pirate, pirates, i ) 
       {
@@ -355,6 +334,9 @@ namespace visualizer
 
       // @TODO: Add animators for the score, team names, etc. 
       m_intf.animationEngine->buildAnimations( so.returnStackList() );
+
+      so.returnStackList().addAnimatableFront( (SmartPointer<Animatable>&) m_theMap );
+
       addFrame( so.returnStackList() );
       frameNum++;
       m_intf.timeManager->setNumTurns( frameNum );

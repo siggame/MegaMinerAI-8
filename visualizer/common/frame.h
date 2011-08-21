@@ -23,6 +23,7 @@ namespace visualizer
       }
 
       void addAnimatable( const SmartPointer<Animatable>& animatable );
+      void addAnimatableFront( const SmartPointer<Animatable>& animatable );
 
       /// @TODO Should probably return a wrapped object
       std::list<SmartPointer<Animatable> >& getAnimations();

@@ -80,6 +80,10 @@ namespace visualizer
         float y1  
         );
 
+     int mapW;
+     int mapH;
+     IRenderer *Renderer;
+
 
 #if 0
       PirateMap();

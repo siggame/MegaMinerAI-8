@@ -189,4 +189,9 @@ namespace visualizer
 
   }
 
+  void DrawMap::animate( const float& t, AnimData* /* d */ ) // We don't use the AnimData
+  {
+    m_map->Renderer->drawTexturedQuad( 0, 0, m_map->mapW, m_map->mapH, "mapTexture" );
+  }
+
 }

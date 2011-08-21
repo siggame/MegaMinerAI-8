@@ -25,6 +25,7 @@ namespace visualizer
     void loadPNG( const std::string& path, unsigned int& texId, QImage& texture );
     void loadTGA( const std::string& path, unsigned int& texId, QImage& texture );
     void loadBMP( const std::string& path, unsigned int& texId, QImage& texture );
+    void loadQImage( unsigned int& texId, QImage& texture );
 
     static void setup();
     static void destroy();

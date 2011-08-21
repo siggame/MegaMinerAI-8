@@ -7,6 +7,11 @@ namespace visualizer
     m_frame.push_back( animatable );
   }
 
+  void Frame::addAnimatableFront( const SmartPointer<Animatable>& animatable )
+  {
+    m_frame.push_front( animatable );
+  }
+
   std::list<SmartPointer<Animatable> >& Frame::getAnimations()
   {
     // @TODO Remove me

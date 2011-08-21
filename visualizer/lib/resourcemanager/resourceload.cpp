@@ -19,7 +19,7 @@ namespace visualizer
 
 ResourceType getResTypeFromStr(const std::string & typeBuff)
 {
-  if ("texture" == typeBuff)
+  if ( "texture" == typeBuff )
     return RT_TEXTURE;
 
   return RT_NONE;
@@ -81,8 +81,8 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
           if (!exists(namebuff))
           {
             std::string tempPath, pathBuff;
-            ss >> tempPath; //pathBuff;
-            pathBuff = qPrintable( fInfo.dir().path() );// + '/'; //+ tempPath;
+            ss >> tempPath; 
+            pathBuff = qPrintable( fInfo.dir().path() );
             pathBuff += "/";
             pathBuff += tempPath;
 

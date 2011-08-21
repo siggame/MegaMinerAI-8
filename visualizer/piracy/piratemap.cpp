@@ -13,17 +13,18 @@ namespace visualizer
   const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384, 32728, 65536 };
   void PirateMap::generateMap( Game& g, Interfaces& intf )
   {
-
     int pixels = intf.options->getInt( "unitSize" );
     int mapSize = g.states[0].mapSize;
     int mWidth /*= m_width*/ = mapSize*pixels;
     int mHeight /*= m_width*/ = mapSize*pixels;
+    mapW = mapH = mapSize;
+    Renderer = intf.renderer;
     int m_power;
 
     int **depthMap = new int*[mWidth];
     int tx = 0;
     int ty = 0;
-
+#if 1
     // Set the depthmap to sealevel
     for( int x = 0; x < mWidth; x++ )
     {
@@ -95,6 +96,7 @@ namespace visualizer
 
     ResTexture r;
 
+
     QImage textures[10] =
       {
         ((ResTexture*)intf.resourceManager->reference( "proc1", "pirateMap" ))->getQImage(),
@@ -155,6 +157,8 @@ namespace visualizer
         result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
       }
     }
+#endif
+
 
     intf.resourceManager->loadTexture( result, "mapTexture" );
 

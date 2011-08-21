@@ -6,6 +6,7 @@
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "piracyStack.h"
+#include "piratemap.h"
 #include "stacks.h"
 
 #include <QThread>
@@ -54,11 +55,13 @@ namespace visualizer
 
     private:
       Game *m_game;
+      SmartPointer<PirateMap> m_theMap;
       //std::vector<std::list<SmartPointer<Animatable> > > m_stackFrames;
       Interfaces m_intf;
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
       MoveList getMoves( const Mappable& unit, const std::vector<GameState>::iterator& state );
+
       void updateAnimations
         ( 
         const Mappable& unit, 

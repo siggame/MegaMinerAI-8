@@ -34,7 +34,7 @@ class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceM
     bool saveResourceFile(const std::string & filename);
 
     void loadTexture( const std::string& filename, const std::string& name );
-    void loadTexture( const QImage& image, const std::string& name );
+    void loadTexture( QImage& image, const std::string& name );
 
     static void setup();
     static void destroy();
