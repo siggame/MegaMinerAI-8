@@ -142,46 +142,6 @@ namespace visualizer
     int x = s.a_x;
     int y = s.a_y;
 
-    if( a != state->animations.end() )
-    {
-      for
-        (
-        std::vector<Animation*>::iterator i = a->second.begin();
-        i != a->second.end();
-        i++
-        )
-      {
-        switch( (*i)->type )
-        {
-          case MOVE:
-            keyFrame++;
-            break;
-          case TALK:
-            {
-              Talk* t = ((Talk*)(*i));
-              s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
-            } break;
-          case PIRATEATTACK:
-          case SHIPATTACK:
-            {
-              Pirateattack* t = ((Pirateattack*)(*i));
-              s.addSubFrame
-                ( 
-                keyFrame, 
-                new AttackAnim
-                  ( 
-                  state->mappables[ t->victim ].x, 
-                  state->mappables[ t->victim ].y 
-                  ) 
-                );
-            } break;
-          default:
-            THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
-            break;
-        }
-      }
-    }
-
     if( state->turnNumber > 0 )
     {
       if( newAnim )
@@ -207,6 +167,7 @@ namespace visualizer
 
         while( x != unit.x || y != unit.y )
         {
+          keyFrame++;
           if( unit.x > x )
           {
             x++;
@@ -235,6 +196,45 @@ namespace visualizer
       } 
     }
 
+
+    if( a != state->animations.end() )
+    {
+      for
+        (
+        std::vector<Animation*>::iterator i = a->second.begin();
+        i != a->second.end();
+        i++
+        )
+      {
+        switch( (*i)->type )
+        {
+          case MOVE:
+            break;
+          case TALK:
+            {
+              Talk* t = ((Talk*)(*i));
+              s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
+            } break;
+          case PIRATEATTACK:
+          case SHIPATTACK:
+            {
+              Pirateattack* t = ((Pirateattack*)(*i));
+              s.addKeyFrame
+                ( 
+                new AttackAnim
+                  ( 
+                  t->attackx,
+                  t->attacky,
+                  &s
+                  ) 
+                );
+            } break;
+          default:
+            THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
+            break;
+        }
+      }
+    }
     if( newAnim )
     {
       s.addKeyFrame( new DrawStack( &s ) );

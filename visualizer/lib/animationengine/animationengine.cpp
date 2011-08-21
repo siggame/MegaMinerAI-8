@@ -67,7 +67,8 @@ namespace visualizer
         )
       {
         (*j)->startTime = start;
-        start = (*j)->endTime = (*j)->startTime + ((*j)->controlDuration()/fullTime);
+        (*j)->endTime = (*j)->startTime + ((*j)->totalDuration()/fullTime);
+        start = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
 
     }

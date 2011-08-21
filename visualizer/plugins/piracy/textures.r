@@ -1,5 +1,5 @@
 texture portRed			textures/CastleRedAlt1.png
-texture portGreen		textures/CastleGreen.png
+texture portGreen		textures/CastleGreen3.png
 texture portNPC			textures/CastleBlack.png
 texture pirateGreen	textures/pirategreen.png
 texture pirateRed		textures/piratered.png
@@ -14,6 +14,7 @@ texture hills			  textures/Hills.png
 texture grass			  textures/Grass.png
 texture mountains		textures/Mountains.png
 texture fontTexture textures/font1.png
+texture cannonball  textures/cannonball.png
 texture proc1       textures/deepWater.png
 texture proc2       textures/midWater.png
 #texture proc3       textures/midWater.png

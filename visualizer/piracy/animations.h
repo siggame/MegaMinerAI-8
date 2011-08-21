@@ -86,10 +86,11 @@ namespace visualizer
   class AttackAnim: public Anim
   {
     public:
-      AttackAnim( const float& x, const float& y )
+      AttackAnim( const float& x, const float& y, Stack *s )
       {
         m_targetX = x;
         m_targetY = y;
+        m_stack = s;
       }
       void animate( const float& t, AnimData *d );
 
@@ -101,6 +102,7 @@ namespace visualizer
     private:
       float m_targetX;
       float m_targetY;
+      Stack *m_stack;
   };
 
   class TalkAnim: public Anim

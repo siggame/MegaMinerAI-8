@@ -109,11 +109,11 @@ move = Animation("Move",
   )
 
 shipAttack = Animation("Shipattack",
-  data = [Variable("attacker", Unit), Variable("victim", Unit)]
+  data = [Variable("attacker", Unit), Variable("attackx", int), Variable( "attacky", int )]
   )
  
 pirateAttack = Animation("Pirateattack",
-  data = [Variable("attacker", Unit), Variable("victim", Unit)]
+  data = [Variable("attacker", Unit), Variable("attackx", int), Variable( "attacky", int )]
   )
    
 talk = Animation("Talk",

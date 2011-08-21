@@ -136,7 +136,7 @@ namespace visualizer
     painter.drawImage( 0, 0, buffer );
     painter.end();
 
-    texture = QGLWidget::convertToGLFormat( fixed );
+    texture = QGLWidget::convertToGLFormat( fixed.mirrored( true, false ) );
 
     glGenTextures( 1, &texId );
     if( texId == 0 )
