@@ -47,7 +47,6 @@ namespace visualizer
 
     /// @TODO We really need a good way of cleaning this up
     /// after a gamelog is done
-    m_intf.animationEngine->registerFrameContainer( this );
 
     m_intf.timeManager->play();
     start();
@@ -264,7 +263,7 @@ namespace visualizer
     size_t frameNum = 0;
 
     PirateMap p;
-    //p.generateMap( *m_game, m_intf );
+    p.generateMap( *m_game, m_intf );
 
 
 #if 0
@@ -359,6 +358,11 @@ namespace visualizer
       frameNum++;
       m_intf.timeManager->setNumTurns( frameNum );
       m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
+
+      if( frameNum <= 1 )
+      {
+        m_intf.animationEngine->registerFrameContainer( this );
+      }
 
     }
 

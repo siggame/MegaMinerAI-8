@@ -59,6 +59,7 @@ namespace visualizer
         }
       }
     }
+#if 0
 
     int larger = 0;
     int smaller = 0;
@@ -93,7 +94,6 @@ namespace visualizer
 
     ResTexture r;
 
-#if 0
     QImage textures[10];
     std::string textureNames[10] =
     {
