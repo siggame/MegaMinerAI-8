@@ -270,6 +270,32 @@ namespace visualizer
     {
       StackOrganizer<MoveList, Stack> so;
 
+      foreach( Port, ports, i )
+      {
+        // Ports don't animate.  Don't need to run getMoves on this one
+        Stack &s = so.getStack( MoveList( -i->second.x, -i->second.y ) );
+        s.m_ports++;
+        s.m_owner     = i->second.owner;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
+        s.m_portIds.push_back( i->first );
+        s.Renderer    = m_intf.renderer;
+
+        updateAnimations( i->second, state, s );
+      }
+
+      foreach( Treasure, treasures, i )
+      {
+        // Treasure doesn't animate.  Don't need to run getMoves on this one
+        Stack &s      = so.getStack( MoveList( -i->second.x, -i->second.y ) );
+        s.m_gold      += i->second.gold;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
+        s.m_goldIds.push_back( i->first );
+        s.Renderer    = m_intf.renderer;
+
+        updateAnimations( i->second, state, s );
+      }
 
       foreach( Pirate, pirates, i ) 
       {
@@ -304,33 +330,6 @@ namespace visualizer
 
         updateAnimations( i->second, state, s );
       } 
-
-      foreach( Port, ports, i )
-      {
-        // Ports don't animate.  Don't need to run getMoves on this one
-        Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
-        s.m_ports++;
-        s.m_owner     = i->second.owner;
-        s.m_x = i->second.x;
-        s.m_y = i->second.y;
-        s.m_portIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
-
-        updateAnimations( i->second, state, s );
-      }
-
-      foreach( Treasure, treasures, i )
-      {
-        // Treasure doesn't animate.  Don't need to run getMoves on this one
-        Stack &s      = so.getStack( MoveList( i->second.x, i->second.y ) );
-        s.m_gold      += i->second.gold;
-        s.m_x = i->second.x;
-        s.m_y = i->second.y;
-        s.m_goldIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
-
-        updateAnimations( i->second, state, s );
-      }
 
       // @TODO: Add animators for the score, team names, etc. 
       m_intf.animationEngine->buildAnimations( so.returnStackList() );
