@@ -115,15 +115,8 @@ namespace visualizer
   {
     PirateData& data = ((PirateData&)*d);
     IRenderer &r = *m_stack->Renderer;
-
-    if( m_stack->m_owner == 0 )
-      r.setColor( 1, 0, 0 );
-    else if( m_stack->m_owner == 1 )
-      r.setColor( 0, 1, 0 );
-    else
-      r.setColor( 0, 0, 1 );
-
-    r.setColor( 1, 1, 1 );
+    j, 1
+    r.setColor( 1, 1, 1, 1 );
 
 
     if( m_stack->m_ships )

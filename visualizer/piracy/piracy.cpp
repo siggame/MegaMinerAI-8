@@ -297,23 +297,6 @@ namespace visualizer
         updateAnimations( i->second, state, s );
       }
 
-      foreach( Pirate, pirates, i ) 
-      {
-        Stack &s = so.getStack( getMoves( i->second, state ) );
-        s.m_pirates++;
-        s.m_owner     =   i->second.owner;
-        s.m_health    +=  i->second.health;
-        s.m_maxHealth +=  PIRATE_HEALTH;
-        s.m_gold      +=  i->second.gold;
-        s.m_strength  +=  i->second.strength;
-        s.m_x = i->second.x;
-        s.m_y = i->second.y;
-        s.m_pirateIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
-
-        updateAnimations( i->second, state, s );
-      }
-
       foreach( Ship, ships, i )
       {
         Stack &s = so.getStack( getMoves( i->second, state ) );
@@ -330,6 +313,23 @@ namespace visualizer
 
         updateAnimations( i->second, state, s );
       } 
+
+      foreach( Pirate, pirates, i ) 
+      {
+        Stack &s = so.getStack( getMoves( i->second, state ) );
+        s.m_pirates++;
+        s.m_owner     =   i->second.owner;
+        s.m_health    +=  i->second.health;
+        s.m_maxHealth +=  PIRATE_HEALTH;
+        s.m_gold      +=  i->second.gold;
+        s.m_strength  +=  i->second.strength;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
+        s.m_pirateIds.push_back( i->first );
+        s.Renderer    = m_intf.renderer;
+
+        updateAnimations( i->second, state, s );
+      }
 
       // @TODO: Add animators for the score, team names, etc. 
       m_intf.animationEngine->buildAnimations( so.returnStackList() );

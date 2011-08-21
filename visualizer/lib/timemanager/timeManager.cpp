@@ -96,12 +96,18 @@ namespace visualizer
 
   const int& _TimeManager::getTurn() const
   {
+    if( m_turnCompletion < 0 )
+    {
+      return m_turn -1;
+    }
     return m_turn;
 
   } // _TimeManager::getTurn()
 
   const float& _TimeManager::getTurnPercent() const
   {
+    if( m_turnCompletion < 0 )
+      return 1+m_turnCompletion;
     return m_turnCompletion;
 
   } // _TimeManager::getTurnPercent()
@@ -193,6 +199,8 @@ namespace visualizer
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
 
+    cout << m_turn << endl;
+    cout << m_turnCompletion << endl;
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );
@@ -208,8 +216,8 @@ namespace visualizer
     }
     else if( m_turnCompletion < -1 )
     {
-      m_turn -= ceil( m_turnCompletion );
-      m_turnCompletion += ceil( m_turnCompletion );
+      m_turn += ceil( m_turnCompletion );
+      m_turnCompletion -= ceil( m_turnCompletion );
 
       if( m_turn <= 0 )
       {

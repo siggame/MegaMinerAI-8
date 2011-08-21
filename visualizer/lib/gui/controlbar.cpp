@@ -98,6 +98,7 @@ namespace visualizer
 
   void ControlBar::rewind()
   {
+    TimeManager->rewind();
 #if 0
     if(TimeManager->getSpeed() > 0)//Going forward
     {
@@ -137,6 +138,7 @@ namespace visualizer
 
   void ControlBar::play()
   {
+    TimeManager->play();
 #if 0
                                    //Is playing
     if(TimeManager->getSpeed() == 1)
@@ -159,43 +161,7 @@ namespace visualizer
 
   void ControlBar::fastForward()
   {
-#if 0
-
-                                   //Paused
-    if(TimeManager->getSpeed() == 0)
-    {
-                                   //Was going FF
-      if(originalTimeManagerSpeed >= 2)
-      {
-                                   //Resume
-        TimeManager->setSpeed(originalTimeManagerSpeed);
-      }
-      else                         //Was not going FF
-      {
-        //Do nothing
-      }
-    }
-                                   //Not going FF
-    else if(TimeManager->getSpeed() < 2)
-    {
-      TimeManager->setSpeed(2);    //Hyperspeed!
-      rewindButton->setText("<<");
-      playButton->setText(">");
-      fastForwardButton->setText("-->>");
-    }
-    else                           //Going FF already
-    {
-      int speed = TimeManager->getSpeed();
-      speed = (speed < 64 ? speed * 2 : 128);
-      QString symbol = "-";
-      for(int i = 1; i != speed; i*=2)
-      {
-        symbol += "-";
-      }
-      TimeManager->setSpeed(speed);
-      fastForwardButton->setText(symbol + ">>");
-    }
-#endif
+    TimeManager->fastForward();
   }
 
 } // visualizer
