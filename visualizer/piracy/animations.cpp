@@ -140,7 +140,7 @@ namespace visualizer
       }
       else
       {
-        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "shipDead" );
       }
     }
     else if( m_stack->m_pirates )

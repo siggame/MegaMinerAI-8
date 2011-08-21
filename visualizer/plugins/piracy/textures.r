@@ -7,6 +7,7 @@ texture pirateNPC		textures/pirateblack.png
 texture shipRed			textures/shipRed1.png
 texture shipGreen		textures/shipGreen1.png
 texture shipNPC			textures/shipBlack1.png
+texture shipDead    textures/ghostShip.png
 texture treasure		textures/coin-Lv-5.png
 texture forest			textures/Forest.png
 texture hills			  textures/Hills.png
