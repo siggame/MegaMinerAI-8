@@ -59,7 +59,6 @@ namespace visualizer
         }
       }
     }
-#if 0
 
     int larger = 0;
     int smaller = 0;
@@ -94,20 +93,32 @@ namespace visualizer
 
     ResTexture r;
 
-    QImage textures[10];
-    std::string textureNames[10] =
-    {
-      OptionsMan->getStr( "proc1" ),
-      OptionsMan->getStr( "proc2" ),
-      OptionsMan->getStr( "proc3" ),
-      OptionsMan->getStr( "proc4" ),
-      OptionsMan->getStr( "proc5" ),
-      OptionsMan->getStr( "proc6" ),
-      OptionsMan->getStr( "proc7" ),
-      OptionsMan->getStr( "proc8" ),
-      OptionsMan->getStr( "proc9" ),
-      OptionsMan->getStr( "proc10" )
-    };
+    QImage textures[10] =
+      {
+        ((ResTexture*)intf.resourceManager->reference( "proc1", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc2", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc3", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc4", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc5", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc6", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc7", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc8", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc9", "pirateMap" ))->getQImage(),
+        ((ResTexture*)intf.resourceManager->reference( "proc10", "pirateMap" ))->getQImage()
+      };
+
+    intf.resourceManager->release( "proc1", "pirateMap" );
+    intf.resourceManager->release( "proc2", "pirateMap" );
+    intf.resourceManager->release( "proc3", "pirateMap" );
+    intf.resourceManager->release( "proc4", "pirateMap" );
+    intf.resourceManager->release( "proc5", "pirateMap" );
+    intf.resourceManager->release( "proc6", "pirateMap" );
+    intf.resourceManager->release( "proc7", "pirateMap" );
+    intf.resourceManager->release( "proc8", "pirateMap" );
+    intf.resourceManager->release( "proc9", "pirateMap" );
+    intf.resourceManager->release( "proc10", "pirateMap" );
+
+#if 0
 
     int depths[10] =
     {

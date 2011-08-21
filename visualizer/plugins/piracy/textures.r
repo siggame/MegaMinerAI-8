@@ -13,3 +13,13 @@ texture hills			  textures/Hills.png
 texture grass			  textures/Grass.png
 texture mountains		textures/Mountains.png
 texture fontTexture textures/font1.png
+texture proc1       textures/deepWater.png
+texture proc2       textures/midWater.png
+texture proc3       textures/midWater.png
+texture proc4       textures/shallowWater.png
+texture proc5       textures/beach.png
+texture proc6       textures/Grass.png
+texture proc7       textures/Grass.png
+texture proc8       textures/Grass.png
+texture proc9       textures/tundra.png
+texture proc10      textures/tundra.png
