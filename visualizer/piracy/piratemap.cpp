@@ -15,16 +15,15 @@ namespace visualizer
   {
     int pixels = intf.options->getInt( "unitSize" );
     int mapSize = g.states[0].mapSize;
-    int mWidth /*= m_width*/ = mapSize*pixels;
-    int mHeight /*= m_width*/ = mapSize*pixels;
+    int mWidth = mapSize*pixels;
+    int mHeight = mapSize*pixels;
     mapW = mapH = mapSize;
     Renderer = intf.renderer;
-    int m_power;
 
     int **depthMap = new int*[mWidth];
     int tx = 0;
     int ty = 0;
-#if 1
+
     // Set the depthmap to sealevel
     for( int x = 0; x < mWidth; x++ )
     {
@@ -137,18 +136,7 @@ namespace visualizer
       intf.options->getInt( "depth10" )
     };
 
-    int temp;
-    for( temp = 0; temp<16; temp++ )
-    {
-      if( mWidth <= powers[temp] )
-        break;
-    }
-
-    m_power = powers[temp];
-
-    cout << "Power: " << m_power << endl;
-
-    QImage result( m_power, m_power, QImage::Format_RGB32 );
+    QImage result( mWidth, mHeight, QImage::Format_RGB32 );
 
     for( int x = 0; x < mWidth; x++ )
     {
@@ -157,8 +145,6 @@ namespace visualizer
         result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
       }
     }
-#endif
-
 
     intf.resourceManager->loadTexture( result, "mapTexture" );
 
