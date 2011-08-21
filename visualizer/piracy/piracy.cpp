@@ -1,4 +1,5 @@
 #include "piracy.h"
+#include "piratemap.h"
 #include "common.h"
 #include "renderer/renderer.h"
 #include "resourcemanager/texture.h"
@@ -262,6 +263,11 @@ namespace visualizer
     time.start();
     size_t frameNum = 0;
 
+    PirateMap p;
+    //p.generateMap( *m_game, m_intf );
+
+
+#if 0
     if( m_game->states.size() >= 1 )
     {
       for
@@ -275,6 +281,7 @@ namespace visualizer
           // Load the background map
         }
     }
+#endif
 
     for
       (

@@ -7,7 +7,6 @@
 #include "resourceman.h"
 #include "texture.h"
 #include "typedefs.h"
-#include "textureloader.h"
 #include <QDir>
 #include <QFileInfo>
 #include <QString>
@@ -86,25 +85,12 @@ bool _ResourceMan::loadResourceFile(const std::string & filename)
             pathBuff = qPrintable( fInfo.dir().path() );// + '/'; //+ tempPath;
             pathBuff += "/";
             pathBuff += tempPath;
-            Resource * res = NULL;
 
             switch (rt)
             {
               case RT_TEXTURE:
               {
-                QImage texture;
-                int id = 0;
-
-                if( (id = TextureLoader->load( pathBuff.c_str(), texture ) ) )
-                {
-                  res = (Resource*)(new ResTexture( texture, id ));
-                  reg(namebuff,(Resource*)res);
-                }
-                else
-                {
-                  std::cout << "Resource Load Error Line " << lineNum << ": Texture \"" << namebuff << "\" at path \"" << pathBuff << "\" didn't load right.\n";
-                }
-
+                loadTexture( pathBuff, namebuff );
                 break;
               }
               default:

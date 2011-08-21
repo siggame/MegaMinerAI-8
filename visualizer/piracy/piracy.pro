@@ -12,6 +12,7 @@ TARGET = piracy
 SOURCES += piracy.cpp \
   animations.cpp \
   piracyStack.cpp \
+  piratemap.cpp \
   ../common/*.cpp \
   parser/*.cpp 
   

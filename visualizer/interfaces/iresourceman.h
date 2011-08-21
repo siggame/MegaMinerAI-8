@@ -24,6 +24,9 @@ class IResourceMan
     virtual bool exists( const ResID_t& rName ) = 0;
     virtual std::vector<std::string> listResourceNames() = 0;
 
+    virtual void loadTexture( const std::string& filename, const std::string& name ) = 0;
+    virtual void loadTexture( const QImage& image, const std::string& name ) = 0;
+
 };
 
 } // visualizer

@@ -162,8 +162,30 @@ namespace visualizer
         r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
       }     
       // Draw a pirate
+    } 
+    else if( m_stack->m_ports )
+    {
+      if( m_stack->m_owner == 0 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portGreen" );
+      } 
+      else if( m_stack->m_owner == 1 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portRed" );
+      }
+      else if( m_stack->m_owner == 2 || m_stack->m_owner == 3 )
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+      }
+      else
+      {
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+      }
     }
-
+    else if( m_stack->m_gold )
+    {
+      r.drawTexturedQuad( data.x, data.y, 1, 1, "treasure" );
+    }
 
   }
 

@@ -25,6 +25,11 @@ namespace visualizer
       virtual bool addFloat( const OptID_t& oName, const float& val ) = 0;
       virtual bool addBool( const OptID_t& oName, const bool& val ) = 0;
 
+      virtual const int& getInt( const OptID_t& oName ) = 0;
+      virtual const float& getFloat( const OptID_t& oName ) = 0;
+      virtual const bool& getBool( const OptID_t& oName ) = 0;
+      virtual const std::string& getStr( const OptID_t& oName ) = 0;
+
   }; // IOptionsMan
 
 } // visualizer

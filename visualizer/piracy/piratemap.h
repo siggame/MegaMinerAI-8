@@ -1,84 +1,100 @@
 #ifndef PIRATEMAP_H
 #define PIRATEMAP_H
 
-#include "../lib/gocfamily_render.h"
-#include "../lib/parser/parser.h"
-#include "../lib/resourcemanager/texture.h"
+#include "parser/parser.h"
+#include <QColor>
+#include <QImage>
+#include "igame.h"
 #include <string>
 #include <fstream>
 
-class PirateMap : public GOCFamily_Render
+namespace visualizer
 {
-  public:
-    PirateMap();
-    ~PirateMap();
 
-    virtual const GOC_IDType componentID() const;
+  class PirateMap: public Animatable
+  {
+    public:
 
-    void generateMap( Game& g );
+      enum TileType
+      {
+        water,
+        land
+      };
 
-    static void drawTGA( std::string filename );
+      enum Orientation
+      {
+        horizontal,
+        vertical
+      };
 
-    enum Orientation
-    {
-      horizontal,
-      vertical
-    };
+      void generateMap( Game& g, Interfaces& intf );
 
-    enum TileType
-    {
-      water,
-      land
-    };
+      AnimData *getData()
+      {
+        return 0;
+      }
 
-    float interp(
-      float x,
-      float x0,
-      float x1,
-      float y0,
-      float y1  );
+      int distToTile
+        (
+        const int& x,
+        const int& y,
+        const int& mapsize,
+        const TileType& type,
+        const std::map<int, Tile>& tiles
+        );
 
-    QRgb interpolate(
-      int x,
-      int y,
-      int size,
-      QImage *images,
-      int *depths,
-      int depth );
+      void boxBlur
+        (
+        int **map,
+        const int& width,
+        const int& height,
+        const int& radius 
+        );
 
-    int distToTile(
-      const int& x,
-      const int& y,
-      const int& mapsize,
-      const TileType& type,
-      const std::map<int, Tile>& tiles
-      );
+      void blur
+        (
+        int **map,
+        const int& width,
+        const int& height,
+        const int& radius,
+        const float* gaussian,
+        Orientation orient 
+        );
 
-    void boxBlur(
-      int **map,
-      const int& width,
-      const int& height,
-      const int& radius );
 
-    void blur(
-      int **map,
-      const int& width,
-      const int& height,
-      const int& radius,
-      const float* gaussian,
-      Orientation orient );
+#if 0
+      PirateMap();
+      ~PirateMap();
 
-    int m_width;
-    int m_power;
 
-    ResTexture mapTexture;
+      static void drawTGA( std::string filename );
 
-    void update();
-    virtual void renderAt(
-      const unsigned int& turn,
-      const unsigned int& frame
-      );
+      float interp(
+        float x,
+        float x0,
+        float x1,
+        float y0,
+        float y1  );
 
-  private:
-};
+      QRgb interpolate(
+        int x,
+        int y,
+        int size,
+        QImage *images,
+        int *depths,
+        int depth );
+      int m_width;
+      int m_power;
+
+      void update();
+      virtual void renderAt(
+        const unsigned int& turn,
+        const unsigned int& frame
+        );
+
+    private:
+#endif
+  };
+
+} // visualizer
 #endif
