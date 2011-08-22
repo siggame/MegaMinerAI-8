@@ -115,7 +115,6 @@ namespace visualizer
   {
     PirateData& data = ((PirateData&)*d);
     IRenderer &r = *m_stack->Renderer;
-    j, 1
     r.setColor( 1, 1, 1, 1 );
 
 

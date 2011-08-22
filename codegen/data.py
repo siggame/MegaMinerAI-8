@@ -92,7 +92,7 @@ Port = Model('Port',
 
 Tile = Model('Tile',
   parent = Mappable,
-  data = [ Variable('type', int, 'land = 0, water = 1'),
+  data = [ Variable('type', float, 'land = 0, water = 1'),
     ],
   doc = 'A basic tile',
 )
