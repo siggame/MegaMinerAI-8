@@ -136,7 +136,7 @@ namespace visualizer
     painter.drawImage( 0, 0, buffer );
     painter.end();
 
-    texture = QGLWidget::convertToGLFormat( fixed );
+    texture = QGLWidget::convertToGLFormat( fixed.mirrored( true, false ) );
 
     glGenTextures( 1, &texId );
     if( texId == 0 )
@@ -285,20 +285,36 @@ namespace visualizer
 
   } // _TextureLoader::loadBMP()
 
+  unsigned int powers[] = { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384 };
+
   void _TextureLoader::loadQImage( unsigned int& texId, QImage& texture )
   {
-    glEnable( GL_TEXTURE_2D );
 
-    QImage fixed( texture.width(), texture.height(), QImage::Format_ARGB32 );
+    int tempW, tempH;
+    for( tempW = 0; tempW < sizeof( powers )/sizeof(unsigned int); tempW++ )
+    {
+      if( texture.width() <= powers[tempW] )
+        break;
+    }
+
+    for( tempH = 0; tempH < sizeof( powers )/sizeof(unsigned int); tempH++ )
+    {
+      if( texture.height() <= powers[tempH] )
+        break;
+    }
+
+    QImage fixed( powers[tempW], powers[tempH], QImage::Format_ARGB32 );
     QPainter painter(&fixed);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect( fixed.rect(), Qt::transparent );
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage( 0, 0, texture );
+    QRectF t( 0, 0, powers[tempW], powers[tempH] );
+    QRectF s( 0, 0, texture.width(), texture.height() );
+    painter.drawImage( t, texture, s );
     painter.end();
 
-    texture = QGLWidget::convertToGLFormat( fixed );
+    texture = QGLWidget::convertToGLFormat( fixed.mirrored( true, false ) );
 
 
     glGenTextures( 1, &texId );
@@ -327,20 +343,6 @@ namespace visualizer
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 
-#if 0
-    glTexImage2D
-      ( 
-      GL_TEXTURE_2D,
-      0,
-      4,
-      texture.width(),
-      texture.height(),
-      0,
-      GL_RGBA,
-      GL_UNSIGNED_BYTE,
-      texture.bits() 
-      );
-#endif
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(), texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 
 

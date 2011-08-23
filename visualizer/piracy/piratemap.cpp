@@ -15,16 +15,15 @@ namespace visualizer
   {
     int pixels = intf.options->getInt( "unitSize" );
     int mapSize = g.states[0].mapSize;
-    int mWidth /*= m_width*/ = mapSize*pixels;
-    int mHeight /*= m_width*/ = mapSize*pixels;
+    int mWidth = mapSize*pixels;
+    int mHeight = mapSize*pixels;
     mapW = mapH = mapSize;
     Renderer = intf.renderer;
-    int m_power;
 
     int **depthMap = new int*[mWidth];
     int tx = 0;
     int ty = 0;
-#if 1
+
     // Set the depthmap to sealevel
     for( int x = 0; x < mWidth; x++ )
     {
@@ -97,30 +96,32 @@ namespace visualizer
     ResTexture r;
 
 
+    const QImage& i1 = ((ResTexture*)intf.resourceManager->reference( "proc1", "pirateMap" ))->getQImage();
+    const QImage& i2 = ((ResTexture*)intf.resourceManager->reference( "proc2", "pirateMap" ))->getQImage();
+    const QImage& i4 = ((ResTexture*)intf.resourceManager->reference( "proc4", "pirateMap" ))->getQImage();
+    const QImage& i5 = ((ResTexture*)intf.resourceManager->reference( "proc5", "pirateMap" ))->getQImage();
+    const QImage& i6 = ((ResTexture*)intf.resourceManager->reference( "proc6", "pirateMap" ))->getQImage();
+    const QImage& i9 = ((ResTexture*)intf.resourceManager->reference( "proc9", "pirateMap" ))->getQImage();
     QImage textures[10] =
       {
-        ((ResTexture*)intf.resourceManager->reference( "proc1", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc2", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc3", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc4", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc5", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc6", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc7", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc8", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc9", "pirateMap" ))->getQImage(),
-        ((ResTexture*)intf.resourceManager->reference( "proc10", "pirateMap" ))->getQImage()
+        i1,
+        i2,
+        i2,
+        i4,
+        i5,
+        i6,
+        i6,
+        i6,
+        i9,
+        i9
       };
 
     intf.resourceManager->release( "proc1", "pirateMap" );
     intf.resourceManager->release( "proc2", "pirateMap" );
-    intf.resourceManager->release( "proc3", "pirateMap" );
     intf.resourceManager->release( "proc4", "pirateMap" );
     intf.resourceManager->release( "proc5", "pirateMap" );
     intf.resourceManager->release( "proc6", "pirateMap" );
-    intf.resourceManager->release( "proc7", "pirateMap" );
-    intf.resourceManager->release( "proc8", "pirateMap" );
     intf.resourceManager->release( "proc9", "pirateMap" );
-    intf.resourceManager->release( "proc10", "pirateMap" );
 
 
     int depths[10] =
@@ -137,18 +138,7 @@ namespace visualizer
       intf.options->getInt( "depth10" )
     };
 
-    int temp;
-    for( temp = 0; temp<16; temp++ )
-    {
-      if( mWidth <= powers[temp] )
-        break;
-    }
-
-    m_power = powers[temp];
-
-    cout << "Power: " << m_power << endl;
-
-    QImage result( m_power, m_power, QImage::Format_RGB32 );
+    QImage result( mWidth, mHeight, QImage::Format_RGB32 );
 
     for( int x = 0; x < mWidth; x++ )
     {
@@ -157,8 +147,6 @@ namespace visualizer
         result.setPixel( x, y, interpolate( x, y, 10, textures, depths, depthMap[x][y] ) );
       }
     }
-#endif
-
 
     intf.resourceManager->loadTexture( result, "mapTexture" );
 

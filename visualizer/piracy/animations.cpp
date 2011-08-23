@@ -95,6 +95,15 @@ namespace visualizer
   void AttackAnim::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
+    if( t >= startTime && t <= endTime )
+    {
+      float x = m_stack->m_x + (m_targetX-m_stack->m_x)*(t-startTime)/(endTime-startTime);
+      float y = m_stack->m_y + (m_targetY-m_stack->m_y)*(t-startTime)/(endTime-startTime);
+
+      // Only draw when it's time.
+      m_stack->Renderer->drawTexturedQuad( x, y, 1, 1, "cannonball" );
+
+    }
   }
 
   void TalkAnim::animate( const float& t, AnimData *d )
@@ -106,15 +115,7 @@ namespace visualizer
   {
     PirateData& data = ((PirateData&)*d);
     IRenderer &r = *m_stack->Renderer;
-
-    if( m_stack->m_owner == 0 )
-      r.setColor( 1, 0, 0 );
-    else if( m_stack->m_owner == 1 )
-      r.setColor( 0, 1, 0 );
-    else
-      r.setColor( 0, 0, 1 );
-
-    r.setColor( 1, 1, 1 );
+    r.setColor( 1, 1, 1, 1 );
 
 
     if( m_stack->m_ships )
@@ -140,7 +141,7 @@ namespace visualizer
       }
       else
       {
-        r.drawTexturedQuad( data.x, data.y, 1, 1, "portNPC" );
+        r.drawTexturedQuad( data.x, data.y, 1, 1, "shipDead" );
       }
     }
     else if( m_stack->m_pirates )

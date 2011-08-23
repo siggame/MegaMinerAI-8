@@ -142,46 +142,6 @@ namespace visualizer
     int x = s.a_x;
     int y = s.a_y;
 
-    if( a != state->animations.end() )
-    {
-      for
-        (
-        std::vector<Animation*>::iterator i = a->second.begin();
-        i != a->second.end();
-        i++
-        )
-      {
-        switch( (*i)->type )
-        {
-          case MOVE:
-            keyFrame++;
-            break;
-          case TALK:
-            {
-              Talk* t = ((Talk*)(*i));
-              s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
-            } break;
-          case PIRATEATTACK:
-          case SHIPATTACK:
-            {
-              Pirateattack* t = ((Pirateattack*)(*i));
-              s.addSubFrame
-                ( 
-                keyFrame, 
-                new AttackAnim
-                  ( 
-                  state->mappables[ t->victim ].x, 
-                  state->mappables[ t->victim ].y 
-                  ) 
-                );
-            } break;
-          default:
-            THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
-            break;
-        }
-      }
-    }
-
     if( state->turnNumber > 0 )
     {
       if( newAnim )
@@ -207,6 +167,7 @@ namespace visualizer
 
         while( x != unit.x || y != unit.y )
         {
+          keyFrame++;
           if( unit.x > x )
           {
             x++;
@@ -235,6 +196,45 @@ namespace visualizer
       } 
     }
 
+
+    if( a != state->animations.end() )
+    {
+      for
+        (
+        std::vector<Animation*>::iterator i = a->second.begin();
+        i != a->second.end();
+        i++
+        )
+      {
+        switch( (*i)->type )
+        {
+          case MOVE:
+            break;
+          case TALK:
+            {
+              Talk* t = ((Talk*)(*i));
+              s.addSubFrame( keyFrame, new TalkAnim( t->message ) );
+            } break;
+          case PIRATEATTACK:
+          case SHIPATTACK:
+            {
+              Pirateattack* t = ((Pirateattack*)(*i));
+              s.addKeyFrame
+                ( 
+                new AttackAnim
+                  ( 
+                  t->attackx,
+                  t->attacky,
+                  &s
+                  ) 
+                );
+            } break;
+          default:
+            THROW( Exception, "Unknown Animation Used: %d", (*i)->type );
+            break;
+        }
+      }
+    }
     if( newAnim )
     {
       s.addKeyFrame( new DrawStack( &s ) );
@@ -270,19 +270,28 @@ namespace visualizer
     {
       StackOrganizer<MoveList, Stack> so;
 
-
-      foreach( Pirate, pirates, i ) 
+      foreach( Port, ports, i )
       {
-        Stack &s = so.getStack( getMoves( i->second, state ) );
-        s.m_pirates++;
-        s.m_owner     =   i->second.owner;
-        s.m_health    +=  i->second.health;
-        s.m_maxHealth +=  PIRATE_HEALTH;
-        s.m_gold      +=  i->second.gold;
-        s.m_strength  +=  i->second.strength;
+        // Ports don't animate.  Don't need to run getMoves on this one
+        Stack &s = so.getStack( MoveList( -i->second.x, -i->second.y ) );
+        s.m_ports++;
+        s.m_owner     = i->second.owner;
         s.m_x = i->second.x;
         s.m_y = i->second.y;
-        s.m_pirateIds.push_back( i->first );
+        s.m_portIds.push_back( i->first );
+        s.Renderer    = m_intf.renderer;
+
+        updateAnimations( i->second, state, s );
+      }
+
+      foreach( Treasure, treasures, i )
+      {
+        // Treasure doesn't animate.  Don't need to run getMoves on this one
+        Stack &s      = so.getStack( MoveList( -i->second.x, -i->second.y ) );
+        s.m_gold      += i->second.gold;
+        s.m_x = i->second.x;
+        s.m_y = i->second.y;
+        s.m_goldIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
         updateAnimations( i->second, state, s );
@@ -305,28 +314,18 @@ namespace visualizer
         updateAnimations( i->second, state, s );
       } 
 
-      foreach( Port, ports, i )
+      foreach( Pirate, pirates, i ) 
       {
-        // Ports don't animate.  Don't need to run getMoves on this one
-        Stack &s = so.getStack( MoveList( i->second.x, i->second.y ) );
-        s.m_ports++;
-        s.m_owner     = i->second.owner;
+        Stack &s = so.getStack( getMoves( i->second, state ) );
+        s.m_pirates++;
+        s.m_owner     =   i->second.owner;
+        s.m_health    +=  i->second.health;
+        s.m_maxHealth +=  PIRATE_HEALTH;
+        s.m_gold      +=  i->second.gold;
+        s.m_strength  +=  i->second.strength;
         s.m_x = i->second.x;
         s.m_y = i->second.y;
-        s.m_portIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
-
-        updateAnimations( i->second, state, s );
-      }
-
-      foreach( Treasure, treasures, i )
-      {
-        // Treasure doesn't animate.  Don't need to run getMoves on this one
-        Stack &s      = so.getStack( MoveList( i->second.x, i->second.y ) );
-        s.m_gold      += i->second.gold;
-        s.m_x = i->second.x;
-        s.m_y = i->second.y;
-        s.m_goldIds.push_back( i->first );
+        s.m_pirateIds.push_back( i->first );
         s.Renderer    = m_intf.renderer;
 
         updateAnimations( i->second, state, s );
