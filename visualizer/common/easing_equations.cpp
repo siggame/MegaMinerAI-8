@@ -1,11 +1,9 @@
 #include "easing_equations.h"
 
-//TODO----> Actually test all of these equations for accuracy
-//
-//
-//
-namespace easing_equations
+namespace EasingEquations
 {
+
+  // Linear Easing
   double easeInLinear(double t, double b, double c, double d)
   {
     return c*t/d + b;
@@ -19,6 +17,7 @@ namespace easing_equations
     return c*t/d + b;
   }
 
+  // Quadratic Easing
   double easeInQuad(double t, double b, double c, double d)
   {
     t/=d;
@@ -31,7 +30,7 @@ namespace easing_equations
   }
   double easeInOutQuad(double t, double b, double c, double d)
   {
-    t/=d;
+    t/=d/2;
     if (t < 1)
     {
       return c/2*t*t + b;
@@ -40,6 +39,7 @@ namespace easing_equations
     return -c/2 * (t*(t-2) - 1) + b;
   }
 
+  // Cubic Easing
   double easeInCubic(double t, double b, double c, double d)
   {
     t/=d;
@@ -52,7 +52,7 @@ namespace easing_equations
   }
   double easeInOutCubic(double t, double b, double c, double d)
   {
-    t/=d;
+    t/=d/2;
     if (t < 1)
     {
       return c/2*t*t*t + b;
@@ -61,6 +61,7 @@ namespace easing_equations
     return c/2*(t*t*t + 2) + b;
   }
 
+  // Quart Easing
   double easeInQuart(double t, double b, double c, double d)
   {
     t/=d;
@@ -82,6 +83,7 @@ namespace easing_equations
 		return -c/2 * (t*t*t*t - 2) + b;
   }
 
+  // Quint Easing
   double easeInQuint(double t, double b, double c, double d)
   {
     t/=d;
@@ -103,117 +105,116 @@ namespace easing_equations
 		return c/2*(t*t*t*t*t + 2) + b;
   }
 
-  //TODO ----> Figure out how to get these Trig functions working
-  /*
+  // Sine Easing
   double easeInSine(double t, double b, double c, double d)
   {
-    return -c * Math.cos(t/d * (Math.PI/2)) + c + b;
+    return -c * cos(t/d * (3.14159265/2)) + c + b;
   }
   double easeOutSine(double t, double b, double c, double d)
   {
-    return c * Math.sin(t/d * (Math.PI/2)) + b;
+    return c * sin(t/d * (3.14159265/2)) + b;
   }
   double easeInOutSine(double t, double b, double c, double d)
   {
-    return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
+    return -c/2 * (cos(3.14159265*t/d) - 1) + b;
   }
-  */
 
-  //TODO ----> Figure out how to get these Exp. functions working
-  /*
+  // Exponential Easing
   double easeInExpo(double t, double b, double c, double d)
   {
-    return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+    return (t==0) ? b : c * pow(2, 10 * (t/d - 1)) + b;
   }
   double easeOutExpo(double t, double b, double c, double d)
   {
-    return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+    return (t==d) ? b+c : c * (-pow(2, -10 * t/d) + 1) + b;
   }
   double easeInOutExpo(double t, double b, double c, double d)
   {
     if (t==0) return b;
 		if (t==d) return b+c;
     t/=(d/2);
-		if (t < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
-		return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+		if (t < 1) return c/2 * pow(2, 10 * (t - 1)) + b;
+		return c/2 * (-pow(2, -10 * --t) + 2) + b;
   }
-  */
 
-  //TODO ----> Figure out how to get these Sqrt. functions working
-  /*
+  // Circular Easing
   double easeInCirc(double t, double b, double c, double d)
   {
     t/=d;
-    return -c * (Math.sqrt(1 - t*t) - 1) + b;
+    return -c * (sqrt(1 - t*t) - 1) + b;
   }
   double easeOutCirc(double t, double b, double c, double d)
   {
     t=t/d-1;
-    return c * Math.sqrt(1 - t*t) + b;
+    return c * sqrt(1 - t*t) + b;
   }
   double easeInOutCirc(double t, double b, double c, double d)
   {
     t/=(d/2);
-    if (t < 1) return -c/2 * (Math.sqrt(1 - t*t) - 1) + b;
+    if (t < 1) return -c/2 * (sqrt(1 - t*t) - 1) + b;
     t-=2;
-		return c/2 * (Math.sqrt(1 - t*t) + 1) + b;
+		return c/2 * (sqrt(1 - t*t) + 1) + b;
   }
-  */
 
-  //TODO ----> Figure out how to get these Math functions working
-  /*
-  double easeInElastic(double t, double b, double c, double d
-    double a, double p)
+  // Elastic Easing
+  double easeInElastic(double t, double b, double c, double d,
+    double a=0, double p=0)
   {
     if (t==0) return b;
     t/=d;
     if (t==1) return b+c;
-    if (!p) p=d*.3;
-		if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		return -(a*Math.pow(2,10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
+    if(p==0) p=d*.3;
+    double s;
+		if (a==0 || a < abs(c)) { a=c; s=p/4; }
+		else s = p/(2*3.14159265) * asin (c/a);
+    t-=1;
+		return -(a*pow(2,10*t) * sin( (t*d-s)*(2*3.14159265)/p )) + b;
   }
-  double easeOutElastic(double t, double b, double c, double d
-    double a, double p)
+  double easeOutElastic(double t, double b, double c, double d,
+    double a=0, double p=0)
   {
     if (t==0) return b;  
     t/=d;
-    if (t==1) return b+c;  if (!p) p=d*.3;
-		if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
-		return (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p ) + c + b);
+    if (t==1) return b+c;
+    if(p==0) p=d*.3;
+    double s;
+		if ( a==0 || a < abs(c)) { a=c; s=p/4; }
+		else s = p/(2*3.14159265) * asin (c/a);
+		return (a*pow(2,-10*t) * sin( (t*d-s)*(2*3.14159265)/p ) + c + b);
   }
-  double easeInOutElastic(double t, double b, double c, double d
-    double a, double p)
+  double easeInOutElastic(double t, double b, double c, double d,
+    double a=0, double p=0)
   {
     if (t==0) return b;  
     t/=(d/2);
-    if (t==2) return b+c;  if (!p) p=d*(.3*1.5);
-		if (!a || a < Math.abs(c)) { a=c; var s=p/4; }
-		else var s = p/(2*Math.PI) * Math.asin (c/a);
+    if (t==2) return b+c;
+    if(p==0) p=d*.3*1.5;
+    double s;
+		if (a==0 || a < abs(c)) { a=c; s=p/4; }
+		else s = p/(2*3.14159265) * asin (c/a);
+		if (t < 1) 
+    {
+      t-=1;
+      return -.5*(a*pow(2,10*t) * sin( (t*d-s)*(2*3.14159265)/p )) + b;
+    }
     t-=1;
-		if (t < 1) return -.5*(a*Math.pow(2,10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p )) + b;
-    t-=1;
-		return a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*(2*Math.PI)/p )*.5 + c + b;
+		return a*pow(2,-10*t) * sin( (t*d-s)*(2*3.14159265)/p )*.5 + c + b;
   }
-  */
 
-  double easeInBack(double t, double b, double c, double d, double s)
+  // Back Easing
+  double easeInBack(double t, double b, double c, double d, double s = 1.70158)
   {
-    //if (s == undefined) s = 1.70158;
     t/=d;
 		return c*t*t*((s+1)*t - s) + b;
   }
-  double easeOutBack(double t, double b, double c, double d, double s)
+  double easeOutBack(double t, double b, double c, double d, double s = 1.70158)
   {
-    //if (s == undefined) s = 1.70158;
     t=t/d-1;
 		return c*(t*t*((s+1)*t + s) + 1) + b;
   }
   double easeInOutBack(double t, double b, double c, double d,
-      double s)
+      double s = 1.70158)
   {
-    //if (s == undefined) s = 1.70158; 
     t/=(d/2);
     s*=(1.525);
 		if (t < 1) return c/2*(t*t*((s+1)*t - s)) + b;
@@ -222,6 +223,7 @@ namespace easing_equations
 		return c/2*(t*t*((s+1)*t + s) + 2) + b;
   }
 
+  // Bounce Ease
   double easeOutBounce(double t, double b, double c, double d)
   {
     t/=d;

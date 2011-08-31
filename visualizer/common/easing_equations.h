@@ -5,11 +5,31 @@
 
 #ifndef EASING_EQUATIONS_H
 #define EASING_EQUATIONS_H
+#include <cmath>
+using namespace std;
 
 namespace EasingEquations
 {
   /////////////////////////////////////////////////////////////////////////////
-  /// @fn linearTween ( double t, double b, double c, double d )
+  /// @fn easeInLinear ( double t, double b, double c, double d )
+  /// @brief Simple linear tweening, no easing.
+  /// @param t The current time.
+  /// @param b The beginning value.
+  /// @param c The change in value.
+  /// @param d The duration.
+  /////////////////////////////////////////////////////////////////////////////
+  
+  /////////////////////////////////////////////////////////////////////////////
+  /// @fn easeOutLinear ( double t, double b, double c, double d )
+  /// @brief Simple linear tweening, no easing.
+  /// @param t The current time.
+  /// @param b The beginning value.
+  /// @param c The change in value.
+  /// @param d The duration.
+  /////////////////////////////////////////////////////////////////////////////
+  
+  /////////////////////////////////////////////////////////////////////////////
+  /// @fn easeInOutLinear ( double t, double b, double c, double d )
   /// @brief Simple linear tweening, no easing.
   /// @param t The current time.
   /// @param b The beginning value.
