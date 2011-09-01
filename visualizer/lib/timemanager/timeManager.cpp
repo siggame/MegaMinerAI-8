@@ -199,8 +199,6 @@ namespace visualizer
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
 
-    cout << m_turn << endl;
-    cout << m_turnCompletion << endl;
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );

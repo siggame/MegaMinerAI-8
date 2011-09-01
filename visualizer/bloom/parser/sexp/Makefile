@@ -4,6 +4,7 @@ libclient_objects = $(sources:%.c=libclient_%.o)
 deps = $(sources:%.c=%.d)
 
 all: sexp.a libclient_sexp.a
+CFLAGS += -fPIC
 
 clean:
 	rm -f $(objects) $(libclient_objects) $(deps) sexp.a libclient_sexp.a

@@ -116,17 +116,30 @@ namespace visualizer
                   addBool(namebuff,ss,lineNum);
                   break;
                 default:
-                  std::cout << "Option Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
+                  THROW
+                    (
+                      Exception,
+                      "Option Load Error Line %d: \"%s\" is not a type.", 
+                      lineNum, typebuff.c_str()
+                    );
               }
             }
             else
             {
-              std::cout << "Option Load Error Line "<< lineNum << ": Option name already exists\n";
+              THROW
+                (
+                  Exception,
+                  "Option Load Error Line %d: Option name already exists.", lineNum
+                );
             }
           }
           else
           {
-            std::cout << "Option Load Error Line "<< lineNum << ": Name buffer read error\n";
+            THROW
+              (
+                Exception,
+                "Option Load Error Line %d: Name buff read error.", lineNum
+              )
           }
         }
       }
@@ -218,12 +231,23 @@ namespace visualizer
       }
       catch (std::string s)
       {
-        std::cout << "Option Load Error Line "<< lineNum << ": \"" << valbuff << "\" " << s <<"\n";
+        THROW
+          (
+            Exception,
+            "Option Load Error Line %d: \"%s\" %s", lineNum, valbuff.c_str(), s.c_str()
+          );
       }
       return true;
     }
-    std::cout << "Option Load Error Line "<< lineNum << ": Invalid bool value\n";
+
+    THROW
+      (
+        Exception,
+        "Option Load Error Line %d: Invalid bool value.", lineNum
+      );
+
     return false;
+
   }
 
 
@@ -249,7 +273,12 @@ namespace visualizer
       return true;
     }
 
-    std::cout << "Option Load Error Line "<< lineNum << ": Invalid float value\n";
+    THROW
+      (
+        Exception,
+        "Option Load Error Line %d: Invalid float value.", lineNum
+      );
+
     return false;
   }
 
@@ -277,7 +306,12 @@ namespace visualizer
       return true;
     }
 
-    std::cout << "Option Load Error Line "<< lineNum << ": Invalid integer value\n";
+    THROW
+      (
+        Exception,
+        "Option Load Error Line %d: Invalid integer value.", lineNum
+      );
+
     return false;
   }
 
@@ -310,7 +344,12 @@ namespace visualizer
       //Mutex->createMutex(namebuff);
       return true;
     }
-    std::cout << "Option Load Error Line "<< lineNum << ": Invalid ...string value? How did you pull that one off?\n";
+
+    THROW
+      (
+        Exception,
+        "Option Load Error Line %d: Invalid ... string value?  How did you pull that one off?", lineNum
+      );
 
     return false;
   }
@@ -368,7 +407,12 @@ namespace visualizer
           }
           break;
         default:                   //shouldn't happen, this is for the warnings
-          std::cout << "ERROR IN SAVING OPTIONS!!: a variable has no type!\n";
+          THROW
+          (
+            Exception,
+            "Error saving options!!: A variable has no type!."
+          );
+          break;
       }
 
     }
@@ -543,13 +587,21 @@ namespace visualizer
   {
     if (!exists(oName))
     {
-      std::cout << "Object: \"" << oName << "\" doesn't exist\n";
+      THROW
+        (
+          Exception,
+          "Object: \"%s\" doesn't exist.", oName.c_str()
+        );
       return;
     }
 
     if (optionType(oName) != OT)
     {
-      std::cout << "Setting option \"" << oName << "\" to wrong type\n";
+      THROW
+        (
+          Exception,
+          "Setting option \"%s\" to wrong type.", oName.c_str()
+        );
       return;
     }
 

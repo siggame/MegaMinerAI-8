@@ -21,8 +21,8 @@ namespace visualizer
   LogRegex Piracy::logFileInfo()
   {
     LogRegex lr;
-    lr.regex = "\(\"ident\"";
-    lr.startSize = 9;
+    lr.regex = "Pirate";
+    lr.startSize = 500;
     
     return lr;
   } /* Piracy::logFileInfo() */
