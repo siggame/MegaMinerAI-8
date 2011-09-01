@@ -9,7 +9,7 @@ else:LIBS += ./parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
 TARGET = bloom 
-SOURCES += bloom.cpp \
+SOURCES += *.cpp \
   ./parser/*.cpp
   
 HEADERS += bloom.h

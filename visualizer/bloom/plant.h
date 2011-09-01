@@ -1,6 +1,9 @@
 #ifndef PLANT_H
 #define PLANT_H
 
+#include "animatable.h"
+#include "ianimator.h"
+
 namespace visualizer
 {
 

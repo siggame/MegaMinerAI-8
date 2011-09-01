@@ -1,6 +1,7 @@
 #include "bloom.h"
 #include "plant.h"
 #include "frame.h"
+#include "animations.h"
 
 namespace visualizer
 {
@@ -59,8 +60,11 @@ namespace visualizer
         )
       {
         plant *p = new plant;
+        p->addKeyFrame( new StartAnim( p ) );
 
 
+
+        p->addKeyFrame( new DrawAnim( p ) );
         turn.addAnimatable( p );
 
       }
