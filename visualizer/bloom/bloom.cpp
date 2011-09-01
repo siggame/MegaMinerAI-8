@@ -1,4 +1,5 @@
 #include "bloom.h"
+#include "plant.h"
 
 namespace visualizer
 {
@@ -25,6 +26,7 @@ namespace visualizer
   
   void Bloom::loadGamelog( std::string gamelog )
   {
+
     cout << "Load Bloom Gamelog" << endl;
     delete m_game;
     m_game = new Game;
@@ -35,6 +37,28 @@ namespace visualizer
         (
           GameException, "Cannot Load The Gamelog."
         );
+
+      m_intf.resourceManager->loadResourceFile( "./plugins/bloom/textures.r" );
+    }
+
+    for
+      (
+      std::vector<GameState>::iterator state = m_game->states.begin();
+      state != m_game->states.end();
+      state++
+      )
+    {
+      for
+        (
+        std::vector<Plant>::iterator i = state->plants.begin();
+        i != state->plants.end();
+        i++
+        )
+      {
+        plant p;
+
+      }
+
     }
 
   } // Bloom::loadGamelog()
