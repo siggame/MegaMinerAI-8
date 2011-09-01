@@ -34,6 +34,7 @@ namespace visualizer
 
   void Piracy::loadGamelog( std::string gamelog )
   {
+    cout << "Load Piracy Gamelog" << endl;
     delete m_game;
     m_game = new Game;
     if( !parseFile( *m_game, gamelog.c_str() ) )

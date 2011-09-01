@@ -129,7 +129,8 @@ void _GUI::loadGamelog( std::string gamelog )
       char *logStart = new char[ (*i)->logFileInfo().startSize+1 ];
       file_gamelog.get( logStart, (*i)->logFileInfo().startSize );
 
-      if( rx.indexIn( logStart ) )
+      cout << logStart << endl;
+      if( rx.indexIn( logStart ) != -1 )
       {
         (*i)->loadGamelog( gamelog );
         parserFound = true;
