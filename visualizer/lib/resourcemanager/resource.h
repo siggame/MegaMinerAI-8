@@ -2,104 +2,142 @@
 #define RESOURCE_H
 #include <set>
 #include <string>
+#include <QImage>
 #include "typedefs.h"
 
 #ifdef DEBUG
 #include <iostream>
 #endif
 
-
-
-class Resource
+namespace visualizer
 {
-	public:
-		/** Default constructor */
-		Resource(ResourceType type)
-		{
-			m_type = type;
-		}
 
-		/** Default destructor */
-		virtual ~Resource(){}
+  class Resource
+  {
+    public:
+      /** Default constructor */
+      Resource(ResourceType type)
+      {
+        m_type = type;
+      }
 
-		virtual bool load(const std::string & filename) = 0;
-		virtual bool unload()
-		{
-			return true;
-		}
+      /** Default destructor */
+      ~Resource(){}
 
-		ResourceType type()
-		{
-			return m_type;
-		}
+      bool unload()
+      {
+        return true;
+      }
 
-        inline bool isReferencedBy(const std::string & referencer)
+      ResourceType type()
+      {
+        return m_type;
+      }
+
+      inline bool isReferencedBy(const std::string & referencer)
+      {
+        if (m_references.find(referencer) != m_references.end())
         {
-            if (m_references.find(referencer) != m_references.end())
-            {
-                return true;
-            }
-            return false;
+          return true;
+        }
+        return false;
+      }
+
+      inline std::set<std::string> referenceList()
+      {
+        return m_references;
+      }
+
+      inline unsigned int numReferences()
+      {
+        return m_references.size();
+      }
+
+    #ifdef DEBUG
+      void printReferences()
+      {
+        std::cout << "References:\n"
+          for (std::set<std::string>::iterator it = m_references.begin();
+          it != m_references.end(); it++)
+        {
+          std::cout << *it << '\n';
+        }
+      }
+    #endif
+
+      inline bool reference(const std::string & referencer)
+      {
+        if (!isReferencedBy(referencer))
+        {
+          m_references.insert(referencer);
+          return true;
         }
 
-        inline std::set<std::string> referenceList()
+      #ifdef DEBUG
+        std::cout << "Referencer: \"" << reference << "\" already exists\n";
+      #endif
+        return false;
+      }
+
+      inline bool deReference(const std::string & referencer)
+      {
+        if (isReferencedBy(referencer))
         {
-            return m_references;
+          m_references.erase(referencer);
+          return true;
         }
 
-        inline unsigned int numReferences()
-        {
-            return m_references.size();
-        }
+      #ifdef DEBUG
+        std::cout << "Referencer: \"" << reference << "\" doesn't exist\n";
+      #endif
+        return false;
+      }
 
-        #ifdef DEBUG
-		void printReferences()
-		{
-		    std::cout << "References:\n"
-		    for (std::set<std::string>::iterator it = m_references.begin();
-                    it != m_references.end(); it++)
-            {
-                std::cout << *it << '\n';
-            }
-		}
-		#endif
+    protected:
+      ResourceType m_type;
+      std::set<std::string> m_references;
+      std::string filename;
+    private:
+  };
 
-        inline bool reference(const std::string & referencer)
-        {
-            if (!isReferencedBy(referencer))
-            {
-                m_references.insert(referencer);
-                return true;
-            }
+  class ResTexture : public Resource
+  {
+    private:
+      QImage texture;
+      unsigned int texId;
+    public:
+      const QImage& getQImage() const 
+      { 
+        return texture; 
+      }
 
-            #ifdef DEBUG
-            std::cout << "Referencer: \"" << reference << "\" already exists\n";
-            #endif
-            return false;
-        }
+      ResTexture() 
+        : Resource(RT_TEXTURE), texId(0)
+      {}
 
-        inline bool deReference(const std::string & referencer)
-        {
-            if (isReferencedBy(referencer))
-            {
-                m_references.erase(referencer);
-                return true;
-            }
+      ResTexture(const QImage &image, const int& id )
+        : Resource(RT_TEXTURE), texId( id )
+      {
+        texture = image;
+      }
 
-            #ifdef DEBUG
-            std::cout << "Referencer: \"" << reference << "\" doesn't exist\n";
-            #endif
-            return false;
-        }
+      int getWidth()
+      {
+        return texture.width();
+      }
 
+      int getHeight()
+      {
+        return texture.height();
+      }
 
-	protected:
-	ResourceType m_type;
-	std::set<std::string> m_references;
-	std::string filename;
-	private:
-};
+      int getTexture()
+      {
+        return texId;
+      }
+  };
 
 
+} // visualizer
 
-#endif // RESOURCE_H
+#endif                           // RESOURCE_H

@@ -92,7 +92,7 @@ Port = Model('Port',
 
 Tile = Model('Tile',
   parent = Mappable,
-  data = [ Variable('type', int, 'land = 0, water = 1'),
+  data = [ Variable('type', float, 'land = 0, water = 1'),
     ],
   doc = 'A basic tile',
 )
@@ -105,13 +105,17 @@ Treasure = Model('Treasure',
 )
 
 move = Animation("Move",
-  data = [Variable("unit", Unit), Variable("x", str), Variable("y",str)]
+  data = [Variable("unit", Unit), Variable("x", int), Variable("y",int)]
   )
 
-attack = Animation("Attack",
-  data = [Variable("attacker", Unit), Variable("victim", Unit)]
+shipAttack = Animation("Shipattack",
+  data = [Variable("attacker", Unit), Variable("attackx", int), Variable( "attacky", int )]
   )
-  
+ 
+pirateAttack = Animation("Pirateattack",
+  data = [Variable("attacker", Unit), Variable("attackx", int), Variable( "attacky", int )]
+  )
+   
 talk = Animation("Talk",
   data = [Variable("speaker", Unit), Variable("message", str)]
   ) 

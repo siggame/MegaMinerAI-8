@@ -1,107 +1,110 @@
-
 #include <iostream>
 #include "lib/gui/gui.h"
 #include "lib/optionsmanager/optionsman.h"
 #include "lib/timemanager/timeManager.h"
-#include "lib/mutex/Mutex.h"
-#include "lib/threadler/threadler.h"
 #include "lib/resourcemanager/resourceman.h"
 #include "lib/resourcemanager/texture.h"
 #include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
-#include "piracy/dupObj.h"
+#include "lib/games/games.h"
+#include "lib/resourcemanager/textureloader.h"
+//#include "piracy/dupObj.h"
+
+using namespace visualizer;
 
 int main(int argc, char *argv[])
 {
-	typedef Renderer<DupObj> Render;
+  ///////////////////////////////////////////////////////////////////
+  // Must initialize things based on their dependency graphs
+  ///////////////////////////////////////////////////////////////////
 
-	QApplication app( argc, argv );
+  ///////////////////////////////////////////////////////////////////
+  // Options Manager Depends On Mutex
+  ///////////////////////////////////////////////////////////////////
+  OptionsMan->setup();
 
-	if (!OptionsMan::create())
-	    return 1;
-
-	if (!Mutex::create())
-	    return 1;
-
-
-	if( !OptionsMan::loadOptionFile( "./options.cfg" ) )
+	if( !OptionsMan->loadOptionFile( "./options.cfg" ) )
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
-		TimeManager::destroy();
-		OptionsMan::destroy();
-		ResourceMan::destroy();
-		Mutex::destroy();
-		Threadler::destroy();
-		Render::destroy();
-		GUI::destroy();
-		ObjectManager::destroy();
-		ObjectLoader::destroy();
 		return 1;
 	}
-
-	if (!GUI::create())
-	    return 1;
-
-	if (!ResourceMan::create())
-	    return 1;
-
-	if (!Threadler::create())
-	    return 1;
-
-	if (!ObjectManager::create())
-	    return 1;
-
-
-	if (!ObjectLoader::create())
-	    return 1;
-
-	if (!TimeManager::create())
-	    return 1;
-
 
 	// initialize global options
-	OptionsMan::addInt("numTurns",1);
-	OptionsMan::addBool("sliderDragging", false );
-	OptionsMan::addInt( "currentTurn", 0 );
-	// done initializing
+	OptionsMan->addInt("numTurns",1);
+	OptionsMan->addBool("sliderDragging", false );
+	OptionsMan->addInt( "currentTurn", 0 );
 
-	TimeManager::setSpeed( 1 );
+  ///////////////////////////////////////////////////////////////////
+  // Time Manager Depends On Options Manager
+  ///////////////////////////////////////////////////////////////////
 
-	GUI::setup();
-	Render::setup();
+  TimeManager->setup();
 
-	if ( !ResourceMan::loadResourceFile("./textures.r") )
-	{
-		std::cerr << "Could Not Load resource.cfg" << std::endl;
-		TimeManager::destroy();
-		OptionsMan::destroy();
-		ResourceMan::destroy();
-		Mutex::destroy();
-		Threadler::destroy();
-		GUI::destroy();
-		Render::destroy();
-		ObjectManager::destroy();
-		ObjectLoader::destroy();
-		return 1;
-	}
+  ///////////////////////////////////////////////////////////////////
+  // ObjectManager depends on OptionsManager 
+  ///////////////////////////////////////////////////////////////////
+  ObjectManager->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // GUI Depends On This Runing, but it doens't depend on anything.
+  ///////////////////////////////////////////////////////////////////
+	QApplication app( argc, argv );
+
+  ///////////////////////////////////////////////////////////////////
+  // SelectionRender depends on OptionsManager 
+  ///////////////////////////////////////////////////////////////////
+  SelectionRender->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // Resource Manager depends on _______________________
+  ///////////////////////////////////////////////////////////////////
+  ResourceMan->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // Initialize Texture Loader
+  ///////////////////////////////////////////////////////////////////
+  TextureLoader->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // Initialize Animation Engine
+  ///////////////////////////////////////////////////////////////////
+  AnimationEngine->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // GUI Depends On Options Manager, Time Manager, Objectmanager,
+  // SelectionRender, and QApplication running already.
+  // GUI also depends on the renderer, but starts it automagically.
+  ///////////////////////////////////////////////////////////////////
+	GUI->setup();
+
+  ///////////////////////////////////////////////////////////////////
+  // Initalize the Games
+  // This MUST be initialized last, but before loading a gamelog
+  // This assigns all the pointers to the interfaces and so all
+  // the the interfaces must be set up already.
+  ///////////////////////////////////////////////////////////////////
+  Games->setup();
 
 	if( argc > 1 )
 	{
-	    GUI::loadGamelog( argv[1] );
+	    GUI->loadGamelog( argv[1] );
 	}
 
-  TimeManager::timerStart();
+  TimeManager->timerStart();
 
 	int retval = app.exec();
 
-	Render::destroy();
-	TimeManager::destroy();
-	GUI::destroy();
-	OptionsMan::destroy();
-	ResourceMan::destroy();
-	Mutex::destroy();
-	Threadler::destroy();
-	ObjectManager::destroy();
-	ObjectLoader::destroy();
+  Games->destroy();
+  AnimationEngine->destroy();
+  TextureLoader->destroy();
+  ResourceMan->destroy();
+
+  GUI->destroy();
+	Renderer->destroy();
+  ObjectManager->destroy();
+  TimeManager->destroy();
+	OptionsMan->destroy();
+
 	return retval;
 }
+

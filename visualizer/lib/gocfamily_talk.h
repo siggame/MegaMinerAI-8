@@ -4,9 +4,12 @@
 #include <string>
 using namespace std;
 
+namespace visualizer
+{
+
 class GOCFamily_Talk : public GOComponent
 {
-    public:
+  public:
     GOCFamily_Talk(){m_message.clear();}
     GOCFamily_Talk(GameObject * parent){setOwner(parent); m_message.clear();}
     GOCFamily_Talk(GameObject * parent, const string & message){setOwner(parent); m_message = message;}
@@ -19,8 +22,10 @@ class GOCFamily_Talk : public GOComponent
     const GOC_IDType familyID() const { return GOC_IDType("TalkFamily"); }
     void update(){}
 
-protected:
+  protected:
     string m_message;
 };
 
-#endif // GOCFAMILY_HEALTH_H
+} // visualizer
+
+#endif                           // GOCFAMILY_HEALTH_H

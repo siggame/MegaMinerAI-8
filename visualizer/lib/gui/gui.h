@@ -1,299 +1,256 @@
+///////////////////////////////////////////////////////////////////////////////
+/// @file gui.h
+/// @description Contains the GUI interface used by the core visualizer
+///////////////////////////////////////////////////////////////////////////////
 #ifndef GUI_H
 #define GUI_H
 
 #include "centralwidget.h"
 #include "controlbar.h"
 #include "../timemanager/timeManager.h"
-#include "../singleton.h"
-#include "../gocfamily_gui.h"
-#include "../objectmanager/objectloader.h"
-
 
 #include <QtGui>
 #include <QMainWindow>
 #include <QTextEdit>
-#include <QTableWidget>
 #include <QStringList>
-#include <QString>
 #include <map>
-#include <string>
+
+#include "igui.h"
+
 using namespace std;
 
-typedef GOCFamily_GUI guiObj;
+namespace visualizer
+{
 
-////////////////////////////////////////////////////////////////
-/// @class    GUI
-/// @brief    GUI object for drawing debugging info along with
-///           the QOpenGL Widget
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @class _GUI
+/// @brief GUI object for drawing debugging info along with the QOpenGL 
+//// Widget
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       reg( const std::string& id, guiObj *obj )
-/// @brief    Registers the desired object with the gui.  Must
-///           do for controlBar, debugWindow, etc.
-/// @param    id Unique identifier for this object.
-/// @param    obj The object we're registering
-/// @pre      id must be unique and obj must be a valid object
-/// @post     The object will be registered with the GUI
-/// @return   bool True if successfully registered. False,
-///           if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::_clear();
+/// @brief Clears all the objects registered
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       del( const std::string& id )
-/// @brief    Unregisters the desired object from the gui.
-/// @param    id Unique identifier to delete an object.
-/// @pre      id must refer to an object within GUI
-/// @post     The object will be unregistered with the GUI
-/// @return   bool True if successfully unregistered.
-///           False, if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::dropEvent( QDropEvent* evt )
+/// @brief This function is triggered automatically by Qt when an object, 
+/// typically a file, is dropped onto the visualizer.  If the object dropped 
+/// on the visualizer is a gamelog, then the visualizer will open it.
+/// @param evt The details of the drop event.  This object is typically 
+/// managed by Qt.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       setup()
-/// @brief    Sets up the GUI along with the singleton
-/// @pre      Object must have been created beforehand
-/// @post     The GUI will be all setup
-/// @return   bool True if successfully setup.
-///           False, if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::dragEnterEvent( QDragEnterEvent *evt )
+/// @brief This function is triggered automatically by Qt when an object 
+/// is dragged over the visualizer.  
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       clear()
-/// @brief    Destroys the instance to the GUI.
-/// @pre      GUI must exist for it to be destroyed.
-/// @post     The GUI instance will be destroyed.
-/// @return   bool True if successfully destroyed.
-///           False, if otherwise
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::update()
+/// @brief When triggered tell the control bar to update
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       getGUIObject( const std::string& id )
-/// @brief    Get the desired object by name
-/// @param    id Unique identifier to get an object
-/// @pre      Object must be registered with id
-/// @post     The pointer to the object of id will be returned
-/// @return   guiObj* The desired object if found, zero if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::closeGUI()
+/// @brief When triggered, the visualizer closes.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       create()
-/// @brief    Set's up the GUI along with the singleton
-/// @pre      Object must have been created before hand
-/// @post     The GUI will be all setup
-/// @return   bool True if successfully setup.
-///           False, if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::getControlBar()
+/// @brief This returns the current control bar being used if we decide to go
+/// for a modular approach to this.
+/// @note May be removed in future versions of the visualizer.
+/// @return guiObj* A pointer to a control bar guiObj
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       destroy()
-/// @brief    Destroys the instance to the GUI.
-/// @pre      GUI must exist for it to be destroyed.
-/// @post     The GUI instance will be destroyed.
-/// @return   bool True if successfully destroyed.
-///           False, if otherwise
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::appendConsole( string line ) 
+/// @brief This function appends text to the console, like talks and debugging
+/// commands.
+/// @param line The line to be outputted to the console.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       numObjects()
-/// @brief    Get the number of registered objects in GUI
-/// @pre      None
-/// @post     Number of registered objects will be returned.
-/// @return   unsigned int representing the number of objects
-///           in the GUI
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::appendConsole( QString line ) 
+/// @brief This function appends text to the console, like talks and debugging
+/// commands.
+/// @param line The line to be outputted to the console.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       isSetup()
-/// @brief    Is the GUI object setup properly?
-/// @pre      None
-/// @post     Returns whether GUI is setup or not
-/// @return   bool True if setup.  False, if otherwise.
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::clearConsole()
+/// @brief This function clears the console completely.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       resizeEvents( QResizeEvent* evt )
-/// @brief    Deal with a resize action
-/// @param    evt Contains various data related to the event.
-/// @pre      None
-/// @post     Appropriately deals with the window getting resized.
-/// @return   None
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::getFullScreen()
+/// @brief Returns whether or not the visualizer is in fullscreen mode or not.
+/// @return bool Representing the fullscreeniness of the visualizer.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       helpContents()
-/// @brief    Respond to Help->Contents
-/// @pre      None
-/// @post     Opens up a URL to the help page.
-/// @return   None
-////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @fn _GUI::setFullscreen( bool full )
+/// @brief Sets puts the visualizer in fullscreen mode or releases it from
+/// it.
+/// @param full If true is passed, the visualizer is put into fullscreen mode.
+/// If false is passed, the visualizer is released from fullscreen mode.
+///////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////
-/// @fn       doSetup()
-/// @brief    Setup the window
-/// @pre      None
-/// @post     Sets up the Window with the QOpenGL object, menus, etc.
-/// @return   bool True if everything went alright.
-///           False, if otherwise.
-////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////
-/// @fn       createActions()
-/// @brief    Build the actions needed for this GUI
-/// @pre      None
-/// @post     Action set will be built
-/// @return   None
-////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////
-/// @fn       createMenus()
-/// @brief    Build the menus for this window
-/// @pre      None
-/// @post     Menus will be built
-/// @return   None
-////////////////////////////////////////////////////////////////
-
-class GUI : public QMainWindow, public Singleton<GUI>
+/// @TODO Turn this into a module
+class _GUI : public QMainWindow, public IGUI
 {
   Q_OBJECT
-  
+  Q_INTERFACES( visualizer::IGUI );
+
   friend class RenderWidget;
-  
-public:
-  GUI() : m_isSetup(false) {};
-  ~GUI();
-  static bool reg( const std::string& id, guiObj *obj );
-  static bool del( const std::string& id );
 
-  static bool setup();
-  static bool clear();
+  public:
+    _GUI() : m_isSetup(false) {};
+    ~_GUI();
+    /// @TODO  Remove these or revise these
+    bool reg( const std::string& id, guiObj *obj );
+    bool del( const std::string& id );
 
-  static guiObj *getGUIObject( const std::string& id );
+    /// @TODO Revise
+    static bool setup();
+    /// @NOTE Why does this return a boolean?  
+    bool clear();
 
-  static bool create();
-  static bool destroy();
+    /// @TODO Remove or revise
+    guiObj *getGUIObject( const std::string& id );
 
-  static unsigned int numObjects();
+    /// @TODO Revise
+    bool create();
+    bool destroy();
+    unsigned int numObjects();
 
-  static bool isSetup();
+    /// @TODO Remove
+    bool isSetup();
 
-  /// EVENTS
-  void dragEnterEvent( QDragEnterEvent *evt );
-  void dropEvent( QDropEvent* evt );
-  void resizeEvent( QResizeEvent* evt );
+    /// EVENTS
+    void dragEnterEvent( QDragEnterEvent *evt );
+    void dropEvent( QDropEvent* evt );
+    void resizeEvent( QResizeEvent* evt );
 
-  /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
-  static void loadGamelog( std::string gamelog );
+    /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
+    void loadGamelog( std::string gamelog );
 
-  static void update();
-  static void closeGUI();
-  
-  static ControlBar * getControlBar();
+    void update();
+    void closeGUI();
 
-  static void appendConsole( string line );
-  static void appendConsole( QString line );
-  static void clearConsole();
-  
-  bool getFullScreen();
-  void setFullScreen(bool);
-  
-private slots:
-  void helpContents();
-  void fileOpen();
-  void toggleFullScreen();
-  void togglePlayPause();
-  void fastForwardShortcut();
-  void rewindShortcut();
-  void stepTurnForwardShortcut();
-  void stepTurnBackShortcut();
+    /// @TODO Revise or remove until we decide we want to switch out control bars
+    ControlBar * getControlBar();
 
-  void catchEscapeKey();
-  
-  void turnPercentageShortcut1();
-  void turnPercentageShortcut2();
-  void turnPercentageShortcut3();
-  void turnPercentageShortcut4();
-  void turnPercentageShortcut5();
-  void turnPercentageShortcut6();
-  void turnPercentageShortcut7();
-  void turnPercentageShortcut8();
-  void turnPercentageShortcut9();
-  void turnPercentageShortcut0();
+    void appendConsole( string line );
+    void appendConsole( QString line );
+    void clearConsole();
 
-public:
+    bool getFullScreen();
+    void setFullScreen(bool);
 
-  static QTableWidget* getGlobalStats();
-  static QTableWidget* getSelectionStats();
-  static QTableWidget* getIndividualStats();
+  private slots:
+    void helpContents();
+    void fileOpen();
+    void toggleFullScreen();
+    void togglePlayPause();
+    void fastForwardShortcut();
+    void rewindShortcut();
+    void stepTurnForwardShortcut();
+    void stepTurnBackShortcut();
 
-private:
-  
-  QTableWidget * m_globalStats;
-  QTableWidget * m_selectionStats;
-  QTableWidget * m_individualStats;
+    void catchEscapeKey();
 
-  /// Container for the objects in the GUI
-  std::map<std::string, guiObj*> m_objects;
-  /// Setup?
-  bool m_isSetup;
+    void turnPercentageShortcut1();
+    void turnPercentageShortcut2();
+    void turnPercentageShortcut3();
+    void turnPercentageShortcut4();
+    void turnPercentageShortcut5();
+    void turnPercentageShortcut6();
+    void turnPercentageShortcut7();
+    void turnPercentageShortcut8();
+    void turnPercentageShortcut9();
+    void turnPercentageShortcut0();
 
-  //In full screen mode or not?
-  bool fullScreen;
+  public:
 
-  /// Main widget for this window
-  CentralWidget *m_centralWidget;
+    /// @TODO This will probably have to change.
+    QTableWidget* getGlobalStats();
+    QTableWidget* getSelectionStats();
+    QTableWidget* getIndividualStats();
 
-  /// Dock Widget For Debugging Info
-  QDockWidget *m_dockWidget;
+  private:
 
-  /// Frame used to hold layout for widgets in dock
-  QFrame *m_dockLayoutFrame;
+    QTableWidget * m_globalStats;
+    QTableWidget * m_selectionStats;
+    QTableWidget * m_individualStats;
 
-  /// Layout For the Dock Widget
-  QVBoxLayout *m_dockLayout;
+    /// Container for the objects in the GUI
+    std::map<std::string, guiObj*> m_objects;
+    /// Setup?
+    bool m_isSetup;
 
-  /// Console Area
-  QTextEdit *m_consoleArea;
+    //In full screen mode or not?
+    bool fullScreen;
 
-  /// Unit Stats Area
-  QTabWidget * m_unitStatsArea;
-  QStringList m_globalStatsVerticalLabels;
-  QStringList m_globalStatsHorizontalLabels;
-  QStringList m_selectionStatsVerticalLabels;
-  QStringList m_selectionStatsHorizontalLabels;
-  QStringList m_individualStatsVerticalLabels;
-  QStringList m_individualStatsHorizontalLabels;
+    /// Main widget for this window
+    CentralWidget *m_centralWidget;
 
-  /// Status Bar
-  QStatusBar *m_statusBar;
+    /// Dock Widget For Debugging Info
+    QDockWidget *m_dockWidget;
 
-  /// Control Bar
-  ControlBar *m_controlBar;
+    /// Frame used to hold layout for widgets in dock
+    QFrame *m_dockLayoutFrame;
 
-  /// Debugging Toolset Widget Within the Dock
-  GOCFamily_GUIToolSet *m_toolSetWidget;
+    /// Layout For the Dock Widget
+    QVBoxLayout *m_dockLayout;
 
-  bool doSetup();
-  void buildControlBar();
-  void createActions();
-  void createMenus();
-  void buildToolSet();
-  void initUnitStats();
+    /// Console Area
+    QTextEdit *m_consoleArea;
 
-  void turnPercentageCalc(int);
+    /// Unit Stats Area
+    QTabWidget * m_unitStatsArea;
+    QStringList m_globalStatsVerticalLabels;
+    QStringList m_globalStatsHorizontalLabels;
+    QStringList m_selectionStatsVerticalLabels;
+    QStringList m_selectionStatsHorizontalLabels;
+    QStringList m_individualStatsVerticalLabels;
+    QStringList m_individualStatsHorizontalLabels;
 
+    /// Status Bar
+    QStatusBar *m_statusBar;
 
-  // Actions
-  QAction *m_helpContents; /// Help->Contents
+    /// Control Bar
+    ControlBar *m_controlBar;
 
-  QAction *m_fileOpen; /// File->Open
-  QAction *m_fileExit; /// File->Exit
+    /// Debugging Toolset Widget Within the Dock
+    GOCFamily_GUIToolSet *m_toolSetWidget;
 
-  QAction *toggleFullScreenAct; /// View -> Toggle Full Screen
-  
-  QString m_previousDirectory;
-	QRect m_normalWindowGeometry;
+    bool doSetup();
+    void buildControlBar();
+    void createActions();
+    void createMenus();
+    void buildToolSet();
+    void initUnitStats();
+
+    void turnPercentageCalc(int);
+
+    // Actions
+    QAction *m_helpContents;     /// Help->Contents
+
+    QAction *m_fileOpen;         /// File->Open
+    QAction *m_fileExit;         /// File->Exit
+
+    QAction *toggleFullScreenAct;/// View -> Toggle Full Screen
+
+    QString m_previousDirectory;
+    QRect m_normalWindowGeometry;
 
 };
 
+extern _GUI *GUI;
+
+}
 #endif

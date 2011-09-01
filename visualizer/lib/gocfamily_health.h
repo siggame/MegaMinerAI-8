@@ -2,9 +2,12 @@
 #define GOCFAMILY_HEALTH_H
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOCFamily_Health : public GOComponent
 {
-    public:
+  public:
     GOCFamily_Health(){m_currentHealth = 0;}
     GOCFamily_Health(GameObject * parent){setOwner(parent);m_currentHealth = 0;}
     GOCFamily_Health(GameObject * parent, const int & currentHealth,const int & maxHealth){setOwner(parent);m_currentHealth = currentHealth;m_maxHealth = maxHealth;}
@@ -22,9 +25,11 @@ class GOCFamily_Health : public GOComponent
     const GOC_IDType familyID() const { return GOC_IDType("HealthFamily"); }
     void update(){}
 
-protected:
+  protected:
     unsigned int m_currentHealth;
     unsigned int m_maxHealth;
 };
 
-#endif // GOCFAMILY_HEALTH_H
+} // visualizer
+
+#endif                           // GOCFAMILY_HEALTH_H

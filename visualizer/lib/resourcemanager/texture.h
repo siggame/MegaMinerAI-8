@@ -6,42 +6,46 @@
 #include <QPainter>
 #include <QString>
 
-//prototypes
-bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
-bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
-bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
-bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
-
-
-
-class ResTexture : public Resource
+#if 0
+namespace visualizer
 {
-	private:
-		QImage texture;
-		unsigned int texId;
-	public:
-    const QImage& getQImage() const { return texture; }
 
-		bool load( const std::string & path );
-    bool load( const QImage& img );
-		ResTexture():Resource(RT_TEXTURE), texId(0){}
-		ResTexture(const std::string & path):Resource(RT_TEXTURE){load(path);}
+  //prototypes
+  bool loadTIFF(const QString & path, unsigned int & texId, QImage & texture);
+  bool loadPNG(const QString & path, unsigned int & texId, QImage & texture);
+  bool loadTGA(const QString & path, unsigned int & texId, QImage & texture);
+  bool loadBMP(const QString & path, unsigned int & texId, QImage & texture);
 
-		int getWidth()
-		{
-			return texture.width();
-		}
+  class ResTexture : public Resource
+  {
+    private:
+      QImage texture;
+      unsigned int texId;
+    public:
+      const QImage& getQImage() const { return texture; }
 
-		int getHeight()
-		{
-			return texture.height();
-		}
+      bool load( const std::string & path );
+      bool load( const QImage& img );
+      ResTexture():Resource(RT_TEXTURE), texId(0){}
+      ResTexture(const std::string & path):Resource(RT_TEXTURE){load(path);}
 
-		int getTexture()
-		{
-			return texId;
-		}
-};
+      int getWidth()
+      {
+        return texture.width();
+      }
 
+      int getHeight()
+      {
+        return texture.height();
+      }
+
+      int getTexture()
+      {
+        return texId;
+      }
+  };
+
+} // visualizer
+#endif
 
 #endif

@@ -56,6 +56,11 @@ struct ${animation.name} : public Animation
 
 % endfor
 
+struct AnimOwner: public Animation
+{
+  int owner;
+};
+
 struct GameState
 {
 % for model in models:
@@ -66,7 +71,7 @@ struct GameState
   ${conversions[datum.type]} ${datum.name};
 % endfor
 
-  std::vector<Animation*> animations;
+  std::map< int, std::vector<Animation*> > animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);
 };
 

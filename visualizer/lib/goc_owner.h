@@ -2,9 +2,12 @@
 #define GOC_OWNER_H
 #include "gameobject/gocomponent.h"
 
+namespace visualizer
+{
+
 class GOC_Owner :public GOComponent
 {
-public:
+  public:
     GOC_Owner(){}
     GOC_Owner(GameObject * parent){setOwner(parent);}
     GOC_Owner(GameObject * parent, const int & o){setOwner(parent); owner(o);}
@@ -15,9 +18,10 @@ public:
     const GOC_IDType componentID() const {return GOC_IDType("Owner");}
     const GOC_IDType familyID() const {return GOC_IDType("Owner");}
 
-protected:
+  protected:
     int m_owner;
 };
 
-#endif // GOC_OWNER_H
+} // visualizer
 
+#endif                           // GOC_OWNER_H

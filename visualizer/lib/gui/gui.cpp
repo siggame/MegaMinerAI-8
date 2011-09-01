@@ -1,10 +1,8 @@
 #include "gui.h"
+#include "../games/games.h"
 #include "../renderer/renderer.h"
-#include "../parser/parser.h"
 #include <QDesktopServices>
 #include <Qt>
-#include "../../piracy/piratemap.h"
-#include "../../piracy/dupObj.h"
 
 #include <iostream>
 #include <string>
@@ -15,157 +13,194 @@
 
 using namespace std;
 
-GUI::~GUI()
+namespace visualizer
+{
+
+_GUI *GUI = 0;
+
+_GUI::~_GUI()
 {
   delete m_helpContents;
   delete m_centralWidget;
 }
 
-bool GUI::reg( const std::string& id, guiObj *obj )
+
+bool _GUI::reg( const std::string& id, guiObj *obj )
 {
-  if( !isInit() )
+  if( m_objects.find( id ) != m_objects.end() )
     return false;
 
-  if( get()->m_objects.find( id ) != get()->m_objects.end() )
-    return false;
-
-  get()->m_objects[id] = obj;
+  m_objects[id] = obj;
   return true;
 }
 
-bool GUI::del( const std::string& id )
+
+bool _GUI::del( const std::string& id )
 {
-  if( !isInit() )
+  if( m_objects.find(id) == m_objects.end() )
     return false;
 
-  if( get()->m_objects.find(id) == get()->m_objects.end() )
-    return false;
-
-  get()->m_objects.erase( id );
+  m_objects.erase( id );
   return true;
 }
 
-bool GUI::setup()
+
+bool _GUI::setup()
 {
-  if( !isInit() )
-    return false;
+  if( !GUI )
+  {
+    GUI = new _GUI;
+  } else
+  {
+    THROW( Exception, "GUI Already Setup" );
+  }
 
-
-  get()->m_isSetup = get()->doSetup();
-  return get()->m_isSetup;
+  GUI->m_isSetup = GUI->doSetup();
+  return GUI->m_isSetup;
 }
 
-bool GUI::clear()
-{
-  if( !isInit() )
-    return false;
 
-  get()->m_objects.clear();
+bool _GUI::clear()
+{
+  m_objects.clear();
   return true;
 }
 
-guiObj* GUI::getGUIObject( const std::string& id )
+
+guiObj* _GUI::getGUIObject( const std::string& id )
 {
-  if( !isInit() )
+  if( m_objects.find(id) == m_objects.end() )
     return NULL;
 
-  if( get()->m_objects.find(id) == get()->m_objects.end() )
-    return NULL;
-
-  return get()->m_objects[id];
+  return m_objects[id];
 }
 
-bool GUI::create()
-{
-  if( !Singleton<GUI>::create() )
-    return false;
 
+bool _GUI::create()
+{
 
   return true;
 }
 
-bool GUI::destroy()
+
+bool _GUI::destroy()
 {
-  if( !isInit() )
-    return false;
   if( !clear() )
     return false;
 
-  return Singleton<GUI>::destroy();
+  return true;
 }
 
-unsigned int GUI::numObjects()
+
+unsigned int _GUI::numObjects()
 {
-  if( !isInit() )
-    return 0;
-
-  return get()->m_objects.size();
+  return m_objects.size();
 }
 
-bool GUI::isSetup()
+
+bool _GUI::isSetup()
 {
-  if( !isInit() )
-    return false;
-
-  return get()->m_isSetup;
+  return m_isSetup;
 }
-void GUI::dragEnterEvent( QDragEnterEvent* evt )
+
+
+void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 {
   // We may want to filter what's dropped on the window at some point
   evt->acceptProposedAction();
 }
 
-#include <iostream>
-using namespace std;
-void GUI::loadGamelog( std::string gamelog )
+
+void _GUI::loadGamelog( std::string gamelog )
 {
-    if (!ObjectLoader::loadGamelog(gamelog))
+  bool parserFound = false;
+  for
+    ( 
+    std::vector<IGame*>::iterator i = Games->gameList().begin(); 
+    i != Games->gameList().end() && !parserFound;
+    i++ 
+    )
+  {
+    ifstream file_gamelog( gamelog.c_str(), ifstream::in );
+    if( file_gamelog.is_open() )
     {
-	std::cout << "THROWING SHITFIT: the gamelog \"" << gamelog << " wont load\n";
+      QRegExp rx( (*i)->logFileInfo().regex.c_str() );
+      rx.setPatternSyntax( QRegExp::RegExp2 );
+      char *logStart = new char[ (*i)->logFileInfo().startSize+1 ];
+      file_gamelog.get( logStart, (*i)->logFileInfo().startSize );
+
+      if( rx.indexIn( logStart ) )
+      {
+        (*i)->loadGamelog( gamelog );
+        parserFound = true;
+      }
+
+      delete logStart;
     }
-  return; //! @todo throw shitfit
+    else
+    {
+      THROW
+        (
+        FileException,
+        "Could Not Find/Open Gamelog\n Path:  %s", 
+        gamelog.c_str()
+        )
+    }
+  }
+
+  if( !parserFound )
+  {
+    THROW( Exception, "An appropriate game player could not be found!" );
+  }
+
 }
 
-void GUI::update()
+
+void _GUI::update()
 {
-  get()->m_controlBar->update();
+  m_controlBar->update();
 }
 
-void GUI::dropEvent( QDropEvent* evt )
-{
 
+void _GUI::dropEvent( QDropEvent* evt )
+{
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
+  /// @TODO Make sure this is a gamelog before opening it
+  /// if we do that, we can open the possibility of 
+  /// having other dropped objects handled by the visualizer
+  /// such as movies and images
   loadGamelog( data );
-
-  // TODO: Open the gamelog with the appropriate plugins
-
 }
 
-void GUI::appendConsole( string line )
+
+void _GUI::appendConsole( string line )
 {
   QString param;
   param.append( line.c_str() );
   appendConsole( param );
 }
 
-void GUI::appendConsole( QString line )
+
+void _GUI::appendConsole( QString line )
 {
-  GUI::get()->m_consoleArea->append( line );
+  _GUI::m_consoleArea->append( line );
 }
 
-void GUI::clearConsole()
+
+void _GUI::clearConsole()
 {
 
-  GUI::get()->m_consoleArea->clear();
+  _GUI::m_consoleArea->clear();
 }
 
-void GUI::resizeEvent( QResizeEvent* evt )
+
+void _GUI::resizeEvent( QResizeEvent* evt )
 {
   if(!m_dockWidget->isFloating())//competitor hasn't torn off our dock window
   {
-    int w = Singleton<GUI>::get()->width();
-    int h = Renderer<DupObj>::height();
+    int w = width();
+    int h = height();
 
     if( h > w )
     {
@@ -174,37 +209,38 @@ void GUI::resizeEvent( QResizeEvent* evt )
       h = temp;
     }
 
-    //m_dockWidget->resize( Singleton<GUI>::get()->width() - Renderer<DupObj>::height(), -1 );
-#if 1
+    //m_dockWidget->resize( Singleton<_GUI>::width() - Renderer<DupObj>::height(), -1 );
+    #if 1
     m_dockWidget->setMinimumWidth( w - h);
-#endif
+    #endif
   }
   QMainWindow::resizeEvent( evt );
 }
 
-void GUI::helpContents()
+
+void _GUI::helpContents()
 {
-  if( OptionsMan::isInit() &&
-      OptionsMan::exists( "helpURL" ) )
+  if( OptionsMan->exists( "helpURL" ) )
   {
-    QDesktopServices::openUrl( QUrl( OptionsMan::getStr( "helpURL" ).c_str() ) );
+    QDesktopServices::openUrl( QUrl( OptionsMan->getStr( "helpURL" ).c_str() ) );
   } else
   {
     QDesktopServices::openUrl( QUrl( "http://www.megaminerai.com" ) );
   }
 }
 
-void GUI::fileOpen()
+
+void _GUI::fileOpen()
 {
-  /* The following is almost entirely a dirty hack to persistently keep the 
+  /* The following is almost entirely a dirty hack to persistently keep the
    * most recent directory to be default for the "Open Gamelog" dialog.
-   * This works WONDERS for usability. 
+   * This works WONDERS for usability.
    */
-	ifstream dirinfoIN;
-	dirinfoIN.open("dirinfo.txt");	
-	if (dirinfoIN.is_open())
+  ifstream dirinfoIN;
+  dirinfoIN.open("dirinfo.txt");
+  if (dirinfoIN.is_open())
   {
-  	string line;
+    string line;
     while ( dirinfoIN.good() )
     {
       getline (dirinfoIN,line);
@@ -214,31 +250,30 @@ void GUI::fileOpen()
     dirinfoIN.close();
   }
 
-
   QFileDialog fileDialog;
-	  
-	
+
   QString filename = fileDialog.getOpenFileName(
-      this,
-      tr( "Open Gamelog" ),
-      m_previousDirectory,
-      tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+    this,
+    tr( "Open Gamelog" ),
+    m_previousDirectory,
+    tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
-		m_previousDirectory = filename;
-		
-		ofstream dirinfoOUT;
-		dirinfoOUT.open("dirinfo.txt");
-		dirinfoOUT << m_previousDirectory.toStdString();
-		dirinfoOUT.close();
+    m_previousDirectory = filename;
+
+    ofstream dirinfoOUT;
+    dirinfoOUT.open("dirinfo.txt");
+    dirinfoOUT << m_previousDirectory.toStdString();
+    dirinfoOUT.close();
     cout << filename.toStdString() << endl;
     loadGamelog( filename.toStdString() );
   }
 
 }
 
-bool GUI::doSetup()
+
+bool _GUI::doSetup()
 {
 
   setAcceptDrops( true );
@@ -253,42 +288,41 @@ bool GUI::doSetup()
 
   // If we're in arenaMode, change some settings
   if(
-      !OptionsMan::isInit() ||
-      !OptionsMan::exists( "arenaMode" ) ||
-      OptionsMan::getBool( "arenaMode" )
+    !OptionsMan->exists( "arenaMode" ) ||
+    OptionsMan->getBool( "arenaMode" )
     )
-    {
-      menuBar()->hide();
-      setFullScreen(true);
-      m_dockWidget->hide();
-    }
-  
+  {
+    menuBar()->hide();
+    setFullScreen(true);
+    m_dockWidget->hide();
+  }
+
   //If we're in demonstrationMode, change different settings
   if(
-      !OptionsMan::isInit() ||
-      !OptionsMan::exists( "demonstrationMode" ) ||
-      OptionsMan::getBool( "demonstrationMode" )
+    !OptionsMan->exists( "demonstrationMode" ) ||
+    OptionsMan->getBool( "demonstrationMode" )
     )
-    {
-      menuBar()->hide();
-      setFullScreen(true);
-      m_dockWidget->hide();
-    }
+  {
+    menuBar()->hide();
+    setFullScreen(true);
+    m_dockWidget->hide();
+  }
 
   setWindowState(
-      windowState()
-      | Qt::WindowActive
-      | Qt::WindowMaximized
-      );
+    windowState()
+    | Qt::WindowActive
+    | Qt::WindowMaximized
+    );
 
   show();
-  
+
   m_previousDirectory = QDir::homePath();
-  
+
   return true;
 }
 
-void GUI::buildControlBar()
+
+void _GUI::buildControlBar()
 {
   m_statusBar = statusBar();
   m_statusBar -> setMaximumHeight(20);
@@ -298,20 +332,21 @@ void GUI::buildControlBar()
 
 }
 
-void GUI::createActions()
+
+void _GUI::createActions()
 {
   m_helpContents = new QAction( tr( "&Contents" ), this );
   m_helpContents->setShortcut( tr( "F1" ) );
   m_helpContents->setStatusTip(
-      tr( "Open Online Help For This Game" )
-      );
+    tr( "Open Online Help For This Game" )
+    );
   connect( m_helpContents, SIGNAL(triggered()), this, SLOT(helpContents()) );
 
   m_fileOpen = new QAction( tr( "&Open" ), this );
   m_fileOpen->setShortcut( tr( "Ctrl+O" ) );
   m_fileOpen->setStatusTip(
-      tr( "Open A Gamelog" )
-      );
+    tr( "Open A Gamelog" )
+    );
   connect( m_fileOpen, SIGNAL(triggered()), this, SLOT(fileOpen()) );
 
   toggleFullScreenAct = new QAction( tr("&Full Screen"), this );
@@ -322,8 +357,8 @@ void GUI::createActions()
   m_fileExit = new QAction( tr( "&Quit" ), this );
   m_fileExit->setShortcut( tr( "Ctrl+Q" ) );
   m_fileExit->setStatusTip(
-      tr( "Close the Visualizer" )
-      );
+    tr( "Close the Visualizer" )
+    );
   connect( m_fileExit, SIGNAL(triggered()), this, SLOT(close()) );
 
   (void) new QShortcut( QKeySequence( tr( "Space" ) ), this, SLOT( togglePlayPause() ) );
@@ -332,13 +367,13 @@ void GUI::createActions()
   (void) new QShortcut( QKeySequence( tr( "Right" ) ), this, SLOT( stepTurnForwardShortcut() ) );
   (void) new QShortcut( QKeySequence( tr( "Left" ) ), this, SLOT( stepTurnBackShortcut() ) );
   (void) new QShortcut( QKeySequence( tr("Escape") ), this, SLOT( catchEscapeKey() ) );
- 
+
   //Ugly hack
   (void) new QShortcut( QKeySequence( Qt::Key_1 ), this, SLOT( turnPercentageShortcut1() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_2 ), this, SLOT( turnPercentageShortcut2() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_3 ), this, SLOT( turnPercentageShortcut3() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_4 ), this, SLOT( turnPercentageShortcut4() ) );
-  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) ); 
+  (void) new QShortcut( QKeySequence( Qt::Key_5 ), this, SLOT( turnPercentageShortcut5() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_6 ), this, SLOT( turnPercentageShortcut6() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_7 ), this, SLOT( turnPercentageShortcut7() ) );
   (void) new QShortcut( QKeySequence( Qt::Key_8 ), this, SLOT( turnPercentageShortcut8() ) );
@@ -346,7 +381,8 @@ void GUI::createActions()
   (void) new QShortcut( QKeySequence( Qt::Key_0 ), this, SLOT( turnPercentageShortcut0() ) );
 }
 
-void GUI::createMenus()
+
+void _GUI::createMenus()
 {
   QMenu *menu;
   menu = menuBar()->addMenu( tr( "&File" ) );
@@ -364,11 +400,12 @@ void GUI::createMenus()
 
 }
 
-void GUI::buildToolSet()
+
+void _GUI::buildToolSet()
 {
   // Get the toolset widget if it exists
   m_toolSetWidget =
-    (GOCFamily_GUIToolSet*)GUI::getGUIObject( "ToolSet" );
+    (GOCFamily_GUIToolSet*)getGUIObject( "ToolSet" );
 
   // Create the dock
   m_dockWidget = new QDockWidget( this );
@@ -406,57 +443,66 @@ void GUI::buildToolSet()
 
 }
 
-void GUI::closeGUI()
+
+void _GUI::closeGUI()
 {
-  GUI::get() -> close();
+  close();
 }
 
-void GUI::toggleFullScreen()
+
+void _GUI::toggleFullScreen()
 {
   setFullScreen(!fullScreen);
 }
 
-void GUI::togglePlayPause()
+
+void _GUI::togglePlayPause()
 {
-  m_controlBar -> play();
+  m_controlBar->play();
 }
 
-void GUI::fastForwardShortcut()
+
+void _GUI::fastForwardShortcut()
 {
-  m_controlBar -> fastForward();
+  m_controlBar->fastForward();
 }
 
-void GUI::rewindShortcut()
+
+void _GUI::rewindShortcut()
 {
   m_controlBar -> rewind();
 }
 
-void GUI::turnPercentageCalc(int value)
+
+void _GUI::turnPercentageCalc(int value)
 {
   float turnPercent = value /9.0;
-  TimeManager::setTurn((int) floor(turnPercent * TimeManager::getNumTurns()));
+  TimeManager->setTurn((int) floor(turnPercent * TimeManager->getNumTurns()));
 }
 
-void GUI::stepTurnForwardShortcut()
+
+void _GUI::stepTurnForwardShortcut()
 {
-  if(TimeManager::getTurn() < TimeManager::getNumTurns()-1)
+  if(TimeManager->getTurn() < TimeManager->getNumTurns()-1)
   {
-    TimeManager::setTurn(TimeManager::getTurn() + 1);
+    TimeManager->setTurn(TimeManager->getTurn() + 1);
   }
 }
 
-void GUI::stepTurnBackShortcut()
+
+void _GUI::stepTurnBackShortcut()
 {
-  if(TimeManager::getTurn() > 0)
+  if(TimeManager->getTurn() > 0)
   {
-    TimeManager::setTurn(TimeManager::getTurn() - 1);
+    TimeManager->setTurn(TimeManager->getTurn() - 1);
   }
 }
+
 
 //Prepares the tabs and tables for the unit stats area
-void GUI::initUnitStats()
+void _GUI::initUnitStats()
 {
-  //TODO: Move this game-specific code out of GUI
+  //TODO Move this game-specific code out of _GUI
 
   //Create unit Stats tab area
   m_unitStatsArea = new QTabWidget( m_dockLayoutFrame );
@@ -481,7 +527,7 @@ void GUI::initUnitStats()
   m_globalStats->setColumnCount(m_globalStatsHorizontalLabels.size());
   m_globalStats->setVerticalHeaderLabels ( m_globalStatsVerticalLabels );
   m_globalStats->setHorizontalHeaderLabels( m_globalStatsHorizontalLabels );
-  
+
   m_selectionStats->setRowCount(m_selectionStatsVerticalLabels.size());
   m_selectionStats->setColumnCount(m_selectionStatsHorizontalLabels.size());
   m_selectionStats->setVerticalHeaderLabels ( m_selectionStatsVerticalLabels );
@@ -501,12 +547,14 @@ void GUI::initUnitStats()
   m_dockLayout->addWidget( m_unitStatsArea );
 }
 
-ControlBar * GUI::getControlBar()
+
+ControlBar * _GUI::getControlBar()
 {
-  return get()->m_controlBar;
+  return m_controlBar;
 }
 
-void GUI::catchEscapeKey()
+
+void _GUI::catchEscapeKey()
 {
   if(getFullScreen())
   {
@@ -514,17 +562,19 @@ void GUI::catchEscapeKey()
   }
 }
 
-bool GUI::getFullScreen()
+
+bool _GUI::getFullScreen()
 {
-  return fullScreen; 
+  return fullScreen;
 }
 
-void GUI::setFullScreen(bool value)
+
+void _GUI::setFullScreen(bool value)
 {
   fullScreen = value;
   if(fullScreen)
   {
-  	m_normalWindowGeometry = geometry();
+    m_normalWindowGeometry = geometry();
     showFullScreen();
   }
   else
@@ -533,33 +583,36 @@ void GUI::setFullScreen(bool value)
     setGeometry(m_normalWindowGeometry);
   }
   show();
-  
-} 
 
-void GUI::turnPercentageShortcut1(){turnPercentageCalc(0);};
-void GUI::turnPercentageShortcut2(){turnPercentageCalc(1);};
-void GUI::turnPercentageShortcut3(){turnPercentageCalc(2);};
-void GUI::turnPercentageShortcut4(){turnPercentageCalc(3);};
-void GUI::turnPercentageShortcut5(){turnPercentageCalc(4);};
-void GUI::turnPercentageShortcut6(){turnPercentageCalc(5);};
-void GUI::turnPercentageShortcut7(){turnPercentageCalc(6);};
-void GUI::turnPercentageShortcut8(){turnPercentageCalc(7);};
-void GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};  
-void GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
-
-QTableWidget * GUI::getIndividualStats()
-{
-  return get()->m_individualStats;
-}
-
-QTableWidget * GUI::getSelectionStats()
-{
-  return get()->m_selectionStats;
-}
-
-QTableWidget * GUI::getGlobalStats()
-{
-  return get()->m_globalStats;
 }
 
 
+void _GUI::turnPercentageShortcut1(){turnPercentageCalc(0);};
+void _GUI::turnPercentageShortcut2(){turnPercentageCalc(1);};
+void _GUI::turnPercentageShortcut3(){turnPercentageCalc(2);};
+void _GUI::turnPercentageShortcut4(){turnPercentageCalc(3);};
+void _GUI::turnPercentageShortcut5(){turnPercentageCalc(4);};
+void _GUI::turnPercentageShortcut6(){turnPercentageCalc(5);};
+void _GUI::turnPercentageShortcut7(){turnPercentageCalc(6);};
+void _GUI::turnPercentageShortcut8(){turnPercentageCalc(7);};
+void _GUI::turnPercentageShortcut9(){turnPercentageCalc(8);};
+void _GUI::turnPercentageShortcut0(){turnPercentageCalc(9);};
+
+QTableWidget * _GUI::getIndividualStats()
+{
+  return m_individualStats;
+}
+
+
+QTableWidget * _GUI::getSelectionStats()
+{
+  return m_selectionStats;
+}
+
+
+QTableWidget * _GUI::getGlobalStats()
+{
+  return m_globalStats;
+}
+
+} // visualizer

@@ -79,7 +79,7 @@ struct DupObj
     glTranslatef(x,y,0);
     #endif
     bool flag = false;
-    if (ResourceMan::isInit())
+    if ( 1 )
     {                            //! @todo: textures here
       glEnable(GL_TEXTURE_2D);
       Resource * res;
@@ -135,7 +135,7 @@ struct DupObj
           //std::cout << "B Bad Object Type\n";
       }
 
-      res = ResourceMan::reference(textureName,"dupObject");
+      res = ResourceMan->reference(textureName,"dupObject");
       if (res)
       {
 
@@ -151,7 +151,7 @@ struct DupObj
 
         glEnd();
 
-        ResourceMan::release(textureName,"dupObject");
+        ResourceMan->release(textureName,"dupObject");
 
       }
       else

@@ -1,5 +1,8 @@
 #include "gocfamily_data.h"
 
+namespace visualizer
+{
+
 #if 0
 template<class T>
 const GOC_IDType& GOCFamily_Data<T>::familyID() const
@@ -24,3 +27,5 @@ T* GOCFamily_Data<T>::getDataAt( const unsigned int& turn, const unsigned int& f
 }
 #endif
 #endif
+
+} // visualizer

@@ -62,14 +62,14 @@ void Scoreboard::renderAt( const unsigned int& turn, const unsigned int& frame )
     return;
   }
 
-  if( turn == TimeManager::getNumTurns() )
+  if( turn == TimeManager->getNumTurns() )
   {
     drawEnd();
     return;
   }
 
   glPushMatrix();
-  glTranslatef( Renderer<DupObj>::height(), 0, 0 );
+  glTranslatef( Renderer->height(), 0, 0 );
   glScalef( .75, .75, 0 );
   fnt.drawString( player[0].playerName );
   glTranslatef( 0, 32, 0 );

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mkdir temp
+for f in $(find ./lib -name '*.h' -or -name '*.hpp' -or -name '*.cpp')
+do
+ echo $f
+ echo $(basename $f)
+ bcpp -fnc bcpp.cfg $f > ./temp/$(basename $f)
+ mv ./temp/$(basename $f) $f
+done
+
+rmdir temp

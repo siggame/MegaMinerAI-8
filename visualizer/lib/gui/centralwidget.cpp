@@ -2,6 +2,9 @@
 #include "gui.h"
 #include <QLabel>
 
+namespace visualizer
+{
+
 CentralWidget::~CentralWidget()
 {
   delete m_controlBarWidget;
@@ -9,6 +12,7 @@ CentralWidget::~CentralWidget()
   delete m_widgetLayout;
 
 }
+
 
 CentralWidget::CentralWidget( QWidget* /*parent*/ )
 {
@@ -22,29 +26,29 @@ CentralWidget::CentralWidget( QWidget* /*parent*/ )
   setLayout( m_widgetLayout );
 }
 
-void CentralWidget::buildControlBar()
-{  
-  m_controlBarWidget = 
-    (GOCFamily_ControlBar*)GUI::getGUIObject( "ControlBar" );
 
-  if( m_controlBarWidget && 
-      (
-       !OptionsMan::isInit() ||
-       !OptionsMan::exists( "arenaMode" ) ||
-       !OptionsMan::getBool( "arenaMode" )
-      )
+void CentralWidget::buildControlBar()
+{
+  m_controlBarWidget =
+    (GOCFamily_ControlBar*)GUI->getGUIObject( "ControlBar" );
+
+  if( m_controlBarWidget &&
+    (
+    !OptionsMan->exists( "arenaMode" ) ||
+    !OptionsMan->getBool( "arenaMode" )
+    )
     )
   {
-    if( 
-	OptionsMan::isInit() &&
-	OptionsMan::exists("maxControlHeight")
+    if(
+      OptionsMan->exists("maxControlHeight")
       )
     {
-      m_controlBarWidget->setMaximumHeight( 
-	  OptionsMan::getInt( "maxControlHeight" )
-          );
+      m_controlBarWidget->setMaximumHeight(
+        OptionsMan->getInt( "maxControlHeight" )
+        );
     }
     m_widgetLayout->addWidget( m_controlBarWidget );
   }
 }
 
+} // visualizer

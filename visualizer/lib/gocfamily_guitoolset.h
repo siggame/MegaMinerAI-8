@@ -1,23 +1,27 @@
 
-
 #ifndef GOCFAMILY_GUITOOLSET_H
 #define GOCFAMILY_GUITOOLSET_H
 
 #include "gameobject/gocomponent.h"
 #include <QWidget>
 
+namespace visualizer
+{
+
 class GOCFamily_GUIToolSet : public GOComponent, public QWidget
 {
-	public:
-		/** Default constructor */
-		GOCFamily_GUIToolSet();
-		/** Default destructor */
-		virtual ~GOCFamily_GUIToolSet() = 0;
+  public:
+    /** Default constructor */
+    GOCFamily_GUIToolSet();
+    /** Default destructor */
+    virtual ~GOCFamily_GUIToolSet() = 0;
 
-		virtual const GOC_IDType familyID() const {return GOC_IDType("GUIToolSetFamily");}
+    virtual const GOC_IDType familyID() const {return GOC_IDType("GUIToolSetFamily");}
 
-	protected:
-	private:
+  protected:
+  private:
 };
 
-#endif // GOCFAMILY_GUITOOLSET_H
+} // visualizer
+
+#endif                           // GOCFAMILY_GUITOOLSET_H

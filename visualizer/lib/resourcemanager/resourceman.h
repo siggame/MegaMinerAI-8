@@ -1,48 +1,57 @@
 #ifndef RESOURCEMAN_H
 #define RESOURCEMAN_H
 
-#include "../singleton.h"
-#include "resource.h"
 #include "../manager/manager.h"
+#include "iresourceman.h"
+#include "itextureloader.h"
 #include <map>
-#include <string>
-#include <vector>
+
+namespace visualizer
+{
 
 /** @todo merge this into the options manager... maybe **/
 
-
-class ResourceMan : protected Manager <ResID_t,Resource*>
+class _ResourceMan : protected _Manager< ResID_t, Resource* >, public IResourceMan
 {
-	public:
-		/** Default constructor */
-		ResourceMan();
-		/** Default destructor */
-		virtual ~ResourceMan();
+  Q_INTERFACES( IResourceMan );
+  public:
+    /** Default constructor */
+    _ResourceMan()
+    {
+    };
+    /** Default destructor */
+    ~_ResourceMan() {};
 
-    static Resource * reference(const std::string & rName, const std::string & referencer);
-    static bool release(const std::string & rName, const std::string & referencer);
+    Resource * reference(const std::string & rName, const std::string & referencer);
+    bool release(const std::string & rName, const std::string & referencer);
 
-		template<class T, ResourceType RT>
-		static bool reg(const ResID_t & rName, const T & value);
-		static bool regFile(const ResID_t & rName, const std::string & filename);
-		static bool del(const ResID_t & rName);
+    //template<class T, ResourceType RT>
+    //    bool reg(const ResID_t & rName, const T & value);
+    bool regFile(const ResID_t & rName, const std::string & filename);
+    bool del(const ResID_t & rName);
 
-		static bool loadResourceFile(const std::string & filename);
-		static bool saveResourceFile(const std::string & filename);
+    bool loadResourceFile(const std::string & filename);
+    bool saveResourceFile(const std::string & filename);
 
-		static bool exists(const ResID_t & rName);
+    void loadTexture( const std::string& filename, const std::string& name );
+    void loadTexture( QImage& image, const std::string& name );
 
-		static std::vector<std::string> listResourceNames();
+    static void setup();
+    static void destroy();
 
-		static bool destroy();
-		static bool create(){return Manager <ResID_t,Resource*>::create();}
-		static bool isInit(){return Manager<ResID_t,Resource*>::isInit();}
+    bool exists(const ResID_t & rName);
 
-	protected:
-	private:
+    std::vector<std::string> listResourceNames();
 
-		ResourceType findFileType(const std::string & filename);
+  protected:
+  private:
+
+    ResourceType findFileType(const std::string & filename);
 
 };
 
-#endif // RESOURCEMAN_H
+extern _ResourceMan *ResourceMan;
+
+} // visualizer
+
+#endif                           // RESOURCEMAN_H

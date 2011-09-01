@@ -1,138 +1,184 @@
 #include "resourceman.h"
+#include "textureloader.h"
 
-/** @brief listResourceNames
-  * get a list of all of the resources
-  * @return a list of all of the ids of the resources
-  */
-std::vector<ResID_t> ResourceMan::listResourceNames()
+namespace visualizer
 {
-	if (!isInit())
-	{
-		return std::vector<ResID_t>();
-	}
 
+  _ResourceMan *ResourceMan = 0;
+
+  std::vector<ResID_t> _ResourceMan::listResourceNames()
+  {
     std::vector<ResID_t> names;
-    DataTable::iterator it = get()->data()->begin();
-    for (; it != get()->data()->end(); it++)
+    DataTable::iterator it = data()->begin();
+    for (; it != data()->end(); it++)
     {
-        names.push_back(it->first);
+      names.push_back(it->first);
     }
     return names;
-}
+  }
 
-/** @brief exists
-  * check if an object exists
-  * @param rName the name of the resource in question
-  * @return true if it exists
-  */
-bool ResourceMan::exists(const ResID_t & rName)
-{
+
+  bool _ResourceMan::exists(const ResID_t & rName)
+  {
     return ManagerType::exists(rName);
-}
+  }
 
 
-
-/** @brief del
-  *	delete a value from the resource manager
-  * @param rName the value to delete
-  * @return true if it existed
-  */
-bool ResourceMan::del(const ResID_t & rName)
-{
+  bool _ResourceMan::del(const ResID_t & rName)
+  {
     if (!exists(rName))
     {
-        return false;
+      return false;
     }
 
-    DataTable * dt = get()->data();
+    DataTable * dt = data();
     Resource * ref = (*(dt))[rName];
     if (ref->numReferences())
     {
-        #ifdef DEBUG
-        std::cout << "Resource \"" << rName << "\" still has a reference:\n";
-        ref->printReferences();
-        #endif
-        return false;
+      #ifdef DEBUG
+      std::cout << "Resource \"" << rName << "\" still has a reference:\n";
+      ref->printReferences();
+      #endif
+      return false;
     }
 
-
     return delPointer(rName);
-}
-
-#include <iostream>
-        using namespace std;
+  }
 
 
-/** @brief destroy
-  * destroy the resource manager
-  * @return true on success
-  */
-bool ResourceMan::destroy()
-{
-	if (!isInit())
-	{
-		return false;
-	}
-	DataTable::iterator it = get()->data()->begin();
-    for (; it != get()->data()->end(); it++)
+  void _ResourceMan::destroy()
+  {
+
+    DataTable::iterator it = ResourceMan->data()->begin();
+    for (; it != ResourceMan->data()->end(); it++)
     {
 
       //if( it->second )
-        if (it->second->numReferences())
-        {
-			#ifdef DEBUG
-            std::cout << "Resource \"" << it->first << "\" still has a reference:\n";
-            it->second->printReferences();
-			#endif
-            return false;
-        }
+      if (it->second->numReferences())
+      {
+        #ifdef __DEBUG__
+        //it->second->printReferences();
+        #endif
+        THROW( Exception, "Resource Manager still contains some references" );
+      }
 
-    //if( it->second )
+      //if( it->second )
       if (!it->second->unload())
-        return false;
+        THROW( Exception, "Problem Unloading ResourceManager" );
 
-		delete it->second;
-    it->second = 0;
+      delete it->second;
+      it->second = 0;
 
     }
 
-    return ManagerType::destroy();
-}
+    delete ResourceMan;
+    ResourceMan = 0;
 
-Resource * ResourceMan::reference(const std::string & rName, const std::string & referencer)
-{
-    if (!ManagerType::isInit())
-	return NULL;
+  }
+
+
+  Resource * _ResourceMan::reference(const std::string & rName, const std::string & referencer)
+  {
     Resource ** res = ManagerType::getItem(rName);
     if (!res)
-	return NULL;
+    {
+      THROW
+        (
+        Exception,
+        "Resource Could Not Be Found: \n  %s", rName.c_str()
+        );
+      return NULL;
+    }
 
     if (!*res)
-	return NULL;
+    {
+      THROW
+        (
+        Exception,
+        "Resource Could Not Be Found: \n  %s", rName.c_str()
+        );
+      return NULL;
+    }
 
     if ((*res)->reference(referencer))
-	return *res;
+      return *res;
+
+    THROW
+      (
+      Exception,
+      "THIS EXCEPTION"
+      );
 
     return NULL;
 
-}
+  }
 
-bool ResourceMan::release(const std::string &rName, const std::string &referencer)
-{
-    if (!ManagerType::isInit())
-	return false;
 
+  void _ResourceMan::setup()
+  {
+    if( !ResourceMan )
+    {
+      ResourceMan = new _ResourceMan;
+    }
+    else
+    {
+      THROW( Exception, "Resource Manager already initialized" );
+    }
+
+  }
+
+
+  bool _ResourceMan::release(const std::string &rName, const std::string &referencer)
+  {
     Resource ** res = ManagerType::getItem(rName);
 
     if (!res)
-	return false;
+      return false;
 
     if (!*res)
-	return false;
+      return false;
 
     if ((*res)->deReference(referencer))
-	return true;
+      return true;
 
     return false;
 
-}
+  } // _ResourceMan::release()
+
+  void _ResourceMan::loadTexture( const std::string& filename, const std::string& name )
+  {
+    Resource * res = NULL;
+    QImage texture;
+    int id = 0;
+
+    if( (id = TextureLoader->load( filename.c_str(), texture ) ) )
+    {
+      res = (Resource*)(new ResTexture( texture, id ));
+      reg(name,(Resource*)res);
+    }
+    else
+    {
+      THROW
+        (
+        Exception,
+        "%s did not load correctly", filename.c_str()
+        );
+    }
+
+  } // _ResourceMan::loadTexture()
+
+  void _ResourceMan::loadTexture( QImage& image, const std::string& name )
+  {
+    unsigned int id;
+    Resource * res = NULL;
+
+    TextureLoader->loadQImage( id, image );
+
+    res = (Resource*)(new ResTexture( image, id ));
+    reg( name, (Resource*)res );
+
+  } // _ResourceMan::loadTexture()
+
+
+} // visualizer
+
