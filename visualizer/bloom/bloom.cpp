@@ -69,6 +69,13 @@ namespace visualizer
         p->Renderer = m_intf.renderer;
         p->addKeyFrame( new StartAnim( p ) );
 
+        p->objectID = i->objectID;
+        p->x = i->x;
+        p->y = i->y;
+        p->root = i->root;
+        p->leaf = i->leaf;
+        p->flower = i->flower;
+        p->health = i->health;
 
         p->addKeyFrame( new DrawAnim( p ) );
         turn.addAnimatable( p );

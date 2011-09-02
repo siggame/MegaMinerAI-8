@@ -37,10 +37,6 @@ namespace visualizer
       int rootLevel;
       int leafLevel;
       int flowerLevel;
-      int rootLevelUp;
-      int leafLevelUp;
-      int flowerLevelUp;
-
 
       IRenderer *Renderer;
 
