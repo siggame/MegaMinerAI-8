@@ -24,6 +24,24 @@ namespace visualizer
 
   }; // StartAnim
 
+  class DrawGround: public Anim
+  {
+    public:
+      DrawGround( dirt* p )
+      {
+        m_dirt = p;
+      }
+
+      void animate( const float& t, AnimData *d );
+      float controlDuration() const
+      { return 0; }
+      float totalDuration() const
+      { return 1; }
+    private:
+      dirt* m_dirt;
+
+  };
+
   class DrawAnim: public Anim
   {
     public:

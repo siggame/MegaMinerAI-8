@@ -40,10 +40,15 @@ namespace visualizer
         (
           GameException, "Cannot Load The Gamelog."
         );
-
-      m_intf.resourceManager->loadResourceFile( "./plugins/bloom/textures.r" );
     }
 
+    m_intf.resourceManager->loadResourceFile( "./plugins/bloom/textures.r" );
+
+    dirt *tD = new dirt;
+    tD->Renderer = m_intf.renderer;
+    tD->addKeyFrame( new DrawGround( tD ) );
+
+    SmartPointer<Animatable> d( tD );
     for
       (
       std::vector<GameState>::iterator state = m_game->states.begin();
@@ -52,6 +57,7 @@ namespace visualizer
       )
     {
       Frame turn;
+      turn.addAnimatable( d );
       for
         (
         std::vector<Plant>::iterator i = state->plants.begin();
@@ -60,8 +66,8 @@ namespace visualizer
         )
       {
         plant *p = new plant;
+        p->Renderer = m_intf.renderer;
         p->addKeyFrame( new StartAnim( p ) );
-
 
 
         p->addKeyFrame( new DrawAnim( p ) );

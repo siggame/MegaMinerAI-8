@@ -3,6 +3,7 @@
 
 #include "animatable.h"
 #include "ianimator.h"
+#include "irenderer.h"
 
 namespace visualizer
 {
@@ -11,6 +12,16 @@ namespace visualizer
   {
     public:
   };
+
+  class dirt: public Animatable
+  {
+    public:
+      IRenderer *Renderer;
+      AnimData* getData()
+      {
+        return 0;
+      }
+  }; // dirt
 
   class plant: public Animatable
   {
@@ -29,6 +40,9 @@ namespace visualizer
       int rootLevelUp;
       int leafLevelUp;
       int flowerLevelUp;
+
+
+      IRenderer *Renderer;
 
       plantData m_data;
 
