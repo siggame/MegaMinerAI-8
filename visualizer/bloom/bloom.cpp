@@ -43,6 +43,7 @@ namespace visualizer
     }
 
     m_intf.resourceManager->loadResourceFile( "./plugins/bloom/textures.r" );
+    m_intf.options->setInt( "mapSize", 20 );
 
     dirt *tD = new dirt;
     tD->Renderer = m_intf.renderer;
@@ -76,6 +77,7 @@ namespace visualizer
         p->leaf = i->leaf;
         p->flower = i->flower;
         p->health = i->health;
+
 
         p->addKeyFrame( new DrawAnim( p ) );
         turn.addAnimatable( p );

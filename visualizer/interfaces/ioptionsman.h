@@ -30,6 +30,11 @@ namespace visualizer
       virtual const bool& getBool( const OptID_t& oName ) = 0;
       virtual const std::string& getStr( const OptID_t& oName ) = 0;
 
+      virtual void setInt( const OptID_t& oName, const int& val ) = 0;
+      virtual void setFloat( const OptID_t& oName, const float& val ) = 0;
+      virtual void setBool( const OptID_t& oName, const bool& val ) = 0;
+      virtual void setStr( const OptID_t& oName, const std::string& val ) = 0;
+
   }; // IOptionsMan
 
 } // visualizer

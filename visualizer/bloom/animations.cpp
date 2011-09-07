@@ -25,13 +25,17 @@ namespace visualizer
 
     r.setColor( 1, 1, 1, 1 );
 
-    r.drawTexturedQuad( p.x, p.y, 1, 1, "plant" );
 
     if( p.flower )
     {
-      r.drawTexturedQuad( p.x, p.y, 0.5, 0.5, "flower" );
+      r.drawTexturedQuad( p.x, p.y, 1, 1, "flower" );
+    }
+    else
+    {
+      r.drawTexturedQuad( p.x, p.y, 1, 1, "plant" );
     }
 
+#if 0
     if( p.leaf )
     {
       r.drawTexturedQuad( p.x + 0.5, p.y, 0.5, 0.5, "leaf" );
@@ -41,6 +45,7 @@ namespace visualizer
     {
       r.drawTexturedQuad( p.x, p.y+0.5, 0.5, 0.5, "root" );
     }
+#endif
 
   }
 
