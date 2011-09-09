@@ -1,11 +1,13 @@
 1 - Ok we're going to go ahead and assume the server guys have done their job and we have a parser already for us.  The parser is responsible for taking a gamelog and putting it into a format that we, the visualizer, can read!  Unless you're debugging the parser, 99.9% of your time in the parser directory will be spent in structures.h.  Let's take a quick look.
  ====================  [ OPEN parser/structures.h ]  ========================= 
+
 2 - At the top of the file, you're going to notice a bunch of constants.  These are IDs for animations that bloom will send to us.  We get sent a pointer to an animation 
  ====================  [ 51 gg ]  ========================= 
  which contains an integer which represents the type.  We use these constants to figure out which animation this is, and treat it appropriately.  
  * SIDEBAR on pointers real quick.  Pointers are variables that point to data.  Unlike int or char or string, a pointer will contain the address of one of those variables.  This is useful in this case because we can force one pointer to act like another.  
  ====================  [ 79 gg ]  =========================
  As you can see, these are our animations.  The "colon public Animation" indicates that each of these Animations inherit the base class, "Animation."  Because they all inherit this base, when we get a pointer to an animation, we can force it to pretend it is any one of these specific animations.  More on that later.  
+
 3 - Now we're going to go back up to our "Plant" class. 
  ====================  [ 19 gg ]  =========================
  In this class we see all the information that competitors will see when they're managing their plants. 
@@ -88,7 +90,7 @@ before we can do that properly.
  ====================  [ make ]  =========================
  ====================  [ cd sexp ]  =========================
  ====================  [ make ]  =========================
- ====================  [ cd .. ]  =========================
+ ====================  [ cd ../.. ]  =========================
 
 Now the parser is properly built and we can use it.  Ok time to start programming.
 
@@ -140,7 +142,42 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
 
     #endif
 
+ ====================  [ :q ]  =========================
 
+11 - Now we can start working on the implementation file "bloom.cpp"
 
+ ====================  [ vim bloom.cpp ]  =========================
 
+    #include "bloom.h"
+
+    namespace visualizer
+    {
+      Bloom::Bloom() // Constructor
+      {
+        m_game = 0;  // Don't setup the game yet.
+      }
+
+      Bloom::~Bloom() // Deconstructor
+      {
+        delete m_game; // Cleanup once we're done
+      }
+
+      LogRegex Bloom::logFileInfo() 
+          // Function tells the visualizer core what gamelogs we can handle
+      {
+        LogRegex lr; // Structure which holds regex to determine gamelog 
+        // ownership
+        lr.regex = "Plant"; // We'll just assume this is a bloom gamelog
+        lr.startSize = 500; // How many characters to read before giving up.
+
+        return lr;
+      }
+
+      void Bloom::registerInterfaces( Interfaces intf )
+      // Holds some of the interfaces we'll be using.
+      {
+        m_intf = intf;
+      }
+
+    }
 
