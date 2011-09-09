@@ -18,10 +18,9 @@ namespace visualizer
 
       LogRegex logFileInfo();
       void loadGamelog( std::string gamelog );
-      void registerInterfaces( Interfaces intf );
     private:
       Game *m_game;
-      Interfaces m_intf;
+
   }; // Bloom
 
 } // visualizer

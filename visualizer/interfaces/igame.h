@@ -22,9 +22,6 @@ namespace visualizer
     std::string   regex;
   };
 
-  // This will act as the initial interface between the visualizer
-  // and the game specific code.
-
   class IGame
   {
     public:
