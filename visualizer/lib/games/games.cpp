@@ -26,16 +26,6 @@ namespace visualizer
     IGame *game = 0;
     bool pluginFound;
     QDir pluginsDir( qApp->applicationDirPath() );
-    Interfaces intf;
-
-    intf.gui = GUI;
-    intf.animationEngine = AnimationEngine;
-    intf.objectManager = ObjectManager;
-    intf.options = OptionsMan;
-    intf.renderer = Renderer;
-    intf.resourceManager = ResourceMan;
-    intf.textureLoader = TextureLoader;
-    intf.timeManager = TimeManager;
 
     pluginsDir.cd( "plugins" );
     foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
@@ -52,7 +42,14 @@ namespace visualizer
 #endif
           pluginFound = true;
           m_gameList.push_back( game );
-          game->registerInterfaces( intf );
+          game->gui = GUI;
+          game->animationEngine = AnimationEngine;
+          game->objectManager = ObjectManager;
+          game->options = OptionsMan;
+          game->renderer = Renderer;
+          game->resourceManager = ResourceMan;
+          game->textureLoader = TextureLoader;
+          game->timeManager = TimeManager;
         } 
         else
         {

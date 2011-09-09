@@ -27,11 +27,6 @@ namespace visualizer
     return lr;
   } /* Piracy::logFileInfo() */
 
-  void Piracy::registerInterfaces( Interfaces intf ) 
-  {
-    m_intf = intf;
-  } /* Piracy::registerInterfaces() */
-
   void Piracy::loadGamelog( std::string gamelog )
   {
     cout << "Load Piracy Gamelog" << endl;
@@ -43,10 +38,10 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
-    m_intf.resourceManager->loadResourceFile( "./plugins/piracy/textures.r" );
+    resourceManager->loadResourceFile( "./plugins/piracy/textures.r" );
 
     m_theMap = new PirateMap;
-    m_theMap->generateMap( *m_game, m_intf );
+    m_theMap->generateMap( *m_game, *this );
     m_theMap->addKeyFrame( new DrawMap( &*m_theMap ) );
 
     start();
@@ -280,7 +275,7 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_portIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
+        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }
@@ -293,7 +288,7 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_goldIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
+        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }
@@ -310,7 +305,7 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_shipIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
+        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       } 
@@ -327,25 +322,25 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_pirateIds.push_back( i->first );
-        s.Renderer    = m_intf.renderer;
+        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }
 
       // @TODO: Add animators for the score, team names, etc. 
-      m_intf.animationEngine->buildAnimations( so.returnStackList() );
+      animationEngine->buildAnimations( so.returnStackList() );
 
       so.returnStackList().addAnimatableFront( (SmartPointer<Animatable>&) m_theMap );
 
       addFrame( so.returnStackList() );
       frameNum++;
-      m_intf.timeManager->setNumTurns( frameNum );
-      m_intf.timeManager->updateProgress( (float)frameNum/m_game->states.size() );
+      timeManager->setNumTurns( frameNum );
+      timeManager->updateProgress( (float)frameNum/m_game->states.size() );
 
       if( frameNum <= 1 )
       {
-        m_intf.animationEngine->registerFrameContainer( this );
-        m_intf.timeManager->play();
+        animationEngine->registerFrameContainer( this );
+        timeManager->play();
       }
 
     }

@@ -22,23 +22,6 @@ namespace visualizer
     std::string   regex;
   };
 
-  struct Interfaces
-  {
-    Interfaces()
-    {
-      memset( this, 0, sizeof( Interfaces ) );
-    }
-    
-    IAnimationEngine *animationEngine;
-    IGUI *gui;
-    IObjectManager *objectManager;
-    IOptionsMan *options;
-    IRenderer *renderer;
-    IResourceMan *resourceManager;
-    ITextureLoader *textureLoader;
-    ITimeManager *timeManager;
-  };
-
   // This will act as the initial interface between the visualizer
   // and the game specific code.
 
@@ -47,7 +30,16 @@ namespace visualizer
     public:
       virtual LogRegex logFileInfo() = 0;
       virtual void loadGamelog( std::string gamelog ) = 0;
-      virtual void registerInterfaces( Interfaces intf ) = 0;
+    
+      IAnimationEngine *animationEngine;
+      IGUI *gui;
+      IObjectManager *objectManager;
+      IOptionsMan *options;
+      IRenderer *renderer;
+      IResourceMan *resourceManager;
+      ITextureLoader *textureLoader;
+      ITimeManager *timeManager;
+
   };
 
 } // visualizer

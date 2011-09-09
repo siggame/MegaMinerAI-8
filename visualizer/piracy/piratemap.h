@@ -27,7 +27,7 @@ namespace visualizer
         vertical
       };
 
-      void generateMap( Game& g, Interfaces& intf );
+      void generateMap( Game& g, IGame& intf );
 
       AnimData *getData()
       {

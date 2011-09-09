@@ -49,7 +49,6 @@ namespace visualizer
       ~Piracy();
       LogRegex logFileInfo();
       void loadGamelog( std::string gamelog );
-      void registerInterfaces( Interfaces intf );
 
       void run();
 
@@ -57,7 +56,6 @@ namespace visualizer
       Game *m_game;
       SmartPointer<PirateMap> m_theMap;
       //std::vector<std::list<SmartPointer<Animatable> > > m_stackFrames;
-      Interfaces m_intf;
 
       MoveList animationsToMoves( const int& x, const int& y, const std::vector<Animation *>& anims );
       MoveList getMoves( const Mappable& unit, const std::vector<GameState>::iterator& state );

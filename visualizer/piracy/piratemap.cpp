@@ -11,7 +11,7 @@ namespace visualizer
 {
 
   const int powers[] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384, 32728, 65536 };
-  void PirateMap::generateMap( Game& g, Interfaces& intf )
+  void PirateMap::generateMap( Game& g, IGame& intf )
   {
     int pixels = intf.options->getInt( "unitSize" );
     int mapSize = g.states[0].mapSize;
