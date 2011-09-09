@@ -221,5 +221,24 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
 
  Since the only unit in bloom is a plant, we'll just make a file called plant.h.  
 
+ ====================  [ vim plant.h ]  =========================
+    #ifndef PLANT_H
+    #define PLANT_H
+
+    // So any thing that gets rendered onto the screen is an "animatable"
+    // even if it's static or just helping something else render.
+    #include "animatable.h"
+
+    namespace visualizer
+    {
+      class plant: public Animatable
+      {
+      }
+      
+    }
+
+
+    #endif PLANT_H
+
 
 
