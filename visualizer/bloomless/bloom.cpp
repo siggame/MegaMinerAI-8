@@ -102,3 +102,4 @@ namespace visualizer
 } // visualizer
 
 Q_EXPORT_PLUGIN2( bloom, visualizer::Bloom );
+

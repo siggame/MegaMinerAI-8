@@ -1,6 +1,7 @@
 #ifndef BLOOM_H
 #define BLOOM_H
 
+#include <QObject>
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "igame.h"
@@ -8,7 +9,7 @@
 
 namespace visualizer
 {
-  class Bloom: public AnimSequence, public visualizer::IGame
+  class Bloom: public QObject, public AnimSequence, public visualizer::IGame
   {
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
