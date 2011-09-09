@@ -1,6 +1,7 @@
 #ifndef BLOOM_H
 #define BLOOM_H
 
+#include <QObject>
 #include "parser/parser.h"      // We need this to talk to the parser
 #include "parser/structures.h"  // This as well for the structures we'll use
 #include "igame.h"              // This header file contains a base class
@@ -14,7 +15,7 @@ namespace visualizer            // For name safety (preventing the duplication o
                                 // of this namespace will not conflict with anything
                                 // inside of it.
    
-  class Bloom: public AnimSequence, public visualizer::IGame
+  class Bloom: public QObject, public AnimSequence, public visualizer::IGame
                // We're calling our main class, 'Bloom'.
                // "public AnimSequence" tells us that 'Bloom' will contain our timeline
                // "public visualizer::IGame" is the common basis which helps the core

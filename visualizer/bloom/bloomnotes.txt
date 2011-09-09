@@ -101,7 +101,8 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
  ====================  [ vim bloom.h ]  =========================
     #ifndef BLOOM_H
     #define BLOOM_H
-
+    
+    #include <QObject>              // Qt library we need for the library
     #include "parser/parser.h"      // We need this to talk to the parser
     #include "parser/structures.h"  // This as well for the structures we'll use
     #include "igame.h"              // This header file contains a base class
@@ -115,8 +116,9 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
                                     // of this namespace will not conflict with anything
                                     // inside of it.
        
-      class Bloom: public AnimSequence, public visualizer::IGame
+      class Bloom: public QObject, public AnimSequence, public visualizer::IGame
                    // We're calling our main class, 'Bloom'.
+                   // public QObject is required.  Just know that for now
                    // "public AnimSequence" tells us that 'Bloom' will contain our timeline
                    // "public visualizer::IGame" is the common basis which helps the core
                    // find bloom.
@@ -175,7 +177,7 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
       {
         // We'll just use this to prove that it's loading bloom when it
         // should
-        cout << "Load Bloom Gamelog"
+        cout << "Load Bloom Gamelog" << endl;
         // Let's just make sure that we don't have memory leaks.
         delete m_game; 
         // Allocates the memory we need for the new gamelog
@@ -196,13 +198,28 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
               GameException, "Cannot Load The Gamelog."
             );
         }
-        
-        // So, now the gamelog is loaded into memory.  We'll just check to
-        // make sure everything is working alright.
-        // Does anyone have any questions before I move on?
-
       }
     }
  
+    // Leave off for demo sake.  Use wiki.
+    // This is just letting Qt know to compile this as a plugin
+    Q_EXPORT_PLUGIN2( bloom, visualizer::Bloom );
+
+    // So, now the gamelog is loaded into memory.  We'll just check to
+    // make sure everything is working alright.
+    // Does anyone have any questions before I move on?
+
  ====================  [ :wq ]  =========================
+ ====================  [ qmake ]  =========================
+ ====================  [ make ]  =========================
+ ====================  [ cd .. ]  =========================
+ So let's run a bloom gamelog to see if it detects it and loads it correctly
+ ====================  [ ./visualizer ~/80.gamelog ]  =========================
+ And just to prove it lives in symbiosis with Piracy, we'll run that to make sure piracy still runs as it should
+ ====================  [ ./visualizer ~/pirate.gamelog ]  =========================
+ 11 - So now, we have the gamelog in memory, but its not in the most usable format.  The parser uses GameStates and Units and stuff that the visualizer doesn't know about.  The visualizer uses animations, timelines, and frames.  So let's start making those.  They're pretty important.
+
+ Since the only unit in bloom is a plant, we'll just make a file called plant.h.  
+
+
 

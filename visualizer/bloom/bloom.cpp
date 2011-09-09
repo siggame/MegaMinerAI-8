@@ -27,7 +27,7 @@ namespace visualizer
   {
     // We'll just use this to prove that it's loading bloom when it
     // should
-    cout << "Load Bloom Gamelog"
+    cout << "Load Bloom Gamelog" << endl;
     // Let's just make sure that we don't have memory leaks.
     delete m_game; 
     // Allocates the memory we need for the new gamelog
@@ -55,3 +55,5 @@ namespace visualizer
 
   }
 }
+
+Q_EXPORT_PLUGIN2( bloom, visualizer::Bloom );
