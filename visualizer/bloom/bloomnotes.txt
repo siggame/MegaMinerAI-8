@@ -132,10 +132,8 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
           // to the core. We'll talk about them more in bloom.cpp
           LogRegex logFileInfo();                     
           void loadGamelog( std::string gamelog );
-          void registerInterfaces( Interfaces intf );
         private:
           Game *m_game;       // Variable which holds the turns.
-          Interfaces m_intf;  // Boilerplate variable that will likely disappear in the future.
       }; // Bloom
 
     } // visualizer
@@ -173,11 +171,38 @@ Now the parser is properly built and we can use it.  Ok time to start programmin
         return lr;
       }
 
-      void Bloom::registerInterfaces( Interfaces intf )
-      // Holds some of the interfaces we'll be using.
+      void Bloom::loadGamelog( std::string gamelog )
       {
-        m_intf = intf;
-      }
+        // We'll just use this to prove that it's loading bloom when it
+        // should
+        cout << "Load Bloom Gamelog"
+        // Let's just make sure that we don't have memory leaks.
+        delete m_game; 
+        // Allocates the memory we need for the new gamelog
+        m_game = new Game;
 
+        // So this is really important.  This loads the gamelog into 
+        // memory when we call it.
+        if( !parseFile( *m_game, (char*)gamelog.c_str() ) ) // Not safe
+        {
+          // It didn't load correctly.  Cleanup everything
+          delete m_game;
+          // This is special macros for throwing exceptions.  
+          // It's good to use exceptions whenever you can so we know
+          // exactly when and where our code is failing.  It will
+          // immediately exit and print the error
+          THROW
+            (
+              GameException, "Cannot Load The Gamelog."
+            );
+        }
+        
+        // So, now the gamelog is loaded into memory.  We'll just check to
+        // make sure everything is working alright.
+        // Does anyone have any questions before I move on?
+
+      }
     }
+ 
+ ====================  [ :wq ]  =========================
 
