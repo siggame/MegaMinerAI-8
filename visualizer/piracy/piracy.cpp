@@ -264,7 +264,7 @@ namespace visualizer
       state++
       )
     {
-      StackOrganizer<MoveList, Stack> so;
+      StackOrganizer<MoveList, Stack> so( renderer );
 
       foreach( Port, ports, i )
       {
@@ -275,7 +275,6 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_portIds.push_back( i->first );
-        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }
@@ -288,7 +287,6 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_goldIds.push_back( i->first );
-        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }
@@ -305,7 +303,6 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_shipIds.push_back( i->first );
-        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       } 
@@ -322,7 +319,6 @@ namespace visualizer
         s.m_x = i->second.x;
         s.m_y = i->second.y;
         s.m_pirateIds.push_back( i->first );
-        s.Renderer    = renderer;
 
         updateAnimations( i->second, state, s );
       }

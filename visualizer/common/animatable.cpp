@@ -4,26 +4,24 @@
 namespace visualizer
 {
 
-#if 0
-  IAnimator& Animatable::getAnimationSequence( IAnimationEngine* animEngine )
+  Animatable::Animatable( IRenderer *renderer )
   {
-    if( !m_animationSequence )
+    m_renderer = renderer;
+  }
+
+  const IRenderer& Animatable::renderer() const
+  {
+    if( m_renderer == 0 )
     {
-      if( !animEngine )
-      {
-        THROW
-          ( 
-          Exception,
-          "Animation Engine Is Null Pointer.  This Should Only Occur When Animations Already Exist."
-          );
-      }
-      m_animationSequence = animEngine->getAnimator();
+      THROW
+        (
+          Exception, 
+          "Cannot use the renderer if never given.  Please use construtor with valid renderer pointer." 
+        );
     }
 
-    return *m_animationSequence;
-
-  } // Animatable::getAnimationSequence()
-#endif
+    return *m_renderer;
+  }
 
   void Animatable::addKeyFrame( Anim* anim )
   {

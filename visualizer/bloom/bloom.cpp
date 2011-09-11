@@ -1,4 +1,7 @@
 #include "bloom.h"
+#include "animations.h"
+#include "plant.h"
+#include "frame.h"
 
 namespace visualizer
 {
@@ -25,33 +28,64 @@ namespace visualizer
 
   void Bloom::loadGamelog( std::string gamelog )
   {
-    // We'll just use this to prove that it's loading bloom when it
-    // should
     cout << "Load Bloom Gamelog" << endl;
-    // Let's just make sure that we don't have memory leaks.
     delete m_game; 
-    // Allocates the memory we need for the new gamelog
     m_game = new Game;
 
-    // So this is really important.  This loads the gamelog into 
-    // memory when we call it.
     if( !parseFile( *m_game, (char*)gamelog.c_str() ) ) // Not safe
     {
-      // It didn't load correctly.  Cleanup everything
       delete m_game;
-      // This is special macros for throwing exceptions.  
-      // It's good to use exceptions whenever you can so we know
-      // exactly when and where our code is failing.  It will
-      // immediately exit and print the error
-      THROW
+         THROW
         (
           GameException, "Cannot Load The Gamelog."
         );
     }
-    
-    // So, now the gamelog is loaded into memory.  We'll just check to
-    // make sure everything is working alright.
-    // Does anyone have any questions before I move on?
+
+    size_t frameNum = 0;
+
+    for
+      (
+      std::vector<GameState>::iterator state = m_game->states.begin();
+      state != m_game->states.end();
+      state++
+      )
+    {
+      Frame turn;
+      for
+        (
+        std::vector<Plant>::iterator i = state->plants.begin();
+        i != state->plants.end();
+        i++
+        )
+      {
+        plant *p = new plant( renderer );
+
+        p->addKeyFrame( new StartAnim() );
+
+        p->x = i->x;
+        p->y = i->y;
+        p->root = i->root;
+        p->flower = i->flower;
+        p->leaf = i->leaf;
+        p->health = i->health;
+        p->ownerID = i->ownerID;
+
+        p->addKeyFrame( new DrawPlant( p ) );
+
+        turn.addAnimatable( p );
+      }
+
+      addFrame( turn );
+
+      frameNum++;
+
+    }
+
+    timeManager->setNumTurns( frameNum );
+
+    animationEngine->registerFrameContainer( this );
+
+    timeManager->play();
 
   }
 }

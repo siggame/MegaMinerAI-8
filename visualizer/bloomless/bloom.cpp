@@ -67,7 +67,6 @@ namespace visualizer
         )
       {
         plant *p = new plant;
-        p->Renderer = renderer;
         p->addKeyFrame( new StartAnim( p ) );
 
         p->objectID = i->objectID;

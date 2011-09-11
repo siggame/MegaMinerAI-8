@@ -28,9 +28,12 @@ namespace visualizer
   //////////////////////////////////////////////////////////////////////////////
 
   class IAnimationEngine;
+  class IRenderer;
+
   class Animatable
   {
     public:
+      Animatable( IRenderer *renderer = 0 );
       virtual AnimData* getData() = 0; 
 
       void addKeyFrame( Anim* anim );
@@ -41,9 +44,13 @@ namespace visualizer
 
       std::list<SmartPointer<Anim> >& getFrames();
       const std::list<SmartPointer<Anim> >& getFrames() const;
+
+      const IRenderer& renderer() const;
     private:
       std::vector< std::list<SmartPointer<Anim> >::iterator > m_keyFrames;
       std::list<SmartPointer<Anim> > m_frames;
+
+      IRenderer *m_renderer;
 
   }; // Animatable
 

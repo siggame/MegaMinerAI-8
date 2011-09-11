@@ -31,6 +31,7 @@ namespace visualizer
     else if( t >= startTime )
     {
       //cout << "LEFT: " << (t-startTime)/(endTime-startTime) << endl;
+
       data.x -= (t-startTime)/(endTime-startTime);
     }
 
@@ -101,7 +102,7 @@ namespace visualizer
       float y = m_stack->m_y + (m_targetY-m_stack->m_y)*(t-startTime)/(endTime-startTime);
 
       // Only draw when it's time.
-      m_stack->Renderer->drawTexturedQuad( x, y, 1, 1, "cannonball" );
+      m_stack->renderer().drawTexturedQuad( x, y, 1, 1, "cannonball" );
 
     }
   }
@@ -114,7 +115,7 @@ namespace visualizer
   void DrawStack::animate( const float& t, AnimData *d )
   {
     PirateData& data = ((PirateData&)*d);
-    IRenderer &r = *m_stack->Renderer;
+    const IRenderer &r = m_stack->renderer();
     r.setColor( 1, 1, 1, 1 );
 
 

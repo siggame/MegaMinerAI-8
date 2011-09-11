@@ -25,6 +25,10 @@ namespace visualizer
   class StackOrganizer
   {
   public:
+    StackOrganizer( IRenderer *renderer = 0 )
+    {
+      m_renderer = renderer;
+    }
     ~StackOrganizer()
     {
   //    cout << "Destroy" << endl;
@@ -45,6 +49,7 @@ namespace visualizer
     // in the vector had a new pointer.  
 
     Frame m_frame;
+    IRenderer *m_renderer;
 
   };
    

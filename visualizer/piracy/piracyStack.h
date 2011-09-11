@@ -18,7 +18,7 @@ namespace visualizer
   struct Stack: public Animatable
   {
     public:
-      Stack()
+      Stack( IRenderer* renderer ) : Animatable( renderer )
       {
         m_owner = m_pirates =
         m_ships = m_ports = 
@@ -64,7 +64,6 @@ namespace visualizer
       float a_y;
 
       PirateData m_pirateData;
-      IRenderer *Renderer;
 
   };
 
