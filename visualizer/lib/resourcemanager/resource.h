@@ -189,11 +189,14 @@ namespace visualizer
             "Animation Frame Out of Bounds"
             );
         }
+
         int tileX = (int)( texture.width()/width );
         int tileY = (int)( texture.height()/height );
         int yPos = (int)frame/tileX;
         int xPos = frame-yPos*tileX;
         Rect tRect;
+        // Might have to do textureWidth - each of these
+        // because of how png stores textures
         tRect.upLeft = Coord( xPos*width, yPos*height );
         tRect.upRight = Coord( (xPos+1)*width, yPos*height );
         tRect.bottomRight = Coord( (xPos+1)*width, (yPos+1)*height );

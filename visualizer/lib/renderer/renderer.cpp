@@ -329,8 +329,26 @@ namespace visualizer
     const float& z
     ) const
   {
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    glDisable( GL_DEPTH_TEST );
+    glEnable( GL_TEXTURE_2D );
 
+    ResAnimation *r = (ResAnimation*)ResourceMan->reference( resource, "renderer" );
+    Rect texCoord = r->calcTexCoord( frameNumber );
 
+    glBindTexture( GL_TEXTURE_2D, r->getTexture() );
+    glBegin( GL_QUADS );
+      glTexCoord2f( texCoord.bottomRight.x, texCoord.bottomRight.y ); glVertex3f( x, y, z );
+      glTexCoord2f( texCoord.bottomLeft.x, texCoord.bottomLeft.y ); glVertex3f( x+w, y, z );
+      glTexCoord2f( texCoord.upLeft.x, texCoord.upLeft.y ); glVertex3f( x+w, y+h, z );
+      glTexCoord2f( texCoord.upRight.x, texCoord.upRight.y ); glVertex3f( x, y+h, z );
+    glEnd();
+
+    ResourceMan->release( resource, "renderer" );
+    glDisable( GL_TEXTURE_2D );
+    glDisable( GL_BLEND );
+    
   }
 
   void _Renderer::drawProgressBar
