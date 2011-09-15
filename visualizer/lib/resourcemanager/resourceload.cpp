@@ -102,17 +102,34 @@ namespace visualizer
 
                 } break;
                 default:
-                  std::cout << "Resource Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
+                  THROW
+                    (
+                    Exception,
+                    "Resource Load Error Line %d: '%s' is not a type.",
+                    lineNum, 
+                    typebuff.c_str()
+                    );
               }
             }
             else
             {
-              std::cout << "Resource Load Error Line "<< lineNum << ": Resource name \"" << namebuff << "\" already exists\n";
+              THROW
+                (
+                Exception,
+                "Resource Load Error Line %d: Resource name '%s' already exists",
+                lineNum,
+                namebuff.c_str()
+                );
             }
           }
           else
           {
-            std::cout << "Resource Load Error Line "<< lineNum << ": Name buffer read error\n";
+            THROW
+              (
+              Exception,
+              "Resource Load Error Line %d: Name buffer read error.",
+              lineNum
+              );
           }
         }
       }
@@ -141,9 +158,12 @@ namespace visualizer
       return true;
     }
 
-    #ifdef DEBUG
-    std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
-    #endif
+    THROW
+      (
+      Exception,
+      "Resource name conflict. Name: '%s' already exists\n",
+      rName.c_str()
+      );
     return false;
   }
 
