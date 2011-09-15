@@ -29,7 +29,6 @@ namespace visualizer
     return true;
   }
 
-
   bool _Renderer::refresh()
   {
     if (!isSetup())
@@ -259,13 +258,10 @@ namespace visualizer
 
   void _Renderer::setColor
     (
-    const float& r,
-    const float& g, 
-    const float& b,
-    const float& a
+    const Color& c
     ) const
   {
-    glColor4f( r, g, b, a );
+    glColor4f( c.r, c.g, c.b, c.a );
   
   } // _Renderer::setColor()
 
@@ -320,6 +316,33 @@ namespace visualizer
     glDisable( GL_TEXTURE_2D );
     glDisable( GL_BLEND );
     
+  }
+
+  void _Renderer::drawAnimQuad
+    (
+    const float& x,
+    const float& y,
+    const float& w,
+    const float& h,
+    const std::string& resource,
+    const int& frameNumber,
+    const float& z
+    ) const
+  {
+
+  }
+
+  void _Renderer::drawProgressBar
+    (
+    const float& x,
+    const float& y,
+    const float& w, 
+    const float& h,
+    const float& percent,
+    const Color& color,
+    const float& z
+    ) const
+  {
   }
 
 } // visualizer

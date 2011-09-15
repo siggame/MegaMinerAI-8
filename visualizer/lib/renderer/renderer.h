@@ -10,9 +10,6 @@
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
 #include "../objectmanager/objectmanager.h"
-#include "../gocfamily_render.h"
-#include "../gocfamily_location.h"
-#include "../gui/gui.h"
 #include "../gui/renderwidget.h"
 #include "../animationengine/animationengine.h"
 #include "../resourcemanager/resourceman.h"
@@ -31,13 +28,6 @@ namespace visualizer
 #define renderDirsName    "renderDirections"
 
   class RenderWidget;
-
-  struct Talks
-  {
-    int id;
-    string message;
-  };
-
   class _Renderer : public UpdateNeeded, public Module, public IRenderer
   {
     Q_INTERFACES( IRenderer );
@@ -45,7 +35,7 @@ namespace visualizer
 
       _Renderer()
       {
-        //m_frames = 0;
+
       }
 
       bool registerConstantObj( const unsigned int& id, renderObj* obj );
@@ -56,8 +46,6 @@ namespace visualizer
       void _setup();
 
       bool clear();
-
-      //renderObj * getRenderObject(const unsigned int id);
 
       bool create();
 
@@ -87,10 +75,7 @@ namespace visualizer
 
       void setColor
         (
-        const float& r,
-        const float& g, 
-        const float& b,
-        const float& a = 1.0f
+        const Color& c
         ) const;
 
       void drawQuad
@@ -121,7 +106,7 @@ namespace visualizer
         const std::string& resource, 
         const int& frameNumber = 0,
         const float& z = 0.0f
-        );
+        ) const;
 
       void drawProgressBar
         (
@@ -130,10 +115,9 @@ namespace visualizer
         const float& w, 
         const float& h,
         const float& percent,
+        const Color& color = Color( 0, 0, 0, 1 ),
         const float& z = 0.0f
-        );
-
-      //void registerFrameContainer( AnimSequence* frameList );
+        ) const;
 
     protected:
     private:
@@ -141,8 +125,6 @@ namespace visualizer
       unsigned int m_width;
       unsigned int m_depth;
       bool m_isSetup;
-
-      //FrameContainer m_frames;
 
       std::map<int, renderObj*> m_renderConstant;
       RenderWidget *m_parent;

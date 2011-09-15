@@ -11,6 +11,28 @@ namespace visualizer
   //this is a place holder
   typedef GameObject renderObj;
 
+  struct Color
+  {
+    Color()
+    {
+      r = g = b = a = 1;
+    }
+
+    Color( const float& R, const float& G, const float& B, const float& A = 1.0f )
+    {
+      r = R;
+      g = G;
+      b = B;
+      a = A;
+    }
+
+    float r;
+    float g;
+    float b;
+    float a;
+
+  };
+
   class IRenderer
   {
     public:
@@ -41,10 +63,7 @@ namespace visualizer
 
       virtual void setColor
         ( 
-        const float& r, 
-        const float& g,
-        const float& b,
-        const float& a = 1.0f
+        const Color& c
         ) const = 0;
 
       virtual void drawQuad
@@ -63,6 +82,28 @@ namespace visualizer
         const float& w, 
         const float& h, 
         const std::string& resource,
+        const float& z = 0.0f
+        ) const = 0;
+
+      virtual void drawAnimQuad
+        (
+        const float& x, 
+        const float& y,
+        const float& w, 
+        const float& h,
+        const std::string& resource,
+        const int& frameNumber = 0,
+        const float& z = 0.0f
+        ) const = 0;
+
+      virtual void drawProgressBar
+        (
+        const float& x,
+        const float& y,
+        const float& w,
+        const float& h,
+        const float& percent,
+        const Color& color = Color( 0, 0, 0, 1 ),
         const float& z = 0.0f
         ) const = 0;
   };

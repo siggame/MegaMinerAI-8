@@ -11,76 +11,76 @@ using namespace std;
 namespace visualizer
 {
 
-struct Color
-{
-  Color( float R, float G, float B )
+  struct TColor
   {
-    r = R;
-    g = G;
-    b = B;
-    index = 0;
-  }
-  float r,g,b;
-  int index;
-};
-
-enum
-{
-  align_left = 0,
-  align_center,
-  align_right
-};
-
-class DrawGLFont
-{
-  public:
-    DrawGLFont();
-    DrawGLFont( int fontTextureId, string fontWidthsFile )
+    TColor( float R, float G, float B )
     {
-      loadNewFont( fontTextureId, fontWidthsFile );
+      r = R;
+      g = G;
+      b = B;
+      index = 0;
     }
+    float r,g,b;
+    int index;
+  };
 
-    void setBold( bool isBold )
-    {
-      bold = isBold;
-    }
+  enum
+  {
+    align_left = 0,
+    align_center,
+    align_right
+  };
 
-    bool loadNewFont( int fontTextureId, string fontWidthsFile );
+  class DrawGLFont
+  {
+    public:
+      DrawGLFont();
+      DrawGLFont( int fontTextureId, string fontWidthsFile )
+      {
+        loadNewFont( fontTextureId, fontWidthsFile );
+      }
 
-    void drawString( string message );
+      void setBold( bool isBold )
+      {
+        bold = isBold;
+      }
 
-    void setAlignment( int align );
+      bool loadNewFont( int fontTextureId, string fontWidthsFile );
 
-    void setColor( int &i, string message );
+      void drawString( string message );
 
-    void resetColors();
-    void addColor( float r, float g, float b );
-    Color retrieveColor( const unsigned int & id );
+      void setAlignment( int align );
 
-  private:
-    void drawAlignedLeft( string message, int offset );
-    void drawAlignedCenter( string message );
-    void drawAlignedRight( string message, int offset );
+      void setColor( int &i, string message );
 
-  private:
+      void resetColors();
+      void addColor( float r, float g, float b );
+      TColor retrieveColor( const unsigned int & id );
 
-    // Don't want to waste a bunch of time rebinding the font
-    // So we'll make this private and do the binding in
-    // drawString
-    void drawCharacter( unsigned char c );
+    private:
+      void drawAlignedLeft( string message, int offset );
+      void drawAlignedCenter( string message );
+      void drawAlignedRight( string message, int offset );
 
-    // We know there's 256 widths
-    char widths[256];
+    private:
 
-    // ID of texture to bind
-    int textureId;
+      // Don't want to waste a bunch of time rebinding the font
+      // So we'll make this private and do the binding in
+      // drawString
+      void drawCharacter( unsigned char c );
 
-    float kerning;
-    bool bold;
-    vector<Color> colors;
+      // We know there's 256 widths
+      char widths[256];
 
-    int alignment;
-};
+      // ID of texture to bind
+      int textureId;
+
+      float kerning;
+      bool bold;
+      vector<TColor> colors;
+
+      int alignment;
+  };
 
 } // visualizer
 
