@@ -25,3 +25,4 @@ texture proc6       textures/Grass.png
 #texture proc8       textures/Grass.png
 texture proc9       textures/tundra.png
 #texture proc10      textures/tundra.png
+animation animBoat  animations/animboat.png
