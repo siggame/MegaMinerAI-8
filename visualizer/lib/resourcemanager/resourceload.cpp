@@ -17,139 +17,146 @@
 namespace visualizer
 {
 
-ResourceType getResTypeFromStr(const std::string & typeBuff)
-{
-  if ( "texture" == typeBuff )
-    return RT_TEXTURE;
-
-  return RT_NONE;
-}
-
-
-bool _ResourceMan::loadResourceFile(const std::string & filename)
-{
-  /* if we allow multiple loading we can combine files easily
-  if (get()->m_options.size())
+  ResourceType getResTypeFromStr(const std::string & typeBuff)
   {
-    //obviously this is the second time you are loading the damn thing
-    return false;
-  }*/
-  QFileInfo fInfo( filename.c_str() );
+    if ( "texture" == typeBuff )
+      return RT_TEXTURE;
+    if ( "animation" == typeBuff )
+      return RT_ANIMATION;
 
-  std::ifstream input(filename.c_str());
-
-  if( !input.is_open() )
-  {    
-    THROW
-      (
-      FileException, 
-      "Unable to load resource file: \n  %s", filename.c_str()
-      );
-  } 
-
-  if (input.eof())
-  {
-    THROW
-      (
-      FileException,
-      "Resource file is empty: \n  %s", filename.c_str()
-      );
+    return RT_NONE;
   }
 
-  std::string buffer;
-  unsigned int lineNum = 1;
-  while (!input.eof())
+
+  bool _ResourceMan::loadResourceFile(const std::string & filename)
   {
-    std::stringstream ss;
-
-    getline(input,buffer);
-
-    if (buffer.size())
+    /* if we allow multiple loading we can combine files easily
+    if (get()->m_options.size())
     {
-      //2 different line carriages because windows is strange
-      if (buffer.c_str()[0] != '#' && buffer.c_str()[0] != '\n' && buffer.c_str()[0] != (char)13)
+      //obviously this is the second time you are loading the damn thing
+      return false;
+    }*/
+    QFileInfo fInfo( filename.c_str() );
+
+    std::ifstream input(filename.c_str());
+
+    if( !input.is_open() )
+    {    
+      THROW
+        (
+        FileException, 
+        "Unable to load resource file: \n  %s", filename.c_str()
+        );
+    } 
+
+    if (input.eof())
+    {
+      THROW
+        (
+        FileException,
+        "Resource file is empty: \n  %s", filename.c_str()
+        );
+    }
+
+    std::string buffer;
+    unsigned int lineNum = 1;
+    while (!input.eof())
+    {
+      std::stringstream ss;
+
+      getline(input,buffer);
+
+      if (buffer.size())
       {
-        ss << buffer;
-        std::string typebuff;
-        std::string namebuff;
-
-        ss >> typebuff;
-        ResourceType rt = getResTypeFromStr(typebuff);
-
-        if (ss >> namebuff)
+        //2 different line carriages because windows is strange
+        if (buffer.c_str()[0] != '#' && buffer.c_str()[0] != '\n' && buffer.c_str()[0] != (char)13)
         {
-          if (!exists(namebuff))
-          {
-            std::string tempPath, pathBuff;
-            ss >> tempPath; 
-            pathBuff = qPrintable( fInfo.dir().path() );
-            pathBuff += "/";
-            pathBuff += tempPath;
+          ss << buffer;
+          std::string typebuff;
+          std::string namebuff;
 
-            switch (rt)
+          ss >> typebuff;
+          ResourceType rt = getResTypeFromStr(typebuff);
+
+          if (ss >> namebuff)
+          {
+            if (!exists(namebuff))
             {
-              case RT_TEXTURE:
+              std::string tempPath, pathBuff;
+              ss >> tempPath; 
+              pathBuff = qPrintable( fInfo.dir().path() );
+              pathBuff += "/";
+              pathBuff += tempPath;
+
+              switch (rt)
               {
-                loadTexture( pathBuff, namebuff );
-                break;
+                case RT_TEXTURE:
+                {
+                  loadTexture( pathBuff, namebuff );
+                  break;
+                }
+                case RT_ANIMATION:
+                {
+                  loadAnimation( pathBuff, namebuff );
+
+                }
+                default:
+                  std::cout << "Resource Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
               }
-              default:
-                std::cout << "Resource Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
+            }
+            else
+            {
+              std::cout << "Resource Load Error Line "<< lineNum << ": Resource name \"" << namebuff << "\" already exists\n";
             }
           }
           else
           {
-            std::cout << "Resource Load Error Line "<< lineNum << ": Resource name \"" << namebuff << "\" already exists\n";
+            std::cout << "Resource Load Error Line "<< lineNum << ": Name buffer read error\n";
           }
         }
-        else
-        {
-          std::cout << "Resource Load Error Line "<< lineNum << ": Name buffer read error\n";
-        }
       }
+
+      lineNum++;
     }
 
-    lineNum++;
-  }
-
-  input.close();
-  return true;
-
-}
-
-
-/** @brief reg
- * register a value from a file
- * @param rName the id to register the resource with
- * @param filename the value exists at (ex: mypic.png)
- * @return true if the file load was successful and the id didnt exist
- */
-bool _ResourceMan::regFile(const ResID_t& rName, const std::string& /*filename*/)
-{
-  if (!exists(rName))
-  {
-    //load File
-
+    input.close();
     return true;
+
   }
 
-  #ifdef DEBUG
-  std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
-  #endif
-  return false;
-}
+
+  /** @brief reg
+   * register a value from a file
+   * @param rName the id to register the resource with
+   * @param filename the value exists at (ex: mypic.png)
+   * @return true if the file load was successful and the id didnt exist
+   */
+  bool _ResourceMan::regFile(const ResID_t& rName, const std::string& /*filename*/)
+  {
+    if (!exists(rName))
+    {
+      //load File
+
+      return true;
+    }
+
+    #ifdef DEBUG
+    std::cout << "Resource name conflict. Name: \"" << rName << "\" already exists\n";
+    #endif
+    return false;
+  }
 
 
-/** @brief saveResourceFile
- * save the resources to a file
- * @param filename the name of the file to save to
- * @return true if it is successful
- */
-bool _ResourceMan::saveResourceFile(const std::string& /*filename*/)
-{
+  /** @brief saveResourceFile
+   * save the resources to a file
+   * @param filename the name of the file to save to
+   * @return true if it is successful
+   */
+  bool _ResourceMan::saveResourceFile(const std::string& /*filename*/)
+  {
 
-  return false;
-}
+    return false;
+  }
 
 } // visualizer
 

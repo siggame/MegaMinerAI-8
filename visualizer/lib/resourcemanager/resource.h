@@ -191,7 +191,7 @@ namespace visualizer
         }
 
         int tileX = (int)( texture.width()/width );
-        int tileY = (int)( texture.height()/height );
+        //int tileY = (int)( texture.height()/height );
         int yPos = (int)frame/tileX;
         int xPos = frame-yPos*tileX;
         Rect tRect;

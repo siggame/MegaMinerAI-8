@@ -4,12 +4,12 @@
 namespace visualizer
 {
 
-enum ResourceType
-{
-  RT_NONE, RT_TEXTURE
-};
+  enum ResourceType
+  {
+    RT_NONE, RT_TEXTURE, RT_ANIMATION
+  };
 
-typedef std::string ResID_t;
+  typedef std::string ResID_t;
 
 } // visualizer
 

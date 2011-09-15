@@ -1,6 +1,8 @@
 #include "resourceman.h"
 #include "textureloader.h"
 
+#include <fstream>
+
 namespace visualizer
 {
 
@@ -151,21 +153,53 @@ namespace visualizer
     QImage texture;
     int id = 0;
 
-    if( (id = TextureLoader->load( filename.c_str(), texture ) ) )
+    if( ( id = TextureLoader->load( filename.c_str(), texture ) ) )
     {
-      res = (Resource*)(new ResTexture( texture, id ));
-      reg(name,(Resource*)res);
+      res = (Resource*)( new ResTexture( texture, id ) );
+      reg( name, (Resource*)res );
     }
     else
     {
       THROW
         (
         Exception,
-        "%s did not load correctly", filename.c_str()
+        "Texture: '%s' did not load correctly", filename.c_str()
         );
     }
 
   } // _ResourceMan::loadTexture()
+
+  void _ResourceMan::loadAnimation( const std::string& filename, const std::string& name )
+  {
+    string discard;
+    Resource * res = NULL;
+    QImage texture;
+    int id = 0;
+    size_t frames, width, height;
+
+    const std::string metaData = filename + ".meta";
+    ifstream metaIn( metaData.c_str() );
+    metaIn >> discard;
+    metaIn >> frames;
+    metaIn >> discard;
+    metaIn >> width;
+    metaIn >> height;
+
+    if( ( id = TextureLoader->load( filename.c_str(), texture ) ) )
+    {
+      res = (Resource*)( new ResAnimation( texture, id, width, height, frames ) );
+      reg( name, (Resource*)res );
+    }
+    else
+    {
+      THROW
+        (
+        Exception,
+        "Animation '%s' did not load correctly", filename.c_str()
+        );
+    }
+
+  }
 
   void _ResourceMan::loadTexture( QImage& image, const std::string& name )
   {
