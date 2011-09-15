@@ -249,29 +249,9 @@ namespace visualizer
 
   bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
   {
-    Stats globalTotal, globalP0, globalP1, globalP2, globalP3;
-    Stats selectedTotal, selectedP0, selectedP1, selectedP2, selectedP3;
-    int health;
-
-    typedef std::map<ObjIdType,LookupNode<GameObject*,ObjIdType>* > Bucket;
-    Bucket * bucket = ObjectManager->getBucket(turn,frame);
-
-    if (!bucket)
-    {
-      //std::cout << "Bucket Requested at (" << turn <<","<<frame << ") does not exist\n";
-      return false;
-    }
-
-    //  m_renderList.clear();
-
     bool selectUpdate = SelectionRender->getUpdated();
     float mapSize = (float)OptionsMan->getInt("mapSize");
     float unitSize  = height()/mapSize;
-
-    int x1 = 0;
-    int x2 = 0;
-    int y1 = 0;
-    int y2 = 0;
 
     return true;
   }

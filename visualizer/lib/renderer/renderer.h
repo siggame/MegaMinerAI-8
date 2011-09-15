@@ -25,168 +25,131 @@
 namespace visualizer
 {
 
-#define renderHeightName "renderHeight"
-#define renderWidthName "renderWidth"
-#define renderDepthName "renderDepth"
-#define renderDirsName  "renderDirections"
+#define renderHeightName  "renderHeight"
+#define renderWidthName   "renderWidth"
+#define renderDepthName   "renderDepth"
+#define renderDirsName    "renderDirections"
 
-class RenderWidget;
+  class RenderWidget;
 
-struct Talks
-{
-  int id;
-  string message;
-};
-
-struct Stats
-{
-  Stats()
+  struct Talks
   {
-    gold = 0;
-    pirates = 0;
-    avgPirateHealth = 0;
-    avgPirateGold = 0;
-    ports = 0;
-    ships = 0;
-    avgShipHealth = 0;
-    avgShipGold = 0;
-    treasures = 0;
-    portGold = 0;
-  }
+    int id;
+    string message;
+  };
 
-  Stats& operator += ( const Stats& rhs )
+  class _Renderer : public UpdateNeeded, public Module, public IRenderer
   {
-    gold += rhs.gold;
-    pirates += rhs.pirates;
-    avgPirateHealth += rhs.avgPirateHealth;
-    avgPirateGold += rhs.avgPirateGold;
-    ships += rhs.ships;
-    avgShipHealth += rhs.avgShipHealth;
-    avgShipGold += rhs.avgShipGold;
-    treasures += rhs.treasures;
-    ports += rhs.ports;
-    return *this;
-  }
+    Q_INTERFACES( IRenderer );
+    public:
 
-  int portGold;
-  int ports;
-  int gold;
-  int pirates;
-  int avgPirateHealth;
-  int avgPirateGold;
-  int ships;
-  int avgShipHealth;
-  int avgShipGold;
-  int treasures;
+      _Renderer()
+      {
+        //m_frames = 0;
+      }
 
-  void final()
-  {
-    if( pirates )
-    {
-      avgPirateGold /= pirates;
-      avgPirateHealth /= pirates;
-    }
+      bool registerConstantObj( const unsigned int& id, renderObj* obj );
+      bool deleteConstantObj( const unsigned int& id );
 
-    if( ships )
-    {
-      avgShipGold /= ships;
-      avgShipHealth /= ships;
-    }
-  }
+      static void setup();
+      static void destroy();
+      void _setup();
 
-};
+      bool clear();
 
-class _Renderer : public UpdateNeeded, public Module, public IRenderer
-{
-  Q_INTERFACES( IRenderer );
-  public:
+      //renderObj * getRenderObject(const unsigned int id);
 
-    _Renderer()
-    {
-      //m_frames = 0;
-    }
+      bool create();
 
-    bool registerConstantObj( const unsigned int& id, renderObj* obj );
-    bool deleteConstantObj( const unsigned int& id );
+      void setParent( RenderWidget *parent );
 
-    static void setup();
-    static void destroy();
-    void _setup();
+      bool refresh();
+      bool resize
+        (
+        const unsigned int & width,
+        const unsigned int & height,
+        const unsigned int & depth = 1
+        );
 
-    bool clear();
+      bool isSetup();
 
-    //renderObj * getRenderObject(const unsigned int id);
+      unsigned int height();
+      unsigned int width();
+      unsigned int depth();
 
-    bool create();
+      bool update
+        (
+        const unsigned int & turn,
+        const unsigned int & frame
+        );
 
-    void setParent( RenderWidget *parent );
+      void update();
 
-    bool refresh();
-    bool resize
-      (
-      const unsigned int & width,
-      const unsigned int & height,
-      const unsigned int & depth = 1
-      );
+      void setColor
+        (
+        const float& r,
+        const float& g, 
+        const float& b,
+        const float& a = 1.0f
+        ) const;
 
-    bool isSetup();
+      void drawQuad
+        (
+        const float& x,
+        const float& y,
+        const float& w,
+        const float& h,
+        const float& z = 0.0f
+        ) const;
 
-    unsigned int height();
-    unsigned int width();
-    unsigned int depth();
+      void drawTexturedQuad
+        (
+        const float& x,
+        const float& y,
+        const float& w, 
+        const float& h, 
+        const std::string& resource,
+        const float& z = 0.0f
+        ) const;
 
-    bool update
-      (
-      const unsigned int & turn,
-      const unsigned int & frame
-      );
+      void drawAnimQuad
+        (
+        const float& x,
+        const float& y,
+        const float& w, 
+        const float& h, 
+        const std::string& resource, 
+        const int& frameNumber = 0,
+        const float& z = 0.0f
+        );
 
-    void update();
+      void drawProgressBar
+        (
+        const float& x,
+        const float& y, 
+        const float& w, 
+        const float& h,
+        const float& percent,
+        const float& z = 0.0f
+        );
 
-    void setColor
-      (
-      const float& r,
-      const float& g, 
-      const float& b,
-      const float& a = 1.0f
-      ) const;
+      //void registerFrameContainer( AnimSequence* frameList );
 
-    void drawQuad
-      (
-      const float& x,
-      const float& y,
-      const float& w,
-      const float& h,
-      const float& z = 0.0f
-      ) const;
+    protected:
+    private:
+      unsigned int m_height;
+      unsigned int m_width;
+      unsigned int m_depth;
+      bool m_isSetup;
 
-    void drawTexturedQuad
-      (
-      const float& x,
-      const float& y,
-      const float& w, 
-      const float& h, 
-      const std::string& resource,
-      const float& z = 0.0f
-      ) const;
+      //FrameContainer m_frames;
 
-    //void registerFrameContainer( AnimSequence* frameList );
+      std::map<int, renderObj*> m_renderConstant;
+      RenderWidget *m_parent;
 
-  protected:
-  private:
-    unsigned int m_height;
-    unsigned int m_width;
-    unsigned int m_depth;
-    bool m_isSetup;
+  };
 
-    //FrameContainer m_frames;
-
-    std::map<int, renderObj*> m_renderConstant;
-    RenderWidget *m_parent;
-
-};
-
-extern _Renderer *Renderer;
+  extern _Renderer *Renderer;
 
 } // visualizer
 
