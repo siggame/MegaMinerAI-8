@@ -116,7 +116,7 @@ namespace visualizer
   {
     PirateData& data = ((PirateData&)*d);
     const IRenderer &r = m_stack->renderer();
-    r.setColor( 1, 1, 1, 1 );
+    r.setColor( Color( 1, 1, 1, 1 ) );
 
 
     if( m_stack->m_ships )
