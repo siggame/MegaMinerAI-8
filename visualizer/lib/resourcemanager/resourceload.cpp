@@ -21,6 +21,7 @@ namespace visualizer
   {
     if ( "texture" == typeBuff )
       return RT_TEXTURE;
+
     if ( "animation" == typeBuff )
       return RT_ANIMATION;
 
@@ -99,7 +100,7 @@ namespace visualizer
                 {
                   loadAnimation( pathBuff, namebuff );
 
-                }
+                } break;
                 default:
                   std::cout << "Resource Load Error Line "<< lineNum << ": \"" << typebuff << "\" is not a type\n";
               }
