@@ -31,4 +31,23 @@ Examples:
    256x256            5                  1024x512
    256x256            8                  1024x512
    256x256            9                  1024x1024
+   128x256            2                  256x256
+   128x256            4                  512x256
+   128x256            5                  512x512
+     etc             etc                   etc
 
+Once you've determined your image size, build the image and start putting in the images 
+from the sequence (make sure they're in order) onto the output image.  The image sequence
+should go left to right, then the next row, then left to right, etc, etc. 
+
+Once that image is done, it should export the image out to some reasonable name 
+baseImageName-anim.png for example and it should also export a meta file:
+baseImageNmae-anim.png.meta which contains:
+
+frames (numberOfFramesInThisAnimation)
+size xDimension yDimension (of animation frame, not the full image)
+
+
+Suggested libraries for using this tool:
+ python's re library (regular expressions for matching file names to search)
+ python imaging library for loading in images and outputting the animation
