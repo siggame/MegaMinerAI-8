@@ -116,8 +116,8 @@ namespace visualizer
   {
     PirateData& data = ((PirateData&)*d);
     const IRenderer &r = m_stack->renderer();
-    r.setColor( Color( 1, 1, 1, 1 ) );
 
+    r.setColor( Color( 1, 1, 1, 1 ) );
 
     if( m_stack->m_ships )
     {
@@ -189,10 +189,17 @@ namespace visualizer
       r.drawTexturedQuad( data.x, data.y, 1, 1, "treasure" );
     }
 
+    if( m_stack->m_maxHealth )
+    {
+      r.setColor( Color( 0.8, 0, 0 ) );
+      r.drawProgressBar( data.x, data.y, 1, 0.15, (float)m_stack->m_health/m_stack->m_maxHealth );
+    }
+
   }
 
   void DrawMap::animate( const float& t, AnimData* /* d */ ) // We don't use the AnimData
   {
+    m_map->Renderer->setColor( Color( 1, 1, 1 ) );
     m_map->Renderer->drawTexturedQuad( 0, 0, m_map->mapW, m_map->mapH, "mapTexture" );
   }
 
