@@ -104,6 +104,7 @@ namespace visualizer
         const float& h,
         const float& percent,
         const Color& color = Color( 0, 0, 0, 1 ),
+        const float& lineWidth = 1,
         const float& z = 0.0f
         ) const = 0;
   };

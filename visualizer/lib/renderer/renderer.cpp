@@ -340,9 +340,28 @@ namespace visualizer
     const float& h,
     const float& percent,
     const Color& color,
+    const float& lineWidth, 
     const float& z
     ) const
   {
+    // The percent bar
+    glBegin( GL_QUADS );
+      glVertex3f( x, y, z );
+      glVertex3f( x+w*percent, y, z );
+      glVertex3f( x+w*percent, y+h, z );
+      glVertex3f( x, y+h, z );
+    glEnd();
+
+    glColor4f( color.r, color.g, color.b, color.a );
+    glLineWidth( lineWidth );
+
+    glBegin( GL_LINE_STRIP );
+      glVertex3f( x, y, z );
+      glVertex3f( x+w, y, z );
+      glVertex3f( x+w, y+h, z );
+      glVertex3f( x, y+h, z );
+      glVertex3f( x, y, z );
+    glEnd();
   }
 
 } // visualizer
