@@ -4,6 +4,7 @@
 #include <string>
 #include <QImage>
 #include "typedefs.h"
+#include "common.h"
 
 #ifdef DEBUG
 #include <iostream>
@@ -11,6 +12,30 @@
 
 namespace visualizer
 {
+
+  struct Coord
+  {
+    Coord()
+    {
+      x = y = z = 0;
+    }
+
+    Coord( const float& X, const float& Y, const float& Z = 0.0f )
+    {
+      x = X;
+      y = Y;
+      z = Z;
+    }
+
+    float x;
+    float y;
+    float z;
+  };
+
+  struct Rect
+  {
+    Coord upLeft, upRight, bottomLeft, bottomRight;
+  };
 
   class Resource
   {
@@ -102,7 +127,7 @@ namespace visualizer
 
   class ResTexture : public Resource
   {
-    private:
+    protected:
       QImage texture;
       unsigned int texId;
     public:
@@ -137,6 +162,56 @@ namespace visualizer
       }
   };
 
+  class ResAnimation : public ResTexture 
+  {
+    public:
+      ResAnimation() 
+        : ResTexture()
+      {}
+
+      ResAnimation
+        ( 
+        const QImage& image, 
+        const int& id, 
+        const size_t& rWidth,
+        const size_t& rHeight, 
+        const size_t& frames
+        ) : ResTexture( image, id ), width( rWidth ), height( rHeight ), numFrames( frames )
+      {}
+    
+      Rect calcTexCoord( const int& frame ) const
+      {
+        if( frame >= numFrames )
+        {
+          THROW
+            (
+            Exception,
+            "Animation Frame Out of Bounds"
+            );
+        }
+        int tileX = (int)( texture.width()/width );
+        int tileY = (int)( texture.height()/height );
+        int yPos = (int)frame/tileX;
+        int xPos = frame-yPos*tileX;
+        Rect tRect;
+        tRect.upLeft = Coord( xPos*width, yPos*height );
+        tRect.upRight = Coord( (xPos+1)*width, yPos*height );
+        tRect.bottomRight = Coord( (xPos+1)*width, (yPos+1)*height );
+        tRect.bottomLeft = Coord( xPos*width, (yPos+1)*height );
+
+        return tRect;
+      }
+
+      size_t frames() const
+      {
+        return numFrames;
+      }
+      
+    private:
+      size_t width, height;
+      size_t numFrames;
+
+  };
 
 } // visualizer
 

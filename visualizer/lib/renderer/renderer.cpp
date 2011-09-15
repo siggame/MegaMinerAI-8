@@ -330,6 +330,7 @@ namespace visualizer
     ) const
   {
 
+
   }
 
   void _Renderer::drawProgressBar
