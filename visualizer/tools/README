@@ -1,0 +1,11 @@
+So it would be nice if we had our own bitmap font builder.  
+What needs to happen is we need to be able to input a 
+desired image size, a desired font size, desired font, 
+etc. etc. 
+
+The builder will then output a png with 1 letter each in 512
+squares.  A meta file would also be created: fontName.png.meta
+
+This will contain the height and width of each character. 
+Python Imaging Library should make all of this possible:
+http://www.pythonware.com/library/pil/handbook/imagedraw.htm
