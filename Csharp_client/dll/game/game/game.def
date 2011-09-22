@@ -1,6 +1,0 @@
-; game.def : Declares the module parameters for the DLL.
-
-LIBRARY      "game"
-
-EXPORTS
-    ; Explicit exports can go here
