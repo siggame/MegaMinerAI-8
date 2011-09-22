@@ -1,2 +1,0 @@
-cd local/python
-python2.6 main.py $1 $2
