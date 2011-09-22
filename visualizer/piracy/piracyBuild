@@ -1,22 +1,8 @@
 #!/bin/bash
 
-mkdir parser
-mkdir parser/sexp
-
-# Run the codegen and get the files
-
-# Get to the codegen
-cd ../../codegen/
-
-# Run it
-python main.py templates
-
-# Copy the appropriate files over
-cp -f -r ./output/visualizer/* ../visualizer/piracy/parser/
-
 # First compile parser for linux
 # Get to Parser directory:
-cd ../visualizer/piracy/parser
+cd parser
 
 # We want to remove all linux binaries and helper files
 make clean
