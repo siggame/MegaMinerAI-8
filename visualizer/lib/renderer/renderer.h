@@ -5,7 +5,7 @@
 #include <list>
 #include <set>
 #include <QTableWidget>
-#include <GL/gl.h>
+#include <QtOpengl>
 #include <string>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
