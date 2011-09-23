@@ -9,6 +9,8 @@ globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
   Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2)'),
   Variable('gameNumber', int, 'What number game this is for the server'),
+  Variable('basecost',int,'base cost of a unit'),
+  Variable('scalecost',float,'scale cost per level'),
   ]
 
 # Constants that are built directly into the client
@@ -58,7 +60,7 @@ Virus = Model('Virus',
               Function ('move',
                 arguments = [Variable('x',int,'move x direction'),
                              Variable('y',int,'move y direction')],
-                doc = ""
+                doc = "moves a unit in x or y directions"
                 ),
               ]
             )
