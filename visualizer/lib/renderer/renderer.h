@@ -35,6 +35,7 @@ namespace visualizer
 
       _Renderer()
       {
+	m_isSetup = false;
 
       }
 

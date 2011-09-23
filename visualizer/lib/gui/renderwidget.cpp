@@ -13,7 +13,6 @@ RenderWidget::RenderWidget( QWidget *parent )
 {
   Renderer->setup();
   glInit();
-  initializeGL();
 }
 
 

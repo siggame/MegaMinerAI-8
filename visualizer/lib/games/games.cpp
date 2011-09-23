@@ -1,6 +1,9 @@
 #include "games.h"
 #include <iostream>
 using namespace std;
+#ifdef Q_WS_MAC
+#include <CoreFoundation/CoreFoundation.h>
+#endif
 
 namespace visualizer
 {
@@ -25,7 +28,12 @@ namespace visualizer
   {
     IGame *game = 0;
     bool pluginFound;
+
     QDir pluginsDir( qApp->applicationDirPath() );
+#ifdef Q_WS_MAC
+	pluginsDir.cd( "../../../" );
+     
+#endif
 
     pluginsDir.cd( "plugins" );
     foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
