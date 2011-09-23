@@ -118,3 +118,26 @@ combat = Animation ("Combat",
         Variable("foe_V",Virus)
         ]
     )
+
+move = Animation ("Move",
+    data = [
+        Variable("unit", Virus),
+        Variable("dx", int),
+        Variable("dy", int)
+        ]
+    )    
+
+crash = Animation ("Crash",
+    data = [
+        Variable("unit", Virus),
+        Variable("dx", int),
+        Variable("dy", int)
+        ]
+    )
+
+create = Animation ("Create",
+    data = [
+        Variable("unit", Virus)
+        ]
+    )
+
