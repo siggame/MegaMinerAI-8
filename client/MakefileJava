@@ -1,4 +1,0 @@
-all:
-	make -C java/ all
-clean:
-	make -C java clean

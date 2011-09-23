@@ -58,7 +58,7 @@ class Match(DefaultGameWorld):
       return "Game has already begun"
     
     #TODO: START STUFF
-
+    self.turn = self.players[-1]
     self.turnNumber = -1
 
     self.nextTurn()
