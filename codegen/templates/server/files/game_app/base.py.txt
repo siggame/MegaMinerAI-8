@@ -24,6 +24,7 @@ class GameWorld(object):
     self.nextid+=1
     self.animations.append(["add", id])
     self.objects[id] = objType(*([self, id]+arguments))
+    return self.objects[id]
 
   def removeObject(self, oldObject):
     self.animations += [["remove", oldObject.id]]
