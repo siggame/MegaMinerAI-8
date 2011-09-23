@@ -1,7 +1,7 @@
 sources = lex.yy.cpp $(wildcard *.cpp)
 objects = $(sources:%.cpp=%.o)
 libclient_objects = $(sources:%.cpp=libclient_%.o)
-
+CC=mingw32-gcc.exe
 CFLAGS = -g
 CXXFLAGS= -g
 
