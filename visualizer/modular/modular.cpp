@@ -15,7 +15,7 @@ namespace visualizer
   LogRegex Modular::logFileInfo()
   {
     LogRegex lr;
-	lr.regex = " "megaminer" 6 ";
+        lr.regex = " megaminer 6 ";
 	lr.startSize = 20;
 	
 	return lr;
@@ -29,17 +29,13 @@ namespace visualizer
 	
 	m_game = new Game;
 	
-	if (parseFile( *m_gate, (char*)gamelog.c_str() ) );
+        if (!parseFile( *m_game, (char*)gamelog.c_str() ) )
 	{
 	  delete m_game;
-	  THROW
-	  (
-	    GameException,
-		"Cannot load gamelog: %s",
-		gamelog.c_str()
-	  );
+          THROW
+          ( GameException,"Cannot load gamelog: %s",gamelog.c_str() );
 	} //if (parseFile( *m_gate, (char*)gamelog.c_str() ) );
-	
+
   } //void Modular::loadGamelog(std::string gamelog)
   
 } //namespace visualizer

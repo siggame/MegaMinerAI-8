@@ -8,9 +8,8 @@ else:LIBS += ./parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
 TARGET = modular
-SOURCES += *.cpp \
-  ./parser/*.cpp
-  
+SOURCES += *.cpp
+
 HEADERS += modular.h
 
 QMAKE_CFLAGS_DEBUG += -pg
@@ -20,3 +19,7 @@ CONFIG += debug plugin
 
 debug:DEFINES += __DEBUG__
 DESTDIR = ../plugins/
+
+OTHER_FILES += \
+    parser/sexp/sexpXP.a
+
