@@ -138,9 +138,9 @@ create = Animation("Create",
     Variable("creating", Virus)
     ]
   )
-suicide = Animation("Suicide",
+suicide = Animation("Recycle",
   data = [
-    Variable("dieing", Virus),
+    Variable("recycling", Virus),
     Variable("base", Base),
     ]
   )
