@@ -3,7 +3,7 @@
 
 #include "texture.h"
 #include <qgl.h>
-#include <QtOpengl>
+#include <QtOpenGL>
 #include <iostream>
 
 #if 0

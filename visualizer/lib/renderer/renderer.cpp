@@ -154,12 +154,7 @@ namespace visualizer
 
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
-<<<<<<< HEAD
-  
-=======
 
-
->>>>>>> c1f46184f9485b31073e83b036f4e6d5e81642af
     glDisable( GL_TEXTURE_2D );
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -168,16 +163,9 @@ namespace visualizer
 
     TimeManager->requestUpdate( Renderer );
 
-<<<<<<< HEAD
-	m_isSetup = true;
-
-  }
-=======
     m_isSetup = true;
       
 	}
->>>>>>> c1f46184f9485b31073e83b036f4e6d5e81642af
-
 
   bool _Renderer::isSetup()
   {
