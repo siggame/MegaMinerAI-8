@@ -2,15 +2,15 @@
 from structures import *
 
 # Informs the codegen if it should include turn timing
-aspects = ['timer']
+aspects = []
 
 # Variables the server needs to send the client each game
 globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
   Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2)'),
   Variable('gameNumber', int, 'What number game this is for the server'),
-  Variable('basecost',int,'base cost of a unit'),
-  Variable('scalecost',float,'scale cost per level'),
+  Variable('basecost', int, 'BaseCost used in the virus price formula'),
+  Variable('scalecost', float, 'Scalar used in the virus price formula'),
   ]
 
 # Constants that are built directly into the client
@@ -22,11 +22,11 @@ Player = Model('Player',
   # Container holding all of the Player's variables 
   data = [
     Variable('playerName',str, "Player's Name"),
-    Variable('bytedollars',int,"Player's points, one with more at end of game wins"),
-    Variable('cycles',int,"Player's machine cycles"),
+    Variable('byteDollars', int, "Player's points, one with more at end of game wins"),
+    Variable('cycles', int, "Player's machine cycles, used to create new Virus's"),
     ],
   # The documentation string for Player objects
-  doc = 'Stores information about all of the players in the game',
+  doc = 'Stores information about a player in the game',
   # Container holding all of the functions a Player can perform
   functions = [
     Function('talk',
@@ -36,110 +36,111 @@ Player = Model('Player',
     ]
   )
   
-  #gives each inherited class instance an x and y cooridinate variable
+#gives each inherited class instance an x and y cooridinate variable
 Mappable = Model("Mappable",
-    data = [
-        Variable ('x',int, 'The x coordinate'),
-        Variable ('y',int, 'The y cooridnate'),
-        ],
-        #The documentation string for the mappable class
-        doc = 'The base object for all mappable things',
-        type = 'virtual'
-        ) 
+  data = [
+    Variable ('x',int, 'The x coordinate'),
+    Variable ('y',int, 'The y cooridnate'),
+    ],
+  #The documentation string for the mappable class
+  doc = 'The base object for all mappable things',
+  type = 'virtual'
+  )
 
 #A virus is the dominant unit of the game. Can move left and right. Has a level, player_id and cost(?) variable.  
 Virus = Model('Virus',
-    parent = Mappable,
-    data = [ 
-            Variable('level',int, "The Unit's current level"),
-            #ownder<<
-            ],
-            # the documentation for Virus objects
-            doc = 'Stores the information about all viruses (virusi?) in the game',
-            functions = [
-              Function ('move',
-                arguments = [Variable('x',int,'move x direction'),
-                             Variable('y',int,'move y direction')],
-                doc = "moves a unit in x or y directions"
-                ),
-              ]
-            )
+  parent = Mappable,
+  data = [
+    Variable('owner', int, "The owner of this Virus"),
+    Variable('level', int, "The Virus's level"),
+    ],
+  # the documentation for Virus objects
+  doc = 'Stores the information about a virus',
+  functions = [
+    Function ('move',
+      arguments = [Variable('x',int,'The x coordinate to move to'),
+                   Variable('y',int,'The y coordinate to move to')],
+      doc = "Moves a unit to the given (x,y) position"
+      ),
+    ]
+  )
     
 Base = Model('Base',
-    parent = Mappable,
-    data = [
+  parent = Mappable,
+  data = [
     Variable ('owner',int,"Whose base this is, all your base are belong to who"),
     ],
-    doc = 'The information on the base',
-    functions = [
-      Function ('Spawn',
-        arguments = [Variable ('Level',int,'The level of the Virus created')],
-        doc = 'Creates a Virus Unit on the base with certain level.'
-        ),
-      ]
-    )
+  doc = 'The information on the base',
+  functions = [
+    Function ('Spawn',
+      arguments = [Variable ('Level', int, 'The level of the Virus to be created')],
+      doc = 'Creates a Virus on the base with certain level.'
+      ),
+    ]
+  )
             
 Tile = Model('Tile',
-    parent = Mappable,
-    data = [
-        Variable('owned_by',int,"who owns this tile"),
-        Variable('type',int,"is this a tile or wall"),
-        ],
-        doc = 'A tile is either floor space, or a wall. Floor space belongs to no one, p1 or p2',
-        )
-               
-    
-
-
+  parent = Mappable,
+  data = [
+    Variable('owner', int, "who owns this tile: 0-First Player, 1-Second Player, 2-Not Owned, 3-Blocked"),
+    ],
+  doc = 'Represents a single space on the map, can be owned by either player, neither player, or be a wall',
+  )
 
 # Defines an Animation, which is sent to the visualizer to let it know something happened
-talk = Animation("PlayerTalk",
+playerTalk = Animation("PlayerTalk",
   data = [
     Variable("speaker", Player), 
-    Variable("message", str)
+    Variable("message", str),
     ]
   )
 
-virus_talk = Animation("UnitTalk",
-    data = [
-        Variable("speaker",Virus),
-        Variable("message",str)
-        ]
+virusTalk = Animation("VirusTalk",
+  data = [
+    Variable("speaker",Virus),
+    Variable("message",str)
+    ]
   )
   
 combine = Animation("Combine",
-     data = [
-        Variable("moving_V", Virus),
-        Variable("stay_V",Virus)
-       ]
-    )
-    
-combat = Animation ("Combat",	
-    data = [
-        Variable("friend_V",Virus),
-        Variable("foe_V",Virus)
-        ]
-    )
+  data = [
+    Variable("moving", Virus),
+    Variable("stationary", Virus),
+    Variable("created", Virus),
+    ]
+  )
 
-move = Animation ("Move",
-    data = [
-        Variable("unit", Virus),
-        Variable("dx", int),
-        Variable("dy", int)
-        ]
-    )    
+combat = Animation("Combat",
+  data = [
+    Variable("moving", Virus),
+    Variable("stationary", Virus),
+    ]
+  )
 
-crash = Animation ("Crash",
-    data = [
-        Variable("unit", Virus),
-        Variable("dx", int),
-        Variable("dy", int)
-        ]
-    )
+move = Animation("Move",
+  data = [
+    Variable("moving", Virus),
+    Variable("dx", int),
+    Variable("dy", int)
+    ]
+  )
 
-create = Animation ("Create",
-    data = [
-        Variable("unit", Virus)
-        ]
-    )
+crash = Animation("Crash",
+  data = [
+    Variable("crashing", Virus),
+    Variable("dx", int),
+    Variable("dy", int)
+    ]
+  )
 
+create = Animation("Create",
+  data = [
+    Variable("creating", Virus)
+    ]
+  )
+suicide = Animation("Suicide",
+  data = [
+    Variable("dieing", Virus),
+    Variable("base", Base),
+    ]
+  )
