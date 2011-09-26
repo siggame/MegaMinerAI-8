@@ -11,7 +11,8 @@ namespace visualizer
 
   void _TimeManager::setup()
   {
-    if( !TimeManager )
+    
+	if( !TimeManager )
     {
       TimeManager = new _TimeManager;
       TimeManager->_setup();
@@ -37,6 +38,9 @@ namespace visualizer
     m_speed = 0;
     m_turnCompletion = 0;
     m_numTurns = 500;
+	loop_on = false;
+	loop_start = m_turn;
+	loop_end = m_numTurns;
 
   } // _TimeManager::_setup()
 
@@ -129,7 +133,7 @@ namespace visualizer
 
   } // _TimeManager::nextTurn()
 
-  const int& _TimeManager::prevTurn()
+    const int& _TimeManager::prevTurn()
   {
     pause();
     m_turnCompletion = 0;
@@ -149,6 +153,19 @@ namespace visualizer
     m_speed = 0;
 
   } // _TimeManager::pause()
+
+  void _TimeManager::abloop_on(const int& a, const int&b)
+  {
+	  loop_on = true;
+	  loop_start = a;
+	  loop_end = b;
+	  setTurn(a);
+	  play();
+  }
+  void _TimeManager::abloop_off()
+  {
+	  loop_on = false;
+  }
 
   void _TimeManager::fastForward()
   {
@@ -204,6 +221,10 @@ namespace visualizer
       m_turn += floor( m_turnCompletion );
       m_turnCompletion -= floor( m_turnCompletion );
 
+	  if(loop_on && m_turn >= loop_end)
+	  {
+		  setTurn(loop_start);
+	  }
       if( m_turn >= m_numTurns )
       {
         m_turn = m_numTurns-1;
@@ -217,6 +238,10 @@ namespace visualizer
       m_turn += ceil( m_turnCompletion );
       m_turnCompletion -= ceil( m_turnCompletion );
 
+	   if(loop_on && m_turn <= loop_start)
+	  {
+		  setTurn(loop_end);
+	  }
       if( m_turn <= 0 )
       {
         m_turn = 0;

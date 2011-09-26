@@ -26,6 +26,10 @@ namespace visualizer
     IGame *game = 0;
     bool pluginFound;
     QDir pluginsDir( qApp->applicationDirPath() );
+	QStringList pluginFilter;
+
+	pluginFilter << "*.dll" << "*.so";
+	pluginsDir.setNameFilters(pluginFilter);
 
     pluginsDir.cd( "plugins" );
     foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
