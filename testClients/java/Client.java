@@ -64,6 +64,7 @@ public interface Client extends Library {
   int virusGetY(Pointer ptr);
   int virusGetOwner(Pointer ptr);
   int virusGetLevel(Pointer ptr);
+  int virusGetMovesLeft(Pointer ptr);
 
 
     //properties

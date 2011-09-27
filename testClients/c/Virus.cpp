@@ -34,6 +34,11 @@ int Virus::level()
   return ((_Virus*)ptr)->level;
 }
 
+int Virus::movesLeft()
+{
+  return ((_Virus*)ptr)->movesLeft;
+}
+
 
 int Virus::move(int x, int y)
 {
@@ -49,5 +54,6 @@ std::ostream& operator<<(std::ostream& stream,Virus ob)
   stream << "y: " << ((_Virus*)ob.ptr)->y  <<'\n';
   stream << "owner: " << ((_Virus*)ob.ptr)->owner  <<'\n';
   stream << "level: " << ((_Virus*)ob.ptr)->level  <<'\n';
+  stream << "movesLeft: " << ((_Virus*)ob.ptr)->movesLeft  <<'\n';
   return stream;
 }

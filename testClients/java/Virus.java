@@ -63,5 +63,11 @@ class Virus extends Mappable
     validify();
     return Client.INSTANCE.virusGetLevel(ptr);
   }
+  ///The number of times this virus can still move
+  public int getMovesLeft()
+  {
+    validify();
+    return Client.INSTANCE.virusGetMovesLeft(ptr);
+  }
 
 }

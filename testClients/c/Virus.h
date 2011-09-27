@@ -24,6 +24,8 @@ class Virus : public Mappable {
   int owner();
   ///The Virus's level
   int level();
+  ///The number of times this virus can still move
+  int movesLeft();
 
   // Actions
   ///Moves a unit to the given (x,y) position

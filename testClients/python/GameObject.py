@@ -258,6 +258,11 @@ class Virus(Mappable):
     self.validify()
     return library.virusGetLevel(self.ptr)
 
+  ##The number of times this virus can still move
+  def getMovesLeft(self):
+    self.validify()
+    return library.virusGetMovesLeft(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -267,4 +272,5 @@ class Virus(Mappable):
     ret += "y: %s\n" % self.getY()
     ret += "owner: %s\n" % self.getOwner()
     ret += "level: %s\n" % self.getLevel()
+    ret += "movesLeft: %s\n" % self.getMovesLeft()
     return ret

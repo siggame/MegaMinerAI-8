@@ -53,6 +53,7 @@ Virus = Model('Virus',
   data = [
     Variable('owner', int, "The owner of this Virus"),
     Variable('level', int, "The Virus's level"),
+    Variable('movesLeft', int, "The number of times this virus can still move"),
     ],
   # the documentation for Virus objects
   doc = 'Stores the information about a virus',

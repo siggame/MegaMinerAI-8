@@ -327,6 +327,8 @@ void parseVirus(Connection* c, _Virus* object, sexp_t* expression)
   sub = sub->next;
   object->level = atoi(sub->val);
   sub = sub->next;
+  object->movesLeft = atoi(sub->val);
+  sub = sub->next;
   
 }
 

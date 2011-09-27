@@ -80,4 +80,8 @@ DLLEXPORT int virusGetLevel(_Virus* ptr)
 {
   return ptr->level;
 }
+DLLEXPORT int virusGetMovesLeft(_Virus* ptr)
+{
+  return ptr->movesLeft;
+}
 

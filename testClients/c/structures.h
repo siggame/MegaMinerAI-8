@@ -51,6 +51,7 @@ struct _Virus
   int y;
   int owner;
   int level;
+  int movesLeft;
 };
 
 #endif
