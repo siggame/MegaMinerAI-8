@@ -25,7 +25,7 @@ class Base extends Mappable
     //commands
     
   ///Creates a Virus on the base with certain level.
-  int Spawn(int Level)
+  int spawn(int Level)
   {
     validify();
     return Client.INSTANCE.baseSpawn(ptr, Level);

@@ -77,7 +77,7 @@ Base = Model('Base',
     ],
   doc = 'The information on the base',
   functions = [
-    Function ('Spawn',
+    Function ('spawn',
       arguments = [Variable ('Level', int, 'The level of the Virus to be created')],
       doc = 'Creates a Virus on the base with certain level.'
       ),

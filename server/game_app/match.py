@@ -115,8 +115,8 @@ class Match(DefaultGameWorld):
     return "logs/" + str(self.id) + ".gamelog"
 
   @derefArgs(Base, None)
-  def Spawn(self, object, Level):
-    return object.Spawn(Level, )
+  def spawn(self, object, Level):
+    return object.spawn(Level, )
 
   @derefArgs(Player, None)
   def talk(self, object, message):

@@ -35,7 +35,7 @@ public class Base: Mappable
     //commands
     
   ///Creates a Virus on the base with certain level.
-  public int Spawn(int Level)
+  public int spawn(int Level)
   {
     validify();
     return Client.baseSpawn(ptr, Level);

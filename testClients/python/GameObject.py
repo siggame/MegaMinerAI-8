@@ -66,7 +66,7 @@ class Base(Mappable):
         return True
     raise ExistentialError()
   ##Creates a Virus on the base with certain level.
-  def Spawn(self, Level):
+  def spawn(self, Level):
     self.validify()
     return library.baseSpawn(self.ptr, Level)
 

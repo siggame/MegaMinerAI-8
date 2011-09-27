@@ -25,7 +25,7 @@ class Base : public Mappable {
 
   // Actions
   ///Creates a Virus on the base with certain level.
-  int Spawn(int Level);
+  int spawn(int Level);
 
   // Properties
 

@@ -30,7 +30,7 @@ int Base::owner()
 }
 
 
-int Base::Spawn(int Level)
+int Base::spawn(int Level)
 {
   return baseSpawn( (_Base*)ptr, Level);
 }

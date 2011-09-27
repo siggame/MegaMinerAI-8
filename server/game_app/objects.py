@@ -38,7 +38,7 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
-  def Spawn(self, Level):
+  def spawn(self, Level):
     pass
 
 

@@ -113,7 +113,7 @@ class GameApp(AccountsAppMixin, BaseApp):
     """Creates a Virus on the base with certain level."""
     if self.game.turn is not self:
       return "Not your turn."
-    return self.game.Spawn(base, Level)
+    return self.game.spawn(base, Level)
 
   @protocolmethod
   @errorBuffer
