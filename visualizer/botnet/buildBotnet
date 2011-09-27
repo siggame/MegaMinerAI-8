@@ -5,4 +5,8 @@ python main.py templates
 
 cp -R output/visualizer ../visualizer/botnet/parser
 
-
+cd ../visualizer/botnet/parser/sexp
+make
+cd ../
+make
+cd ../
