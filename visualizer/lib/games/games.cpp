@@ -30,13 +30,12 @@ namespace visualizer
     bool pluginFound;
 
     QDir pluginsDir( qApp->applicationDirPath() );
-	QStringList pluginFilter;
+    QStringList pluginFilter;
 
-	pluginFilter << "*.dll" << "*.so";
-	pluginsDir.setNameFilters(pluginFilter);
+    pluginFilter << "*.dll" << "*.so" << "*.dylib";
+    pluginsDir.setNameFilters(pluginFilter);
 #ifdef Q_WS_MAC
-	pluginsDir.cd( "../../../" );
-     
+    pluginsDir.cd( "../../../" );
 #endif
 
     pluginsDir.cd( "plugins" );
@@ -65,26 +64,20 @@ namespace visualizer
         } 
         else
         {
-          THROW
-            ( 
-            Exception, 
-            "Plugin Is Not Valid For Usage\n Path:  %s\n Error String: \n  %s", 
-            qPrintable( pluginsDir.absoluteFilePath( fileName ) ),
-            qPrintable( pluginLoader.errorString() )
-            );
+          cerr << "Plugin Is Not Valid For Usage" << endl;
+          cerr << " Path: " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+          cerr << " Error String: " << endl << "  " << qPrintable( pluginLoader.errorString() ) << endl;
         }
       }
       else
       {
-        THROW
-          ( 
-          Exception, 
-          "Plugin Could Not Be Loaded Into Memory\n Path:  %s\n Error String: \n  %s", 
-          qPrintable( pluginsDir.absoluteFilePath( fileName ) ),
-          qPrintable( pluginLoader.errorString() )
-          );
+        cerr << "Plugin Could Not Be Loaded Into Memory" << endl;
+        cerr << " Path:  " << qPrintable( pluginsDir.absoluteFilePath( fileName ) ) << endl;
+        cerr << " Error String: " << endl;
+        cerr << "  " << qPrintable( pluginLoader.errorString() ) << endl;
       }
     }
+    
   } // _Games::_setup()
 
   std::vector< IGame* >& _Games::gameList()
