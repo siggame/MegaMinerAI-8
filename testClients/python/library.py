@@ -47,6 +47,9 @@ library.playerTalk.argtypes = [c_void_p, c_char_p]
 library.virusMove.restype = c_int
 library.virusMove.argtypes = [c_void_p, c_int, c_int]
 
+library.virusTalk.restype = c_int
+library.virusTalk.argtypes = [c_void_p, c_char_p]
+
 # accessors
 
 #Globals 

@@ -30,6 +30,8 @@ public class Client {
   public static extern int playerTalk(IntPtr self, string message);
   [DllImport("client")]
   public static extern int virusMove(IntPtr self, int x, int y);
+  [DllImport("client")]
+  public static extern int virusTalk(IntPtr self, string message);
 
     //accessors
   [DllImport("client")]

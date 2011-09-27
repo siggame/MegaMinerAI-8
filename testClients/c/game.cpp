@@ -240,6 +240,18 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   return 1;
 }
 
+DLLEXPORT int virusTalk(_Virus* object, char* message)
+{
+  stringstream expr;
+  expr << "(game-talk " << object->id
+      << " \"" << escape_string(message) << "\""
+       << ")";
+  LOCK( &object->_c->mutex);
+  send_string(object->_c->socket, expr.str().c_str());
+  UNLOCK( &object->_c->mutex);
+  return 1;
+}
+
 
 //Utility functions for parsing data
 void parseMappable(Connection* c, _Mappable* object, sexp_t* expression)

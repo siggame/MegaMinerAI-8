@@ -21,6 +21,7 @@ public interface Client extends Library {
   int baseSpawn(Pointer object, int Level);
   int playerTalk(Pointer object, String message);
   int virusMove(Pointer object, int x, int y);
+  int virusTalk(Pointer object, String message);
 
     //accessors
   int getTurnNumber(Pointer connection);

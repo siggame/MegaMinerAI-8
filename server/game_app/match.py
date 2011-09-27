@@ -126,6 +126,10 @@ class Match(DefaultGameWorld):
   def move(self, object, x, y):
     return object.move(x, y, )
 
+  @derefArgs(Virus, None)
+  def talk(self, object, message):
+    return object.talk(message, )
+
 
   def sendIdent(self, players):
     if len(self.players) < 2:

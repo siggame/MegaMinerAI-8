@@ -40,6 +40,12 @@ public class Virus: Mappable
     validify();
     return Client.virusMove(ptr, x, y);
   }
+  ///Allows a Virus to display a message to the screen.
+  public int talk(string message)
+  {
+    validify();
+    return Client.virusTalk(ptr, message);
+  }
     
     //getters
     

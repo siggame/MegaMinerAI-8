@@ -30,6 +30,12 @@ class Virus extends Mappable
     validify();
     return Client.INSTANCE.virusMove(ptr, x, y);
   }
+  ///Allows a Virus to display a message to the screen.
+  int talk(String message)
+  {
+    validify();
+    return Client.INSTANCE.virusTalk(ptr, message);
+  }
     
     //getters
     

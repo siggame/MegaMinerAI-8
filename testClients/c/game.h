@@ -71,6 +71,8 @@ extern "C"
   DLLEXPORT int playerTalk(_Player* object, char* message);
   ///Moves a unit to the given (x,y) position
   DLLEXPORT int virusMove(_Virus* object, int x, int y);
+  ///Allows a Virus to display a message to the screen.
+  DLLEXPORT int virusTalk(_Virus* object, char* message);
 
 //derived properties
 

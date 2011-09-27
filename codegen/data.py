@@ -63,9 +63,13 @@ Virus = Model('Virus',
                    Variable('y',int,'The y coordinate to move to')],
       doc = "Moves a unit to the given (x,y) position"
       ),
+    Function('talk',
+      arguments = [Variable('message', str, 'The message that the Virus should say')],
+      doc = 'Allows a Virus to display a message to the screen.'
+      ),
     ]
   )
-    
+
 Base = Model('Base',
   parent = Mappable,
   data = [

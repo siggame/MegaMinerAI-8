@@ -30,6 +30,8 @@ class Virus : public Mappable {
   // Actions
   ///Moves a unit to the given (x,y) position
   int move(int x, int y);
+  ///Allows a Virus to display a message to the screen.
+  int talk(char* message);
 
   // Properties
 

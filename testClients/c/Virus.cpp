@@ -45,6 +45,11 @@ int Virus::move(int x, int y)
   return virusMove( (_Virus*)ptr, x, y);
 }
 
+int Virus::talk(char* message)
+{
+  return virusTalk( (_Virus*)ptr, message);
+}
+
 
 
 std::ostream& operator<<(std::ostream& stream,Virus ob)

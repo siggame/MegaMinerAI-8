@@ -135,6 +135,16 @@ class GameApp(AccountsAppMixin, BaseApp):
       return "Not your turn."
     return self.game.move(virus, x, y)
 
+  @protocolmethod
+  @errorBuffer
+  @requireTurn
+  @requireTypes(None, int, str)
+  def gameTalk(self, virus, message):
+    """Allows a Virus to display a message to the screen."""
+    if self.game.turn is not self:
+      return "Not your turn."
+    return self.game.talk(virus, message)
+
 
   @protocolmethod
   def whoami(self):

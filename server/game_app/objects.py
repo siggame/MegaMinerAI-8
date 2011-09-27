@@ -117,5 +117,8 @@ class Virus(Mappable):
   def move(self, x, y):
     pass
 
+  def talk(self, message):
+    pass
+
 
 
