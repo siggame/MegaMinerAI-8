@@ -32,8 +32,6 @@ namespace visualizer
 
   void _AnimationEngine::buildAnimations( Frame& frame )
   {
-    // @NOTE Can we simplify this looping any?  Not a huge issue since it's internal
-    // if this were on the piracy side, I'd be a little more worried
     for
       ( 
       std::list<SmartPointer<Animatable> >::iterator i = frame.getAnimations().begin();
@@ -41,8 +39,13 @@ namespace visualizer
       i++ 
       )
     {
+      // Total duration is the total amount of time units 
+      // in the animation.
       float totalDuration = 0;
+      // extraTime is used to assist in calculating the total duration
+      // if there are extra animations left over
       float extraTime = 0;
+      // Temporary variable for expanding extratime
       float exT;
       for
         (
@@ -51,12 +54,16 @@ namespace visualizer
         j++
         )
       {
+        // totalDuration is at the very minimum the summation of the "control" durations.
         totalDuration += (*j)->controlDuration();
+        // Calculate the extra time for just this animation
         exT = (*j)->totalDuration() - (*j)->controlDuration();
-        extraTime = extraTime > exT ? extraTime : exT;
-
+        // Build up the total extraTime
+        // If the left over extraTime is greater than the new exT, adjust it appropriately
+        extraTime = (extraTime - (*j)->controlDuration()) > exT ? (extraTime - (*j)->controlDuration()) : exT;
       }
 
+      // Set the full relative duration to the total control durations and any remaining time.
       float fullTime = totalDuration + extraTime;
       float start = 0;
       for
@@ -66,8 +73,11 @@ namespace visualizer
         j++
         )
       {
+        // Set the animation start time
         (*j)->startTime = start;
+        // Calculate the relative animation end time based off of the start time.
         (*j)->endTime = (*j)->startTime + ((*j)->totalDuration()/fullTime);
+        // Calculate the next start time based off of the control duration.
         start = (*j)->startTime + ((*j)->controlDuration()/fullTime);
       }
 
@@ -112,9 +122,7 @@ namespace visualizer
 
   void _AnimationEngine::registerFrameContainer( AnimSequence* frameList )
   {
-    cout << "REGISTERED" << endl;
     m_frameList = frameList;
-    cout << "mSize: " << m_frameList->size() << endl;
   } // _AnimationEngine::registerFrameContainer()
 
 } // visualizer

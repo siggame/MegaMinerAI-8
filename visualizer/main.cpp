@@ -8,7 +8,6 @@
 #include "lib/renderer/renderer.h"
 #include "lib/games/games.h"
 #include "lib/resourcemanager/textureloader.h"
-//#include "piracy/dupObj.h"
 
 using namespace visualizer;
 
@@ -23,11 +22,7 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
   OptionsMan->setup();
 
-#ifdef Q_WS_MAC
-	if( !OptionsMan->loadOptionFile( "../../../options.cfg" ) )
-#else
 	if( !OptionsMan->loadOptionFile( "./options.cfg" ) )
-#endif
 	{
 		std::cerr << "Could Not Load options.cfg" << std::endl;
 		return 1;

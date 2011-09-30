@@ -45,6 +45,7 @@ QMAKE_CFLAGS_DEBUG += -pg -rdynamic
 QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic
 QMAKE_LFLAGS_DEBUG += -pg -rdynamic
 CONFIG += debug
+macx:config -= app_bundle
 QT += opengl
 SUBDIRS += tools 
 OTHER_FILES += 

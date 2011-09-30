@@ -34,9 +34,6 @@ namespace visualizer
 
     pluginFilter << "*.dll" << "*.so" << "*.dylib";
     pluginsDir.setNameFilters(pluginFilter);
-#ifdef Q_WS_MAC
-    pluginsDir.cd( "../../../" );
-#endif
 
     pluginsDir.cd( "plugins" );
     foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
