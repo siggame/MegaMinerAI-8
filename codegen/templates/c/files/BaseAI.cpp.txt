@@ -19,11 +19,11 @@ bool BaseAI::startTurn()
 % for model in models:
 %   if model.type == 'Model':
   count = get${model.name}Count(c);
-  ${lowercase(model.name)}s.clear();
-  ${lowercase(model.name)}s.resize(count);
+  ${lowercase(model.plural)}.clear();
+  ${lowercase(model.plural)}.resize(count);
   for(int i = 0; i < count; i++)
   {
-    ${lowercase(model.name)}s[i] = ${model.name}(get${model.name}(c, i));
+    ${lowercase(model.plural)}[i] = ${model.name}(get${model.name}(c, i));
   }
 
 %   endif

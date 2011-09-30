@@ -31,7 +31,7 @@ namespace Windows
 #include <unistd.h>
 #endif
 
-#ifdef ENABLE_THREADS 
+#ifdef ENABLE_THREADS
 #define LOCK(X) pthread_mutex_lock(X)
 #define UNLOCK(X) pthread_mutex_unlock(X)
 #else
@@ -45,10 +45,10 @@ DLLEXPORT Connection* createConnection()
 {
   Connection* c = new Connection;
   c->socket = -1;
-  #ifdef ENABLE_THREADS 
+  #ifdef ENABLE_THREADS
   pthread_mutex_init(&c->mutex, NULL);
   #endif
-  
+
 % for datum in globals + constants:
   c->${datum.name} = 0;
 % endfor
@@ -63,9 +63,9 @@ DLLEXPORT Connection* createConnection()
 
 DLLEXPORT void destroyConnection(Connection* c)
 {
-  #ifdef ENABLE_THREADS 
+  #ifdef ENABLE_THREADS
   pthread_mutex_destroy(&c->mutex);
-  #endif 
+  #endif
 % for model in models:
 %   if model.type == 'Model':
   if(c->${model.plural})
@@ -106,7 +106,7 @@ DLLEXPORT int serverLogin(Connection* c, const char* username, const char* passw
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   message = expression->list;
   if(message->val == NULL || strcmp(message->val, "login-accepted") != 0)
   {
@@ -123,19 +123,19 @@ DLLEXPORT int createGame(Connection* c)
   sexp_t* expression, *number;
 
   send_string(c->socket, "(create-game)");
-  
+
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   number = expression->list->next;
   c->gameNumber = atoi(number->val);
   destroy_sexp(expression);
-  
+
   std::cout << "Creating game " << c->gameNumber << endl;
-  
+
   c->playerID = 0;
-  
+
   return c->gameNumber;
 }
 
@@ -143,16 +143,16 @@ DLLEXPORT int joinGame(Connection* c, int gameNum)
 {
   sexp_t* expression;
   stringstream expr;
-  
+
   c->gameNumber = gameNum;
-  
+
   expr << "(join-game " << c->gameNumber << ")";
   send_string(c->socket, expr.str().c_str());
-  
+
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   if(strcmp(expression->list->val, "join-accepted") != 0)
   {
     cerr << "Game " << c->gameNumber << " doesn't exist." << endl;
@@ -160,10 +160,10 @@ DLLEXPORT int joinGame(Connection* c, int gameNum)
     return 0;
   }
   destroy_sexp(expression);
-  
+
   c->playerID = 1;
   send_string(c->socket, "(game-start)");
-  
+
   return 1;
 }
 
@@ -229,9 +229,9 @@ void parse${model.name}(Connection* c, _${model.name}* object, sexp_t* expressio
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
 %   for datum in model.data:
 %     if datum.type == int:
   object->${datum.name} = atoi(sub->val);
@@ -244,7 +244,7 @@ void parse${model.name}(Connection* c, _${model.name}* object, sexp_t* expressio
 %     endif
   sub = sub->next;
 %   endfor
-  
+
 }
 % endfor
 
@@ -253,7 +253,7 @@ DLLEXPORT int networkLoop(Connection* c)
   while(true)
   {
     sexp_t* base, *expression, *sub, *subsub;
-    
+
     char* message = rec_string(c->socket);
     string text = message;
     base = extract_sexpr(message);
@@ -348,7 +348,7 @@ DLLEXPORT int networkLoop(Connection* c)
             delete[] c->${model.plural};
           }
           c->${model.name}Count =  sexp_list_length(expression)-1; //-1 for the header
-          c->${model.name}s = new _${model.name}[c->${model.name}Count];
+          c->${model.plural} = new _${model.name}[c->${model.name}Count];
           for(int i = 0; i < c->${model.name}Count; i++)
           {
             sub = sub->next;
@@ -375,7 +375,7 @@ DLLEXPORT int networkLoop(Connection* c)
 %   if model.type == 'Model':
 DLLEXPORT _${model.name}* get${model.name}(Connection* c, int num)
 {
-  return c->${model.name}s + num;
+  return c->${model.plural} + num;
 }
 DLLEXPORT int get${model.name}Count(Connection* c)
 {
