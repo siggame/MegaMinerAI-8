@@ -53,6 +53,7 @@ Virus = Model('Virus',
   data = [
     Variable('owner', int, "The owner of this Virus"),
     Variable('level', int, "The Virus's level"),
+    Variable('movesLeft', int, "The number of times this virus can still move"),
     ],
   # the documentation for Virus objects
   doc = 'Stores the information about a virus',
@@ -62,9 +63,13 @@ Virus = Model('Virus',
                    Variable('y',int,'The y coordinate to move to')],
       doc = "Moves a unit to the given (x,y) position"
       ),
+    Function('talk',
+      arguments = [Variable('message', str, 'The message that the Virus should say')],
+      doc = 'Allows a Virus to display a message to the screen.'
+      ),
     ]
   )
-    
+
 Base = Model('Base',
   parent = Mappable,
   data = [
@@ -72,7 +77,7 @@ Base = Model('Base',
     ],
   doc = 'The information on the base',
   functions = [
-    Function ('Spawn',
+    Function ('spawn',
       arguments = [Variable ('Level', int, 'The level of the Virus to be created')],
       doc = 'Creates a Virus on the base with certain level.'
       ),
