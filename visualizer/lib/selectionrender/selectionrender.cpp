@@ -1,5 +1,5 @@
 #include "selectionrender.h"
-#include <GL/gl.h>
+#include <QtOpenGL>
 using namespace std;
 
 namespace visualizer

@@ -155,8 +155,6 @@ namespace visualizer
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
 
-    m_isSetup = true;
-
     glDisable( GL_TEXTURE_2D );
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -165,13 +163,9 @@ namespace visualizer
 
     TimeManager->requestUpdate( Renderer );
 
-    if( !m_isSetup )
-    {
-      THROW( Exception, "Renderer Didn't Set Up Properly" );
-    }
-
-  }
-
+    m_isSetup = true;
+      
+	}
 
   bool _Renderer::isSetup()
   {

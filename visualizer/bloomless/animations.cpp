@@ -1,53 +1,50 @@
 #include "animations.h"
-#include <iostream>
-using namespace std;
 
 namespace visualizer
 {
-
-  void StartAnim::animate( const float& t, AnimData *d )
+  void StartAnim::animate( const float& /* t */, AnimData * /* d */ )
   {
-    
   }
 
-  void DrawGround::animate( const float& t, AnimData *d )
+  void DrawPlant::animate( const float& /* t */, AnimData * /* d */ )
   {
-    IRenderer& r = *m_dirt->Renderer;
-    r.setColor( 1, 1, 1, 1 );
 
-    r.drawTexturedQuad( 0, 0, 30, 30, "dirt" );
-  }
+    plant &p = *m_plant;
 
-  void DrawAnim::animate( const float& t, AnimData *d )
-  {
-    IRenderer& r = *m_plant->Renderer;
-    plant& p = *m_plant;
+    float r = 0;
+    float g = 0;
+    float b = 0;
 
-    r.setColor( 1, 1, 1, 1 );
-
-
-    if( p.flower )
+    p.renderer().setColor( Color( 1, 1, 1 ) );
+    if( p.ownerID == 0 )
     {
-      r.drawTexturedQuad( p.x, p.y, 1, 1, "flower" );
-    }
-    else
+      p.renderer().drawTexturedQuad( p.x, p.y, 1, 1, "shipRed" );
+    } else
     {
-      r.drawTexturedQuad( p.x, p.y, 1, 1, "plant" );
+      p.renderer().drawTexturedQuad( p.x, p.y, 1, 1, "shipGreen" );
     }
 
 #if 0
+    if( p.flower )
+    {
+      b = 1;
+    }
+
     if( p.leaf )
     {
-      r.drawTexturedQuad( p.x + 0.5, p.y, 0.5, 0.5, "leaf" );
+      g = 1;
     }
 
     if( p.root )
     {
-      r.drawTexturedQuad( p.x, p.y+0.5, 0.5, 0.5, "root" );
+      r = 1;
     }
 #endif
 
+
+    p.renderer().setColor( Color( 0, 1, 0 ) );
+    p.renderer().drawProgressBar( p.x + 0.04, p.y+ 0.04, .92, 0.08, p.health/20.0f, Color( 0, 0, 0, .8 ) );
+
   }
 
-} // visualizer 
-
+}

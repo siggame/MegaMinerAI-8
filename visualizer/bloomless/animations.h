@@ -2,63 +2,52 @@
 #define ANIMATIONS_H
 
 #include "plant.h"
+#include "irenderer.h"
 
 namespace visualizer
 {
 
-  class StartAnim: public Anim
+  struct StartAnim: public Anim
   {
     public:
-      StartAnim( plant* p )
+      void animate( const float& t, AnimData *d );
+
+
+      float controlDuration() const
       {
-        m_plant = p;
+        return 0;
       }
 
-      void animate( const float& t, AnimData *d );
-      float controlDuration() const
-      { return 0; }
       float totalDuration() const
-      { return 1; }
+      {
+        return 0;
+      }
+  };
+
+  struct DrawPlant: public Anim
+  {
+    DrawPlant( plant *p )
+    {
+      m_plant = p;
+    }
+
+    void animate( const float& t, AnimData* d);
+    
+    float controlDuration() const
+    {
+      return 0;
+    }
+
+    float totalDuration() const
+    {
+      return 0;
+    }
+
     private:
       plant* m_plant;
 
-  }; // StartAnim
-
-  class DrawGround: public Anim
-  {
-    public:
-      DrawGround( dirt* p )
-      {
-        m_dirt = p;
-      }
-
-      void animate( const float& t, AnimData *d );
-      float controlDuration() const
-      { return 0; }
-      float totalDuration() const
-      { return 1; }
-    private:
-      dirt* m_dirt;
-
   };
 
-  class DrawAnim: public Anim
-  {
-    public:
-      DrawAnim( plant* p )
-      {
-        m_plant = p;
-      }
+}
 
-      void animate( const float& t, AnimData *d );
-      float controlDuration() const
-      { return 0; }
-      float totalDuration() const
-      { return 0; }
-    private:
-      plant* m_plant;
-  };
-
-} // visualizer
-
-#endif // ANIMATIONS_H
+#endif // ANIMATION_H

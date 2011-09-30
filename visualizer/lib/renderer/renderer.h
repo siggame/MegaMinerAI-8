@@ -5,7 +5,7 @@
 #include <list>
 #include <set>
 #include <QTableWidget>
-#include <GL/gl.h>
+#include <QtOpenGL>
 #include <string>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
@@ -35,6 +35,7 @@ namespace visualizer
 
       _Renderer()
       {
+		  m_isSetup = false;
 
       }
 

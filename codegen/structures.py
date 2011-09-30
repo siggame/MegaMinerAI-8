@@ -38,14 +38,14 @@ class Model(object):
     if 'type' in kwargs:
       self.type = kwargs['type']
     if 'plural' in kwargs:
-      self.plural = kwargs[plural]
-  
+      self.plural = kwargs['plural']
+
   def addData(self, data):
     self.data.extend(data)
-    
+
   def addFunctions(self, functions):
     self.functions.extend(functions)
-  
+
   def addProperties(self, properties):
     self.properties.extend(properties)
 
@@ -53,7 +53,7 @@ class Variable(object):
   name = ''
   type = None
   doc = ''
-  
+
   def __init__(self, name, type, doc = ''):
     self.name = name
     self.type = type
@@ -62,7 +62,7 @@ class Variable(object):
 class Animation(object):
   name = ''
   data = []
-  
+
   def __init__(self, name, **kwargs):
     self.data = []
     self.name = name
@@ -76,7 +76,7 @@ class Function(object):
   arguments = []
   result = None
   doc = ''
-  
+
   def __init__(self, name, arguments = [], result = None, doc=''):
     self.name = name
     self.arguments = arguments
