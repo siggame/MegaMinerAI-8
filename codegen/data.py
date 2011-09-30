@@ -19,7 +19,7 @@ constants = [
 
 # Defines a player object, used to store information for each player, like score, gold, etc
 Player = Model('Player',
-  # Container holding all of the Player's variables 
+  # Container holding all of the Player's variables
   data = [
     Variable('playerName',str, "Player's Name"),
     Variable('byteDollars', int, "Player's points, one with more at end of game wins"),
@@ -35,7 +35,7 @@ Player = Model('Player',
       ),
     ]
   )
-  
+
 #gives each inherited class instance an x and y cooridinate variable
 Mappable = Model("Mappable",
   data = [
@@ -47,7 +47,7 @@ Mappable = Model("Mappable",
   type = 'virtual'
   )
 
-#A virus is the dominant unit of the game. Can move left and right. Has a level, player_id and cost(?) variable.  
+#A virus is the dominant unit of the game. Can move left and right. Has a level, player_id and cost(?) variable.
 Virus = Model('Virus',
   parent = Mappable,
   data = [
@@ -67,7 +67,8 @@ Virus = Model('Virus',
       arguments = [Variable('message', str, 'The message that the Virus should say')],
       doc = 'Allows a Virus to display a message to the screen.'
       ),
-    ]
+    ],
+  plural = 'Viruses'
   )
 
 Base = Model('Base',
@@ -83,7 +84,7 @@ Base = Model('Base',
       ),
     ]
   )
-            
+
 Tile = Model('Tile',
   parent = Mappable,
   data = [
@@ -95,7 +96,7 @@ Tile = Model('Tile',
 # Defines an Animation, which is sent to the visualizer to let it know something happened
 playerTalk = Animation("PlayerTalk",
   data = [
-    Variable("speaker", Player), 
+    Variable("speaker", Player),
     Variable("message", str),
     ]
   )
@@ -106,7 +107,7 @@ virusTalk = Animation("VirusTalk",
     Variable("message",str)
     ]
   )
-  
+
 combine = Animation("Combine",
   data = [
     Variable("moving", Virus),
