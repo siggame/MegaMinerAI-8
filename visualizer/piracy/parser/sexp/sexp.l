@@ -1,4 +1,5 @@
 %option noyywrap
+%option never-interactive
 
 %{
 #ifndef YYSTYPE

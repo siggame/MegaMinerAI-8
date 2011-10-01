@@ -4,8 +4,6 @@ INCLUDEPATH += ../interfaces \
   ../lib/ \
   ../common/
 DEPENDPATH += ../common/
-win32:LIBS += ./parser/sexp/sexpXP.a
-else:LIBS += ./parser/sexp/sexp.a
 MOC = moc
 TEMPLATE = lib
 TARGET = piracy
@@ -14,10 +12,13 @@ SOURCES += piracy.cpp \
   piracyStack.cpp \
   piratemap.cpp \
   ../common/*.cpp \
-  parser/*.cpp 
+  parser/sexp/*.cpp \
+  parser/structures.cpp \
+  parser/parseGamelog.cpp
   
 HEADERS += *.h \
   parser/*.h \
+  parser/sexp/*.h \
   ../common/*.h
 
 QMAKE_CFLAGS_DEBUG += -pg
@@ -27,4 +28,5 @@ CONFIG += debug plugin
 QT += opengl
 
 debug:DEFINES += __DEBUG__
+DEFINES += YY_NO_UNISTD_H
 DESTDIR = ../plugins/
