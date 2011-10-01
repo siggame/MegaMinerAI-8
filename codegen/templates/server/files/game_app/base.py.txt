@@ -13,7 +13,7 @@ class GameWorld(object):
              #None before and after the game.
     self.winner = None #the player who won the game;
                #None before and during the game
-    self.objects = ObjectHolder #key: object's id
+    self.objects = ObjectHolder() #key: object's id
                 #value: instance of the object
     self.animations = ["animations"]
 
