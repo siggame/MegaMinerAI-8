@@ -55,11 +55,11 @@ bool BaseAI::startTurn()
   }
 
   count = getVirusCount(c);
-  viruss.clear();
-  viruss.resize(count);
+  viruses.clear();
+  viruses.resize(count);
   for(int i = 0; i < count; i++)
   {
-    viruss[i] = Virus(getVirus(c, i));
+    viruses[i] = Virus(getVirus(c, i));
   }
 
   if(!initialized)

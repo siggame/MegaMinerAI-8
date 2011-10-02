@@ -43,7 +43,7 @@ struct Connection
   int PlayerCount;
   _Tile* Tiles;
   int TileCount;
-  _Virus* Viruss;
+  _Virus* Viruses;
   int VirusCount;
 };
 

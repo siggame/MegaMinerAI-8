@@ -16,7 +16,7 @@ class BaseAI:
   bases = []
   players = []
   tiles = []
-  viruss = []
+  viruses = []
 
   def startTurn(self):
     from GameObject import Base
@@ -27,7 +27,7 @@ class BaseAI:
     BaseAI.bases = [Base(library.getBase(self.connection, i)) for i in xrange(library.getBaseCount(self.connection))]
     BaseAI.players = [Player(library.getPlayer(self.connection, i)) for i in xrange(library.getPlayerCount(self.connection))]
     BaseAI.tiles = [Tile(library.getTile(self.connection, i)) for i in xrange(library.getTileCount(self.connection))]
-    BaseAI.viruss = [Virus(library.getVirus(self.connection, i)) for i in xrange(library.getVirusCount(self.connection))]
+    BaseAI.viruses = [Virus(library.getVirus(self.connection, i)) for i in xrange(library.getVirusCount(self.connection))]
 
     if not self.initialized:
       self.initialized = True

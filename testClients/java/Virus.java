@@ -10,11 +10,11 @@ class Virus extends Mappable
   boolean validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.viruss.length; i++)
+    for(int i = 0; i < BaseAI.viruses.length; i++)
     {
-      if(BaseAI.viruss[i].ID == ID)
+      if(BaseAI.viruses[i].ID == ID)
       {
-        ptr = BaseAI.viruss[i].ptr;
+        ptr = BaseAI.viruses[i].ptr;
         iteration = BaseAI.iteration;
         return true;
       }

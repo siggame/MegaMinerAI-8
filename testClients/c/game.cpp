@@ -31,7 +31,7 @@ namespace Windows
 #include <unistd.h>
 #endif
 
-#ifdef ENABLE_THREADS 
+#ifdef ENABLE_THREADS
 #define LOCK(X) pthread_mutex_lock(X)
 #define UNLOCK(X) pthread_mutex_unlock(X)
 #else
@@ -45,10 +45,10 @@ DLLEXPORT Connection* createConnection()
 {
   Connection* c = new Connection;
   c->socket = -1;
-  #ifdef ENABLE_THREADS 
+  #ifdef ENABLE_THREADS
   pthread_mutex_init(&c->mutex, NULL);
   #endif
-  
+
   c->turnNumber = 0;
   c->playerID = 0;
   c->gameNumber = 0;
@@ -60,16 +60,16 @@ DLLEXPORT Connection* createConnection()
   c->PlayerCount = 0;
   c->Tiles = NULL;
   c->TileCount = 0;
-  c->Viruss = NULL;
+  c->Viruses = NULL;
   c->VirusCount = 0;
   return c;
 }
 
 DLLEXPORT void destroyConnection(Connection* c)
 {
-  #ifdef ENABLE_THREADS 
+  #ifdef ENABLE_THREADS
   pthread_mutex_destroy(&c->mutex);
-  #endif 
+  #endif
   if(c->Bases)
   {
     for(int i = 0; i < c->BaseCount; i++)
@@ -92,12 +92,12 @@ DLLEXPORT void destroyConnection(Connection* c)
     }
     delete[] c->Tiles;
   }
-  if(c->Viruss)
+  if(c->Viruses)
   {
     for(int i = 0; i < c->VirusCount; i++)
     {
     }
-    delete[] c->Viruss;
+    delete[] c->Viruses;
   }
   delete c;
 }
@@ -123,7 +123,7 @@ DLLEXPORT int serverLogin(Connection* c, const char* username, const char* passw
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   message = expression->list;
   if(message->val == NULL || strcmp(message->val, "login-accepted") != 0)
   {
@@ -140,19 +140,19 @@ DLLEXPORT int createGame(Connection* c)
   sexp_t* expression, *number;
 
   send_string(c->socket, "(create-game)");
-  
+
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   number = expression->list->next;
   c->gameNumber = atoi(number->val);
   destroy_sexp(expression);
-  
+
   std::cout << "Creating game " << c->gameNumber << endl;
-  
+
   c->playerID = 0;
-  
+
   return c->gameNumber;
 }
 
@@ -160,16 +160,16 @@ DLLEXPORT int joinGame(Connection* c, int gameNum)
 {
   sexp_t* expression;
   stringstream expr;
-  
+
   c->gameNumber = gameNum;
-  
+
   expr << "(join-game " << c->gameNumber << ")";
   send_string(c->socket, expr.str().c_str());
-  
+
   char* reply = rec_string(c->socket);
   expression = extract_sexpr(reply);
   delete[] reply;
-  
+
   if(strcmp(expression->list->val, "join-accepted") != 0)
   {
     cerr << "Game " << c->gameNumber << " doesn't exist." << endl;
@@ -177,10 +177,10 @@ DLLEXPORT int joinGame(Connection* c, int gameNum)
     return 0;
   }
   destroy_sexp(expression);
-  
+
   c->playerID = 1;
   send_string(c->socket, "(game-start)");
-  
+
   return 1;
 }
 
@@ -258,24 +258,24 @@ void parseMappable(Connection* c, _Mappable* object, sexp_t* expression)
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
   object->id = atoi(sub->val);
   sub = sub->next;
   object->x = atoi(sub->val);
   sub = sub->next;
   object->y = atoi(sub->val);
   sub = sub->next;
-  
+
 }
 void parseBase(Connection* c, _Base* object, sexp_t* expression)
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
   object->id = atoi(sub->val);
   sub = sub->next;
   object->x = atoi(sub->val);
@@ -284,15 +284,15 @@ void parseBase(Connection* c, _Base* object, sexp_t* expression)
   sub = sub->next;
   object->owner = atoi(sub->val);
   sub = sub->next;
-  
+
 }
 void parsePlayer(Connection* c, _Player* object, sexp_t* expression)
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
   object->id = atoi(sub->val);
   sub = sub->next;
   object->playerName = new char[strlen(sub->val)+1];
@@ -303,15 +303,15 @@ void parsePlayer(Connection* c, _Player* object, sexp_t* expression)
   sub = sub->next;
   object->cycles = atoi(sub->val);
   sub = sub->next;
-  
+
 }
 void parseTile(Connection* c, _Tile* object, sexp_t* expression)
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
   object->id = atoi(sub->val);
   sub = sub->next;
   object->x = atoi(sub->val);
@@ -320,15 +320,15 @@ void parseTile(Connection* c, _Tile* object, sexp_t* expression)
   sub = sub->next;
   object->owner = atoi(sub->val);
   sub = sub->next;
-  
+
 }
 void parseVirus(Connection* c, _Virus* object, sexp_t* expression)
 {
   sexp_t* sub;
   sub = expression->list;
-  
+
   object->_c = c;
-  
+
   object->id = atoi(sub->val);
   sub = sub->next;
   object->x = atoi(sub->val);
@@ -341,7 +341,7 @@ void parseVirus(Connection* c, _Virus* object, sexp_t* expression)
   sub = sub->next;
   object->movesLeft = atoi(sub->val);
   sub = sub->next;
-  
+
 }
 
 DLLEXPORT int networkLoop(Connection* c)
@@ -349,7 +349,7 @@ DLLEXPORT int networkLoop(Connection* c)
   while(true)
   {
     sexp_t* base, *expression, *sub, *subsub;
-    
+
     char* message = rec_string(c->socket);
     string text = message;
     base = extract_sexpr(message);
@@ -482,19 +482,19 @@ DLLEXPORT int networkLoop(Connection* c)
         }
         else if(string(sub->val) == "Virus")
         {
-          if(c->Viruss)
+          if(c->Viruses)
           {
             for(int i = 0; i < c->VirusCount; i++)
             {
             }
-            delete[] c->Viruss;
+            delete[] c->Viruses;
           }
           c->VirusCount =  sexp_list_length(expression)-1; //-1 for the header
-          c->Viruss = new _Virus[c->VirusCount];
+          c->Viruses = new _Virus[c->VirusCount];
           for(int i = 0; i < c->VirusCount; i++)
           {
             sub = sub->next;
-            parseVirus(c, c->Viruss+i, sub);
+            parseVirus(c, c->Viruses+i, sub);
           }
         }
       }
@@ -540,7 +540,7 @@ DLLEXPORT int getTileCount(Connection* c)
 
 DLLEXPORT _Virus* getVirus(Connection* c, int num)
 {
-  return c->Viruss + num;
+  return c->Viruses + num;
 }
 DLLEXPORT int getVirusCount(Connection* c)
 {
