@@ -26,7 +26,7 @@ protected:
   std::vector<Base> bases;
   std::vector<Player> players;
   std::vector<Tile> tiles;
-  std::vector<Virus> viruss;
+  std::vector<Virus> viruses;
 public:
   ///How many turns it has been since the beginning of the game
   int turnNumber();

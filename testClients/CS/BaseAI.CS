@@ -11,7 +11,7 @@ public abstract class BaseAI
   public static Base[] bases;
   public static Player[] players;
   public static Tile[] tiles;
-  public static Virus[] viruss;
+  public static Virus[] viruses;
   IntPtr connection;
   public static int iteration;
   bool initialized;
@@ -64,10 +64,10 @@ public abstract class BaseAI
       tiles[i] = new Tile(Client.getTile(connection, i));
     }
     count = Client.getVirusCount(connection);
-    viruss = new Virus[count];
+    viruses = new Virus[count];
     for(int i = 0; i < count; i++)
     {
-      viruss[i] = new Virus(Client.getVirus(connection, i));
+      viruses[i] = new Virus(Client.getVirus(connection, i));
     }
 
     if(!initialized)

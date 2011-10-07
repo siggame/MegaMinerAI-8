@@ -222,7 +222,7 @@ class Virus(Mappable):
     #somewhere else in memory now
     if self.iteration == BaseAI.iteration:
       return True
-    for i in BaseAI.viruss:
+    for i in BaseAI.viruses:
       if i.id == self.id:
         self.ptr = i.ptr
         self.iteration = BaseAI.iteration

@@ -10,7 +10,7 @@ public abstract class BaseAI
   static Base[] bases;
   static Player[] players;
   static Tile[] tiles;
-  static Virus[] viruss;
+  static Virus[] viruses;
   Pointer connection;
   static int iteration;
   boolean initialized;
@@ -63,10 +63,10 @@ public abstract class BaseAI
       tiles[i] = new Tile(Client.INSTANCE.getTile(connection, i));
     }
     count = Client.INSTANCE.getVirusCount(connection);
-    viruss = new Virus[count];
+    viruses = new Virus[count];
     for(int i = 0; i < count; i++)
     {
-      viruss[i] = new Virus(Client.INSTANCE.getVirus(connection, i));
+      viruses[i] = new Virus(Client.INSTANCE.getVirus(connection, i));
     }
 
     if(!initialized)

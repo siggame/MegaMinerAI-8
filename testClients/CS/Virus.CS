@@ -20,11 +20,11 @@ public class Virus: Mappable
   public override bool validify()
   {
     if(iteration == BaseAI.iteration) return true;
-    for(int i = 0; i < BaseAI.viruss.Length; i++)
+    for(int i = 0; i < BaseAI.viruses.Length; i++)
     {
-      if(BaseAI.viruss[i].ID == ID)
+      if(BaseAI.viruses[i].ID == ID)
       {
-        ptr = BaseAI.viruss[i].ptr;
+        ptr = BaseAI.viruses[i].ptr;
         iteration = BaseAI.iteration;
         return true;
       }
