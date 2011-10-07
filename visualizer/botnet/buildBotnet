@@ -3,7 +3,9 @@ cd ../../codegen
 
 python main.py templates
 
-cp -R output/visualizer ../visualizer/botnet/parser
+cp -R output/visualizer/* ../visualizer/botnet/parser
+
+pwd
 
 cd ../visualizer/botnet/parser/sexp
 make
