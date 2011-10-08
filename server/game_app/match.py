@@ -60,11 +60,68 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
     self.turn = self.players[-1]
     self.turnNumber = -1
-
+#    self.addObject(Tile,[3,4,3])
+    self.addObject(Player, ['name', 0, self.startcycles])
+    self.addObject(Player, ['name', 0, self.startcycles])
     self.nextTurn()
     return True
 
-
+  def startMap (self, cfgUnits):
+    mapFilenames = []
+    
+    #look through the list of map files, for every .map file, add to mapfilename list
+    for filename in os.listdir("maps/"):
+      if ".map" in filename:
+        mapFilenames.append(filename)
+        
+      #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
+    with open(("maps/" + mapFilename[random.randint(0,len(mapFilenams)-1)]),'r') as f:
+      mapdata = f.read().replace(' ','').split()
+        
+    #Need to get the attributes for the game objects before we parse the file
+    # or not :/
+    '''
+    #parse through map and start makin stuff
+    for y in range(0,self.mapSize):
+      for x in range(0,self.mapSize):
+        #read(1) means that you read one character at a time
+        mapSquare = f.read(1)
+        #if the next byte is a ' ' or carrier return or newline, read next byte
+        if mapSquare == ' ' or '\r' or '\n':
+          mapSquare = f.read(1)
+        
+        elif mapSquare == ''       
+    '''
+    #self.grid is for our benefit, so that we can look things up by location
+    self.grid = []
+    #saves y data as a enumeration called row, iterates through
+    #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
+    for y, row in enumerate(mapdata):
+      self.grid.append([None]*len(row))
+      for x, mapSquare in enumerate(row):
+        #if mapSquare is an X then it is a wall, owned by 3
+        #map[x][y] = X
+        if mapSquare == 'X':
+          self.grid[x][y] = self.addObject(Tile.make(x,y,3))
+        #if mapSquare is a . then it is a neutral tile owned by 2
+        #map[x][y] = .
+        elif mapSquare == '.':
+          self.grid[x][y] = self.addObject(Tile.make(x,y,2))
+        #if mapSquare is 1, then it is a tile owned by player 1, which means 
+        #there's a base on top, so we add a base too
+        #map[x][y] = 1
+        elif mapSquare == '1':
+         self.grid[x][y] = self.addObject(Tile.make(x,y,1))
+         self.addObject(Base.make(x,y,1))
+        #same as previous, only it is player 0's base/tile combo
+        #map[x][y] = 0
+        elif mapSquare =='0':
+          self.grid[x][y] = self.addObject(Tile.make(x,y,0))
+          self.addObject(Base.make(x,y,0))
+          
+          
+        
+    
   def nextTurn(self):
     self.turnNumber += 1
     if self.turn == self.players[0]:
@@ -90,7 +147,28 @@ class Match(DefaultGameWorld):
 
   def checkWinner(self):
     #TODO: Make this check if a player won, and call declareWinner with a player if they did
-    pass
+    firstFound = False
+    player1 = self.objects.players[0]
+    player2 = self.objects.players[1]
+    '''
+    for i in self.objects.players:
+      if firstFound == False:
+        player1 = i
+        firstFound = True
+      else:
+        player2 = i
+    '''
+    if self.turnNumber == self.turnLimit:
+      if player1.byteDollars > player2.byteDollars:
+        self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
+        print "2 Wins!"
+      elif player2.byteDollars > player1.byteDollars:
+        self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
+        print "1 Wins!"
+    #need to get a game goin, player 0 wins by defualt
+      else:
+        self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
+    return
 
   def declareWinner(self, winner, reason=''):
     self.winner = winner
