@@ -61,6 +61,8 @@ class Match(DefaultGameWorld):
     self.turn = self.players[-1]
     self.turnNumber = -1
 #    self.addObject(Tile,[3,4,3])
+    self.addObject(Player, ['name', 0, self.startcycles])
+    self.addObject(Player, ['name', 0, self.startcycles])
     self.nextTurn()
     return True
 
@@ -145,18 +147,27 @@ class Match(DefaultGameWorld):
 
   def checkWinner(self):
     #TODO: Make this check if a player won, and call declareWinner with a player if they did
-    player1 = Player
-    player2 = Player
+    firstFound = False
+    player1 = self.objects.players[0]
+    player2 = self.objects.players[1]
+    '''
+    for i in self.objects.players:
+      if firstFound == False:
+        player1 = i
+        firstFound = True
+      else:
+        player2 = i
+    '''
     if self.turnNumber == self.turnLimit:
-      if self.players[0].byteDollars > self.players[1].byteDollars:
-        self.declareWinner(self,players[0], 'Victory through Bytedollar superiority!!')
+      if player1.byteDollars > player2.byteDollars:
+        self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
         print "2 Wins!"
-      elif self.players[1].byteDollars > self.players[0].byeDollars:
-        self.declareWinner(self,players[1], 'Victory through Bytedollar superiority!!')
+      elif player2.byteDollars > player1.byteDollars:
+        self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
     #need to get a game goin, player 0 wins by defualt
       else:
-        self.declareWinner(self,players[0],'Victory through we need a WinnAr!')        
+        self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
 
   def declareWinner(self, winner, reason=''):
