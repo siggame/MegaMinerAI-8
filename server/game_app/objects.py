@@ -38,9 +38,14 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
-  def spawn(self, Level):
-    pass
-
+  def spawn(self, lvl):
+    self.addObject(Virus,x,y,owner,level,movesLeft)
+    x = self.x
+    y = sefl.y
+    owner = self.owner
+    level = lvl
+    movesLeft = 0
+    return
 
 
 class Player:
@@ -112,11 +117,18 @@ class Virus(Mappable):
     return value
 
   def nextTurn(self):
-    pass
+    self.movesLeft = 1
+    return
 
-  def move(self, x, y):
-    pass
-
+  def move(self, dx, dy):
+    if self.movesLeft > 0 and dx > 0:
+      self.x = self.x + dx
+      self.movesLeft = self.movesLeft -1
+    if self.movesLeft > 0 and dy >0:
+      self.y = self.y + dy
+      self.movesLeft = self.movesLeft -1
+    return
+    
   def talk(self, message):
     pass
 

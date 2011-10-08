@@ -60,9 +60,8 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
     self.turn = self.players[-1]
     self.turnNumber = -1
-#    self.addObject(Tile,[3,4,3])
-    self.addObject(Player, ['name', 0, self.startcycles])
-    self.addObject(Player, ['name', 0, self.startcycles])
+    self.addObject(Player, ['TODO', 0, self.startcycles])
+    self.addObject(Player, ['TODO', 0, self.startcycles])
     self.nextTurn()
     return True
 
@@ -80,18 +79,6 @@ class Match(DefaultGameWorld):
         
     #Need to get the attributes for the game objects before we parse the file
     # or not :/
-    '''
-    #parse through map and start makin stuff
-    for y in range(0,self.mapSize):
-      for x in range(0,self.mapSize):
-        #read(1) means that you read one character at a time
-        mapSquare = f.read(1)
-        #if the next byte is a ' ' or carrier return or newline, read next byte
-        if mapSquare == ' ' or '\r' or '\n':
-          mapSquare = f.read(1)
-        
-        elif mapSquare == ''       
-    '''
     #self.grid is for our benefit, so that we can look things up by location
     self.grid = []
     #saves y data as a enumeration called row, iterates through
@@ -150,14 +137,6 @@ class Match(DefaultGameWorld):
     firstFound = False
     player1 = self.objects.players[0]
     player2 = self.objects.players[1]
-    '''
-    for i in self.objects.players:
-      if firstFound == False:
-        player1 = i
-        firstFound = True
-      else:
-        player2 = i
-    '''
     if self.turnNumber == self.turnLimit:
       if player1.byteDollars > player2.byteDollars:
         self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
@@ -170,6 +149,12 @@ class Match(DefaultGameWorld):
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
 
+  #will put all tiles connected to a base on list 
+  # then pop them into a set when moved off of
+  # and give points to player based on size of set
+  def tilePath(self,owner):
+      #TODO ^       
+      pass  
   def declareWinner(self, winner, reason=''):
     self.winner = winner
 
