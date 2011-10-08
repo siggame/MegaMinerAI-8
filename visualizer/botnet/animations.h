@@ -16,9 +16,80 @@ namespace visualizer
       float controlDuration() const
       { return 0; }
       float totalDuration() const
-      { return 1; }
+      { return 0; }
 
   }; // StartAnim
+
+  class StartVirus: public Anim
+  {
+    public:
+      StartVirus( virus* v )
+      {
+        m_virus = v;
+      }
+
+      void animate( const float& t, AnimData *d )
+      {
+        VirusData* v = (VirusData*)d;
+        v->x = m_virus->x;
+        v->y = m_virus->y;
+      }
+
+      float controlDuration() const
+      { return 0; }
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      virus* m_virus;
+  };
+
+  class LeftAnim: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // LeftAnim
+
+  class RightAnim: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // RightAnim
+
+  class UpAnim: public Anim
+  {
+    public:
+    void animate( const float& t, AnimData *d );
+
+    float controlDuration() const
+    { return 1; }
+    float totalDuration() const
+    { return 1; }
+
+  }; // UpAnim
+
+  class DownAnim: public Anim
+  {
+    public:
+    void animate( const float& t, AnimData *d );
+
+    float controlDuration() const
+    { return 1; }
+    float totalDuration() const
+    { return 1; }
+  }; // DownAnim
 
   class DrawVirus: public Anim
   {
@@ -58,11 +129,7 @@ namespace visualizer
 
     private:
       tile* m_tile;
-      
-      
-
-
-  };
+  }; // DrawTile
 
 } // visualizer
 

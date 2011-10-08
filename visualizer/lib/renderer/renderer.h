@@ -35,8 +35,8 @@ namespace visualizer
 
       _Renderer()
       {
-		  m_isSetup = false;
-
+	  	  m_isSetup = false;
+        m_height = m_width = m_depth = 0;
       }
 
       bool registerConstantObj( const unsigned int& id, renderObj* obj );

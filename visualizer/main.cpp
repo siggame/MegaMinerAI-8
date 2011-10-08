@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
 	OptionsMan->addInt("numTurns",1);
 	OptionsMan->addBool("sliderDragging", false );
 	OptionsMan->addInt( "currentTurn", 0 );
+  
+  // NO MEMORY LEAKS AT THIS POINT
 
   ///////////////////////////////////////////////////////////////////
   // Time Manager Depends On Options Manager
@@ -105,5 +107,6 @@ int main(int argc, char *argv[])
 	OptionsMan->destroy();
 
 	return retval;
+
 }
 

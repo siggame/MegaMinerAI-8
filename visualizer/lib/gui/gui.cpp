@@ -430,7 +430,7 @@ void _GUI::buildToolSet()
   m_dockLayout->addWidget( m_consoleArea );
 
   //Add Unit Stats to the layout
-  initUnitStats();
+  //initUnitStats();
 
   // If we have our tools for this game, add those bitches
   if( m_toolSetWidget )
