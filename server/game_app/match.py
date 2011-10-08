@@ -62,7 +62,7 @@ class Match(DefaultGameWorld):
     self.turn = self.players[-1]
     self.turnNumber = -1
     for p in self.players:
-      self.addObject(Player, [p.screenName, 0, self.startcycles])
+      self.addObject(Player, [p.screenName, 0, self.startCycles])
     self.startMap()
     self.nextTurn()
     return True
@@ -81,7 +81,7 @@ class Match(DefaultGameWorld):
     with open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames)-1)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
     self.width = len(mapdata)
-    self.height = len(map[0])        
+    self.height = len(mapdata[0])        
     #Need to get the attributes for the game objects before we parse the file
     # or not :/
     #self.grid is for our benefit, so that we can look things up by location
@@ -103,12 +103,12 @@ class Match(DefaultGameWorld):
         #map[x][y] = 1
         elif mapSquare == '1':
          self.grid[x][y] = self.addObject(Tile, [x,y,1])
-         self.addObject(Base.make(x,y,1))
+         self.addObject(Base,[x,y,1])
         #same as previous, only it is player 0's base/tile combo
         #map[x][y] = 0
         elif mapSquare =='0':
           self.grid[x][y] = self.addObject(Tile, [x,y,0])
-          self.addObject(Base.make(x,y,0))
+          self.addObject(Base,[x,y,0])
           
           
         
