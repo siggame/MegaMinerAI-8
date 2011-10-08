@@ -60,8 +60,8 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
     self.turn = self.players[-1]
     self.turnNumber = -1
-    self.addObject(Player, ['TODO', 0, self.startcycles])
-    self.addObject(Player, ['TODO', 0, self.startcycles])
+    for p in self.players:
+      self.addObject(Player, [p.screenName, 0, self.startcycles])
     self.nextTurn()
     return True
 
