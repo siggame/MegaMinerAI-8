@@ -1,6 +1,7 @@
 #include "frame.h"
 #include "viruses.h"
 #include "botnet.h"
+#include "animations.h"
 
 namespace visualizer
 {
@@ -41,6 +42,8 @@ namespace visualizer
         );
     }
 
+    size_t frameNum = 0;
+
     for
       (
       std::vector<GameState>::iterator state = m_game->states.begin();
@@ -56,13 +59,32 @@ namespace visualizer
         i++ 
         )
       {
+        virus* v = new virus( renderer );
+
+        v->addKeyFrame( new StartAnim );
+        v->id = i->second.id;
+        v->owner = i->second.owner;
+        v->x = i->second.x;
+        v->y = i->second.y;
+        v->level = i->second.level;
+        v->movesLeft = i->second.movesLeft;
+        v->addKeyFrame( new DrawVirus( v ) );
+
+        turn.addAnimatable( v );
 
       }
-        
+
+      addFrame( turn );
+      
+      frameNum++;
 
     }
 
+    timeManager->setNumTurns( frameNum );
 
+    animationEngine->registerFrameContainer( this );
+
+    timeManager->play();
 
   } // BotNet::loadGamelog() 
 

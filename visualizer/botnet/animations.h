@@ -14,7 +14,7 @@ namespace visualizer
 
       float controlDuration() const
       { return 0; }
-      float totalDuraion() const
+      float totalDuration() const
       { return 1; }
 
   }; // StartAnim
