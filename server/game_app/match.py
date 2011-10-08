@@ -76,7 +76,8 @@ class Match(DefaultGameWorld):
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
     with open(("maps/" + mapFilename[random.randint(0,len(mapFilenams)-1)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
-        
+    self.width = len(mapdata)
+    self.height = len(map[0])        
     #Need to get the attributes for the game objects before we parse the file
     # or not :/
     #self.grid is for our benefit, so that we can look things up by location
