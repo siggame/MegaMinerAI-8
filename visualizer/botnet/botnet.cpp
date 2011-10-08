@@ -1,6 +1,7 @@
 #include "frame.h"
 #include "viruses.h"
 #include "botnet.h"
+#include "animations.h"
 
 namespace visualizer
 {
@@ -41,6 +42,8 @@ namespace visualizer
         );
     }
 
+    size_t frameNum = 0;
+
     for
       (
       std::vector<GameState>::iterator state = m_game->states.begin();
@@ -49,6 +52,29 @@ namespace visualizer
       )
     {
       Frame turn;
+
+      for
+        (
+        std::map<int, Tile>::iterator i = state->tiles.begin();
+        i != state->tiles.end();
+        i++ 
+        )
+      {
+        cout << i->second.x << endl;
+        tile* t = new tile( renderer );
+        t->addKeyFrame( new StartAnim );
+        t->id = i->second.id;
+        t->x = i->second.x;
+        t->y = i->second.y;
+        t->owner = i->second.owner;
+
+        t->addKeyFrame( new DrawTile( t ) );
+
+        turn.addAnimatable( t );
+
+      }
+        
+
       for
         (
         std::map<int, Virus>::iterator i = state->viruses.begin();
@@ -56,13 +82,32 @@ namespace visualizer
         i++ 
         )
       {
+        virus* v = new virus( renderer );
+
+        v->addKeyFrame( new StartAnim );
+        v->id = i->second.id;
+        v->owner = i->second.owner;
+        v->x = i->second.x;
+        v->y = i->second.y;
+        v->level = i->second.level;
+        v->movesLeft = i->second.movesLeft;
+        v->addKeyFrame( new DrawVirus( v ) );
+
+        turn.addAnimatable( v );
 
       }
-        
+
+      addFrame( turn );
+      
+      frameNum++;
 
     }
 
+    timeManager->setNumTurns( frameNum );
 
+    animationEngine->registerFrameContainer( this );
+
+    timeManager->play();
 
   } // BotNet::loadGamelog() 
 

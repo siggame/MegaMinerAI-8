@@ -34,6 +34,24 @@ namespace visualizer
     
   }; // Virus
 
+  struct tile: public Animatable
+  {
+    tile( IRenderer *renderer ) : Animatable( renderer )
+    { owner = id = x = y = 0; }
+
+    int id;
+    int owner;
+    float x;
+    float y;
+
+    AnimData* getData()
+    {
+      return 0;
+    }
+
+
+  };
+
 } // visualizer
 
 #endif // VIRUSES_H

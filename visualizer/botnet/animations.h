@@ -10,11 +10,12 @@ namespace visualizer
   class StartAnim: public Anim
   {
     public:
+      StartAnim() {}
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 0; }
-      float totalDuraion() const
+      float totalDuration() const
       { return 1; }
 
   }; // StartAnim
@@ -38,6 +39,30 @@ namespace visualizer
       virus* m_virus;
 
   }; // DrawVirus
+
+  class DrawTile: public Anim
+  {
+    public: 
+      DrawTile( tile* t )
+      {
+        m_tile = t;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      tile* m_tile;
+      
+      
+
+
+  };
 
 } // visualizer
 

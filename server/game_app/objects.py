@@ -38,8 +38,12 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
+    #TODO make the virus cost something
   def spawn(self, level):
-    self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
+    if self.objects.Player.cycles < level**self.scalecost:
+      return "You don't have enough cycles to create this virus"
+    else
+      self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
 
 
 class Player:
@@ -63,7 +67,8 @@ class Player:
     pass
 
   def talk(self, message):
-    pass
+    self.game.animations.append(['talk',self.id,message])
+    return true
 
 
 
