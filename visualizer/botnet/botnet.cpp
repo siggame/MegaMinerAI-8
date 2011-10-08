@@ -52,6 +52,28 @@ namespace visualizer
       )
     {
       Frame turn;
+
+      for
+        (
+        std::map<int, Tile>::iterator i = state->tiles.begin();
+        i != state->tiles.end();
+        i++ 
+        )
+      {
+        tile* t = new tile( renderer );
+        t->addKeyFrame( new StartAnim );
+        t->id = i->second.id;
+        t->x = i->second.x;
+        t->y = i->second.y;
+        t->owner = i->second.owner;
+
+        t->addKeyFrame( new DrawTile( t ) );
+
+        turn.addAnimatable( t );
+
+      }
+        
+
       for
         (
         std::map<int, Virus>::iterator i = state->viruses.begin();
