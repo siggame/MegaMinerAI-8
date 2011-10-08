@@ -15,6 +15,8 @@ namespace visualizer
   LogRegex Modular::logFileInfo()
   {
     LogRegex lr;
+    lr.regex = "(\"megaminer\" 6)";
+    lr.startSize = 50;
 	return lr;
   }
   
