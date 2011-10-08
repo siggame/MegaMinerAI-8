@@ -35,9 +35,13 @@ public:
   ///What number game this is for the server
   int gameNumber();
   ///BaseCost used in the virus price formula
-  int basecost();
+  int baseCost();
   ///Scalar used in the virus price formula
-  float scalecost();
+  float scaleCost();
+  ///The width of the map (max X value)
+  int width();
+  ///The height of the map (max Y value)
+  int height();
   
   BaseAI(Connection* c);
   virtual ~BaseAI();

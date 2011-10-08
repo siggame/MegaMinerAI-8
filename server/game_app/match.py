@@ -7,6 +7,7 @@ from networking.sexpr.sexpr import *
 import os
 import itertools
 import scribe
+import random
 
 Scribe = scribe.Scribe
 
@@ -24,12 +25,10 @@ class Match(DefaultGameWorld):
     self.scribe = Scribe(self.logPath())
     self.addPlayer(self.scribe, "spectator")
 
-    #TODO: INITIALIZE THESE!
-    self.turnNumber = None
-    self.playerID = None
-    self.gameNumber = None
-    self.basecost = None
-    self.scalecost = None
+    #Initializes some variables
+    self.turnNumber = -1
+    self.playerID = -1
+    self.gameNumber = id
 
   def addPlayer(self, connection, type="player"):
     connection.type = type
@@ -62,11 +61,58 @@ class Match(DefaultGameWorld):
     #TODO: START STUFF
     self.turn = self.players[-1]
     self.turnNumber = -1
-
+    for p in self.players:
+      self.addObject(Player, [p.screenName, 0, self.startCycles])
+    self.startMap()
     self.nextTurn()
     return True
-
-
+    
+    
+    
+  def startMap (self):
+    mapFilenames = []
+    
+    #look through the list of map files, for every .map file, add to mapfilename list
+    for filename in os.listdir("maps/"):
+      if ".map" in filename:
+        mapFilenames.append(filename)
+        
+      #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
+    with open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames)-1)]),'r') as f:
+      mapdata = f.read().replace(' ','').split()
+    self.width = len(mapdata)
+    self.height = len(mapdata[0])        
+    #Need to get the attributes for the game objects before we parse the file
+    # or not :/
+    #self.grid is for our benefit, so that we can look things up by location
+    self.grid = [[None]*self.height for _ in range(self.width)]
+    #saves y data as a enumeration called row, iterates through
+    #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
+    for y, row in enumerate(mapdata):
+      for x, mapSquare in enumerate(row):
+        #if mapSquare is an X then it is a wall, owned by 3
+        #map[x][y] = X
+        if mapSquare == 'X':
+          self.grid[x][y] = self.addObject(Tile, [x,y,3])
+        #if mapSquare is a . then it is a neutral tile owned by 2
+        #map[x][y] = .
+        elif mapSquare == '.':
+          self.grid[x][y] = self.addObject(Tile, [x,y,2])
+        #if mapSquare is 1, then it is a tile owned by player 1, which means 
+        #there's a base on top, so we add a base too
+        #map[x][y] = 1
+        elif mapSquare == '1':
+         self.grid[x][y] = self.addObject(Tile, [x,y,1])
+         self.addObject(Base,[x,y,1])
+        #same as previous, only it is player 0's base/tile combo
+        #map[x][y] = 0
+        elif mapSquare =='0':
+          self.grid[x][y] = self.addObject(Tile, [x,y,0])
+          self.addObject(Base,[x,y,0])
+          
+          
+        
+    
   def nextTurn(self):
     self.turnNumber += 1
     if self.turn == self.players[0]:
@@ -92,8 +138,27 @@ class Match(DefaultGameWorld):
 
   def checkWinner(self):
     #TODO: Make this check if a player won, and call declareWinner with a player if they did
-    pass
+    firstFound = False
+    player1 = self.objects.players[0]
+    player2 = self.objects.players[1]
+    if self.turnNumber == self.turnLimit:
+      if player1.byteDollars > player2.byteDollars:
+        self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
+        print "2 Wins!"
+      elif player2.byteDollars > player1.byteDollars:
+        self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
+        print "1 Wins!"
+    #need to get a game goin, player 0 wins by defualt
+      else:
+        self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
+    return
 
+  #will put all tiles connected to a base on list 
+  # then pop them into a set when moved off of
+  # and give points to player based on size of set
+  def tilePath(self,owner):
+      #TODO ^       
+      pass  
   def declareWinner(self, winner, reason=''):
     self.winner = winner
 
@@ -156,8 +221,7 @@ class Match(DefaultGameWorld):
 
   def status(self):
     msg = ["status"]
-
-    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.basecost, self.scalecost])
+    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.baseCost, self.scaleCost, self.width, self.height])
 
     typeLists = []
     typeLists.append(["Base"] + [i.toList() for i in self.objects.values() if i.__class__ is Base])

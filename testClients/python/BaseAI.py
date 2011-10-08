@@ -53,11 +53,17 @@ class BaseAI:
   def gameNumber(self):
     return library.getGameNumber(self.connection)
 
-  def basecost(self):
-    return library.getBasecost(self.connection)
+  def baseCost(self):
+    return library.getBaseCost(self.connection)
 
-  def scalecost(self):
-    return library.getScalecost(self.connection)
+  def scaleCost(self):
+    return library.getScaleCost(self.connection)
+
+  def width(self):
+    return library.getWidth(self.connection)
+
+  def height(self):
+    return library.getHeight(self.connection)
 
   def __init__(self, connection):
     self.connection = connection

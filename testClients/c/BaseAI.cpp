@@ -17,13 +17,21 @@ int BaseAI::gameNumber()
 {
   return getGameNumber(c);
 }
-int BaseAI::basecost()
+int BaseAI::baseCost()
 {
-  return getBasecost(c);
+  return getBaseCost(c);
 }
-float BaseAI::scalecost()
+float BaseAI::scaleCost()
 {
-  return getScalecost(c);
+  return getScaleCost(c);
+}
+int BaseAI::width()
+{
+  return getWidth(c);
+}
+int BaseAI::height()
+{
+  return getHeight(c);
 }
 
 bool BaseAI::startTurn()

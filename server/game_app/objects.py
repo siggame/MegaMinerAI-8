@@ -38,10 +38,14 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
-  def spawn(self, Level):
-    pass
-
-
+#Done, wait to see if it works    #TODO make the virus cost something
+  def spawn(self, level):
+    cost = self.basecost*self.scalecost**level
+    if self.objects.Player.cycles < cost:
+      return "You don't have enough cycles to create this virus"
+    else:
+      self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
+      self.objects.Player.cycles = self.objects.Player.cycles - cost
 
 class Player:
   def __init__(self, game, id, playerName, byteDollars, cycles):
@@ -64,7 +68,8 @@ class Player:
     pass
 
   def talk(self, message):
-    pass
+    self.game.animations.append(['talk',self.id,message])
+    return true
 
 
 
@@ -112,11 +117,25 @@ class Virus(Mappable):
     return value
 
   def nextTurn(self):
-    pass
+    self.movesLeft = 1
+    return
 
   def move(self, x, y):
-    pass
-
+    if self.owner != self.game.playerID:
+      return "That virus is not yours to control"
+    if self.movesLeft <= 0:
+      return "That virus has no more moves"
+    if self.game.grid[x][y].owner == 3:
+      return "There is a wall in the way"
+    if abs(self.x-x) + abs(self.y-y) > 1:
+      return "Units can only move to adjacent locations"
+    #TODO Handle units walking into friendly different level units
+    #TODO Handle units walkint into friendly same level units
+    #TODO Handle units walking into walls
+    #TODO Handle units walking off edge of the stage
+    self.x = x
+    self.y = y
+    
   def talk(self, message):
     pass
 
