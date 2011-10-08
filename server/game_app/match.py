@@ -156,7 +156,8 @@ class Match(DefaultGameWorld):
 #it outside function so player bytedollars update on next turn  
   path = []
   def tilePath(self,owner):
-#      path = []
+      Path = set()
+      tiles = []
       #TODO ^ biggun, try breadth first search 
       return      
       

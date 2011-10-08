@@ -36,7 +36,7 @@ class Base(Mappable):
     return value
 
   def nextTurn(self):
-    pass
+   return "base next turn called"
 
 #Done, wait to see if it works    #TODO make the virus cost something
   def spawn(self, level):
@@ -47,7 +47,8 @@ class Base(Mappable):
     else:
       self.game.addObject(Virus, [self.x, self.y, self.owner, level, 0])
       player.cycles -= cost
-
+      return "I spawned a virus"
+      
 class Player:
   def __init__(self, game, id, playerName, byteDollars, cycles):
     self.game = game
@@ -72,7 +73,9 @@ class Player:
     #TODO Award points to the player
       #will be the size of the set of bases under your control, this is similar to the function tilepath.
       #could just make a self attribute from tilepath to return the size of the paths, add that to points
+    print('!!!!!!!!!!!!!')
     self.byteDollars += len(self.game.path)
+    self.cycles += 42 #this is for testing, so we can keep making viruses
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk',self.id,message])
@@ -127,6 +130,7 @@ class Virus(Mappable):
     return
 
   def move(self, x, y):
+    print ('tryin ta move')
     #TODO when a virus moves over a tile it turns the tile to the player's type/ownership
     #You can't move a virus that belongs to the other player
     if self.owner != self.game.playerID:
@@ -145,7 +149,10 @@ class Virus(Mappable):
       return "Units can only move to adjacent locations"
    #Done? see if it works #TODO Handle units walking into friendly different level units
   #!!!!!!!!!!!!!!!!!!!!!!!!!!!!2am code, beware!!!!!!!!!!!!!!!!!!!11111
+    print('entering 2am code')
     for i in self.game.objects.viruses:
+      print('i owner is', i.owner, 'i level is ',i.level)
+      print('self owner is ', self.owner, 'self level is ',self.level)
       if i.owner is self.owner and i.x is x and i.y is y:
         #moving a unit onto a friendl of a different level is a no no
         if i.level is not self.level:
@@ -153,11 +160,11 @@ class Virus(Mappable):
         #moving a unit onto a friendly of same level makes a new 
         #virus of a higher level, gets rid of other two. LEVEL UP!
         elif i.level is self.level:
-         newLevel = i.level+1
-         addObject('Virus',[x,y,newLevel])
-         removeObject(self.game.object.Virus)
-         removeObject(self.game.object.Virus)#do we have a removeObject function? found it, did I use it correctly?
-         return "When our powers combine!...we kill ourselves to make a slightly stronger virus"
+          newLevel = i.level+1
+          addObject('Virus',[x,y,newLevel])
+          removeObject(self.game.object.Virus)
+          removeObject(self.game.object.Virus)#do we have a removeObject function? found it, did I use it correctly?
+          return "When our powers combine!...we kill ourselves to make a slightly stronger virus"
         #moving a virus onto an enemy virus, conflict!!
       elif i.owner is not self.owner and i.x is x and i.y is y:
         #TODO return some money for removed Viruses to player 
@@ -180,11 +187,13 @@ class Virus(Mappable):
 #Done? need to test    #TODO Handle units walking into enemy units ...conflict!
 #compiles, need to test
     #TODO Each case has animations
-        else:
-          self.x = x
-          self.y = y
-          return "Successful, uneventful move"
+      else:
+        self.x = x
+        self.y = y
+        return "Successful, uneventful move"
+    return "got to end of function without hitting cases...wat"
 #don't know if I need all the returns, but might help debugging, plus they're fun to write, and easy to remove if need be
+  
   def talk(self, message):
     self.game.animations.append(['VirusTalk',self.id,message])
 
