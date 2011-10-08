@@ -40,12 +40,13 @@ class Base(Mappable):
 
 #Done, wait to see if it works    #TODO make the virus cost something
   def spawn(self, level):
-    cost = self.basecost*self.scalecost**level
-    if self.objects.Player.cycles < cost:
+    player = self.game.objects.players[self.owner]
+    cost = self.game.baseCost*self.game.scaleCost**level
+    if player.cycles < cost:
       return "You don't have enough cycles to create this virus"
     else:
-      self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
-      self.objects.players[self.owner].cycles -= cost
+      self.game.addObject(Virus, [self.x, self.y, self.owner, level, 0])
+      player.cycles -= cost
 
 class Player:
   def __init__(self, game, id, playerName, byteDollars, cycles):
@@ -126,6 +127,8 @@ class Virus(Mappable):
       return "That virus is not yours to control"
     if self.movesLeft <= 0:
       return "That virus has no more moves"
+    if not (0 <= x < self.game.width) or not (0 <=y < self.game.height):
+      return "Don't move off of the map"
     if self.game.grid[x][y].owner == 3:
       return "There is a wall in the way"
     if abs(self.x-x) + abs(self.y-y) > 1:
