@@ -61,8 +61,8 @@ class Match(DefaultGameWorld):
     self.turn = self.players[-1]
     self.turnNumber = -1
 #    self.addObject(Tile,[3,4,3])
-    self.addObject(Player, ['name', 0, self.startcycles])
-    self.addObject(Player, ['name', 0, self.startcycles])
+    for p in self.players:
+      self.addObject(Player, [p.screenName, 0, self.startcycles])
     self.nextTurn()
     return True
 
