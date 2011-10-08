@@ -66,8 +66,11 @@ class Player:
     return value
 
   def nextTurn(self):
-    #TODO Award money to player
+    player = self.game.objects.players[self.owner]
+    #TODO Award money to the player
+      #don't actually know how money is awarded, read game concept
     #TODO Award points to the player
+      #will be the size of the set of bases under your control, this is similar to the function tilepath.
     pass
 
   def talk(self, message):
@@ -123,20 +126,24 @@ class Virus(Mappable):
     return
 
   def move(self, x, y):
+    #You can't move a virus that belongs to the other player
     if self.owner != self.game.playerID:
       return "That virus is not yours to control"
+    #You can't move if you have no moves left
     if self.movesLeft <= 0:
       return "That virus has no more moves"
+    #You can't move off the edge, the world is flat
     if not (0 <= x < self.game.width) or not (0 <=y < self.game.height):
       return "Don't move off of the map"
     if self.game.grid[x][y].owner == 3:
+    #You can't move into a wall...the wall will win
       return "There is a wall in the way"
+    #You can't move more than one space away
     if abs(self.x-x) + abs(self.y-y) > 1:
       return "Units can only move to adjacent locations"
     #TODO Handle units walking into friendly different level units
     #TODO Handle units walkint into friendly same level units
-    #TODO Handle units walking into walls
-    #TODO Handle units walking off edge of the stage
+    #TODO Handle units walking into enemy units ...conflict!
     #TODO Each case has animations
     self.x = x
     self.y = y
