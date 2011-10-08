@@ -113,13 +113,9 @@ namespace visualizer
             }
             else
             {
-              THROW
-                (
-                Exception,
-                "Resource Load Error Line %d: Resource name '%s' already exists",
-                lineNum,
-                namebuff.c_str()
-                );
+#if __DEBUG__
+             cerr << "Resource Load Error Line " << lineNum << ": Resource name '" << namebuff << "' already exists" << endl;
+#endif
             }
           }
           else

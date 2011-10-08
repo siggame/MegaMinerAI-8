@@ -38,7 +38,11 @@ namespace visualizer
       THROW( GameException, "Cannot Load The Gamelog" );
     }
 
+    // If we already generated a map previously, we'll have to remake it.
+    resourceManager->del( "mapTexture" );
     resourceManager->loadResourceFile( "./plugins/piracy/textures.r" );
+
+    options->setInt( "mapSize", 40 );
 
     m_theMap = new PirateMap;
     m_theMap->generateMap( *m_game, *this );
