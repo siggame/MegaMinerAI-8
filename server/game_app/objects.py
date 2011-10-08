@@ -38,14 +38,8 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
-  def spawn(self, lvl):
-    self.addObject(Virus,x,y,owner,level,movesLeft)
-    x = self.x
-    y = sefl.y
-    owner = self.owner
-    level = lvl
-    movesLeft = 0
-    return
+  def spawn(self, level):
+    self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
 
 
 class Player:
@@ -120,14 +114,18 @@ class Virus(Mappable):
     self.movesLeft = 1
     return
 
-  def move(self, dx, dy):
-    if self.movesLeft > 0 and dx > 0:
-      self.x = self.x + dx
-      self.movesLeft = self.movesLeft -1
-    if self.movesLeft > 0 and dy >0:
-      self.y = self.y + dy
-      self.movesLeft = self.movesLeft -1
-    return
+  def move(self, x, y):
+    if self.owner != self.game.playerID:
+      return "That virus is not yours to control"
+    if self.movesLeft <= 0:
+      return "That virus has no more moves"
+    if self.game.grid[x][y].owner == 3:
+      return "There is a wall in the way"
+    if abs(self.x-x) + abs(self.y-y) > 1:
+      return "Units can only move to adjacent locations"
+    #TODO Handle units walking to each other
+    self.x = x
+    self.y = y
     
   def talk(self, message):
     pass
