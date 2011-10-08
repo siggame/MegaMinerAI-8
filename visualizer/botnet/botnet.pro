@@ -7,7 +7,7 @@ DEPENDPATH += ../common/
 MOC = moc
 TEMPLATE = lib
 TARGET = botnet 
-SOURCES += botnet.cpp \
+SOURCES += *.cpp \
   ../common/*.cpp \
   parser/sexp/*.cpp \
   parser/structures.cpp \

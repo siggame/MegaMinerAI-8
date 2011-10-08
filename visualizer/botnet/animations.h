@@ -10,6 +10,7 @@ namespace visualizer
   class StartAnim: public Anim
   {
     public:
+      StartAnim() {}
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const

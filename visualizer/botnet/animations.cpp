@@ -6,7 +6,7 @@ namespace visualizer
   {
   }
 
-  void DrawVirus::animation( const float& t, AnimData *d )
+  void DrawVirus::animate( const float& t, AnimData *d )
   {
     virus &v = *m_virus;
     
