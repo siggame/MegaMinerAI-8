@@ -37,7 +37,7 @@ namespace visualizer
   struct tile: public Animatable
   {
     tile( IRenderer *renderer ) : Animatable( renderer )
-    { owner = id = x = y = 0 }
+    { owner = id = x = y = 0; }
 
     int id;
     int owner;
