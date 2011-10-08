@@ -45,7 +45,7 @@ class Base(Mappable):
       return "You don't have enough cycles to create this virus"
     else:
       self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
-      self.objects.Player.cycles = self.objects.Player.cycles - cost
+      self.objects.players[self.owner].cycles -= cost
 
 class Player:
   def __init__(self, game, id, playerName, byteDollars, cycles):
@@ -65,12 +65,12 @@ class Player:
     return value
 
   def nextTurn(self):
+    #TODO Award money to player
+    #TODO Award points to the player
     pass
 
   def talk(self, message):
-    self.game.animations.append(['talk',self.id,message])
-    return true
-
+    self.game.animations.append(['PlayerTalk',self.id,message])
 
 
 class Tile(Mappable):
@@ -117,7 +117,8 @@ class Virus(Mappable):
     return value
 
   def nextTurn(self):
-    self.movesLeft = 1
+    if self.owner == self.game.playerID:
+      self.movesLeft = 1
     return
 
   def move(self, x, y):
@@ -133,11 +134,12 @@ class Virus(Mappable):
     #TODO Handle units walkint into friendly same level units
     #TODO Handle units walking into walls
     #TODO Handle units walking off edge of the stage
+    #TODO Each case has animations
     self.x = x
     self.y = y
     
   def talk(self, message):
-    pass
+    self.game.animations.append(['VirusTalk',self.id,message])
 
 
 

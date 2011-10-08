@@ -83,7 +83,6 @@ class Match(DefaultGameWorld):
     self.width = len(mapdata)
     self.height = len(mapdata[0])        
     #Need to get the attributes for the game objects before we parse the file
-    # or not :/
     #self.grid is for our benefit, so that we can look things up by location
     self.grid = [[None]*self.height for _ in range(self.width)]
     #saves y data as a enumeration called row, iterates through
@@ -91,27 +90,20 @@ class Match(DefaultGameWorld):
     for y, row in enumerate(mapdata):
       for x, mapSquare in enumerate(row):
         #if mapSquare is an X then it is a wall, owned by 3
-        #map[x][y] = X
         if mapSquare == 'X':
           self.grid[x][y] = self.addObject(Tile, [x,y,3])
         #if mapSquare is a . then it is a neutral tile owned by 2
-        #map[x][y] = .
         elif mapSquare == '.':
           self.grid[x][y] = self.addObject(Tile, [x,y,2])
         #if mapSquare is 1, then it is a tile owned by player 1, which means 
         #there's a base on top, so we add a base too
-        #map[x][y] = 1
         elif mapSquare == '1':
          self.grid[x][y] = self.addObject(Tile, [x,y,1])
          self.addObject(Base,[x,y,1])
         #same as previous, only it is player 0's base/tile combo
-        #map[x][y] = 0
         elif mapSquare =='0':
           self.grid[x][y] = self.addObject(Tile, [x,y,0])
           self.addObject(Base,[x,y,0])
-          
-          
-        
     
   def nextTurn(self):
     self.turnNumber += 1
@@ -137,7 +129,6 @@ class Match(DefaultGameWorld):
     return True
 
   def checkWinner(self):
-    #TODO: Make this check if a player won, and call declareWinner with a player if they did
     firstFound = False
     player1 = self.objects.players[0]
     player2 = self.objects.players[1]
@@ -148,7 +139,7 @@ class Match(DefaultGameWorld):
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
-    #need to get a game goin, player 0 wins by defualt
+    #TODO need to get a game goin, player 0 wins by defualt
       else:
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
@@ -157,8 +148,9 @@ class Match(DefaultGameWorld):
   # then pop them into a set when moved off of
   # and give points to player based on size of set
   def tilePath(self,owner):
-      #TODO ^       
-      pass  
+      #TODO ^
+      pass
+
   def declareWinner(self, winner, reason=''):
     self.winner = winner
 
