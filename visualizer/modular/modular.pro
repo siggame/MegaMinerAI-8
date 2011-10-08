@@ -5,9 +5,6 @@ INCLUDEPATH += ../interfaces \
 
 DEPENDPATH += ../common/
 
-win32:LIBS += ./parser/sexp/sexpXP.a
-else:LIBS += ./parser/sexp/sexp.a
-
 MOC = moc
 TEMPLATE = lib
 TARGET = modular
