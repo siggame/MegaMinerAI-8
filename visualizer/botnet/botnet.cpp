@@ -92,15 +92,19 @@ namespace visualizer
         {
           case 0: // Left
             v->addKeyFrame( new LeftAnim );
+            v->x++;
           break;
           case 1: // Right
             v->addKeyFrame( new RightAnim );
+            v->x--;
           break;
           case 2: // Up
             v->addKeyFrame( new UpAnim );
+            v->y--;
           break;
           case 3: // Down
             v->addKeyFrame( new DownAnim );
+            v->y++;
           break;
         }
 
