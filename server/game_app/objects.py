@@ -66,13 +66,13 @@ class Player:
     return value
 
   def nextTurn(self):
-    player = self.game.objects.players[self.owner]
+#    player = self.game.objects.players[
     #TODO Award money to the player
       #don't actually know how money is awarded, read game concept
     #TODO Award points to the player
       #will be the size of the set of bases under your control, this is similar to the function tilepath.
       #could just make a self attribute from tilepath to return the size of the paths, add that to points
-    player.byteDollars += len(self.path)
+    self.byteDollars += len(self.game.path)
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk',self.id,message])

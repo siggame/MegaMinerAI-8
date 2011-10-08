@@ -151,11 +151,15 @@ class Match(DefaultGameWorld):
   #will put all tiles connected to a base on list 
   # then pop them into a set when moved off of
   # and give points to player based on size of set
+#path will go in tile path eventually, but I think that since tilepath 
+#isn't being called path is not made (Python magic) so putting 
+#it outside function so player bytedollars update on next turn  
+  path = []
   def tilePath(self,owner):
-      path = []
+#      path = []
       #TODO ^ biggun, try breadth first search 
-            
-      pass
+      return      
+      
 
   def declareWinner(self, winner, reason=''):
     self.winner = winner
