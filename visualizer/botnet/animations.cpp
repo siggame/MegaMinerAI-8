@@ -19,18 +19,18 @@ namespace visualizer
   }
   void DrawTile::animate( const float& t, AnimData *d )
   {
-    tile &t = *m_tile;
+    tile &q = *m_tile;
 
-    if( t.owner == 0)
-      t.renderer().setColor( Color(0.5, 0, 0) ); 
-    else if ( t.owner == 1)
-      t.renderer().setColor( Color( , , ) );
-    else if ( t.owner == 2)
-      t.renderer().setColor( Color( , , ) );
-    else if ( t.owner == 3)
-      t.renderer().setColor( Color( , , ) );
+    if( q.owner == 0)
+      q.renderer().setColor( Color(0.5, 0, 0) ); 
+    else if ( q.owner == 1)
+      q.renderer().setColor( Color(0  , 0 , 0.5 ) );
+    else if ( q.owner == 2)
+      q.renderer().setColor( Color(0.1 ,0.1 ,0.1 ) );
+    else if ( q.owner == 3)
+      q.renderer().setColor( Color(0.5 ,0.7 ,0.2 ) );
     
-    t.renderer().drawQuad( t.x, t.y, 1, 1);
+    q.renderer().drawQuad( q.x, q.y, 1, 1);
   }
 } // visualizer
 

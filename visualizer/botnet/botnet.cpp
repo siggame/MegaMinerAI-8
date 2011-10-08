@@ -60,6 +60,7 @@ namespace visualizer
         i++ 
         )
       {
+        cout << i->second.x << endl;
         tile* t = new tile( renderer );
         t->addKeyFrame( new StartAnim );
         t->id = i->second.id;
