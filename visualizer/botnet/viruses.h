@@ -15,7 +15,14 @@ namespace visualizer
   struct virus: public Animatable
   {
     virus( IRenderer *renderer ) : Animatable( renderer )
-    {}
+    { owner = level = movesLeft = id = x = y = 0; }
+
+    int id;
+    int owner;
+    int level;
+    int movesLeft;
+    float x;
+    float y;
 
     AnimData* getData()
     {
