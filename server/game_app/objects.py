@@ -143,7 +143,7 @@ class Virus(Mappable):
     #You can't move more than one space away
     if abs(self.x-x) + abs(self.y-y) > 1:
       return "Units can only move to adjacent locations"
-    #TODO Handle units walking into friendly different level units
+   #Done? see if it works #TODO Handle units walking into friendly different level units
   #!!!!!!!!!!!!!!!!!!!!!!!!!!!!2am code, beware!!!!!!!!!!!!!!!!!!!11111
     for i in self.game.objects.viruses:
       if i.owner is self.owner and i.x is x and i.y is y:
