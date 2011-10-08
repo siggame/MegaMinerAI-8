@@ -58,7 +58,7 @@ class Match(DefaultGameWorld):
     if self.winner is not None or self.turn is not None:
       return "Game has already begun"
     
-    #TODO: START STUFF
+#Done    #TODO: START STUFF 
     self.turn = self.players[-1]
     self.turnNumber = -1
     for p in self.players:
@@ -71,7 +71,7 @@ class Match(DefaultGameWorld):
     
   def startMap (self):
     mapFilenames = []
-    
+    #will need a function to generate a map
     #look through the list of map files, for every .map file, add to mapfilename list
     for filename in os.listdir("maps/"):
       if ".map" in filename:
@@ -148,7 +148,7 @@ class Match(DefaultGameWorld):
   # then pop them into a set when moved off of
   # and give points to player based on size of set
   def tilePath(self,owner):
-      #TODO ^
+      #TODO ^ biggun
       pass
 
   def declareWinner(self, winner, reason=''):
