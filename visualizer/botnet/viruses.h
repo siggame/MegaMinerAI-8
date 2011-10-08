@@ -3,6 +3,7 @@
 
 #include "animatable.h"
 #include "irenderer.h"
+#include "connectivity.h"
 
 namespace visualizer
 { 
@@ -34,7 +35,7 @@ namespace visualizer
     
   }; // Virus
 
-  struct tile: public Animatable
+  struct tile: public Animatable, public ConnectivityNode
   {
     tile( IRenderer *renderer ) : Animatable( renderer )
     { owner = id = x = y = 0; }

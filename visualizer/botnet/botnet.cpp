@@ -53,6 +53,21 @@ namespace visualizer
     {
       Frame turn;
 
+      Connectivity p1;
+      Connectivity p2;
+
+      for
+        (
+        std::map<int, Base>::iterator i = m_game->states[ state ].bases.begin();
+        i != m_game->states[ state ].bases.end();
+        i++
+        )
+      {
+
+        p1.addBase( i->second.x, i->second.y );
+        p2.addBase( i->second.x, i->second.y );
+      }
+
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -67,11 +82,22 @@ namespace visualizer
         t->y = i->second.y;
         t->owner = i->second.owner;
 
+        if( t->owner == 0 )
+        {
+          p1.addNode( t->x, t->y, t );
+        } else if( t->owner == 1 )
+        {
+          p2.addNode( t->x, t->y, t );
+        }
+
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
 
       }
+      
+      p1.generateConnectivity();
+      p2.generateConnectivity();
         
       for
         (
