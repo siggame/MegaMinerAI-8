@@ -71,7 +71,7 @@ class Match(DefaultGameWorld):
     
   def startMap (self):
     mapFilenames = []
-    #will need a function to generate a map
+    #TODO will need a function to generate a map, lower priority, make game work first
     #look through the list of map files, for every .map file, add to mapfilename list
     for filename in os.listdir("maps/"):
       if ".map" in filename:
@@ -84,7 +84,9 @@ class Match(DefaultGameWorld):
     self.height = len(mapdata[0])        
     #Need to get the attributes for the game objects before we parse the file
     #self.grid is for our benefit, so that we can look things up by location
+
     self.grid = [[None]*self.height for _ in range(self.width)]
+
     #saves y data as a enumeration called row, iterates through
     #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
     for y, row in enumerate(mapdata):
@@ -139,7 +141,9 @@ class Match(DefaultGameWorld):
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
-    #TODO need to get a game goin, player 0 wins by defualt
+    #TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
+    #could sum costs of each team's viruses, more expensive army wins
+    # need to get a game goin, player 0 wins by defualt
       else:
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
@@ -148,7 +152,9 @@ class Match(DefaultGameWorld):
   # then pop them into a set when moved off of
   # and give points to player based on size of set
   def tilePath(self,owner):
-      #TODO ^ biggun
+      path = []
+      #TODO ^ biggun, try breadth first search 
+            
       pass
 
   def declareWinner(self, winner, reason=''):

@@ -71,7 +71,8 @@ class Player:
       #don't actually know how money is awarded, read game concept
     #TODO Award points to the player
       #will be the size of the set of bases under your control, this is similar to the function tilepath.
-    pass
+      #could just make a self attribute from tilepath to return the size of the paths, add that to points
+    player.byteDollars += len(self.path)
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk',self.id,message])
@@ -126,6 +127,7 @@ class Virus(Mappable):
     return
 
   def move(self, x, y):
+    #TODO when a virus moves over a tile it turns the tile to the player's type/ownership
     #You can't move a virus that belongs to the other player
     if self.owner != self.game.playerID:
       return "That virus is not yours to control"
@@ -142,12 +144,47 @@ class Virus(Mappable):
     if abs(self.x-x) + abs(self.y-y) > 1:
       return "Units can only move to adjacent locations"
     #TODO Handle units walking into friendly different level units
-    #TODO Handle units walkint into friendly same level units
-    #TODO Handle units walking into enemy units ...conflict!
+  #!!!!!!!!!!!!!!!!!!!!!!!!!!!!2am code, beware!!!!!!!!!!!!!!!!!!!11111
+    for i in self.game.objects.viruses:
+      if i.owner is self.owner and i.x is x and i.y is y:
+        #moving a unit onto a friendl of a different level is a no no
+        if i.level is not self.level:
+          return "You can't move your unit to another of yours of different level"
+        #moving a unit onto a friendly of same level makes a new 
+        #virus of a higher level, gets rid of other two. LEVEL UP!
+        elif i.level is self.level:
+         newLevel = i.level+1
+         addObject('Virus',[x,y,newLevel])
+         removeObject(self.game.object.Virus)
+         removeObject(self.game.object.Virus)#do we have a removeObject function? found it, did I use it correctly?
+         return "When our powers combine!...we kill ourselves to make a slightly stronger virus"
+        #moving a virus onto an enemy virus, conflict!!
+      elif i.owner is not self.owner and i.x is x and i.y is y:
+        #TODO return some money for removed Viruses to player 
+        #if they're stronger, you weaken them, they kill you
+        if i.level > self.level:
+          i.level -= self.level
+          removeObject(self,'Virus')
+          return "two uneven viruses meet, you weakened him, but your virus died"
+        #if you're stronger, they weaken you, you kill them
+        elif i.level < self.level:
+          self.level -= i.level
+          removeObject(self.game.object.Virus)
+          return "two uneven viruses meet, you are weaker, but your foe is dead"
+        #if you're evenly matched, a great battle ensues, and you both die
+        elif i.level is self.level:
+          removeObject(self.game.object.Virus)
+          removeObject(self.game.object.Virus)
+          return "two evenly matched viruses enter, no one leaves"
+#Done? need to test    #TODO Handle units walkint into friendly same level units
+#Done? need to test    #TODO Handle units walking into enemy units ...conflict!
+#compiles, need to test
     #TODO Each case has animations
-    self.x = x
-    self.y = y
-    
+        else:
+          self.x = x
+          self.y = y
+          return "Successful, uneventful move"
+#don't know if I need all the returns, but might help debugging, plus they're fun to write, and easy to remove if need be
   def talk(self, message):
     self.game.animations.append(['VirusTalk',self.id,message])
 
