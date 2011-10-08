@@ -52,8 +52,10 @@ DLLEXPORT Connection* createConnection()
   c->turnNumber = 0;
   c->playerID = 0;
   c->gameNumber = 0;
-  c->basecost = 0;
-  c->scalecost = 0;
+  c->baseCost = 0;
+  c->scaleCost = 0;
+  c->width = 0;
+  c->height = 0;
   c->Bases = NULL;
   c->BaseCount = 0;
   c->Players = NULL;
@@ -421,10 +423,16 @@ DLLEXPORT int networkLoop(Connection* c)
           c->gameNumber = atoi(sub->val);
           sub = sub->next;
 
-          c->basecost = atoi(sub->val);
+          c->baseCost = atoi(sub->val);
           sub = sub->next;
 
-          c->scalecost = atof(sub->val);
+          c->scaleCost = atof(sub->val);
+          sub = sub->next;
+
+          c->width = atoi(sub->val);
+          sub = sub->next;
+
+          c->height = atoi(sub->val);
           sub = sub->next;
 
         }
@@ -560,11 +568,19 @@ DLLEXPORT int getGameNumber(Connection* c)
 {
   return c->gameNumber;
 }
-DLLEXPORT int getBasecost(Connection* c)
+DLLEXPORT int getBaseCost(Connection* c)
 {
-  return c->basecost;
+  return c->baseCost;
 }
-DLLEXPORT float getScalecost(Connection* c)
+DLLEXPORT float getScaleCost(Connection* c)
 {
-  return c->scalecost;
+  return c->scaleCost;
+}
+DLLEXPORT int getWidth(Connection* c)
+{
+  return c->width;
+}
+DLLEXPORT int getHeight(Connection* c)
+{
+  return c->height;
 }

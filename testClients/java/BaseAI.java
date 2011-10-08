@@ -94,13 +94,23 @@ public abstract class BaseAI
     return Client.INSTANCE.getGameNumber(connection);
   }
   ///BaseCost used in the virus price formula
-  int basecost()
+  int baseCost()
   {
-    return Client.INSTANCE.getBasecost(connection);
+    return Client.INSTANCE.getBaseCost(connection);
   }
   ///Scalar used in the virus price formula
-  float scalecost()
+  float scaleCost()
   {
-    return Client.INSTANCE.getScalecost(connection);
+    return Client.INSTANCE.getScaleCost(connection);
+  }
+  ///The width of the map (max X value)
+  int width()
+  {
+    return Client.INSTANCE.getWidth(connection);
+  }
+  ///The height of the map (max Y value)
+  int height()
+  {
+    return Client.INSTANCE.getHeight(connection);
   }
 }
