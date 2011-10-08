@@ -18,8 +18,8 @@ namespace visualizer
   LogRegex BotNet::logFileInfo()
   {
     LogRegex lr;
-    lr.regex = "Virus";
-    lr.startSize = 500;
+    lr.regex = "Base";
+    lr.startSize = 1000;
 
     return lr;
   } // BotNet::logFileInfo()
@@ -46,8 +46,8 @@ namespace visualizer
 
     for
       (
-      std::vector<GameState>::iterator state = m_game->states.begin();
-      state != m_game->states.end();
+      size_t state = 0; 
+      state < m_game->states.size();
       state++
       )
     {
@@ -55,12 +55,11 @@ namespace visualizer
 
       for
         (
-        std::map<int, Tile>::iterator i = state->tiles.begin();
-        i != state->tiles.end();
+        std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
+        i != m_game->states[ state ].tiles.end();
         i++ 
         )
       {
-        cout << i->second.x << endl;
         tile* t = new tile( renderer );
         t->addKeyFrame( new StartAnim );
         t->id = i->second.id;
@@ -74,21 +73,37 @@ namespace visualizer
 
       }
         
-
       for
         (
-        std::map<int, Virus>::iterator i = state->viruses.begin();
-        i != state->viruses.end();
+        std::map<int, Virus>::iterator i = m_game->states[ state ].viruses.begin();
+        i != m_game->states[ state ].viruses.end();
         i++ 
         )
       {
         virus* v = new virus( renderer );
 
-        v->addKeyFrame( new StartAnim );
+        v->addKeyFrame( new StartVirus( v ) );
         v->id = i->second.id;
         v->owner = i->second.owner;
         v->x = i->second.x;
         v->y = i->second.y;
+
+        switch( checkForMovement( m_game, state, i->second.id ) )
+        {
+          case 0: // Left
+            v->addKeyFrame( new LeftAnim );
+          break;
+          case 1: // Right
+            v->addKeyFrame( new RightAnim );
+          break;
+          case 2: // Up
+            v->addKeyFrame( new UpAnim );
+          break;
+          case 3: // Down
+            v->addKeyFrame( new DownAnim );
+          break;
+        }
+
         v->level = i->second.level;
         v->movesLeft = i->second.movesLeft;
         v->addKeyFrame( new DrawVirus( v ) );
@@ -96,6 +111,8 @@ namespace visualizer
         turn.addAnimatable( v );
 
       }
+
+      animationEngine->buildAnimations( turn );
 
       addFrame( turn );
       
@@ -110,6 +127,42 @@ namespace visualizer
     timeManager->play();
 
   } // BotNet::loadGamelog() 
+
+  size_t BotNet::checkForMovement( Game* g, const size_t& state, const int& id )
+  {
+    if( state > 0 )
+    {
+      std::map<int,Virus>::iterator k = g->states[ state - 1 ].viruses.find( id );
+      if( k != g->states[ state - 1 ].viruses.end() )
+      {
+        // He exists. 
+        Virus* prev = &k->second;
+        Virus* cur = &g->states[ state ].viruses[ id ];
+
+        if( cur->x > prev->x )
+        {
+          return 1;
+        } 
+        else if( cur->x < prev->x )
+        {
+          return 0;
+        }
+        else if( cur->y > prev->y )
+        {
+          return 2;
+        }
+        else if( cur->y < prev->y )
+        {
+          return 3;
+        }
+
+      }
+    }
+
+    // No anim
+    return -1;
+
+  } // BotNet::checkForMovement()
 
 } // visualizer
 

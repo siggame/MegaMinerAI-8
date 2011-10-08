@@ -1,10 +1,10 @@
 #include "easing_equations.h"
 
-namespace EasingEquations
+namespace visualizer 
 {
 
   // Linear Easing
-  double easeInLinear(double t, double b, double c, double d)
+  double linearTween(double t, double b, double c, double d)
   {
     return c*t/d + b;
   }

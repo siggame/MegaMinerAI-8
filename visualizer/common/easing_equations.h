@@ -8,7 +8,7 @@
 #include <cmath>
 using namespace std;
 
-namespace EasingEquations
+namespace visualizer
 {
   /////////////////////////////////////////////////////////////////////////////
   /// @fn easeInLinear ( double t, double b, double c, double d )

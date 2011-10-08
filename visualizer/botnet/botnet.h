@@ -21,6 +21,7 @@ namespace visualizer
 
       LogRegex logFileInfo();
       void loadGamelog( std::string gamelog );
+      size_t checkForMovement( Game* g, const size_t& state, const int& id );
 
     private:
       Game *m_game;

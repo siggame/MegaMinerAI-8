@@ -13,6 +13,13 @@ namespace visualizer
 class _SelectionRender : public GOCFamily_Render
 {
   public:
+    _SelectionRender()
+    {
+      m_updated = false;              //Finished dragging
+      m_dragging = false;             //Currently dragging
+
+      m_X1 = m_Y1 = m_X2 = m_Y2 = 0;
+    }
                                  //X1, Y1, X2, Y2 Screen Resolution
     void setSelectionBox(int, int, int, int);
     int getX1() { return m_X1; }
