@@ -41,9 +41,13 @@ public class Client {
   [DllImport("client")]
   public static extern int getGameNumber(IntPtr connection);
   [DllImport("client")]
-  public static extern int getBasecost(IntPtr connection);
+  public static extern int getBaseCost(IntPtr connection);
   [DllImport("client")]
-  public static extern float getScalecost(IntPtr connection);
+  public static extern float getScaleCost(IntPtr connection);
+  [DllImport("client")]
+  public static extern int getWidth(IntPtr connection);
+  [DllImport("client")]
+  public static extern int getHeight(IntPtr connection);
 
   [DllImport("client")]
   public static extern IntPtr getBase(IntPtr connection, int num);

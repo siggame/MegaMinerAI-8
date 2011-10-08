@@ -62,11 +62,17 @@ library.getPlayerID.argtypes = [c_void_p]
 library.getGameNumber.restype = c_int
 library.getGameNumber.argtypes = [c_void_p]
 
-library.getBasecost.restype = c_int
-library.getBasecost.argtypes = [c_void_p]
+library.getBaseCost.restype = c_int
+library.getBaseCost.argtypes = [c_void_p]
 
-library.getScalecost.restype = c_float
-library.getScalecost.argtypes = [c_void_p]
+library.getScaleCost.restype = c_float
+library.getScaleCost.argtypes = [c_void_p]
+
+library.getWidth.restype = c_int
+library.getWidth.argtypes = [c_void_p]
+
+library.getHeight.restype = c_int
+library.getHeight.argtypes = [c_void_p]
 
 library.getBase.restype = c_void_p
 library.getBase.argtypes = [c_void_p, c_int]

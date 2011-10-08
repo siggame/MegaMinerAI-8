@@ -34,8 +34,10 @@ struct Connection
   int turnNumber;
   int playerID;
   int gameNumber;
-  int basecost;
-  float scalecost;
+  int baseCost;
+  float scaleCost;
+  int width;
+  int height;
 
   _Base* Bases;
   int BaseCount;
@@ -83,8 +85,10 @@ extern "C"
 DLLEXPORT int getTurnNumber(Connection* c);
 DLLEXPORT int getPlayerID(Connection* c);
 DLLEXPORT int getGameNumber(Connection* c);
-DLLEXPORT int getBasecost(Connection* c);
-DLLEXPORT float getScalecost(Connection* c);
+DLLEXPORT int getBaseCost(Connection* c);
+DLLEXPORT float getScaleCost(Connection* c);
+DLLEXPORT int getWidth(Connection* c);
+DLLEXPORT int getHeight(Connection* c);
 
 DLLEXPORT _Base* getBase(Connection* c, int num);
 DLLEXPORT int getBaseCount(Connection* c);

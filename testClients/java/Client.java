@@ -27,8 +27,10 @@ public interface Client extends Library {
   int getTurnNumber(Pointer connection);
   int getPlayerID(Pointer connection);
   int getGameNumber(Pointer connection);
-  int getBasecost(Pointer connection);
-  float getScalecost(Pointer connection);
+  int getBaseCost(Pointer connection);
+  float getScaleCost(Pointer connection);
+  int getWidth(Pointer connection);
+  int getHeight(Pointer connection);
 
   Pointer getBase(Pointer connection, int num);
   int getBaseCount(Pointer connection);

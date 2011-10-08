@@ -80,7 +80,8 @@ class Match(DefaultGameWorld):
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
     with open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames)-1)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
-        
+    self.width = len(mapdata)
+    self.height = len(map[0])        
     #Need to get the attributes for the game objects before we parse the file
     # or not :/
     #self.grid is for our benefit, so that we can look things up by location
@@ -220,8 +221,7 @@ class Match(DefaultGameWorld):
 
   def status(self):
     msg = ["status"]
-
-    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.basecost, self.scalecost])
+    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.baseCost, self.scaleCost, self.width, self.height])
 
     typeLists = []
     typeLists.append(["Base"] + [i.toList() for i in self.objects.values() if i.__class__ is Base])
