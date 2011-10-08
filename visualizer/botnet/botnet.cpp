@@ -17,7 +17,7 @@ namespace visualizer
   LogRegex BotNet::logFileInfo()
   {
     LogRegex lr;
-    lr.regex = "Plant";
+    lr.regex = "Virus";
     lr.startSize = 500;
 
     return lr;
