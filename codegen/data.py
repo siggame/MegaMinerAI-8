@@ -9,8 +9,10 @@ globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
   Variable('playerID', int, 'Player Number; either 0 or 1 (0 is player 1, 1 is player 2)'),
   Variable('gameNumber', int, 'What number game this is for the server'),
-  Variable('basecost', int, 'BaseCost used in the virus price formula'),
-  Variable('scalecost', float, 'Scalar used in the virus price formula'),
+  Variable('baseCost', int, 'BaseCost used in the virus price formula'),
+  Variable('scaleCost', float, 'Scalar used in the virus price formula'),
+  Variable('width', int, 'The width of the map (max X value)'),
+  Variable('height', int, 'The height of the map (max Y value)'),
   ]
 
 # Constants that are built directly into the client

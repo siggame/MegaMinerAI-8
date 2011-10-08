@@ -232,8 +232,7 @@ class Match(DefaultGameWorld):
 
   def status(self):
     msg = ["status"]
-
-    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.basecost, self.scalecost])
+    msg.append(["game", self.turnNumber, self.playerID, self.gameNumber, self.baseCost, self.scaleCost, self.width, self.height])
 
     typeLists = []
     typeLists.append(["Base"] + [i.toList() for i in self.objects.values() if i.__class__ is Base])
