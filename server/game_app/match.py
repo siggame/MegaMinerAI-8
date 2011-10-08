@@ -7,6 +7,7 @@ from networking.sexpr.sexpr import *
 import os
 import itertools
 import scribe
+import random
 
 Scribe = scribe.Scribe
 
@@ -62,10 +63,13 @@ class Match(DefaultGameWorld):
     self.turnNumber = -1
     for p in self.players:
       self.addObject(Player, [p.screenName, 0, self.startcycles])
+    self.startMap()
     self.nextTurn()
     return True
-
-  def startMap (self, cfgUnits):
+    
+    
+    
+  def startMap (self):
     mapFilenames = []
     
     #look through the list of map files, for every .map file, add to mapfilename list
@@ -74,36 +78,35 @@ class Match(DefaultGameWorld):
         mapFilenames.append(filename)
         
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
-    with open(("maps/" + mapFilename[random.randint(0,len(mapFilenams)-1)]),'r') as f:
+    with open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames)-1)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
         
     #Need to get the attributes for the game objects before we parse the file
     # or not :/
     #self.grid is for our benefit, so that we can look things up by location
-    self.grid = []
+    self.grid = [[None]*self.height for _ in range(self.width)]
     #saves y data as a enumeration called row, iterates through
     #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
     for y, row in enumerate(mapdata):
-      self.grid.append([None]*len(row))
       for x, mapSquare in enumerate(row):
         #if mapSquare is an X then it is a wall, owned by 3
         #map[x][y] = X
         if mapSquare == 'X':
-          self.grid[x][y] = self.addObject(Tile.make(x,y,3))
+          self.grid[x][y] = self.addObject(Tile, [x,y,3])
         #if mapSquare is a . then it is a neutral tile owned by 2
         #map[x][y] = .
         elif mapSquare == '.':
-          self.grid[x][y] = self.addObject(Tile.make(x,y,2))
+          self.grid[x][y] = self.addObject(Tile, [x,y,2])
         #if mapSquare is 1, then it is a tile owned by player 1, which means 
         #there's a base on top, so we add a base too
         #map[x][y] = 1
         elif mapSquare == '1':
-         self.grid[x][y] = self.addObject(Tile.make(x,y,1))
+         self.grid[x][y] = self.addObject(Tile, [x,y,1])
          self.addObject(Base.make(x,y,1))
         #same as previous, only it is player 0's base/tile combo
         #map[x][y] = 0
         elif mapSquare =='0':
-          self.grid[x][y] = self.addObject(Tile.make(x,y,0))
+          self.grid[x][y] = self.addObject(Tile, [x,y,0])
           self.addObject(Base.make(x,y,0))
           
           

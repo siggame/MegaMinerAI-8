@@ -38,13 +38,14 @@ class Base(Mappable):
   def nextTurn(self):
     pass
 
-    #TODO make the virus cost something
+#Done, wait to see if it works    #TODO make the virus cost something
   def spawn(self, level):
-    if self.objects.Player.cycles < level**self.scalecost:
+    cost = self.basecost*self.scalecost**level
+    if self.objects.Player.cycles < cost:
       return "You don't have enough cycles to create this virus"
-    else
+    else:
       self.addObject(Virus, [self.x, self.y, self.owner, level, 0])
-
+      self.objects.Player.cycles = self.objects.Player.cycles - cost
 
 class Player:
   def __init__(self, game, id, playerName, byteDollars, cycles):
@@ -128,7 +129,10 @@ class Virus(Mappable):
       return "There is a wall in the way"
     if abs(self.x-x) + abs(self.y-y) > 1:
       return "Units can only move to adjacent locations"
-    #TODO Handle units walking to each other
+    #TODO Handle units walking into friendly different level units
+    #TODO Handle units walkint into friendly same level units
+    #TODO Handle units walking into walls
+    #TODO Handle units walking off edge of the stage
     self.x = x
     self.y = y
     
