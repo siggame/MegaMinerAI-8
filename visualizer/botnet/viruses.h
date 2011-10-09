@@ -41,6 +41,25 @@ namespace visualizer
     
   }; // Virus
 
+  struct base: public Animatable
+  {
+    base( IRenderer *renderer ) : Animatable( renderer )
+    { owner = id = x = y = 0; }
+
+    int id;
+    int owner;
+    float x;
+    float y;
+
+    AnimData* getData()
+    {
+      return &g;
+    }
+
+    GeneralAnim g;
+
+  }; // base
+
   struct tile: public Animatable, public ConnectivityNode
   {
     tile( IRenderer *renderer ) : Animatable( renderer )
@@ -58,8 +77,7 @@ namespace visualizer
 
     GeneralAnim g;
 
-
-  };
+  }; // tile
 
 } // visualizer
 

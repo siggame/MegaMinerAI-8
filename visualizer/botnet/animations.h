@@ -125,6 +125,26 @@ namespace visualizer
 
   }; // DrawVirus
 
+  class DrawBase: public Anim
+  {
+    public:
+      DrawBase( base* b )
+      {
+        m_base = b;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      base* m_base;
+  }; // DrawBase
+
   class DrawTile: public Anim
   {
     public: 

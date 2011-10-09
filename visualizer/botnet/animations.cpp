@@ -17,7 +17,7 @@ namespace visualizer
     else
        v.renderer().setColor( Color( 0.1, 0.1, 1 ) );
     
-    v.renderer().drawQuad( vd->x, vd->y, 1, 1 );
+    v.renderer().drawQuad( vd->x+.25, vd->y+.25, .5, .5 );
   } // DrawVirus::animate()
 
   void Appear::animate( const float& t, AnimData *d )
@@ -40,6 +40,33 @@ namespace visualizer
      
 
   }
+
+  void DrawBase::animate( const float& t, AnimData *d )
+  {
+
+    GeneralAnim *g = (GeneralAnim*) d;
+    base &q = *m_base;
+
+    float intensity;
+    if( t < 0.5 )
+    {
+      intensity = easeOutCubic( t, .8, .2, 0.5 );
+    } else
+    {
+      intensity = easeInCubic( t-.5, 1, -.2, 0.5 );
+    }
+
+    if( q.owner == 0 )
+    {
+      q.renderer().setColor( Color( 0.3f*intensity, 0, 0, 1 ) ); 
+    }
+    else if( q.owner == 1 )
+    {
+      q.renderer().setColor( Color( 0, 0, 0.3f*intensity, 1 ) );
+    }
+
+    q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
+  } // DrawBase::animate()
 
   void DrawTile::animate( const float& t, AnimData *d )
   {
