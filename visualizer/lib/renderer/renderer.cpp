@@ -18,6 +18,7 @@ namespace visualizer
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+
     glOrtho( 0, width,_height,0, -depth, depth );
 
     glMatrixMode(GL_MODELVIEW);

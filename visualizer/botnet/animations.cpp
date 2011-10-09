@@ -13,9 +13,9 @@ namespace visualizer
     virus &v = *m_virus;
     
     if( v.owner == 0 )
-       v.renderer().setColor( Color( 1, 0, 0 ) );
+       v.renderer().setColor( Color( 1, 0.1, 0.1 ) );
     else
-       v.renderer().setColor( Color( 0, 0, 1 ) );
+       v.renderer().setColor( Color( 0.1, 0.1, 1 ) );
     
     v.renderer().drawQuad( vd->x, vd->y, 1, 1 );
   } // DrawVirus::animate()
@@ -33,8 +33,10 @@ namespace visualizer
       g->alpha = 1;
     } else
     {
-      g->alpha = linearTween( t-startTime, 0, 1, endTime-startTime );
+      g->alpha = easeOutBounce( t-startTime, 0, 1, endTime-startTime );
     } 
+
+    g->alpha = 1;
      
 
   }
@@ -48,22 +50,23 @@ namespace visualizer
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.5, 0.5, 0, g->alpha ) ); 
+        q.renderer().setColor( Color( 0.6, 0, 0, g->alpha ) ); 
       else
-        q.renderer().setColor( Color( 0.35, 0, 0, g->alpha ) );
+        q.renderer().setColor( Color( 0.4, 0, 0, g->alpha ) );
     }
     else if( q.owner == 1 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0, 0.5, 0.5, g->alpha ) );
+        q.renderer().setColor( Color( 0, 0, 0.6, g->alpha ) );
       else
-        q.renderer().setColor( Color( 0, 0, 0.35, g->alpha ) );
+        q.renderer().setColor( Color( 0, 0, 0.4, g->alpha ) );
     }
-#if 0
+#if 1
     else if( q.owner == 2 )
       q.renderer().setColor( Color( 0.1, 0.1, 0.1 ) );
     else if( q.owner == 3 )
-      q.renderer().setColor( Color( 0.5, 0.7, 0.2 ) );
+      // WALLS
+      q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
 #else
       else
       {
@@ -80,7 +83,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = linearTween( t-startTime, v->x, -1, endTime-startTime );
+      v->x = easeOutElastic( t-startTime, v->x, -1, endTime-startTime, 2, 1 );
     } else if ( t >= endTime )
     {
       v->x--;
@@ -92,7 +95,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = linearTween( t-startTime, v->x, 1, endTime-startTime );
+      v->x = easeOutExpo( t-startTime, v->x, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->x++;
@@ -104,7 +107,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = linearTween( t-startTime, v->y, 1, endTime-startTime );
+      v->y = easeOutBounce( t-startTime, v->y, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y++;
@@ -113,10 +116,11 @@ namespace visualizer
 
   void DownAnim::animate( const float& t, AnimData *d )
   {
+    // I think this is actually up
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = linearTween( t-startTime, v->y, -1, endTime-startTime );
+      v->y = easeOutSine( t-startTime, v->y, -1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y--;
