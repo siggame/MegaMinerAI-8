@@ -144,13 +144,13 @@ class Virus(Mappable):
       return "Don't move off of the map"
     if self.game.grid[x][y].owner is 3:
     #You can't move into a wall...the wall will win
-#TODO how to pass Crash grid x and y   
+#TODO how to pass Crash grid x and y, not sure if what I have works
       self.game.animations.append(['Crash',self,self.game.grid[x],self.game.grid[y]])
       return "There is a wall in the way"
     #You can't move more than one space away
     if abs(self.x-x) + abs(self.y-y) > 1:
       return "Units can only move to adjacent locations"
-   #Done? see if it works #TODO Handle units walking into friendly different level units
+#Done? see if it works #TODO Handle units walking into friendly different level units
   #!!!!!!!!!!!!!!!!!!!!!!!!!!!!2am code, beware!!!!!!!!!!!!!!!!!!!11111
     print('entering 2am code')
     for i in self.game.objects.viruses:
@@ -197,7 +197,7 @@ class Virus(Mappable):
 #Done? need to test    #TODO Handle units walkint into friendly same level units
 #Done? need to test    #TODO Handle units walking into enemy units ...conflict!
 #compiles, need to test
-    #TODO Each case has animations
+#Done? need to test    #TODO Each case has animations
       else:
         self.game.animations.append(['Move',self,self.x,self.y])
         self.x = x

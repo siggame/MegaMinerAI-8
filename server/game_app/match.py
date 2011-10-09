@@ -71,8 +71,8 @@ class Match(DefaultGameWorld):
     
   def startMap (self):
     mapFilenames = []
-    #TODO will need a function to generate a map, lower priority, make game work first
-    #look through the list of map files, for every .map file, add to mapfilename list
+#TODO will need a function to generate a map, lower priority, make game work first
+#look through the list of map files, for every .map file, add to mapfilename list
     for filename in os.listdir("maps/"):
       if ".map" in filename:
         mapFilenames.append(filename)
@@ -141,10 +141,13 @@ class Match(DefaultGameWorld):
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
-    #TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
-    #could sum costs of each team's viruses, more expensive army wins
-    # need to get a game goin, player 0 wins by defualt
-      else:
+#TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
+#could sum costs of each team's viruses, more expensive army wins
+# need to get a game goin, player 0 wins by defualt
+    #  elif player2.btyeDollars is player1.byteDollars:
+    #    self.armyCost = 0
+    #    for i in self.objects.viruses
+      else:   
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
 
@@ -158,7 +161,7 @@ class Match(DefaultGameWorld):
   def tilePath(self,owner):
       Path = set()
       tiles = []
-      #TODO ^ biggun, try breadth first search 
+      #TODO ^ biggun, try breadth first search make a way of finding how many tiles are connected to a base
       return      
       
 
