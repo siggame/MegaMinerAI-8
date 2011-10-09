@@ -5,7 +5,7 @@ INCLUDEPATH += ../interfaces \
   ../common/
 DEPENDPATH += ../common/
 MOC = moc
-TEMPLATE = lib
+TEMPLATE = lib 
 TARGET = botnet 
 SOURCES += *.cpp \
   ../common/*.cpp \
@@ -20,8 +20,10 @@ HEADERS += *.h \
 
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
-QMAKE_LFLAGS_DEBUG += -pg
+QMAKE_LFLAGS_DEBUG += -pg -shared
+QMAKE_LFLAGS_RELEASE += -pg -shared
 CONFIG += debug plugin
+CONFIG += dll
 QT += opengl
 
 debug:DEFINES += __DEBUG__

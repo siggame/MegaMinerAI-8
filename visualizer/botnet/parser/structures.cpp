@@ -136,8 +136,10 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "turnNumber: " << ob.turnNumber  <<'\n';
   stream << "playerID: " << ob.playerID  <<'\n';
   stream << "gameNumber: " << ob.gameNumber  <<'\n';
-  stream << "basecost: " << ob.basecost  <<'\n';
-  stream << "scalecost: " << ob.scalecost  <<'\n';
+  stream << "baseCost: " << ob.baseCost  <<'\n';
+  stream << "scaleCost: " << ob.scaleCost  <<'\n';
+  stream << "width: " << ob.width  <<'\n';
+  stream << "height: " << ob.height  <<'\n';
 
   stream << "\n\nMappables:\n";
   for(std::map<int,Mappable>::iterator i = ob.mappables.begin(); i != ob.mappables.end(); i++)

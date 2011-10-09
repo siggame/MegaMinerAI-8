@@ -149,8 +149,10 @@ struct GameState
   int turnNumber;
   int playerID;
   int gameNumber;
-  int basecost;
-  float scalecost;
+  int baseCost;
+  float scaleCost;
+  int width;
+  int height;
 
   std::map< int, std::vector<Animation*> > animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);

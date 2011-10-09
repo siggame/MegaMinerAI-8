@@ -379,10 +379,16 @@ static bool parseSexp(Game& game, sexp_t* expression)
           gs.gameNumber = atoi(sub->val);
           sub = sub->next;
           if ( !sub ) return false;
-          gs.basecost = atoi(sub->val);
+          gs.baseCost = atoi(sub->val);
           sub = sub->next;
           if ( !sub ) return false;
-          gs.scalecost = atof(sub->val);
+          gs.scaleCost = atof(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.width = atoi(sub->val);
+          sub = sub->next;
+          if ( !sub ) return false;
+          gs.height = atoi(sub->val);
           sub = sub->next;
       }
       else if(string(sub->val) == "Mappable")
