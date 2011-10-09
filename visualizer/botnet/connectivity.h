@@ -4,6 +4,8 @@
 #include <map>
 #include <vector>
 #include <stack>
+#include <iostream>
+using namespace std;
 
 namespace visualizer
 {
@@ -39,9 +41,7 @@ namespace visualizer
 
     bool operator < ( const coord& rhs ) const
     {
-      if( x < rhs.x )
-        return true;
-      if( y < rhs.y )
+      if( x*1000 + y < rhs.x*1000 + rhs.y )
         return true;
 
       return false;
@@ -101,6 +101,8 @@ namespace visualizer
 
   }; // Connectivity
 
-} // visualizer
+  ostream& operator << ( ostream& os, const coord& rhs );
+  
 
-#endif // CONNECTIVITY_H
+} // visualizer
+#endif

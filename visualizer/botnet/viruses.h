@@ -7,7 +7,13 @@
 
 namespace visualizer
 { 
-  struct VirusData: public AnimData
+
+  struct GeneralAnim: public AnimData
+  {
+    float alpha;
+  };
+
+  struct VirusData: public GeneralAnim
   {
     float x;
     float y;
@@ -47,8 +53,10 @@ namespace visualizer
 
     AnimData* getData()
     {
-      return 0;
+      return &g;
     }
+
+    GeneralAnim g;
 
 
   };

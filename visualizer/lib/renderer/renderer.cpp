@@ -269,6 +269,7 @@ namespace visualizer
     ) const
   {
     glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
    
     glBegin( GL_QUADS );
       glVertex3f( x, y, z );

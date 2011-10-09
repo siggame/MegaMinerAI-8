@@ -51,9 +51,10 @@ QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic
 QMAKE_LFLAGS_DEBUG += -pg -rdynamic
 }
 
+TEMPLATE = subdirs app
 CONFIG += debug
 macx:CONFIG -= app_bundle
 QT += opengl
-SUBDIRS += tools 
+SUBDIRS += botnet piracy lightRevelation
 OTHER_FILES += 
 debug:DEFINES += __DEBUG__

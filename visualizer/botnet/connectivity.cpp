@@ -1,5 +1,6 @@
 #include "connectivity.h"
 
+
 namespace visualizer
 {
   void Connectivity::addBase( const float& x, const float& y )
@@ -17,8 +18,13 @@ namespace visualizer
   bool Connectivity::findMyNode( const coord& c )
   {
     std::map<coord, ConnectivityNode*>::iterator i = m_nodes.find( c );
-    if( i != m_nodes.end() && !i->second->connected() )
-      return true;
+    if( i != m_nodes.end() ) 
+    {
+      if( !i->second->connected() )
+      {
+        return true;
+      }
+    }
     return false;
 
   } // Connectivity::findMyNode()
@@ -54,6 +60,7 @@ namespace visualizer
           continue;
 
         m_nodes[ c ]->setConnected( true );
+
         for( size_t j = 0; j < 4; j++ )
         {
           if( findMyNode( c + udlr[ j ] ) )
@@ -68,5 +75,12 @@ namespace visualizer
 
   } // Connectivity::generateConnectivity()
 
+  ostream& operator << ( ostream& os, const coord& rhs )
+  {
+    os << "( " << rhs.x << ", " << rhs.y << " )";
+    return os;
+
+  }
 
 } // visualizer
+

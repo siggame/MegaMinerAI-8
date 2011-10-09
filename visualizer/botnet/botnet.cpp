@@ -63,9 +63,13 @@ namespace visualizer
         i++
         )
       {
-
-        p1.addBase( i->second.x, i->second.y );
-        p2.addBase( i->second.x, i->second.y );
+        if( i->second.owner == 0 )
+        {
+          p1.addBase( i->second.x, i->second.y );
+        } else
+        {
+          p2.addBase( i->second.x, i->second.y );
+        }
       }
 
       for
@@ -86,10 +90,12 @@ namespace visualizer
         {
           p1.addNode( t->x, t->y, t );
         } else if( t->owner == 1 )
+
         {
           p2.addNode( t->x, t->y, t );
         }
 
+        t->addKeyFrame( new Appear );
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
