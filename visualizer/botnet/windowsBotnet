@@ -1,0 +1,19 @@
+#!/bin/bash
+cd ../../codegen
+
+python main.py templates
+
+cp -R output/visualizer/* ../visualizer/botnet/parser
+
+pwd
+
+cd ../visualizer/botnet/parser/sexp
+make
+cd ../
+make
+cd ../
+
+make clean
+qmake -spec win32-x-g++
+make clean
+make -f Makefile.Release
