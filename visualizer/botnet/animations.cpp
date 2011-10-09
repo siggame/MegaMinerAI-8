@@ -13,9 +13,9 @@ namespace visualizer
     virus &v = *m_virus;
     
     if( v.owner == 0 )
-       v.renderer().setColor( Color( 1, 0.1, 0.1 ) );
+       v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
     else
-       v.renderer().setColor( Color( 0.1, 0.1, 1 ) );
+       v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
     
     v.renderer().drawQuad( vd->x+.25, vd->y+.25, .5, .5 );
   } // DrawVirus::animate()

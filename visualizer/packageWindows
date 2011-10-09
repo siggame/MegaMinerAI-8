@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cp options.cfg ./release/
+cp -r ./plugins/ ./release/
+rm ./release/plugins/*.so
+
+cd release
+rm visualizer.zip
+zip visualizer.zip -r *
+cp visualizer.zip /home/ftp/visualizer.zip

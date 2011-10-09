@@ -43,13 +43,7 @@ namespace visualizer
     for( std::vector<coord>::iterator i = m_bases.begin(); i != m_bases.end(); i++  )
     {
       std::stack<coord> nodesLeft;
-      for( size_t j = 0; j < 4; j++ )
-      {
-        if( findMyNode( *i + udlr[ j ] ) )
-        {
-          nodesLeft.push( *i + udlr[ j ] );
-        }
-      }
+      nodesLeft.push( *i );
 
       while( nodesLeft.size() )
       {
