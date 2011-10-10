@@ -4,6 +4,6 @@
 
 from django.conf.urls.defaults import *
 
-urlpatters = patterns('mysite.thunderdome.views',
-#    (r'',''),
+urlpatterns = patterns('mysite.thunderdome.views',
+    (r'^$','index'),
 )
