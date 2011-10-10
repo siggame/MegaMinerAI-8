@@ -141,12 +141,24 @@ class Match(DefaultGameWorld):
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
-#TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
+#Done? need to test #TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
 #could sum costs of each team's viruses, more expensive army wins
 # need to get a game goin, player 0 wins by defualt
-    #  elif player2.btyeDollars is player1.byteDollars:
-    #    self.armyCost = 0
-    #    for i in self.objects.viruses
+      elif player2.byteDollars is player1.byteDollars:
+        self.p1armyCost = 0
+        self.p2armyCost = 0
+        for i in self.objects.viruses:
+          cost = self.baseCost*self.scaleCost**i.level
+          if i.owner is 0:
+            self.p1armyCost += cost
+          elif i.owner is 1:
+            self.p2armyCost += cost
+          if self.p1armyCost > self.p2armyCost:
+            self.declareWinner(self.players[0],'Victory through more expensive army')
+          elif self.p2armyCost > self.p2armyCost:
+            self.declareWinner(self.players[1],'Victory through more eexpensive army')
+          else:
+            self.declareWinner(self.players[0],'Victory because I said so, why can you build the same army?')       
       else:   
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
