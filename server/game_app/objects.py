@@ -39,25 +39,31 @@ class Base(Mappable):
    return "base next turn called"
 
 #Done, wait to see if it works    #TODO make the virus cost something
+#spawn keeps getting denied 
   def spawn(self, level):
-    player1 = self.game.objects.players[0]
-    player2 = self.game.objects.players[1]
-    if self.game.turnNumber%2 is 0:
-     current_player = player1
-    else:
-     current_player = player2                     
+  #  player1 = self.game.objects.players[0]
+  #  player2 = self.game.objects.players[1]
+  #  if self.game.turnNumber%2 is 0:
+  #   current_player = player1
+  #  else:
+  #   current_player = player2                     
     player = self.game.objects.players[self.owner]
     cost = self.game.baseCost*self.game.scaleCost**level
+  #  print(current_player.id,'player cycles = ',player.cycles,'cost = ',cost)
     if player.cycles < cost:
+      print('Cannot afford virus')
       return "You don't have enough cycles to create this virus"
     elif player.cycles >= cost:
      if level <0:
+       print('tried making neg virus')
        return "You can't create a virus with a negative level"
      else:
-      self.game.addObject(Virus, [self.x, self.y, self.owner, level, 0])
       self.game.animations.append(['Create',self])
       player.cycles -= cost
-      print( "I spawned a virus",current_player.id)
+      print( "I spawned a virus")
+      self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
+      return True     
+     #  "THIS SHOULD BE WORKING!!"
     else:
       return "wat"
 
@@ -143,12 +149,12 @@ class Virus(Mappable):
   def move(self, dx, dy):
 #Done? need to test #TODO when a virus moves over a tile it turns the tile to the player's type/ownership
     #You can't move a virus that belongs to the other player
-    player1 = self.game.objects.players[0]
-    player2 = self.game.objects.players[1]
-    if self.game.turnNumber%2 is 0:
-      current_player = player1
-    else:
-      current_player = player2
+  #  player1 = self.game.objects.players[0]
+  #  player2 = self.game.objects.players[1]
+  #  if self.game.turnNumber%2 is 0:
+  #    current_player = player1
+  #  else:
+  #    current_player = player2
     if self.owner != self.game.playerID:
       return "That virus is not yours to control"
     #You can't move if you have no moves left
@@ -174,7 +180,8 @@ class Virus(Mappable):
         #moving a unit onto a friendly of a different level is a no no
         if i.level is not self.level:
           self.game.animations.append(['Crash',self,i.x,i.y])
-          print( "You can't move your unit to another of yours of different level",current_player.id) ###
+          return("You can't move your unit to another of yours of different level") ###
+         ####how does yield work?  yield("You can't move your unit to another of yours of different level")
         #moving a unit onto a friendly of same level makes a new 
         #virus of a higher level, gets rid of other two. LEVEL UP!
         elif i.level is self.level:
@@ -185,17 +192,20 @@ class Virus(Mappable):
 #Done? needs testing #TODO look into removeObject
           self.game.removeObject(i)
           self.game.removeObject(self)#do we have a removeObject function? found it, did I use it correctly?
-          print("When our powers combine!...we kill ourselves to make a slightly stronger virus",current_player.id) ###
+          print("When our powers combine!...we kill ourselves to make a slightly stronger virus") ###
+          return True
         #moving a virus onto an enemy virus, conflict!!
       elif i.owner is not self.owner and i.x is dx and i.y is dy:
       # print('MY NAME IS VIRUSO MONTOYA, PREPARE TO DIE')
 #TODO return some money for removed Viruses to player 
         #if they're stronger, you weaken them, they kill you
-        self.game.animations.append(['Combat',self,i])
+###        self.game.animations.append(['Combat',self,i])
         if i.level > self.level:
+          self.game.animations.append(['Combat',self,i])
           i.level -= self.level
           self.game.removeObject(self)
-          print( "two uneven viruses meet, you weakened him, but your virus died",current_player.id) ###
+          print( "two uneven viruses meet, you weakened him, but your virus died") ###
+          return True
         #if you're stronger, they weaken you, you kill them
         elif i.level < self.level:
           self.game.animations.append(['Combat',self,i])
@@ -203,13 +213,15 @@ class Virus(Mappable):
           self.game.removeObject(i)
           self.game.grid[dx][dy].owner = self.owner
           self.movesLeft-=1
-          print( "two uneven viruses meet, you are weaker, but your foe is dead",current_player.id)###
+          print( "two uneven viruses meet, you are weaker, but your foe is dead")###
+          return True
         #if you're evenly matched, a great battle ensues, and you both die
         elif i.level is self.level:
           self.game.animations.append(['Combat',self,i])
           self.game.removeObject(self)
           self.game.removeObject(i)
-          print( "two evenly matched viruses enter, no one leaves",current_player.id)###
+          print( "two evenly matched viruses enter, no one leaves")###
+          return True
 #Done? need to test    #TODO Handle units walkint into friendly same level units
 #Done? need to test    #TODO Handle units walking into enemy units ...conflict!
 #Done? need to test    #TODO Each case has animations
@@ -219,8 +231,10 @@ class Virus(Mappable):
         self.y = dy
         self.game.grid[dx][dy].owner = self.owner
         self.movesLeft-=1
-        print( "Successful, uneventful move",current_player.id)###
+        print( "Successful, uneventful move")###
+        return True
     return( "got to end of function without hitting cases...wat")###
+ #TODO make it so an enemy virus can't move onto a base 
   
   def talk(self, message):
     self.game.animations.append(['VirusTalk',self.id,message])
