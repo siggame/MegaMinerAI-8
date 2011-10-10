@@ -9,6 +9,16 @@
 #include <stdio.h>
 #include <iostream>
 
+//void * operator new( size_t size )
+//{
+  //cout << file << ": " << line << endl;
+  //return new char[size];
+  
+//}
+
+//#define new new( __FILE__, __LINE__ )
+
+
 #endif
 
 namespace visualizer 

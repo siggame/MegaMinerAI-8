@@ -1,4 +1,5 @@
 #include <iostream>
+#include "common.h"
 #include "lib/gui/gui.h"
 #include "lib/optionsmanager/optionsman.h"
 #include "lib/timemanager/timeManager.h"

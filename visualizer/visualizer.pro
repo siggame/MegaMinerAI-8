@@ -22,7 +22,6 @@ SOURCES += main.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/renderer/*.cpp \
-    ./lib/renderer/textRenderer/*.cpp \
     ./common/*.cpp \
     ./lib/animationengine/*.cpp
 MOC = moc
@@ -37,18 +36,17 @@ HEADERS += ./lib/manager/*.h \
     ./lib/*.h \
     ./lib/selectionrender/*.h \
     ./lib/resourcemanager/*.h \
-    ./lib/renderer/textRenderer/*.h \
     ./lib/animationengine/*.h \
     ./common/*.h \
     ./interfaces/*.h
 win32: {
 QMAKE_CFLAGS_DEBUG += -pg
 QMAKE_CXXFLAGS_DEBUG += -pg
-QMAKE_LFLAGS_DEBUG += -pg
+QMAKE_LFLAGS_DEBUG += -pg 
 } else {
 QMAKE_CFLAGS_DEBUG += -pg -rdynamic
 QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic
-QMAKE_LFLAGS_DEBUG += -pg -rdynamic
+QMAKE_LFLAGS_DEBUG += -pg -rdynamic 
 }
 
 CONFIG += debug
