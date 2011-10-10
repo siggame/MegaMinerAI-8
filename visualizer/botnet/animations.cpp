@@ -13,11 +13,16 @@ namespace visualizer
     virus &v = *m_virus;
     
     if( v.owner == 0 )
-       v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
+    {
+      v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
+      v.renderer().drawQuad( vd->x+0.25, vd->y+0.25, .25, .5 );
+    }
     else
-       v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
+    {
+      v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
+      v.renderer().drawQuad( vd->x+0.50, vd->y+0.25, .25, .5 );
+    }
     
-    v.renderer().drawQuad( vd->x+.25, vd->y+.25, .5, .5 );
   } // DrawVirus::animate()
 
   void Appear::animate( const float& t, AnimData *d )
@@ -77,16 +82,16 @@ namespace visualizer
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.6, 0, 0, g->alpha ) ); 
+        q.renderer().setColor( Color( 0.4, 0, 0, g->alpha ) ); 
       else
-        q.renderer().setColor( Color( 0.4, 0, 0, g->alpha ) );
+        q.renderer().setColor( Color( 0.2, 0, 0, g->alpha ) );
     }
     else if( q.owner == 1 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0, 0, 0.6, g->alpha ) );
-      else
         q.renderer().setColor( Color( 0, 0, 0.4, g->alpha ) );
+      else
+        q.renderer().setColor( Color( 0, 0, 0.2, g->alpha ) );
     }
 #if 1
     else if( q.owner == 2 )
