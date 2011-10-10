@@ -166,7 +166,7 @@ class Virus(Mappable):
     if not (0 <= dx < self.game.width) or not (0 <=dy < self.game.height):
       print("Don't move off of the map")
       return "Don't move off of the map"
-    if self.game.grid[dx][dy].owner is 3:
+    if self.game.grid[dx][dy].owner == 3:
     #You can't move into a wall...the wall will win
 #might work, still worth looking into#TODO how to pass Crash grid x and y, not sure if what I have works
       self.game.animations.append(['Crash',self,self.game.grid[dx],self.game.grid[dy]])
@@ -178,19 +178,19 @@ class Virus(Mappable):
       return "Units can only move to adjacent locations"
 #Done? see if it works #TODO Handle units walking into friendly different level units
     for i in self.game.objects.bases:
-      if i.x is dx and i.y is dy:
+      if i.x == dx and i.y == dy:
         print("You can't move onto a base")
         return "You cannot move onto a base, back to the field soldier!"
     for i in self.game.objects.viruses:
-      if i.owner is self.owner and i.x is dx and i.y is dy:
+      if i.owner == self.owner and i.x == dx and i.y == dy:
         #moving a unit onto a friendly of a different level is a no no
-        if i.level is not self.level:
+        if i.level != self.level:
           self.game.animations.append(['Crash',self,i.x,i.y])
           print("You can't move your unit to another of yours of different level")
           return("You can't move your unit to another of yours of different level") ###
         #moving a unit onto a friendly of same level makes a new 
         #virus of a higher level, gets rid of other two. LEVEL UP!
-        elif i.level is self.level:
+        elif i.level == self.level:
 #Done? needs testing #TODO look into animations
           self.game.animations.append(['Combine',self,i,Virus])
           self.game.addObject(Virus,[dx,dy,i.owner,self.level+1,0])
@@ -200,7 +200,7 @@ class Virus(Mappable):
           print("When our powers combine!...we kill ourselves to make a slightly stronger virus") ###
           return True
         #moving a virus onto an enemy virus, conflict!!
-      elif i.owner is not self.owner and i.x is dx and i.y is dy:
+      elif i.owner != self.owner and i.x == dx and i.y == dy:
       # print('MY NAME IS VIRUSO MONTOYA, PREPARE TO DIE')
 #TODO return some money for removed Viruses to player 
         #if they're stronger, you weaken them, they kill you
@@ -221,7 +221,7 @@ class Virus(Mappable):
           print( "two uneven viruses meet, you are weaker, but your foe is dead")###
           return True
         #if you're evenly matched, a great battle ensues, and you both die
-        elif i.level is self.level:
+        elif i.level == self.level:
           self.game.animations.append(['Combat',self,i])
           self.game.removeObject(self)
           self.game.removeObject(i)

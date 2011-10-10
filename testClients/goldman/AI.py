@@ -24,7 +24,7 @@ class AI(BaseAI):
      #if self.turnNumber<10:
       print('spawning a virus')
       base.spawn(random.randint(1,10))
-   print self.turnNumber()
+   print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",self.turnNumber())
    for virus in self.viruses:
 #    if virus.owner is self.id:
      dx = dy = 0
