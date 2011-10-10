@@ -134,7 +134,7 @@ class Match(DefaultGameWorld):
     firstFound = False
     player1 = self.objects.players[0]
     player2 = self.objects.players[1]
-    if self.turnNumber == self.turnLimit:
+    if self.turnNumber >= self.turnLimit:
       if player1.byteDollars > player2.byteDollars:
         self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
         print "2 Wins!"
@@ -156,8 +156,10 @@ class Match(DefaultGameWorld):
           if self.p1armyCost > self.p2armyCost:
             self.declareWinner(self.players[0],'Victory through more expensive army')
           elif self.p2armyCost > self.p2armyCost:
+            print(" Wins!")
             self.declareWinner(self.players[1],'Victory through more eexpensive army')
           else:
+            print("1 Wins!")
             self.declareWinner(self.players[0],'Victory because I said so, why can you build the same army?')       
       else:   
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        

@@ -20,14 +20,13 @@ class AI(BaseAI):
     pass
 
   def run(self):
-   print('This is my turn')
    for base in self.bases:
-     print('Spawnin stuff')
-     base.spawn(random.randint(1,10))
-   #  base.spawn(-2)
+     #if self.turnNumber<10:
+      print('spawning a virus')
+      base.spawn(random.randint(1,10))
    print self.turnNumber()
    for virus in self.viruses:
-#    if 0>1:
+#    if virus.owner is self.id:
      dx = dy = 0
 #     print('move x','virus.x =',virus.getX())
      if virus.getX()<5:
@@ -42,6 +41,7 @@ class AI(BaseAI):
          dy = 1
        elif virus.getY() is 5:
          dx = 1
+     print('moving a virus')
      virus.move(virus.getX()+dx,virus.getY()+dy)  
   #   print('dx,dy',dx,dy)
   #  if 0>1:
