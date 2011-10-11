@@ -2,14 +2,14 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
-from django.shortcuts import render_to_response
-
-from mysite.thunderdome.models import Match, Competitor, MatchData
-
+# Non-Django 3rd Party Imports
 import beanstalkc
 
+# Django Imports
+from django.shortcuts import render_to_response
 
-def _stalk_status(connection, tube_name):
+# My Imports
+from thunderdome.models import Game
 
 
 def index(request):
@@ -17,19 +17,19 @@ def index(request):
     p = dict() # payload for the render_to_response
 
     c = beanstalkc.Connection()
-    c.use('match-requests')
-    tube_status = connection.stats_tube('match-requests')
+    c.use('game-requests')
+    tube_status = c.stats_tube('game-requests')
     (p['ready_requests'], p['running_requests']) = \
         [tube_status[x] for x in ('current-jobs-ready',
                                   'current-jobs-reserved')]
     c.close()
 
-    (p['new_matches'], p['scheduled_matches'], p['running_matches'], 
-     p['complete_matches'], p['failed_matches']) = \
-         [Match.objects.filter(status = x).count 
+    (p['new_games'], p['scheduled_games'], p['running_games'], 
+     p['complete_games'], p['failed_games']) = \
+         [Game.objects.filter(status = x).count 
           for x in ('1', '2', '3', '4', '0')]
 
-    p['sanity'] = p['ready_requests']  == p['scheduled_matches'] \
-              and p['running_matches'] == p['running_requests']
+    p['sanity'] = p['ready_requests']  == p['scheduled_games'] \
+              and p['running_games'] == p['running_requests']
 
     return render_to_response('thunderdome/index.html', p)

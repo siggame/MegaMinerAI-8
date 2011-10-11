@@ -2,8 +2,8 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('mysite.thunderdome.views',
-    (r'^$','index'),
+urlpatterns = patterns('thunderdome.views',
+    url(r'^$','index'),
 )

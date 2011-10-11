@@ -2,13 +2,16 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
-from django.db import models
-from django.core.exceptions import ValidationError
-
+# Non-Django 3rd Party Imports
 import beanstalkc
+import time
+import json
+
+# Django Imports
+from django.db import models
 
 
-class Competitor(models.Model):
+class Client(models.Model):
     ### A competitor in the arena
     name            = models.CharField(max_length=100)
     current_version = models.CharField(max_length=100, default='')
@@ -17,7 +20,8 @@ class Competitor(models.Model):
     def __unicode__(self):
         return self.name
 
-class Match(models.Model):
+    
+class Game(models.Model):
     ### A single match
     STATUS_CHOICES = \
         (('1', 'New'),
@@ -25,7 +29,7 @@ class Match(models.Model):
          ('3', 'Running'),
          ('4', 'Complete'),
          ('0', 'Failed'))
-    competitors = models.ManyToManyField(Competitor, through='MatchData')
+    clients     = models.ManyToManyField(Client, through='GameData')
     status      = models.CharField(max_length=1, 
                                    choices=STATUS_CHOICES,
                                    default='1')
@@ -39,8 +43,10 @@ class Match(models.Model):
         if self.pk == None:
             self.save()
         c = beanstalkc.Connection()
-        c.use('match-requests')
-        c.put(str(self.pk), priority=self.priority)
+        c.use('game-requests')
+        payload = json.dumps({'game_id'    : str(self.pk),
+                              'entry_time' : str(time.time()) })
+        c.put(payload, priority=self.priority)
         c.close()
         self.status=2
         self.save()
@@ -50,14 +56,13 @@ class Match(models.Model):
         return unicode(self.pk)
 
 
-class MatchData(models.Model):
+class GameData(models.Model):
     ### each Match will have one of these for each competitor in that match
-    match      = models.ForeignKey(Match)
-    competitor = models.ForeignKey(Competitor)
-    version    = models.CharField(max_length=100)
+    game       = models.ForeignKey(Game)
+    client     = models.ForeignKey(Client)
     compiled   = models.NullBooleanField()
     won        = models.NullBooleanField()
     stats      = models.TextField(default='') # holds extra stuff via JSON
 
     def __unicode__(self):
-        return u"%s - %s" % (self.match.pk, self.competitor.name)
+        return u"%s - %s" % (self.match.pk, self.client.name)
