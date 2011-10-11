@@ -4,34 +4,13 @@
 #include <QtPlugin>
 #include "animsequence.h"
 #include "iobjectmanager.h"
+#include "models.h"
 
 namespace visualizer
 {
 
   //this is a place holder
   typedef GameObject renderObj;
-
-  struct Color
-  {
-    Color()
-    {
-      r = g = b = a = 1;
-    }
-
-    Color( const float& R, const float& G, const float& B, const float& A = 1.0f )
-    {
-      r = R;
-      g = G;
-      b = B;
-      a = A;
-    }
-
-    float r;
-    float g;
-    float b;
-    float a;
-
-  };
 
   class IRenderer
   {
