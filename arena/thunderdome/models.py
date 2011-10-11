@@ -23,22 +23,15 @@ class Client(models.Model):
     
 class Game(models.Model):
     ### A single match
-    STATUS_CHOICES = \
-        (('1', 'New'),
-         ('2', 'Scheduled'),
-         ('3', 'Running'),
-         ('4', 'Complete'),
-         ('0', 'Failed'))
     clients     = models.ManyToManyField(Client, through='GameData')
-    status      = models.CharField(max_length=1, 
-                                   choices=STATUS_CHOICES,
-                                   default='1')
+    status      = models.CharField(max_length=20, 
+                                   default='New')
     priority    = models.IntegerField(default=1000)
     gamelog_url = models.CharField(max_length=200, default='')
     stats       = models.TextField(default='') # holds extra stuff via JSON
 
     def schedule(self):
-        if self.status != '1':
+        if self.status != 'New':
             return False
         if self.pk == None:
             self.save()
@@ -48,7 +41,7 @@ class Game(models.Model):
                               'entry_time' : str(time.time()) })
         c.put(payload, priority=self.priority)
         c.close()
-        self.status=2
+        self.status='Scheduled'
         self.save()
         return True
 
@@ -65,4 +58,4 @@ class GameData(models.Model):
     stats      = models.TextField(default='') # holds extra stuff via JSON
 
     def __unicode__(self):
-        return u"%s - %s" % (self.match.pk, self.client.name)
+        return u"%s - %s" % (self.game.pk, self.client.name)

@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Game #{{ game.pk }}</title>
+  </head>
+  <body>
+    <h1>Game #{{ game.pk }}
+      {% for client in game.clients.all %}
+      - {{ client.name }}
+      {% endfor %}
+    </h1>
+    Status: {{ game.status }}<br>
+    Priority: {{ game.priority }}<br>
+    <a href="{{ game.gamelog_url }}">gamelog</a><br>
+    {{ game.stats }}
+    <hr>
+    {% for data in game.gamedata_set.all %}
+    {{ data.client.name }} - {{ data.client.current_version }}<br>
+    Compiled: {{ data.compiled }}<br>
+    Won: {{ data.won }}<br>
+    {{ data.stats }}
+    <hr>
+    {% endfor %}
+  </body>
+</html>

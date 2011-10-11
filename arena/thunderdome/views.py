@@ -6,7 +6,8 @@
 import beanstalkc
 
 # Django Imports
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse
 
 # My Imports
 from thunderdome.models import Game
@@ -27,9 +28,18 @@ def index(request):
     (p['new_games'], p['scheduled_games'], p['running_games'], 
      p['complete_games'], p['failed_games']) = \
          [Game.objects.filter(status = x).count 
-          for x in ('1', '2', '3', '4', '0')]
+          for x in ('New', 'Scheduled', 'Running', 'Complete', 'Failed')]
 
     p['sanity'] = p['ready_requests']  == p['scheduled_games'] \
               and p['running_games'] == p['running_requests']
 
     return render_to_response('thunderdome/index.html', p)
+
+
+def inject(request):
+    return HttpResponse("derp!")
+
+
+def view_game(request, game_id):
+    g = get_object_or_404(Game, pk=game_id)
+    return render_to_response('thunderdome/view_game.html', {'game': g})
