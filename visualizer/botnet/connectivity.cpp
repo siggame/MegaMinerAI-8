@@ -5,19 +5,19 @@ namespace visualizer
 {
   void Connectivity::addBase( const float& x, const float& y )
   {
-    m_bases.push_back( coord( x, y ) );
+    m_bases.push_back( vertex( x, y ) );
 
   } // Connectivity::addBase()
 
   void Connectivity::addNode( const float& x, const float& y, ConnectivityNode *node )
   {
-    m_nodes[ coord( x, y ) ] = node;
+    m_nodes[ vertex( x, y ) ] = node;
     
   } // Connectivity::addNode()
 
-  bool Connectivity::findMyNode( const coord& c )
+  bool Connectivity::findMyNode( const vertex& c )
   {
-    std::map<coord, ConnectivityNode*>::iterator i = m_nodes.find( c );
+    std::map<vertex, ConnectivityNode*>::iterator i = m_nodes.find( c );
     if( i != m_nodes.end() ) 
     {
       if( !i->second->connected() )
@@ -29,25 +29,25 @@ namespace visualizer
 
   } // Connectivity::findMyNode()
 
-  coord udlr[] = 
+  vertex udlr[] = 
   {
-    coord( 1, 0 ),
-    coord( 0, 1 ),
-    coord( -1, 0 ),
-    coord( 0, -1 )
+    vertex( 1, 0 ),
+    vertex( 0, 1 ),
+    vertex( -1, 0 ),
+    vertex( 0, -1 )
   };
 
   void Connectivity::generateConnectivity()
   {
 
-    for( std::vector<coord>::iterator i = m_bases.begin(); i != m_bases.end(); i++  )
+    for( std::vector<vertex>::iterator i = m_bases.begin(); i != m_bases.end(); i++  )
     {
-      std::stack<coord> nodesLeft;
+      std::stack<vertex> nodesLeft;
       nodesLeft.push( *i );
 
       while( nodesLeft.size() )
       {
-        coord c = nodesLeft.top();
+        vertex c = nodesLeft.top();
         nodesLeft.pop();
 
         if( m_nodes[ c ]->connected() ) 
@@ -69,7 +69,7 @@ namespace visualizer
 
   } // Connectivity::generateConnectivity()
 
-  ostream& operator << ( ostream& os, const coord& rhs )
+  ostream& operator << ( ostream& os, const vertex& rhs )
   {
     os << "( " << rhs.x << ", " << rhs.y << " )";
     return os;

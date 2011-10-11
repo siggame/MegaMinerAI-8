@@ -93,20 +93,12 @@ namespace visualizer
       else
         q.renderer().setColor( Color( 0, 0, 0.2, g->alpha ) );
     }
-#if 1
     else if( q.owner == 2 )
       q.renderer().setColor( Color( 0.1, 0.1, 0.1 ) );
     else if( q.owner == 3 )
       // WALLS
       q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
-#else
-      else
-      {
-        q.renderer().setColor( Color( 0, 0, 0, 0 ) ) ;
-      }
-
-#endif
-    
+  
     q.renderer().drawQuad( q.x, q.y, 1, 1 );
   } // DrawTile::animate()
 
@@ -115,7 +107,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = easeOutElastic( t-startTime, v->x, -1, endTime-startTime, 2, 1 );
+      v->x = easeOutCubic( t-startTime, v->x, -1, endTime-startTime );
     } else if ( t >= endTime )
     {
       v->x--;
@@ -127,7 +119,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = easeOutExpo( t-startTime, v->x, 1, endTime-startTime );
+      v->x = easeOutCubic( t-startTime, v->x, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->x++;
@@ -139,7 +131,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = easeOutBounce( t-startTime, v->y, 1, endTime-startTime );
+      v->y = easeOutCubic( t-startTime, v->y, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y++;
@@ -152,7 +144,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = easeOutSine( t-startTime, v->y, -1, endTime-startTime );
+      v->y = easeOutCubic( t-startTime, v->y, -1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y--;
