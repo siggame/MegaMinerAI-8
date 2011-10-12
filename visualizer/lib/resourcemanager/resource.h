@@ -146,12 +146,12 @@ namespace visualizer
         texture = image;
       }
 
-      int getWidth()
+      size_t getWidth()
       {
         return texture.width();
       }
 
-      int getHeight()
+      size_t getHeight()
       {
         return texture.height();
       }

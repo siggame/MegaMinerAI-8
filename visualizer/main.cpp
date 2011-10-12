@@ -4,7 +4,6 @@
 #include "lib/optionsmanager/optionsman.h"
 #include "lib/timemanager/timeManager.h"
 #include "lib/resourcemanager/resourceman.h"
-#include "lib/resourcemanager/texture.h"
 #include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
 #include "lib/games/games.h"

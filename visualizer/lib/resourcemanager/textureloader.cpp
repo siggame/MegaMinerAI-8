@@ -30,16 +30,16 @@ namespace visualizer
     switch( getImageType( path.c_str() ) )
     {
       case IMG_TIFF:
-        loadTIFF( path.c_str(), texId, texture );
+        loadGeneric( path.c_str(), texId, texture );
         break;
       case IMG_PNG:
-        loadPNG( path.c_str(), texId, texture );
+        loadGeneric( path.c_str(), texId, texture );
         break;
       case IMG_TGA:
-        loadTGA( path.c_str(), texId, texture );
+        loadGeneric( path.c_str(), texId, texture );
         break;
       case IMG_BMP:
-        loadBMP( path.c_str(), texId, texture );
+        loadGeneric( path.c_str(), texId, texture );
         break;
       default:
         THROW 
@@ -55,65 +55,7 @@ namespace visualizer
 
   } // _TextureLoader::load()
 
-  void _TextureLoader::loadTIFF(const std::string& path, unsigned int & texId, QImage & texture)
-  {
-
-    QImage buffer;
-    if (!buffer.load( path.c_str() ))
-    {
-      THROW
-        (
-        Exception,
-        "Could Not Load Texture.\n Path: %s",
-        path.c_str()
-        );
-        
-    }
-
-    QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
-    QPainter painter( &fixed );
-
-    painter.setCompositionMode( QPainter::CompositionMode_Source );
-    painter.fillRect( fixed.rect(), Qt::transparent );
-    painter.setCompositionMode( QPainter::CompositionMode_SourceOver );
-    painter.drawImage( 0, 0, buffer );
-    painter.end();
-
-    texture = QGLWidget::convertToGLFormat( fixed );
-    glGenTextures( 1, &texId );
-    if( texId == 0 )
-    {
-      THROW
-        (
-        Exception,
-        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
-        );
-    }
-
-    glBindTexture( GL_TEXTURE_2D, texId );
-
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-    glTexImage2D
-      ( 
-      GL_TEXTURE_2D, 
-      0, 
-      4, 
-      texture.width(), 
-      texture.height(), 
-      0, 
-      GL_RGBA, 
-      GL_UNSIGNED_BYTE, 
-      texture.bits() 
-      );
-      
-    //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-
-  } // _TextureLoader::loadTIFF()
-
-
-  void _TextureLoader::loadPNG(const std::string& path, unsigned int & texId, QImage & texture)
+  void _TextureLoader::loadGeneric(const std::string& path, unsigned int & texId, QImage & texture)
   {
     QImage buffer;
 
@@ -151,148 +93,20 @@ namespace visualizer
     }
 
     glBindTexture( GL_TEXTURE_2D, texId );
-    //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 
-#if 0
-    glTexImage2D
-      ( 
-      GL_TEXTURE_2D,
-      0,
-      4,
-      texture.width(),
-      texture.height(),
-      0,
-      GL_RGBA,
-      GL_UNSIGNED_BYTE,
-      texture.bits() 
-      );
-#endif
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(), texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 
   } // _TextureLoader::loadPNG()
-
-  void _TextureLoader::loadTGA(const std::string& path, unsigned int & texId, QImage & texture)
-  {
-    QImage buffer;
-
-    if (!buffer.load( path.c_str() ))
-    {
-      THROW
-        (
-        Exception,
-        "Could Not Load Texture.\n Path: %s",
-        path.c_str()
-        );
-    }
-
-    QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
-    QPainter painter(&fixed);
-
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect( fixed.rect(), Qt::transparent );
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawImage( 0, 0, buffer );
-    painter.end();
-
-    texture = QGLWidget::convertToGLFormat( fixed );
-    glGenTextures( 1, &texId );
-    if( texId == 0 )
-    {
-      THROW
-        (
-        Exception,
-        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
-        );
-    }
-
-    glBindTexture( GL_TEXTURE_2D, texId );
-    //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    glTexImage2D
-      ( 
-      GL_TEXTURE_2D,
-      0,
-      4,
-      texture.width(),
-      texture.height(),
-      0,
-      GL_RGBA,
-      GL_UNSIGNED_BYTE,
-      texture.bits() 
-      );
-    //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-
-  } // _TextureLoader::loadTGA()
-
-
-  void _TextureLoader::loadBMP(const std::string& path, unsigned int & texId, QImage & texture)
-  {
-    QImage buffer;
-
-    if (!buffer.load( path.c_str() ))
-    {
-      THROW
-        (
-        Exception,
-        "Could Not Load Texture.\n Path: %s",
-        path.c_str()
-        );
-    }
-
-    QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
-    QPainter painter( &fixed );
-
-    painter.setCompositionMode( QPainter::CompositionMode_Source );
-    painter.fillRect( fixed.rect(), Qt::transparent );
-    painter.setCompositionMode( QPainter::CompositionMode_SourceOver );
-    painter.drawImage( 0, 0, buffer );
-    painter.end();
-
-    texture = QGLWidget::convertToGLFormat( fixed );
-    glGenTextures( 1, &texId );
-    if( texId == 0 )
-    {
-      THROW
-        (
-        Exception,
-        "OpenGL Rendering Context Not Valid.  This is Causing glGenTextures to return 0."
-        );
-    }
-
-    glBindTexture( GL_TEXTURE_2D, texId );
-    //	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-    glTexImage2D
-      ( 
-      GL_TEXTURE_2D, 
-      0, 
-      4, 
-      texture.width(), 
-      texture.height(), 
-      0, 
-      GL_RGBA, 
-      GL_UNSIGNED_BYTE, 
-      texture.bits() 
-      );
-    //gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(),texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
-
-  } // _TextureLoader::loadBMP()
-
+  
   unsigned int powers[] = { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384 };
 
   void _TextureLoader::loadQImage( unsigned int& texId, QImage& texture )
   {
 
-    int tempW, tempH;
+    size_t tempW, tempH;
     for( tempW = 0; tempW < sizeof( powers )/sizeof(unsigned int); tempW++ )
     {
       if( texture.width() <= powers[tempW] )

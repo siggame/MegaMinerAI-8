@@ -5,7 +5,6 @@
 //	aksfkb@mst.edu
 
 #include "resourceman.h"
-#include "texture.h"
 #include "typedefs.h"
 #include <QDir>
 #include <QFileInfo>
