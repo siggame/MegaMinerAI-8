@@ -7,6 +7,7 @@ import beanstalkc
 
 # Django Imports
 from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 
 # My Imports
@@ -47,7 +48,7 @@ def inject(request):
             game.schedule()
             payload = {'game': game}
             payload.update(csrf(request))
-            return render_to_response('thunderdome/view_game.html', payload)
+            return HttpResponseRedirect('view/%s' % game.pk)
     else:
         form = InjectedGameForm()
     

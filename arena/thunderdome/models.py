@@ -36,6 +36,9 @@ class Game(models.Model):
             return False
         if self.pk == None:
             self.save()
+        return self.force_schedule()
+    
+    def force_schedule(self):
         c = beanstalkc.Connection()
         c.use('game-requests')
         payload = json.dumps({'game_id'    : str(self.pk),
@@ -56,6 +59,7 @@ class GameData(models.Model):
     client     = models.ForeignKey(Client)
     compiled   = models.NullBooleanField()
     won        = models.NullBooleanField()
+#    version    = models.CharField(max_length=100, default='')
     stats      = models.TextField(default='') # holds extra stuff via JSON
 
     def __unicode__(self):
