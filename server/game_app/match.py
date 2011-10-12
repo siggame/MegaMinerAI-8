@@ -44,14 +44,12 @@ class Match(DefaultGameWorld):
     return True
 
   def removePlayer(self, connection):
- #   print "Removing player: ", connection
     if connection in self.players:
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
         self.declareWinner(winner)
       self.players.remove(connection)
     else:
-#      print('WHY AM I HERE?', 'connection = ',connection)
       self.spectators.remove(connection)
 
   def start(self):
@@ -159,14 +157,15 @@ class Match(DefaultGameWorld):
           self.declareWinner(self.players[0],'Victory through more expensive army')
         elif self.p2armyCost > self.p2armyCost:
           print(" Wins!")
-          self.declareWinner(self.players[1],'Victory through more eexpensive army')
+          self.declareWinner(self.players[1],'Victory through more expensive army')
         else:
           print("1 Wins!")
-          self.declareWinner(self.players[0],'Victory because I said so, why can you build the same army?')       
+          self.declareWinner(self.players[0],'Victory because I said so, why did you build the same army?')       
       else:   
         self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
 
+#TODO HIGH PRIORITY
   #will put all tiles connected to a base on list 
   # then pop them into a set when moved off of
   # and give points to player based on size of set
@@ -177,7 +176,7 @@ class Match(DefaultGameWorld):
   def tilePath(self,owner):
       Path = set()
       tiles = []
-      #TODO ^ biggun, try breadth first search make a way of finding how many tiles are connected to a base
+#TODO ^ biggun, try breadth first search make a way of finding how many tiles are connected to a base
       return      
       
 

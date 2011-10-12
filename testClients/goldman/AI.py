@@ -21,7 +21,7 @@ class AI(BaseAI):
 
   def run(self):
    for base in self.bases:
-     #if self.turnNumber<10:
+     if self.turnNumber()<=10:
       print('spawning a virus')
       base.spawn(random.randint(1,10))
    print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",self.turnNumber())

@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <title>Manually Inject a Game</title>
+    </head>
+  <body>
+    <h1>Manually Inject a Game</h1>
+    <form method='POST' action='inject'>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type='submit' value='Submit' />
+    </form>
+  </body>
+</html>
