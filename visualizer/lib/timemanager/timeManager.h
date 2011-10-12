@@ -89,8 +89,9 @@ namespace visualizer
 
       void play();
       void pause();
-	  void abloop_on(const int& a, const int&b);
-	  void abloop_off();
+
+      void abloop_on(const int& a, const int&b);
+      void abloop_off();
 	  
       void fastForward();
       void rewind();

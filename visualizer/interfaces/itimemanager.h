@@ -26,8 +26,9 @@ namespace visualizer
 
       virtual void play() = 0;
       virtual void pause() = 0;
-	  virtual void abloop_on(const int& a, const int& b) = 0;
-	  virtual void abloop_off() = 0;
+
+      virtual void abloop_on(const int& a, const int& b) = 0;
+      virtual void abloop_off() = 0;
       
       virtual void fastForward() = 0;
       virtual void rewind() = 0;

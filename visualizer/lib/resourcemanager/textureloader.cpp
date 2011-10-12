@@ -49,6 +49,8 @@ namespace visualizer
           path.c_str()
           );
     }
+
+    glDisable( GL_TEXTURE_2D );
     return texId;
 
   } // _TextureLoader::load()

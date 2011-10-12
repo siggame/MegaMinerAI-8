@@ -11,7 +11,7 @@
 namespace visualizer
 {
 
-  class BotNet: public QObject, public AnimSequence, public IGame
+  class BotNet: public QObject, public IGame
   {
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
@@ -25,6 +25,7 @@ namespace visualizer
 
     private:
       Game *m_game;
+      AnimSequence *m_timeline;
   }; 
 
 } // visualizer

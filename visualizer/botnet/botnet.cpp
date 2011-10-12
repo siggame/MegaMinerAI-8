@@ -8,11 +8,13 @@ namespace visualizer
   BotNet::BotNet()
   {
     m_game = 0;
+    m_timeline = 0;
   } // BotNet::BotNet()
 
   BotNet::~BotNet()
   {
     delete m_game;
+    delete m_timeline;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -26,14 +28,18 @@ namespace visualizer
 
   void BotNet::loadGamelog( std::string gamelog )
   {
+#if 1
     cout << "Load BotNet Gamelog" << endl;
     
     delete m_game;
+    delete m_timeline;
     m_game = new Game;
+    m_timeline = new AnimSequence;
 
     if( !parseFile( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
+      delete m_timeline;
       THROW
         (
         GameException,
@@ -41,6 +47,8 @@ namespace visualizer
         gamelog.c_str()
         );
     }
+
+    resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
     size_t frameNum = 0;
 
@@ -161,7 +169,7 @@ namespace visualizer
 
       animationEngine->buildAnimations( turn );
 
-      addFrame( turn );
+      m_timeline->addFrame( turn );
       
       frameNum++;
 
@@ -169,9 +177,10 @@ namespace visualizer
 
     timeManager->setNumTurns( frameNum );
 
-    animationEngine->registerFrameContainer( this );
+    animationEngine->registerFrameContainer( m_timeline );
 
     timeManager->play();
+#endif
 
   } // BotNet::loadGamelog() 
 
