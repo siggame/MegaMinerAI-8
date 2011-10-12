@@ -7,11 +7,10 @@ import beanstalkc
 
 # Django Imports
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponse
+from django.core.context_processors import csrf
 
 # My Imports
-from thunderdome.models import Game
-
+from thunderdome.models import Game, Client, GameData, InjectedGameForm
 
 def index(request):
     # Let's start by having this page show some arena health statistics
@@ -37,9 +36,27 @@ def index(request):
 
 
 def inject(request):
-    return HttpResponse("derp!")
+    ### Handle manual injection of a game into the system
+    if request.method == 'POST':
+        form = InjectedGameForm(request.POST)
+        if form.is_valid():
+            game = Game.objects.create(priority=form.cleaned_data['priority'])
+            for client in Client.objects.filter(pk__in = \
+                                                form.cleaned_data['clients']):
+                GameData(game=game, client=client).save()
+            game.schedule()
+            payload = {'game': game}
+            payload.update(csrf(request))
+            return render_to_response('thunderdome/view_game.html', payload)
+    else:
+        form = InjectedGameForm()
+    
+    payload = {'form': form}
+    payload.update(csrf(request))
+    return render_to_response('thunderdome/inject.html', payload)
 
 
 def view_game(request, game_id):
-    g = get_object_or_404(Game, pk=game_id)
-    return render_to_response('thunderdome/view_game.html', {'game': g})
+    ### View the status of a single game
+    return render_to_response('thunderdome/view_game.html', 
+                              {'game': get_object_or_404(Game, pk=game_id)})

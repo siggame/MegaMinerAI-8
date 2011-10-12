@@ -8,8 +8,9 @@ import time
 import json
 
 # Django Imports
+from django import forms
 from django.db import models
-
+from django.forms.widgets import CheckboxSelectMultiple
 
 class Client(models.Model):
     ### A competitor in the arena
@@ -59,3 +60,14 @@ class GameData(models.Model):
 
     def __unicode__(self):
         return u"%s - %s" % (self.game.pk, self.client.name)
+
+
+class InjectedGameForm(forms.Form):
+    ### Used to manually inject a game into the queue
+    priority = forms.IntegerField(min_value=0, max_value=1000)
+    clients = forms.MultipleChoiceField(widget=CheckboxSelectMultiple)
+    
+    def __init__(self, *args, **kwargs):
+        super(InjectedGameForm, self).__init__(*args, **kwargs)
+        self.fields['clients'].choices = [(x.pk, x.name) for x in 
+                                          Client.objects.all()]
