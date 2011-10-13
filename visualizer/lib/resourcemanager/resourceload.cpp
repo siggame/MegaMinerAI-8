@@ -30,12 +30,6 @@ namespace visualizer
 
   bool _ResourceMan::loadResourceFile(const std::string & filename)
   {
-    /* if we allow multiple loading we can combine files easily
-    if (get()->m_options.size())
-    {
-      //obviously this is the second time you are loading the damn thing
-      return false;
-    }*/
     QFileInfo fInfo( filename.c_str() );
 
     std::ifstream input(filename.c_str());

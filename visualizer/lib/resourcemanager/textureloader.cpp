@@ -1,5 +1,6 @@
 #include "common.h"
 #include "textureloader.h"
+#include <cmath>
 
 #include <qgl.h>
 
@@ -55,6 +56,8 @@ namespace visualizer
 
   } // _TextureLoader::load()
 
+  unsigned int powers[] = { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384 };
+
   void _TextureLoader::loadGeneric(const std::string& path, unsigned int & texId, QImage & texture)
   {
     QImage buffer;
@@ -69,9 +72,12 @@ namespace visualizer
         );
     }
 
-    QImage fixed( buffer.width(), buffer.height(), QImage::Format_ARGB32 );
+    size_t width = powers[ (size_t)log2( buffer.width()-1 )  ];
+    size_t height = powers[ (size_t)log2( buffer.height()-1 ) ];
+
+    QImage fixed( width, height, QImage::Format_ARGB32 );
     cout << path << endl;
-    cout << "w: " << buffer.width() << " h: " << buffer.height() << endl;
+    cout << "w: " << width << " h: " << height << endl;
     QPainter painter(&fixed);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -100,8 +106,6 @@ namespace visualizer
     gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGBA, texture.width(), texture.height(), GL_RGBA, GL_UNSIGNED_BYTE, texture.bits() );
 
   } // _TextureLoader::loadPNG()
-  
-  unsigned int powers[] = { 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8182, 16384 };
 
   void _TextureLoader::loadQImage( unsigned int& texId, QImage& texture )
   {
