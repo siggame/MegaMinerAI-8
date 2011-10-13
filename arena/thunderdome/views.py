@@ -13,7 +13,7 @@ from django.core.context_processors import csrf
 # My Imports
 from thunderdome.models import Game, Client, GameData, InjectedGameForm
 
-def index(request):
+def health(request):
     # Let's start by having this page show some arena health statistics
     p = dict() # payload for the render_to_response
 
@@ -33,7 +33,7 @@ def index(request):
     p['sanity'] = p['ready_requests']  == p['scheduled_games'] \
               and p['running_games'] == p['running_requests']
 
-    return render_to_response('thunderdome/index.html', p)
+    return render_to_response('thunderdome/health.html', p)
 
 
 def inject(request):
@@ -61,6 +61,13 @@ def view_game(request, game_id):
     ### View the status of a single game
     return render_to_response('thunderdome/view_game.html', 
                               {'game': get_object_or_404(Game, pk=game_id)})
+
+
+def view_client(request, client_id):
+    ### View the status of a single client
+    return render_to_response('thunderdome/view_client.html', 
+                              {'client': get_object_or_404(Client, 
+                                                           pk=client_id)})
 
 
 def scoreboard(request):
@@ -92,9 +99,25 @@ def scoreboard(request):
         c1.row = list()
         for c2 in clients:
             if c1 in grid and c2 in grid[c1]:
-                c1.row.append(grid[c1][c2])
+                c1.row.append((c1.pk,c2.pk,grid[c1][c2]))
             else:
-                c1.row.append(' ')
+                c1.row.append((c1.pk,c2.pk,' '))
 
     payload = {'clients': clients}
     return render_to_response('thunderdome/scoreboard.html', payload)
+
+
+def matchup(request, client1_id, client2_id):
+    client1 = get_object_or_404(Client, pk=client1_id)
+    client2 = get_object_or_404(Client, pk=client2_id)
+    
+    # manual join. fix this if you know how
+    c1games = set(client1.game_set.all())
+    c2games = set(client2.game_set.all())    
+    shared_games = list(c1games & c2games)
+        
+    payload = {'client1' : client1,
+               'client2' : client2,
+               'games'   : shared_games }
+    
+    return render_to_response('thunderdome/matchup.html', payload)

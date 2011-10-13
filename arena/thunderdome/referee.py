@@ -40,18 +40,20 @@ def looping():
     print "processing game", game_id
 
     gamedatas = list(game.gamedata_set.all())
-    random.shuffle(gamedatas) # even split of p0, p1
-
+    random.shuffle(gamedatas) # even split of p0, p1        
+    
     # handle embargoed players
     if any([x.client.embargoed for x in gamedatas]):
         game.status = "Failed"
         game.save()
+        job.delete()
         stalk.close()
         print "failing the game, embargoed player"
         return
     
     # get and compile the clients
     for x in gamedatas:
+        x.version = x.client.current_version
         update_local_repo(x.client)
         result = subprocess.call(['make'], cwd=x.client.name,
                                  stdout=file("/dev/null", "w"), 
@@ -68,6 +70,7 @@ def looping():
     if not all([x.compiled for x in gamedatas]):
         game.status = "Failed"
         game.save()
+        job.delete()
         stalk.close()
         print "failing the game, someone didn't compile"
         return

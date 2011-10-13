@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>{{ client.name }}</title>
+  </head>
+  <body>
+    <h1>{{ client.name }}</h1>
+    Current Version:
+    {% if client.embargoed %}
+    <font color='red'>{{ client.current_version }} This version does not compile!
+    </font>
+    {% else %}
+    {{ client.current_version }}
+    {% endif %}
+    <hr>
+    {% for game in client.game_set.all %}
+      Game #{{game.pk}} <a href="{{ game.gamelog_url }}">gamelog</a><br />
+      {% for data in game.gamedata_set.all %}
+        {% if data.won %}
+          <font color='green'>
+        {% else %}
+	  <font color='red'>
+        {% endif %}
+	{{ data.client.name }} - {{ data.version }}
+        </font><br>
+      {% endfor %}
+      <hr>
+    {% endfor %}
+    
+  </body>
+</html>

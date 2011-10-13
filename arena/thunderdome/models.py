@@ -18,6 +18,12 @@ class Client(models.Model):
     current_version = models.CharField(max_length=100, default='')
     embargoed       = models.BooleanField(default=False) # fail to compile?
 
+    def wins(self):
+        return [x.game for x in self.gamedata_set.filter(won=True)]
+    
+    def losses(self):
+        return [x.game for x in self.gamedata_set.filter(won=False)]
+    
     def __unicode__(self):
         return self.name
 
@@ -30,7 +36,8 @@ class Game(models.Model):
     priority    = models.IntegerField(default=1000)
     gamelog_url = models.CharField(max_length=200, default='')
     stats       = models.TextField(default='') # holds extra stuff via JSON
-
+    
+    
     def schedule(self):
         if self.status != 'New':
             return False
@@ -59,7 +66,7 @@ class GameData(models.Model):
     client     = models.ForeignKey(Client)
     compiled   = models.NullBooleanField()
     won        = models.NullBooleanField()
-#    version    = models.CharField(max_length=100, default='')
+    version    = models.CharField(max_length=100, default='')
     stats      = models.TextField(default='') # holds extra stuff via JSON
 
     def __unicode__(self):
