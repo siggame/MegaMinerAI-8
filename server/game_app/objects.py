@@ -52,7 +52,7 @@ class Base(Mappable):
  #      print('tried making neg virus')
        return "You can't create a virus with a negative level"
      else:
-      self.game.animations.append(['Create',self])
+      self.game.animations.append(['Create',Virus])
       player.cycles -= cost
       self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
       return True     
@@ -169,7 +169,9 @@ class Virus(Mappable):
         print("You can't move onto a base",dx,dy)
         return "You cannot move onto a base, back to the field soldier!"
     for i in self.game.objects.viruses:
-      if i.owner == self.owner and i.x == dx and i.y == dy:
+     if i.owner == self.owner: 
+      if i.x == dx:
+       if i.y == dy:
         #moving a unit onto a friendly of a different level is a no no
         if i.level != self.level:
           self.game.animations.append(['Crash',self,i.x,i.y])
@@ -187,7 +189,12 @@ class Virus(Mappable):
           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
           return True
         #moving a virus onto an enemy virus, conflict!!
-      elif i.owner != self.owner and i.x == dx and i.y == dy:
+     elif i.owner != self.owner:
+      print("something owner") 
+      if i.x == dx:
+       print("something x")
+       if i.y == dy:
+        print("something y")
       # print('MY NAME IS VIRUSO MONTOYA, PREPARE TO DIE') don't have the heart to kill Viruso Montoya/remove this comment
 #TODO return some money for removed Viruses to player 
         #if they're stronger, you weaken them, they kill you
@@ -209,8 +216,8 @@ class Virus(Mappable):
         #if you're evenly matched, a great battle ensues, and you both die
         elif i.level == self.level:
           self.game.animations.append(['Combat',self,i])
-          self.game.removeObject(self)
           self.game.removeObject(i)
+          self.game.removeObject(self)
           print( "two evenly matched viruses enter, no one leaves ",dx,dy)###
           return True
 #Done? need to test    #TODO Handle units walkint into friendly same level units

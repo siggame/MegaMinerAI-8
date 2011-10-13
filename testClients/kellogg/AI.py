@@ -23,27 +23,29 @@ class AI(BaseAI):
    for base in self.bases:
      if self.turnNumber()<=10:
       print('spawning a virus')
-      #base.spawn(random.randint(1,10))
-      base.spawn(2)
+      base.spawn(20)
    print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",self.turnNumber())
    for virus in self.viruses:
 #    if virus.owner is self.id:
      dx = dy = 0
 #     print('move x','virus.x =',virus.getX())
-     if virus.getX()<5:
-       dx = 1
-     elif virus.getX()>5:
-       dx = -1
-     elif virus.getX() is 5:
+ #    if virus.getX()<0:
+  #     dx = 1
+ #    elif virus.getX()>0:
+  #     dx = -1
+     virus.move(virus.getX()-1,virus.getY())
+     
+#     elif 0< virus.getX() <= 5:
+#       virus.move(virus.getX()-1,virus.getY())
  #      print('move y')
-       if virus.getY()>5:
-        dy = -1
-       elif virus.getY()<5:
-         dy = 1
-       elif virus.getY() is 5:
-         dx = 1
-     print('moving a virus')
-     virus.move(virus.getX()+1,virus.getY()+dy)  
+ #      if virus.getY()>5:
+ #       dy = -1
+  #     elif virus.getY()<5:
+  #       dy = 1
+  #     elif virus.getY() is 5:
+  #       dx = 1
+#     print('moving a virus')
+  #   virus.move(virus.getX()+dx,virus.getY()+dy)  
   #   print('dx,dy',dx,dy)
   #  if 0>1:
   #   virus.move(virus.getX()+dx, virus.getY()+dy)
