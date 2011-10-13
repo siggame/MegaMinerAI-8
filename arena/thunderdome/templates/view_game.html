@@ -10,7 +10,9 @@
     </h1>
     Status: {{ game.status }}<br>
     Priority: {{ game.priority }}<br>
-    <a href="{{ game.gamelog_url }}">gamelog</a><br>
+    {% if game.gamelog_url|length > 0 %}
+      <a href="{{ game.gamelog_url }}">gamelog</a><br>
+    {% endif %}
     {{ game.stats }}
     <hr>
     {% for data in game.gamedata_set.all %}

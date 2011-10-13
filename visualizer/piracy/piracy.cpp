@@ -1,7 +1,6 @@
 #include "piracy.h"
 #include "common.h"
 #include "renderer/renderer.h"
-#include "resourcemanager/texture.h"
 #include "selectionrender/selectionrender.h"
 #include "animations.h"
 #include "scoreboard.h"
