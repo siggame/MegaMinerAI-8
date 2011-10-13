@@ -15,6 +15,7 @@ from django_dev_site import settings
 setup_environ(settings)
 
 # Non-Django 3rd Part Imports
+import re
 import beanstalkc
 import json
 import git
@@ -40,9 +41,10 @@ def looping():
     job_bits = json.loads(job.body)
     game_id = job_bits['game_id']
     game = Game.objects.get(pk=game_id)
+    print "processing game", game_id
 
     gamedatas = list(game.gamedata_set.all())
-    random.shuffle(gamedatas)
+    random.shuffle(gamedatas) # even split of p0, p1
 
     # handle embargoed players
     if any([x.client.embargoed for x in gamedatas]):
@@ -52,12 +54,13 @@ def looping():
         return
     
     # get and compile the clients
-    trash = open("/dev/null", 'w')
     for x in gamedatas:
-        # handle embargoed
-        update_local_repo(x.client.name)
-        result = subprocess.call(['make'], cwd=x.client.name, 
-                                 stdout=trash, stderr=trash)
+        # compile clients
+        update_local_repo(x.client)
+        result = subprocess.call(['make'], cwd=x.client.name,
+                                 stdout=file("/dev/null", "w"), 
+                                 stderr=file("/dev/null", "w"))
+
         x.compiled = (result is 0)
         if not x.compiled:
             x.client.embargoed = True
@@ -70,14 +73,14 @@ def looping():
         game.status = "Failed"
         game.save()
         print "failing the game"
-        trash.close()
         return
     
     # prep for the game
     get_fresh_server()    
     server = subprocess.Popen(['python', 'main.py'], 
                               cwd='server',
-                              stderr=trash)
+                              stdout=file("/dev/null", "w"),
+                              stderr=subprocess.STDOUT)
     time.sleep(2)
 
     # FIXME some day the server will allow me to connect everyone
@@ -85,32 +88,51 @@ def looping():
     executable = '%s/%s/run' % (os.getcwd(), gamedatas[0].client.name)
     p0 = subprocess.Popen([executable, 'localhost'], 
                           cwd=gamedatas[0].client.name,
-                          stdout=trash, stderr=trash)
+                          stdout=file("/dev/null", "w"), 
+                          stderr=subprocess.STDOUT)
     time.sleep(1)
     
     executable = '%s/%s/run' % (os.getcwd(), gamedatas[1].client.name)
-    p1 = subprocess.Popen([executable, 'localhost', '1'], 
+    p1 = subprocess.Popen([executable, 'localhost', '1'], # <- that '1' sucks
                           cwd=gamedatas[1].client.name,
-                          stdout=trash, stderr=trash)
-    
+                          stdout=file("/dev/null", "w"), 
+                          stderr=subprocess.STDOUT)
+
     # game is running. watch for gamelog
+    print "running..."
     game.status = "Running"
     game.save()
     while not os.access('server/logs/1.gamelog.bz2', os.F_OK):
         job.touch()
         time.sleep(1)
-
-    [x.terminate() for x in [server, p0, p1]]
-    trash.close()
-    
-    # FIXME determine winnner
         
+    print "determining winner..."
+
+    # figure out who won
+    f = open('server/logs/1.gamelog', 'r')
+    log = f.readline()
+    f.close()
+    match = re.search("\"game-winner\" (\d) \"[\w ]+\" (\d+)", log)
+    winner = match.groups()[1]
+    if winner == '0':
+        gamedatas[0].won = True
+        gamedatas[1].won = False
+    elif winner == '1':
+        gamedatas[0].won = False
+        gamedatas[1].won = True
+    [x.save() for x in gamedatas]        
+    
+    print "pushing gamelog..."
+    
+    # clean up
+    [x.terminate() for x in [server, p0, p1]]
+            
     push_gamelog(game)
     game.status = "Complete"
     game.save()
-    
     job.delete()
-    stalk.close()
+    stalk.close()    
+    print "done!"
     
     
 def push_gamelog(game):
@@ -135,9 +157,10 @@ def get_fresh_server():
 def update_local_repo(client):
     base_git_path = "ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/clients/"
     try:
-        git.Git().clone('%s%s.git' % (base_git_path, client))
+        git.Git().clone('%s%s.git' % (base_git_path, client.name))
     except git.exc.GitCommandError:
         pass
-    git.Repo(client).remotes.origin.pull()
-
+    git.Repo(client.name).remotes.origin.pull()
+    # FIXME set the right tag
+    
 main()
