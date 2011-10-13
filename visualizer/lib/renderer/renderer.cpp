@@ -144,11 +144,6 @@ namespace visualizer
 
     clear();
 
-    unsigned int rwidth = width();
-    unsigned int rheight = height();
-    unsigned int rdepth = depth();
-
-    /// @TODO Move this to the appropriate spot
     glShadeModel( GL_SMOOTH );
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClearDepth( 1.0f );
@@ -202,7 +197,7 @@ namespace visualizer
   }
 
 
-  bool _Renderer::deleteConstantObj( const unsigned int& id )
+  bool _Renderer::deleteConstantObj( const unsigned int&/* id */ )
   {
     return false;
   }
@@ -241,12 +236,14 @@ namespace visualizer
   }
 
 
-  bool _Renderer::update(const unsigned int & turn, const unsigned int & frame)
+  bool _Renderer::update(const unsigned int & /*turn*/, const unsigned int & /*frame*/)
   {
+#if 0
     bool selectUpdate = SelectionRender->getUpdated();
     float mapSize = (float)OptionsMan->getInt("mapSize");
     float unitSize  = height()/mapSize;
 
+#endif
     return true;
   }
 
@@ -383,9 +380,10 @@ namespace visualizer
     (
     const float& x,
     const float& y,
+    const std::string& fontName,
     const std::string& line,
     const float& size,
-    const Alignment& a
+    const Alignment& a 
     ) const
   {
 

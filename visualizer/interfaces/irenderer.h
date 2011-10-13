@@ -98,6 +98,7 @@ namespace visualizer
         (
         const float& x,
         const float& y,
+        const std::string& fontName,
         const std::string& line, 
         const float& size = 15.0f, 
         const Alignment& a = Left

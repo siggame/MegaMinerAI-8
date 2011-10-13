@@ -5,6 +5,7 @@
 #include <QImage>
 #include "typedefs.h"
 #include "common.h"
+#include "renderer/text.h"
 
 #ifdef DEBUG
 #include <iostream>
@@ -127,10 +128,23 @@ namespace visualizer
 
   class ResFont : public Resource 
   {
-    ResFont()
-      : Resource( RT_FONT )
-      {
-      }
+    public: 
+      ResFont
+        ( 
+        const Text& font
+        )
+        : Resource( RT_FONT )
+        {
+          m_font = font;
+        }
+
+      const Text& getFont() const
+        {
+          return m_font;
+        }
+
+    private:
+      Text m_font;
 
   };
 
