@@ -32,7 +32,7 @@ namespace visualizer
 
   } // Text::Text()
 
-  void Text::drawLeft( const std::string& line )
+  void Text::drawLeft( const std::string& line ) const
   {
     // At this point, the text should already be translated to the 
     // correct position.
@@ -78,7 +78,7 @@ namespace visualizer
 
   } // Text::drawLeft()
 
-  void Text::drawCenter( const std::string& line )
+  void Text::drawCenter( const std::string& line ) const
   {
     size_t width = getLineWidth( line )/2;
     glTranslatef( -width, 0, 0 );
@@ -86,14 +86,14 @@ namespace visualizer
 
   } // Text::drawCenter()
 
-  void Text::drawRight( const std::string& line )
+  void Text::drawRight( const std::string& line ) const
   {
     size_t width = getLineWidth( line );
     glTranslatef( -width, 0, 0 );
 
   } // Text::drawRight()
 
-  size_t Text::getLineWidth( const std::string& line )
+  size_t Text::getLineWidth( const std::string& line ) const
   {
     size_t width = 0;
     for( size_t i = 0; i < line.size(); i++ )
@@ -105,7 +105,7 @@ namespace visualizer
 
   } // Text::getLineWidth()
 
-  Text& Text::operator << ( const std::string& line )
+  const Text& Text::operator << ( const std::string& line ) const
   {
     drawLeft( line );
     glTranslatef( getLineWidth( line ), 0, 0 );

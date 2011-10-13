@@ -11,14 +11,14 @@ namespace visualizer
       Text();
       Text( const std::string& resource, const std::string& fontWidthsFile );
 
-      Text& operator << ( const std::string& line );
+      const Text& operator << ( const std::string& line ) const;
 
-      void drawLeft( const std::string& line );
-      void drawRight( const std::string& line );
-      void drawCenter( const std::string& line );
+      void drawLeft( const std::string& line ) const;
+      void drawRight( const std::string& line ) const;
+      void drawCenter( const std::string& line ) const;
 
     private:
-      size_t getLineWidth( const std::string& line );
+      size_t getLineWidth( const std::string& line ) const;
       
       unsigned char m_width[256];
       std::string m_resource;

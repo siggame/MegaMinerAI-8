@@ -382,11 +382,33 @@ namespace visualizer
     const float& y,
     const std::string& fontName,
     const std::string& line,
-    const float& size,
+    const float& /*size*/,
     const Alignment& a 
     ) const
   {
+    const Text& t = ((ResFont*)ResourceMan->reference( fontName, "renderer" ))->getFont();
 
+    glPushMatrix();
+    // Scale to camera stuff. 
+    // Then scale proportionally to size
+    glTranslatef( x, y, 0 );
+   
+    switch( a )
+    {
+      case Left:
+        t.drawLeft( line );
+      break;
+      case Right:
+        t.drawRight( line );
+      break;
+      case Center:
+        t.drawCenter( line );
+      break;
+    }
+
+    glPopMatrix();
+
+    ResourceMan->release( fontName, "renderer" );
   }
 
 } // visualizer
