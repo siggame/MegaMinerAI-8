@@ -76,8 +76,10 @@ namespace visualizer
     size_t height = powers[ (size_t)log2( buffer.height()-1 ) ];
 
     QImage fixed( width, height, QImage::Format_ARGB32 );
+#if __DEBUG__
     cout << path << endl;
     cout << "w: " << width << " h: " << height << endl;
+#endif
     QPainter painter(&fixed);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
