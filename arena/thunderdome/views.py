@@ -61,3 +61,40 @@ def view_game(request, game_id):
     ### View the status of a single game
     return render_to_response('thunderdome/view_game.html', 
                               {'game': get_object_or_404(Game, pk=game_id)})
+
+
+def scoreboard(request):
+    clients = Client.objects.all()
+    
+    # Build the speedy lookup table
+    grid = dict()    
+    for c1 in clients:
+        grid[c1] = dict()
+        for c2 in clients:
+            if c1 != c2:
+                grid[c1][c2] = 0
+    
+    for game in Game.objects.all():
+        winner_set = game.gamedata_set.filter(won=True)
+        loser_set  = game.gamedata_set.filter(won=False)
+        if( len(winner_set) == 1 and len(loser_set) == 1 ):
+            winner = winner_set[0]
+            loser  = loser_set[0]
+            grid[winner.client][loser.client] += 1
+                
+    # Sort the clients by winningness
+    clients = list(clients)
+    clients.sort(key = lambda x: x.gamedata_set.filter(won=True).count(),
+                 reverse=True)
+
+    # Load the data in the format the template expects
+    for c1 in clients:
+        c1.row = list()
+        for c2 in clients:
+            if c1 in grid and c2 in grid[c1]:
+                c1.row.append(grid[c1][c2])
+            else:
+                c1.row.append(' ')
+
+    payload = {'clients': clients}
+    return render_to_response('thunderdome/scoreboard.html', payload)

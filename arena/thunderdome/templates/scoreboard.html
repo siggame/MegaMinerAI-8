@@ -1,0 +1,24 @@
+<html>
+  <head>
+  <title>Scoreboard</title>
+  </head>
+  <body>
+    <h1>Scoreboard</h1>
+    <table border=1>
+      <tr>
+	<td></td>
+        {% for client in clients %}
+          <td align='center'>{{ client.name }}</td>
+        {% endfor %}
+      </tr>
+      {% for client in clients %}
+      <tr>
+	<td align='right'>{{ client.name }}</td>
+	{% for entry in client.row %}
+	  <td align='center'>{{ entry }}</td>
+	{% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
