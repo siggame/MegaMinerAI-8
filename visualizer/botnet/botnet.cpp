@@ -139,6 +139,68 @@ namespace visualizer
         v->x = i->second.x;
         v->y = i->second.y;
 
+#if 0
+        cout << "Anim size: " << m_game->states[ state ].animations.size() << endl;
+        cout << "Anim size: " << m_game->states[ state ].animations[ v->id ].size() << endl;
+
+        cout << "============" << endl;
+        cout << v->id << endl;
+
+        for
+          (
+          std::map< int, std::vector<Animation*> >::iterator j = m_game->states[ state ].animations.begin();
+          j != m_game->states[ state ].animations.end();
+          j++
+          )
+        {
+          cout << "ID: " << j->first << endl;
+          cout << "S: " << j->second.size() << endl;
+        }
+
+          std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
+          j != m_game->states[ state ].animations[ v->id ].end();
+          j++
+          )
+        {
+
+        }
+#endif
+ 
+
+        for
+          (
+          std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
+          j != m_game->states[ state ].animations[ v->id ].end();
+          j++
+          )
+        {
+          cout << "ANIMATION" << endl;
+          switch( (*j)->type )
+          {
+            case COMBAT:
+              cout << "Combat" << endl;
+            break;
+            case COMBINE:
+              cout << "Combine" << endl;
+            break;
+            case CRASH:
+              cout << "Crash" << endl;
+            break;
+            case CREATE:
+              cout << "Create" << endl;
+            break;
+            case PLAYERTALK:
+              cout << "Playertalk" << endl;
+            break;
+            case RECYCLE:
+              cout << "Recycle" << endl;
+            break;
+            case VIRUSTALK:
+              cout << "Virus Talk" << endl;
+            break;
+          }
+        }
+        
         switch( checkForMovement( m_game, state, i->second.id ) )
         {
           case 0: // Left

@@ -493,10 +493,13 @@ static bool parseSexp(Game& game, sexp_t* expression)
       }
       if(string(ToLower( sub->val ) ) == "create")
       {
+        cout << "C" << endl;
         Create* animation = new Create;
         if ( !parseCreate(*animation, expression) )
           return false;
 
+        cout << "A" << endl;
+        cout << ((AnimOwner*)animation)->owner << endl;
         animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "move")

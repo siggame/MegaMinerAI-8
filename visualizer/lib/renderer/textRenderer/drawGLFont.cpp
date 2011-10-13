@@ -42,8 +42,8 @@ namespace visualizer
 
 
   bool DrawGLFont::loadNewFont(
-  int fontTextureId,
-  string fontWidthsFile
+    int fontTextureId,
+    string fontWidthsFile
   )
   {
     textureId = fontTextureId;
@@ -65,7 +65,6 @@ namespace visualizer
 
     return true;
   }
-
 
   void DrawGLFont::setColor( int &i, string message )
   {

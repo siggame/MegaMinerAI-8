@@ -13,10 +13,15 @@ namespace visualizer
 
       Text& operator << ( const std::string& line );
 
-    private:
-      unsigned char m_width[256];
+      void drawLeft( const std::string& line );
+      void drawRight( const std::string& line );
+      void drawCenter( const std::string& line );
 
-      std::string resource;
+    private:
+      size_t getLineWidth( const std::string& line );
+      
+      unsigned char m_width[256];
+      std::string m_resource;
 
   };
 
