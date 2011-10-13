@@ -9,4 +9,5 @@ urlpatterns = patterns('thunderdome.views',
     url(r'^inject$', 'inject'),
     url(r'^view/(?P<game_id>\d+)$', 'view_game'),
     url(r'^scoreboard$', 'scoreboard'),
+    url(r'^view_client/(?P<client_id>\d+)$', 'view_client'),
 )

@@ -63,6 +63,13 @@ def view_game(request, game_id):
                               {'game': get_object_or_404(Game, pk=game_id)})
 
 
+def view_client(request, client_id):
+    ### View the status of a single client
+    return render_to_response('thunderdome/view_client.html', 
+                              {'client': get_object_or_404(Client, 
+                                                           pk=client_id)})
+
+
 def scoreboard(request):
     clients = Client.objects.all()
     
