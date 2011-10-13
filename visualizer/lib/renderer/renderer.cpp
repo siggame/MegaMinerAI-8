@@ -312,7 +312,7 @@ namespace visualizer
     glDisable( GL_TEXTURE_2D );
     glDisable( GL_BLEND );
     
-  }
+  } // _Renderer::DrawTexturedQuad()
 
   void _Renderer::drawAnimQuad
     (
@@ -345,7 +345,7 @@ namespace visualizer
     glDisable( GL_TEXTURE_2D );
     glDisable( GL_BLEND );
     
-  }
+  } // _Renderer::drawAnimQuad()
 
   void _Renderer::drawProgressBar
     (
@@ -377,6 +377,18 @@ namespace visualizer
       glVertex3f( x, y+h, z );
       glVertex3f( x, y, z );
     glEnd();
+  } // _Renderer::DrawProgressBar()
+
+  void _Renderer::drawText
+    (
+    const float& x,
+    const float& y,
+    const std::string& line,
+    const float& size,
+    const Alignment& a
+    ) const
+  {
+
   }
 
 } // visualizer

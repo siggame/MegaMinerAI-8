@@ -15,6 +15,13 @@ namespace visualizer
   class IRenderer
   {
     public:
+      enum Alignment
+      {
+        Left, 
+        Right, 
+        Center
+      };
+
       virtual bool registerConstantObj( const unsigned int& id, renderObj* obj ) = 0;
       virtual bool deleteConstantObj( const unsigned int& id ) = 0;
 
@@ -85,6 +92,15 @@ namespace visualizer
         const Color& color = Color( 0, 0, 0, 1 ),
         const float& lineWidth = 1,
         const float& z = 0.0f
+        ) const = 0;
+
+      virtual void drawText
+        (
+        const float& x,
+        const float& y,
+        const std::string& line, 
+        const float& size = 15.0f, 
+        const Alignment& a = Left
         ) const = 0;
   };
 

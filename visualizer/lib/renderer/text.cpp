@@ -48,7 +48,6 @@ namespace visualizer
 
     glBindTexture( GL_TEXTURE_2D, r->getTexture() );
 
- 
     for( size_t i = 0; i < line.size(); i++ )
     {
       size_t c = line[ i ];
@@ -67,7 +66,6 @@ namespace visualizer
         glVertex3f( 0, 0, 0 );
 
       glEnd();
-      
 
     }
 

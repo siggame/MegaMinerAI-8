@@ -125,6 +125,15 @@ namespace visualizer
     private:
   };
 
+  class ResFont : public Resource 
+  {
+    ResFont()
+      : Resource( RT_FONT )
+      {
+      }
+
+  };
+
   class ResTexture : public Resource
   {
     protected:
