@@ -54,7 +54,7 @@ class Base(Mappable):
      else:
       player.cycles -= cost
       self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
-      self.game.animations.append(['Create',self.game.objects.viruses[-1]])
+      self.game.animations.append(['Create',self.game.objects.viruses[-1].id])
       return True     
     else:
       return "wat"
@@ -156,7 +156,7 @@ class Virus(Mappable):
     if self.game.grid[dx][dy].owner == 3:
     #You can't move into a wall...the wall will win
 #might work, still worth looking into#TODO how to pass Crash grid x and y, not sure if what I have works
-      self.game.animations.append(['Crash',self,self.game.grid[dx],self.game.grid[dy]])
+      self.game.animations.append(['Crash',self.id,self.game.grid[dx],self.game.grid[dy]])
       print("There is a wall in the way")
       return "There is a wall in the way"
     #You can't move more than one space away
@@ -177,15 +177,15 @@ class Virus(Mappable):
         print("i.y is dy")
         #moving a unit onto a friendly of a different level is a no no
         if i.level != self.level:
-          self.game.animations.append(['Crash',self,i.x,i.y])
+          self.game.animations.append(['Crash',self.id,i.x,i.y])
           print("You can't move your unit to another of yours of different level",dx,dy)
           return("You can't move your unit to another of yours of different level") ###
         #moving a unit onto a friendly of same level makes a new 
         #virus of a higher level, gets rid of other two. LEVEL UP!
         elif i.level == self.level:
 #Done? needs testing #TODO look into animations
-          self.game.animations.append(['Combine',self,i,Virus])
           self.game.addObject(Virus,[dx,dy,i.owner,self.level+1,0])
+          self.game.animations.append(['Combine',self.id,i.id,self.game.objects.viruses[-1].id])           
 #Done? needs testing #TODO look into removeObject
           self.game.removeObject(i)
           self.game.removeObject(self)#do we have a removeObject function? found it, did I use it correctly?
@@ -202,14 +202,14 @@ class Virus(Mappable):
 #TODO return some money for removed Viruses to player 
         #if they're stronger, you weaken them, they kill you
         if i.level > self.level:
-          self.game.animations.append(['Combat',self,i])
+          self.game.animations.append(['Combat',self.id,i.id])
           i.level -= self.level
           self.game.removeObject(self)
           print("two uneven viruses meet, you weakened him, but your virus died ",dx,dy) ###
           return True
         #if you're stronger, they weaken you, you kill them
         elif i.level < self.level:
-          self.game.animations.append(['Combat',self,i])
+          self.game.animations.append(['Combat',self.id,i.id])
           self.level -= i.level
           self.game.removeObject(i)
           self.game.grid[dx][dy].owner = self.owner
@@ -218,7 +218,7 @@ class Virus(Mappable):
           return True
         #if you're evenly matched, a great battle ensues, and you both die
         elif i.level == self.level:
-          self.game.animations.append(['Combat',self,i])
+          self.game.animations.append(['Combat',self.id,i.id])# WHY DO YOU BREAK TEH GAME?!
           self.game.removeObject(i)
           self.game.removeObject(self)
           print("two evenly matched viruses enter, no one leaves ",dx,dy)###
@@ -227,7 +227,7 @@ class Virus(Mappable):
 #Done? need to test    #TODO Handle units walking into enemy units ...conflict!
 #Done? need to test    #TODO Each case has animations
       else:
-        self.game.animations.append(['Move',self,self.x,self.y])
+        self.game.animations.append(['Move',self.id,self.x,self.y])
         self.x = dx
         self.y = dy
         self.game.grid[dx][dy].owner = self.owner
