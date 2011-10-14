@@ -39,9 +39,9 @@ class Base(Mappable):
 
   def nextTurn(self):
     if self.owner == self.game.playerID:
-      self.movesLeft = 1
+      self.spawnsLeft = 1
     else:
-      self.movesLeft = 0
+      self.spawnsLeft = 0
 
   def spawn(self, level):
     player = self.game.objects.players[self.owner]

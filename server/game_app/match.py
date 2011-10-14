@@ -135,21 +135,21 @@ class Match(DefaultGameWorld):
     # Calcuate the cost of a virus
     return self.baseCost*self.scaleCost**level
 
-  def worth(self, owner):
+  def worth(self, id):
     # Calculate the worth of a player
-    total = self.objects.players[owner].cycles
+    total = self.objects.players[id].cycles
     for virus in self.objects.viruses:
-      if virus.owner == owner:
-        total += self.worth(virus.level)
+      if virus.owner == id:
+        total += self.virusCost(virus.level)
     return total
   
   def getScore(self, owner):
     # TODO Perform breadth first search from bases to all connected owned tiles
     return 0
 
-  def getIncome(self, owner):
+  def getIncome(self, id):
     possible = self.startingCycles + self.turnNumber / 2 * self.cyclesPerTurn
-    return math.ceil((possible - self.worth(owner))*self.returnAmount) + self.cyclesPerTurn
+    return math.ceil((possible - self.worth(id))*self.returnAmount) + self.cyclesPerTurn
 
   def checkWinner(self):
     player1 = self.objects.players[0]
