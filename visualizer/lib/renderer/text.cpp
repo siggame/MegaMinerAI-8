@@ -9,10 +9,6 @@ using namespace std;
 namespace visualizer
 {
 
-  Text::Text()
-  {
-  } // Text::Text()
-
   Text::Text( const std::string& resource, const std::string& fontWidthsFile )
   {
     ifstream fin( fontWidthsFile.c_str() );

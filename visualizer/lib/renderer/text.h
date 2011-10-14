@@ -8,7 +8,6 @@ namespace visualizer
   class Text
   {
     public:
-      Text();
       Text( const std::string& resource, const std::string& fontWidthsFile );
 
       const Text& operator << ( const std::string& line ) const;

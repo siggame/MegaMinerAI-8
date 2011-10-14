@@ -133,9 +133,8 @@ namespace visualizer
         ( 
         const Text& font
         )
-        : Resource( RT_FONT )
+        : Resource( RT_FONT ), m_font( font )
         {
-          m_font = font;
         }
 
       const Text& getFont() const

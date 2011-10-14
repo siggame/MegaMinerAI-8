@@ -147,16 +147,38 @@ namespace visualizer
 
   } // _ResourceMan::release()
 
-  void _ResourceMan::loadTexture( const std::string& filename, const std::string& name )
+  void _ResourceMan::loadFont
+    ( 
+    const std::string& fontWidths, 
+    const std::string& fontTexture, 
+    const std::string& name 
+    )
   {
-    Resource * res = NULL;
+    static size_t fontNum = 0;
+    std::string fontName = "uniqueFontName";
+    fontName += fontNum++;
+    loadTexture( fontTexture, fontName );
+    Text t( fontName, fontWidths );
+
+    Resource *res = (Resource*)( new ResFont( t ) );
+    reg( name, res );
+
+  } // _ResourceMan::loadFont()
+
+  void _ResourceMan::loadTexture
+    ( 
+    const std::string& filename, 
+    const std::string& name 
+    )
+  {
+    Resource * res = 0;
     QImage texture;
     int id = 0;
 
     if( ( id = TextureLoader->load( filename.c_str(), texture ) ) )
     {
       res = (Resource*)( new ResTexture( texture, id ) );
-      reg( name, (Resource*)res );
+      reg( name, res );
     }
     else
     {
