@@ -8,6 +8,7 @@ import os
 import itertools
 import scribe
 import random
+import math
 
 Scribe = scribe.Scribe
 
@@ -58,11 +59,11 @@ class Match(DefaultGameWorld):
     if self.winner is not None or self.turn is not None:
       return "Game has already begun"
     
-#Done    #TODO: START STUFF 
+    #START STUFF 
     self.turn = self.players[-1]
     self.turnNumber = -1
     for p in self.players:
-      self.addObject(Player, [p.screenName, 0, self.startCycles])
+      self.addObject(Player, [p.screenName, 0, self.startingCycles])
     self.startMap()
     self.nextTurn()
     return True
@@ -78,10 +79,10 @@ class Match(DefaultGameWorld):
         mapFilenames.append(filename)
         
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
-    with open(("maps/" + mapFilenames[random.randint(0,len(mapFilenames)-1)]),'r') as f:
+    with open(("maps/" + mapFilenames[self.gameNumber % len(mapFilenames)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
     self.width = len(mapdata)
-    self.height = len(mapdata[0])        
+    self.height = len(mapdata[0])
     #Need to get the attributes for the game objects before we parse the file
     #self.grid is for our benefit, so that we can look things up by location
 
@@ -101,11 +102,11 @@ class Match(DefaultGameWorld):
         #there's a base on top, so we add a base too
         elif mapSquare == '1':
          self.grid[x][y] = self.addObject(Tile, [x,y,1])
-         self.addObject(Base,[x,y,1])
+         self.addObject(Base,[x, y, 1, 0])
         #same as previous, only it is player 0's base/tile combo
         elif mapSquare =='0':
           self.grid[x][y] = self.addObject(Tile, [x,y,0])
-          self.addObject(Base,[x,y,0])
+          self.addObject(Base,[x, y, 0, 0])
     
   def nextTurn(self):
     self.turnNumber += 1
@@ -130,55 +131,51 @@ class Match(DefaultGameWorld):
     self.animations = ["animations"]
     return True
 
+  def virusCost(self, level):
+    # Calcuate the cost of a virus
+    return self.baseCost*self.scaleCost**level
+
+  def worth(self, owner):
+    # Calculate the worth of a player
+    total = self.objects.players[owner].cycles
+    for virus in self.objects.viruses:
+      if virus.owner == owner:
+        total += self.worth(virus.level)
+    return total
+  
+  def getScore(self, owner):
+    # TODO Perform breadth first search from bases to all connected owned tiles
+    return 0
+
+  def getIncome(self, owner):
+    possible = self.startingCycles + self.turnNumber / 2 * self.cyclesPerTurn
+    return math.ceil((possible - self.worth(owner))*self.returnAmount) + self.cyclesPerTurn
+
   def checkWinner(self):
-    firstFound = False
     player1 = self.objects.players[0]
     player2 = self.objects.players[1]
     if self.turnNumber >= self.turnLimit:
       if player1.byteDollars > player2.byteDollars:
         self.declareWinner(self.players[0], 'Victory through Bytedollar superiority!!')
-        print "2 Wins!"
+        print "0 Wins!"
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
       #Done? need to test #TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
       #could sum costs of each team's viruses, more expensive army wins
       # need to get a game goin, player 0 wins by defualt
-      elif player2.byteDollars == player1.byteDollars:
-        self.p1armyCost = 0
-        self.p2armyCost = 0
-        for i in self.objects.viruses:
-          cost = self.baseCost*self.scaleCost**i.level
-          if i.owner == 0:
-            self.p1armyCost += cost
-          elif i.owner == 1:
-            self.p2armyCost += cost
-        if self.p1armyCost > self.p2armyCost:
-          self.declareWinner(self.players[0],'Victory through more expensive army')
-        elif self.p2armyCost > self.p2armyCost:
-          print(" Wins!")
-          self.declareWinner(self.players[1],'Victory through more expensive army')
-        else:
+      else:
+        p0Worth, p1Worth = self.worth(0), self.worth(1)
+        if p0Worth > p1Worth:
+          self.declareWinner(self.players[0], 'Victory through more usable cycles')
+          print("0 Wins!")
+        elif p0Worth > p1Worth:
           print("1 Wins!")
+          self.declareWinner(self.players[1], 'Victory through more usuable cycles')
+        else:
+          print("0 Wins!")
           self.declareWinner(self.players[0],'Victory because I said so, why did you build the same army?')       
-      else:   
-        self.declareWinner(self.players[0],'Victory through we need a WinnAr!')        
     return
-
-#TODO HIGH PRIORITY
-  #will put all tiles connected to a base on list 
-  # then pop them into a set when moved off of
-  # and give points to player based on size of set
-#path will go in tile path eventually, but I think that since tilepath 
-#isn't being called path is not made (Python magic) so putting 
-#it outside function so player bytedollars update on next turn  
-  path = []
-  def tilePath(self,owner):
-      Path = set()
-      tiles = []
-#TODO ^ biggun, try breadth first search make a way of finding how many tiles are connected to a base
-      return      
-      
 
   def declareWinner(self, winner, reason=''):
     self.winner = winner
