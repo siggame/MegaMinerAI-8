@@ -70,7 +70,8 @@ namespace visualizer
       q.renderer().setColor( Color( 0, 0, 0.3f*intensity, 1 ) );
     }
 
-    q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
+    //q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
+    q.renderer().drawTexturedQuad( q.x+.1, q.y+.1, .8, .8, "uniqueFontName0" );
   } // DrawBase::animate()
 
   void DrawTile::animate( const float& t, AnimData *d )
@@ -100,7 +101,7 @@ namespace visualizer
       q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
   
     //q.renderer().drawQuad( q.x, q.y, 1, 1 );
-    q.renderer().drawText( q.x, q.y, "mainFont", "Hello, World!" );
+    q.renderer().drawText( q.x, q.y, "mainFont", "H" );
   } // DrawTile::animate()
 
   void LeftAnim::animate( const float& t, AnimData *d )
