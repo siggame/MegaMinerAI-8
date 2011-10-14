@@ -122,6 +122,9 @@ library.baseGetY.argtypes = [c_void_p]
 library.baseGetOwner.restype = c_int
 library.baseGetOwner.argtypes = [c_void_p]
 
+library.baseGetSpawnsLeft.restype = c_int
+library.baseGetSpawnsLeft.argtypes = [c_void_p]
+
 library.playerGetId.restype = c_int
 library.playerGetId.argtypes = [c_void_p]
 
