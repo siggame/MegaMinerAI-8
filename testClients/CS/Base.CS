@@ -67,5 +67,11 @@ public class Base: Mappable
     validify();
     return Client.baseGetOwner(ptr);
   }
+  ///The number of viruses this base can still spawn this turn
+  public int getSpawnsLeft()
+  {
+    validify();
+    return Client.baseGetSpawnsLeft(ptr);
+  }
 
 }

@@ -22,6 +22,8 @@ class Base : public Mappable {
   int y();
   ///Whose base this is, all your base are belong to who
   int owner();
+  ///The number of viruses this base can still spawn this turn
+  int spawnsLeft();
 
   // Actions
   ///Creates a Virus on the base with certain level.

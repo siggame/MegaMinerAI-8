@@ -286,6 +286,8 @@ void parseBase(Connection* c, _Base* object, sexp_t* expression)
   sub = sub->next;
   object->owner = atoi(sub->val);
   sub = sub->next;
+  object->spawnsLeft = atoi(sub->val);
+  sub = sub->next;
 
 }
 void parsePlayer(Connection* c, _Player* object, sexp_t* expression)

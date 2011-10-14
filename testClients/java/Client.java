@@ -51,6 +51,7 @@ public interface Client extends Library {
   int baseGetX(Pointer ptr);
   int baseGetY(Pointer ptr);
   int baseGetOwner(Pointer ptr);
+  int baseGetSpawnsLeft(Pointer ptr);
 
   int playerGetId(Pointer ptr);
   String playerGetPlayerName(Pointer ptr);

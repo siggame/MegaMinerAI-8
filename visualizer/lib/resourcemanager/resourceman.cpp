@@ -1,6 +1,7 @@
 #include "resourceman.h"
 #include "textureloader.h"
 
+#include <sstream>
 #include <fstream>
 
 namespace visualizer
@@ -155,10 +156,10 @@ namespace visualizer
     )
   {
     static size_t fontNum = 0;
-    std::string fontName = "uniqueFontName";
-    fontName += fontNum++;
-    loadTexture( fontTexture, fontName );
-    Text t( fontName, fontWidths );
+    std::stringstream fontName;
+    fontName << "MEGAMINERVISUALIZER_UNIQUEFONTNAME_" << fontNum++;
+    loadTexture( fontTexture, fontName.str() );
+    Text t( fontName.str(), fontWidths );
 
     Resource *res = (Resource*)( new ResFont( t ) );
     reg( name, res );

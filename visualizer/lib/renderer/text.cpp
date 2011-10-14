@@ -33,7 +33,8 @@ namespace visualizer
     // At this point, the text should already be translated to the 
     // correct position.
     glPushMatrix();
-    float off = -1.0f/16.0f;
+    float off = 1.0f/16.0f;
+    const float defaultSize = 0.25;
 
     glEnable( GL_BLEND );    
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -47,23 +48,24 @@ namespace visualizer
     for( size_t i = 0; i < line.size(); i++ )
     {
       size_t c = line[ i ];
-      float x = ((float)(c%16)/16.0f);
-      float y = 1.0f-((float)((int)c/16)/16.0f);
+      float x = 1-((float)(c%16)/16.0f)-off;
+      float y = 1-((float)((int)c/16)/16.0f)+off;
 
       glBegin( GL_QUADS );
-
-        glTexCoord2f( x, y+off );
-        glVertex3f( 0, 32, 0 );
-        glTexCoord2f( x-off, y+off );
-        glVertex3f( 32, 32, 0 );
-        glTexCoord2f( x-off, y );
-        glVertex3f( 32, 0, 0 );
-        glTexCoord2f( x, y );
+        glTexCoord2f( x+off, y+off );
         glVertex3f( 0, 0, 0 );
-
+        glTexCoord2f( x, y+off );
+        glVertex3f( defaultSize, 0, 0 );
+        glTexCoord2f( x, y );
+        glVertex3f( defaultSize, defaultSize, 0 );
+        glTexCoord2f( x+off, y );
+        glVertex3f( 0, defaultSize, 0 );
       glEnd();
 
+      float t = (float)getCharWidth( line[ i ] )/32*defaultSize;
+      glTranslatef( t, 0, 0 );
     }
+
 
     ResourceMan->release( m_resource, "text" );
     glDisable( GL_TEXTURE_2D );
@@ -94,12 +96,17 @@ namespace visualizer
     size_t width = 0;
     for( size_t i = 0; i < line.size(); i++ )
     {
-      width += m_width[ line[ i ] ];
+      width += getCharWidth( line[ i ] );
     }
 
     return width;
 
   } // Text::getLineWidth()
+
+  size_t Text::getCharWidth( const size_t& c ) const
+  {
+    return m_width[ c-32 ];
+  }
 
   const Text& Text::operator << ( const std::string& line ) const
   {

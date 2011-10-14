@@ -19,12 +19,13 @@ class Mappable:
 
 
 class Base(Mappable):
-  def __init__(self, game, id, x, y, owner):
+  def __init__(self, game, id, x, y, owner, spawnsLeft):
     self.game = game
     self.id = id
     self.x = x
     self.y = y
     self.owner = owner
+    self.spawnsLeft = spawnsLeft
 
   def toList(self):
     value = [
@@ -32,6 +33,7 @@ class Base(Mappable):
       self.x,
       self.y,
       self.owner,
+      self.spawnsLeft,
       ]
     return value
 

@@ -90,6 +90,11 @@ class Base(Mappable):
     self.validify()
     return library.baseGetOwner(self.ptr)
 
+  ##The number of viruses this base can still spawn this turn
+  def getSpawnsLeft(self):
+    self.validify()
+    return library.baseGetSpawnsLeft(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -98,6 +103,7 @@ class Base(Mappable):
     ret += "x: %s\n" % self.getX()
     ret += "y: %s\n" % self.getY()
     ret += "owner: %s\n" % self.getOwner()
+    ret += "spawnsLeft: %s\n" % self.getSpawnsLeft()
     return ret
 
 ##Stores information about a player in the game
@@ -263,7 +269,7 @@ class Virus(Mappable):
     self.validify()
     return library.virusGetLevel(self.ptr)
 
-  ##The number of times this virus can still move
+  ##The number of times this virus can still move this turn
   def getMovesLeft(self):
     self.validify()
     return library.virusGetMovesLeft(self.ptr)

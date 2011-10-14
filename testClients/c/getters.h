@@ -21,6 +21,7 @@ DLLEXPORT int baseGetId(_Base* ptr);
 DLLEXPORT int baseGetX(_Base* ptr);
 DLLEXPORT int baseGetY(_Base* ptr);
 DLLEXPORT int baseGetOwner(_Base* ptr);
+DLLEXPORT int baseGetSpawnsLeft(_Base* ptr);
 
 
 DLLEXPORT int playerGetId(_Player* ptr);

@@ -79,7 +79,7 @@ public class Virus: Mappable
     validify();
     return Client.virusGetLevel(ptr);
   }
-  ///The number of times this virus can still move
+  ///The number of times this virus can still move this turn
   public int getMovesLeft()
   {
     validify();
