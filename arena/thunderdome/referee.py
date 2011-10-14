@@ -3,7 +3,7 @@
 #####
 
 # My AWS credentials
-from aws_creds import access_cred, secret_cred
+from aws_creds import access_cred, secret_cred, username, password
 
 # Some magic to get a standalone python program hooked in to django
 import sys
@@ -55,10 +55,8 @@ def looping():
     for x in gamedatas:
         x.version = x.client.current_version
         update_local_repo(x.client)
-        result = subprocess.call(['make'], cwd=x.client.name,
-                                 stdout=file("/dev/null", "w"), 
-                                 stderr=subprocess.STDOUT)
-
+        update_downstream_repo('localhost', x.client)
+        result = remote_compile('localhost', x.client)
         x.compiled = (result is 0)
         if not x.compiled:
             x.client.embargoed = True
@@ -84,15 +82,29 @@ def looping():
     time.sleep(2)
 
     players = list()
-    execution = ['/bin/bash', 'run', 'localhost']
-    for gamedata in gamedatas:
-        players.append(subprocess.Popen(execution,
-                                        cwd=gamedata.client.name,
-                                        stdout=file("/dev/null", "w"),
-                                        stderr=subprocess.STDOUT))
-        time.sleep(1)
-        if len(execution) == 3:  # grumble grumble server
-            execution += ['1'] 
+    
+    e = ["ssh"] + \
+        ["mies@localhost"] + \
+        ["cd %s ; ./run localhost >/dev/null 2>/dev/null" % gamedatas[0].client.name]
+    players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
+                                    stderr=subprocess.STDOUT))
+    time.sleep(2)
+
+    e = ["ssh"] + \
+        ["mies@localhost"] + \
+        ["cd %s ; ./run localhost 1 >/dev/null 2>/dev/null" % gamedatas[1].client.name]
+    players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
+                                    stderr=subprocess.STDOUT))
+    
+#    execution = ['/bin/bash', 'run', 'localhost']
+#    for gamedata in gamedatas:
+#        players.append(subprocess.Popen(execution,
+#                                        cwd=gamedata.client.name,
+#                                        stdout=file("/dev/null", "w"),
+#                                        stderr=subprocess.STDOUT))
+#        time.sleep(1)
+#        if len(execution) == 3:  # grumble grumble server
+#            execution += ['1'] 
 
     # game is running. watch for gamelog
     print "running..."
@@ -123,6 +135,40 @@ def looping():
     stalk.close()    
     print "done!"
 
+
+import socket
+import libssh2
+    
+def remote_compile(hostname, client):
+    command = 'cd %s ; make >/dev/null 2>/dev/null' % client.name
+    return remote_call(hostname, command)
+
+
+def update_downstream_repo(hostname, client):
+    command = 'git clone ssh://mies@localhost/home/mies/arena/%s >/dev/null 2>/dev/null' % client.name
+    remote_call(hostname, command)
+    command = 'cd %s ; git pull >/dev/null 2>/dev/null' % client.name
+    remote_call(hostname, command)
+    
+
+def remote_call(hostname, command):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((hostname, 22))
+
+    session = libssh2.Session()
+    session.startup(sock)
+
+    session.userauth_password(username, password)
+    channel = session.open_session()
+    channel.execute(command)
+    while not channel.eof():
+        junk = channel.read(1024)
+        time.sleep(1)
+    
+    result = channel.exit_status()
+    session.close()
+    return result        
+    
 
 def parse_gamelog():
     ### Determine winner by parsing that last s-expression in the gamelog
