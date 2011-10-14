@@ -157,7 +157,7 @@ namespace visualizer
   {
     static size_t fontNum = 0;
     std::stringstream fontName;
-    fontName << "uniqueFontName" << fontNum++;
+    fontName << "MEGAMINERVISUALIZER_UNIQUEFONTNAME_" << fontNum++;
     loadTexture( fontTexture, fontName.str() );
     Text t( fontName.str(), fontWidths );
 

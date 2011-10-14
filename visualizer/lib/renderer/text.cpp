@@ -53,11 +53,11 @@ namespace visualizer
       glBegin( GL_QUADS );
 
         glTexCoord2f( x, y+off );
-        glVertex3f( 0, 32, 0 );
+        glVertex3f( 0, 1, 0 );
         glTexCoord2f( x-off, y+off );
-        glVertex3f( 32, 32, 0 );
+        glVertex3f( 1, 1, 0 );
         glTexCoord2f( x-off, y );
-        glVertex3f( 32, 0, 0 );
+        glVertex3f( 1, 0, 0 );
         glTexCoord2f( x, y );
         glVertex3f( 0, 0, 0 );
 

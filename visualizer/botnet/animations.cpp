@@ -70,8 +70,7 @@ namespace visualizer
       q.renderer().setColor( Color( 0, 0, 0.3f*intensity, 1 ) );
     }
 
-    //q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
-    q.renderer().drawTexturedQuad( q.x+.1, q.y+.1, .8, .8, "uniqueFontName0" );
+    q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
   } // DrawBase::animate()
 
   void DrawTile::animate( const float& t, AnimData *d )
