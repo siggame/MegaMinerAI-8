@@ -1,6 +1,8 @@
 #include "animations.h"
 #include "easing_equations.h"
 
+#include <sstream>
+
 namespace visualizer
 {
   void StartAnim::animate( const float& t, AnimData *d )
@@ -11,16 +13,22 @@ namespace visualizer
   {
     VirusData *vd = (VirusData*)d;
     virus &v = *m_virus;
+    std::stringstream level;
+    level << v.level;
     
     if( v.owner == 0 )
     {
       v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
       v.renderer().drawQuad( vd->x+0.25, vd->y+0.25, .25, .5 );
+      v.renderer().setColor( Color( 0, 0, 0 ) );
+      v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str()  );
     }
     else
     {
       v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
       v.renderer().drawQuad( vd->x+0.50, vd->y+0.25, .25, .5 );
+      v.renderer().setColor( Color( 0, 0, 0 ) );
+      v.renderer().drawText( vd->x+0.50, vd->y+0.25, "mainFont", level.str()  );
     }
     
   } // DrawVirus::animate()
@@ -99,8 +107,7 @@ namespace visualizer
       // WALLS
       q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
   
-    //q.renderer().drawQuad( q.x, q.y, 1, 1 );
-    q.renderer().drawText( q.x, q.y, "mainFont", "H" );
+    q.renderer().drawQuad( q.x, q.y, 1, 1 );
   } // DrawTile::animate()
 
   void LeftAnim::animate( const float& t, AnimData *d )

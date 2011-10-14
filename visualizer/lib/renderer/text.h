@@ -18,6 +18,7 @@ namespace visualizer
 
     private:
       size_t getLineWidth( const std::string& line ) const;
+      size_t getCharWidth( const size_t& c ) const;
       
       unsigned char m_width[256];
       std::string m_resource;
