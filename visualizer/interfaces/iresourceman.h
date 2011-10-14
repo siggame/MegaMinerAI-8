@@ -28,7 +28,7 @@ class IResourceMan
       ( 
       const std::string& filename, 
       const std::string& name 
-      ) = 0;
+      )= 0;
 
     virtual void loadTexture
       ( 

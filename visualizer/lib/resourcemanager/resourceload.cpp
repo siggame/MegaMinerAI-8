@@ -24,6 +24,9 @@ namespace visualizer
     if ( "animation" == typeBuff )
       return RT_ANIMATION;
 
+    if( "font" == typeBuff )
+      return RT_FONT;
+
     return RT_NONE;
   }
 
@@ -93,6 +96,15 @@ namespace visualizer
                 {
                   loadAnimation( pathBuff, namebuff );
 
+                } break;
+                case RT_FONT:
+                {
+                  std::string fontWidthFile;
+                  ss >> fontWidthFile;
+                  std::string fontPath = qPrintable( fInfo.dir().path() );
+                  fontPath += "/";
+                  fontPath += fontWidthFile;
+                  loadFont( fontPath, pathBuff, namebuff );
                 } break;
                 default:
                   THROW
