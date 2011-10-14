@@ -147,16 +147,16 @@ class Virus(Mappable):
       return "That virus is not yours to control"
     #You can't move if you have no moves left
     if self.movesLeft <= 0:
-      print("That virus has no more moves")
+#      print("That virus has no more moves")
       return "That virus has no more moves"
     #You can't move off the edge, the world is flat
     if not (0 <= dx < self.game.width) or not (0 <=dy < self.game.height):
-      print("Don't move off of the map")
+#      print("Don't move off of the map")
       return "Don't move off of the map"
     if self.game.grid[dx][dy].owner == 3:
     #You can't move into a wall...the wall will win
 #might work, still worth looking into#TODO how to pass Crash grid x and y, not sure if what I have works
-      self.game.animations.append(['Crash',self.id,self.game.grid[dx],self.game.grid[dy]])
+      self.game.animations.append(['Crash',self.id,dx,dy])
       print("There is a wall in the way")
       return "There is a wall in the way"
     #You can't move more than one space away
@@ -177,7 +177,7 @@ class Virus(Mappable):
         print("i.y is dy")
         #moving a unit onto a friendly of a different level is a no no
         if i.level != self.level:
-          self.game.animations.append(['Crash',self.id,i.x,i.y])
+          self.game.animations.append(['Crash',self.id,dx,dy])
           print("You can't move your unit to another of yours of different level",dx,dy)
           return("You can't move your unit to another of yours of different level") ###
         #moving a unit onto a friendly of same level makes a new 
@@ -227,7 +227,7 @@ class Virus(Mappable):
 #Done? need to test    #TODO Handle units walking into enemy units ...conflict!
 #Done? need to test    #TODO Each case has animations
       else:
-        self.game.animations.append(['Move',self.id,self.x,self.y])
+        #self.game.animations.append(['Move',self.id,self.x,self.y]) #gardner automagically makes move animation
         self.x = dx
         self.y = dy
         self.game.grid[dx][dy].owner = self.owner
