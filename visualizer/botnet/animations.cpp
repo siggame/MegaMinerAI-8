@@ -99,7 +99,8 @@ namespace visualizer
       // WALLS
       q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
   
-    q.renderer().drawQuad( q.x, q.y, 1, 1 );
+    //q.renderer().drawQuad( q.x, q.y, 1, 1 );
+    q.renderer().drawText( q.x, q.y, "mainFont", "Hello, World!" );
   } // DrawTile::animate()
 
   void LeftAnim::animate( const float& t, AnimData *d )
