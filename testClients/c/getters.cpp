@@ -28,6 +28,10 @@ DLLEXPORT int baseGetOwner(_Base* ptr)
 {
   return ptr->owner;
 }
+DLLEXPORT int baseGetSpawnsLeft(_Base* ptr)
+{
+  return ptr->spawnsLeft;
+}
 DLLEXPORT int playerGetId(_Player* ptr)
 {
   return ptr->id;

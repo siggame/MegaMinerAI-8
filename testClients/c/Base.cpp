@@ -29,6 +29,11 @@ int Base::owner()
   return ((_Base*)ptr)->owner;
 }
 
+int Base::spawnsLeft()
+{
+  return ((_Base*)ptr)->spawnsLeft;
+}
+
 
 int Base::spawn(int Level)
 {
@@ -43,5 +48,6 @@ std::ostream& operator<<(std::ostream& stream,Base ob)
   stream << "x: " << ((_Base*)ob.ptr)->x  <<'\n';
   stream << "y: " << ((_Base*)ob.ptr)->y  <<'\n';
   stream << "owner: " << ((_Base*)ob.ptr)->owner  <<'\n';
+  stream << "spawnsLeft: " << ((_Base*)ob.ptr)->spawnsLeft  <<'\n';
   return stream;
 }

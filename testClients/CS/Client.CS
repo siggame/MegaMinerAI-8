@@ -83,6 +83,8 @@ public class Client {
   public static extern int baseGetY(IntPtr ptr);
   [DllImport("client")]
   public static extern int baseGetOwner(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int baseGetSpawnsLeft(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int playerGetId(IntPtr ptr);

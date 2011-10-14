@@ -55,7 +55,7 @@ Virus = Model('Virus',
   data = [
     Variable('owner', int, "The owner of this Virus"),
     Variable('level', int, "The Virus's level"),
-    Variable('movesLeft', int, "The number of times this virus can still move"),
+    Variable('movesLeft', int, "The number of times this virus can still move this turn"),
     ],
   # the documentation for Virus objects
   doc = 'Stores the information about a virus',
@@ -77,6 +77,7 @@ Base = Model('Base',
   parent = Mappable,
   data = [
     Variable ('owner',int,"Whose base this is, all your base are belong to who"),
+    Variable ('spawnsLeft',int,"The number of viruses this base can still spawn this turn"),
     ],
   doc = 'The information on the base',
   functions = [

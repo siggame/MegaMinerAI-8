@@ -26,6 +26,7 @@ struct _Base
   int x;
   int y;
   int owner;
+  int spawnsLeft;
 };
 struct _Player
 {
