@@ -33,7 +33,8 @@ namespace visualizer
     // At this point, the text should already be translated to the 
     // correct position.
     glPushMatrix();
-    float off = -1.0f/16.0f;
+    float off = 1.0f/16.0f;
+    const float defaultSize = 0.25;
 
     glEnable( GL_BLEND );    
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -48,16 +49,16 @@ namespace visualizer
     {
       size_t c = line[ i ];
       float x = ((float)(c%16)/16.0f);
-      float y = 1.0f-((float)((int)c/16)/16.0f);
+      float y = ((float)((int)c/16)/16.0f);
 
       glBegin( GL_QUADS );
 
-        glTexCoord2f( x, y+off );
-        glVertex3f( 0, 1, 0 );
-        glTexCoord2f( x-off, y+off );
-        glVertex3f( 1, 1, 0 );
-        glTexCoord2f( x-off, y );
-        glVertex3f( 1, 0, 0 );
+        glTexCoord2f( x, y-off );
+        glVertex3f( 0, defaultSize, 0 );
+        glTexCoord2f( x+off, y-off );
+        glVertex3f( defaultSize, defaultSize, 0 );
+        glTexCoord2f( x+off, y );
+        glVertex3f( defaultSize, 0, 0 );
         glTexCoord2f( x, y );
         glVertex3f( 0, 0, 0 );
 
