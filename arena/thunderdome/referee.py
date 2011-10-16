@@ -2,6 +2,10 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
+gladiator   = 'localhost'
+#gladiator   = 'ec2-204-236-192-120.compute-1.amazonaws.com'
+my_hostname = 'mnuck.com'
+
 # My AWS credentials
 from aws_creds import access_cred, secret_cred, username, password
 
@@ -34,7 +38,10 @@ def looping():
     # get a game
     stalk = beanstalkc.Connection()
     stalk.watch('game-requests')
-    job = stalk.reserve()
+    job = stalk.reserve(timeout=2)
+    if job is None:
+        stalk.close()
+        return
     game_id = json.loads(job.body)['game_id']
     game = Game.objects.get(pk=game_id)
     print "processing game", game_id
@@ -55,8 +62,8 @@ def looping():
     for x in gamedatas:
         x.version = x.client.current_version
         update_local_repo(x.client)
-        update_downstream_repo('localhost', x.client)
-        result = remote_compile('localhost', x.client)
+        update_downstream_repo(gladiator, x.client)
+        result = remote_compile(gladiator, x.client)
         x.compiled = (result is 0)
         if not x.compiled:
             x.client.embargoed = True
@@ -84,27 +91,20 @@ def looping():
     players = list()
     
     e = ["ssh"] + \
-        ["mies@localhost"] + \
-        ["cd %s ; ./run localhost >/dev/null 2>/dev/null" % gamedatas[0].client.name]
+        ["gladiator@%s" % gladiator] + \
+        ["cd %s ; ./run %s" % \
+             (gamedatas[0].client.name, my_hostname)]
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
-    time.sleep(2)
+    time.sleep(5)
 
     e = ["ssh"] + \
-        ["mies@localhost"] + \
-        ["cd %s ; ./run localhost 1 >/dev/null 2>/dev/null" % gamedatas[1].client.name]
+        ["gladiator@%s" % gladiator] + \
+        ["cd %s ; ./run %s 1" % \
+             (gamedatas[1].client.name, my_hostname)]
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
-    
-#    execution = ['/bin/bash', 'run', 'localhost']
-#    for gamedata in gamedatas:
-#        players.append(subprocess.Popen(execution,
-#                                        cwd=gamedata.client.name,
-#                                        stdout=file("/dev/null", "w"),
-#                                        stderr=subprocess.STDOUT))
-#        time.sleep(1)
-#        if len(execution) == 3:  # grumble grumble server
-#            execution += ['1'] 
+
 
     # game is running. watch for gamelog
     print "running..."
@@ -145,7 +145,7 @@ def remote_compile(hostname, client):
 
 
 def update_downstream_repo(hostname, client):
-    command = 'git clone ssh://mies@localhost/home/mies/arena/%s >/dev/null 2>/dev/null' % client.name
+    command = 'git clone ssh://mies@%s/home/mies/arena/%s >/dev/null 2>/dev/null' % (my_hostname, client.name)
     remote_call(hostname, command)
     command = 'cd %s ; git pull >/dev/null 2>/dev/null' % client.name
     remote_call(hostname, command)
