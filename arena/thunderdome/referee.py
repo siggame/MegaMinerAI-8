@@ -2,9 +2,14 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
-gladiator   = 'localhost'
-#gladiator   = 'ec2-204-236-192-120.compute-1.amazonaws.com'
-my_hostname = 'mnuck.com'
+import sys
+
+if len(sys.argv) != 4:
+    gladiator      = 'localhost'
+    my_hostname     = 'mnuck.com'
+    print "referee.py gladiator my_hostname"
+else:
+    (junk, gladiator, my_hostname) = sys.argv
 
 # My AWS credentials
 from aws_creds import access_cred, secret_cred, username, password
@@ -26,6 +31,19 @@ import random, time
 
 # My Imports
 from thunderdome.models import Game
+
+
+from threading import Thread
+
+class Smile_And_Nod(Thread):
+    def __init__(self, pipe):
+        Thread.__init__(self)
+        self.pipe = pipe
+        
+    def run(self):
+        while True:
+            if len(self.pipe.readline()) == 0:
+                break
 
 
 def main():
@@ -80,28 +98,39 @@ def looping():
         print "failing the game, someone didn't compile"
         return
     
-    # fire up the processes
-    get_fresh_server()    
-    server = subprocess.Popen(['python', 'main.py'], 
-                              cwd='server',
-                              stdout=file("/dev/null", "w"),
-                              stderr=subprocess.STDOUT)
-    time.sleep(2)
-
     players = list()
     
-    e = ["ssh"] + \
-        ["gladiator@%s" % gladiator] + \
+    e = ["ssh", "gladiator@%s" % gladiator] + \
         ["cd %s ; ./run %s" % \
              (gamedatas[0].client.name, my_hostname)]
-    players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
-                                    stderr=subprocess.STDOUT))
-    time.sleep(5)
+    players.append(subprocess.Popen(e, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE))
+    
+    line = players[0].stdout.readline()
+    match = re.search("Creating game (\d+)", line)
+    if match:
+        game_number = match.groups()[0]
+    else:
+        line = players[0].stderr.readline()
+        if re.search("Unable to open socket", line):
+            print "server is probably down. that's bad."
+        else:
+            print "unexpected output from client. bail."
+        players[0].terminate()
+        stalk.close()
+        return
 
-    e = ["ssh"] + \
-        ["gladiator@%s" % gladiator] + \
-        ["cd %s ; ./run %s 1" % \
-             (gamedatas[1].client.name, my_hostname)]
+    print "server says this is game number", game_number
+    
+    nodder1 = Smile_And_Nod(players[0].stdout)
+    nodder1.start()
+    nodder2 = Smile_And_Nod(players[0].stderr)
+    nodder2.start()
+    
+
+    e = ["ssh", "gladiator@%s" % gladiator] + \
+        ["cd %s ; ./run %s %s" % \
+             (gamedatas[1].client.name, my_hostname, game_number)]
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
 
@@ -110,13 +139,13 @@ def looping():
     print "running..."
     game.status = "Running"
     game.save()
-    while not os.access('server/logs/1.gamelog.bz2', os.F_OK):
+    while not os.access("server/logs/%s.gamelog" % game_number, os.F_OK):
         job.touch()
         time.sleep(1)
         
     # figure out who won by reading the gamelog
     print "determining winner..."
-    winner = parse_gamelog()
+    winner = parse_gamelog(game_number)
     if winner == '0':
         gamedatas[0].won = True
         gamedatas[1].won = False
@@ -126,9 +155,10 @@ def looping():
     [x.save() for x in gamedatas]        
         
     # clean up
-    [x.terminate() for x in [server] + players]
+    [x.join() for x in (nodder1, nodder2)]
+    [x.terminate() for x in players]
     print "pushing gamelog..."
-    push_gamelog(game)
+    push_gamelog(game, game_number)
     game.status = "Complete"
     game.save()
     job.delete()
@@ -170,9 +200,9 @@ def remote_call(hostname, command):
     return result        
     
 
-def parse_gamelog():
+def parse_gamelog(game_number):
     ### Determine winner by parsing that last s-expression in the gamelog
-    f = open('server/logs/1.gamelog', 'r')
+    f = open("server/logs/%s.gamelog" % game_number, 'r')
     log = f.readline()
     f.close()
     match = re.search("\"game-winner\" (\d) \"[\w ]+\" (\d+)", log)
@@ -181,25 +211,18 @@ def parse_gamelog():
     return None
 
     
-def push_gamelog(game):
+def push_gamelog(game, game_number):
     ### Push the gamelog to S3
     c = boto.connect_s3(access_cred, secret_cred)
     b = c.get_bucket('siggame-gamelogs')
     k = boto.s3.key.Key(b)
     k.key = "%s.gamelog.bz2" % game.pk
-    k.set_contents_from_filename("server/logs/1.gamelog.bz2")
+    k.set_contents_from_filename("server/logs/%s.gamelog.bz2" % game_number)
     k.set_acl('public-read')
     game.gamelog_url = 'http://siggame-gamelogs.s3.amazonaws.com/%s' % k.key
     game.save()
-    os.remove("server/logs/1.gamelog.bz2")
-    os.remove("server/logs/1.gamelog")
-
-
-def get_fresh_server():
-    ### Pull a new server, just in case
-    git.Repo("/home/mies/megaminer8").remotes.origin.pull()
-    shutil.rmtree('server', ignore_errors=True)
-    shutil.copytree('/home/mies/megaminer8/server', 'server')
+    os.remove("server/logs/%s.gamelog.bz2" % game_number)
+    os.remove("server/logs/%s.gamelog" % game_number)
     
     
 def update_local_repo(client):
