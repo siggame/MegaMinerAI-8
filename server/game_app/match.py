@@ -86,7 +86,7 @@ class Match(DefaultGameWorld):
     #Need to get the attributes for the game objects before we parse the file
     #self.grid is for our benefit, so that we can look things up by location
 
-    self.grid = [[None]*self.height for _ in range(self.width)]
+    self.grid = [[None]*self.width for _ in range(self.height)]
 
     #saves y data as a enumeration called row, iterates through
     #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
