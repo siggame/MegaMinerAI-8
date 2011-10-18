@@ -4,6 +4,8 @@ from structures import *
 # Informs the codegen if it should include turn timing
 aspects = []
 
+gameName = "BotNet"
+
 # Variables the server needs to send the client each game
 globals = [
   Variable('turnNumber', int, 'How many turns it has been since the beginning of the game'),
