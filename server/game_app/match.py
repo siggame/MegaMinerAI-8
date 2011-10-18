@@ -81,12 +81,12 @@ class Match(DefaultGameWorld):
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
     with open(("maps/" + mapFilenames[self.gameNumber % len(mapFilenames)]),'r') as f:
       mapdata = f.read().replace(' ','').split()
-    self.width = len(mapdata)
-    self.height = len(mapdata[0])
+    self.width = len(mapdata[0])
+    self.height = len(mapdata)
     #Need to get the attributes for the game objects before we parse the file
     #self.grid is for our benefit, so that we can look things up by location
 
-    self.grid = [[None]*self.width for _ in range(self.height)]
+    self.grid = [[None]*self.height for _ in range(self.width)]
 
     #saves y data as a enumeration called row, iterates through
     #does the same for x, saved as mapSquare. mapsquare points at map[x][y]
