@@ -2,13 +2,15 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
-import sys
+from datetime import datetime
 
-if len(sys.argv) != 5:
-    gladiator      = 'localhost'
-    my_hostname     = 'mnuck.com'
-    server_path    = '/home/mies/arena/server'
-    print "referee.py gladiator my_hostname server_path"
+import sys
+if len(sys.argv) != 6:
+    gladiator1   = 'localhost'
+    gladiator2   = 'localhost'
+    my_hostname  = 'mnuck.com'
+    server_path  = '/home/mies/arena/server'
+    print "referee.py gladiator1 gladiator2 my_hostname server_path"
 else:
     (junk, gladiator, my_hostname, server_path) = sys.argv
     
@@ -81,7 +83,12 @@ def looping():
         return
     
     # get and compile the clients
+    gladiator = gladiator2
     for x in gamedatas:
+        if gladiator == gladiator2:
+            gladiator = gladiator1
+        else:
+            gladiator = gladiator2
         x.version = x.client.current_version
         update_downstream_repo(gladiator, x.client)
         result = remote_compile(gladiator, x.client)
@@ -103,7 +110,7 @@ def looping():
     
     players = list()
     
-    e = ["ssh", "gladiator@%s" % gladiator] + \
+    e = ["ssh", "gladiator@%s" % gladiator1] + \
         ["cd %s ; ./run %s" % \
              (gamedatas[0].client.name, my_hostname)]
     players.append(subprocess.Popen(e, stdout=subprocess.PIPE,
@@ -131,7 +138,7 @@ def looping():
     nodder2 = Smile_And_Nod(players[0].stderr)
     nodder2.start()
     
-    e = ["ssh", "gladiator@%s" % gladiator] + \
+    e = ["ssh", "gladiator@%s" % gladiator2] + \
         ["cd %s ; ./run %s %s" % \
              (gamedatas[1].client.name, my_hostname, game_number)]
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
@@ -165,6 +172,8 @@ def looping():
     print "pushing gamelog..."
     push_gamelog(game, game_number)
     game.status = "Complete"
+    game.completed = datetime.now()
+    
     game.save()
     job.delete()
     stalk.close()    
