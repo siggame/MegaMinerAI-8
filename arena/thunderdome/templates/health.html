@@ -1,8 +1,10 @@
-<html>
-<head>
-<title>ACM SIG-Game MegaMiner Arena (Thunderdome)</title>
-</head>
-<body>
+{% extends "thunderdome/base.html" %}
+
+{% block title %}
+ACM SIG-Game MegaMiner Arena (Thunderdome)
+{% endblock %}
+
+{% block content %}
 <h1>Arena</h1>
 
 <h2>Queue's Eye View</h2>
@@ -15,6 +17,5 @@ Scheduled Games: {{ scheduled_games }}</br>
 Running Games: {{ running_games }}</br>
 Complete Games: {{ complete_games }}</br>
 Failed Games: {{ failed_games }}<br>
+{% endblock %}
 
-</body>
-</html>

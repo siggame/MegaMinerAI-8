@@ -1,8 +1,10 @@
-<html>
-  <head>
-    <title>{{ client.name }}</title>
-  </head>
-  <body>
+{% extends "thunderdome/base.html" %}
+
+{% block title %}
+{{ client.name }}
+{% endblock %}
+
+{% block content %}
     <h1>{{ client.name }}</h1>
     Current Version:
     {% if client.embargoed %}
@@ -25,6 +27,4 @@
       {% endfor %}
       <hr>
     {% endfor %}
-    
-  </body>
-</html>
+{% endblock %}

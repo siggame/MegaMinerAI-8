@@ -1,8 +1,10 @@
-<html>
-  <head>
-  <title>Scoreboard</title>
-  </head>
-  <body>
+{% extends "thunderdome/base.html" %}
+
+{% block title %}
+Scoreboard
+{% endblock %}
+
+{% block content %}
     <h1>Scoreboard</h1>
     <table border=1>
       <tr>
@@ -26,5 +28,4 @@
       </tr>
       {% endfor %}
     </table>
-  </body>
-</html>
+{% endblock %}
