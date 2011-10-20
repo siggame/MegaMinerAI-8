@@ -161,9 +161,6 @@ class Match(DefaultGameWorld):
       elif player2.byteDollars > player1.byteDollars:
         self.declareWinner(self.players[1], 'Victory through Bytedollar superiority!!')
         print "1 Wins!"
-      #Done? need to test #TODO will make a p2 dollar is p1 dollar case later, need to have games end. 
-      #could sum costs of each team's viruses, more expensive army wins
-      # need to get a game goin, player 0 wins by defualt
       else:
         p0Worth, p1Worth = self.worth(0), self.worth(1)
         if p0Worth > p1Worth:
