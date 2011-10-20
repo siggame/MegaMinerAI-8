@@ -2,15 +2,18 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
+from datetime import datetime
+
 import sys
-
-if len(sys.argv) != 4:
-    gladiator      = 'localhost'
-    my_hostname     = 'mnuck.com'
-    print "referee.py gladiator my_hostname"
+if len(sys.argv) != 6:
+    gladiator1   = 'localhost'
+    gladiator2   = 'localhost'
+    my_hostname  = 'mnuck.com'
+    server_path  = '/home/mies/arena/server'
+    print "referee.py gladiator1 gladiator2 my_hostname server_path"
 else:
-    (junk, gladiator, my_hostname) = sys.argv
-
+    (junk, gladiator, my_hostname, server_path) = sys.argv
+    
 # My AWS credentials
 from aws_creds import access_cred, secret_cred, username, password
 
@@ -27,7 +30,7 @@ setup_environ(settings)
 import re, json               # special strings
 import beanstalkc, git, boto  # networky
 import subprocess, shutil, os # shellish
-import random, time
+import random, time, os
 
 # My Imports
 from thunderdome.models import Game
@@ -66,6 +69,9 @@ def looping():
 
     gamedatas = list(game.gamedata_set.all())
     random.shuffle(gamedatas) # even split of p0, p1        
+
+    for x in gamedatas:
+        update_local_repo(x.client)
     
     # handle embargoed players
     if any([x.client.embargoed for x in gamedatas]):
@@ -77,9 +83,13 @@ def looping():
         return
     
     # get and compile the clients
+    gladiator = gladiator2
     for x in gamedatas:
+        if gladiator == gladiator2:
+            gladiator = gladiator1
+        else:
+            gladiator = gladiator2
         x.version = x.client.current_version
-        update_local_repo(x.client)
         update_downstream_repo(gladiator, x.client)
         result = remote_compile(gladiator, x.client)
         x.compiled = (result is 0)
@@ -100,7 +110,7 @@ def looping():
     
     players = list()
     
-    e = ["ssh", "gladiator@%s" % gladiator] + \
+    e = ["ssh", "gladiator@%s" % gladiator1] + \
         ["cd %s ; ./run %s" % \
              (gamedatas[0].client.name, my_hostname)]
     players.append(subprocess.Popen(e, stdout=subprocess.PIPE,
@@ -120,29 +130,31 @@ def looping():
         stalk.close()
         return
 
-    print "server says this is game number", game_number
-    
+    # Player 0 is special, in that we need to read his output just
+    # long enough to get the server game number. Once we have that
+    # one datum, we ignore the rest of his output.
     nodder1 = Smile_And_Nod(players[0].stdout)
     nodder1.start()
     nodder2 = Smile_And_Nod(players[0].stderr)
     nodder2.start()
     
-
-    e = ["ssh", "gladiator@%s" % gladiator] + \
+    e = ["ssh", "gladiator@%s" % gladiator2] + \
         ["cd %s ; ./run %s %s" % \
              (gamedatas[1].client.name, my_hostname, game_number)]
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
 
-
-    # game is running. watch for gamelog
+    # game is running. watch for compressed gamelog
     print "running..."
     game.status = "Running"
     game.save()
-    while not os.access("server/logs/%s.gamelog" % game_number, os.F_OK):
+    print "%s/logs/%s.gamelog.bz2" % (server_path, game_number)
+    while not os.access("%s/logs/%s.gamelog.bz2" % (server_path, game_number), 
+                        os.F_OK):
         job.touch()
         time.sleep(1)
-        
+    
+    time.sleep(1)
     # figure out who won by reading the gamelog
     print "determining winner..."
     winner = parse_gamelog(game_number)
@@ -160,6 +172,8 @@ def looping():
     print "pushing gamelog..."
     push_gamelog(game, game_number)
     game.status = "Complete"
+    game.completed = datetime.now()
+    
     game.save()
     job.delete()
     stalk.close()    
@@ -175,9 +189,10 @@ def remote_compile(hostname, client):
 
 
 def update_downstream_repo(hostname, client):
-    command = 'git clone ssh://mies@%s/home/mies/arena/%s >/dev/null 2>/dev/null' % (my_hostname, client.name)
+    command = 'rm -rf %s' % client.name
     remote_call(hostname, command)
-    command = 'cd %s ; git pull >/dev/null 2>/dev/null' % client.name
+    command = 'git clone ssh://mies@%s%s/%s >/dev/null 2>/dev/null' % \
+        (my_hostname, os.getcwd(), client.name)
     remote_call(hostname, command)
     
 
@@ -202,7 +217,7 @@ def remote_call(hostname, command):
 
 def parse_gamelog(game_number):
     ### Determine winner by parsing that last s-expression in the gamelog
-    f = open("server/logs/%s.gamelog" % game_number, 'r')
+    f = open("%s/logs/%s.gamelog" % (server_path, game_number), 'r')
     log = f.readline()
     f.close()
     match = re.search("\"game-winner\" (\d) \"[\w ]+\" (\d+)", log)
@@ -217,12 +232,13 @@ def push_gamelog(game, game_number):
     b = c.get_bucket('siggame-gamelogs')
     k = boto.s3.key.Key(b)
     k.key = "%s.gamelog.bz2" % game.pk
-    k.set_contents_from_filename("server/logs/%s.gamelog.bz2" % game_number)
+    k.set_contents_from_filename("%s/logs/%s.gamelog.bz2" % \
+                                     (server_path, game_number))
     k.set_acl('public-read')
     game.gamelog_url = 'http://siggame-gamelogs.s3.amazonaws.com/%s' % k.key
     game.save()
-    os.remove("server/logs/%s.gamelog.bz2" % game_number)
-    os.remove("server/logs/%s.gamelog" % game_number)
+    os.remove("%s/logs/%s.gamelog.bz2" % (server_path, game_number))
+    os.remove("%s/logs/%s.gamelog" % (server_path, game_number))
     
     
 def update_local_repo(client):
@@ -232,7 +248,28 @@ def update_local_repo(client):
         git.Git().clone('%s%s.git' % (base_path, client.name))
     except git.exc.GitCommandError:
         pass
-    git.Repo(client.name).remotes.origin.pull()
-    # FIXME set the right tag
+    repo = git.Repo(client.name)
+    stupid_string = 'thumbelalinaX'
+
+    # clean up my mess from before
+    repo.heads.master.checkout()
+    my_head = [x for x in repo.heads if x.name == stupid_string]
+    if( len(my_head) != 0 ):
+        [repo.delete_head(x) for x in my_head]
+        
+    # get a fresh one
+    repo.remotes.origin.pull()
+    working_tags = [x for x in repo.tags if x.tag is not None]
+    if( len(working_tags) != 0 ):
+        newest = max(working_tags, key = lambda x: x.tag.tagged_date)
+        # use the newest tag
+        new_head = repo.create_head(stupid_string, commit=newest.commit)
+        new_head.checkout()
+        
+        # maybe we can unembargo someone while we're at it
+        if( newest.name != client.current_version ):
+            client.current_version = newest.name
+            client.embargoed = False
+            client.save()
     
 main()

@@ -2,6 +2,9 @@
 ### Missouri S&T ACM SIG-Game Arena (Thunderdome)
 #####
 
+# Standard Imports
+from datetime import datetime
+
 # Non-Django 3rd Party Imports
 import beanstalkc
 import time
@@ -35,6 +38,8 @@ class Game(models.Model):
                                    default='New')
     priority    = models.IntegerField(default=1000)
     gamelog_url = models.CharField(max_length=200, default='')
+    visualized  = models.DateTimeField(null=True)
+    completed   = models.DateTimeField(null=True)
     stats       = models.TextField(default='') # holds extra stuff via JSON
     
     

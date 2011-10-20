@@ -9,10 +9,12 @@ import beanstalkc
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
 
 # My Imports
 from thunderdome.models import Game, Client, GameData, InjectedGameForm
 
+@login_required
 def health(request):
     # Let's start by having this page show some arena health statistics
     p = dict() # payload for the render_to_response
@@ -36,6 +38,7 @@ def health(request):
     return render_to_response('thunderdome/health.html', p)
 
 
+@login_required
 def inject(request):
     ### Handle manual injection of a game into the system
     if request.method == 'POST':
@@ -57,12 +60,14 @@ def inject(request):
     return render_to_response('thunderdome/inject.html', payload)
 
 
+@login_required
 def view_game(request, game_id):
     ### View the status of a single game
     return render_to_response('thunderdome/view_game.html', 
                               {'game': get_object_or_404(Game, pk=game_id)})
 
 
+@login_required
 def view_client(request, client_id):
     ### View the status of a single client
     return render_to_response('thunderdome/view_client.html', 
@@ -70,6 +75,7 @@ def view_client(request, client_id):
                                                            pk=client_id)})
 
 
+@login_required
 def scoreboard(request):
     clients = Client.objects.all()
     
@@ -107,6 +113,7 @@ def scoreboard(request):
     return render_to_response('thunderdome/scoreboard.html', payload)
 
 
+@login_required
 def matchup(request, client1_id, client2_id):
     client1 = get_object_or_404(Client, pk=client1_id)
     client2 = get_object_or_404(Client, pk=client2_id)

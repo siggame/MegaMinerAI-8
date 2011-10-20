@@ -22,12 +22,13 @@ def parseData():
   globals = data.globals
   constants = data.constants
   animations = []
+  gameName = data.gameName
   for i in members(data):
     if isinstance(i, structures.Model):
       insertModel(models, i)
     elif isinstance(i, structures.Animation):
       animations.append(i)
-  return {'models':models, 'globals':globals, 'constants':constants, 'animations':animations, 'aspects':aspects}
+  return {'models':models, 'globals':globals, 'constants':constants, 'animations':animations, 'aspects':aspects, 'gameName':gameName}
 
 
 

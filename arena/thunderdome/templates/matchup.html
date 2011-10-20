@@ -1,21 +1,22 @@
-<html>
-  <head>
-    <title>{{ client1.name }} vs {{ client2.name }}</title>
-  </head>
-  <body>
-    <h1>{{ client1.name }} vs {{ client2.name }}</h1>
-    {% for game in games %}
-      Game #{{game.pk}} <a href="{{ game.gamelog_url }}">gamelog</a><br />
-      {% for data in game.gamedata_set.all %}
-        {% if data.won %}
-          <font color='green'>
-        {% else %}
-	  <font color='red'>
-        {% endif %}
-	{{ data.client.name }} - {{ data.version }}
-        </font><br>
-      {% endfor %}
-      <hr>
-    {% endfor %}
-  </body>
-</html>
+{% extends "thunderdome/base.html" %}
+
+{% block title %}
+{{ client1.name }} vs {{ client2.name }}
+{% endblock %}
+
+{% block content %}
+<h1>{{ client1.name }} vs {{ client2.name }}</h1>
+{% for game in games %}
+  Game #{{game.pk}} <a href="{{ game.gamelog_url }}">gamelog</a><br />
+  {% for data in game.gamedata_set.all %}
+    {% if data.won %}
+      <font color='green'>
+    {% else %}
+      <font color='red'>
+    {% endif %}
+    {{ data.client.name }} - {{ data.version }}
+    </font><br>
+  {% endfor %}
+  <hr>
+{% endfor %}
+{% endblock %}

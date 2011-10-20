@@ -16,6 +16,7 @@ class Scribe:
       os.mkdir("logs/")
     if (os.path.exists(self.logPath)):
       os.remove(self.logPath)
+    self.writeSExpr(["gameName", "BotNet"])
 
   def writeSExpr(self, message):
     log = open(self.logPath, "a")

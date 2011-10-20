@@ -1,8 +1,10 @@
-<html>
-  <head>
-    <title>Game #{{ game.pk }}</title>
-  </head>
-  <body>
+{% extends "thunderdome/base.html" %}
+
+{% block title %}
+Game #{{ game.pk }}
+{% endblock %}
+
+{% block content %}
     <h1>Game #{{ game.pk }}
       {% for client in game.clients.all %}
       - {{ client.name }}
@@ -23,5 +25,4 @@
     {{ data.stats }}
     <hr>
     {% endfor %}
-  </body>
-</html>
+{% endblock %}
