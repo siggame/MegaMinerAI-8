@@ -4,6 +4,9 @@
 #include <ctime>
 #include <cmath>
 
+// CHANGE ME CHANGE ME CHANGE ME 
+#include "gui/gui.h"
+
 namespace visualizer
 {
 
@@ -38,9 +41,9 @@ namespace visualizer
     m_speed = 0;
     m_turnCompletion = 0;
     m_numTurns = 500;
-	loop_on = false;
-	loop_start = m_turn;
-	loop_end = m_numTurns;
+    loop_on = false;
+    loop_start = m_turn;
+    loop_end = m_numTurns;
 
   } // _TimeManager::_setup()
 
@@ -221,15 +224,23 @@ namespace visualizer
       m_turn += floor( m_turnCompletion );
       m_turnCompletion -= floor( m_turnCompletion );
 
-	  if(loop_on && m_turn >= loop_end)
-	  {
-		  setTurn(loop_start);
-	  }
+      if(loop_on && m_turn >= loop_end)
+      {
+        setTurn(loop_start);
+      }
+
       if( m_turn >= m_numTurns )
       {
         m_turn = m_numTurns-1;
         m_turnCompletion = 0;
         pause();
+        if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arenaMode" ) )
+        {
+
+          // CHANGE ME THIS IS BAD
+          GUI->close();
+
+        }
       }
 
     }
@@ -238,10 +249,11 @@ namespace visualizer
       m_turn += ceil( m_turnCompletion );
       m_turnCompletion -= ceil( m_turnCompletion );
 
-	   if(loop_on && m_turn <= loop_start)
-	  {
-		  setTurn(loop_end);
-	  }
+      if(loop_on && m_turn <= loop_start)
+      {
+        setTurn(loop_end);
+      }
+
       if( m_turn <= 0 )
       {
         m_turn = 0;
