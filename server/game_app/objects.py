@@ -136,27 +136,21 @@ class Virus(Mappable):
       self.movesLeft = 0
 
   def move(self, dx, dy):
-#Done? need to test #TODO when a virus moves over a tile it turns the tile to the player's type/ownership
     #You can't move a virus that belongs to the other player
     if self.owner != self.game.playerID:
       return "That virus is not yours to control"
     #You can't move if you have no moves left
     elif self.movesLeft <= 0:
-#      print("That virus has no more moves")
       return "That virus has no more moves"
     #You can't move off the edge, the world is flat
     elif not (0 <= dx < self.game.width) or not (0 <=dy < self.game.height):
-#      print("Don't move off of the map")
       return "Don't move off of the map"
     elif self.game.grid[dx][dy].owner == 3:
     #You can't move into a wall...the wall will win
-#might work, still worth looking into#TODO how to pass Crash grid x and y, not sure if what I have works
       self.game.animations.append(['Crash', self.id, dx, dy])
-      print("There is a wall in the way")
       return "There is a wall in the way"
     #You can't move more than one space away
     elif abs(self.x-dx) + abs(self.y-dy) != 1:
-      print("Units have move range of 1")
       return "Units can only move to adjacent locations"
 #Done? see if it works #TODO Handle units walking into friendly different level units
 
