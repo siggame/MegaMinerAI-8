@@ -195,7 +195,7 @@ class Match(DefaultGameWorld):
     self.turn = None
     
   def logPath(self):
-    return "logs/" + str(self.id) + ".gamelog"
+    return "logs/" + str(self.id) + ".glog"
 
   @derefArgs(Base, None)
   def spawn(self, object, Level):

@@ -159,8 +159,9 @@ class GameApp(AccountsAppMixin, BaseApp):
   @requireTypes(None, str)
   def requestLog(self, logID):
     """ Requests a specific gamelog """ 
-    infile = bz2.BZ2File("logs/" + logID + ".gamelog.bz2", "r")
-    return ['log', logID, infile.read()]
+    
+    with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:
+      return ['log', logID, infile.read()]
 
   def writeSExpr(self, message):
     """ Adds backward compatibility with game logic written for the old
