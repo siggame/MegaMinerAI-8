@@ -25,7 +25,7 @@ namespace visualizer
       return RT_ANIMATION;
 
     if( "font" == typeBuff )
-      return RT_FONT;
+      return RS_FONT;
 
     return RT_NONE;
   }
@@ -97,7 +97,7 @@ namespace visualizer
                   loadAnimation( pathBuff, namebuff );
 
                 } break;
-                case RT_FONT:
+                case RS_FONT:
                 {
                   std::string fontWidthFile;
                   ss >> fontWidthFile;
