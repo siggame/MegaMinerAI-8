@@ -20,9 +20,11 @@ class AI(BaseAI):
     pass
 
   def run(self):
+   for p in self.players:
+     print p
    for base in self.bases:
-     if self.turnNumber()<=10:
-      print('spawning a virus')
+     #if self.turnNumber()<=10:
+     # print('spawning a virus')
       base.spawn(0)
    print ("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",self.turnNumber())
    for virus in self.viruses:

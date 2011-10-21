@@ -107,7 +107,13 @@ class Match(DefaultGameWorld):
         elif mapSquare =='0':
           self.grid[x][y] = self.addObject(Tile, [x,y,0])
           self.addObject(Base,[x, y, 0, 0])
-    
+        else:
+          print "HUH?", mapSquare
+    for row in self.grid:
+      for col in row:
+        if col is None:
+          print "WAT"
+          sys.exit()
   def nextTurn(self):
     self.turnNumber += 1
     if self.turn == self.players[0]:
@@ -133,7 +139,7 @@ class Match(DefaultGameWorld):
 
   def virusCost(self, level):
     # Calcuate the cost of a virus
-    return self.baseCost*self.scaleCost**level
+    return int(self.baseCost*self.scaleCost**level)
 
   def worth(self, id):
     # Calculate the worth of a player
@@ -143,13 +149,32 @@ class Match(DefaultGameWorld):
         total += self.virusCost(virus.level)
     return total
   
-  def getScore(self, owner):
+  def getScore(self, id):
     # TODO Perform breadth first search from bases to all connected owned tiles
-    return 0
+    path = []
+    connect = {} 
+    closed = [[False]*self.height for _ in range(self.width)]
+    offsets = [(0,1),(1,0),(0,-1),(-1,0)]
+    score = 0
+    for base in self.objects.bases:
+      if base.owner == id:
+        score+=1
+        path.append(self.grid[base.x][base.y])
+        closed[base.x][base.y] = True
+    while len(path)>0:
+      working = path.pop()
+      for offset in offsets:
+        dx, dy = working.x+offset[0], working.y+offset[1]
+        if 0 <= dx < self.width and 0 <= dy < self.height and not closed[dx][dy] and self.grid[dx][dy].owner == id:
+          score+=1
+          path.append(self.grid[dx][dy])
+          closed[dx][dy] = True
+    print self.turnNumber, score
+    return score
 
   def getIncome(self, id):
     possible = self.startingCycles + self.turnNumber / 2 * self.cyclesPerTurn
-    return math.ceil((possible - self.worth(id))*self.returnAmount) + self.cyclesPerTurn
+    return int(math.ceil((possible - self.worth(id))*self.returnAmount) + self.cyclesPerTurn)
 
   def checkWinner(self):
     player1 = self.objects.players[0]
