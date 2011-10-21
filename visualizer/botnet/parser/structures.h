@@ -30,6 +30,7 @@ struct Mappable
 struct Base: public Mappable 
 {
   int owner;
+  int spawnsLeft;
 
   friend std::ostream& operator<<(std::ostream& stream, Base obj);
 };

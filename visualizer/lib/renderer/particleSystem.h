@@ -7,6 +7,12 @@
 namespace visualizer
 {
 
+  class ParticleSystemManager
+  {
+
+  };
+
+
 } // visualizer
 
 #endif // PARTICLE_SYSTEM_H

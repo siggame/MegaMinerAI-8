@@ -174,7 +174,8 @@ namespace visualizer
           j++
           )
         {
-          cout << "ANIMATION" << endl;
+          //cout << "ANIMATION" << endl;
+#if 0
           switch( (*j)->type )
           {
             case COMBAT:
@@ -199,6 +200,7 @@ namespace visualizer
               cout << "Virus Talk" << endl;
             break;
           }
+#endif
         }
         
         switch( checkForMovement( m_game, state, i->second.id ) )
