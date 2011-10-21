@@ -234,9 +234,8 @@ namespace visualizer
         m_turn = m_numTurns-1;
         m_turnCompletion = 0;
         pause();
-        if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arenaMode" ) )
+        if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
-
           // CHANGE ME THIS IS BAD
           GUI->close();
 
