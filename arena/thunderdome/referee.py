@@ -4,16 +4,16 @@
 
 from datetime import datetime
 
+import socket
+
 import sys
-if len(sys.argv) != 6:
-    gladiator1   = 'localhost'
-    gladiator2   = 'localhost'
-    my_hostname  = 'mnuck.com'
+if len(sys.argv) != 2:
     server_path  = '/home/mies/arena/server'
-    print "referee.py gladiator1 gladiator2 my_hostname server_path"
+    print "referee.py server_path"
 else:
-    (junk, gladiator, my_hostname, server_path) = sys.argv
-    
+    (junk, server_path) = sys.argv
+my_hostname = socket.gethostname()    
+
 # My AWS credentials
 from aws_creds import access_cred, secret_cred, username, password
 
@@ -26,7 +26,7 @@ import settings
 
 setup_environ(settings)
 
-# Non-Django 3rd Part Imports
+# Non-Django 3rd Party Imports
 import re, json               # special strings
 import beanstalkc, git, boto  # networky
 import subprocess, shutil, os # shellish
@@ -34,7 +34,6 @@ import random, time, os
 
 # My Imports
 from thunderdome.models import Game
-
 
 from threading import Thread
 
@@ -49,19 +48,39 @@ class Smile_And_Nod(Thread):
                 break
 
 
+stalk = None
+gladiator1 = None
+gladiator2 = None
+toucher = None
+
 def main():
-    # FIXME eventually want a way to break out of this loop gracefully
+    global stalk
+    stalk = beanstalkc.Connection()
+    acquire_gladiators()
+    
+    stalk.watch('game-requests')
     while True:
         looping()
 
+        
+def acquire_gladiators():
+    global gladiator1, gladiator2
+    global stalk, toucher
+    print "acquiring gladiators..."
+    stalk.watch('free-gladiators')
+    gladiator_job = stalk.reserve()
+    stalk.ignore('free-gladiators')
+    (gladiator1, gladiator2) = json.loads(gladiator_job.body)
+    toucher = gladiator_job
+    print "got em:", gladiator1, gladiator2
+    
 
 def looping():
+    global stalk, toucher
+    toucher.touch()
     # get a game
-    stalk = beanstalkc.Connection()
-    stalk.watch('game-requests')
     job = stalk.reserve(timeout=2)
     if job is None:
-        stalk.close()
         return
     game_id = json.loads(job.body)['game_id']
     game = Game.objects.get(pk=game_id)
@@ -78,13 +97,13 @@ def looping():
         game.status = "Failed"
         game.save()
         job.delete()
-        stalk.close()
         print "failing the game, embargoed player"
         return
     
     # get and compile the clients
     gladiator = gladiator2
     for x in gamedatas:
+        toucher.touch()
         if gladiator == gladiator2:
             gladiator = gladiator1
         else:
@@ -104,7 +123,6 @@ def looping():
         game.status = "Failed"
         game.save()
         job.delete()
-        stalk.close()
         print "failing the game, someone didn't compile"
         return
     
@@ -127,9 +145,9 @@ def looping():
         else:
             print "unexpected output from client. bail."
         players[0].terminate()
-        stalk.close()
         return
 
+    toucher.touch()
     # Player 0 is special, in that we need to read his output just
     # long enough to get the server game number. Once we have that
     # one datum, we ignore the rest of his output.
@@ -152,6 +170,7 @@ def looping():
     while not os.access("%s/logs/%s.gamelog.bz2" % (server_path, game_number), 
                         os.F_OK):
         job.touch()
+        toucher.touch()
         time.sleep(1)
     
     time.sleep(1)
@@ -176,7 +195,7 @@ def looping():
     
     game.save()
     job.delete()
-    stalk.close()    
+    toucher.touch()
     print "done!"
 
 
@@ -244,32 +263,19 @@ def push_gamelog(game, game_number):
 def update_local_repo(client):
     ### This is the repo the gladiators will be grabbing from
     base_path = "ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/clients/"
-    try:
-        git.Git().clone('%s%s.git' % (base_path, client.name))
-    except git.exc.GitCommandError:
-        pass
+    subprocess.call(['git', 'clone',                          # might fail
+                     '%s%s.git' % (base_path, client.name)],  # don't care
+                    stdout=file('/dev/null', 'w'),
+                    stderr=subprocess.STDOUT)
+    subprocess.call(['git', 'pull'], cwd=client.name,
+                    stdout=file('/dev/null', 'w'),
+                    stderr=subprocess.STDOUT)                    
+    
+    # maybe we can unembargo
     repo = git.Repo(client.name)
-    stupid_string = 'thumbelalinaX'
-
-    # clean up my mess from before
-    repo.heads.master.checkout()
-    my_head = [x for x in repo.heads if x.name == stupid_string]
-    if( len(my_head) != 0 ):
-        [repo.delete_head(x) for x in my_head]
-        
-    # get a fresh one
-    repo.remotes.origin.pull()
-    working_tags = [x for x in repo.tags if x.tag is not None]
-    if( len(working_tags) != 0 ):
-        newest = max(working_tags, key = lambda x: x.tag.tagged_date)
-        # use the newest tag
-        new_head = repo.create_head(stupid_string, commit=newest.commit)
-        new_head.checkout()
-        
-        # maybe we can unembargo someone while we're at it
-        if( newest.name != client.current_version ):
-            client.current_version = newest.name
-            client.embargoed = False
-            client.save()
+    if( repo.heads.master.commit.hexsha != client.current_version ):
+        client.current_version = repo.heads.master.commit.hexsha
+        client.embargoed = False
+        client.save()
     
 main()
