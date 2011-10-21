@@ -74,6 +74,11 @@ static bool parseBase(Base& object, sexp_t* expression)
   object.owner = atoi(sub->val);
   sub = sub->next;
 
+  if ( !sub ) goto ERROR;
+
+  object.spawnsLeft = atoi(sub->val);
+  sub = sub->next;
+
   return true;
 
   ERROR:

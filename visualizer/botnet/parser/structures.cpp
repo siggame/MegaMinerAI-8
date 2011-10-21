@@ -20,6 +20,7 @@ std::ostream& operator<<(std::ostream& stream, Base ob)
   stream << "x: " << ob.x  <<'\n';
   stream << "y: " << ob.y  <<'\n';
   stream << "owner: " << ob.owner  <<'\n';
+  stream << "spawnsLeft: " << ob.spawnsLeft  <<'\n';
   return stream;
 }
 
