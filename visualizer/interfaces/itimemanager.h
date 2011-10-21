@@ -35,8 +35,8 @@ namespace visualizer
 
       /// @TODO Determine whether the visualizer should have exclusive
       /// ability to change speed.
-#if 0
       virtual void setTurn( const int& turn ) = 0;
+#if 0
       virtual float getSpeed() = 0;
       virtual void setSpeed( const float& speed ) = 0;
 #endif

@@ -243,6 +243,7 @@ namespace visualizer
 
     animationEngine->registerFrameContainer( m_timeline );
 
+    timeManager->setTurn( 0 );
     timeManager->play();
 #endif
 
