@@ -88,4 +88,8 @@ DLLEXPORT int virusGetMovesLeft(_Virus* ptr)
 {
   return ptr->movesLeft;
 }
+DLLEXPORT int virusGetLiving(_Virus* ptr)
+{
+  return ptr->living;
+}
 

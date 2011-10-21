@@ -109,7 +109,7 @@ class Tile(Mappable):
 
 
 class Virus(Mappable):
-  def __init__(self, game, id, x, y, owner, level, movesLeft):
+  def __init__(self, game, id, x, y, owner, level, movesLeft, living=1):
     self.game = game
     self.id = id
     self.x = x
@@ -117,6 +117,7 @@ class Virus(Mappable):
     self.owner = owner
     self.level = level
     self.movesLeft = movesLeft
+    self.living = living
 
   def toList(self):
     value = [
@@ -126,6 +127,7 @@ class Virus(Mappable):
       self.owner,
       self.level,
       self.movesLeft,
+      self.living,
       ]
     return value
 

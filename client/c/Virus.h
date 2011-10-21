@@ -26,6 +26,8 @@ class Virus : public Mappable {
   int level();
   ///The number of times this virus can still move this turn
   int movesLeft();
+  ///This virus is alive if the function returns a 1
+  int living();
 
   // Actions
   ///Moves a unit to the given (x,y) position

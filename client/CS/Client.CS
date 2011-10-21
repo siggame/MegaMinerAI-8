@@ -116,6 +116,8 @@ public class Client {
   public static extern int virusGetLevel(IntPtr ptr);
   [DllImport("client")]
   public static extern int virusGetMovesLeft(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int virusGetLiving(IntPtr ptr);
 
 
     //properties
