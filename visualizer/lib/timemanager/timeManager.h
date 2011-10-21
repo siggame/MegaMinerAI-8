@@ -109,9 +109,9 @@ namespace visualizer
       QTime m_time;
       float m_speed;
       float m_progress;
-	  bool loop_on;
-	  int loop_start;
-	  int loop_end;
+      bool loop_on;
+      int loop_start;
+      int loop_end;
 
       /// @TODO Rename this variable.  It's not a good name at all
 

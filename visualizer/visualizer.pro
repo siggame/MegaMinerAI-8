@@ -38,6 +38,7 @@ HEADERS += ./lib/manager/*.h \
     ./lib/selectionrender/*.h \
     ./lib/resourcemanager/*.h \
     ./lib/animationengine/*.h \
+    ./lib/decompress/*.h \
     ./common/*.h \
     ./interfaces/*.h
 win32: {
