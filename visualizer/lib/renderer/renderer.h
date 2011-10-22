@@ -131,6 +131,37 @@ namespace visualizer
         const Alignment& a = Left
         ) const;
 
+      void drawLine
+        (
+        const float& sX,
+        const float& sY,
+        const float& eX,
+        const float& eY,
+        const float& width = 1.0f
+        ) const;
+
+      void translate
+        (
+        const float& x,
+        const float& y,
+        const float& z = 0.0f
+        ) const;
+
+      void scale
+        (
+        const float& x,
+        const float& y,
+        const float& z = 1.0f
+        ) const;
+
+      void rotate
+        (
+        const float& amount,
+        const float& x,
+        const float& y,
+        const float& z
+        ) const;
+
     protected:
     private:
       unsigned int m_height;

@@ -344,6 +344,57 @@ namespace visualizer
     
   } // _Renderer::drawAnimQuad()
 
+  void _Renderer::translate
+    (
+    const float& x,
+    const float& y,
+    const float& z
+    ) const
+  {
+    glTranslatef( x, y, z );
+  } // _Renderer::translate()
+
+  void _Renderer::scale
+    (
+    const float& x,
+    const float& y,
+    const float& z
+    ) const
+  {
+    glScalef( x, y, z );
+  } // _Renderer::scale()
+
+  void _Renderer::rotate
+    (
+    const float& amount, 
+    const float& x, 
+    const float& y, 
+    const float& z
+    ) const
+  {
+    glRotatef( amount, x, y, z );
+  }
+
+  void _Renderer::drawLine
+    (
+    const float& sX,
+    const float& sY,
+    const float& eX,
+    const float& eY,
+    const float& width
+    ) const
+  {
+
+    glLineWidth( width );
+
+    glBegin( GL_LINES );
+
+      glVertex2f( sX, sY );
+      glVertex2f( eX, eY );
+
+    glEnd();
+  }
+
   void _Renderer::drawProgressBar
     (
     const float& x,

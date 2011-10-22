@@ -103,6 +103,39 @@ namespace visualizer
         const float& size = 15.0f, 
         const Alignment& a = Left
         ) const = 0;
+
+      virtual void drawLine
+        (
+        const float& sX,
+        const float& sY,
+        const float& eX,
+        const float& eY,
+        const float& width = 1.0f
+        ) const = 0;
+
+      virtual void translate
+        (
+        const float& x,
+        const float& y,
+        const float& z = 0.0f
+        ) const = 0;
+
+      virtual void scale
+        (
+        const float& x,
+        const float& y,
+        const float& z = 1.0f
+        ) const = 0;
+
+      virtual void rotate
+        (
+        const float& amount,
+        const float& x,
+        const float& y,
+        const float& z
+        ) const = 0;
+
+
   };
 
 } // visualizer
