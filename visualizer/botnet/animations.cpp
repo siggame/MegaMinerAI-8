@@ -77,8 +77,12 @@ namespace visualizer
     {
       q.renderer().setColor( Color( 0, 0, 0.3f*intensity, 1 ) );
     }
-
+    
     q.renderer().drawQuad( q.x+.1, q.y+.1, .8, .8 );
+    
+    q.renderer().setColor( Color( 1,1,1 ) );
+    q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , (q.owner ? "blue-server" : "red-server" ) );
+    
   } // DrawBase::animate()
 
   void DrawTile::animate( const float& t, AnimData *d )
