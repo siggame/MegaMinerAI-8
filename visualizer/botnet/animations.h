@@ -35,6 +35,25 @@ namespace visualizer
       }
   };
 
+  class PushBoard: public Anim
+  {
+    public:
+      PushBoard( moveBoard* mb )
+      {
+        m_mb = mb;
+      }
+
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 0; }
+      float totalDuration() const
+      { return 0; }
+    private:
+      moveBoard *m_mb;
+
+  };
+
   class StartVirus: public Anim
   {
     public:
