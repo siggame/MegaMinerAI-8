@@ -109,10 +109,12 @@ namespace visualizer
       score1->player = 0;
       score1->x = 1.0f;
       score1->y = 0.2f;
+      score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width - 1.0f;
+      score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
 
       score1->addKeyFrame( new DrawScore( score1 ) );
       score2->addKeyFrame( new DrawScore( score2 ) );

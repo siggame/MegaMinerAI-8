@@ -28,13 +28,13 @@ namespace visualizer
 
   } // Text::Text()
 
+  const float defaultSize = 0.25;
   void Text::drawLeft( const std::string& line ) const
   {
     // At this point, the text should already be translated to the 
     // correct position.
     glPushMatrix();
     float off = 1.0f/16.0f;
-    const float defaultSize = 0.25;
 
     glEnable( GL_BLEND );    
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -78,17 +78,26 @@ namespace visualizer
 
   void Text::drawCenter( const std::string& line ) const
   {
-    size_t width = getLineWidth( line )/2;
-    glTranslatef( -width, 0, 0 );
+    glPushMatrix();
+    float width = getLineWidth( line )/2;
 
+    width *= defaultSize/32;
+
+    glTranslatef( -width, 0, 0 );
+    drawLeft( line );
+    glPopMatrix();
 
   } // Text::drawCenter()
 
   void Text::drawRight( const std::string& line ) const
   {
-    size_t width = getLineWidth( line );
-    cout << "WIDTH: " << width << endl;
+    glPushMatrix();
+    float width = getLineWidth( line );
+    width *= defaultSize/32;
     glTranslatef( -width, 0, 0 );
+    cout << line << endl;
+    drawLeft( line );
+    glPopMatrix();
 
   } // Text::drawRight()
 

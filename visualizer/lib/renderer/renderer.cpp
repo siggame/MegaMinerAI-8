@@ -464,8 +464,6 @@ namespace visualizer
     glTranslatef( x, y, 0 );
     scale( size, size );
 
-    cout << a << endl;
-   
     switch( a )
     {
       case Left:

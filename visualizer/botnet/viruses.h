@@ -132,6 +132,7 @@ namespace visualizer
 
     int player;
     int score;
+    string teamName;
 
     AnimData* getData()
     { 
