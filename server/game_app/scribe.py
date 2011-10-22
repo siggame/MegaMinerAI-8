@@ -16,7 +16,7 @@ class Scribe:
       os.mkdir("logs/")
     if (os.path.exists(self.logPath)):
       os.remove(self.logPath)
-    self.log = bz2.BZ2File(self.logPath, "w")
+    self.log = bz2.BZ2File(self.logPath+".part", "w")
     self.writeSExpr(["gameName", "BotNet"])
 
   def writeSExpr(self, message):
@@ -24,4 +24,6 @@ class Scribe:
 
   def finalize(self):
     self.log.close()
+    os.rename(self.logPath+".part", self.logPath)
+    
 

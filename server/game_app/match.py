@@ -150,7 +150,7 @@ class Match(DefaultGameWorld):
     return total
   
   def getScore(self, id):
-    # TODO Perform breadth first search from bases to all connected owned tiles
+#Done, need to test    # TODO Perform breadth first search from bases to all connected owned tiles
     path = []
     connect = {} 
     closed = [[False]*self.height for _ in range(self.width)]
@@ -223,17 +223,13 @@ class Match(DefaultGameWorld):
   def spawn(self, object, Level):
     return object.spawn(Level, )
 
-  @derefArgs(Player, None)
+  @derefArgs((Player, Virus), None)
   def talk(self, object, message):
     return object.talk(message, )
 
   @derefArgs(Virus, None, None)
   def move(self, object, x, y):
     return object.move(x, y, )
-
-  @derefArgs(Virus, None)
-  def talk(self, object, message):
-    return object.talk(message, )
 
 
   def sendIdent(self, players):

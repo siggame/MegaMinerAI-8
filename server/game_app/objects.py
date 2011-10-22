@@ -55,6 +55,10 @@ class Base(Mappable):
     elif self.spawnsLeft < 1:
       return "A base can only spawn one virus a turn"
     else:
+      for virus in self.game.objects.viruses:
+        if virus.x == self.x and virus.y == self.y:
+          return "You can't spawn a virus on an occupied base"
+      
       player.cycles -= cost
       self.spawnsLeft -= 1
       newVirus = self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
@@ -109,7 +113,7 @@ class Tile(Mappable):
 
 
 class Virus(Mappable):
-  def __init__(self, game, id, x, y, owner, level, movesLeft, living=1):
+  def __init__(self, game, id, x, y, owner, level, movesLeft):
     self.game = game
     self.id = id
     self.x = x
@@ -117,7 +121,6 @@ class Virus(Mappable):
     self.owner = owner
     self.level = level
     self.movesLeft = movesLeft
-    self.living = living
 
   def toList(self):
     value = [
@@ -127,7 +130,6 @@ class Virus(Mappable):
       self.owner,
       self.level,
       self.movesLeft,
-      self.living,
       ]
     return value
 
@@ -142,10 +144,10 @@ class Virus(Mappable):
     if self.owner != self.game.playerID:
       return "That virus is not yours to control"
     #You can't move if you have no moves left
-    elif self.movesLeft < 1:
+    elif self.movesLeft <= 0:
       return "That virus has no more moves"
     #You can't move off the edge, the world is flat
-    elif not (0 <= dx < self.game.width) or not (0 <= dy < self.game.height):
+    elif not (0 <= dx < self.game.width) or not (0 <=dy < self.game.height):
       return "Don't move off of the map"
     elif self.game.grid[dx][dy].owner == 3:
     #You can't move into a wall...the wall will win
@@ -169,8 +171,9 @@ class Virus(Mappable):
            self.game.animations.append(['Crash', self.id, dx, dy])
            return("You cannot combine units of different levels")
          else:
-           virus.level+=1
-           self.game.animations.append(['Combine', self.id, virus.id])
+           newVirus = self.game.addObject(Virus,[dx, dy, self.owner, self.level+1, 0])
+           self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
+           self.game.removeObject(virus)
            self.game.removeObject(self)
            print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
            return True
@@ -183,7 +186,6 @@ class Virus(Mappable):
          elif self.level > virus.level:
            self.game.removeObject(virus)
            # NO return because the move should still happen
-           break
         #if you're evenly matched, a great battle ensues, and you both die
          elif virus.level == self.level:
            self.game.removeObject(virus)
