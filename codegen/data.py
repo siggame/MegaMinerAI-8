@@ -118,7 +118,6 @@ combine = Animation("Combine",
   data = [
     Variable("moving", Virus),
     Variable("stationary", Virus),
-    Variable("created", Virus),
     ]
   )
 
