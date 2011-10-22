@@ -110,10 +110,63 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
   evt->acceptProposedAction();
 }
 
-
 void _GUI::loadGamelog( std::string gamelog )
 {
   bool parserFound = false;
+
+  if( gamelog.rfind( ".glog" ) != string::npos )
+  {
+    std::string fullLog = "";
+    FILE* f;
+    BZFILE* b;
+    int nBuf;
+    char buf[ 256 ];
+    int bzError;
+    int nWritten;
+
+    f = fopen( gamelog.c_str(), "r" );
+    if( !f )
+    {
+      THROW
+        (
+        Exception,
+        "Could not open the glog."
+        );
+    }
+
+    b =  BZ2_bzReadOpen( &bzError, f, 0, 0, NULL, 0 );
+    if( bzError != BZ_OK ) 
+    {
+      BZ2_bzReadClose( &bzError, b );
+      THROW
+        (
+        Exception,
+        "Could not decompress."
+        );
+    }
+
+    while( bzError == BZ_OK )
+    {
+      nBuf = BZ2_bzRead( &bzError, b, buf, 256 );
+      if( bzError == BZ_OK )
+      {
+        fullLog += buf;
+      }
+    }
+
+    BZ2_bzReadClose( &bzError, b );
+    if( bzError != BZ_STREAM_END )
+    {
+      THROW
+        (
+        Exception,
+        "Could not close the gamelog?"
+        );
+    }
+
+
+  }
+
   for
     ( 
     std::vector<IGame*>::iterator i = Games->gameList().begin(); 
