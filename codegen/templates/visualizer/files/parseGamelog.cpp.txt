@@ -221,6 +221,33 @@ bool parseFile(Game& game, const char* filename)
 
 bool parseString(Game& game, const char* string)
 {
+  FILE* in = tmpfile();
+
+  if(!in)
+    return false;
+
+  fputs( string, in );
+  fseek( in, 0, SEEK_SET );
+
+  parseFile(in);
+
+  sexp_t* st = NULL;
+
+  while((st = parse()))
+  {
+    if( !parseSexp(game, st) )
+    {
+      while(parse()); //empty the file, keep Lex happy.
+      fclose(in);
+      return false;
+    }
+    destroy_sexp(st);
+  }
+
+  fclose(in);
+
+  return true;
+#if 0
   sexp_t* st = NULL;
 
   st = extract_sexpr(string);
@@ -233,4 +260,5 @@ bool parseString(Game& game, const char* string)
   }
 
   return flag;
+#endif
 }

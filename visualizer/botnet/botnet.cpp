@@ -35,8 +35,6 @@ namespace visualizer
     m_game = new Game;
     m_timeline = new AnimSequence;
 
-    cout << gamelog << endl;
-
     if( !parseString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
@@ -80,7 +78,7 @@ namespace visualizer
       Connectivity p2;
        
       
-      cout << m_game->states[ state ].players[ 0 ] << endl;
+      //cout << m_game->states[ state ].players[ 0 ] << endl;
       
       turn.addAnimatable( b );
       
