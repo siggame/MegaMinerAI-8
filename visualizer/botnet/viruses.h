@@ -78,6 +78,20 @@ namespace visualizer
     GeneralAnim g;
 
   }; // tile
+  
+  struct background: public Animatable
+  {
+    background( IRenderer *renderer ) : Animatable( renderer )
+    { }
+    
+    int mapWidth;
+    int mapHeight;
+    
+    AnimData* getData()
+    {
+      return NULL;
+    }
+  }; // background
 
 } // visualizer
 

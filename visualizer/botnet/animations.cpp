@@ -13,10 +13,10 @@ namespace visualizer
   {
     VirusData *vd = (VirusData*)d;
     virus &v = *m_virus;
-    std::stringstream level;
+    std:stringstream level;
     level << v.level;
     
-    if( v.owner == 0 )
+    if ( v.owner == 0 )
     {
       v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
       v.renderer().drawQuad( vd->x+0.25, vd->y+0.25, .25, .5 );
@@ -102,7 +102,8 @@ namespace visualizer
         q.renderer().setColor( Color( 0, 0, 0.2, g->alpha ) );
     }
     else if( q.owner == 2 )
-      q.renderer().setColor( Color( 0.1, 0.1, 0.1 ) );
+      // NOTHING
+      q.renderer().setColor( Color( 0.1, 0.1, 0.1, 0.0 ) );
     else if( q.owner == 3 )
       // WALLS
       q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
@@ -159,6 +160,23 @@ namespace visualizer
     }
   } // DownAnim::animate()
 
+<<<<<<< HEAD
+  void DrawBackground::animate( const float& t, AnimData *d )
+  {
+    for ( int x = 0; x < m_background->mapWidth; x += 4 )
+    {
+      for ( int y = 0; y < m_background->mapHeight; y+= 4 )
+      {
+        cout << "I'm in the Y loop! at: " << x << "," << y << "\n";
+        m_background->renderer().setColor( Color( 0.05, 0.05, 0.05 ) );
+        m_background->renderer().drawQuad( x, y, 4, 4 );
+        
+        m_background->renderer().setColor( Color( 1.0, 1.0, 1.0 ) );
+        m_background->renderer().drawTexturedQuad( x, y, 4, 4 , "nodeBackground" );
+      }
+    }
+  } 
+=======
   void UpCollide::animate(const float& t, AnimData *d)
   {
     VirusData *v = (VirusData*)d;
@@ -228,6 +246,7 @@ namespace visualizer
       v->x = easeOutCubic(mid,v->x+1,-1,endTime-mid);
     }
   }
+>>>>>>> 5ce050c1faadf5d9c8a9bbf3f34fbe553fb2bc5d
 
 } // visualizer
 

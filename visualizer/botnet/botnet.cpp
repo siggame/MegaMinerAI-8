@@ -50,7 +50,21 @@ namespace visualizer
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
     size_t frameNum = 0;
-
+    
+    background* b = new background( renderer );
+    
+    if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
+    {
+      b->mapHeight = m_game->states[0].height;
+      b->mapWidth  = m_game->states[0].width;
+    }
+    else
+    {
+      THROW(Exception, "Game's hieght and width not set!");
+    }
+    
+    b->addKeyFrame( new DrawBackground( b ) );
+    
     for
       (
       size_t state = 0; 
@@ -65,7 +79,9 @@ namespace visualizer
        
       
       cout << m_game->states[ state ].players[ 0 ] << endl;
-
+      
+      turn.addAnimatable( b );
+      
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();

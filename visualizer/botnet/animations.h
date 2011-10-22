@@ -182,6 +182,26 @@ namespace visualizer
     private:
       tile* m_tile;
   }; // DrawTile
+  
+  class DrawBackground: public Anim
+  {
+    public: 
+      DrawBackground( background* b)
+      {
+        m_background = b;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      background* m_background;
+  }; // DrawBackground
 
   class UpCollide : public Anim
   {
