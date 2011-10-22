@@ -86,27 +86,28 @@ namespace visualizer
 
     GeneralAnim *g = (GeneralAnim*) d;
     tile &q = *m_tile;
-
+    
+    // Player 1 owned Tile
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.4, 0, 0, g->alpha ) ); 
+        q.renderer().setColor( Color( 0.4, 0, 0, 0.3 ) ); 
       else
-        q.renderer().setColor( Color( 0.2, 0, 0, g->alpha ) );
-    }
+        q.renderer().setColor( Color( 0.2, 0, 0, 0.3 ) );
+    }// PLayer 2 owned Tile
     else if( q.owner == 1 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0, 0, 0.4, g->alpha ) );
+        q.renderer().setColor( Color( 0, 0, 0.4, 0.3 ) );
       else
-        q.renderer().setColor( Color( 0, 0, 0.2, g->alpha ) );
+        q.renderer().setColor( Color( 0, 0, 0.2, 0.3 ) );
     }
+    // Nobody owns this tile
     else if( q.owner == 2 )
-      // NOTHING
       q.renderer().setColor( Color( 0.1, 0.1, 0.1, 0.0 ) );
+    // Wall Tile
     else if( q.owner == 3 )
-      // WALLS
-      q.renderer().setColor( Color( 0.5, 0.5, 0.4 ) );
+      q.renderer().setColor( Color( 0.5, 0.5, 0.4, 0.3 ) );
   
     q.renderer().drawQuad( q.x, q.y, 1, 1 );
   } // DrawTile::animate()
@@ -160,7 +161,7 @@ namespace visualizer
     }
   } // DownAnim::animate()
 
-<<<<<<< HEAD
+
   void DrawBackground::animate( const float& t, AnimData *d )
   {
     for ( int x = 0; x < m_background->mapWidth; x += 4 )
@@ -176,7 +177,7 @@ namespace visualizer
       }
     }
   } 
-=======
+  
   void UpCollide::animate(const float& t, AnimData *d)
   {
     VirusData *v = (VirusData*)d;
@@ -246,7 +247,6 @@ namespace visualizer
       v->x = easeOutCubic(mid,v->x+1,-1,endTime-mid);
     }
   }
->>>>>>> 5ce050c1faadf5d9c8a9bbf3f34fbe553fb2bc5d
 
 } // visualizer
 
