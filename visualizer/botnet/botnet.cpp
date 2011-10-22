@@ -47,8 +47,11 @@ namespace visualizer
         );
     }
 
-    renderer->setCamera( 0, 0, 40, 20 );
-    renderer->setUnitSize( 40, 20 );
+    float w = m_game->states[ 0 ].width;
+    float h = m_game->states[ 0 ].height;
+
+    renderer->setCamera( 0, 0, w, h );
+    renderer->setUnitSize( w, h );
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
