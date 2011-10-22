@@ -203,8 +203,50 @@ namespace visualizer
       background* m_background;
   }; // DrawBackground
 
-} // visualizer
+  class UpCollide : public Anim
+  {
+    public: 
+      void animate(const float& t, AnimData *d);
+      
+      float controlDuration() const
+      {return 1;}
+      float totalDuration() const
+      {return 1;}
+  }; //Collide
+  
+  
+  class DownCollide : public Anim
+  {
+    public:
+      void animate(const float& t, AnimData *d);
+      
+      float controlDuration() const
+      {return 1;}
+      float totalDuration() const                                      
+      {return 1;}
+  };
 
+  class LeftCollide : public Anim
+  {
+    public:
+      void animate(const float& t, AnimData *d);
+      
+      float ControlDuration() const
+      {return 1;}
+      float totatlDuration() const
+      {return 1;}
+  };
 
+  class RightCollide : public Anim
+  {
+    public: 
+      void animate(const float& t, AnimData *d);
+      
+      float controlDuration() const
+      {return 1;}
+      float totalDuration() const
+      {return 1;}
+  };
+}//visualizer
 
 #endif // ANIMATIONS_H

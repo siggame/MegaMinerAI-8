@@ -202,6 +202,8 @@ namespace visualizer
               cout << "Combine" << endl;
             break;
             case CRASH:
+             // Crash* thing = &(*j);
+             // v.
               cout << "Crash" << endl;
             break;
             case CREATE:

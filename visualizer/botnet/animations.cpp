@@ -147,7 +147,7 @@ namespace visualizer
     }
   } // UpAnim::animate()
 
-  void DownAnim::animate( const float& t, AnimData *d )
+  void DownAnim::animate(const float& t, AnimData *d )
   {
     // I think this is actually up
     VirusData *v = (VirusData*)d;
@@ -160,6 +160,7 @@ namespace visualizer
     }
   } // DownAnim::animate()
 
+<<<<<<< HEAD
   void DrawBackground::animate( const float& t, AnimData *d )
   {
     for ( int x = 0; x < m_background->mapWidth; x += 4 )
@@ -175,6 +176,77 @@ namespace visualizer
       }
     }
   } 
+=======
+  void UpCollide::animate(const float& t, AnimData *d)
+  {
+    VirusData *v = (VirusData*)d;
+    float mid = (startTime+endTime)/2;
+    
+      if(t > endTime)
+      {
+      }
+      else if (t<mid)
+      {
+        v->y = easeInCubic(startTime,v->y,-1,mid-startTime);
+      } 
+      else if (t>=mid)
+      {
+        v->y = easeOutCubic(mid,v->y-1,+1,endTime-mid);
+      }
+  } // UpCollide::animate()
+  
+  void DownCollide::animate(const float& t, AnimData *d)
+  {
+    VirusData *v = (VirusData*)d;
+    float mid = (startTime+endTime)/2;
+    if(t > endTime)
+    {
+    }
+    else if(t<mid)
+    {
+      v->y = easeInCubic(startTime,v->y,+1,mid-startTime);
+    }
+    else if (t>=mid)
+    {
+      v->y = easeOutCubic(mid,v->y+1,-1,endTime-mid);
+    }
+  }
+
+  void LeftCollide::animate(const float& t, AnimData *d)
+  {
+    VirusData *v = (VirusData*)d;
+    float mid = (startTime+endTime)/2;
+    if(t > endTime)
+    {
+    }
+    else if(t<mid)
+    {
+      v->x = easeInCubic(startTime,v->x,-1,mid-startTime);
+    }
+    else if (t>=mid)
+    {
+       v->x = easeOutCubic(mid,v->x-1,+1,endTime-mid);
+    }
+  }
+  
+  void RightCollide::animate(const float& t, AnimData *d)
+  {
+    VirusData *v = (VirusData*)d;
+    float mid = (startTime + endTime)/2;                          
+    
+    if(t>endTime)
+    {
+    }
+    else if (t<mid)
+    {
+      v->x = easeInCubic(startTime,v->x,+1,mid-startTime);
+    }
+    else if (t>=mid)
+    {
+      v->x = easeOutCubic(mid,v->x+1,-1,endTime-mid);
+    }
+  }
+>>>>>>> 5ce050c1faadf5d9c8a9bbf3f34fbe553fb2bc5d
 
 } // visualizer
 
