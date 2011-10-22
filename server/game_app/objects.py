@@ -84,7 +84,10 @@ class Player:
       self.cycles += self.game.getIncome(self.id) 
 
   def talk(self, message):
-    self.game.animations.append(['PlayerTalk', self.id, message])
+    if self.id == self.game.playerID:
+      self.game.animations.append(['PlayerTalk', self.id, message])
+      return True
+    return "You can't make the other player say things"
 
 class Tile(Mappable):
   def __init__(self, game, id, x, y, owner):
@@ -197,4 +200,7 @@ class Virus(Mappable):
     return True
   
   def talk(self, message):
-    self.game.animations.append(['VirusTalk',self.id,message])
+    if self.game.playerID == self.owner:
+      self.game.animations.append(['VirusTalk',self.id,message])
+      return True
+    return "You can't make the other person's virus talk!"
