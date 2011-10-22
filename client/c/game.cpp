@@ -200,7 +200,7 @@ DLLEXPORT void getStatus(Connection* c)
   UNLOCK( &c->mutex );
 }
 
-
+#include <math.h>
 
 DLLEXPORT int baseSpawn(_Base* object, int Level)
 {
@@ -211,7 +211,32 @@ DLLEXPORT int baseSpawn(_Base* object, int Level)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
-  return 1;
+
+  //TODO Game state changes
+  Connection * c = object->_c;
+  int cost = c->baseCost * pow(c->scaleCost, Level);
+  if(c->playerID != object->owner)
+  {
+    return 0;
+  }
+  else if(Level < 0)
+  {
+    return 0;
+  }
+  else if(c->Players[c->playerID].cycles < cost)
+  {
+    return 0;
+  }
+  else if(object->spawnsLeft < 1)
+  {
+    return 0;
+  }
+  else
+  {
+    c->Players[c->playerID].cycles -= cost;
+    object->spawnsLeft--;
+    return 1;
+  }
 }
 
 
@@ -239,6 +264,105 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   LOCK( &object->_c->mutex);
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
+
+  //TODO Game state changes
+  Connection * c = object->_c;
+  if(c->playerID != object->owner)
+  {
+    return 0;
+  }
+  else if(object->movesLeft < 1)
+  {
+    return 0;
+  }
+  else if(!(0 <= x and x < c->width) or !(0<= y and y < c->height))
+  {
+    return 0;
+  }
+  else if(object->living==0)
+  {
+    return 0;
+  }
+  else if(c->Tiles[x + y*c->width].owner == 3)
+  {
+    return 0;
+  }
+  else if(abs(object->x-x) + abs(object->y-y) != 1)
+  {
+    return 0;
+  }
+  else // TODO Check for viruses in the way
+  {
+    for(int i=0; i<c->BaseCount;i++)
+    {
+      if(c->Bases[i].x == x and c->Bases[i].y == y)
+      {
+        // if you move onto a base, stop now, you are dead
+        object->movesLeft = 0;
+        object->living = 0;
+        return 0;
+      }
+    }
+    for(int i=0; i<c->VirusCount;i++)
+    {
+      // if its at the location
+      if(c->Viruses[i].living == 1 and c->Viruses[i].x == x and c->Viruses[i].y == y)
+      {
+        // if its owned by me
+        if(c->Viruses[i].owner == object->owner)
+        {
+          // if we share a level
+          if(c->Viruses[i].level == object->level)
+          {
+            // a combine has happened
+            object->movesLeft = 0;
+            object->living = 0;
+            c->Viruses[i].movesLeft = 0;
+            c->Viruses[i].level++;
+            return 1;
+          }
+          else
+          {
+            // blocks movement
+            return 0;
+          }
+        }
+        else // opponent owns this guy
+        {
+          if(c->Viruses[i].level > object->level)
+          {
+            // you died
+            object->movesLeft = 0;
+            object->living = 0;
+            return 1;
+          }
+          else if(c->Viruses[i].level == object->level)
+          {
+            // you both died
+            object->movesLeft = 0;
+            object->living = 0;
+            c->Viruses[i].movesLeft = 0;
+            c->Viruses[i].living=0;
+            return 1;
+          }
+          else
+          {
+            // the other guy died
+            c->Viruses[i].movesLeft = 0;
+            c->Viruses[i].living = 0;
+            // Break so you stop looking for viruses, but still get valid move logic
+            break;
+          }
+        }
+      }
+    }
+    object->movesLeft--;
+    object->x = x;
+    object->y = y;
+    c->Tiles[x+y*c->width].owner = object->owner;
+    return 1;
+  }
+  // Should be unreachable
   return 1;
 }
 
