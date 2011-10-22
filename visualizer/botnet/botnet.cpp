@@ -59,7 +59,7 @@ namespace visualizer
     size_t frameNum = 0;
     
     background* b = new background( renderer );
-    grid *g = new grid( renderer )
+    grid *g = new grid( renderer );
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
@@ -75,7 +75,7 @@ namespace visualizer
     }
     
     b->addKeyFrame( new DrawBackground( b ) );
-    g->addKeyFrame( new DrawBackground( g ) );
+    g->addKeyFrame( new DrawGrid( g ) );
     
     for
       (

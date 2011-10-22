@@ -206,7 +206,7 @@ namespace visualizer
   class DrawGrid: public Anim
   {
     public: 
-      DrawBackground( grid* g)
+      DrawGrid( grid* g)
       {
         m_grid = g;
       }
