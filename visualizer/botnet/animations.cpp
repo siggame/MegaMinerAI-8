@@ -303,6 +303,28 @@ namespace visualizer
     }
   }
 
+  void DrawScore::animate( const float& t, AnimData* d )
+  {
+    stringstream ss;
+    ss << m_sb->score;
+
+
+    IRenderer::Alignment a = IRenderer::Left;
+    Color team = Color( 1, 0, 0 );
+
+    if( m_sb->player == 1 )
+    {
+      a = IRenderer::Right;
+      team = Color( 0, 0, 1 );
+    }
+
+    cout << m_sb->x << ", " << m_sb->y << endl;
+    m_sb->renderer().setColor( team ); 
+    m_sb->renderer().drawText( m_sb->x, m_sb->y, "mainFont", ss.str(), 3, a ); 
+
+
+  }
+
 } // visualizer
 
 

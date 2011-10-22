@@ -87,6 +87,7 @@ namespace visualizer
   void Text::drawRight( const std::string& line ) const
   {
     size_t width = getLineWidth( line );
+    cout << "WIDTH: " << width << endl;
     glTranslatef( -width, 0, 0 );
 
   } // Text::drawRight()

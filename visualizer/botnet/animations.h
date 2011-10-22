@@ -168,7 +168,10 @@ namespace visualizer
   class DrawScore: public Anim
   {
     public:
-      DrawScore();
+      DrawScore( scoreboard* sb )
+      {
+        m_sb = sb;
+      }
 
       void animate( const float& t, AnimData* d );
 
@@ -179,6 +182,7 @@ namespace visualizer
       { return 0; }
 
     private:
+      scoreboard* m_sb;
 
   }; // DrawScore
 

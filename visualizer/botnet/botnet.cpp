@@ -108,12 +108,17 @@ namespace visualizer
       score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
       score1->player = 0;
       score1->x = 1.0f;
-      score1->y = 0.5f;
+      score1->y = 0.2f;
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->player = 1;
-      score2->y = 0.5f;
-      score1->x = m_game->states[ 0 ].width;
+      score2->y = 0.2f;
+      score2->x = m_game->states[ 0 ].width - 1.0f;
 
+      score1->addKeyFrame( new DrawScore( score1 ) );
+      score2->addKeyFrame( new DrawScore( score2 ) );
+
+      turn.addAnimatable( score1 );
+      turn.addAnimatable( score2 );
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );

@@ -463,6 +463,8 @@ namespace visualizer
     // Then scale proportionally to size
     glTranslatef( x, y, 0 );
     scale( size, size );
+
+    cout << a << endl;
    
     switch( a )
     {
