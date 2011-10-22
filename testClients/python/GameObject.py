@@ -274,6 +274,11 @@ class Virus(Mappable):
     self.validify()
     return library.virusGetMovesLeft(self.ptr)
 
+  ##This virus is alive if the function returns a 1
+  def getLiving(self):
+    self.validify()
+    return library.virusGetLiving(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -284,4 +289,5 @@ class Virus(Mappable):
     ret += "owner: %s\n" % self.getOwner()
     ret += "level: %s\n" % self.getLevel()
     ret += "movesLeft: %s\n" % self.getMovesLeft()
+    ret += "living: %s\n" % self.getLiving()
     return ret

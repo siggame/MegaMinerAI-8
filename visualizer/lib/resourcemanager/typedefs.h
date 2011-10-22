@@ -6,7 +6,10 @@ namespace visualizer
 
   enum ResourceType
   {
-    RT_NONE, RT_TEXTURE, RT_ANIMATION, RT_FONT
+    RT_NONE, 
+    RT_TEXTURE, 
+    RT_ANIMATION, 
+    RS_FONT
   };
 
   typedef std::string ResID_t;

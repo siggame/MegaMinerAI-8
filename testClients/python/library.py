@@ -167,5 +167,8 @@ library.virusGetLevel.argtypes = [c_void_p]
 library.virusGetMovesLeft.restype = c_int
 library.virusGetMovesLeft.argtypes = [c_void_p]
 
+library.virusGetLiving.restype = c_int
+library.virusGetLiving.argtypes = [c_void_p]
+
 
 #Properties
