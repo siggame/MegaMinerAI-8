@@ -45,7 +45,22 @@ namespace visualizer
     /// @TODO Need to clean up this code a bit.
     glPushMatrix();
     float mapSize = (float)OptionsMan->getInt("mapSize");
-    glScalef( height()/mapSize, height()/mapSize, 1 );
+
+    translate( width()*m_winX/m_unitSzX, height()*m_winY/m_unitSzY );
+
+    float bigger = height()<width() ? height() : width();
+
+    float factor;
+
+    if( height()/m_unitSzY > width()/m_unitSzX )
+    {
+      factor = width() / m_unitSzX;
+    } else
+    {
+      factor = height() / m_unitSzY;
+    }
+
+    glScalef( factor, factor, 1 );
 
     AnimationEngine->draw();
 
@@ -474,6 +489,12 @@ namespace visualizer
     const float& eY
     )
   { 
+    m_winX = sX;
+    m_winY = sY;
+    m_winW = eX;
+    m_winH = eY;
+
+    resize( width(), height() );
 
   } // _Renderer::setCamera()
 
@@ -483,7 +504,10 @@ namespace visualizer
     const float& sY
     )
   {
+    m_unitSzX = sX;
+    m_unitSzY = sY;
 
+    refresh();
   } // _Renderer::setUnitSize()
 
 } // visualizer

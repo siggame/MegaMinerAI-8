@@ -47,6 +47,9 @@ namespace visualizer
         );
     }
 
+    renderer->setCamera( 0, 0, 40, 20 );
+    renderer->setUnitSize( 40, 20 );
+
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
     start();
