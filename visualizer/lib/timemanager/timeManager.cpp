@@ -123,7 +123,7 @@ namespace visualizer
   {
     m_turn = turn;
 
-    updateChildren();
+    //updateChildren();
 
   } // _TimeManager::setTurn()
 

@@ -163,7 +163,7 @@ namespace visualizer
       
 	}
 
-  bool _Renderer::isSetup()
+  bool _Renderer::isSetup() const
   {
     return m_isSetup;
   }
@@ -203,7 +203,7 @@ namespace visualizer
   }
 
 
-  unsigned int _Renderer::width()
+  unsigned int _Renderer::width() const
   {
     if (isSetup())
       return m_width;
@@ -212,7 +212,7 @@ namespace visualizer
   }
 
 
-  unsigned int _Renderer::height()
+  unsigned int _Renderer::height() const
   {
     if (isSetup())
       return m_height;
@@ -221,7 +221,7 @@ namespace visualizer
   }
 
 
-  unsigned int _Renderer::depth()
+  unsigned int _Renderer::depth() const
   {
     if (isSetup())
       return m_depth;

@@ -1,7 +1,7 @@
 #ifndef BLOOM_H
 #define BLOOM_H
 
-#include <QObject>
+#include <QThread>
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "igame.h"
@@ -11,13 +11,15 @@
 namespace visualizer
 {
 
-  class BotNet: public QObject, public IGame
+  class BotNet: public QThread, public IGame
   {
     Q_OBJECT;
     Q_INTERFACES( visualizer::IGame );
     public: 
       BotNet();
       ~BotNet();
+
+      void run();
 
       LogRegex logFileInfo();
       void loadGamelog( std::string gamelog );
