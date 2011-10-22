@@ -275,7 +275,7 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   {
     return 0;
   }
-  else if(!(0 <= x and x < c->width) or !(0<= y and y < c->height))
+  else if(!(0 <= x && x < c->width) || !(0<= y && y < c->height))
   {
     return 0;
   }
@@ -295,7 +295,7 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   {
     for(int i=0; i<c->BaseCount;i++)
     {
-      if(c->Bases[i].x == x and c->Bases[i].y == y)
+      if(c->Bases[i].x == x && c->Bases[i].y == y)
       {
         // if you move onto a base, stop now, you are dead
         object->movesLeft = 0;
@@ -306,7 +306,7 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
     for(int i=0; i<c->VirusCount;i++)
     {
       // if its at the location
-      if(c->Viruses[i].living == 1 and c->Viruses[i].x == x and c->Viruses[i].y == y)
+      if(c->Viruses[i].living == 1 && c->Viruses[i].x == x && c->Viruses[i].y == y)
       {
         // if its owned by me
         if(c->Viruses[i].owner == object->owner)
