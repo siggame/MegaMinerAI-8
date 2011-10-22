@@ -57,6 +57,7 @@ struct Virus: public Mappable
   int owner;
   int level;
   int movesLeft;
+  int living;
 
   friend std::ostream& operator<<(std::ostream& stream, Virus obj);
 };
@@ -79,7 +80,6 @@ struct Combine : public Animation
 {
   int moving;
   int stationary;
-  int created;
 
   friend std::ostream& operator<<(std::ostream& stream, Combine obj);
 };

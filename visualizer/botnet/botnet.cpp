@@ -35,7 +35,9 @@ namespace visualizer
     m_game = new Game;
     m_timeline = new AnimSequence;
 
-    if( !parseFile( *m_game, gamelog.c_str() ) )
+    cout << gamelog << endl;
+
+    if( !parseString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
       delete m_timeline;

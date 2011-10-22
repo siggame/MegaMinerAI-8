@@ -187,6 +187,11 @@ static bool parseVirus(Virus& object, sexp_t* expression)
   object.movesLeft = atoi(sub->val);
   sub = sub->next;
 
+  if ( !sub ) goto ERROR;
+
+  object.living = atoi(sub->val);
+  sub = sub->next;
+
   return true;
 
   ERROR:
@@ -224,9 +229,6 @@ static bool parseCombine(Combine& object, sexp_t* expression)
   sub = sub->next;
   if( !sub ) goto ERROR;
   object.stationary = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.created = atoi(sub->val);
   sub = sub->next;
   return true;
 
@@ -609,16 +611,30 @@ bool parseFile(Game& game, const char* filename)
 
 bool parseString(Game& game, const char* string)
 {
+  FILE* in = tmpfile();
+
+  if(!in)
+    return false;
+
+  fputs( string, in );
+  fseek( in, 0, SEEK_SET );
+
+  parseFile(in);
+
   sexp_t* st = NULL;
 
-  st = extract_sexpr(string);
-  bool flag = true;
-  while(st && flag)
+  while((st = parse()))
   {
-    flag = parseSexp(game, st);
+    if( !parseSexp(game, st) )
+    {
+      while(parse()); //empty the file, keep Lex happy.
+      fclose(in);
+      return false;
+    }
     destroy_sexp(st);
-    st = parse();
   }
 
-  return flag;
+  fclose(in);
+
+  return true;
 }

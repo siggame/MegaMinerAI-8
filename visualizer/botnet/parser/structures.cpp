@@ -53,6 +53,7 @@ std::ostream& operator<<(std::ostream& stream, Virus ob)
   stream << "owner: " << ob.owner  <<'\n';
   stream << "level: " << ob.level  <<'\n';
   stream << "movesLeft: " << ob.movesLeft  <<'\n';
+  stream << "living: " << ob.living  <<'\n';
   return stream;
 }
 
@@ -72,7 +73,6 @@ std::ostream& operator<<(std::ostream& stream, Combine ob)
   stream << "Combine" << "\n";
   stream << "moving: " << ob.moving  <<'\n';
   stream << "stationary: " << ob.stationary  <<'\n';
-  stream << "created: " << ob.created  <<'\n';
   return stream;
 }
 
