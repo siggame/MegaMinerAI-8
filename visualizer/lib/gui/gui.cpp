@@ -113,10 +113,10 @@ void _GUI::dragEnterEvent( QDragEnterEvent* evt )
 void _GUI::loadGamelog( std::string gamelog )
 {
   bool parserFound = false;
+  std::string fullLog = "";
 
   if( gamelog.rfind( ".glog" ) != string::npos )
   {
-    std::string fullLog = "";
     FILE* f;
     BZFILE* b;
     int nBuf;
@@ -152,10 +152,19 @@ void _GUI::loadGamelog( std::string gamelog )
       fullLog += buf;
     }
 
-    cout << fullLog << endl;
-
     BZ2_bzReadClose( &bzError, b );
 
+  } else
+  {
+    ifstream file_gamelog( gamelog.c_str(), ifstream::in );
+    if( file_gamelog.is_open() )
+    {
+      std::string str( istreambuf_iterator<char>(file_gamelog), std::istreambuf_iterator<char>() );
+     
+      fullLog = str;
+
+
+    }
   }
 
   for
