@@ -22,6 +22,7 @@ SOURCES += main.cpp \
     ./lib/resourcemanager/*.cpp \
     ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
+    ./lib/decompress/*.c \
     ./lib/renderer/*.cpp \
     ./common/*.cpp \
     ./lib/animationengine/*.cpp

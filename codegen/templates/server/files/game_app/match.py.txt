@@ -110,7 +110,7 @@ class Match(DefaultGameWorld):
     self.turn = None
     
   def logPath(self):
-    return "logs/" + str(self.id) + ".gamelog"
+    return "logs/" + str(self.id) + ".glog"
 
 % for model in models:
 %   for func in model.functions:

@@ -16,15 +16,14 @@ class Scribe:
       os.mkdir("logs/")
     if (os.path.exists(self.logPath)):
       os.remove(self.logPath)
+    self.log = bz2.BZ2File(self.logPath+".part", "w")
     self.writeSExpr(["gameName", "BotNet"])
 
   def writeSExpr(self, message):
-    log = open(self.logPath, "a")
-    log.write(sexpr2str(message))
+    self.log.write(sexpr2str(message))
 
   def finalize(self):
-    compressedLog = bz2.BZ2File("%s.bz2"%(self.logPath,), "w")
-    log = open(self.logPath, "r")
-    compressedLog.write(log.read())
-
+    self.log.close()
+    os.rename(self.logPath+".part", self.logPath)
+    
 

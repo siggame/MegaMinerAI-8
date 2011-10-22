@@ -217,23 +217,19 @@ class Match(DefaultGameWorld):
     self.turn = None
     
   def logPath(self):
-    return "logs/" + str(self.id) + ".gamelog"
+    return "logs/" + str(self.id) + ".glog"
 
   @derefArgs(Base, None)
   def spawn(self, object, Level):
     return object.spawn(Level, )
 
-  @derefArgs(Player, None)
+  @derefArgs((Player, Virus), None)
   def talk(self, object, message):
     return object.talk(message, )
 
   @derefArgs(Virus, None, None)
   def move(self, object, x, y):
     return object.move(x, y, )
-
-  @derefArgs(Virus, None)
-  def talk(self, object, message):
-    return object.talk(message, )
 
 
   def sendIdent(self, players):
