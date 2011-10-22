@@ -159,11 +159,20 @@ void _GUI::loadGamelog( std::string gamelog )
     ifstream file_gamelog( gamelog.c_str(), ifstream::in );
     if( file_gamelog.is_open() )
     {
-      std::string str( istreambuf_iterator<char>(file_gamelog), std::istreambuf_iterator<char>() );
+      
+      size_t length;
+      file_gamelog.seekg( 0, ios::end );
+      length = file_gamelog.tellg();
+      file_gamelog.seekg( 0, ios::beg );
+
+      char *input = new char[ length + 1 ];
+      file_gamelog.read( input, length );
+
+      file_gamelog.close();
+
+      fullLog = input;
+      delete input;
      
-      fullLog = str;
-
-
     }
   }
 
@@ -174,6 +183,17 @@ void _GUI::loadGamelog( std::string gamelog )
     i++ 
     )
   {
+    QRegExp rx( (*i)->logFileInfo().regex.c_str() );
+    rx.setPatternSyntax( QRegExp::RegExp2 );
+    
+    if( rx.indexIn( fullLog.c_str() ) != -1 )
+    {
+      TimeManager->setTurn( 0 );
+      (*i)->loadGamelog( fullLog );
+      parserFound = true;
+    }
+
+#if 0
     ifstream file_gamelog( gamelog.c_str(), ifstream::in );
     if( file_gamelog.is_open() )
     {
@@ -204,6 +224,7 @@ void _GUI::loadGamelog( std::string gamelog )
         gamelog.c_str()
         )
     }
+#endif
   }
 
   if( !parserFound )
