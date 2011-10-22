@@ -452,7 +452,7 @@ namespace visualizer
     const float& y,
     const std::string& fontName,
     const std::string& line,
-    const float& /*size*/,
+    const float& size,
     const Alignment& a 
     ) const
   {
@@ -461,6 +461,7 @@ namespace visualizer
     glPushMatrix();
     // Scale to camera stuff. 
     // Then scale proportionally to size
+    scale( size, size );
     glTranslatef( x, y, 0 );
    
     switch( a )

@@ -19,6 +19,19 @@ namespace visualizer
     float y;
   };
 
+  struct moveBoard: public Animatable
+  {
+    moveBoard( IRenderer *renderer ) : Animatable( renderer )
+    {}
+
+    float offst;
+
+    AnimData* getData()
+    {
+      return 0;
+    }
+  };
+
   struct virus: public Animatable
   {
     virus( IRenderer *renderer ) : Animatable( renderer )
@@ -109,6 +122,18 @@ namespace visualizer
       return NULL;
     }
   }; // grid
+
+  struct scoreboard: public Animatable
+  {
+    scoreboard( IRenderer* renderer ) : Animatable( renderer )
+    { }
+
+    float x, y;
+
+    int player;
+    int score;
+
+  };
 
 } // visualizer
 

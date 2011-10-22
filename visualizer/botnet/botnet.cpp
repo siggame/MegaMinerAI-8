@@ -48,7 +48,7 @@ namespace visualizer
     }
 
     float w = m_game->states[ 0 ].width;
-    float h = m_game->states[ 0 ].height;
+    float h = m_game->states[ 0 ].height + 1.5f;
 
     renderer->setCamera( 0, 0, w, h );
     renderer->setUnitSize( w, h );
@@ -63,9 +63,13 @@ namespace visualizer
   {
 
     size_t frameNum = 0;
-    
+
     background* b = new background( renderer );
     grid *g = new grid( renderer );
+    moveBoard *mb = new moveBoard( renderer );
+
+    mb->offst = 1.5;
+    mb->addKeyFrame( new PushBoard( mb ) );
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
@@ -97,7 +101,10 @@ namespace visualizer
 
       Connectivity p1;
       Connectivity p2;
+
+      //scoreboard* p1 = new 
       
+      turn.addAnimatable( mb );
       turn.addAnimatable( b );
 
       for

@@ -33,6 +33,14 @@ namespace visualizer
     
   } // DrawVirus::animate()
 
+  void PushBoard::animate( const float& t, AnimData *d )
+  {
+
+    m_mb->renderer().translate( 0, m_mb->offst );
+
+
+  }
+
   void Appear::animate( const float& t, AnimData *d )
   {
     GeneralAnim* g = (GeneralAnim*)d;
