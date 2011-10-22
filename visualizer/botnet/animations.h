@@ -24,6 +24,7 @@ namespace visualizer
   {
     public:
       void animate( const float& t, AnimData *d );
+
       float controlDuration() const
       {
         return 0;
@@ -144,6 +145,23 @@ namespace visualizer
     private:
       base* m_base;
   }; // DrawBase
+
+  class DrawScore: public Anim
+  {
+    public:
+      DrawScore();
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+
+  }; // DrawScore
 
   class DrawTile: public Anim
   {

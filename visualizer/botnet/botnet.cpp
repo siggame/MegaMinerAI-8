@@ -28,7 +28,6 @@ namespace visualizer
 
   void BotNet::loadGamelog( std::string gamelog )
   {
-#if 1
     cout << "Load BotNet Gamelog" << endl;
     
     delete m_game;
@@ -63,6 +62,9 @@ namespace visualizer
 
       Connectivity p1;
       Connectivity p2;
+       
+      
+      cout << m_game->states[ state ].players[ 0 ] << endl;
 
       for
         (
@@ -82,7 +84,6 @@ namespace visualizer
         {
           p1.addNode( t->x, t->y, t );
         } else if( t->owner == 1 )
-
         {
           p2.addNode( t->x, t->y, t );
         }
@@ -245,7 +246,6 @@ namespace visualizer
 
     timeManager->setTurn( 0 );
     timeManager->play();
-#endif
 
   } // BotNet::loadGamelog() 
 
