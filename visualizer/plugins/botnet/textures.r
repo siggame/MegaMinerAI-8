@@ -1,5 +1,5 @@
 texture virus textures/mryuk.png
-font mainFont textures/font1.png font1.dat
+font mainFont textures/Arimo.png Arimo.dat
 texture nodeBackground textures/nodes.png
 texture wall textures/wall.png
 texture red-server textures/red-server.png
