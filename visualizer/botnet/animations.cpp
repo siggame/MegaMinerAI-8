@@ -16,7 +16,8 @@ namespace visualizer
     std:stringstream level;
     level << v.level;
     
-    if ( v.owner == 0 )
+    //Draw to check for overlapping viruses
+    /*if ( v.owner == 0 )
     {
       v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
       v.renderer().drawQuad( vd->x+0.25, vd->y+0.25, .25, .5 );
@@ -29,6 +30,21 @@ namespace visualizer
       v.renderer().drawQuad( vd->x+0.50, vd->y+0.25, .25, .5 );
       v.renderer().setColor( Color( 0, 0, 0 ) );
       v.renderer().drawText( vd->x+0.50, vd->y+0.25, "mainFont", level.str()  );
+    }*/
+    
+    if ( v.owner == 0 )  // RED
+    {
+      v.renderer().setColor( Color( 1, 1, 1 ) );
+      v.renderer().drawTexturedQuad( vd->x, vd->y, 1, 1 , "red-virus" );
+      v.renderer().setColor( Color( 0, 1, 0 ) );
+      v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str(), 60  );
+    }
+    else
+    {
+      v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
+      v.renderer().drawQuad( vd->x+0.50, vd->y+0.25, .25, .5 );
+      v.renderer().setColor( Color( 0, 1, 0 ) );
+      v.renderer().drawText( vd->x+0.50, vd->y+0.25, "mainFont", level.str(), 60  );
     }
     
   } // DrawVirus::animate()
