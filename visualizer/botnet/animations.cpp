@@ -91,25 +91,37 @@ namespace visualizer
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.4, 0, 0, 0.3 ) ); 
+        q.renderer().setColor( Color( 0.4, 0, 0, 0.5 ) ); 
       else
-        q.renderer().setColor( Color( 0.2, 0, 0, 0.3 ) );
+        q.renderer().setColor( Color( 0.2, 0, 0, 0.5 ) );
+      
+      q.renderer().drawQuad( q.x, q.y, 1, 1 );
     }// PLayer 2 owned Tile
     else if( q.owner == 1 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0, 0, 0.4, 0.3 ) );
+        q.renderer().setColor( Color( 0, 0, 0.4, 0.5 ) );
       else
-        q.renderer().setColor( Color( 0, 0, 0.2, 0.3 ) );
+        q.renderer().setColor( Color( 0, 0, 0.2, 0.5 ) );
+      
+      q.renderer().drawQuad( q.x, q.y, 1, 1 );
     }
     // Nobody owns this tile
     else if( q.owner == 2 )
+    {
       q.renderer().setColor( Color( 0.1, 0.1, 0.1, 0.0 ) );
+      q.renderer().drawQuad( q.x, q.y, 1, 1 );
+    }
     // Wall Tile
     else if( q.owner == 3 )
-      q.renderer().setColor( Color( 0.5, 0.5, 0.4, 0.3 ) );
-  
-    q.renderer().drawQuad( q.x, q.y, 1, 1 );
+    {
+      //q.renderer().setColor( Color( 1.0, 1.0, 1.0, 0.0 ) );
+      //q.renderer().drawQuad( q.x, q.y, 1, 1 );
+      
+      q.renderer().setColor( Color( 1.0, 1.0, 1.0 ) );
+      q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , "wall" );
+    }
+
   } // DrawTile::animate()
 
   void LeftAnim::animate( const float& t, AnimData *d )
@@ -168,7 +180,6 @@ namespace visualizer
     {
       for ( int y = 0; y < m_background->mapHeight; y+= 4 )
       {
-        cout << "I'm in the Y loop! at: " << x << "," << y << "\n";
         m_background->renderer().setColor( Color( 0.05, 0.05, 0.05 ) );
         m_background->renderer().drawQuad( x, y, 4, 4 );
         
@@ -176,7 +187,12 @@ namespace visualizer
         m_background->renderer().drawTexturedQuad( x, y, 4, 4 , "nodeBackground" );
       }
     }
-  } 
+  } // DrawBackground::animate
+  
+  void DrawGrid::animate( const float& t, AnimData *d )
+  {
+    cout << "Height: " << m_grid->renderer().height() << "Width: " << m_grid->renderer().width() << "\n";
+  } // DrawGrid::animate
   
   void UpCollide::animate(const float& t, AnimData *d)
   {

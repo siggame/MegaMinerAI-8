@@ -202,6 +202,26 @@ namespace visualizer
     private:
       background* m_background;
   }; // DrawBackground
+  
+  class DrawGrid: public Anim
+  {
+    public: 
+      DrawBackground( grid* g)
+      {
+        m_grid = g;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      grid* m_grid;
+  }; // DrawGrid
 
   class UpCollide : public Anim
   {

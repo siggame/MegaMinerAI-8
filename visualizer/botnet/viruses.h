@@ -92,6 +92,20 @@ namespace visualizer
       return NULL;
     }
   }; // background
+  
+  struct grid: public Animatable
+  {
+    grid( IRenderer *renderer ) : Animatable( renderer )
+    { }
+    
+    int mapWidth;
+    int mapHeight;
+    
+    AnimData* getData()
+    {
+      return NULL;
+    }
+  }; // grid
 
 } // visualizer
 

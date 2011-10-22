@@ -52,11 +52,15 @@ namespace visualizer
     size_t frameNum = 0;
     
     background* b = new background( renderer );
+    grid *g = new grid( renderer )
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
       b->mapHeight = m_game->states[0].height;
       b->mapWidth  = m_game->states[0].width;
+      
+      g->mapHeight = m_game->states[0].height;
+      g->mapWidth  = m_game->states[0].width;
     }
     else
     {
@@ -64,6 +68,7 @@ namespace visualizer
     }
     
     b->addKeyFrame( new DrawBackground( b ) );
+    g->addKeyFrame( new DrawBackground( g ) );
     
     for
       (
@@ -81,7 +86,7 @@ namespace visualizer
       //cout << m_game->states[ state ].players[ 0 ] << endl;
       
       turn.addAnimatable( b );
-      
+
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -249,7 +254,10 @@ namespace visualizer
         turn.addAnimatable( v );
 
       }
-
+      
+      // Draw Grid
+      turn.addAnimatable( g );
+      
       animationEngine->buildAnimations( turn );
 
       m_timeline->addFrame( turn );
