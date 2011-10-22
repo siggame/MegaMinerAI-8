@@ -42,6 +42,7 @@ DLLEXPORT int virusGetY(_Virus* ptr);
 DLLEXPORT int virusGetOwner(_Virus* ptr);
 DLLEXPORT int virusGetLevel(_Virus* ptr);
 DLLEXPORT int virusGetMovesLeft(_Virus* ptr);
+DLLEXPORT int virusGetLiving(_Virus* ptr);
 
 
 

@@ -85,5 +85,11 @@ public class Virus: Mappable
     validify();
     return Client.virusGetMovesLeft(ptr);
   }
+  ///This virus is alive if the function returns a 1
+  public int getLiving()
+  {
+    validify();
+    return Client.virusGetLiving(ptr);
+  }
 
 }

@@ -75,5 +75,11 @@ class Virus extends Mappable
     validify();
     return Client.INSTANCE.virusGetMovesLeft(ptr);
   }
+  ///This virus is alive if the function returns a 1
+  public int getLiving()
+  {
+    validify();
+    return Client.INSTANCE.virusGetLiving(ptr);
+  }
 
 }
