@@ -233,6 +233,14 @@ DLLEXPORT int baseSpawn(_Base* object, int Level)
   }
   else
   {
+    for(int i=0; i<c->VirusCount;i++)
+    {
+      // if its at the location
+      if(c->Viruses[i].living == 1 && c->Viruses[i].x == object->x && c->Viruses[i].y == object->y)
+      {
+        return 0;
+      }
+    }
     c->Players[c->playerID].cycles -= cost;
     object->spawnsLeft--;
     return 1;
