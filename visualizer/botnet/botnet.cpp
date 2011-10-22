@@ -102,7 +102,16 @@ namespace visualizer
       Connectivity p1;
       Connectivity p2;
 
-      //scoreboard* p1 = new 
+      scoreboard* score1 = new scoreboard( renderer );
+      scoreboard* score2 = new scoreboard( renderer );
+
+      score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
+      score1->player = 0;
+      score1->x = 1.0f;
+      score1->y = 0.5f;
+      score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
+      score2->player = 1;
+
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );

@@ -133,6 +133,11 @@ namespace visualizer
     int player;
     int score;
 
+    AnimData* getData()
+    { 
+      return 0;
+    }
+
   };
 
 } // visualizer
