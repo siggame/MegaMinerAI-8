@@ -120,7 +120,7 @@ void _GUI::loadGamelog( std::string gamelog )
     FILE* f;
     BZFILE* b;
     int nBuf;
-    char buf[ 256 ];
+    char buf[ 257 ];
     int bzError;
     int nWritten;
 
@@ -148,22 +148,13 @@ void _GUI::loadGamelog( std::string gamelog )
     while( bzError == BZ_OK )
     {
       nBuf = BZ2_bzRead( &bzError, b, buf, 256 );
-      if( bzError == BZ_OK )
-      {
-        fullLog += buf;
-      }
+      buf[ nBuf ] = 0;
+      fullLog += buf;
     }
+
+    cout << fullLog << endl;
 
     BZ2_bzReadClose( &bzError, b );
-    if( bzError != BZ_STREAM_END )
-    {
-      THROW
-        (
-        Exception,
-        "Could not close the gamelog?"
-        );
-    }
-
 
   }
 
