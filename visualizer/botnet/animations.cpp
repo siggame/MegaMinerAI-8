@@ -314,7 +314,6 @@ namespace visualizer
     }
 
 
-    cout << m_sb->x << ", " << m_sb->y << endl;
     m_sb->renderer().setColor( team ); 
     m_sb->renderer().drawText( m_sb->x, m_sb->y, "mainFont", ss.str(), 3, a ); 
 

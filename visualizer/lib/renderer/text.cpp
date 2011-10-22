@@ -29,6 +29,7 @@ namespace visualizer
   } // Text::Text()
 
   const float defaultSize = 0.25;
+  const float widthMultiplier = 0.5f;
   void Text::drawLeft( const std::string& line ) const
   {
     // At this point, the text should already be translated to the 
@@ -62,7 +63,7 @@ namespace visualizer
         glVertex3f( 0, defaultSize, 0 );
       glEnd();
 
-      float t = (float)getCharWidth( line[ i ] )/32*defaultSize;
+      float t = (float)getCharWidth( line[ i ] )/32*defaultSize*widthMultiplier;
       glTranslatef( t, 0, 0 );
     }
 
@@ -81,7 +82,7 @@ namespace visualizer
     glPushMatrix();
     float width = getLineWidth( line )/2;
 
-    width *= defaultSize/32;
+    width *= defaultSize/32*widthMultiplier;
 
     glTranslatef( -width, 0, 0 );
     drawLeft( line );
@@ -93,9 +94,8 @@ namespace visualizer
   {
     glPushMatrix();
     float width = getLineWidth( line );
-    width *= defaultSize/32;
+    width *= defaultSize/32*widthMultiplier;
     glTranslatef( -width, 0, 0 );
-    cout << line << endl;
     drawLeft( line );
     glPopMatrix();
 
