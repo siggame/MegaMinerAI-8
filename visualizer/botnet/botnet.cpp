@@ -49,6 +49,13 @@ namespace visualizer
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
+    start();
+
+  }
+
+  void BotNet::run()
+  {
+
     size_t frameNum = 0;
     
     background* b = new background( renderer );
@@ -76,9 +83,6 @@ namespace visualizer
 
       Connectivity p1;
       Connectivity p2;
-       
-      
-      //cout << m_game->states[ state ].players[ 0 ] << endl;
       
       turn.addAnimatable( b );
       
@@ -156,34 +160,6 @@ namespace visualizer
         v->x = i->second.x;
         v->y = i->second.y;
 
-#if 0
-        cout << "Anim size: " << m_game->states[ state ].animations.size() << endl;
-        cout << "Anim size: " << m_game->states[ state ].animations[ v->id ].size() << endl;
-
-        cout << "============" << endl;
-        cout << v->id << endl;
-
-        for
-          (
-          std::map< int, std::vector<Animation*> >::iterator j = m_game->states[ state ].animations.begin();
-          j != m_game->states[ state ].animations.end();
-          j++
-          )
-        {
-          cout << "ID: " << j->first << endl;
-          cout << "S: " << j->second.size() << endl;
-        }
-
-          std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
-          j != m_game->states[ state ].animations[ v->id ].end();
-          j++
-          )
-        {
-
-        }
-#endif
- 
-
         for
           (
           std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
@@ -256,16 +232,19 @@ namespace visualizer
       
       frameNum++;
 
+      timeManager->setNumTurns( frameNum );
+
+      if( frameNum <= 1 )
+      {
+        timeManager->setTurn( 0 );
+        animationEngine->registerFrameContainer( m_timeline );
+        cout << frameNum << endl;
+        timeManager->play();
+      }
+
     }
 
-    timeManager->setNumTurns( frameNum );
-
-    animationEngine->registerFrameContainer( m_timeline );
-
-    timeManager->setTurn( 0 );
-    timeManager->play();
-
-  } // BotNet::loadGamelog() 
+  } // BotNet::run() 
 
   size_t BotNet::checkForMovement( Game* g, const size_t& state, const int& id )
   {
