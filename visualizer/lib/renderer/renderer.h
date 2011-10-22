@@ -162,11 +162,34 @@ namespace visualizer
         const float& z
         ) const;
 
+      void setCamera
+        (
+        const float& sX,
+        const float& sY,
+        const float& eX,
+        const float& eY
+        );
+
+      void setUnitSize
+        (
+        const float& sX,
+        const float& sY
+        );
+
     protected:
     private:
       unsigned int m_height;
       unsigned int m_width;
       unsigned int m_depth;
+
+      float m_unitSzX;
+      float m_unitSzY;
+
+      float m_winX;
+      float m_winY;
+      float m_winW;
+      float m_winH;
+
       bool m_isSetup;
 
       std::map<int, renderObj*> m_renderConstant;
