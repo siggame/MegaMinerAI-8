@@ -36,6 +36,11 @@ namespace visualizer
       _Renderer()
       {
 	  	  m_isSetup = false;
+        m_unitSzX = m_unitSzY = 1;
+        m_winX = m_winY = 0;
+        
+        m_winW = m_winH = 30;
+
         m_height = m_width = m_depth = 0;
       }
 
