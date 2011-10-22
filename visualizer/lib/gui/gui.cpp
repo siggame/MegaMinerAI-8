@@ -291,6 +291,7 @@ void _GUI::resizeEvent( QResizeEvent* evt )
     //m_dockWidget->resize( Singleton<_GUI>::width() - Renderer<DupObj>::height(), -1 );
     #if 1
     m_dockWidget->setMinimumWidth( w - h);
+    m_dockWidget->hide();
     #endif
   }
   QMainWindow::resizeEvent( evt );
