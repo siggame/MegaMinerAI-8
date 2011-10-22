@@ -55,10 +55,14 @@ class Base(Mappable):
     elif self.spawnsLeft < 1:
       return "A base can only spawn one virus a turn"
     else:
-      player.cycles -= cost
-      self.spawnsLeft -= 1
-      newVirus = self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
-      self.game.animations.append(['Create', newVirus.id])
+     for virus in self.game.objects.viruses:
+      if virus.x == self.x and virus.y == self.y:
+       return "You can't spawn a virus on an occupied base"
+      else:
+       player.cycles -= cost
+       self.spawnsLeft -= 1
+       newVirus = self.game.addObject(Virus,[self.x,self.y,self.owner,level,0])
+       self.game.animations.append(['Create', newVirus.id])
       return True
 
 class Player:
