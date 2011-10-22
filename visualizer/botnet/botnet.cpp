@@ -111,6 +111,8 @@ namespace visualizer
       score1->y = 0.5f;
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->player = 1;
+      score2->y = 0.5f;
+      score1->x = m_game->states[ 0 ].width;
 
       
       turn.addAnimatable( mb );

@@ -461,8 +461,8 @@ namespace visualizer
     glPushMatrix();
     // Scale to camera stuff. 
     // Then scale proportionally to size
-    scale( size, size );
     glTranslatef( x, y, 0 );
+    scale( size, size );
    
     switch( a )
     {
