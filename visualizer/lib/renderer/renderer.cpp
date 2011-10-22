@@ -384,6 +384,8 @@ namespace visualizer
     const float& width
     ) const
   {
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     glLineWidth( width );
 
@@ -393,6 +395,8 @@ namespace visualizer
       glVertex2f( eX, eY );
 
     glEnd();
+
+    glDisable( GL_BLEND );
   }
 
   void _Renderer::drawProgressBar
@@ -460,7 +464,27 @@ namespace visualizer
     glPopMatrix();
 
     ResourceMan->release( fontName, "renderer" );
-  }
+  } // _Renderer::drawText()
+
+  void _Renderer::setCamera
+    (
+    const float& sX,
+    const float& sY,
+    const float& eX,
+    const float& eY
+    )
+  { 
+
+  } // _Renderer::setCamera()
+
+  void _Renderer::setUnitSize
+    (
+    const float& sX,
+    const float& sY
+    )
+  {
+
+  } // _Renderer::setUnitSize()
 
 } // visualizer
 

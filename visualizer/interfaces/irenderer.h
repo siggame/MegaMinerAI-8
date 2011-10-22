@@ -135,6 +135,21 @@ namespace visualizer
         const float& z
         ) const = 0;
 
+      virtual void setCamera
+        (
+        const float& sX,
+        const float& sY,
+        const float& eX,
+        const float& eY
+        ) = 0;
+
+      virtual void setUnitSize
+        (
+        const float& sX,
+        const float& sY
+        ) = 0;
+
+
 
   };
 
