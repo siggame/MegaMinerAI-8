@@ -191,7 +191,18 @@ namespace visualizer
   
   void DrawGrid::animate( const float& t, AnimData *d )
   {
-    cout << "Height: " << m_grid->renderer().height() << "Width: " << m_grid->renderer().width() << "\n";
+    for(int x = 0; x < m_grid->mapWidth; x++)
+    {
+      m_grid->renderer().setColor( Color( 0.2, 0.2, 0.2, 0.5 ) );
+      m_grid->renderer().drawLine(x, 0, x, m_grid->pixelHeight, 1.0);
+    }
+    
+    for(int y = 0; y < m_grid->mapHeight; y++)
+    {
+      m_grid->renderer().setColor( Color( 0.2, 0.2, 0.2, 0.5 ) );
+      m_grid->renderer().drawLine(0, y, m_grid->mapWidth, y, 1.0);
+    }
+      
   } // DrawGrid::animate
   
   void UpCollide::animate(const float& t, AnimData *d)

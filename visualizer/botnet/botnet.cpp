@@ -68,6 +68,9 @@ namespace visualizer
       
       g->mapHeight = m_game->states[0].height;
       g->mapWidth  = m_game->states[0].width;
+      
+      g->pixelWidth  = renderer->width();
+      g->pixelHeight = (renderer->width() * m_game->states[0].height)/m_game->states[0].width;
     }
     else
     {

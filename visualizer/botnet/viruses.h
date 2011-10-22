@@ -101,6 +101,9 @@ namespace visualizer
     int mapWidth;
     int mapHeight;
     
+    int pixelHeight;
+    int pixelWidth;
+    
     AnimData* getData()
     {
       return NULL;
