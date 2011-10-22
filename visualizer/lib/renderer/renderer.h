@@ -60,11 +60,11 @@ namespace visualizer
         const unsigned int & depth = 1
         );
 
-      bool isSetup();
+      bool isSetup() const;
 
-      unsigned int height();
-      unsigned int width();
-      unsigned int depth();
+      unsigned int height() const;
+      unsigned int width() const;
+      unsigned int depth() const;
 
       bool update
         (

@@ -232,14 +232,13 @@ namespace visualizer
       
       frameNum++;
 
-      timeManager->setNumTurns( frameNum );
 
       if( frameNum <= 1 )
       {
         timeManager->setTurn( 0 );
         animationEngine->registerFrameContainer( m_timeline );
-        cout << frameNum << endl;
         timeManager->play();
+        timeManager->setNumTurns( m_game->states.size() );
       }
 
     }

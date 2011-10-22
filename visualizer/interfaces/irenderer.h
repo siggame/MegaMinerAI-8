@@ -33,11 +33,11 @@ namespace visualizer
         const unsigned int& depth
         ) = 0;
 
-      virtual bool isSetup() = 0;
+      virtual bool isSetup() const = 0;
 
-      virtual unsigned int height() = 0;
-      virtual unsigned int width() = 0;
-      virtual unsigned int depth() = 0;
+      virtual unsigned int height() const = 0;
+      virtual unsigned int width() const = 0;
+      virtual unsigned int depth() const = 0;
 
       virtual bool update
         (
