@@ -211,22 +211,17 @@ namespace visualizer
               virus* v = new virus( renderer );
               v->addKeyFrame( new StartVirus( v ) );
               Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
-              Coord curCoord( m_game->states[ state ].viruses[ c.stationary ].x, m_game->states[ state ].viruses[ c.stationary ].y );
+              Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
               v->id = c.moving;
 
-              cout << c.moving << endl;
-              cout << c.stationary << endl;
-
-              cout << prevCoord.x << ", " << prevCoord.y << endl;
-              cout << curCoord.x << ", " << curCoord.y << endl;
               v->x = prevCoord.x;
               v->y = prevCoord.y;
               v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level;
               v->owner = m_game->states[ state - 1 ].viruses[ c.moving ].owner;
               if( curCoord.x > prevCoord.x )
-                v->addKeyFrame( new LeftAnim );
-              else if( curCoord.x < prevCoord.x )
                 v->addKeyFrame( new RightAnim );
+              else if( curCoord.x < prevCoord.x )
+                v->addKeyFrame( new LeftAnim );
               else if( curCoord.y > prevCoord.y )
                 v->addKeyFrame( new UpAnim );
               else
