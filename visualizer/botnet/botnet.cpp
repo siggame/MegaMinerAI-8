@@ -84,7 +84,7 @@ namespace visualizer
     }
     else
     {
-      THROW(Exception, "Game's hieght and width not set!");
+      THROW(Exception, "Game's height and width not set!");
     }
     
     b->addKeyFrame( new DrawBackground( b ) );
