@@ -213,7 +213,7 @@ namespace visualizer
     for(int x = 0; x < m_grid->mapWidth; x++)
     {
       m_grid->renderer().setColor( Color( 0.2, 0.2, 0.2, 0.5 ) );
-      m_grid->renderer().drawLine(x, 0, x, m_grid->pixelHeight, 1.0);
+      m_grid->renderer().drawLine(x, 0, x, m_grid->mapHeight, 1.0);
     }
     
     for(int y = 0; y < m_grid->mapHeight; y++)
