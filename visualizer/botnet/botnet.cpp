@@ -84,7 +84,7 @@ namespace visualizer
     }
     else
     {
-      THROW(Exception, "Game's hieght and width not set!");
+      THROW(Exception, "Game's height and width not set!");
     }
     
     b->addKeyFrame( new DrawBackground( b ) );
@@ -113,7 +113,7 @@ namespace visualizer
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->player = 1;
       score2->y = 0.2f;
-      score2->x = m_game->states[ 0 ].width - 1.0f;
+      score2->x = m_game->states[ 0 ].width-1;
       score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
 
       score1->addKeyFrame( new DrawScore( score1 ) );
@@ -184,6 +184,56 @@ namespace visualizer
       p1.generateConnectivity();
       p2.generateConnectivity();
         
+      // Draw Grid
+      turn.addAnimatable( g );
+
+      for
+        ( 
+        std::map<int, vector<Animation*> >::iterator i = m_game->states[ state ].animations.begin();
+        i != m_game->states[ state ].animations.end();
+        i++ 
+        )
+      {
+        for
+          (
+          std::vector<Animation*>::iterator j = i->second.begin();
+          j != i->second.end();
+          j++
+          )
+        {
+          switch( (*j)->type )
+          {
+            case COMBINE:
+            {
+              Animation& a = (Animation&)*(*j);
+              cout << "A: " << a.type << endl;
+              Combine &c = (Combine&)*(*j);
+              virus* v = new virus( renderer );
+              v->addKeyFrame( new StartVirus( v ) );
+              Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
+              Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
+              v->id = c.moving;
+
+              v->x = prevCoord.x;
+              v->y = prevCoord.y;
+              v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level;
+              v->owner = m_game->states[ state - 1 ].viruses[ c.moving ].owner;
+              if( curCoord.x > prevCoord.x )
+                v->addKeyFrame( new RightAnim );
+              else if( curCoord.x < prevCoord.x )
+                v->addKeyFrame( new LeftAnim );
+              else if( curCoord.y > prevCoord.y )
+                v->addKeyFrame( new UpAnim );
+              else
+                v->addKeyFrame( new DownAnim );
+              v->addKeyFrame( new DrawVirus( v ) );
+              turn.addAnimatable( v );
+ 
+            } break;
+          }
+        }
+      }
+      
       for
         (
         std::map<int, Virus>::iterator i = m_game->states[ state ].viruses.begin();
@@ -207,31 +257,28 @@ namespace visualizer
           )
         {
           //cout << "ANIMATION" << endl;
-#if 0
+#if 1
           switch( (*j)->type )
           {
             case COMBAT:
-              cout << "Combat" << endl;
-            break;
-            case COMBINE:
-              cout << "Combine" << endl;
+              //cout << "Combat" << endl;
             break;
             case CRASH:
              // Crash* thing = &(*j);
              // v.
-              cout << "Crash" << endl;
+             // cout << "Crash" << endl;
             break;
             case CREATE:
-              cout << "Create" << endl;
+              //cout << "Create" << endl;
             break;
             case PLAYERTALK:
-              cout << "Playertalk" << endl;
+              //cout << "Playertalk" << endl;
             break;
             case RECYCLE:
-              cout << "Recycle" << endl;
+              //cout << "Recycle" << endl;
             break;
             case VIRUSTALK:
-              cout << "Virus Talk" << endl;
+              //cout << "Virus Talk" << endl;
             break;
           }
 #endif
@@ -264,9 +311,6 @@ namespace visualizer
         turn.addAnimatable( v );
 
       }
-      
-      // Draw Grid
-      turn.addAnimatable( g );
       
       animationEngine->buildAnimations( turn );
 
