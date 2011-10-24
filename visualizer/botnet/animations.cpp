@@ -2,6 +2,9 @@
 #include "easing_equations.h"
 
 #include <sstream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 namespace visualizer
 {
@@ -138,7 +141,10 @@ namespace visualizer
       //q.renderer().drawQuad( q.x, q.y, 1, 1 );
       
       q.renderer().setColor( Color( 1.0, 1.0, 1.0 ) );
-      q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , "wall" );
+      srand(40 * q.x + q.y);
+      stringstream s;
+      s << "wall-" << rand()%5;
+      q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , s.str() );
     }
 
   } // DrawTile::animate()
@@ -213,7 +219,7 @@ namespace visualizer
     for(int x = 0; x < m_grid->mapWidth; x++)
     {
       m_grid->renderer().setColor( Color( 0.2, 0.2, 0.2, 0.5 ) );
-      m_grid->renderer().drawLine(x, 0, x, m_grid->pixelHeight, 1.0);
+      m_grid->renderer().drawLine(x, 0, x, m_grid->mapHeight, 1.0);
     }
     
     for(int y = 0; y < m_grid->mapHeight; y++)

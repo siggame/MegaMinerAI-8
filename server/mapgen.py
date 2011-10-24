@@ -47,25 +47,6 @@ class Map(object):
         center = self.center()
         return self.unitValue(current[0], center[0]), self.unitValue(current[1], center[1])
 
-    '''
-    def draw(self):
-        #x, y = self.center()
-        x, y = random.randint(0, self.width - 1), random.randint(0, self.height - 1)
-
-        while self.wallCount < self.maxWalls:
-            offset = self.center((x, y))
-            #offset = self.unitValue(x, random.randint(0, self.width - 1)), self.unitValue(y, random.randint(0, self.height - 1))
-            for _ in range(1):
-                self.set(x, y, 'X')
-                self.wallCount += 1
-                x += offset[0]
-                y += offset[1]
-                if not (0 <= x < self.width) or not (0 <= y < self.height) or self.get(x, y) == 'X':
-                    return
-
-            print str(self)
-
-    '''
     def draw(self):
         x, y = random.choice(self.edges)
         dx, dy = random.choice([(dx, dy) for (dx, dy) in self.offsets if 0 < x + dx < self.width - 1 and 0 < y + dy < self.height - 1])
@@ -76,6 +57,7 @@ class Map(object):
             y += dy
             if not (0 <= x < self.width) or not (0 <= y < self.height):
                 break;
+
     def generate(self):
         self.side = [['.'] * self.height for _ in range(self.width)]
         self.wallCount = 0
@@ -109,7 +91,6 @@ class Map(object):
                 mirror = self.sym(wall[0], wall[1], self.width, self.height)
                 self.set(wall[0], wall[1], '.')
                 open.append(wall)
-                open.append(mirror)
             working = open.pop()
             for offset in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
                 next = working[0] + offset[0], working[1] + offset[1]
