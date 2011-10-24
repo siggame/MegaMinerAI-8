@@ -162,12 +162,11 @@ def looping():
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
 
-    # game is running. watch for compressed gamelog
+    # game is running. watch for gamelog
     print "running..."
     game.status = "Running"
     game.save()
-    print "%s/logs/%s.gamelog.bz2" % (server_path, game_number)
-    while not os.access("%s/logs/%s.gamelog.bz2" % (server_path, game_number), 
+    while not os.access("%s/logs/%s.glog" % (server_path, game_number), 
                         os.F_OK):
         job.touch()
         toucher.touch()
@@ -234,9 +233,11 @@ def remote_call(hostname, command):
     return result        
     
 
+from bz2 import BZ2File
 def parse_gamelog(game_number):
     ### Determine winner by parsing that last s-expression in the gamelog
-    f = open("%s/logs/%s.gamelog" % (server_path, game_number), 'r')
+    ### the gamelog is now compressed.
+    f = BZ2File("%s/logs/%s.glog" % (server_path, game_number), 'r')
     log = f.readline()
     f.close()
     match = re.search("\"game-winner\" (\d) \"[\w ]+\" (\d+)", log)
@@ -250,14 +251,13 @@ def push_gamelog(game, game_number):
     c = boto.connect_s3(access_cred, secret_cred)
     b = c.get_bucket('siggame-gamelogs')
     k = boto.s3.key.Key(b)
-    k.key = "%s.gamelog.bz2" % game.pk
-    k.set_contents_from_filename("%s/logs/%s.gamelog.bz2" % \
+    k.key = "%s.glog" % game.pk
+    k.set_contents_from_filename("%s/logs/%s.glog" % \
                                      (server_path, game_number))
     k.set_acl('public-read')
     game.gamelog_url = 'http://siggame-gamelogs.s3.amazonaws.com/%s' % k.key
     game.save()
-    os.remove("%s/logs/%s.gamelog.bz2" % (server_path, game_number))
-    os.remove("%s/logs/%s.gamelog" % (server_path, game_number))
+    os.remove("%s/logs/%s.glog" % (server_path, game_number))
     
     
 def update_local_repo(client):

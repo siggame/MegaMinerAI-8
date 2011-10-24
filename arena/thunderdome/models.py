@@ -14,6 +14,7 @@ import json
 from django import forms
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
+from django.db.models import Max
 
 class Client(models.Model):
     ### A competitor in the arena
@@ -21,6 +22,14 @@ class Client(models.Model):
     current_version = models.CharField(max_length=100, default='')
     embargoed       = models.BooleanField(default=False) # fail to compile?
 
+    
+    def last_visualized(self):
+        vis = self.game_set.all().aggregate(Max('visualized'))
+        if vis['visualized__max']:
+            return vis['visualized__max']
+        else:
+            return datetime(1970,1,1,0,0)
+    
     def wins(self):
         return [x.game for x in self.gamedata_set.filter(won=True)]
     
@@ -38,10 +47,9 @@ class Game(models.Model):
                                    default='New')
     priority    = models.IntegerField(default=1000)
     gamelog_url = models.CharField(max_length=200, default='')
-    visualized  = models.DateTimeField(null=True)
+    visualized  = models.DateTimeField(default=datetime(1970,1,1),null=True)
     completed   = models.DateTimeField(null=True)
     stats       = models.TextField(default='') # holds extra stuff via JSON
-    
     
     def schedule(self):
         if self.status != 'New':
@@ -87,3 +95,5 @@ class InjectedGameForm(forms.Form):
         super(InjectedGameForm, self).__init__(*args, **kwargs)
         self.fields['clients'].choices = [(x.pk, x.name) for x in 
                                           Client.objects.all()]
+
+    
