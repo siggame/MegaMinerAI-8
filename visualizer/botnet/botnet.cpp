@@ -206,7 +206,6 @@ namespace visualizer
             case COMBINE:
             {
               Animation& a = (Animation&)*(*j);
-              cout << "A: " << a.type << endl;
               Combine &c = (Combine&)*(*j);
               virus* v = new virus( renderer );
               v->addKeyFrame( new StartVirus( v ) );
