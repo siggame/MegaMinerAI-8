@@ -35,7 +35,7 @@ namespace visualizer
   struct virus: public Animatable
   {
     virus( IRenderer *renderer ) : Animatable( renderer )
-    { owner = level = movesLeft = id = x = y = 0; }
+    { owner = level = movesLeft = id = x = y = 0; pixels = NULL; }
 
     int id;
     int owner;
@@ -43,6 +43,7 @@ namespace visualizer
     int movesLeft;
     float x;
     float y;
+    bool **pixels;
 
     AnimData* getData()
     {

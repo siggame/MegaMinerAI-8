@@ -35,11 +35,30 @@ namespace visualizer
       v.renderer().drawText( vd->x+0.50, vd->y+0.25, "mainFont", level.str()  );
     }*/
     
-
-    v.renderer().setColor( Color( 1, 1, 1 ) );
-    v.renderer().drawTexturedQuad( vd->x, vd->y, 1, 1 , (v.owner ? "blue-virus" : "red-virus") );
-    v.renderer().setColor( Color( 0, 1, 0 ) );
-    v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str(), 2  );
+    if(v.pixels == NULL)
+    {
+        v.renderer().setColor( Color( 1, 1, 1 ) );
+        v.renderer().drawTexturedQuad( vd->x, vd->y, 1, 1 , (v.owner ? "blue-virus" : "red-virus") );
+        v.renderer().setColor( Color( 0, 1, 0 ) );
+        v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str(), 2  );
+    }
+    else
+    {
+        v.renderer().setColor( (v.owner == 0 ? Color(1,0,0) : Color(0,0,1)) );
+        
+        for(int x = 0; x < 16; x++)
+            for(int y = 0; y < 16; y++)
+                if(v.pixels[x][y])
+                {
+                    //cout << "abotu to draw... ";
+                    //v.renderer().drawQuad( vd->x + x/16, vd->y + y/16, 1/16, 1/16);
+                    v.renderer().drawQuad( vd->x + (x * 0.0625), vd->y + (y * 0.0625), 0.0625, 0.0625);
+                    //cout << "done drawing...\n";
+                }
+        
+        v.renderer().setColor( Color(1, 1, 1) );
+        v.renderer().drawText( vd->x+0.2, vd->y+0.33, "mainFont", level.str(), 2.5 );
+    }
     
   } // DrawVirus::animate()
 

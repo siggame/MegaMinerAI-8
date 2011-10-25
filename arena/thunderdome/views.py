@@ -7,12 +7,15 @@ import beanstalkc
 
 # Django Imports
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 
 # My Imports
 from thunderdome.models import Game, Client, GameData, InjectedGameForm
+
+from datetime import datetime
 
 @login_required
 def health(request):
@@ -128,3 +131,18 @@ def matchup(request, client1_id, client2_id):
                'games'   : shared_games }
     
     return render_to_response('thunderdome/matchup.html', payload)
+
+
+def get_next_game_url_to_visualize(request):
+    clients = Client.objects.all()
+    worst_client = min(clients, key = lambda x: x.last_visualized())
+    next_gid = worst_client.game_set.all().aggregate(Max('pk'))['pk__max']
+    next_game = Game.objects.get(pk=next_gid)
+    return HttpResponse(next_game.gamelog_url)
+
+
+def game_visualized(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+    game.visualized = datetime.now()
+    game.save()
+    return HttpResponse("OK")

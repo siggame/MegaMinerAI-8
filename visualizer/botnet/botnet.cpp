@@ -2,6 +2,7 @@
 #include "viruses.h"
 #include "botnet.h"
 #include "animations.h"
+#include "virus-builder.h" // for jacob fischer's random virus building
 
 namespace visualizer
 {
@@ -73,6 +74,11 @@ namespace visualizer
 
     mb->offst = 1.5;
     mb->addKeyFrame( new PushBoard( mb ) );
+    
+    // build the players virus sprites
+    bool **player1virus = buildVirus(m_game->states[0].players[0].playerName);
+    bool **player2virus = buildVirus(m_game->states[0].players[1].playerName);
+    
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
@@ -308,6 +314,7 @@ namespace visualizer
 
         v->level = i->second.level;
         v->movesLeft = i->second.movesLeft;
+        v->pixels = (v->owner ? player2virus : player1virus);
         v->addKeyFrame( new DrawVirus( v ) );
 
         turn.addAnimatable( v );
