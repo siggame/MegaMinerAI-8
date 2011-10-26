@@ -150,6 +150,14 @@ void _GUI::loadGamelog( std::string gamelog )
       nBuf = BZ2_bzRead( &bzError, b, buf, 256 );
       buf[ nBuf ] = 0;
       fullLog += buf;
+      if( bzError != BZ_OK && bzError != BZ_STREAM_END )
+      {
+        THROW
+          (
+          Exception,
+          "Unable to read compressed gamelog.\n Gamelog: %s\n bzError: %i", gamelog.c_str(), bzError
+          );
+      }
     }
 
     BZ2_bzReadClose( &bzError, b );
