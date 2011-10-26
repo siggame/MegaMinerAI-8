@@ -132,7 +132,7 @@ namespace visualizer
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.7, 0, 0, 0.4 ) ); 
+        q.renderer().setColor( Color( 0.7, 0, 0, 0.6 ) ); 
       else
         q.renderer().setColor( Color( 0.2, 0, 0, 0.5 ) );
       
