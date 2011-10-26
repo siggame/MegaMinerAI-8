@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+//using System.Drawing;
 
 ///The class implementing gameplay logic.
 class AI : BaseAI
@@ -139,4 +140,31 @@ class AI : BaseAI
             Console.WriteLine(line);
         }*/
     }
+    
+    /*public Point find_something_interesting(Virus virus)
+    {
+        var interesting_points = new List<Point>();
+        
+        // add the N, E, S, W points aroudn the virus to start
+        interesting_points.Add(new Point(virus.getX() + 1, virus.getY()));
+        interesting_points.Add(new Point(virus.getX() - 1, virus.getY()));
+        interesting_points.Add(new Point(virus.getX(), virus.getY() + 1));
+        interesting_points.Add(new Point(virus.getX(), virus.getY() - 1));
+        
+        // look at each point untill we find something interesting
+        while(!interesting_points.Empty())
+        {
+            int x = interesting_points[0].X;
+            int y = interesting_points[0].Y;
+            
+            // if the current point is boring
+            if(map[x][y] == MAP_WALL || map[x][y] == MAP_MY_TILE)
+            {
+                interesting_points.RemoveAt(0);
+            }
+            
+        }
+        
+        return null;
+    }*/
 }
