@@ -8,18 +8,18 @@ import socket
 
 import sys
 if len(sys.argv) != 2:
-    server_path  = '/home/mies/arena/server'
+    server_path  = '/home/mnuck/arena/server'
     print "referee.py server_path"
 else:
     (junk, server_path) = sys.argv
-my_hostname = socket.gethostname()    
+my_hostname = "r09mannr4.device.mst.edu"
 
 # My AWS credentials
 from aws_creds import access_cred, secret_cred, username, password
 
 # Some magic to get a standalone python program hooked in to django
 import sys
-sys.path = ['/home/mies/', '/home/mies/mysite/mysite'] + sys.path
+sys.path = ['/srv/', '/srv/uard/'] + sys.path
 
 from django.core.management import setup_environ
 import settings
@@ -29,8 +29,8 @@ setup_environ(settings)
 # Non-Django 3rd Party Imports
 import re, json               # special strings
 import beanstalkc, git, boto  # networky
-import subprocess, shutil, os # shellish
-import random, time, os
+import subprocess, os         # shellish
+import random, time
 
 # My Imports
 from thunderdome.models import Game
@@ -183,10 +183,11 @@ def looping():
         gamedatas[0].won = False
         gamedatas[1].won = True
     [x.save() for x in gamedatas]        
-        
+
     # clean up
-    [x.join() for x in (nodder1, nodder2)]
+    print "cleaning up..."
     [x.terminate() for x in players]
+    [x.join() for x in (nodder1, nodder2)]
     print "pushing gamelog..."
     push_gamelog(game, game_number)
     game.status = "Complete"
@@ -195,7 +196,7 @@ def looping():
     game.save()
     job.delete()
     toucher.touch()
-    print "done!"
+    print "done %s" % str(datetime.now())
 
 
 import socket
@@ -209,8 +210,9 @@ def remote_compile(hostname, client):
 def update_downstream_repo(hostname, client):
     command = 'rm -rf %s' % client.name
     remote_call(hostname, command)
-    command = 'git clone ssh://mies@%s%s/%s >/dev/null 2>/dev/null' % \
+    command = 'git clone ssh://mnuck@%s:2222%s/%s/ >/dev/null 2>/dev/null' % \
         (my_hostname, os.getcwd(), client.name)
+    print command
     remote_call(hostname, command)
     
 
@@ -240,7 +242,7 @@ def parse_gamelog(game_number):
     f = BZ2File("%s/logs/%s.glog" % (server_path, game_number), 'r')
     log = f.readline()
     f.close()
-    match = re.search("\"game-winner\" (\d) \"[\w ]+\" (\d+)", log)
+    match = re.search("\"game-winner\" (\d+) \"[^\"]+\" (\d+)", log)
     if match:
         return match.groups()[1]
     return None
