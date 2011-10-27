@@ -115,6 +115,7 @@ void _GUI::loadGamelog( std::string gamelog )
   bool parserFound = false;
   std::string fullLog = "";
 
+#if 0
   if( gamelog.rfind( ".glog" ) != string::npos )
   {
     FILE* f;
@@ -163,6 +164,7 @@ void _GUI::loadGamelog( std::string gamelog )
     BZ2_bzReadClose( &bzError, b );
 
   } else
+#endif
   {
     ifstream file_gamelog( gamelog.c_str(), ifstream::in );
     if( file_gamelog.is_open() )
@@ -178,7 +180,23 @@ void _GUI::loadGamelog( std::string gamelog )
 
       file_gamelog.close();
 
-      fullLog = input;
+      if( gamelog.rfind( ".glog" ) != string::npos )
+      {
+        const int megs = 25;
+        unsigned int size = megs * 1024*1024;
+        cout << endl;
+        char *output = new char[ size-1 ];
+
+        BZ2_bzBuffToBuffDecompress( output, &size, input, length, 0, 0 );
+        fullLog = output;
+
+        delete output;
+      }
+      else
+      {
+        fullLog = input;
+      }
+
       delete input;
      
     }
