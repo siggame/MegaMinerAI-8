@@ -22,22 +22,14 @@ def main():
     stalk.watch('master-requests')    
     server = start_server()
     refs = list()
-    refs.append( start_referee(1, '/home/mnuck/arena/server') )
-    refs.append( start_referee(2, '/home/mnuck/arena/server') )
-    refs.append( start_referee(3, '/home/mnuck/arena/server') )
-    refs.append( start_referee(4, '/home/mnuck/arena/server') )
-    refs.append( start_referee(5, '/home/mnuck/arena/server') )
-    refs.append( start_referee(6, '/home/mnuck/arena/server') )
-    refs.append( start_referee(7, '/home/mnuck/arena/server') )
-    refs.append( start_referee(8, '/home/mnuck/arena/server') )
-    refs.append( start_referee(9, '/home/mnuck/arena/server') )
-    refs.append( start_referee(10, '/home/mnuck/arena/server') )
+    for i in xrange(8):
+        refs.append( start_referee(i, '/home/mnuck/arena/server') )
     while True:
         time.sleep(1)
 
 
 def start_server():
-    command = ['python', 'main.py']
+    command = ['python', 'main.py', '-arena']
     return subprocess.Popen(command, cwd='server',
                             stdout=file("/dev/null", "w"),
                             stderr=subprocess.STDOUT)
