@@ -132,20 +132,36 @@ namespace visualizer
     if( q.owner == 0 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0.7, 0, 0, 0.6 ) ); 
+      {
+        q.renderer().setColor( Color( 0.65, 0, 0, 0.6 ) );
+        q.renderer().drawQuad( q.x, q.y, 1, 1 );
+        q.renderer().setColor( Color( 0.75, 0.75, 0.75 ) );
+        stringstream s;
+        s << "red-nodes-" << (int)q.x%4 << "," << (int)q.y%4;
+        q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , s.str() );
+      }
       else
-        q.renderer().setColor( Color( 0.2, 0, 0, 0.5 ) );
-      
-      q.renderer().drawQuad( q.x, q.y, 1, 1 );
+      {
+        q.renderer().setColor( Color( 0.3, 0, 0, 0.5 ) );
+        q.renderer().drawQuad( q.x, q.y, 1, 1 );
+      }
     }// PLayer 2 owned Tile
     else if( q.owner == 1 )
     {
       if( q.connected() )
-        q.renderer().setColor( Color( 0, 0, 0.7, 0.6 ) );
+      {
+        q.renderer().setColor( Color( 0, 0, 0.65, 0.6 ) );
+        q.renderer().drawQuad( q.x, q.y, 1, 1 );
+        q.renderer().setColor( Color( 0.75, 0.75, 0.75 ) );
+        stringstream s;
+        s << "blue-nodes-" << (int)q.x%4 << "," << (int)q.y%4;
+        q.renderer().drawTexturedQuad( q.x, q.y, 1, 1 , s.str() );
+      }
       else
-        q.renderer().setColor( Color( 0, 0, 0.2, 0.5 ) );
-      
-      q.renderer().drawQuad( q.x, q.y, 1, 1 );
+      {
+        q.renderer().setColor( Color( 0, 0, 0.3, 0.5 ) );
+        q.renderer().drawQuad( q.x, q.y, 1, 1 );
+      }
     }
     // Nobody owns this tile
     else if( q.owner == 2 )
