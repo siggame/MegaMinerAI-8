@@ -184,8 +184,10 @@ class TestGameServer(SexpProtocol):
 emptyLog = False
   
 if __name__ == "__main__":
+  portNumber = 19000
   if '-arena' in sys.argv:
     emptyLog = True
-  TestGameServer.main(19000)
-
-  
+  if '-port' in sys.argv:
+    indexNumber = sys.argv.index('-port') + 1
+    portNumber = int(sys.argv[ indexNumber ])
+  TestGameServer.main(portNumber)
