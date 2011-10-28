@@ -10,7 +10,7 @@
 
 namespace virusBuilder
 {
-    static short parts[8 /*Type*/][9 /*Number unique parts for that type*/][4][4] = 
+    static bool parts[8 /*Type*/][9 /*Number unique parts for that type*/][4][4] = 
     {
         { /* Hand */
             {

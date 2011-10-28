@@ -159,7 +159,13 @@ class GameApp(AccountsAppMixin, BaseApp):
   @requireTypes(None, str)
   def requestLog(self, logID):
     """ Requests a specific gamelog """ 
-    
+    global emptyLog
+
+    # -arena in the command line means:
+    # "nobody is ever going to see the log, don't send it, it's huge"
+    if emptyLog:
+      return ['log', logID, ""]
+
     with bz2.BZ2File("logs/" + logID + ".glog", "r") as infile:
       return ['log', logID, infile.read()]
 
@@ -173,8 +179,15 @@ class GameApp(AccountsAppMixin, BaseApp):
 class TestGameServer(SexpProtocol):
   app = GameApp
 
+
+# global
+emptyLog = False
+  
 if __name__ == "__main__":
+  portNumber = 19000
   if '-arena' in sys.argv:
-    import arena
-    arena.install()
-  TestGameServer.main(19000)
+    emptyLog = True
+  if '-port' in sys.argv:
+    indexNumber = sys.argv.index('-port') + 1
+    portNumber = int(sys.argv[ indexNumber ])
+  TestGameServer.main(portNumber)

@@ -1,5 +1,5 @@
 texture virus textures/mryuk.png
-font mainFont textures/Arimo.png Arimo.dat
+font mainFont textures/DroidSansMono.png DroidSansMono.dat
 texture nodeBackground textures/nodes.png
 texture red-server textures/red-server.png
 texture blue-server textures/blue-server.png
@@ -10,3 +10,35 @@ texture wall-1 textures/wall-2.png
 texture wall-2 textures/wall-3.png
 texture wall-3 textures/wall-4.png
 texture wall-4 textures/wall-5.png
+texture blue-nodes-0,0 textures/connected-nodes/blue-nodes-0,0.png
+texture blue-nodes-1,0 textures/connected-nodes/blue-nodes-1,0.png
+texture blue-nodes-2,0 textures/connected-nodes/blue-nodes-2,0.png
+texture blue-nodes-3,0 textures/connected-nodes/blue-nodes-3,0.png
+texture blue-nodes-0,1 textures/connected-nodes/blue-nodes-0,1.png
+texture blue-nodes-1,1 textures/connected-nodes/blue-nodes-1,1.png
+texture blue-nodes-2,1 textures/connected-nodes/blue-nodes-2,1.png
+texture blue-nodes-3,1 textures/connected-nodes/blue-nodes-3,1.png
+texture blue-nodes-0,2 textures/connected-nodes/blue-nodes-0,2.png
+texture blue-nodes-1,2 textures/connected-nodes/blue-nodes-1,2.png
+texture blue-nodes-2,2 textures/connected-nodes/blue-nodes-2,2.png
+texture blue-nodes-3,2 textures/connected-nodes/blue-nodes-3,2.png
+texture blue-nodes-0,3 textures/connected-nodes/blue-nodes-0,3.png
+texture blue-nodes-1,3 textures/connected-nodes/blue-nodes-1,3.png
+texture blue-nodes-2,3 textures/connected-nodes/blue-nodes-2,3.png
+texture blue-nodes-3,3 textures/connected-nodes/blue-nodes-3,3.png
+texture red-nodes-0,0 textures/connected-nodes/red-nodes-0,0.png
+texture red-nodes-1,0 textures/connected-nodes/red-nodes-1,0.png
+texture red-nodes-2,0 textures/connected-nodes/red-nodes-2,0.png
+texture red-nodes-3,0 textures/connected-nodes/red-nodes-3,0.png
+texture red-nodes-0,1 textures/connected-nodes/red-nodes-0,1.png
+texture red-nodes-1,1 textures/connected-nodes/red-nodes-1,1.png
+texture red-nodes-2,1 textures/connected-nodes/red-nodes-2,1.png
+texture red-nodes-3,1 textures/connected-nodes/red-nodes-3,1.png
+texture red-nodes-0,2 textures/connected-nodes/red-nodes-0,2.png
+texture red-nodes-1,2 textures/connected-nodes/red-nodes-1,2.png
+texture red-nodes-2,2 textures/connected-nodes/red-nodes-2,2.png
+texture red-nodes-3,2 textures/connected-nodes/red-nodes-3,2.png
+texture red-nodes-0,3 textures/connected-nodes/red-nodes-0,3.png
+texture red-nodes-1,3 textures/connected-nodes/red-nodes-1,3.png
+texture red-nodes-2,3 textures/connected-nodes/red-nodes-2,3.png
+texture red-nodes-3,3 textures/connected-nodes/red-nodes-3,3.png

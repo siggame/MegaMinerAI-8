@@ -5,10 +5,10 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "decompress/bzlib.h"
 #include "centralwidget.h"
 #include "controlbar.h"
 #include "../timemanager/timeManager.h"
-#include "decompress/bzlib.h"
 
 #include <QtGui>
 #include <QMainWindow>
