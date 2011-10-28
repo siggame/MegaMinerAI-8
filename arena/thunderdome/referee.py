@@ -7,11 +7,11 @@ from datetime import datetime
 import socket
 
 import sys
-if len(sys.argv) != 2:
-    server_path  = '/home/mnuck/arena/server'
-    print "referee.py server_path"
+if len(sys.argv) != 3:
+    print "referee.py server_path port"
+    exit()
 else:
-    (junk, server_path) = sys.argv
+    (junk, server_path, port) = sys.argv
 my_hostname = "r09mannr4.device.mst.edu"
 
 # My AWS credentials
@@ -129,8 +129,15 @@ def looping():
     players = list()
     
     e = ["ssh", "gladiator@%s" % gladiator1] + \
-        ["cd %s ; ./run %s" % \
-             (gamedatas[0].client.name, my_hostname)]
+        ["cd %s ; ./run %s:%s" % \
+             (gamedatas[0].client.name, my_hostname, port)]
+    print
+    print
+    print
+    print e
+    print
+    print
+    print
     players.append(subprocess.Popen(e, stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE))
     
@@ -157,8 +164,15 @@ def looping():
     nodder2.start()
     
     e = ["ssh", "gladiator@%s" % gladiator2] + \
-        ["cd %s ; ./run %s %s" % \
-             (gamedatas[1].client.name, my_hostname, game_number)]
+        ["cd %s ; ./run %s:%s %s" % \
+             (gamedatas[1].client.name, my_hostname, port, game_number)]
+    print
+    print
+    print
+    print e
+    print
+    print
+    print
     players.append(subprocess.Popen(e, stdout=file("/dev/null", "w"),
                                     stderr=subprocess.STDOUT))
 

@@ -12,12 +12,7 @@ stalk = beanstalkc.Connection()
 stalk.watch('free-gladiators')
 stalk.use('free-gladiators')
 
-print "clearing the gladiator pool..."
-while stalk.stats_tube('free-gladiators')['current-jobs-ready'] > 0:
-    j = stalk.reserve()
-    j.delete()
-
-count = 16
+count = 8
 print "spinning up %i gladiators..." % count
 conn = boto.connect_ec2(access_cred, secret_cred)
 gladiator_image = conn.get_image('ami-ef63ac86')
@@ -41,11 +36,6 @@ for instance in reservation.instances:
     pair_thing = [instance.public_dns_name, instance.public_dns_name]
     gladiator_pairs.append(pair_thing)
     
-#gladiator_pairs = [ ['localhost', 'localhost'],
-#                    ['localhost', 'localhost'] ]
-
-#print gladiator_pairs
-
 print "loading gladiators into the pool..."
 for pair in gladiator_pairs:
     s = json.dumps(pair)
