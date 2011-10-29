@@ -4,6 +4,7 @@
 
 # Standard Imports
 from datetime import datetime
+from random import random
 
 # Non-Django 3rd Party Imports
 import beanstalkc
@@ -21,7 +22,13 @@ class Client(models.Model):
     name            = models.CharField(max_length=100)
     current_version = models.CharField(max_length=100, default='')
     embargoed       = models.BooleanField(default=False) # fail to compile?
-
+        
+    def last_game(self):
+        last = self.game_set.all().aggregate(Max('pk'))
+        if last['pk__max']:
+            return last['pk__max']
+        else:
+            return -1
     
     def last_visualized(self):
         vis = self.game_set.all().aggregate(Max('visualized'))
