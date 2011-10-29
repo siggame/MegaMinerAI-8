@@ -342,21 +342,41 @@ namespace visualizer
 
     IRenderer::Alignment a = IRenderer::Left;
     Color team = Color( 1, 0, 0 );
-
-
+    Color darkTeam = Color( 0.6, 0, 0 );
+    double winningPercent = (double)m_sb->score / (double)(m_sb->score + m_sb->enemyScore);
+    double startX = 0;
+    double endX   = m_sb->mapWidth * winningPercent;
+    double xTextOffset = 2;
+    double xVirusOffset = 0.5;
+    
     if( m_sb->player == 1 )
     {
       a = IRenderer::Right;
       team = Color( 0, 0, 1 );
+      darkTeam = Color( 0, 0, 0.6 );
       ss << m_sb->score << " : " << m_sb->teamName;
-    } else
+      
+      startX = m_sb->mapWidth * (1 - winningPercent);
+      endX   = m_sb->mapWidth;
+      xTextOffset = -2.4;
+      xVirusOffset = -1.5;
+    }
+    else
     {
       ss << m_sb->teamName << " : " << m_sb->score;
     }
 
-
     m_sb->renderer().setColor( team ); 
-    m_sb->renderer().drawText( m_sb->x, m_sb->y, "mainFont", ss.str(), 3, a ); 
+    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y, "mainFont", ss.str(), 3, a );
+    
+    for(int x = 0; x < 16; x++)
+      for(int y = 0; y < 16; y++)
+        if(m_sb->virusPixels[x][y])
+          m_sb->renderer().drawQuad( m_sb->x + (x * 0.0625) + xVirusOffset, m_sb->y + (y * 0.0625), 0.0625, 0.0625);
+    
+    m_sb->renderer().drawLine(startX, m_sb->y + 1.25, endX, m_sb->y + 1.25, 16.0);
+    m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
+    m_sb->renderer().drawLine(m_sb->mapWidth/2 + 0.45, m_sb->y + 1.25, m_sb->mapWidth/2 + 0.55, m_sb->y + 1.25, 16.0);
 
   }
 

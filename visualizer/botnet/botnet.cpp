@@ -116,11 +116,18 @@ namespace visualizer
       score1->x = 1.0f;
       score1->y = 0.2f;
       score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
+      score1->mapWidth  = m_game->states[0].width;
+      score1->virusPixels = player1virus;
+      score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
+      
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width-1;
       score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
+      score2->mapWidth  = m_game->states[0].width;
+      score2->virusPixels = player2virus;
+      score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
 
       score1->addKeyFrame( new DrawScore( score1 ) );
       score2->addKeyFrame( new DrawScore( score2 ) );

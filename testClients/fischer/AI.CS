@@ -67,7 +67,13 @@ class AI : BaseAI
         
         // for each of my bases try to spawn a virus
         foreach(var my_base in bases)
-            if(my_base.getOwner() == playerID() && map[my_base.getX(),my_base.getY()].VirusLevel == -1)
+            if(
+                my_base.getOwner() == playerID() && 
+                map[my_base.getX(),my_base.getY()].VirusLevel == -1 &&
+                players[playerID()].getByteDollars() > (int)(baseCost() * scaleCost()) &&
+                my_base.getSpawnsLeft() > 0 &&
+                players[playerID()].getCycles() > 0
+               )
                 my_base.spawn(0);
         
         // for each of my viruses find a point to go to, then go there!
@@ -99,7 +105,6 @@ class AI : BaseAI
                     virus.move(points[0].X, points[0].Y);
                     points.RemoveAt(0);
                 }
-                
                 
                 if(loopCount >= 999)
                     Console.WriteLine("ALERT: Preventing Infinite Loop at DOING MOVE.");
