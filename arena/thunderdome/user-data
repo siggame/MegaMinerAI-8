@@ -1,0 +1,23 @@
+#!/bin/bash
+export ACCESS_CRED='AKIAIZX76FSWZCJPHGXQ'
+export SECRET_CRED='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'
+export S3_BUCKET='siggame-gamelogs'
+export CLIENT_PREFIX='ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/clients'
+
+cd /home/gladiator/arena
+
+# gather up the fixed components
+scp -P 2222 mnuck@r09mannr4.device.mst.edu:/home/mnuck/arena/referee.py .
+scp -P 2222 mnuck@r09mannr4.device.mst.edu:/home/mnuck/arena/blaster.py .
+scp -P 2222 mnuck@r09mannr4.device.mst.edu:/srv/uard/thunderdome/models.py /home/gladiator/djangolol/thunderdome/models.py
+git clone ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/server
+
+# open ssh tunnels. 5432 is postgresql, 11300 is beanstalkd
+ssh -f -N -p 2222 \
+    -L 5432:r09mannr4.device.mst.edu:5432 \
+    -L 11300:r09mannr4.device.mst.edu:11300 \
+    mnuck@r09mannr4.device.mst.edu
+	    
+./blaster.py
+	    
+exit 0

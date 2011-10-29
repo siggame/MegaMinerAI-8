@@ -130,9 +130,14 @@ namespace visualizer
     { }
 
     float x, y;
-
+    
+    int mapWidth;
+    bool **virusPixels;
+    
     int player;
     int score;
+    int enemyScore;
+    
     string teamName;
 
     AnimData* getData()

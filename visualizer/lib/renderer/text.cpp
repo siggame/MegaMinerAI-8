@@ -21,6 +21,7 @@ namespace visualizer
       unsigned char temp;
       fin.read( (char*)&temp, sizeof( char ) );
       m_width[ i ] = temp;
+      m_width[ i ] = m_width[ i ]/1.75;
       fin.read( (char*)&temp, sizeof( char ) );
     }
     

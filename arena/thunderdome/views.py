@@ -125,7 +125,8 @@ def matchup(request, client1_id, client2_id):
     c1games = set(client1.game_set.all())
     c2games = set(client2.game_set.all())    
     shared_games = list(c1games & c2games)
-        
+    shared_games.sort(key=lambda x: x.pk, reverse=True)
+    
     payload = {'client1' : client1,
                'client2' : client2,
                'games'   : shared_games }
@@ -136,7 +137,7 @@ def matchup(request, client1_id, client2_id):
 def get_next_game_url_to_visualize(request):
     clients = Client.objects.all()
     worst_client = min(clients, key = lambda x: x.last_visualized())
-    next_gid = worst_client.game_set.all().aggregate(Max('pk'))['pk__max']
+    next_gid = worst_client.game_set.all().filter(status='Complete').aggregate(Max('pk'))['pk__max']
     next_game = Game.objects.get(pk=next_gid)
     return HttpResponse(next_game.gamelog_url)
 
