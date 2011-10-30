@@ -4,7 +4,7 @@
 
 # Some magic to get a standalone python program hooked in to django
 import sys
-sys.path = ['/srv/', '/srv/uard/'] + sys.path
+sys.path = ['/home/mies/mysite', '/home/mies/mysite/mysite/'] + sys.path
 
 from django.core.management import setup_environ
 import settings
