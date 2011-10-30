@@ -51,9 +51,9 @@ class Client(models.Model):
 class Game(models.Model):
     ### A single game
     clients     = models.ManyToManyField(Client, through='GameData',
-                                         related_name='game_clients')
+                                         related_name='games_played')
     winner      = models.ForeignKey(Client, null=True, blank=True,
-                                    related_name='game_winners')
+                                    related_name='games_won')
     status      = models.CharField(max_length=20, 
                                    default='New')
     priority    = models.IntegerField(default=1000)
@@ -61,6 +61,7 @@ class Game(models.Model):
     visualized  = models.DateTimeField(default=datetime(1970,1,1),null=True)
     completed   = models.DateTimeField(null=True)
     claimed     = models.BooleanField(default=True)
+    tournament  = models.BooleanField(default=False)
     stats       = models.TextField(default='') # holds extra stuff via JSON
     
     def schedule(self):
@@ -112,17 +113,17 @@ class InjectedGameForm(forms.Form):
 class Match(models.Model):
     ### A multi-game match
     p0     = models.ForeignKey(Client, null=True, blank=True, 
-                               related_name='match_p0s')
+                               related_name='matches_as_p0')
     p1     = models.ForeignKey(Client, null=True, blank=True,
-                               related_name='match_p1s')
+                               related_name='matches_as_p1')
     winner = models.ForeignKey(Client, null=True, blank=True,
-                               related_name='match_winners')
+                               related_name='matches_won')
     loser  = models.ForeignKey(Client, null=True, blank=True,
-                               related_name='match_losers')
+                               related_name='matches_lost')
     father = models.ForeignKey('self', null=True, blank=True,
-                               related_name='match_fathers')
+                               related_name='matches_fathered')
     mother = models.ForeignKey('self', null=True, blank=True,
-                               related_name='match_mothers')
+                               related_name='matches_mothered')
     games  = models.ManyToManyField(Game)
     wins_to_win = models.IntegerField(default=4)
     father_type = models.TextField(default='win')
