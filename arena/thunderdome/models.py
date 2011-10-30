@@ -54,6 +54,8 @@ class Game(models.Model):
                                          related_name='games_played')
     winner      = models.ForeignKey(Client, null=True, blank=True,
                                     related_name='games_won')
+    loser       = models.ForeignKey(Client, null=True, blank=True,
+                                    related_name='games_lost')
     status      = models.CharField(max_length=20, 
                                    default='New')
     priority    = models.IntegerField(default=1000)

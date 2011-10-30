@@ -89,19 +89,20 @@ def scoreboard(request):
         for c2 in clients:
             if c1 != c2:
                 grid[c1][c2] = 0
-    
-    for game in Game.objects.all():
-        winner_set = game.gamedata_set.filter(won=True)
-        loser_set  = game.gamedata_set.filter(won=False)
-        if( len(winner_set) == 1 and len(loser_set) == 1 ):
-            winner = winner_set[0]
-            loser  = loser_set[0]
-            grid[winner.client][loser.client] += 1
+
+    for c1 in clients:
+        for game in list(c1.games_won.all()):
+            grid[c1][game.loser] +=1
                 
     # Sort the clients by winningness
     clients = list(clients)
-    clients.sort(key = lambda x: x.gamedata_set.filter(won=True).count(),
-                 reverse=True)
+    def fitness(x):
+        if x.games_played.count() == 0:
+            return 0
+        else:
+            return x.games_won.count() / float(x.games_played.count())
+        
+    clients.sort(reverse=True, key = lambda x: fitness(x))
 
     # Load the data in the format the template expects
     for c1 in clients:
@@ -122,8 +123,8 @@ def matchup(request, client1_id, client2_id):
     client2 = get_object_or_404(Client, pk=client2_id)
     
     # manual join. fix this if you know how
-    c1games = set(client1.game_set.all())
-    c2games = set(client2.game_set.all())    
+    c1games = set(client1.games_played.all())
+    c2games = set(client2.games_played.all())    
     shared_games = list(c1games & c2games)
     shared_games.sort(key=lambda x: x.pk, reverse=True)
     
