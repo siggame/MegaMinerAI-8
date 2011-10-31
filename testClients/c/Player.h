@@ -22,6 +22,8 @@ class Player {
   int byteDollars();
   ///Player's machine cycles, used to create new Virus's
   int cycles();
+  ///The amount of time this player has before timing out
+  int time();
 
   // Actions
   ///Allows a player to display a message to the screen.

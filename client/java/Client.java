@@ -57,6 +57,7 @@ public interface Client extends Library {
   String playerGetPlayerName(Pointer ptr);
   int playerGetByteDollars(Pointer ptr);
   int playerGetCycles(Pointer ptr);
+  int playerGetTime(Pointer ptr);
 
   int tileGetId(Pointer ptr);
   int tileGetX(Pointer ptr);

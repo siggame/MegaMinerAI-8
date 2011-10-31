@@ -152,6 +152,11 @@ class Player(GameObject):
     self.validify()
     return library.playerGetCycles(self.ptr)
 
+  ##The amount of time this player has before timing out
+  def getTime(self):
+    self.validify()
+    return library.playerGetTime(self.ptr)
+
 
   def __str__(self):
     self.validify()
@@ -160,6 +165,7 @@ class Player(GameObject):
     ret += "playerName: %s\n" % self.getPlayerName()
     ret += "byteDollars: %s\n" % self.getByteDollars()
     ret += "cycles: %s\n" % self.getCycles()
+    ret += "time: %s\n" % self.getTime()
     return ret
 
 ##Represents a single space on the map, can be owned by either player, neither player, or be a wall

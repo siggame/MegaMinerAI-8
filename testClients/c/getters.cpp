@@ -48,6 +48,10 @@ DLLEXPORT int playerGetCycles(_Player* ptr)
 {
   return ptr->cycles;
 }
+DLLEXPORT int playerGetTime(_Player* ptr)
+{
+  return ptr->time;
+}
 DLLEXPORT int tileGetId(_Tile* ptr)
 {
   return ptr->id;

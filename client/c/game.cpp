@@ -439,6 +439,8 @@ void parsePlayer(Connection* c, _Player* object, sexp_t* expression)
   sub = sub->next;
   object->cycles = atoi(sub->val);
   sub = sub->next;
+  object->time = atoi(sub->val);
+  sub = sub->next;
 
 }
 void parseTile(Connection* c, _Tile* object, sexp_t* expression)
