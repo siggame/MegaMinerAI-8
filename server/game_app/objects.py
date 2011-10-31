@@ -86,8 +86,13 @@ class Player:
 
   def nextTurn(self):
     if self.id == self.game.playerID:
+      # you get money on your turn, unless it is after the last turn
+      if self.game.turnNumber < self.game.turnLimit:
+        self.cycles += self.game.getIncome(self.id)
+    # Calculates the score at the end of a players turn (IE the start of the next player)
+    # Since no one goes before the first turn, don't calculate on the first turn
+    elif self.game.turnNumber > 0:
       self.byteDollars += self.game.getScore(self.id)
-      self.cycles += self.game.getIncome(self.id) 
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk', self.id, message])

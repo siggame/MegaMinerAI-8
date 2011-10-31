@@ -161,7 +161,6 @@ class Match(DefaultGameWorld):
           score+=1
           path.append(self.grid[dx][dy])
           closed[dx][dy] = True
-    print id, self.turnNumber, score
     return score
 
   def getIncome(self, id):
