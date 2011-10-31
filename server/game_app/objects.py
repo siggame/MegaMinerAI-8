@@ -66,12 +66,13 @@ class Base(Mappable):
       return True
 
 class Player:
-  def __init__(self, game, id, playerName, byteDollars, cycles):
+  def __init__(self, game, id, playerName, byteDollars, cycles, time):
     self.game = game
     self.id = id
     self.playerName = playerName
     self.byteDollars = byteDollars
     self.cycles = cycles
+    self.time = time
 
   def toList(self):
     value = [
@@ -79,6 +80,7 @@ class Player:
       self.playerName,
       self.byteDollars,
       self.cycles,
+      self.time,
       ]
     return value
 
@@ -89,6 +91,7 @@ class Player:
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk', self.id, message])
+    return True
 
 class Tile(Mappable):
   def __init__(self, game, id, x, y, owner):
@@ -177,7 +180,6 @@ class Virus(Mappable):
            self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
            self.game.removeObject(virus)
            self.game.removeObject(self)
-           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
            return True
        #moving a virus onto an enemy virus, conflict!!
        else:
@@ -192,7 +194,6 @@ class Virus(Mappable):
          elif virus.level == self.level:
            self.game.removeObject(virus)
            self.game.removeObject(self)
-           print("two evenly matched viruses enter, no one leaves ",dx,dy)###
            return True
     self.x = dx
     self.y = dy
@@ -202,3 +203,4 @@ class Virus(Mappable):
   
   def talk(self, message):
     self.game.animations.append(['VirusTalk',self.id,message])
+    return True

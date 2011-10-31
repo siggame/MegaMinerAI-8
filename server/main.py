@@ -184,6 +184,8 @@ class TestGameServer(SexpProtocol):
 emptyLog = False
   
 if __name__ == "__main__":
+  import timer
+  timer.install()
   portNumber = 19000
   if '-arena' in sys.argv:
     emptyLog = True

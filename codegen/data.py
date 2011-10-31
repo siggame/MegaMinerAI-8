@@ -28,6 +28,7 @@ Player = Model('Player',
     Variable('playerName',str, "Player's Name"),
     Variable('byteDollars', int, "Player's points, one with more at end of game wins"),
     Variable('cycles', int, "Player's machine cycles, used to create new Virus's"),
+    Variable('time', int, "The amount of time this player has before timing out"),
     ],
   # The documentation string for Player objects
   doc = 'Stores information about a player in the game',
