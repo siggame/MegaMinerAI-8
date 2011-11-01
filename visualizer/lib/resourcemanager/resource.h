@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include <QImage>
+#include <QtOpenGL>
 #include "typedefs.h"
 #include "common.h"
 #include "renderer/text.h"
@@ -124,6 +125,34 @@ namespace visualizer
       std::set<std::string> m_references;
       std::string filename;
     private:
+  };
+
+  class ResDisplayList: public Resource
+  {
+    public:
+      ResDisplayList()
+        : Resource( RT_DISPLAY_LIST )
+      { listNum = glGenLists( 1 ); }
+
+      void startList()
+      {
+        glNewList( listNum, GL_COMPILE );
+
+      }
+
+      void endList()
+      {
+        glEndList();
+      }
+
+      void draw()
+      {
+        glCallList( listNum );
+      }
+
+
+    private:
+      unsigned int listNum;
   };
 
   class ResFont : public Resource 

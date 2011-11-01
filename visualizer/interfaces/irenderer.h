@@ -149,7 +149,11 @@ namespace visualizer
         const float& sY
         ) = 0;
 
+      virtual void beginList( const std::string& name ) = 0;
 
+      virtual void endList( const std::string& name ) = 0;
+
+      virtual void drawList( const std::string& name ) = 0;
 
   };
 

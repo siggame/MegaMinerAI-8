@@ -9,7 +9,8 @@ namespace visualizer
     RT_NONE, 
     RT_TEXTURE, 
     RT_ANIMATION, 
-    RS_FONT
+    RS_FONT,
+    RT_DISPLAY_LIST
   };
 
   typedef std::string ResID_t;
