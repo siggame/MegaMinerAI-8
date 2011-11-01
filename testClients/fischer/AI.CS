@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Linq;
 
 enum Direction { Up = 0, Left = 1, Down = 2, Right = 3 }
 enum NodeType { Unset = -1, Wall, EnemyBase, MyBase, MyTile, EnemyTile, NeutralTile, EnemyVirus, MyVirus }
@@ -8,6 +9,7 @@ enum NodeType { Unset = -1, Wall, EnemyBase, MyBase, MyTile, EnemyTile, NeutralT
 class GameNode {
     public NodeType Type = NodeType.Unset;
     public int VirusLevel = -1;
+    public int DistanceToNearestTakenTile = 1;
 }
 
 class GamePoint {
@@ -25,7 +27,9 @@ class AI : BaseAI
 {
     public GameNode[,] map;    
     Random rand;
+    int desiredX = -1, desiredY = -1;
     private const int UNSET = -1;
+    public bool goingAfterEnemy = false;
     
     public override string username() { return "Geordi's Visor"; }
     public override string password() { return "TNG"; }
@@ -45,7 +49,28 @@ class AI : BaseAI
         rand = new Random();
         rand.Next(1);  // To surpress warnings about rand not being used.
         
-        Console.WriteLine("Hello World");
+        int farthestDistance = 0;
+        
+        update_map();
+        
+        desiredX = 0;
+        desiredY = 0;
+        
+        for(int x = 0; x < width(); x += 2)         // have to do every 4th tile to no LAGGGGG out
+            for(int y = 0; y < height(); y += 2)
+                if(map[x, y].Type == NodeType.NeutralTile)
+                {
+                    int d = distanceToNearestTakenNode(x, y);
+                    
+                    if(d > farthestDistance)
+                    {
+                        farthestDistance = d;
+                        desiredX = x;
+                        desiredY = y;
+                    }
+                }
+        
+        Console.WriteLine("Desired Point: " + desiredX + "," + desiredY);
     }
 
     public override bool run()
@@ -69,10 +94,10 @@ class AI : BaseAI
         foreach(var my_base in bases)
             if(
                 my_base.getOwner() == playerID() && 
-                map[my_base.getX(),my_base.getY()].VirusLevel == -1 &&
+                map[my_base.getX(),my_base.getY()].VirusLevel == -1/* &&
                 players[playerID()].getByteDollars() > (int)(baseCost() * scaleCost()) &&
                 my_base.getSpawnsLeft() > 0 &&
-                players[playerID()].getCycles() > 0
+                players[playerID()].getCycles() > 0*/
                )
                 my_base.spawn(0);
         
@@ -116,6 +141,8 @@ class AI : BaseAI
     
     public void update_map()
     {
+        int neutralTiles = 0, takenTiles = 0;
+        
         // reset the map
         for(int x = 0; x < width(); x++)
             for(int y = 0; y < height(); y++)
@@ -130,11 +157,20 @@ class AI : BaseAI
             if(tile.getOwner() == wall())
                 map[tile.getX(), tile.getY()].Type = NodeType.Wall;
             else if(tile.getOwner() == neutral_tile())
+            {
                 map[tile.getX(), tile.getY()].Type = NodeType.NeutralTile;
+                neutralTiles++;
+            }
             else if(tile.getOwner() == playerID())
+            {
                 map[tile.getX(), tile.getY()].Type = NodeType.MyTile;
+                takenTiles++;
+            }
             else if(tile.getOwner() == enemyID())
+            {
                 map[tile.getX(), tile.getY()].Type = NodeType.EnemyTile;
+                takenTiles++;
+            }
         }
         
         // map all the viruses
@@ -160,10 +196,33 @@ class AI : BaseAI
             else if(some_base.getOwner() == enemyID())
                 map[some_base.getX(), some_base.getY()].Type = NodeType.EnemyBase;
         }
+        
+        if(neutralTiles < takenTiles && !goingAfterEnemy)
+        {
+            var enemy_base = bases.ToList().First(b => b.getOwner() == enemyID());
+            
+            desiredX = enemy_base.getX();
+            desiredY = enemy_base.getY();
+            
+            goingAfterEnemy = true;
+            
+            Console.WriteLine("I SAY: die enemy viruses!");
+        }
     }
     
     public GamePoint find_point(int x, int y, int this_virus_level, int desired_virus_level)
     {
+        if(x >= width() || y >= height() || y < 0 || x < 0)
+            return null;
+        
+        // BEGIN: First find a path to the desired position to influence our movement
+        var grid = get_pathnode_map(x, y, this_virus_level, !goingAfterEnemy);
+        var aStar = new SettlersEngine.SpatialAStar<GamePathNode, Object>(grid);
+        var path = aStar.Search(new Point(x, y), new Point(desiredX, desiredY), null);
+        //LinkedList<GamePathNode> path = null;
+        // END: First find a path to the desired position to influence our movement
+        
+        
         var points = new List<GamePoint>();
         var returnablePoints = new List<GamePoint>();
         //var startingPoint = new GamePoint(x, y);
@@ -194,7 +253,7 @@ class AI : BaseAI
             if(node.Type == NodeType.EnemyTile ||
                node.Type == NodeType.NeutralTile ||
               (node.Type == NodeType.EnemyVirus && node.VirusLevel < this_virus_level) ||
-              (node.Type == NodeType.MyVirus && node.VirusLevel == this_virus_level && this_virus_level < desired_virus_level ))
+              (node.Type == NodeType.MyVirus && node.VirusLevel == this_virus_level && this_virus_level < desired_virus_level && pt.Depth == 1))
             {
                 returnablePoints.Add(pt);
                 points.Remove(pt);
@@ -208,12 +267,12 @@ class AI : BaseAI
                node.Type == NodeType.EnemyBase ||
               (node.Type == NodeType.MyVirus && node.VirusLevel != this_virus_level) ||
               (node.Type == NodeType.EnemyVirus && node.VirusLevel >= this_virus_level) ||
-              (node.Type == NodeType.MyVirus))
+              (node.Type == NodeType.MyVirus && pt.Depth == 1))
             {
                 points.Remove(pt);
             }
-            // else if it is my tile look for something else
-            else if(node.Type == NodeType.MyTile)
+            // else if it is my tile or my far away virus look for something else
+            else if(node.Type == NodeType.MyTile || (node.Type == NodeType.MyVirus && pt.Depth > 1) )
             {
                 // if we can add the point then do so
                 if(returnDepth == 0 || pt.Depth < returnDepth)
@@ -257,24 +316,45 @@ class AI : BaseAI
             //   3. Neutral Tiles
             //   4. My Viruses to join with
             
+            var inOrder = new List<GamePoint>();
+            
             foreach(var returnablePoint in returnablePoints)
                 if(map[returnablePoint.X, returnablePoint.Y].Type == NodeType.EnemyVirus)
-                    return returnablePoint;
+                    inOrder.Add(returnablePoint);
             
             foreach(var returnablePoint in returnablePoints)
                 if(map[returnablePoint.X, returnablePoint.Y].Type == NodeType.EnemyTile)
-                    return returnablePoint;
+                    inOrder.Add(returnablePoint);
             
             foreach(var returnablePoint in returnablePoints)
                 if(map[returnablePoint.X, returnablePoint.Y].Type == NodeType.NeutralTile)
-                    return returnablePoint;
+                    inOrder.Add(returnablePoint);
             
             foreach(var returnablePoint in returnablePoints)
                 if(map[returnablePoint.X, returnablePoint.Y].Type == NodeType.MyVirus)
-                    return returnablePoint;
+                    inOrder.Add(returnablePoint);
             
-            Console.WriteLine("PROBLEM: No returnablePoints have any Priority!");
-            return returnablePoints[0];
+            // go through the points we want in order and if there is a path return the point that is in that path
+            //   this basically says, "oh you have a many options? well take the one that mvoes you closer to the desired point".
+            if(path != null && path.Count > 2)
+            {
+                path.RemoveFirst();
+                GamePathNode firstStep = null;
+                
+                //because path.First won't compile :(
+                foreach(var node in path)
+                {
+                    firstStep = node;
+                    break;
+                }
+                
+                foreach(var returnablePoint in inOrder)
+                    if(returnablePoint.X == firstStep.X && returnablePoint.Y == firstStep.Y)
+                        return returnablePoint;
+            }
+            
+            //only should happen if there was no path
+            return inOrder[0];
         }
         else
         {
@@ -284,5 +364,147 @@ class AI : BaseAI
         return null;
     }
     
+    public int distanceToNearestTakenNode(int x, int y)
+    {
+        var points = new List<GamePoint>();
+        points.Add(new GamePoint(x + 1, y));
+        points.Add(new GamePoint(x - 1, y));
+        points.Add(new GamePoint(x, y + 1));
+        points.Add(new GamePoint(x, y - 1));
+        
+        int deepestPoint = 1;
+        int loopCount = 0;
+        
+        while(points.Count > 0 && loopCount < 10000)
+        {
+            var pt = points[0];
+            loopCount++;
+            
+            if(deepestPoint < pt.Depth)
+                deepestPoint = pt.Depth;
+            
+            // make sure the point is not out of range of the game board
+            if(pt.X >= width() || pt.X < 0 || pt.Y >= height() || pt.Y < 0)
+            {
+                points.Remove(pt);
+                continue;
+            }
+            
+            var node = map[pt.X, pt.Y];
+
+            if(node.Type == NodeType.Wall)
+            {
+                points.Remove(pt);
+            }
+            else if(node.Type == NodeType.MyVirus ||
+                    node.Type == NodeType.EnemyVirus ||
+                    node.Type == NodeType.MyBase ||
+                    node.Type == NodeType.EnemyBase ||
+                    node.Type == NodeType.MyTile ||
+                    node.Type == NodeType.EnemyTile)
+            {
+                //Console.WriteLine("OMG: Not preventing NTN!");
+                return deepestPoint;
+            }
+            else // should be a Neutral Tile
+            {
+                foreach(Direction dir in Enum.GetValues(typeof(Direction)))
+                {
+                    var seedPoint = new GamePoint(pt, dir);
+                    
+                    bool alreadyInPoints = false;
+                    
+                    foreach(var point in points)
+                        if(point.X == seedPoint.X && point.Y == seedPoint.Y)
+                        {
+                            alreadyInPoints = true;
+                            break;
+                        }
+                    
+                    if(!alreadyInPoints)
+                        points.Add(seedPoint);
+                }
+                
+                points.Remove(pt);
+            }
+        }
+        
+        if(loopCount >= 9999)
+            Console.WriteLine("ALERT: Preventing Infinite Loop at Nearest Taken Node. (Which means node should be trapped)");
+        
+        return -1;
+    }
     
+    public GamePathNode[,] get_pathnode_map(int startX, int startY, int start_virus_level, bool my_tiles_are_blocked)
+    {
+        update_map();
+        
+        var pathNodeMap = new GamePathNode[width(), height()];
+        
+        for(int x = 0; x < width(); x++)
+        {
+            for(int y = 0; y < height(); y++)
+            {
+                Boolean isWall = false;
+                
+                var node = map[x, y];
+                
+                // WALL: node that can't be moved through
+                if(node.Type == NodeType.MyBase ||
+                   node.Type == NodeType.EnemyBase ||
+                   node.Type == NodeType.Wall ||
+                  (node.Type == NodeType.EnemyVirus && node.VirusLevel >= start_virus_level) ||
+                  (node.Type == NodeType.MyTile && my_tiles_are_blocked)
+                  )
+                {
+                    isWall = true;
+                }
+                // NOT WALL: starting location
+                else if(x == startX && y == startY)
+                {
+                    isWall = false;
+                }
+                // WALL: adjacent virus of mine
+                else if(
+                            node.Type == NodeType.MyVirus &&
+                            (
+                                ( x == startX + 1 && y == startY ) ||
+                                ( x == startX - 1 && y == startY ) ||
+                                ( x == startX && y == startY + 1 ) ||
+                                ( x == startX && y == startY - 1 )
+                            )
+                       )
+                {
+                    isWall = true;
+                }
+                // NOT WALL: anything else (hopefully)
+                else
+                {
+                    isWall = false;
+                }
+                
+                pathNodeMap[x, y] = new GamePathNode()
+                {
+                    IsWall = isWall,
+                    X = x,
+                    Y = y,
+                };
+            }
+        }
+        
+        return pathNodeMap;
+    }
 }
+
+public class GamePathNode : SettlersEngine.IPathNode<Object>
+{
+    public Int32 X { get; set; }
+    public Int32 Y { get; set; }
+    public Boolean IsWall { get; set; }
+
+    public bool IsWalkable(Object unused)
+    {
+        return !IsWall;
+    }
+}
+
