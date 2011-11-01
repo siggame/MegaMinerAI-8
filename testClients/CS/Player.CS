@@ -70,5 +70,11 @@ public class Player
     validify();
     return Client.playerGetCycles(ptr);
   }
+  ///The amount of time this player has before timing out
+  public int getTime()
+  {
+    validify();
+    return Client.playerGetTime(ptr);
+  }
 
 }

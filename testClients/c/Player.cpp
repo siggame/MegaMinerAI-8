@@ -29,6 +29,11 @@ int Player::cycles()
   return ((_Player*)ptr)->cycles;
 }
 
+int Player::time()
+{
+  return ((_Player*)ptr)->time;
+}
+
 
 int Player::talk(char* message)
 {
@@ -43,5 +48,6 @@ std::ostream& operator<<(std::ostream& stream,Player ob)
   stream << "playerName: " << ((_Player*)ob.ptr)->playerName  <<'\n';
   stream << "byteDollars: " << ((_Player*)ob.ptr)->byteDollars  <<'\n';
   stream << "cycles: " << ((_Player*)ob.ptr)->cycles  <<'\n';
+  stream << "time: " << ((_Player*)ob.ptr)->time  <<'\n';
   return stream;
 }

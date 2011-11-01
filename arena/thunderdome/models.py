@@ -22,6 +22,7 @@ class Client(models.Model):
     name            = models.CharField(max_length=100)
     current_version = models.CharField(max_length=100, default='')
     embargoed       = models.BooleanField(default=False) # fail to compile?
+    seed            = models.IntegerField(default=0)
         
     def last_game(self):
         last = self.game_set.all().aggregate(Max('pk'))
@@ -48,14 +49,21 @@ class Client(models.Model):
 
     
 class Game(models.Model):
-    ### A single match
-    clients     = models.ManyToManyField(Client, through='GameData')
+    ### A single game
+    clients     = models.ManyToManyField(Client, through='GameData',
+                                         related_name='games_played')
+    winner      = models.ForeignKey(Client, null=True, blank=True,
+                                    related_name='games_won')
+    loser       = models.ForeignKey(Client, null=True, blank=True,
+                                    related_name='games_lost')
     status      = models.CharField(max_length=20, 
                                    default='New')
     priority    = models.IntegerField(default=1000)
     gamelog_url = models.CharField(max_length=200, default='')
     visualized  = models.DateTimeField(default=datetime(1970,1,1),null=True)
     completed   = models.DateTimeField(null=True)
+    claimed     = models.BooleanField(default=True)
+    tournament  = models.BooleanField(default=False)
     stats       = models.TextField(default='') # holds extra stuff via JSON
     
     def schedule(self):
@@ -104,3 +112,26 @@ class InjectedGameForm(forms.Form):
                                           Client.objects.all()]
 
     
+class Match(models.Model):
+    ### A multi-game match
+    p0     = models.ForeignKey(Client, null=True, blank=True, 
+                               related_name='matches_as_p0')
+    p1     = models.ForeignKey(Client, null=True, blank=True,
+                               related_name='matches_as_p1')
+    winner = models.ForeignKey(Client, null=True, blank=True,
+                               related_name='matches_won')
+    loser  = models.ForeignKey(Client, null=True, blank=True,
+                               related_name='matches_lost')
+    father = models.ForeignKey('self', null=True, blank=True,
+                               related_name='matches_fathered')
+    mother = models.ForeignKey('self', null=True, blank=True,
+                               related_name='matches_mothered')
+    games  = models.ManyToManyField(Game)
+    wins_to_win = models.IntegerField(default=4)
+    father_type = models.TextField(default='win')
+    mother_type = models.TextField(default='win')
+    status      = models.TextField(default='Waiting')
+    root        = models.BooleanField(default=False)
+    
+    def __unicode__(self):
+        return u"%s - %s" % (self.p0.name, self.p1.name)

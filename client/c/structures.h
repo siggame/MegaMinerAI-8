@@ -35,6 +35,7 @@ struct _Player
   char* playerName;
   int byteDollars;
   int cycles;
+  int time;
 };
 struct _Tile
 {

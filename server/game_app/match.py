@@ -63,7 +63,7 @@ class Match(DefaultGameWorld):
     self.turn = self.players[-1]
     self.turnNumber = -1
     for p in self.players:
-      self.addObject(Player, [p.screenName, 0, self.startingCycles])
+      self.addObject(Player, [p.screenName, 0, self.startingCycles, self.startTime])
     self.startMap()
     self.nextTurn()
     return True
@@ -72,8 +72,7 @@ class Match(DefaultGameWorld):
     
   def startMap (self):
     mapFilenames = []
-#TODO will need a function to generate a map, lower priority, make game work first
-#look through the list of map files, for every .map file, add to mapfilename list
+    #look through the list of map files, for every .map file, add to mapfilename list
     for filename in os.listdir("maps/"):
       if ".map" in filename:
         mapFilenames.append(filename)
@@ -107,13 +106,7 @@ class Match(DefaultGameWorld):
         elif mapSquare =='0':
           self.grid[x][y] = self.addObject(Tile, [x,y,0])
           self.addObject(Base,[x, y, 0, 0])
-        else:
-          print "HUH?", mapSquare
-    for row in self.grid:
-      for col in row:
-        if col is None:
-          print "WAT"
-          sys.exit()
+
   def nextTurn(self):
     self.turnNumber += 1
     if self.turn == self.players[0]:
@@ -150,7 +143,6 @@ class Match(DefaultGameWorld):
     return total
   
   def getScore(self, id):
-#Done, need to test    # TODO Perform breadth first search from bases to all connected owned tiles
     path = []
     connect = {} 
     closed = [[False]*self.height for _ in range(self.width)]
@@ -169,7 +161,6 @@ class Match(DefaultGameWorld):
           score+=1
           path.append(self.grid[dx][dy])
           closed[dx][dy] = True
-    print self.turnNumber, score
     return score
 
   def getIncome(self, id):

@@ -7,16 +7,17 @@ export CLIENT_PREFIX='ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/clients'
 cd /home/gladiator/arena
 
 # gather up the fixed components
-scp -P 2222 mnuck@r09mannr4.device.mst.edu:/home/mnuck/arena/referee.py .
-scp -P 2222 mnuck@r09mannr4.device.mst.edu:/home/mnuck/arena/blaster.py .
-scp -P 2222 mnuck@r09mannr4.device.mst.edu:/srv/uard/thunderdome/models.py /home/gladiator/djangolol/thunderdome/models.py
-git clone ssh://mnuck@r99acm.device.mst.edu:2222/home/mnuck/server
+scp mies@mnuck.com:/home/mies/arena/referee.py .
+scp mies@mnuck.com:/home/mies/arena/blaster.py .
+scp mies@mnuck.com:/home/mies/mysite/mysite/thunderdome/models.py \
+            /home/gladiator/djangolol/thunderdome/models.py
+git clone ssh://mies@mnuck.com/home/mies/arena/server
 
 # open ssh tunnels. 5432 is postgresql, 11300 is beanstalkd
-ssh -f -N -p 2222 \
-    -L 5432:r09mannr4.device.mst.edu:5432 \
-    -L 11300:r09mannr4.device.mst.edu:11300 \
-    mnuck@r09mannr4.device.mst.edu
+ssh -f -N \
+    -L 5432:mnuck.com:5432 \
+    -L 11300:mnuck.com:11300 \
+    mies@mnuck.com
 	    
 ./blaster.py
 	    
