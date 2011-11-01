@@ -175,11 +175,11 @@ namespace visualizer
         const float& eY
         );
 
-      void beginList( const std::string& name );
+      void beginList( const std::string& name ) const;
 
-      void endList( const std::string& name );
+      void endList( const std::string& name ) const;
 
-      void drawList( const std::string& name );
+      void drawList( const std::string& name ) const;
 
 
       // void setCameraShape()

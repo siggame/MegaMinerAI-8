@@ -499,7 +499,7 @@ namespace visualizer
 
   } // _Renderer::setCamera()
 
-  void _Renderer::beginList( const std::string& name )
+  void _Renderer::beginList( const std::string& name ) const
   {
     ResourceMan->newDisplayList( name );
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
@@ -508,7 +508,7 @@ namespace visualizer
 
   } // _Renderer::beginList()
 
-  void _Renderer::endList( const std::string& name )
+  void _Renderer::endList( const std::string& name ) const
   {
     ResourceMan->newDisplayList( name );
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
@@ -517,7 +517,7 @@ namespace visualizer
 
   } // _Renderer::endList()
 
-  void _Renderer::drawList( const std::string& name )
+  void _Renderer::drawList( const std::string& name ) const
   {
     ResourceMan->newDisplayList( name );
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
