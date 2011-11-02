@@ -84,7 +84,8 @@ class Player:
 
   def nextTurn(self):
     if self.id == self.game.playerID:
-      self.byteDollars += self.game.getScore(self.id)
+      if self.game.turnNumber != 0:
+       self.byteDollars += self.game.getScore(self.id)
       self.cycles += self.game.getIncome(self.id) 
 
   def talk(self, message):
@@ -177,7 +178,7 @@ class Virus(Mappable):
            self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
            self.game.removeObject(virus)
            self.game.removeObject(self)
-           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
+#           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
            return True
        #moving a virus onto an enemy virus, conflict!!
        else:
