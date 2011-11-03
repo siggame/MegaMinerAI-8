@@ -11,7 +11,6 @@ cd ../visualizer/botnet/parser/sexp
 make clean
 make
 if [ "$?" -ne "0" ]; then
-  echo "Could Not Build the Parser"
   exit 1
 fi
 cd ../../
@@ -20,3 +19,6 @@ make clean
 qmake
 make clean
 make
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi

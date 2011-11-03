@@ -1,10 +1,23 @@
 #!/bin/bash
 
 cp options.cfg ./release/
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+
 cp -r ./plugins/ ./release/
 rm ./release/plugins/*.so
 
 cd release
 rm visualizer.zip
 zip visualizer.zip -r *
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+
 cp visualizer.zip /home/ftp/visualizer.zip
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+
+
