@@ -113,6 +113,11 @@ static bool parsePlayer(Player& object, sexp_t* expression)
   object.cycles = atoi(sub->val);
   sub = sub->next;
 
+  if ( !sub ) goto ERROR;
+
+  object.time = atoi(sub->val);
+  sub = sub->next;
+
   return true;
 
   ERROR:
@@ -637,4 +642,18 @@ bool parseString(Game& game, const char* string)
   fclose(in);
 
   return true;
+#if 0
+  sexp_t* st = NULL;
+
+  st = extract_sexpr(string);
+  bool flag = true;
+  while(st && flag)
+  {
+    flag = parseSexp(game, st);
+    destroy_sexp(st);
+    st = parse();
+  }
+
+  return flag;
+#endif
 }

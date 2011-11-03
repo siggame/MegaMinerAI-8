@@ -41,6 +41,7 @@ struct Player
   char* playerName;
   int byteDollars;
   int cycles;
+  int time;
 
   friend std::ostream& operator<<(std::ostream& stream, Player obj);
 };
