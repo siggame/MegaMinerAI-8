@@ -7,16 +7,7 @@
 {% block content %}
 <h1>{{ client1.name }} vs {{ client2.name }}</h1>
 {% for game in games %}
-  Game #{{game.pk}} <a href="{{ game.gamelog_url }}">gamelog</a><br />
-  {% for data in game.gamedata_set.all %}
-    {% if data.won %}
-      <font color='green'>
-    {% else %}
-      <font color='red'>
-    {% endif %}
-    {{ data.client.name }} - {{ data.version }}
-    </font><br>
-  {% endfor %}
+  {% include 'thunderdome/single_game_block.html' %}
   <hr>
 {% endfor %}
 {% endblock %}

@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Max
 
 # My Imports
-from thunderdome.models import Game, Client, GameData, InjectedGameForm
+from thunderdome.models import Game, Client, GameData, InjectedGameForm, Match
 
 from datetime import datetime
 
@@ -37,6 +37,8 @@ def health(request):
 
     p['sanity'] = p['ready_requests']  == p['scheduled_games'] \
               and p['running_games'] == p['running_requests']
+    
+    p['matches'] = Match.objects.all()
 
     return render_to_response('thunderdome/health.html', p)
 
@@ -71,6 +73,13 @@ def view_game(request, game_id):
 
 
 @login_required
+def view_match(request, match_id):
+    ### View the status of a single game
+    return render_to_response('thunderdome/view_match.html', 
+                              {'match': get_object_or_404(Match, pk=match_id)})
+    
+
+@login_required
 def view_client(request, client_id):
     ### View the status of a single client
     return render_to_response('thunderdome/view_client.html', 
@@ -87,22 +96,15 @@ def scoreboard(request):
     for c1 in clients:
         grid[c1] = dict()
         for c2 in clients:
-            if c1 != c2:
-                grid[c1][c2] = 0
+            grid[c1][c2] = 0
 
     for c1 in clients:
-        for game in list(c1.games_won.all()):
+        for game in c1.games_won.all():
             grid[c1][game.loser] +=1
                 
     # Sort the clients by winningness
     clients = list(clients)
-    def fitness(x):
-        if x.games_played.count() == 0:
-            return 0
-        else:
-            return x.games_won.count() / float(x.games_played.count())
-        
-    clients.sort(reverse=True, key = lambda x: fitness(x))
+    clients.sort(reverse=True, key = lambda x: x.fitness())
 
     # Load the data in the format the template expects
     for c1 in clients:
@@ -138,7 +140,7 @@ def matchup(request, client1_id, client2_id):
 def get_next_game_url_to_visualize(request):
     clients = Client.objects.all()
     worst_client = min(clients, key = lambda x: x.last_visualized())
-    next_gid = worst_client.game_set.all().filter(status='Complete').aggregate(Max('pk'))['pk__max']
+    next_gid = worst_client.games_played.all().filter(status='Complete').aggregate(Max('pk'))['pk__max']
     next_game = Game.objects.get(pk=next_gid)
     return HttpResponse(next_game.gamelog_url)
 

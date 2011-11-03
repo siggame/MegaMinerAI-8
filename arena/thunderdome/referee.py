@@ -146,10 +146,12 @@ def looping():
     winner = parse_gamelog(game_number)
     if winner == '0':
         game.winner = gamedatas[0].client
+        game.loser  = gamedatas[1].client
         gamedatas[0].won = True
         gamedatas[1].won = False
     elif winner == '1':
         game.winner = gamedatas[1].client
+        game.loser  = gamedatas[0].client
         gamedatas[0].won = False
         gamedatas[1].won = True
     [x.save() for x in gamedatas]        
