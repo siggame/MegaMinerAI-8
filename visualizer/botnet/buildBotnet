@@ -8,6 +8,7 @@ cp -R output/visualizer/* ../visualizer/botnet/parser
 pwd
 
 cd ../visualizer/botnet/parser/sexp
+make clean
 make
 if [ "$?" -ne "0" ]; then
   echo "Could Not Build the Parser"
@@ -18,4 +19,4 @@ cd ../../
 make clean
 qmake
 make clean
-make -f Makefile.Release
+make

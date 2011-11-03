@@ -9,6 +9,7 @@ pwd
 
 cd ../visualizer/botnet/parser/sexp
 make
+make clean
 if [ "$?" -ne "0" ]; then
   echo "Could Not Build the Parser"
   exit 1
