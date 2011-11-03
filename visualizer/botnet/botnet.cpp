@@ -14,6 +14,8 @@ namespace visualizer
 
   BotNet::~BotNet()
   {
+    terminate();
+    wait();
     cout << "Destroying" << endl;
     //delete m_game;
     //delete m_timeline;
