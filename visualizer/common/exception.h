@@ -69,6 +69,15 @@ namespace visualizer
       }
   };
 
+  class OpenGLException : public Exception
+  {
+    public:
+      OpenGLException( std::string e, std::string fileName, unsigned int lineNum )
+      {
+        printException( e, fileName, lineNum, "OpenGL Error Detected" );
+      }
+  };
+
 } // visualizer
 
 #endif

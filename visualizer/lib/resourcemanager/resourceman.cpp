@@ -109,7 +109,9 @@ namespace visualizer
     THROW
       (
       Exception,
-      "THIS EXCEPTION"
+      "Could not retrieve resource because it is already in use.  Please make sure \
+      that you have released the resource once you're done.  This also occurs, when \
+      you do multithreading."
       );
 
     return NULL;

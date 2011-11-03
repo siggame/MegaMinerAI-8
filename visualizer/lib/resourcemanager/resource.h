@@ -150,7 +150,6 @@ namespace visualizer
         glCallList( listNum );
       }
 
-
     private:
       unsigned int listNum;
   };

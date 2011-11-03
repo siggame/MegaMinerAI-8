@@ -79,7 +79,6 @@ namespace visualizer
     bool **player1virus = buildVirus(m_game->states[0].players[0].playerName);
     bool **player2virus = buildVirus(m_game->states[0].players[1].playerName);
     
-    
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
       b->mapHeight = m_game->states[0].height;
@@ -98,7 +97,7 @@ namespace visualizer
     
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
-    
+ 
     for
       (
       size_t state = 0; 

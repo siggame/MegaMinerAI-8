@@ -3,6 +3,7 @@
 
 #include "exception.h"
 #include "smartpointer.h"
+#include <QtOpenGL>
 
 #if __DEBUG__
 
@@ -32,6 +33,72 @@ namespace visualizer
   sprintf( message, y, ##__VA_ARGS__ ); \
   throw x( message, __FILE__, __LINE__ ); \
   } 
+
+inline void printStackTrace() 
+{
+#ifdef __STACKTRACE__ 
+  // Exception is closing everything down anyway.  May as well use up some memory
+  void *array[256];
+  size_t size;
+  cerr << " Stack Trace: " << endl;
+  size = backtrace( array, 10 );
+  backtrace_symbols_fd( array, size, 2 );
+#endif
+}
+
+#define WARNING( y, ... ) \
+  { \
+  char message[512]; \
+  sprintf( message, y, ##__VA_ARGS__ ); \
+  cerr << "WARNING: " << message << endl; \
+  printStackTrace(); \
+  } 
+
+inline void openglErrorCheck()
+{
+  unsigned int err;
+  while( (err = glGetError() ) )
+  {
+    switch( err )
+    {
+      case GL_INVALID_ENUM:
+      {
+        WARNING( "Invalid Enumeration Used In Some OpenGL Thing"  );
+      } break;
+      case GL_INVALID_VALUE:
+      {
+        WARNING( "An Invalid Value Was Used In Some OpenGL Argument And Was Ignored.  Wish I had more details for you..." );
+      } break;
+      case GL_INVALID_OPERATION:
+      {
+        WARNING( "An Invalid OpenGL Operation Was Performed and Ignored.  Wish I had more details for you..." );
+      } break;
+      case GL_STACK_OVERFLOW:
+      {
+        WARNING( "An OpenGL Comman You Tried to Perform Would Have Caused A Stack Overflow.  It was ignored.  Wish I had more details for you..." );
+      } break;
+      case GL_STACK_UNDERFLOW:
+      {
+        WARNING( "WHAT THE FUCK DID YOU DO!?!?" );
+      } break;
+      case GL_OUT_OF_MEMORY:
+      {
+        THROW( OpenGLException, "OpenGL Is Out Of Memory.  Clean up after yourself." );
+      } break;
+      case GL_TABLE_TOO_LARGE:
+      {
+        WARNING( "You made some opengl table too large or something." );
+      } break;
+      case GL_NO_ERROR:
+      break;
+      default:
+        THROW( OpenGLException, "OpenGL Error Occurred Somewhere." );
+
+    }
+  }
+
+}
+
 #define IMPLEMENT_ME THROW( Exception, "This Feature Is Not Yet Implemented." );
 
 #define DBG_MSG( x ) std::cout << "DEBUG MSG: " << x << endl;
