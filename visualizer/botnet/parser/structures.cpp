@@ -31,6 +31,7 @@ std::ostream& operator<<(std::ostream& stream, Player ob)
   stream << "playerName: " << ob.playerName  <<'\n';
   stream << "byteDollars: " << ob.byteDollars  <<'\n';
   stream << "cycles: " << ob.cycles  <<'\n';
+  stream << "time: " << ob.time  <<'\n';
   return stream;
 }
 

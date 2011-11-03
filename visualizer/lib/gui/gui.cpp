@@ -174,8 +174,10 @@ void _GUI::loadGamelog( std::string gamelog )
       file_gamelog.seekg( 0, ios::end );
       length = file_gamelog.tellg();
       file_gamelog.seekg( 0, ios::beg );
+      cout << "L: " << length << endl;
 
       char *input = new char[ length + 1 ];
+      input[ length ] = 0;
       file_gamelog.read( input, length );
 
       file_gamelog.close();
@@ -188,6 +190,7 @@ void _GUI::loadGamelog( std::string gamelog )
         char *output = new char[ size-1 ];
 
         BZ2_bzBuffToBuffDecompress( output, &size, input, length, 0, 0 );
+        output[ size ] = 0;
         fullLog = output;
 
         delete output;
@@ -269,13 +272,35 @@ void _GUI::update()
 
 void _GUI::dropEvent( QDropEvent* evt )
 {
+  const QMimeData* mimeData = evt->mimeData();
+  
+  if( mimeData->hasUrls() )
+  {
+    cout << "HAS URLS!!" << endl;
+    QStringList pathList;
+    QList<QUrl> urlList = mimeData->urls();
+
+    for( size_t i = 0; i < urlList.size() && i < 32; ++i )
+    {
+      pathList.append( urlList.at( i ).toLocalFile() );
+    }
+
+    string path = urlList.at( 0 ).toLocalFile().toAscii().constData();
+    loadGamelog( path );
+
+
+  }
+#if 0
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
   /// @TODO Make sure this is a gamelog before opening it
   /// if we do that, we can open the possibility of 
   /// having other dropped objects handled by the visualizer
   /// such as movies and images
+
+  cout << "The following string was dropped on the visualizer: " << data << endl;
   loadGamelog( data );
+#endif
 }
 
 
@@ -362,7 +387,7 @@ void _GUI::fileOpen()
     this,
     tr( "Open Gamelog" ),
     m_previousDirectory,
-    tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+    tr( "Gamelogs (*.gamelog *.glog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
@@ -722,3 +747,9 @@ QTableWidget * _GUI::getGlobalStats()
 }
 
 } // visualizer
+
+
+
+
+
+

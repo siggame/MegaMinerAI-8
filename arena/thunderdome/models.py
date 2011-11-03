@@ -25,24 +25,24 @@ class Client(models.Model):
     seed            = models.IntegerField(default=0)
         
     def last_game(self):
-        last = self.game_set.all().aggregate(Max('pk'))
+        last = self.games_played.all().aggregate(Max('pk'))
         if last['pk__max']:
             return last['pk__max']
         else:
             return -1
     
     def last_visualized(self):
-        vis = self.game_set.all().aggregate(Max('visualized'))
+        vis = self.games_played.all().aggregate(Max('visualized'))
         if vis['visualized__max']:
             return vis['visualized__max']
         else:
             return datetime(1970,1,1,0,0)
     
-    def wins(self):
-        return [x.game for x in self.gamedata_set.filter(won=True)]
-    
-    def losses(self):
-        return [x.game for x in self.gamedata_set.filter(won=False)]
+    def fitness(self):
+        if self.games_played.count() == 0:
+            return 0
+        else:
+            return self.games_won.count() / float(self.games_played.count())
     
     def __unicode__(self):
         return self.name
@@ -127,6 +127,7 @@ class Match(models.Model):
     mother = models.ForeignKey('self', null=True, blank=True,
                                related_name='matches_mothered')
     games  = models.ManyToManyField(Game)
+    losses_to_eliminate = models.IntegerField(default=2)
     wins_to_win = models.IntegerField(default=4)
     father_type = models.TextField(default='win')
     mother_type = models.TextField(default='win')

@@ -9,5 +9,8 @@ make clean
 
 # Leave off release if you want a debug build
 make 
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
 
 # Congrats, you're done

@@ -14,9 +14,11 @@ namespace visualizer
 
   BotNet::~BotNet()
   {
-    cout << "Destroying" << endl;
-    //delete m_game;
-    //delete m_timeline;
+    terminate();
+    wait();
+    animationEngine->registerFrameContainer( 0 );
+    delete m_game;
+    delete m_timeline;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -31,20 +33,33 @@ namespace visualizer
   void BotNet::loadGamelog( std::string gamelog )
   {
     cout << "Load BotNet Gamelog" << endl;
+
+    cout << "Timeline: " << (long int)m_timeline << endl;
+
+    terminate();
+    wait();
+
+    animationEngine->registerFrameContainer( 0 );
     
     delete m_game;
     delete m_timeline;
+
     m_game = new Game;
     m_timeline = new AnimSequence;
+
+    cout << "Timeline: " << (long int)m_timeline << endl;
 
     if( !parseString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
       delete m_timeline;
+      m_game = 0;
+      m_timeline = 0;
+      cout << gamelog.c_str() << endl;
       THROW
         (
         GameException,
-        "Cannot load gamelog: %s", 
+        "Cannot load gamelog", 
         gamelog.c_str()
         );
     }
@@ -52,12 +67,14 @@ namespace visualizer
     float w = m_game->states[ 0 ].width;
     float h = m_game->states[ 0 ].height + 1.5f;
 
+#if 1
     renderer->setCamera( 0, 0, w, h );
     renderer->setUnitSize( w, h );
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
 
     start();
+#endif
 
   }
 
@@ -79,7 +96,6 @@ namespace visualizer
     bool **player1virus = buildVirus(m_game->states[0].players[0].playerName);
     bool **player2virus = buildVirus(m_game->states[0].players[1].playerName);
     
-    
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
       b->mapHeight = m_game->states[0].height;
@@ -98,7 +114,7 @@ namespace visualizer
     
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
-    
+ 
     for
       (
       size_t state = 0; 

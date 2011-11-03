@@ -8,7 +8,17 @@ cp -R output/visualizer/* ../visualizer/botnet/parser
 pwd
 
 cd ../visualizer/botnet/parser/sexp
+make clean
 make
-cd ../
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+cd ../../
+
+make clean
+qmake
+make clean
 make
-cd ../
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi

@@ -506,20 +506,22 @@ namespace visualizer
     dl->startList();
     ResourceMan->release( name, "renderer" );
 
+    openglErrorCheck();
+
   } // _Renderer::beginList()
 
   void _Renderer::endList( const std::string& name ) const
   {
-    ResourceMan->newDisplayList( name );
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
     dl->endList();
     ResourceMan->release( name, "renderer" );
+
+    openglErrorCheck();
 
   } // _Renderer::endList()
 
   void _Renderer::drawList( const std::string& name ) const
   {
-    ResourceMan->newDisplayList( name );
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
     dl->draw();
     ResourceMan->release( name, "renderer" );

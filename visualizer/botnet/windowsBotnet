@@ -9,11 +9,16 @@ pwd
 
 cd ../visualizer/botnet/parser/sexp
 make
-cd ../
-make
-cd ../
+make clean
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi
+cd ../../
 
 make clean
 qmake -spec win32-x-g++
 make clean
 make -f Makefile.Release
+if [ "$?" -ne "0" ]; then
+  exit 1
+fi

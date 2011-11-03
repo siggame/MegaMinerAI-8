@@ -232,7 +232,8 @@ namespace visualizer
       if( m_turn >= m_numTurns )
       {
         m_turn = m_numTurns-1;
-        m_turnCompletion = 0;
+        // Very close to the next turn, but not quite
+        m_turnCompletion = 0.99999999;
         pause();
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {

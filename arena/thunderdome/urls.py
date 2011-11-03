@@ -14,5 +14,6 @@ urlpatterns = patterns('thunderdome.views',
                     
     url(r'^health$', 'health'),
     url(r'^view_client/(?P<client_id>\d+)$', 'view_client'),
+    url(r'^view_match/(?P<match_id>\d+)$', 'view_match'),
     url(r'^matchup/(?P<client1_id>\d+)vs(?P<client2_id>\d+)$', 'matchup'),
 )

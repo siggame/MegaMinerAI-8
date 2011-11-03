@@ -87,6 +87,7 @@ namespace visualizer
 
   void _AnimationEngine::draw()
   {
+    m_animMutex.lock();
     if( m_frameList )
     {
       Frame& frame = (*m_frameList)[ TimeManager->getTurn() ];
@@ -101,6 +102,7 @@ namespace visualizer
         drawAnim( *(*i) );
       }
     }
+    m_animMutex.unlock();
 
   } // _AnimationEngine::draw()
 
@@ -122,7 +124,9 @@ namespace visualizer
 
   void _AnimationEngine::registerFrameContainer( AnimSequence* frameList )
   {
-    m_frameList = frameList;
+    m_animMutex.lock();
+      m_frameList = frameList;
+    m_animMutex.unlock();
   } // _AnimationEngine::registerFrameContainer()
 
 } // visualizer

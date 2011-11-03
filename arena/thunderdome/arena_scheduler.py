@@ -24,7 +24,7 @@ def main():
     if 'game-requests' not in stalk.tubes():
         schedule_a_game()
     while True:
-        if stalk.stats_tube('game-requests')['current-jobs-ready'] < 10:
+        if stalk.stats_tube('game-requests')['current-jobs-ready'] < 1:
             schedule_a_game()
         sleep(1)
     stalk.close()
