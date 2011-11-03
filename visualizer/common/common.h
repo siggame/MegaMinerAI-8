@@ -85,10 +85,6 @@ inline void openglErrorCheck()
       {
         THROW( OpenGLException, "OpenGL Is Out Of Memory.  Clean up after yourself." );
       } break;
-      case GL_TABLE_TOO_LARGE:
-      {
-        WARNING( "You made some opengl table too large or something." );
-      } break;
       case GL_NO_ERROR:
       break;
       default:
