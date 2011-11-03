@@ -14,9 +14,11 @@ namespace visualizer
 
   BotNet::~BotNet()
   {
-    cout << "Destroying" << endl;
-    //delete m_game;
-    //delete m_timeline;
+    terminate();
+    wait();
+    animationEngine->registerFrameContainer( 0 );
+    delete m_game;
+    delete m_timeline;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -31,20 +33,33 @@ namespace visualizer
   void BotNet::loadGamelog( std::string gamelog )
   {
     cout << "Load BotNet Gamelog" << endl;
+
+    cout << "Timeline: " << (long int)m_timeline << endl;
+
+    terminate();
+    wait();
+
+    animationEngine->registerFrameContainer( 0 );
     
     delete m_game;
     delete m_timeline;
+
     m_game = new Game;
     m_timeline = new AnimSequence;
+
+    cout << "Timeline: " << (long int)m_timeline << endl;
 
     if( !parseString( *m_game, gamelog.c_str() ) )
     {
       delete m_game;
       delete m_timeline;
+      m_game = 0;
+      m_timeline = 0;
+      cout << gamelog.c_str() << endl;
       THROW
         (
         GameException,
-        "Cannot load gamelog: %s", 
+        "Cannot load gamelog", 
         gamelog.c_str()
         );
     }
@@ -105,6 +120,7 @@ namespace visualizer
       state++
       )
     {
+#if 1
       Frame turn;
 
       Connectivity p1;
@@ -353,6 +369,7 @@ namespace visualizer
         timeManager->setNumTurns( m_game->states.size() );
       }
 
+#endif
     }
 
     cout << "Done Loading That Gamelog..." << endl;
