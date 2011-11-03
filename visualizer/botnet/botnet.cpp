@@ -67,7 +67,7 @@ namespace visualizer
     float w = m_game->states[ 0 ].width;
     float h = m_game->states[ 0 ].height + 1.5f;
 
-#if 0
+#if 1
     renderer->setCamera( 0, 0, w, h );
     renderer->setUnitSize( w, h );
 
