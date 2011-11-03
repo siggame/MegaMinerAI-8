@@ -275,6 +275,8 @@ void _GUI::dropEvent( QDropEvent* evt )
   /// if we do that, we can open the possibility of 
   /// having other dropped objects handled by the visualizer
   /// such as movies and images
+
+  cout << "The following string was dropped on the visualizer: " << data << endl;
   loadGamelog( data );
 }
 
@@ -722,5 +724,6 @@ QTableWidget * _GUI::getGlobalStats()
 }
 
 } // visualizer
+
 
 

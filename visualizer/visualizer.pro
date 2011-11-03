@@ -43,13 +43,13 @@ HEADERS += ./lib/manager/*.h \
     ./common/*.h \
     ./interfaces/*.h
 win32: {
-QMAKE_CFLAGS_DEBUG += -pg
-QMAKE_CXXFLAGS_DEBUG += -pg
-QMAKE_LFLAGS_DEBUG += -pg 
+#QMAKE_CFLAGS_DEBUG += -pg
+#QMAKE_CXXFLAGS_DEBUG += -pg
+#QMAKE_LFLAGS_DEBUG += -pg 
 } else {
-QMAKE_CFLAGS_DEBUG += -pg -rdynamic
-QMAKE_CXXFLAGS_DEBUG += -pg -rdynamic
-QMAKE_LFLAGS_DEBUG += -pg -rdynamic 
+QMAKE_CFLAGS_DEBUG += -rdynamic
+QMAKE_CXXFLAGS_DEBUG += -rdynamic
+QMAKE_LFLAGS_DEBUG += -rdynamic 
 }
 
 CONFIG += debug 
