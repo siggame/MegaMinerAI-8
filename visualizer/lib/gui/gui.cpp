@@ -174,8 +174,10 @@ void _GUI::loadGamelog( std::string gamelog )
       file_gamelog.seekg( 0, ios::end );
       length = file_gamelog.tellg();
       file_gamelog.seekg( 0, ios::beg );
+      cout << "L: " << length << endl;
 
       char *input = new char[ length + 1 ];
+      input[ length ] = 0;
       file_gamelog.read( input, length );
 
       file_gamelog.close();
@@ -188,6 +190,7 @@ void _GUI::loadGamelog( std::string gamelog )
         char *output = new char[ size-1 ];
 
         BZ2_bzBuffToBuffDecompress( output, &size, input, length, 0, 0 );
+        output[ size ] = 0;
         fullLog = output;
 
         delete output;

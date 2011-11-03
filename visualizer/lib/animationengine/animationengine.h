@@ -53,6 +53,7 @@ namespace visualizer
       void registerFrameContainer( AnimSequence* frameList );
 
     private:
+      QMutex m_animMutex;
       AnimSequence *m_frameList;
      
   }; // _AnimationEngine
