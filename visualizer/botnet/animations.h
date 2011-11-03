@@ -185,6 +185,29 @@ namespace visualizer
       scoreboard* m_sb;
 
   }; // DrawScore
+  
+  class ScoreAnim: public Anim
+  {
+    public:
+      ScoreAnim(int& oldRed, int& oldBlu, int& curRed, int& curBlu)
+      {
+        oldRedScore = oldRed;
+        oldBluScore = oldBlu;
+        
+        currentRedScore = curRed;
+        currentBluScore = curBlu;
+      }
+      
+      void animate( const float& t, AnimData *d );
+      
+      double oldRedScore, oldBluScore, currentRedScore, currentBluScore;
+      
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // ScoreAnim
 
   class DrawTile: public Anim
   {

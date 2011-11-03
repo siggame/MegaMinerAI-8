@@ -130,9 +130,21 @@ namespace visualizer
       score2->mapWidth  = m_game->states[0].width;
       score2->virusPixels = player2virus;
       score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
-
+      if(state > 0)
+        score2->addKeyFrame
+        (
+            new ScoreAnim
+            (
+                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
+                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
+                m_game->states[ state ].players[ 0 ].byteDollars,
+                m_game->states[ state ].players[ 1 ].byteDollars
+            )
+        );
+        
       score1->addKeyFrame( new DrawScore( score1 ) );
       score2->addKeyFrame( new DrawScore( score2 ) );
+      
 
       turn.addAnimatable( score1 );
       turn.addAnimatable( score2 );

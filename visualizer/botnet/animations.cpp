@@ -337,17 +337,17 @@ namespace visualizer
 
   void DrawScore::animate( const float& t, AnimData* d )
   {
-    stringstream ss;
+    stringstream ss, omgwtfbbq;
 
 
     IRenderer::Alignment a = IRenderer::Left;
     Color team = Color( 1, 0, 0 );
     Color darkTeam = Color( 0.6, 0, 0 );
-    double winningPercent = (double)m_sb->score / (double)(m_sb->score + m_sb->enemyScore);
     double startX = 0;
-    double endX   = m_sb->mapWidth * winningPercent;
+    double endX   = m_sb->mapWidth;
     double xTextOffset = 2;
     double xVirusOffset = 0.5;
+    ScoreData *sd = (ScoreData*)d;
     
     if( m_sb->player == 1 )
     {
@@ -356,8 +356,8 @@ namespace visualizer
       darkTeam = Color( 0, 0, 0.6 );
       ss << m_sb->score << " : " << m_sb->teamName;
       
-      startX = m_sb->mapWidth * (1 - winningPercent);
-      endX   = m_sb->mapWidth;
+      startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
+      endX   =  m_sb->mapWidth * (1 - (sd->blueOffset + sd->drawnOffset));
       xTextOffset = -2.4;
       xVirusOffset = -1.5;     
     }
@@ -375,20 +375,44 @@ namespace visualizer
             m_sb->renderer().drawQuad( x/2.0, y/2.0, 0.5, 0.5);
         }
     }
-
+    
+    // set the team's color and then draw thier text
     m_sb->renderer().setColor( team ); 
     m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y, "mainFont", ss.str(), 3, a );
     
+    // draw the virus
     for(int x = 0; x < 16; x++)
       for(int y = 0; y < 16; y++)
         if(m_sb->virusPixels[x][y])
           m_sb->renderer().drawQuad( m_sb->x + (x * 0.0625) + xVirusOffset, m_sb->y + (y * 0.0625), 0.0625, 0.0625);
     
-    m_sb->renderer().drawLine(startX, m_sb->y + 1.25, endX, m_sb->y + 1.25, 16.0);
+    // draw the colored bar
+    m_sb->renderer().drawQuad(startX, m_sb->y + 1.0, endX, m_sb->y + 2.0);
+    
+    // draw the center marker
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawLine(m_sb->mapWidth/2 + 0.48, m_sb->y + 1.25, m_sb->mapWidth/2 + 0.52, m_sb->y + 1.25, 16.0);
-
+    m_sb->renderer().drawQuad(m_sb->mapWidth/2 - 0.125, m_sb->y + 1, 0.25, 1);
   }
+  
+  void ScoreAnim::animate( const float& t, AnimData *d )
+  {
+    ScoreData *s = (ScoreData*)d;
+    
+    double oldBlueOffset = 1 - (double)oldBluScore / (double)(oldBluScore + oldRedScore);
+    double curBlueOffset = 1 - (double)currentBluScore / (double)(currentBluScore + currentRedScore);
+    double blueOffset = curBlueOffset - oldBlueOffset;
+    
+    if( t > startTime && t < endTime/2 )
+    {
+      s->drawnOffset = blueOffset * (t * 2);
+      s->blueOffset = oldBlueOffset;
+    } else if( t >= endTime/2 )
+    {
+      s->drawnOffset = 0;
+      s->blueOffset = curBlueOffset;
+    }
+    
+  } // ScoreAnim::animate() 
 
 } // visualizer
 
