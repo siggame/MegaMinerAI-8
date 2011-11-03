@@ -9,6 +9,13 @@ pwd
 
 cd ../visualizer/botnet/parser/sexp
 make
-cd ../
-make
-cd ../
+if [ "$?" -ne "0" ]; then
+  echo "Could Not Build the Parser"
+  exit 1
+fi
+cd ../../
+
+make clean
+qmake
+make clean
+make -f Makefile.Release

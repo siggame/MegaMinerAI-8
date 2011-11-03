@@ -8,22 +8,12 @@ cp -R output/visualizer/* ../visualizer/botnet/parser
 pwd
 
 cd ../visualizer/botnet/parser/sexp
-if [ "$?" -ne "0" ]; then
-  echo "Could Not Build the Parser"
-  exit 1
-fi
 make
 if [ "$?" -ne "0" ]; then
   echo "Could Not Build the Parser"
   exit 1
 fi
-cd ../
-make
-if [ "$?" -ne "0" ]; then
-  echo "Could Not Build the Parser"
-  exit 1
-fi
-cd ../
+cd ../../
 
 make clean
 qmake -spec win32-x-g++
