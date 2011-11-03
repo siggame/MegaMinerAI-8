@@ -465,7 +465,7 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "sexp.l"
-#line 4 "sexp.l"
+#line 5 "sexp.l"
 #ifndef YYSTYPE
 #define YYSTYPE int
 #endif
@@ -665,7 +665,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 18 "sexp.l"
+#line 19 "sexp.l"
 
 
 #line 672 "lex.yy.cpp"
@@ -727,16 +727,12 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 21 );
+		while ( yy_current_state != 16 );
+		yy_cp = (yy_last_accepting_cpos);
+		yy_current_state = (yy_last_accepting_state);
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = (yy_last_accepting_cpos);
-			yy_current_state = (yy_last_accepting_state);
-			yy_act = yy_accept[yy_current_state];
-			}
 
 		YY_DO_BEFORE_ACTION;
 
@@ -754,40 +750,40 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 20 "sexp.l"
+#line 21 "sexp.l"
 {return STRING;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 "sexp.l"
+#line 22 "sexp.l"
 {return TOKEN;}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 22 "sexp.l"
+#line 23 "sexp.l"
 {}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 23 "sexp.l"
+#line 24 "sexp.l"
 {return LPAREN;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 24 "sexp.l"
+#line 25 "sexp.l"
 {return RPAREN;}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 25 "sexp.l"
+#line 26 "sexp.l"
 {return END;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 27 "sexp.l"
+#line 28 "sexp.l"
 ECHO;
 	YY_BREAK
-#line 791 "lex.yy.cpp"
+#line 787 "lex.yy.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -852,7 +848,8 @@ ECHO;
 
 			else
 				{
-				yy_cp = (yy_c_buf_p);
+				yy_cp = (yy_last_accepting_cpos);
+				yy_current_state = (yy_last_accepting_state);
 				goto yy_find_action;
 				}
 			}
@@ -1335,10 +1332,6 @@ static void yy_load_buffer_state  (void)
 	yyfree((void *) b  );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-    
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a yyrestart() or at EOF.
@@ -1362,7 +1355,7 @@ extern int isatty (int );
         b->yy_bs_column = 0;
     }
 
-        b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
+        b->yy_is_interactive = 0;
     
 	errno = oerrno;
 }
@@ -1783,7 +1776,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 27 "sexp.l"
+#line 28 "sexp.l"
 
 
 

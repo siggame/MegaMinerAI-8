@@ -327,7 +327,7 @@ extern int yylex (void);
 #undef YY_DECL
 #endif
 
-#line 27 "sexp.l"
+#line 28 "sexp.l"
 
 
 #line 334 "lex.yy.h"
