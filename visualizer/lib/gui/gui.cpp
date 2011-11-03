@@ -362,7 +362,7 @@ void _GUI::fileOpen()
     this,
     tr( "Open Gamelog" ),
     m_previousDirectory,
-    tr( "Gamelogs (*.gamelog);;All Files (*.*)") ).toAscii().constData();
+    tr( "Gamelogs (*.gamelog, *.glog);;All Files (*.*)") ).toAscii().constData();
 
   if( filename.size() > 0 )
   {
@@ -722,3 +722,4 @@ QTableWidget * _GUI::getGlobalStats()
 }
 
 } // visualizer
+
