@@ -269,6 +269,25 @@ void _GUI::update()
 
 void _GUI::dropEvent( QDropEvent* evt )
 {
+  const QMimeData* mimeData = evt->mimeData();
+  
+  if( mimeData->hasUrls() )
+  {
+    cout << "HAS URLS!!" << endl;
+    QStringList pathList;
+    QList<QUrl> urlList = mimeData->urls();
+
+    for( size_t i = 0; i < urlList.size() && i < 32; ++i )
+    {
+      pathList.append( urlList.at( i ).toLocalFile() );
+    }
+
+    string path = urlList.at( 0 ).toLocalFile().toAscii().constData();
+    loadGamelog( path );
+
+
+  }
+#if 0
   evt->mimeData()->text();
   string data = evt->mimeData()->text().toAscii().constData();
   /// @TODO Make sure this is a gamelog before opening it
@@ -278,6 +297,7 @@ void _GUI::dropEvent( QDropEvent* evt )
 
   cout << "The following string was dropped on the visualizer: " << data << endl;
   loadGamelog( data );
+#endif
 }
 
 
@@ -724,6 +744,9 @@ QTableWidget * _GUI::getGlobalStats()
 }
 
 } // visualizer
+
+
+
 
 
 
