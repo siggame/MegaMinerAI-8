@@ -359,11 +359,21 @@ namespace visualizer
       startX = m_sb->mapWidth * (1 - winningPercent);
       endX   = m_sb->mapWidth;
       xTextOffset = -2.4;
-      xVirusOffset = -1.5;
+      xVirusOffset = -1.5;     
     }
     else
     {
       ss << m_sb->teamName << " : " << m_sb->score;
+      
+      srand(m_sb->teamName.length());
+      
+      for(int x = 0; x < m_sb->mapWidth * 2; x++)
+        for(int y = 0; y < 4; y++)
+        {
+            double num = (rand()%5)/40.0f;
+            m_sb->renderer().setColor( Color( num, num, num) );
+            m_sb->renderer().drawQuad( x/2.0, y/2.0, 0.5, 0.5);
+        }
     }
 
     m_sb->renderer().setColor( team ); 
@@ -376,7 +386,7 @@ namespace visualizer
     
     m_sb->renderer().drawLine(startX, m_sb->y + 1.25, endX, m_sb->y + 1.25, 16.0);
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawLine(m_sb->mapWidth/2 + 0.45, m_sb->y + 1.25, m_sb->mapWidth/2 + 0.55, m_sb->y + 1.25, 16.0);
+    m_sb->renderer().drawLine(m_sb->mapWidth/2 + 0.48, m_sb->y + 1.25, m_sb->mapWidth/2 + 0.52, m_sb->y + 1.25, 16.0);
 
   }
 

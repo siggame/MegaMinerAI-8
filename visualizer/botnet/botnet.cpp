@@ -14,8 +14,9 @@ namespace visualizer
 
   BotNet::~BotNet()
   {
-    delete m_game;
-    delete m_timeline;
+    cout << "Destroying" << endl;
+    //delete m_game;
+    //delete m_timeline;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -62,6 +63,8 @@ namespace visualizer
 
   void BotNet::run()
   {
+
+    cout << "Loading Gamelog..." << endl;
 
     size_t frameNum = 0;
 
@@ -331,7 +334,6 @@ namespace visualizer
       
       frameNum++;
 
-
       if( frameNum <= 1 )
       {
         timeManager->setTurn( 0 );
@@ -341,6 +343,8 @@ namespace visualizer
       }
 
     }
+
+    cout << "Done Loading That Gamelog..." << endl;
 
   } // BotNet::run() 
 

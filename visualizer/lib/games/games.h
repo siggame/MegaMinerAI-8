@@ -45,10 +45,13 @@ namespace visualizer
       void _setup();
       static void destroy();
 
+      ~_Games();
+
       std::vector< IGame* >& gameList();
 
     private:
       std::vector< IGame* > m_gameList;
+      std::vector< QPluginLoader* > m_plugins;
 
   };
 

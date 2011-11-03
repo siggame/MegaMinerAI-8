@@ -28,6 +28,7 @@ DLLEXPORT int playerGetId(_Player* ptr);
 DLLEXPORT char* playerGetPlayerName(_Player* ptr);
 DLLEXPORT int playerGetByteDollars(_Player* ptr);
 DLLEXPORT int playerGetCycles(_Player* ptr);
+DLLEXPORT int playerGetTime(_Player* ptr);
 
 
 DLLEXPORT int tileGetId(_Tile* ptr);

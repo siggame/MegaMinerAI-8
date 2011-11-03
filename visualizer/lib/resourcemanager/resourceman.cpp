@@ -236,6 +236,13 @@ namespace visualizer
 
   } // _ResourceMan::loadTexture()
 
+  void _ResourceMan::newDisplayList( const std::string& name )
+  {
+    Resource* res = (Resource*)new ResDisplayList();
+    reg( name, res );
+
+  } // _ResourceMan::newDisplayList()
+
 
 } // visualizer
 

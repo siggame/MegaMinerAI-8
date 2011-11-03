@@ -66,12 +66,13 @@ class Base(Mappable):
       return True
 
 class Player:
-  def __init__(self, game, id, playerName, byteDollars, cycles):
+  def __init__(self, game, id, playerName, byteDollars, cycles, time):
     self.game = game
     self.id = id
     self.playerName = playerName
     self.byteDollars = byteDollars
     self.cycles = cycles
+    self.time = time
 
   def toList(self):
     value = [
@@ -79,17 +80,29 @@ class Player:
       self.playerName,
       self.byteDollars,
       self.cycles,
+      self.time,
       ]
     return value
 
   def nextTurn(self):
     if self.id == self.game.playerID:
+<<<<<<< HEAD
       if self.game.turnNumber != 0:
        self.byteDollars += self.game.getScore(self.id)
       self.cycles += self.game.getIncome(self.id) 
+=======
+      # you get money on your turn, unless it is after the last turn
+      if self.game.turnNumber < self.game.turnLimit:
+        self.cycles += self.game.getIncome(self.id)
+    # Calculates the score at the end of a players turn (IE the start of the next player)
+    # Since no one goes before the first turn, don't calculate on the first turn
+    elif self.game.turnNumber > 0:
+      self.byteDollars += self.game.getScore(self.id)
+>>>>>>> f247c6292564b0df9ebf98d0b3062fe0fb8bdd51
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk', self.id, message])
+    return True
 
 class Tile(Mappable):
   def __init__(self, game, id, x, y, owner):
@@ -178,7 +191,10 @@ class Virus(Mappable):
            self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
            self.game.removeObject(virus)
            self.game.removeObject(self)
+<<<<<<< HEAD
 #           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
+=======
+>>>>>>> f247c6292564b0df9ebf98d0b3062fe0fb8bdd51
            return True
        #moving a virus onto an enemy virus, conflict!!
        else:
@@ -193,7 +209,6 @@ class Virus(Mappable):
          elif virus.level == self.level:
            self.game.removeObject(virus)
            self.game.removeObject(self)
-           print("two evenly matched viruses enter, no one leaves ",dx,dy)###
            return True
     self.x = dx
     self.y = dy
@@ -203,3 +218,4 @@ class Virus(Mappable):
   
   def talk(self, message):
     self.game.animations.append(['VirusTalk',self.id,message])
+    return True

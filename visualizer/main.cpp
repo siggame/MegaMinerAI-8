@@ -95,7 +95,9 @@ int main(int argc, char *argv[])
 
 	int retval = app.exec();
 
+  cout << "Destroying Games" << endl;
   Games->destroy();
+  cout << "Destroying Animation Engine" << endl;
   AnimationEngine->destroy();
   TextureLoader->destroy();
   ResourceMan->destroy();

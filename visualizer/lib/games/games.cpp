@@ -38,7 +38,9 @@ namespace visualizer
     pluginsDir.cd( "plugins" );
     foreach( QString fileName, pluginsDir.entryList( QDir::Files ) )
     {
-      QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
+      QPluginLoader& pluginLoader = *new QPluginLoader( pluginsDir.absoluteFilePath( fileName ) );
+      m_plugins.push_back( &pluginLoader );
+      //QPluginLoader pluginLoader( pluginsDir.absoluteFilePath( fileName ) );
       QObject *plugin = pluginLoader.instance();
       if( plugin )
       {
@@ -88,5 +90,20 @@ namespace visualizer
     Games = 0;
 
   } // _Games::destroy()
+
+  _Games::~_Games()
+  {
+    for
+      ( 
+      vector< QPluginLoader* >::iterator i = m_plugins.begin();
+      i != m_plugins.end();
+      i++ 
+      )
+    {
+      (*i)->unload();
+      delete *i;
+    }
+
+  }
 
 } // visualizer

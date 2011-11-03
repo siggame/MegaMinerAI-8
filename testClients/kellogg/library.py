@@ -137,6 +137,9 @@ library.playerGetByteDollars.argtypes = [c_void_p]
 library.playerGetCycles.restype = c_int
 library.playerGetCycles.argtypes = [c_void_p]
 
+library.playerGetTime.restype = c_int
+library.playerGetTime.argtypes = [c_void_p]
+
 library.tileGetId.restype = c_int
 library.tileGetId.argtypes = [c_void_p]
 

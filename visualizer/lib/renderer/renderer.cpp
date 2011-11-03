@@ -499,6 +499,33 @@ namespace visualizer
 
   } // _Renderer::setCamera()
 
+  void _Renderer::beginList( const std::string& name ) const
+  {
+    ResourceMan->newDisplayList( name );
+    ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
+    dl->startList();
+    ResourceMan->release( name, "renderer" );
+
+  } // _Renderer::beginList()
+
+  void _Renderer::endList( const std::string& name ) const
+  {
+    ResourceMan->newDisplayList( name );
+    ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
+    dl->endList();
+    ResourceMan->release( name, "renderer" );
+
+  } // _Renderer::endList()
+
+  void _Renderer::drawList( const std::string& name ) const
+  {
+    ResourceMan->newDisplayList( name );
+    ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
+    dl->draw();
+    ResourceMan->release( name, "renderer" );
+
+  } // _Renderer::drawList()
+
   void _Renderer::setUnitSize
     (
     const float& sX,

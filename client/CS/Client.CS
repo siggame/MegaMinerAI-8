@@ -94,6 +94,8 @@ public class Client {
   public static extern int playerGetByteDollars(IntPtr ptr);
   [DllImport("client")]
   public static extern int playerGetCycles(IntPtr ptr);
+  [DllImport("client")]
+  public static extern int playerGetTime(IntPtr ptr);
 
   [DllImport("client")]
   public static extern int tileGetId(IntPtr ptr);
