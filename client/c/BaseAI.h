@@ -43,7 +43,7 @@ public:
   ///The height of the map (max Y value)
   int height();
   ///Gets the tile at the specified location
-  Tile& getTile(int x, int y);
+  Tile& getTileAtLocation(int x, int y);
   
   BaseAI(Connection* c);
   virtual ~BaseAI();
