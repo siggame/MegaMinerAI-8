@@ -40,7 +40,8 @@ namespace visualizer
     m_progress = 0;
     m_speed = 0;
     m_turnCompletion = 0;
-    m_numTurns = 500;
+    m_numTurns = 1;
+    m_maxTurns = -1;
     loop_on = false;
     loop_start = m_turn;
     loop_end = m_numTurns;
@@ -205,6 +206,12 @@ namespace visualizer
 
   } // _TimeManager::setNumTurns()
 
+  void _TimeManager::setMaxTurns( const size_t& maxTurns )
+  {
+    m_maxTurns = maxTurns;
+
+  }
+
   const float& _TimeManager::getSpeed()
   {
     return m_speed;
@@ -227,6 +234,11 @@ namespace visualizer
       if(loop_on && m_turn >= loop_end)
       {
         setTurn(loop_start);
+      }
+
+      if( m_turn > m_maxTurns )
+      {
+        m_turn = m_maxTurns;
       }
 
       if( m_turn >= m_numTurns )

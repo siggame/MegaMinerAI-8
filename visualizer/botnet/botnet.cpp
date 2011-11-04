@@ -433,6 +433,8 @@ namespace visualizer
       m_timeline->addFrame( turn );
       
       frameNum++;
+      
+      timeManager->setMaxTurns( frameNum );
 
       if( frameNum <= 1 )
       {

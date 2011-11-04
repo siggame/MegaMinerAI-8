@@ -98,6 +98,7 @@ namespace visualizer
 
       const int& getNumTurns() const;
       void setNumTurns( const int& numTurns );
+      void setMaxTurns( const size_t& maxTurns );
 
     private slots:
       void timerUpdate();
@@ -124,6 +125,7 @@ namespace visualizer
 
       int m_turn;
       int m_numTurns;
+      size_t m_maxTurns;
       std::list< UpdateNeeded* > m_updateRequesters;
   }; // _TimeManager
 

@@ -16,6 +16,7 @@ namespace visualizer
       virtual const int& getNumTurns() const = 0;
 
       virtual void setNumTurns( const int& numTurns ) = 0;
+      virtual void setMaxTurns( const size_t& maxTurns ) = 0;
 
       virtual void requestUpdate( UpdateNeeded* requester ) = 0;
 
