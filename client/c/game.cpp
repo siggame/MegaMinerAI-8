@@ -212,7 +212,7 @@ DLLEXPORT int baseSpawn(_Base* object, int Level)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
 
-  //TODO Game state changes
+  // Game state changes
   Connection * c = object->_c;
   int cost = c->baseCost * pow(c->scaleCost, Level);
   if(c->playerID != object->owner)
@@ -273,7 +273,7 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   send_string(object->_c->socket, expr.str().c_str());
   UNLOCK( &object->_c->mutex);
 
-  //TODO Game state changes
+  // Game state changes
   Connection * c = object->_c;
   if(c->playerID != object->owner)
   {
@@ -299,7 +299,7 @@ DLLEXPORT int virusMove(_Virus* object, int x, int y)
   {
     return 0;
   }
-  else // TODO Check for viruses in the way
+  else
   {
     for(int i=0; i<c->BaseCount;i++)
     {

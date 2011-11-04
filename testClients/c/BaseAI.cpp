@@ -33,6 +33,10 @@ int BaseAI::height()
 {
   return getHeight(c);
 }
+Tile& BaseAI::getTile(int x, int y)
+{
+  return tiles[x+y*width()]  
+}
 
 bool BaseAI::startTurn()
 {

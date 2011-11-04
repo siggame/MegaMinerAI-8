@@ -113,4 +113,9 @@ public abstract class BaseAI
   {
     return Client.INSTANCE.getHeight(connection);
   }
+  ///Gets the tile at the specified location
+  Tile getTile(int x, int y)
+  {
+    return tiles[x+y*width()]
+  }
 }
