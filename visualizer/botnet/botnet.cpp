@@ -3,6 +3,7 @@
 #include "botnet.h"
 #include "animations.h"
 #include "virus-builder.h" // for jacob fischer's random virus building
+#include <sstream>
 
 namespace visualizer
 {
@@ -71,7 +72,75 @@ namespace visualizer
     renderer->setUnitSize( w, h );
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
-
+    
+    // build the two player viruses
+    for(int playerid = 0; playerid < 2; playerid++)
+    {
+      stringstream displayListId;
+      displayListId << "PlayerVirus-" << playerid;
+      
+      renderer->beginList(displayListId.str());
+      
+      bool **pixels = buildVirus(m_game->states[0].players[playerid].playerName);
+      
+      for(int x = 0; x < 16; x++)
+        for(int y = 0; y < 16; y++)
+          if(pixels[x][y])
+          {
+            // set the pixel's color to the team's color
+            renderer->setColor( ( playerid == 0 ? Color( 0.6f + (0.0125f * (double)(x + y)), 0, 0) : Color(0, 0, 0.6f + 0.125f * (double)(x + y) ) ) );
+            
+            //draw the main block of the pixel
+            renderer->drawQuad( (x * 0.0625), (y * 0.0625), 0.0625, 0.0625);
+            
+            // the border's color
+            renderer->setColor( Color(1,1,1, 0.35) );
+            
+            //check to see if we need a border
+            if(x - 1 < 0 || !pixels[x - 1][y])  // left
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                (  y   * 0.0625),
+                (  x   * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+                
+            if(x + 1 == 16 || !pixels[x + 1][y])  // right
+              renderer->drawLine
+              (
+                ((x+1) * 0.0625),
+                (  y   * 0.0625),
+                ((x+1) * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+                
+            if(y - 1 < 0 || !pixels[x][y - 1])  // up
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                (  y   * 0.0625),
+                ((x+1) * 0.0625),
+                (  y   * 0.0625),
+                1.0
+              );
+                
+            if(y + 1 == 16 || !pixels[x][y + 1])  // down
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                ((y+1) * 0.0625),
+                ((x+1) * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+          }
+    
+      renderer->endList(displayListId.str());
+    }
+    
     start();
 
   }
