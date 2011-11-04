@@ -152,3 +152,15 @@ void parseFile(FILE* in)
     delete buffer;
   buffer = tmp;
 }
+
+void parseString( const char* string )
+{
+  YY_BUFFER_STATE* tmp = new YY_BUFFER_STATE;
+  *tmp = yy_scan_string( string );
+  yy_switch_to_buffer( *tmp );
+  if(buffer)
+    yy_delete_buffer(*buffer);
+    delete buffer;
+  buffer = tmp;
+
+}
