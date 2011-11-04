@@ -6,6 +6,9 @@
 
 namespace visualizer
 {
+
+  Log errorLog( "botnetLog.log" );
+
   BotNet::BotNet()
   {
     m_game = 0;
