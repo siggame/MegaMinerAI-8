@@ -55,7 +55,7 @@ namespace visualizer
       delete m_timeline;
       m_game = 0;
       m_timeline = 0;
-      cout << gamelog.c_str() << endl;
+      errorLog << gamelog;
       THROW
         (
         GameException,

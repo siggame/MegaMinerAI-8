@@ -2,6 +2,7 @@
 #define EXCEPTION_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #ifdef __GNUC__ 
@@ -15,6 +16,32 @@ using namespace std;
 
 namespace visualizer
 {
+  class Log
+  {
+    public:
+      Log( const std::string& fileName )
+        : out_file( fileName.c_str() )
+      {
+      };
+
+      ~Log()
+      {
+        out_file.close();
+      }
+
+      Log& operator << ( const std::string& line )
+      {
+        out_file << line << endl;
+        return *this;
+      }
+
+    private:
+      std::ofstream out_file;
+  };
+
+  extern Log errorLog;
+
+
   class Exception
   {
     public:
@@ -39,6 +66,11 @@ namespace visualizer
         cerr << "=================== " << exceptionType << " =================== " << endl;
         cerr << " Error: " << e << endl;
         cerr << " File:  " << fileName << ":" << lineNum << endl;
+#if __DEBUG__
+        errorLog << ( "=================== " + exceptionType + " =================== " );
+        errorLog << ( " Error: " + e );
+
+#endif
 #ifdef __STACKTRACE__ 
         // Exception is closing everything down anyway.  May as well use up some memory
         void *array[256];
