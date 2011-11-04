@@ -7,6 +7,9 @@
 
 namespace visualizer
 {
+
+  Log errorLog( "botnetLog.log" );
+
   BotNet::BotNet()
   {
     m_game = 0;
@@ -56,7 +59,7 @@ namespace visualizer
       delete m_timeline;
       m_game = 0;
       m_timeline = 0;
-      cout << gamelog.c_str() << endl;
+      errorLog << gamelog;
       THROW
         (
         GameException,

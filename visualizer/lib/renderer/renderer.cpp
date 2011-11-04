@@ -528,6 +528,16 @@ namespace visualizer
 
   } // _Renderer::drawList()
 
+  void _Renderer::push() const
+  {
+    glPushMatrix();
+  } // _Renderer::push()
+
+  void _Renderer::pop() const
+  {
+    glPopMatrix();
+  } // _Renderer::pop()
+
   void _Renderer::setUnitSize
     (
     const float& sX,
