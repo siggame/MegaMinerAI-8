@@ -154,6 +154,10 @@ namespace visualizer
       virtual void endList( const std::string& name ) const = 0;
 
       virtual void drawList( const std::string& name ) const = 0;
+      
+      virtual void push() const = 0;
+
+      virtual void pop() const = 0;
 
   };
 

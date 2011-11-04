@@ -24,7 +24,6 @@
 
 namespace visualizer 
 {
-
 #if __DEBUG__
 #define SETUP(x) std::cout << x << " initialized at line " << __LINE__ << "." << endl;
 #define THROW( x, y, ... ) \

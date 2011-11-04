@@ -18,47 +18,20 @@ namespace visualizer
     virus &v = *m_virus;
     std:stringstream level;
     level << v.level;
+
+    // Create the Display List's String ID
+    stringstream displayListId;
+    displayListId << "PlayerVirus-" << v.owner;
     
-    //Draw to check for overlapping viruses
-    /*if ( v.owner == 0 )
-    {
-      v.renderer().setColor( Color( 1, 0.1, 0.1, .8 ) );
-      v.renderer().drawQuad( vd->x+0.25, vd->y+0.25, .25, .5 );
-      v.renderer().setColor( Color( 0, 0, 0 ) );
-      v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str()  );
-    }
-    else
-    {
-      v.renderer().setColor( Color( 0.1, 0.1, 1, .8 ) );
-      v.renderer().drawQuad( vd->x+0.50, vd->y+0.25, .25, .5 );
-      v.renderer().setColor( Color( 0, 0, 0 ) );
-      v.renderer().drawText( vd->x+0.50, vd->y+0.25, "mainFont", level.str()  );
-    }*/
+    // draw the virus's display list!
+    v.renderer().push();
+    v.renderer().translate(vd->x, vd->y);
+    v.renderer().drawList(displayListId.str());
+    v.renderer().pop();
     
-    if(v.pixels == NULL)
-    {
-        v.renderer().setColor( Color( 1, 1, 1 ) );
-        v.renderer().drawTexturedQuad( vd->x, vd->y, 1, 1 , (v.owner ? "blue-virus" : "red-virus") );
-        v.renderer().setColor( Color( 0, 1, 0 ) );
-        v.renderer().drawText( vd->x+0.25, vd->y+0.25, "mainFont", level.str(), 2  );
-    }
-    else
-    {
-        v.renderer().setColor( (v.owner == 0 ? Color(1,0,0) : Color(0,0,1)) );
-        
-        for(int x = 0; x < 16; x++)
-            for(int y = 0; y < 16; y++)
-                if(v.pixels[x][y])
-                {
-                    //cout << "abotu to draw... ";
-                    //v.renderer().drawQuad( vd->x + x/16, vd->y + y/16, 1/16, 1/16);
-                    v.renderer().drawQuad( vd->x + (x * 0.0625), vd->y + (y * 0.0625), 0.0625, 0.0625);
-                    //cout << "done drawing...\n";
-                }
-        
-        v.renderer().setColor( Color(1, 1, 1) );
-        v.renderer().drawText( vd->x+0.2, vd->y+0.33, "mainFont", level.str(), 2.5 );
-    }
+    // draw the virus's level
+    v.renderer().setColor( Color(1, 1, 1) );
+    v.renderer().drawText( vd->x+0.2, vd->y+0.33, "mainFont", level.str(), 2.5 );
     
   } // DrawVirus::animate()
 
@@ -262,7 +235,6 @@ namespace visualizer
       m_grid->renderer().setColor( Color( 0.2, 0.2, 0.2, 0.5 ) );
       m_grid->renderer().drawLine(0, y, m_grid->mapWidth, y, 1.0);
     }
-      
   } // DrawGrid::animate
   
   void UpCollide::animate(const float& t, AnimData *d)
@@ -338,16 +310,15 @@ namespace visualizer
   void DrawScore::animate( const float& t, AnimData* d )
   {
     stringstream ss;
-
-
+    
     IRenderer::Alignment a = IRenderer::Left;
     Color team = Color( 1, 0, 0 );
     Color darkTeam = Color( 0.6, 0, 0 );
-    double winningPercent = (double)m_sb->score / (double)(m_sb->score + m_sb->enemyScore);
     double startX = 0;
-    double endX   = m_sb->mapWidth * winningPercent;
+    double endX   = m_sb->mapWidth;
     double xTextOffset = 2;
     double xVirusOffset = 0.5;
+    ScoreData *sd = (ScoreData*)d;
     
     if( m_sb->player == 1 )
     {
@@ -356,8 +327,8 @@ namespace visualizer
       darkTeam = Color( 0, 0, 0.6 );
       ss << m_sb->score << " : " << m_sb->teamName;
       
-      startX = m_sb->mapWidth * (1 - winningPercent);
-      endX   = m_sb->mapWidth;
+      startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
+      endX   =  m_sb->mapWidth * (1 - (sd->blueOffset + sd->drawnOffset));
       xTextOffset = -2.4;
       xVirusOffset = -1.5;     
     }
@@ -375,20 +346,59 @@ namespace visualizer
             m_sb->renderer().drawQuad( x/2.0, y/2.0, 0.5, 0.5);
         }
     }
-
+    
+    // set the team's color and then draw thier text
     m_sb->renderer().setColor( team ); 
     m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y, "mainFont", ss.str(), 3, a );
     
+    // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
       for(int y = 0; y < 16; y++)
         if(m_sb->virusPixels[x][y])
           m_sb->renderer().drawQuad( m_sb->x + (x * 0.0625) + xVirusOffset, m_sb->y + (y * 0.0625), 0.0625, 0.0625);
     
-    m_sb->renderer().drawLine(startX, m_sb->y + 1.25, endX, m_sb->y + 1.25, 16.0);
+    
+    /* NEW BUT WEIRD: Colors bars become gray...
+    // draw the virus
+    // Create the Display List's String ID
+    stringstream displayListId;
+    displayListId << "PlayerVirus-" << m_sb->player;
+    
+    // draw the virus's display list!
+    m_sb->renderer().push();
+    m_sb->renderer().translate(m_sb->x + xVirusOffset, m_sb->y);
+    m_sb->renderer().drawList(displayListId.str());
+    m_sb->renderer().pop();
+    */
+    
+    
+    // draw the colored bar
+    m_sb->renderer().drawQuad(startX, m_sb->y + 1.0, endX, m_sb->y + 2.0);
+    
+    // draw the center marker
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawLine(m_sb->mapWidth/2 + 0.48, m_sb->y + 1.25, m_sb->mapWidth/2 + 0.52, m_sb->y + 1.25, 16.0);
-
+    m_sb->renderer().drawQuad(m_sb->mapWidth/2 - 0.125, m_sb->y + 1, 0.25, 1);
   }
+  
+  void ScoreAnim::animate( const float& t, AnimData *d )
+  {
+    ScoreData *s = (ScoreData*)d;
+    
+    double oldBlueOffset = 1 - (double)oldBluScore / (double)(oldBluScore + oldRedScore);
+    double curBlueOffset = 1 - (double)currentBluScore / (double)(currentBluScore + currentRedScore);
+    double blueOffset = curBlueOffset - oldBlueOffset;
+    
+    if( t > startTime && t < endTime/2 )
+    {
+      s->drawnOffset = blueOffset * (t * 2);
+      s->blueOffset = oldBlueOffset;
+    } else if( t >= endTime/2 )
+    {
+      s->drawnOffset = 0;
+      s->blueOffset = curBlueOffset;
+    }
+    
+  } // ScoreAnim::animate() 
 
 } // visualizer
 

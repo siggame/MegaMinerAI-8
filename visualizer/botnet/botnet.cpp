@@ -3,9 +3,13 @@
 #include "botnet.h"
 #include "animations.h"
 #include "virus-builder.h" // for jacob fischer's random virus building
+#include <sstream>
 
 namespace visualizer
 {
+
+  Log errorLog( "botnetLog.log" );
+
   BotNet::BotNet()
   {
     m_game = 0;
@@ -55,7 +59,7 @@ namespace visualizer
       delete m_timeline;
       m_game = 0;
       m_timeline = 0;
-      cout << gamelog.c_str() << endl;
+      errorLog << gamelog;
       THROW
         (
         GameException,
@@ -67,14 +71,80 @@ namespace visualizer
     float w = m_game->states[ 0 ].width;
     float h = m_game->states[ 0 ].height + 1.5f;
 
-#if 1
     renderer->setCamera( 0, 0, w, h );
     renderer->setUnitSize( w, h );
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
-
+    
+    // build the two player viruses
+    for(int playerid = 0; playerid < 2; playerid++)
+    {
+      stringstream displayListId;
+      displayListId << "PlayerVirus-" << playerid;
+      
+      renderer->beginList(displayListId.str());
+      
+      bool **pixels = buildVirus(m_game->states[0].players[playerid].playerName);
+      
+      for(int x = 0; x < 16; x++)
+        for(int y = 0; y < 16; y++)
+          if(pixels[x][y])
+          {
+            // set the pixel's color to the team's color
+            renderer->setColor( ( playerid == 0 ? Color( 0.6f + (0.0125f * (double)(x + y)), 0, 0) : Color(0, 0, 0.6f + 0.125f * (double)(x + y) ) ) );
+            
+            //draw the main block of the pixel
+            renderer->drawQuad( (x * 0.0625), (y * 0.0625), 0.0625, 0.0625);
+            
+            // the border's color
+            renderer->setColor( Color(1,1,1, 0.35) );
+            
+            //check to see if we need a border
+            if(x - 1 < 0 || !pixels[x - 1][y])  // left
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                (  y   * 0.0625),
+                (  x   * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+                
+            if(x + 1 == 16 || !pixels[x + 1][y])  // right
+              renderer->drawLine
+              (
+                ((x+1) * 0.0625),
+                (  y   * 0.0625),
+                ((x+1) * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+                
+            if(y - 1 < 0 || !pixels[x][y - 1])  // up
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                (  y   * 0.0625),
+                ((x+1) * 0.0625),
+                (  y   * 0.0625),
+                1.0
+              );
+                
+            if(y + 1 == 16 || !pixels[x][y + 1])  // down
+              renderer->drawLine
+              (
+                (  x   * 0.0625),
+                ((y+1) * 0.0625),
+                ((x+1) * 0.0625),
+                ((y+1) * 0.0625),
+                1.0
+              );
+          }
+    
+      renderer->endList(displayListId.str());
+    }
+    
     start();
-#endif
 
   }
 
@@ -122,6 +192,7 @@ namespace visualizer
       state++
       )
     {
+#if 1
       Frame turn;
 
       Connectivity p1;
@@ -147,9 +218,21 @@ namespace visualizer
       score2->mapWidth  = m_game->states[0].width;
       score2->virusPixels = player2virus;
       score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
-
+      if(state > 0)
+        score2->addKeyFrame
+        (
+            new ScoreAnim
+            (
+                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
+                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
+                m_game->states[ state ].players[ 0 ].byteDollars,
+                m_game->states[ state ].players[ 1 ].byteDollars
+            )
+        );
+        
       score1->addKeyFrame( new DrawScore( score1 ) );
       score2->addKeyFrame( new DrawScore( score2 ) );
+      
 
       turn.addAnimatable( score1 );
       turn.addAnimatable( score2 );
@@ -358,6 +441,7 @@ namespace visualizer
         timeManager->setNumTurns( m_game->states.size() );
       }
 
+#endif
     }
 
     cout << "Done Loading That Gamelog..." << endl;
