@@ -18,6 +18,12 @@ namespace visualizer
     float x;
     float y;
   };
+  
+  struct ScoreData: public GeneralAnim
+  {
+    double drawnOffset;
+    double blueOffset;
+  };
 
   struct moveBoard: public Animatable
   {
@@ -140,10 +146,13 @@ namespace visualizer
     
     string teamName;
 
+    
     AnimData* getData()
-    { 
-      return 0;
+    {
+      return &m_scoreData;
     }
+
+    ScoreData m_scoreData;
 
   };
 
