@@ -17,6 +17,35 @@ class AI : BaseAI
   //Return true to end your turn, return false to ask the server for updated information
   public override bool run()
   {
+    // loop through all of the bases
+    for(int i=0;i<bases.Length;i++)
+    {
+      // check if you own that base
+      if(bases[i].getOwner() == playerID())
+      {
+        // check to see if you have enough cycles to spawn a level 0 virus
+        if(baseCost() <= players[playerID()].getCycles())
+        {
+          // spawn a level 0 virus at that base
+          bases[i].spawn(0);
+        }
+      }
+    }
+
+    // loop through all of the viruses
+    for(int i=0;i<viruses.Length;i++)
+    {
+      // if you own that virus
+      if(viruses[i].getOwner() == playerID())
+      {
+        // if the tile you want to move to is NOT a wall
+        if(getTileAtLocation(viruses[i].getX()+1, viruses[i].getY()).getOwner() != 3)
+        {
+          // move the virus
+          viruses[i].move(viruses[i].getX()+1, viruses[i].getY());
+        }
+      }
+    }
     return true;
   }
 
