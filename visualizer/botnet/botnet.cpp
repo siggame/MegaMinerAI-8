@@ -141,6 +141,7 @@ namespace visualizer
               );
           }
     
+      renderer->setColor( ( playerid == 0 ? Color( 0.6f, 0, 0) : Color(0, 0, 0.6f ) ) );
       renderer->endList(displayListId.str());
     }
     

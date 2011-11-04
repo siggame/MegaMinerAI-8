@@ -351,14 +351,15 @@ namespace visualizer
     m_sb->renderer().setColor( team ); 
     m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y, "mainFont", ss.str(), 3, a );
     
+#if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
       for(int y = 0; y < 16; y++)
         if(m_sb->virusPixels[x][y])
           m_sb->renderer().drawQuad( m_sb->x + (x * 0.0625) + xVirusOffset, m_sb->y + (y * 0.0625), 0.0625, 0.0625);
-    
-    
-    /* NEW BUT WEIRD: Colors bars become gray...
+
+#else
+    // NEW BUT WEIRD: Colors bars become gray...
     // draw the virus
     // Create the Display List's String ID
     stringstream displayListId;
@@ -369,7 +370,7 @@ namespace visualizer
     m_sb->renderer().translate(m_sb->x + xVirusOffset, m_sb->y);
     m_sb->renderer().drawList(displayListId.str());
     m_sb->renderer().pop();
-    */
+#endif
     
     
     // draw the colored bar
