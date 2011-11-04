@@ -138,7 +138,7 @@ namespace visualizer
 
   void ControlBar::play()
   {
-    if( TimeManager->getSpeed() )
+    if( TimeManager->getSpeed() != 0 )
       TimeManager->pause();
     else
       TimeManager->play();

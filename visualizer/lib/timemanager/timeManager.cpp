@@ -172,7 +172,7 @@ namespace visualizer
 
   void _TimeManager::fastForward()
   {
-    IMPLEMENT_ME;
+    m_speed *= 1.5;
 
   } // _TimeManager::fastForward()
 
@@ -184,7 +184,7 @@ namespace visualizer
     }
     else
     {
-      IMPLEMENT_ME;
+      m_speed *= 1.5;
     }
 
   } // _TimeManager::rewind()
