@@ -181,6 +181,9 @@ namespace visualizer
 
       void drawList( const std::string& name ) const;
 
+      void push() const;
+
+      void pop() const;
 
       // void setCameraShape()
       // void setCameraFocus()
