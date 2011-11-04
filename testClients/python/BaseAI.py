@@ -65,5 +65,7 @@ class BaseAI:
   def height(self):
     return library.getHeight(self.connection)
 
+  def getTile(self, x, y):
+    return self.tiles[x+y*self.width()]
   def __init__(self, connection):
     self.connection = connection
