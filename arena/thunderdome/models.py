@@ -4,7 +4,6 @@
 
 # Standard Imports
 from datetime import datetime
-from random import random
 
 # Non-Django 3rd Party Imports
 import beanstalkc
