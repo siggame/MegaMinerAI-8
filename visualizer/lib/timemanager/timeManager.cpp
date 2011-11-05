@@ -247,10 +247,12 @@ namespace visualizer
 
       if( m_turn >= m_numTurns )
       {
+        pause();
+
         m_turn = m_numTurns-1;
         // Very close to the next turn, but not quite
         m_turnCompletion = 0.99999999;
-        pause();
+
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
           // CHANGE ME THIS IS BAD
@@ -278,6 +280,7 @@ namespace visualizer
       }
 
     }
+
     updateChildren();
 
   } // _TimeManager::timerUpdate()
