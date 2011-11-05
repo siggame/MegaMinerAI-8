@@ -131,7 +131,6 @@ namespace visualizer
   const int& _TimeManager::nextTurn()
   {
     pause();
-    m_turnCompletion = 0;
     m_turn++;
     return getTurn();
 
@@ -140,7 +139,6 @@ namespace visualizer
     const int& _TimeManager::prevTurn()
   {
     pause();
-    m_turnCompletion = 0;
     m_turn--;
     return getTurn();
 
@@ -155,6 +153,12 @@ namespace visualizer
   void _TimeManager::pause()
   {
     m_speed = 0;
+    if( m_turnCompletion > 0.5 )
+    {
+      m_turn++;
+    }
+
+    m_turnCompletion = 0;
 
   } // _TimeManager::pause()
 
@@ -225,7 +229,7 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
-
+    
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );

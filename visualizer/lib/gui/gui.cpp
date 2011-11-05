@@ -614,19 +614,13 @@ void _GUI::turnPercentageCalc(int value)
 
 void _GUI::stepTurnForwardShortcut()
 {
-  if(TimeManager->getTurn() < TimeManager->getNumTurns()-1)
-  {
-    TimeManager->setTurn(TimeManager->getTurn() + 1);
-  }
+  TimeManager->nextTurn();
 }
 
 
 void _GUI::stepTurnBackShortcut()
 {
-  if(TimeManager->getTurn() > 0)
-  {
-    TimeManager->setTurn(TimeManager->getTurn() - 1);
-  }
+  TimeManager->prevTurn();
 }
 
 
