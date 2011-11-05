@@ -38,20 +38,19 @@ namespace visualizer
   {
     cout << "Load BotNet Gamelog" << endl;
 
-    cout << "Timeline: " << (long int)m_timeline << endl;
-
+    // Make sure we're not still loading a previous gamelog
     terminate();
     wait();
 
+    // Reset the animation engine.  
     animationEngine->registerFrameContainer( 0 );
     
+    // Clean up any old games.
     delete m_game;
     delete m_timeline;
 
     m_game = new Game;
     m_timeline = new AnimSequence;
-
-    cout << "Timeline: " << (long int)m_timeline << endl;
 
     if( !parseString( *m_game, gamelog.c_str() ) )
     {
@@ -152,7 +151,9 @@ namespace visualizer
   void BotNet::run()
   {
 
+#ifdef __DEBUG__
     cout << "Loading Gamelog..." << endl;
+#endif
 
     size_t frameNum = 0;
 
@@ -445,7 +446,9 @@ namespace visualizer
 
     }
 
+#ifdef __DEBUG__
     cout << "Done Loading That Gamelog..." << endl;
+#endif
 
   } // BotNet::run() 
 
