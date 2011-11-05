@@ -52,7 +52,7 @@ QMAKE_CXXFLAGS_DEBUG += -rdynamic
 QMAKE_LFLAGS_DEBUG += -rdynamic 
 }
 
-CONFIG += release 
+CONFIG += debug 
 macx:CONFIG -= app_bundle
 QT += opengl
 SUBDIRS += botnet piracy lightRevelation
