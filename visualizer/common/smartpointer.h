@@ -66,6 +66,14 @@ class SmartPointer
       (*m_ref)++;
     }
 
+    template<class U> friend class SmartPointer;
+
+    template<class U>
+    SmartPointer( const SmartPointer<U>& data ) : m_data( data.m_data ), m_ref( data.m_ref )
+    {
+      (*m_ref)++;
+    }
+
     ~SmartPointer()
     {
       (*m_ref)--;
@@ -77,6 +85,11 @@ class SmartPointer
         m_ref = 0;
  
       }
+    }
+
+    operator T*()
+    {
+      return m_data;
     }
 
     T& operator *()
@@ -116,11 +129,6 @@ class SmartPointer
     operator bool()
     {
       return m_data != 0;
-    }
-
-    T* ptr()
-    {
-      return m_data;
     }
 
 };

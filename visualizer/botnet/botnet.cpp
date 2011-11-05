@@ -21,8 +21,8 @@ namespace visualizer
     terminate();
     wait();
     animationEngine->registerFrameContainer( 0 );
-    delete m_game;
     delete m_timeline;
+    delete m_game;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -156,9 +156,9 @@ namespace visualizer
 
     size_t frameNum = 0;
 
-    background* b = new background( renderer );
-    grid *g = new grid( renderer );
-    moveBoard *mb = new moveBoard( renderer );
+    SmartPointer<background> b = new background( renderer );
+    SmartPointer<grid> g = new grid( renderer );
+    SmartPointer<moveBoard> mb = new moveBoard( renderer );
 
     mb->offst = 1.5;
     mb->addKeyFrame( new PushBoard( mb ) );
@@ -193,7 +193,6 @@ namespace visualizer
       state++
       )
     {
-#if 1
       Frame turn;
 
       Connectivity p1;
@@ -444,7 +443,6 @@ namespace visualizer
         timeManager->setNumTurns( m_game->states.size() );
       }
 
-#endif
     }
 
     cout << "Done Loading That Gamelog..." << endl;
