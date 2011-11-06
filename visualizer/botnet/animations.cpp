@@ -310,6 +310,7 @@ namespace visualizer
   void DrawScore::animate( const float& t, AnimData* d )
   {
     stringstream ss;
+    ss << ":" << m_sb->score;
     
     m_sb->renderer().translate(0, -2.5);
     IRenderer::Alignment a = IRenderer::Left;
@@ -320,6 +321,8 @@ namespace visualizer
     double xTextOffset = 1.5;
     double xBottomInfoOffset = 2.875;
     double xVirusOffset = -0.75;
+    double scoreOffset = 13.75;
+    string scoreFileName = "scoreboard-bytedollar-red";
     ScoreData *sd = (ScoreData*)d;
     
     if( m_sb->player == 1 )
@@ -327,8 +330,8 @@ namespace visualizer
       a = IRenderer::Right;
       team = Color( 0, 0, 1 );
       darkTeam = Color( 0, 0, 0.6 );
-      ss << m_sb->score << " : " << m_sb->teamName;
-      
+      scoreOffset = 23.25;
+      scoreFileName = "scoreboard-bytedollar-blue";
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
       endX   =  m_sb->mapWidth * (1 - (sd->blueOffset + sd->drawnOffset));
       xTextOffset = -2.1;
@@ -337,8 +340,6 @@ namespace visualizer
     }
     else
     {
-      ss << m_sb->teamName << " : " << m_sb->score;
-      
       srand(m_sb->teamName.length());
       
       for(int x = 0; x < m_sb->mapWidth * 2; x++)
@@ -352,8 +353,11 @@ namespace visualizer
     
     // set the team's color and then draw thier text
     m_sb->renderer().setColor( team ); 
-    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y - 0.125, "mainFont", ss.str(), 4.5, a );
+    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y - 0.125, "mainFont", m_sb->teamName, 4.5, a );
     
+    //draw their score too
+    m_sb->renderer().drawTexturedQuad(scoreOffset, m_sb->y, 1, 1, scoreFileName);
+    m_sb->renderer().drawText( scoreOffset + 0.46, m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
 #if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
