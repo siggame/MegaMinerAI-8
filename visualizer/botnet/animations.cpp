@@ -311,6 +311,7 @@ namespace visualizer
   {
     stringstream ss;
     
+    m_sb->renderer().translate(0, -2.5);
     IRenderer::Alignment a = IRenderer::Left;
     Color team = Color( 1, 0, 0 );
     Color darkTeam = Color( 0.6, 0, 0 );
@@ -341,7 +342,7 @@ namespace visualizer
       srand(m_sb->teamName.length());
       
       for(int x = 0; x < m_sb->mapWidth * 2; x++)
-        for(int y = 0; y < 6; y++)
+        for(int y = 0; y < 5; y++)
         {
             double num = (rand()%5)/40.0f;
             m_sb->renderer().setColor( Color( num, num, num) );
@@ -437,11 +438,13 @@ namespace visualizer
     
     // draw the colored bar
     m_sb->renderer().setColor( darkTeam );
-    m_sb->renderer().drawQuad(startX, m_sb->y + 2, endX, m_sb->y + 2);
+    m_sb->renderer().drawQuad(startX, m_sb->y + 2, endX, 0.25);
     
     // draw the center marker
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 3, 2);
+    m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 2.25, 2);
+  
+    m_sb->renderer().translate(0, 2.5);
   }
   
   void ScoreAnim::animate( const float& t, AnimData *d )

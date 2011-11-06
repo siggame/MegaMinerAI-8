@@ -41,6 +41,9 @@ namespace visualizer
       void addBase( const float& x, const float& y );
       void addNode( const float& x, const float& y, ConnectivityNode* node );
       void generateConnectivity();
+      
+      int numConnectedNodes;
+      int numUnconnectedNodes;
 
     private:
       bool findMyNode( const vertex& c );

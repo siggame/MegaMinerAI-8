@@ -195,54 +195,14 @@ namespace visualizer
 
       Connectivity p1;
       Connectivity p2;
-
-      scoreboard* score1 = new scoreboard( renderer );
-      scoreboard* score2 = new scoreboard( renderer );
-
-      score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
-      score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
-      score1->connectedTiles = -42; // TODO: Actually calculate this
-      score1->unconnectedTiles = -42; // TODO: Actually calculate this
-      score1->player = 0;
-      score1->x = 1.0f;
-      score1->y = 0.2f;
-      score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
-      score1->mapWidth  = m_game->states[0].width;
-      score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
-      score1->neutralTiles = -42;
-      
-      score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
-      score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
-      score2->connectedTiles = -42; // TODO: Actually calculate this
-      score2->unconnectedTiles = -42; // TODO: Actually calculate this
-      score2->player = 1;
-      score2->y = 0.2f;
-      score2->x = m_game->states[ 0 ].width-1;
-      score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
-      score2->mapWidth  = m_game->states[0].width;
-      score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
-      if(state > 0)
-        score2->addKeyFrame
-        (
-            new ScoreAnim
-            (
-                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
-                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
-                m_game->states[ state ].players[ 0 ].byteDollars,
-                m_game->states[ state ].players[ 1 ].byteDollars
-            )
-        );
-        
-      score1->addKeyFrame( new DrawScore( score1 ) );
-      score2->addKeyFrame( new DrawScore( score2 ) );
-      
-
-      turn.addAnimatable( score1 );
-      turn.addAnimatable( score2 );
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );
-
+      
+      
+      
+      // BEGIN: Draw Tiles
+      int numNeutralTiles = 0;
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -258,20 +218,22 @@ namespace visualizer
         t->owner = i->second.owner;
 
         if( t->owner == 0 )
-        {
           p1.addNode( t->x, t->y, t );
-        } else if( t->owner == 1 )
-        {
+        else if( t->owner == 1 )
           p2.addNode( t->x, t->y, t );
-        }
+        else if( t->owner == 2 )
+          numNeutralTiles++;
 
         t->addKeyFrame( new Appear );
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
-
       }
- 
+      // END: Draw Tiles
+      
+      
+      
+      // BEGIN: Draw Bases
       for
         (
         std::map<int, Base>::iterator i = m_game->states[ state ].bases.begin();
@@ -297,11 +259,61 @@ namespace visualizer
 
         turn.addAnimatable( b );
       }
+      // END: Draw Bases
 
      
       p1.generateConnectivity();
       p2.generateConnectivity();
+      
+      
+
+      // BEGIN: Draw Scoreboard
+      scoreboard* score1 = new scoreboard( renderer );
+      scoreboard* score2 = new scoreboard( renderer );
+
+      score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
+      score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
+      score1->connectedTiles = p1.numConnectedNodes;
+      score1->unconnectedTiles = p1.numUnconnectedNodes;
+      score1->player = 0;
+      score1->x = 1.0f;
+      score1->y = 0.2f;
+      score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
+      score1->mapWidth  = m_game->states[0].width;
+      score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
+      score1->neutralTiles = numNeutralTiles;
+      
+      score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
+      score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
+      score2->connectedTiles = p2.numConnectedNodes;
+      score2->unconnectedTiles = p2.numUnconnectedNodes;
+      score2->player = 1;
+      score2->y = 0.2f;
+      score2->x = m_game->states[ 0 ].width-1;
+      score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
+      score2->mapWidth  = m_game->states[0].width;
+      score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
+      if(state > 0)
+        score2->addKeyFrame
+        (
+            new ScoreAnim
+            (
+                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
+                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
+                m_game->states[ state ].players[ 0 ].byteDollars,
+                m_game->states[ state ].players[ 1 ].byteDollars
+            )
+        );
         
+      score1->addKeyFrame( new DrawScore( score1 ) );
+      score2->addKeyFrame( new DrawScore( score2 ) );
+
+      turn.addAnimatable( score1 );
+      turn.addAnimatable( score2 );
+      // END: Draw Scoreboard
+
+
+      
       // Draw Grid
       turn.addAnimatable( g );
 
