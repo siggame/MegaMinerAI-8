@@ -42,3 +42,12 @@ texture red-nodes-0,3 textures/connected-nodes/red-nodes-0,3.png
 texture red-nodes-1,3 textures/connected-nodes/red-nodes-1,3.png
 texture red-nodes-2,3 textures/connected-nodes/red-nodes-2,3.png
 texture red-nodes-3,3 textures/connected-nodes/red-nodes-3,3.png
+texture scoreboard-bytedollar-red textures/scoreboard/bytedollar-red.png
+texture scoreboard-bytedollar-blue textures/scoreboard/bytedollar-blue.png
+texture scoreboard-connected-nodes-red textures/scoreboard/connected-nodes-red.png
+texture scoreboard-connected-nodes-blue textures/scoreboard/connected-nodes-blue.png
+texture scoreboard-cycles-red textures/scoreboard/cycles-red.png
+texture scoreboard-cycles-blue textures/scoreboard/cycles-blue.png
+texture scoreboard-unconnected-nodes-red textures/scoreboard/unconnected-nodes-red.png
+texture scoreboard-unconnected-nodes-blue textures/scoreboard/unconnected-nodes-blue.png
+texture scoreboard-neutral-nodes textures/scoreboard/neutral-tiles.png

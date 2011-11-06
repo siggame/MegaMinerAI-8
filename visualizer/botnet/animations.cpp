@@ -316,8 +316,9 @@ namespace visualizer
     Color darkTeam = Color( 0.6, 0, 0 );
     double startX = 0;
     double endX   = m_sb->mapWidth;
-    double xTextOffset = 2;
-    double xVirusOffset = 0.5;
+    double xTextOffset = 1.5;
+    double xBottomInfoOffset = 2.875;
+    double xVirusOffset = -0.75;
     ScoreData *sd = (ScoreData*)d;
     
     if( m_sb->player == 1 )
@@ -329,8 +330,9 @@ namespace visualizer
       
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
       endX   =  m_sb->mapWidth * (1 - (sd->blueOffset + sd->drawnOffset));
-      xTextOffset = -2.4;
-      xVirusOffset = -1.5;     
+      xTextOffset = -2.1;
+      xVirusOffset = -1.25;     
+      xBottomInfoOffset = 26.8;
     }
     else
     {
@@ -339,7 +341,7 @@ namespace visualizer
       srand(m_sb->teamName.length());
       
       for(int x = 0; x < m_sb->mapWidth * 2; x++)
-        for(int y = 0; y < 4; y++)
+        for(int y = 0; y < 6; y++)
         {
             double num = (rand()%5)/40.0f;
             m_sb->renderer().setColor( Color( num, num, num) );
@@ -349,7 +351,7 @@ namespace visualizer
     
     // set the team's color and then draw thier text
     m_sb->renderer().setColor( team ); 
-    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y, "mainFont", ss.str(), 3, a );
+    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y - 0.125, "mainFont", ss.str(), 4.5, a );
     
 #if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
@@ -367,18 +369,79 @@ namespace visualizer
     
     // draw the virus's display list!
     m_sb->renderer().push();
-    m_sb->renderer().translate(m_sb->x + xVirusOffset, m_sb->y);
+    m_sb->renderer().translate(m_sb->x + xVirusOffset, m_sb->y - 0.125);
+    m_sb->renderer().scale(2.0, 2.0);
     m_sb->renderer().drawList(displayListId.str());
     m_sb->renderer().pop();
 #endif
     
+    // draw the bottom info
+    stringstream bottomInfo;
+    m_sb->renderer().setColor( team );
+    string stringColor = (m_sb->player ? "blue" : "red");
+    
+    // cycles
+    bottomInfo << "scoreboard-cycles-" << stringColor;
+    m_sb->renderer().drawTexturedQuad(xBottomInfoOffset, m_sb->y + 1, 0.75, 0.75, bottomInfo.str());
+    bottomInfo.str("");
+    bottomInfo.clear();
+    bottomInfo << m_sb->cycles;
+    m_sb->renderer().drawText(xBottomInfoOffset + 0.75, m_sb->y + 0.9, "mainFont", bottomInfo.str(), 3.5);
+    bottomInfo.str("");
+    bottomInfo.clear();
+    
+    // connected tiles
+    bottomInfo << "scoreboard-connected-nodes-" << stringColor;
+    m_sb->renderer().drawTexturedQuad(xBottomInfoOffset + 4, m_sb->y + 1, 0.75, 0.75, bottomInfo.str());
+    bottomInfo.str("");
+    bottomInfo.clear();
+    bottomInfo << m_sb->connectedTiles;
+    m_sb->renderer().drawText(xBottomInfoOffset + 4.75, m_sb->y + 0.9, "mainFont", bottomInfo.str(), 3.5);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 4, m_sb->y + 1, xBottomInfoOffset + 4.75, m_sb->y + 1, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 4, m_sb->y + 1.75, xBottomInfoOffset + 4.75, m_sb->y + 1.75, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 4, m_sb->y + 1, xBottomInfoOffset + 4, m_sb->y + 1.75, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 4.75, m_sb->y + 1, xBottomInfoOffset + 4.75, m_sb->y + 1.75, 1);
+    bottomInfo.str("");
+    bottomInfo.clear();
+    
+    // unconnected tiles
+    bottomInfo << "scoreboard-unconnected-nodes-" << stringColor;
+    m_sb->renderer().drawTexturedQuad(xBottomInfoOffset + 8, m_sb->y + 1, 0.75, 0.75, bottomInfo.str());
+    bottomInfo.str("");
+    bottomInfo.clear();
+    bottomInfo << m_sb->unconnectedTiles;
+    m_sb->renderer().drawText(xBottomInfoOffset + 8.75, m_sb->y + 0.9, "mainFont", bottomInfo.str(), 3.5);
+    m_sb->renderer().drawText(xBottomInfoOffset + 8.75, m_sb->y + 0.9, "mainFont", bottomInfo.str(), 3.5);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 8, m_sb->y + 1, xBottomInfoOffset + 8.75, m_sb->y + 1, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 8, m_sb->y + 1.75, xBottomInfoOffset + 8.75, m_sb->y + 1.75, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 8, m_sb->y + 1, xBottomInfoOffset + 8, m_sb->y + 1.75, 1);
+    m_sb->renderer().drawLine(xBottomInfoOffset + 8.75, m_sb->y + 1, xBottomInfoOffset + 8.75, m_sb->y + 1.75, 1);
+    bottomInfo.str("");
+    bottomInfo.clear();
+    
+    // neutral tiles
+    if(!m_sb->player)
+    {
+        m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
+        m_sb->renderer().drawTexturedQuad(xBottomInfoOffset + 16, m_sb->y + 0.5, 0.75, 0.75, "scoreboard-neutral-nodes");
+        bottomInfo << m_sb->neutralTiles;
+        m_sb->renderer().drawText(xBottomInfoOffset + 16.75, m_sb->y + 0.4, "mainFont", bottomInfo.str(), 3.5);
+        m_sb->renderer().drawText(xBottomInfoOffset + 16.75, m_sb->y + 0.4, "mainFont", bottomInfo.str(), 3.5);
+        m_sb->renderer().drawLine(xBottomInfoOffset + 16, m_sb->y + 0.5, xBottomInfoOffset + 16.75, m_sb->y + 0.5, 1);
+        m_sb->renderer().drawLine(xBottomInfoOffset + 16, m_sb->y + 1.25, xBottomInfoOffset + 16.75, m_sb->y + 1.25, 1);
+        m_sb->renderer().drawLine(xBottomInfoOffset + 16, m_sb->y + 0.5, xBottomInfoOffset + 16, m_sb->y + 1.25, 1);
+        m_sb->renderer().drawLine(xBottomInfoOffset + 16.75, m_sb->y + 0.5, xBottomInfoOffset + 16.75, m_sb->y + 1.25, 1);
+        bottomInfo.str("");
+        bottomInfo.clear();
+    }
     
     // draw the colored bar
-    m_sb->renderer().drawQuad(startX, m_sb->y + 1.0, endX, m_sb->y + 2.0);
+    m_sb->renderer().setColor( darkTeam );
+    m_sb->renderer().drawQuad(startX, m_sb->y + 2, endX, m_sb->y + 2);
     
     // draw the center marker
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawQuad(m_sb->mapWidth/2 - 0.125, m_sb->y + 1, 0.25, 1);
+    m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 3, 2);
   }
   
   void ScoreAnim::animate( const float& t, AnimData *d )

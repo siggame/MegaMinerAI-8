@@ -142,6 +142,10 @@ namespace visualizer
     
     int player;
     int score;
+    int cycles;
+    int connectedTiles;
+    int unconnectedTiles;
+    int neutralTiles;
     int enemyScore;
     
     string teamName;

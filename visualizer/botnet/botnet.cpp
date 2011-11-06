@@ -160,13 +160,10 @@ namespace visualizer
     SmartPointer<background> b = new background( renderer );
     SmartPointer<grid> g = new grid( renderer );
     SmartPointer<moveBoard> mb = new moveBoard( renderer );
-
-    mb->offst = 1.5;
-    mb->addKeyFrame( new PushBoard( mb ) );
     
-    // build the players virus sprites
-    bool **player1virus = buildVirus(m_game->states[0].players[0].playerName);
-    bool **player2virus = buildVirus(m_game->states[0].players[1].playerName);
+    // offset for the score to be rendered at the top
+    mb->offst = 2.5f;
+    mb->addKeyFrame( new PushBoard( mb ) );
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
@@ -203,21 +200,26 @@ namespace visualizer
       scoreboard* score2 = new scoreboard( renderer );
 
       score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
+      score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
+      score1->connectedTiles = -42; // TODO: Actually calculate this
+      score1->unconnectedTiles = -42; // TODO: Actually calculate this
       score1->player = 0;
       score1->x = 1.0f;
       score1->y = 0.2f;
       score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
       score1->mapWidth  = m_game->states[0].width;
-      score1->virusPixels = player1virus;
       score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
+      score1->neutralTiles = -42;
       
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
+      score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
+      score2->connectedTiles = -42; // TODO: Actually calculate this
+      score2->unconnectedTiles = -42; // TODO: Actually calculate this
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width-1;
       score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
       score2->mapWidth  = m_game->states[0].width;
-      score2->virusPixels = player2virus;
       score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
       if(state > 0)
         score2->addKeyFrame
@@ -421,7 +423,6 @@ namespace visualizer
 
         v->level = i->second.level;
         v->movesLeft = i->second.movesLeft;
-        v->pixels = (v->owner ? player2virus : player1virus);
         v->addKeyFrame( new DrawVirus( v ) );
 
         turn.addAnimatable( v );
