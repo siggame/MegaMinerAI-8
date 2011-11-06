@@ -506,8 +506,6 @@ namespace visualizer
     dl->startList();
     ResourceMan->release( name, "renderer" );
 
-    openglErrorCheck();
-
   } // _Renderer::beginList()
 
   void _Renderer::endList( const std::string& name ) const
@@ -515,8 +513,6 @@ namespace visualizer
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
     dl->endList();
     ResourceMan->release( name, "renderer" );
-
-    openglErrorCheck();
 
   } // _Renderer::endList()
 
