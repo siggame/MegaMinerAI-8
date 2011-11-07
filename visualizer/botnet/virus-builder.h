@@ -461,6 +461,29 @@ namespace virusBuilder
             }
         }
     }; // END: parts[][][][]
+    
+    static bool androidEasterEgg[16][8] = 
+    {
+        { 0, 0, 0, 1,   0, 0, 0, 0 },
+        { 0, 0, 0, 0,   1, 0, 1, 1 },
+        { 0, 0, 0, 0,   0, 1, 1, 1 },
+        { 0, 0, 0, 0,   1, 1, 0, 1 },
+        
+        { 0, 0, 0, 0,   1, 1, 1, 1 },
+        { 0, 0, 0, 0,   0, 0, 0, 0 },
+        { 0, 1, 1, 0,   1, 1, 1, 1 },
+        { 0, 1, 1, 0,   1, 1, 1, 1 },
+        
+        { 0, 1, 1, 0,   1, 1, 1, 1 },
+        { 0, 1, 1, 0,   1, 1, 1, 1 },
+        { 0, 1, 1, 0,   1, 1, 1, 1 },
+        { 0, 0, 0, 0,   1, 1, 1, 1 },
+        
+        { 0, 0, 0, 0,   1, 1, 1, 1 },
+        { 0, 0, 0, 0,   0, 1, 1, 0 },
+        { 0, 0, 0, 0,   0, 1, 1, 0 },
+        { 0, 0, 0, 0,   0, 1, 1, 0 }
+    }; // END: androidEasterEgg[][]
 }
 
 using namespace std;
@@ -471,37 +494,51 @@ using namespace std;
 // Returns:  a bool** of size 16x16 that represents where pixels of the virus are (true means color, false means transperant) 
 bool ** buildVirus(string teamName)
 {
-    // hash the team's name to seed rand()
-    int hash = 0;
-    int offset = 'a' - 1;
-    
-    for(string::const_iterator it= teamName.begin(); it != teamName.end(); ++it)
-        hash = hash << 1 | (*it - offset);  
-    
-    // seed rand with the has of their team name so it is random for everyone, but every team gets the same virus generated
-    srand(hash + 1);
-    
+    // the virus image to return
     bool ** virus = new bool*[16];
     for(int i = 0; i < 16; i++)
     {
         virus[i] = new bool[16];
     }
     
-    short xOffset = 0, yOffset = 0;
-    
-    for(short type = 0; type < TYPES_OF_PARTS; type++ )
+    // check for easter eggs
+    if(strcmp(teamName.c_str(), "Droids you're lookin for") == 0)
     {
-        short partToUse = rand()%NUM_OF_UNIQUE_PARTS_FOR_EACH_TYPE;
-         
-        for(short x = 0; x < PART_LENGTH; x++)
-            for(short y = 0; y < PART_LENGTH; y++)
-                virus[x + xOffset][y + yOffset] = (bool)virusBuilder::parts[type][partToUse][x][y];
+        for(int x = 0; x < 8; x++)
+            for(int y = 0; y < 16; y++)
+                virus[x][y] = virusBuilder::androidEasterEgg[y][x];
+    }
+    else
+    {
+        // hash the team's name to seed rand()
+        int hash = 0;
+        int offset = 'a' - 1;
         
-        xOffset += 4;
-        if(xOffset == 8)
+        for(string::const_iterator it= teamName.begin(); it != teamName.end(); ++it)
+            hash = hash << 1 | (*it - offset);  
+        
+        // seed rand with the has of their team name so it is random for everyone, but every team gets the same virus generated
+        srand(hash + 1);
+        
+        
+        
+        
+        short xOffset = 0, yOffset = 0;
+        
+        for(short type = 0; type < TYPES_OF_PARTS; type++ )
         {
-            yOffset += 4;
-            xOffset = 0;
+            short partToUse = rand()%NUM_OF_UNIQUE_PARTS_FOR_EACH_TYPE;
+             
+            for(short x = 0; x < PART_LENGTH; x++)
+                for(short y = 0; y < PART_LENGTH; y++)
+                    virus[x + xOffset][y + yOffset] = (bool)virusBuilder::parts[type][partToUse][x][y];
+            
+            xOffset += 4;
+            if(xOffset == 8)
+            {
+                yOffset += 4;
+                xOffset = 0;
+            }
         }
     }
     

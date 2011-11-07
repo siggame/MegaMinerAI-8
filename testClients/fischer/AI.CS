@@ -80,6 +80,8 @@ class AI : BaseAI
         int desired_virus_level = 0;
         int enemy_virus_count = 0;
         
+        // see if we need to find a new 
+        
         // find the desired level for our viruses
         foreach(var virus in viruses)
             if(virus.getOwner() == enemyID())
@@ -88,7 +90,7 @@ class AI : BaseAI
                 enemy_virus_count++;
             }
         if(enemy_virus_count > 0)
-            desired_virus_level = (int)Math.Ceiling((double)desired_virus_level/(double)enemy_virus_count);
+            desired_virus_level = (int)Math.Ceiling((double)desired_virus_level/(double)enemy_virus_count) + 1;
         
         // for each of my bases try to spawn a virus
         foreach(var my_base in bases)
@@ -128,6 +130,9 @@ class AI : BaseAI
                     //switch(rand.Next(5)) { case 0: virus.move(virus.getX() + 1, virus.getY()); break;  case 1: virus.move(virus.getX(), virus.getY() + 1); break;  case 2: virus.move(virus.getX(), virus.getY() - 1); break;  case 3: virus.move(virus.getX() - 1, virus.getY()); break; }
                     loopCount++;
                     virus.move(points[0].X, points[0].Y);
+                    //if we just move to the desired point
+                    if(goingAfterEnemy && points[0].X == desiredX && points[0].Y == desiredY)
+                        find_new_desired_point(points[0].X, points[0].Y);
                     points.RemoveAt(0);
                 }
                 
@@ -199,10 +204,7 @@ class AI : BaseAI
         
         if(neutralTiles < takenTiles && !goingAfterEnemy)
         {
-            var enemy_base = bases.ToList().First(b => b.getOwner() == enemyID());
-            
-            desiredX = enemy_base.getX();
-            desiredY = enemy_base.getY();
+            find_new_desired_point(desiredX, desiredY);
             
             goingAfterEnemy = true;
             
@@ -247,6 +249,42 @@ class AI : BaseAI
                 continue;
             }
             
+            
+            // check to make sure this tile is not dangerous (eg >= enemy virus adjacent to it), if it is remove it
+            if(pt.X + 1 < width())
+            {
+                if(map[pt.X + 1, pt.Y].Type == NodeType.EnemyVirus && map[pt.X + 1, pt.Y].VirusLevel >= this_virus_level)
+                {
+                    points.Remove(pt);
+                    continue;
+                }
+            }
+            if(pt.X - 1 >= 0)
+            {
+                if(map[pt.X - 1, pt.Y].Type == NodeType.EnemyVirus && map[pt.X - 1, pt.Y].VirusLevel >= this_virus_level)
+                {
+                    points.Remove(pt);
+                    continue;
+                }
+            }
+            if(pt.Y + 1 < height())
+            {
+                if(map[pt.X, pt.Y + 1].Type == NodeType.EnemyVirus && map[pt.X, pt.Y + 1].VirusLevel >= this_virus_level)
+                {
+                    points.Remove(pt);
+                    continue;
+                }
+            }
+            if(pt.Y - 1 >= 0)
+            {
+                if(map[pt.X, pt.Y - 1].Type == NodeType.EnemyVirus && map[pt.X, pt.Y - 1].VirusLevel >= this_virus_level)
+                {
+                    points.Remove(pt);
+                    continue;
+                }
+            }
+            
+            // at this point we willa ctually look at this node
             var node = map[pt.X, pt.Y];
             
             // if it is interesting let's go to it
@@ -358,9 +396,24 @@ class AI : BaseAI
         }
         else
         {
-            Console.WriteLine("PROBLEM: No point was found to return...\n");
+            // just go where ever that path we found the the desired point is
+            if(path != null && path.Count > 2)
+            {
+                path.RemoveFirst();
+                GamePathNode firstStep = null;
+                
+                //because path.First won't compile :(
+                foreach(var node in path)
+                {
+                    firstStep = node;
+                    break;
+                }
+
+                return new GamePoint(firstStep.X, firstStep.Y);
+            }
         }
         
+        Console.WriteLine("PROBLEM: No point was found to return...\n");
         return null;
     }
     
@@ -483,6 +536,45 @@ class AI : BaseAI
                     isWall = false;
                 }
                 
+                // WALL: Adjacent tile with adjecent >= level enemy virus
+                if(
+                    ( x == startX + 1 && y == startY ) ||
+                    ( x == startX - 1 && y == startY ) ||
+                    ( x == startX && y == startY + 1 ) ||
+                    ( x == startX && y == startY - 1 )
+                  )
+                {
+                    if(x + 1 < width())
+                    {
+                        if(map[x + 1, y].Type == NodeType.EnemyVirus && start_virus_level <= map[x + 1, y].VirusLevel)
+                        {
+                            isWall = true;
+                        }
+                    }
+                    else if(x - 1 >= 0)
+                    {
+                        if(map[x - 1, y].Type == NodeType.EnemyVirus && start_virus_level <= map[x - 1, y].VirusLevel)
+                        {
+                            isWall = true;
+                        }
+                    }
+                    else if(y + 1 < height())
+                    {
+                        if(map[x, y + 1].Type == NodeType.EnemyVirus && start_virus_level <= map[x, y + 1].VirusLevel)
+                        {
+                            isWall = true;
+                        }
+                    }
+                    else if(y - 1 >= 0)
+                    {
+                        if(map[x, y - 1].Type == NodeType.EnemyVirus && start_virus_level <= map[x, y - 1].VirusLevel)
+                        {
+                            isWall = true;
+                        }
+                    }
+                }
+                
+                
                 pathNodeMap[x, y] = new GamePathNode()
                 {
                     IsWall = isWall,
@@ -493,6 +585,46 @@ class AI : BaseAI
         }
         
         return pathNodeMap;
+    }
+    
+    public void find_new_desired_point(int previousX, int previousY)
+    {
+        foreach(var enemy_base in bases)
+            if(enemy_base.getOwner() == enemyID())
+                if(enemy_base.getX() != previousX && enemy_base.getY() != previousY)
+                {
+                    if(enemy_base.getX() + 1 < width())
+                        if(map[enemy_base.getX() + 1, enemy_base.getY()].Type != NodeType.Wall)
+                        {
+                            desiredX = enemy_base.getX();
+                            desiredY = enemy_base.getY();
+                            break;
+                        }
+                    
+                    if(enemy_base.getX() - 1 >= 0)
+                        if(map[enemy_base.getX() - 1, enemy_base.getY()].Type != NodeType.Wall)
+                        {
+                            desiredX = enemy_base.getX();
+                            desiredY = enemy_base.getY();
+                            break;
+                        }
+                    
+                    if(enemy_base.getY() + 1 < height())
+                        if(map[enemy_base.getX(), enemy_base.getY() + 1].Type != NodeType.Wall)
+                        {
+                            desiredX = enemy_base.getX();
+                            desiredY = enemy_base.getY();
+                            break;
+                        }
+                    
+                    if(enemy_base.getY() - 1 >= 0)
+                        if(map[enemy_base.getX(), enemy_base.getY() - 1].Type != NodeType.Wall)
+                        {
+                            desiredX = enemy_base.getX();
+                            desiredY = enemy_base.getY();
+                            break;
+                        }
+                }
     }
 }
 
