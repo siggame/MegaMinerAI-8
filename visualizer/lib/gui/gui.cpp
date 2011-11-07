@@ -414,6 +414,8 @@ bool _GUI::doSetup()
   createActions();
   buildControlBar();
 
+  setWindowIcon( QIcon( "icon.png" ) );
+
   createMenus();
   buildToolSet();
 

@@ -79,6 +79,8 @@ namespace visualizer
 
       void update();
 
+      void viewport( int x, int y, int width, int height );
+
       void setColor
         (
         const Color& c
