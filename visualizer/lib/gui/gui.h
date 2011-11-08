@@ -142,7 +142,7 @@ class _GUI : public QMainWindow, public IGUI
 
     /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
     void loadGamelog( std::string gamelog );
-    void loadGamestring( const std::string& str );
+    void loadGamestring( char *log, const size_t& length );
 
     void update();
     void closeGUI();

@@ -110,51 +110,29 @@ namespace visualizer
     evt->acceptProposedAction();
   }
 
-  void _GUI::loadGamestring( const std::string& str )
-  {
-  }
-
-  void _GUI::loadGamelog( std::string gamelog )
+  void _GUI::loadGamestring( char* log, const size_t& length )
   {
     bool parserFound = false;
-    std::string fullLog = "";
 
-    ifstream file_gamelog( gamelog.c_str(), ifstream::in );
-    if( file_gamelog.is_open() )
+    std::string fullLog;
+    if( log[ 0 ] == 'B' && log[ 1 ] == 'Z' && ( log[ 2 ] == 'h' || log[ 2 ] == '0' ) )
     {
-      
-      size_t length;
-      file_gamelog.seekg( 0, ios::end );
-      length = file_gamelog.tellg();
-      file_gamelog.seekg( 0, ios::beg );
+      const int megs = 25;
+      unsigned int size = megs * 1024*1024;
+      cout << endl;
+      char *output = new char[ size-1 ];
 
-      char *input = new char[ length + 1 ];
-      input[ length ] = 0;
-      file_gamelog.read( input, length );
+      BZ2_bzBuffToBuffDecompress( output, &size, log, length, 0, 0 );
+      output[ size ] = 0;
+      fullLog = output;
 
-      file_gamelog.close();
-
-      if( gamelog.rfind( ".glog" ) != string::npos )
-      {
-        const int megs = 25;
-        unsigned int size = megs * 1024*1024;
-        cout << endl;
-        char *output = new char[ size-1 ];
-
-        BZ2_bzBuffToBuffDecompress( output, &size, input, length, 0, 0 );
-        output[ size ] = 0;
-        fullLog = output;
-
-        delete output;
-      }
-      else
-      {
-        fullLog = input;
-      }
-
-      delete input;
-     
+      delete output;     
     }
+    else
+    {
+      fullLog = log;
+    }
+
 
     for
       ( 
@@ -178,6 +156,29 @@ namespace visualizer
     if( !parserFound )
     {
       THROW( Exception, "An appropriate game player could not be found!" );
+    }
+  }
+
+  void _GUI::loadGamelog( std::string gamelog )
+  {
+    ifstream file_gamelog( gamelog.c_str(), ifstream::in );
+    if( file_gamelog.is_open() )
+    {
+      
+      size_t length;
+      file_gamelog.seekg( 0, ios::end );
+      length = file_gamelog.tellg();
+      file_gamelog.seekg( 0, ios::beg );
+
+      char *input = new char[ length + 1 ];
+      input[ length ] = 0;
+      file_gamelog.read( input, length );
+
+      file_gamelog.close();
+
+      loadGamestring( input, length );
+
+      delete input;
     }
 
   }
@@ -209,17 +210,7 @@ namespace visualizer
 
 
     }
-#if 0
-    evt->mimeData()->text();
-    string data = evt->mimeData()->text().toAscii().constData();
-    /// @TODO Make sure this is a gamelog before opening it
-    /// if we do that, we can open the possibility of 
-    /// having other dropped objects handled by the visualizer
-    /// such as movies and images
 
-    cout << "The following string was dropped on the visualizer: " << data << endl;
-    loadGamelog( data );
-#endif
   }
 
 
@@ -432,8 +423,7 @@ namespace visualizer
     inout.readRawData( gamelog, fileSize );
     gamelog[ fileSize ] = 0;
 
-    cout << fileSize << endl;
-    cout << gamelog << endl;
+    loadGamestring( gamelog, fileSize );
 
     delete gamelog;
 
