@@ -54,7 +54,7 @@ QMAKE_LFLAGS_DEBUG += -rdynamic
 
 CONFIG += debug 
 macx:CONFIG -= app_bundle
-QT += opengl
+QT += opengl network
 SUBDIRS += botnet piracy lightRevelation
 OTHER_FILES += 
 debug:DEFINES += __DEBUG__
