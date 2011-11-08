@@ -22,6 +22,7 @@ namespace visualizer
       
       unsigned char m_width[256];
       std::string m_resource;
+      unsigned int m_list;
 
   };
 

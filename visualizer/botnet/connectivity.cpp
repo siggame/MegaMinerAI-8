@@ -44,7 +44,7 @@ namespace visualizer
     {
       std::stack<vertex> nodesLeft;
       nodesLeft.push( *i );
-
+      
       while( nodesLeft.size() )
       {
         vertex c = nodesLeft.top();
@@ -62,9 +62,17 @@ namespace visualizer
             nodesLeft.push( c + udlr[ j ] );
           }
         }
-
       }
-      
+    }
+    
+    numConnectedNodes = 0;
+    numUnconnectedNodes = 0;
+    for(map<vertex, ConnectivityNode*>::iterator i = m_nodes.begin(); i != m_nodes.end(); i++)
+    {
+      if(i->second->connected())
+        numConnectedNodes++;
+      else
+        numUnconnectedNodes++;
     }
 
   } // Connectivity::generateConnectivity()

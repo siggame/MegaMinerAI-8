@@ -40,7 +40,8 @@ namespace visualizer
     m_progress = 0;
     m_speed = 0;
     m_turnCompletion = 0;
-    m_numTurns = 500;
+    m_numTurns = 1;
+    m_maxTurns = -1;
     loop_on = false;
     loop_start = m_turn;
     loop_end = m_numTurns;
@@ -130,7 +131,6 @@ namespace visualizer
   const int& _TimeManager::nextTurn()
   {
     pause();
-    m_turnCompletion = 0;
     m_turn++;
     return getTurn();
 
@@ -139,7 +139,6 @@ namespace visualizer
     const int& _TimeManager::prevTurn()
   {
     pause();
-    m_turnCompletion = 0;
     m_turn--;
     return getTurn();
 
@@ -154,6 +153,12 @@ namespace visualizer
   void _TimeManager::pause()
   {
     m_speed = 0;
+    if( m_turnCompletion > 0.5 )
+    {
+      m_turn++;
+    }
+
+    m_turnCompletion = 0;
 
   } // _TimeManager::pause()
 
@@ -172,7 +177,7 @@ namespace visualizer
 
   void _TimeManager::fastForward()
   {
-    IMPLEMENT_ME;
+    m_speed *= 1.5;
 
   } // _TimeManager::fastForward()
 
@@ -184,7 +189,7 @@ namespace visualizer
     }
     else
     {
-      IMPLEMENT_ME;
+      m_speed *= 1.5;
     }
 
   } // _TimeManager::rewind()
@@ -205,6 +210,12 @@ namespace visualizer
 
   } // _TimeManager::setNumTurns()
 
+  void _TimeManager::setMaxTurns( const size_t& maxTurns )
+  {
+    m_maxTurns = maxTurns;
+
+  }
+
   const float& _TimeManager::getSpeed()
   {
     return m_speed;
@@ -218,7 +229,7 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
-
+    
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );
@@ -229,12 +240,19 @@ namespace visualizer
         setTurn(loop_start);
       }
 
+      if( m_turn > m_maxTurns )
+      {
+        m_turn = m_maxTurns;
+      }
+
       if( m_turn >= m_numTurns )
       {
+        pause();
+
         m_turn = m_numTurns-1;
         // Very close to the next turn, but not quite
         m_turnCompletion = 0.99999999;
-        pause();
+
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
           // CHANGE ME THIS IS BAD
@@ -262,6 +280,7 @@ namespace visualizer
       }
 
     }
+
     updateChildren();
 
   } // _TimeManager::timerUpdate()

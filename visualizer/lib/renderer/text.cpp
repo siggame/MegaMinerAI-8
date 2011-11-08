@@ -9,6 +9,9 @@ using namespace std;
 namespace visualizer
 {
 
+  const float defaultSize = 0.25;
+  const float widthMultiplier = 0.5f;
+  const float off = 1.0f/16.0f;
   Text::Text( const std::string& resource, const std::string& fontWidthsFile )
   {
     ifstream fin( fontWidthsFile.c_str() );
@@ -16,12 +19,36 @@ namespace visualizer
     if( !fin.is_open() )
       return;
 
+    m_list = glGenLists( 256 );
+
     for( size_t i = 0; i < 256; i++ )
     {
       unsigned char temp;
       fin.read( (char*)&temp, sizeof( char ) );
       m_width[ i ] = temp;
       m_width[ i ] = m_width[ i ]/1.75;
+
+      glNewList( m_list+i, GL_COMPILE );
+        
+        float x = 1-((float)(i%16)/16.0f)-off;
+        float y = 1-((float)((int)i/16)/16.0f)+off;
+
+        glBegin( GL_QUADS );
+          glTexCoord2f( x+off, y+off );
+          glVertex3f( 0, 0, 0 );
+          glTexCoord2f( x, y+off );
+          glVertex3f( defaultSize, 0, 0 );
+          glTexCoord2f( x, y );
+          glVertex3f( defaultSize, defaultSize, 0 );
+          glTexCoord2f( x+off, y );
+          glVertex3f( 0, defaultSize, 0 );
+        glEnd();
+
+        float t = (float)getCharWidth( i )/32*defaultSize*widthMultiplier;
+        glTranslatef( t, 0, 0 );     
+
+      glEndList();
+      
       fin.read( (char*)&temp, sizeof( char ) );
     }
     
@@ -29,14 +56,11 @@ namespace visualizer
 
   } // Text::Text()
 
-  const float defaultSize = 0.25;
-  const float widthMultiplier = 0.5f;
   void Text::drawLeft( const std::string& line ) const
   {
     // At this point, the text should already be translated to the 
     // correct position.
     glPushMatrix();
-    float off = 1.0f/16.0f;
 
     glEnable( GL_BLEND );    
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -47,27 +71,8 @@ namespace visualizer
 
     glBindTexture( GL_TEXTURE_2D, r->getTexture() );
 
-    for( size_t i = 0; i < line.size(); i++ )
-    {
-      size_t c = line[ i ];
-      float x = 1-((float)(c%16)/16.0f)-off;
-      float y = 1-((float)((int)c/16)/16.0f)+off;
-
-      glBegin( GL_QUADS );
-        glTexCoord2f( x+off, y+off );
-        glVertex3f( 0, 0, 0 );
-        glTexCoord2f( x, y+off );
-        glVertex3f( defaultSize, 0, 0 );
-        glTexCoord2f( x, y );
-        glVertex3f( defaultSize, defaultSize, 0 );
-        glTexCoord2f( x+off, y );
-        glVertex3f( 0, defaultSize, 0 );
-      glEnd();
-
-      float t = (float)getCharWidth( line[ i ] )/32*defaultSize*widthMultiplier;
-      glTranslatef( t, 0, 0 );
-    }
-
+    glListBase( m_list );
+    glCallLists( line.size(), GL_UNSIGNED_BYTE, line.c_str() ); 
 
     ResourceMan->release( m_resource, "text" );
     glDisable( GL_TEXTURE_2D );

@@ -21,8 +21,8 @@ namespace visualizer
     terminate();
     wait();
     animationEngine->registerFrameContainer( 0 );
-    delete m_game;
     delete m_timeline;
+    delete m_game;
   } // BotNet::~BotNet()
 
   LogRegex BotNet::logFileInfo()
@@ -38,20 +38,19 @@ namespace visualizer
   {
     cout << "Load BotNet Gamelog" << endl;
 
-    cout << "Timeline: " << (long int)m_timeline << endl;
-
+    // Make sure we're not still loading a previous gamelog
     terminate();
     wait();
 
+    // Reset the animation engine.  
     animationEngine->registerFrameContainer( 0 );
     
+    // Clean up any old games.
     delete m_game;
     delete m_timeline;
 
     m_game = new Game;
     m_timeline = new AnimSequence;
-
-    cout << "Timeline: " << (long int)m_timeline << endl;
 
     if( !parseString( *m_game, gamelog.c_str() ) )
     {
@@ -69,7 +68,7 @@ namespace visualizer
     }
 
     float w = m_game->states[ 0 ].width;
-    float h = m_game->states[ 0 ].height + 1.5f;
+    float h = m_game->states[ 0 ].height + 2.5f;
 
     renderer->setCamera( 0, 0, w, h );
     renderer->setUnitSize( w, h );
@@ -141,6 +140,7 @@ namespace visualizer
               );
           }
     
+      renderer->setColor( ( playerid == 0 ? Color( 0.6f, 0, 0) : Color(0, 0, 0.6f ) ) );
       renderer->endList(displayListId.str());
     }
     
@@ -151,20 +151,19 @@ namespace visualizer
   void BotNet::run()
   {
 
+#ifdef __DEBUG__
     cout << "Loading Gamelog..." << endl;
+#endif
 
     size_t frameNum = 0;
 
-    background* b = new background( renderer );
-    grid *g = new grid( renderer );
-    moveBoard *mb = new moveBoard( renderer );
-
-    mb->offst = 1.5;
-    mb->addKeyFrame( new PushBoard( mb ) );
+    SmartPointer<background> b = new background( renderer );
+    SmartPointer<grid> g = new grid( renderer );
+    SmartPointer<moveBoard> mb = new moveBoard( renderer );
     
-    // build the players virus sprites
-    bool **player1virus = buildVirus(m_game->states[0].players[0].playerName);
-    bool **player2virus = buildVirus(m_game->states[0].players[1].playerName);
+    // offset for the score to be rendered at the top
+    mb->offst = 2.5f;
+    mb->addKeyFrame( new PushBoard( mb ) );
     
     if (m_game->states[0].height > 0 && m_game->states[0].width > 0)
     {
@@ -192,54 +191,18 @@ namespace visualizer
       state++
       )
     {
-#if 1
       Frame turn;
 
       Connectivity p1;
       Connectivity p2;
-
-      scoreboard* score1 = new scoreboard( renderer );
-      scoreboard* score2 = new scoreboard( renderer );
-
-      score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
-      score1->player = 0;
-      score1->x = 1.0f;
-      score1->y = 0.2f;
-      score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
-      score1->mapWidth  = m_game->states[0].width;
-      score1->virusPixels = player1virus;
-      score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
-      
-      score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
-      score2->player = 1;
-      score2->y = 0.2f;
-      score2->x = m_game->states[ 0 ].width-1;
-      score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
-      score2->mapWidth  = m_game->states[0].width;
-      score2->virusPixels = player2virus;
-      score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
-      if(state > 0)
-        score2->addKeyFrame
-        (
-            new ScoreAnim
-            (
-                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
-                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
-                m_game->states[ state ].players[ 0 ].byteDollars,
-                m_game->states[ state ].players[ 1 ].byteDollars
-            )
-        );
-        
-      score1->addKeyFrame( new DrawScore( score1 ) );
-      score2->addKeyFrame( new DrawScore( score2 ) );
-      
-
-      turn.addAnimatable( score1 );
-      turn.addAnimatable( score2 );
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );
-
+      
+      
+      
+      // BEGIN: Draw Tiles
+      int numNeutralTiles = 0;
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -255,20 +218,22 @@ namespace visualizer
         t->owner = i->second.owner;
 
         if( t->owner == 0 )
-        {
           p1.addNode( t->x, t->y, t );
-        } else if( t->owner == 1 )
-        {
+        else if( t->owner == 1 )
           p2.addNode( t->x, t->y, t );
-        }
+        else if( t->owner == 2 )
+          numNeutralTiles++;
 
         t->addKeyFrame( new Appear );
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
-
       }
- 
+      // END: Draw Tiles
+      
+      
+      
+      // BEGIN: Draw Bases
       for
         (
         std::map<int, Base>::iterator i = m_game->states[ state ].bases.begin();
@@ -294,11 +259,61 @@ namespace visualizer
 
         turn.addAnimatable( b );
       }
+      // END: Draw Bases
 
      
       p1.generateConnectivity();
       p2.generateConnectivity();
+      
+      
+
+      // BEGIN: Draw Scoreboard
+      scoreboard* score1 = new scoreboard( renderer );
+      scoreboard* score2 = new scoreboard( renderer );
+
+      score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
+      score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
+      score1->connectedTiles = p1.numConnectedNodes;
+      score1->unconnectedTiles = p1.numUnconnectedNodes;
+      score1->player = 0;
+      score1->x = 1.0f;
+      score1->y = 0.2f;
+      score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
+      score1->mapWidth  = m_game->states[0].width;
+      score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
+      score1->neutralTiles = numNeutralTiles;
+      
+      score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
+      score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
+      score2->connectedTiles = p2.numConnectedNodes;
+      score2->unconnectedTiles = p2.numUnconnectedNodes;
+      score2->player = 1;
+      score2->y = 0.2f;
+      score2->x = m_game->states[ 0 ].width-1;
+      score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
+      score2->mapWidth  = m_game->states[0].width;
+      score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
+      if(state > 0)
+        score2->addKeyFrame
+        (
+            new ScoreAnim
+            (
+                m_game->states[ state - 1 ].players[ 0 ].byteDollars, 
+                m_game->states[ state - 1 ].players[ 1 ].byteDollars,
+                m_game->states[ state ].players[ 0 ].byteDollars,
+                m_game->states[ state ].players[ 1 ].byteDollars
+            )
+        );
         
+      score1->addKeyFrame( new DrawScore( score1 ) );
+      score2->addKeyFrame( new DrawScore( score2 ) );
+
+      turn.addAnimatable( score1 );
+      turn.addAnimatable( score2 );
+      // END: Draw Scoreboard
+
+
+      
       // Draw Grid
       turn.addAnimatable( g );
 
@@ -420,7 +435,6 @@ namespace visualizer
 
         v->level = i->second.level;
         v->movesLeft = i->second.movesLeft;
-        v->pixels = (v->owner ? player2virus : player1virus);
         v->addKeyFrame( new DrawVirus( v ) );
 
         turn.addAnimatable( v );
@@ -432,6 +446,8 @@ namespace visualizer
       m_timeline->addFrame( turn );
       
       frameNum++;
+      
+      timeManager->setMaxTurns( frameNum );
 
       if( frameNum <= 1 )
       {
@@ -441,10 +457,11 @@ namespace visualizer
         timeManager->setNumTurns( m_game->states.size() );
       }
 
-#endif
     }
 
+#ifdef __DEBUG__
     cout << "Done Loading That Gamelog..." << endl;
+#endif
 
   } // BotNet::run() 
 

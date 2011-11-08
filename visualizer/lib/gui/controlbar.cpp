@@ -99,69 +99,30 @@ namespace visualizer
   void ControlBar::rewind()
   {
     TimeManager->rewind();
-#if 0
-    if(TimeManager->getSpeed() > 0)//Going forward
-    {
-      TimeManager->setSpeed(-1);
-      rewindButton->setText("<<");
-      playButton->setText(">");
-      fastForwardButton->setText("->>");
-    }
-    else if((float)TimeManager->getSpeed() == 0)
-    {
-                                   //Was going Rewind
-      if(originalTimeManagerSpeed < 0)
-      {
-                                   //Resume
-        TimeManager->setSpeed(originalTimeManagerSpeed);
-      }
-      else                         //Was not going Rewind
-      {
-        //Do nothing
-      }
-    }
-    else                           //Already Rewinding
-    {
-      int speed = TimeManager->getSpeed();
-      speed = (speed > -64 ? speed * 2 : -128);
-      QString symbol = "<-";
-      for(int i = -1; i != speed; i*=2)
-      {
-        symbol += "-";
-      }
-      TimeManager->setSpeed(speed);
-      rewindButton->setText(symbol);
-    }
-#endif
+    playButton->setText( "||" );
   }
 
 
   void ControlBar::play()
   {
-    TimeManager->play();
-#if 0
-                                   //Is playing
-    if(TimeManager->getSpeed() == 1)
+    if( TimeManager->getSpeed() != 0 )
     {
-                                   //Store previous speed
-      originalTimeManagerSpeed = TimeManager->getSpeed();
-      TimeManager->setSpeed(0);    //Pause
-      playButton->setText(">");    //Set button to "will play if pressed"
+      TimeManager->pause();
+      playButton->setText( ">" );
     }
-    else                           //Something other than normal playback speed
+    else
     {
-      rewindButton->setText("<<");
-      playButton->setText("||");
-      fastForwardButton->setText("->>");
-      TimeManager->setSpeed(1);    //Start again at normal playback speed
+      TimeManager->play();
+      playButton->setText( "||" );
     }
-#endif
+
   }
 
 
   void ControlBar::fastForward()
   {
     TimeManager->fastForward();
+    playButton->setText( "||" );
   }
 
 } // visualizer

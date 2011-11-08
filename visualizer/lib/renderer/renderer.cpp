@@ -14,7 +14,7 @@ namespace visualizer
   {
     unsigned int _height = height?height:1;
 
-    glViewport( 0, 0, (GLint)width, (GLint)_height);
+    viewport( 0, 0, width, _height );
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -28,6 +28,23 @@ namespace visualizer
     m_depth = depth;
     refresh();
     return true;
+  }
+
+  void _Renderer::viewport( int x, int y, int width, int height )
+  {
+    static int _x = -1;
+    static int _y = -1;
+    static int _width = -1;
+    static int _height = -1;
+
+    if( width != _width || height != _height || x != _x || y != _y )
+    {
+      glViewport( x, y, width, height );
+      _width = width;
+      _height = height;
+      _x = x;
+      _y = y;
+    }
   }
 
   bool _Renderer::refresh()
@@ -366,7 +383,8 @@ namespace visualizer
     const float& z
     ) const
   {
-    glTranslatef( x, y, z );
+    if( x != 0 || y != 0 || z != 0 )
+      glTranslatef( x, y, z );
   } // _Renderer::translate()
 
   void _Renderer::scale
@@ -506,8 +524,6 @@ namespace visualizer
     dl->startList();
     ResourceMan->release( name, "renderer" );
 
-    openglErrorCheck();
-
   } // _Renderer::beginList()
 
   void _Renderer::endList( const std::string& name ) const
@@ -515,8 +531,6 @@ namespace visualizer
     ResDisplayList* dl = (ResDisplayList*)ResourceMan->reference( name, "renderer" );
     dl->endList();
     ResourceMan->release( name, "renderer" );
-
-    openglErrorCheck();
 
   } // _Renderer::endList()
 

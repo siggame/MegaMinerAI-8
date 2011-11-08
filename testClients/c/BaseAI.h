@@ -42,6 +42,8 @@ public:
   int width();
   ///The height of the map (max Y value)
   int height();
+  ///Gets the tile at the specified location
+  Tile& getTileAtLocation(int x, int y);
   
   BaseAI(Connection* c);
   virtual ~BaseAI();

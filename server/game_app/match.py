@@ -9,6 +9,7 @@ import itertools
 import scribe
 import random
 import math
+import time
 
 Scribe = scribe.Scribe
 
@@ -78,7 +79,7 @@ class Match(DefaultGameWorld):
         mapFilenames.append(filename)
         
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
-    with open(("maps/" + mapFilenames[self.gameNumber % len(mapFilenames)]),'r') as f:
+    with open(("maps/" + mapFilenames[int((time.time()*1000) % len(mapFilenames))]),'r') as f:
       mapdata = f.read().replace(' ','').split()
     self.width = len(mapdata[0])
     self.height = len(mapdata)
@@ -122,6 +123,13 @@ class Match(DefaultGameWorld):
     for obj in self.objects.values():
       obj.nextTurn()
 
+    # NEW WAY FOR SCORING
+    # Only does score before player 0's turn
+    if self.turnNumber%2 == 0:
+      score = self.biggerArea()
+      self.objects.players[0].byteDollars+=score[0]
+      self.objects.players[1].byteDollars+=score[1]
+
     self.checkWinner()
     if self.winner is None:
       self.sendStatus([self.turn] +  self.spectators)
@@ -163,6 +171,48 @@ class Match(DefaultGameWorld):
           closed[dx][dy] = True
     return score
 
+  def biggerArea(self):
+    p1, p2 = set(), set()
+    # Builds a dictionary of all controlled tiles for both players
+    for tile in self.objects.tiles:
+      if tile.owner == 0:
+        p1.add((tile.x, tile.y))
+      elif tile.owner == 1:
+        p2.add((tile.x, tile.y))
+    # defines adjacency
+    offsets = [(0,1), (1,0), (0,-1), (-1,0)]
+
+    def connect(openList, available):
+      # Given a list of starting points and a set of valid points, find how many are connected to the start
+      size = len(openList)
+      while len(openList) > 0:
+        working = openList.pop()
+        for offset in offsets:
+          next = working[0] + offset[0], working[1] + offset[1]
+          if next in available:
+            available.remove(next)
+            size += 1
+            openList.append(next)
+      return size
+
+    def maxArea(available):
+      # Given a dictionary of valid tiles
+      largest = 0
+      while len(available) > 0:
+        next = available.pop()
+        size = connect([next], available)
+        if largest < size:
+          largest = size
+      return largest
+    p1size, p2size = maxArea(p1), maxArea(p2)
+    # Convert the score to be a single point
+    if p1size > p2size:
+      return 1, 0
+    elif p1size < p2size:
+      return 0, 1
+    else:
+      return 0, 0
+
   def getIncome(self, id):
     possible = self.startingCycles + self.turnNumber / 2 * self.cyclesPerTurn
     return int(math.ceil((possible - self.worth(id))*self.returnAmount) + self.cyclesPerTurn)
@@ -187,7 +237,15 @@ class Match(DefaultGameWorld):
           self.declareWinner(self.players[1], 'Victory through more usuable cycles')
         else:
           print("0 Wins!")
-          self.declareWinner(self.players[0],'Victory because I said so, why did you build the same army?')       
+          self.declareWinner(self.players[0],'Victory because I said so, why did you build the same army?')
+    else:
+      pointsRemaining = (self.turnLimit - self.turnNumber) / 2 + 2
+      if player1.byteDollars - player2.byteDollars > pointsRemaining:
+        self.declareWinner(self.players[0], 'Victory through Bytedollar domination!!')
+        print "0 Wins!"
+      elif player2.byteDollars - player1.byteDollars > pointsRemaining:
+        self.declareWinner(self.players[1], 'Victory through Bytedollar domination!!')
+        print "1 Wins!"
     return
 
   def declareWinner(self, winner, reason=''):
