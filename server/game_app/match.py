@@ -79,7 +79,7 @@ class Match(DefaultGameWorld):
         mapFilenames.append(filename)
         
       #choose a random map, open it as f, then get rid of all whitespace in file, save that file as mapdata, close f
-    with open(("maps/" + mapFilenames[(time.time()*1000) % len(mapFilenames)]),'r') as f:
+    with open(("maps/" + mapFilenames[int((time.time()*1000) % len(mapFilenames))]),'r') as f:
       mapdata = f.read().replace(' ','').split()
     self.width = len(mapdata[0])
     self.height = len(mapdata)
