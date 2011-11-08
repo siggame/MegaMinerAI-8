@@ -86,11 +86,6 @@ class Player:
 
   def nextTurn(self):
     if self.id == self.game.playerID:
-<<<<<<< HEAD
-      if self.game.turnNumber != 0:
-       self.byteDollars += self.game.getScore(self.id)
-      self.cycles += self.game.getIncome(self.id) 
-=======
       # you get money on your turn, unless it is after the last turn
       if self.game.turnNumber < self.game.turnLimit:
         self.cycles += self.game.getIncome(self.id)
@@ -98,7 +93,6 @@ class Player:
     # Since no one goes before the first turn, don't calculate on the first turn
     elif self.game.turnNumber > 0:
       self.byteDollars += self.game.getScore(self.id)
->>>>>>> f247c6292564b0df9ebf98d0b3062fe0fb8bdd51
 
   def talk(self, message):
     self.game.animations.append(['PlayerTalk', self.id, message])
@@ -191,10 +185,7 @@ class Virus(Mappable):
            self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
            self.game.removeObject(virus)
            self.game.removeObject(self)
-<<<<<<< HEAD
 #           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
-=======
->>>>>>> f247c6292564b0df9ebf98d0b3062fe0fb8bdd51
            return True
        #moving a virus onto an enemy virus, conflict!!
        else:
