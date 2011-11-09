@@ -320,7 +320,7 @@ namespace visualizer
     if( OptionsMan->getBool( "server" ) )
     {
       m_server = new QTcpServer( this );
-      if( !m_server->listen( QHostAddress::Any, 12345 ) )
+      if( !m_server->listen( QHostAddress::Any, OptionsMan->getInt( "serverPort" ) ) )
       {
         THROW
           (

@@ -40,7 +40,6 @@ namespace visualizer
     {
       #ifdef __DEBUG__
       std::cout << "Resource \"" << rName << "\" still has a reference:\n";
-      ref->printReferences();
       #endif
       return false;
     }
@@ -59,9 +58,6 @@ namespace visualizer
       //if( it->second )
       if (it->second->numReferences())
       {
-        #ifdef __DEBUG__
-        it->second->printReferences();
-        #endif
         THROW( Exception, "Resource Manager still contains some references" );
       }
 
