@@ -351,9 +351,12 @@ namespace visualizer
         }
     }
     
-    // set the team's color and then draw thier text
+    // set the team's color and then draw thier team's name
     m_sb->renderer().setColor( team ); 
-    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y - 0.125, "mainFont", m_sb->teamName, 4.5, a );
+    float textSize = 4.5;
+    if(m_sb->teamName.length() > 17)
+        textSize = 4.5 * (17 / ((float)m_sb->teamName.length()));
+    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y + (textSize - ((float)textSize * 1.045f)) , "mainFont", m_sb->teamName, textSize, a );
     
     //draw their score too
     m_sb->renderer().drawTexturedQuad(scoreOffset, m_sb->y, 1, 1, scoreFileName);
