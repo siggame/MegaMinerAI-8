@@ -1,21 +1,27 @@
 import socket
 from struct import *
+import time
 
-TCP_IP = '127.0.0.1'
+IPs = [ '192.168.1.132', '127.0.0.1' ]
+
 TCP_PORT = 12345
 
-f = open( '/home/jacob/gamelogs/100.glog', 'rb' )
+gamelogs = [ '/home/jacob/gamelogs/100.glog', '/home/jacob/gamelogs/123.glog', '/home/jacob/gamelogs/100.glog', '/home/jacob/gamelogs/123.glog' ]
 
-MSG = f.read()
+for g in gamelogs:
+  f = open( g, 'rb' )
 
-st = pack( '!{0}s'.format( len(MSG) ), MSG )
+  MSG = f.read()
+  st = pack( '!{0}s'.format( len(MSG) ), MSG )
+  sz = pack( '!I', len( MSG ) )
 
-s = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-s.connect( (TCP_IP, TCP_PORT) )
+  for i in IPs:
+    s = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+    s.connect( (i, TCP_PORT) )
 
-sz = pack( '!I', len( MSG ) )
-s.send( sz )
+    s.send( sz )
 
-s.send( st )
+    s.send( st )
 
-s.close()
+    s.close()
+  time.sleep( 20 )
