@@ -21,7 +21,7 @@ typedef struct {
 
 } ALLOC_INFO;
 
-extern map<long int, ALLOC_INFO> allocMap;
+extern list< ALLOC_INFO > allocMap;
 
 void DumpUnfreed();
 

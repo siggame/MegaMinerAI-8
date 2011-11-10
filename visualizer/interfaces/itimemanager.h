@@ -38,7 +38,7 @@ namespace visualizer
       /// ability to change speed.
       virtual void setTurn( const int& turn ) = 0;
 
-      virtual float getSpeed() = 0;
+      virtual const float& getSpeed() = 0;
       virtual void setSpeed( const float& speed ) = 0;
 
   };
