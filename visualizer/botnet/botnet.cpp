@@ -148,6 +148,12 @@ namespace visualizer
     
       renderer->setColor( ( playerid == 0 ? Color( 0.6f, 0, 0) : Color(0, 0, 0.6f ) ) );
       renderer->endList(displayListId.str());
+      
+      // free up memory from creatings the viruses pixels
+      for(int i = 0; i < 16; i++)
+        delete pixels[i];
+      
+      delete pixels;
     }
     
     start();
@@ -189,14 +195,26 @@ namespace visualizer
     
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
- 
+    
+    bool isArenaMode = (strcmp(options->getStr("gameMode").c_str(),"arena") == 0);
+    
+    // Go through the game and build everything to draw!
     for
       (
       size_t state = 0; 
-      state < m_game->states.size() && !m_suicide;
+      state < m_game->states.size() + isArenaMode && !m_suicide;
       state++
       )
     {
+      bool drawArenaWinner;
+      size_t originalState = state;
+      
+      if(state >= m_game->states.size())
+      {
+        state = m_game->states.size() - 1;
+        drawArenaWinner = true;
+      }
+      
       Frame turn;
       
       turn.addAnimatable( mb );
@@ -494,6 +512,29 @@ namespace visualizer
 
       }
       
+      // BEGIN: Draw the Arena Winner
+      if(drawArenaWinner)
+      {
+        ArenaWinner *aw = new ArenaWinner
+        ( 
+            renderer,
+            timeManager,
+            m_game->winner,
+            m_game->states[0].players[ m_game->winner ].playerName,
+            m_game->winReason,
+            (int)m_game->states[0].width,
+            (int)m_game->states[0].height
+        );
+        
+        aw->addKeyFrame( new StartAnim );
+        aw->addKeyFrame( new ArenaWinnerAnim(timeManager) );
+        aw->addKeyFrame( new DrawArenaWinner( aw ) );
+        turn.addAnimatable( aw );
+        
+        state = originalState;
+      }
+      // END: Draw the Arena Winner
+      
       animationEngine->buildAnimations( turn );
 
       m_timeline->addFrame( turn );
@@ -507,7 +548,7 @@ namespace visualizer
         timeManager->setTurn( 0 );
         animationEngine->registerFrameContainer( m_timeline );
         timeManager->play();
-        timeManager->setNumTurns( m_game->states.size() );
+        timeManager->setNumTurns( m_game->states.size() + isArenaMode );
       }
 
     }
