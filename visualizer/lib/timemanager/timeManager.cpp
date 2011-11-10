@@ -236,9 +236,9 @@ namespace visualizer
         setTurn(loop_start);
       }
 
-      if( m_turn > m_maxTurns )
+      if( m_turn >= m_maxTurns )
       {
-        m_turn = m_maxTurns;
+        m_turn = m_maxTurns-1;
       }
 
       if( m_turn >= m_numTurns )
