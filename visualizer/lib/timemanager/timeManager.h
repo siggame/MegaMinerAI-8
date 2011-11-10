@@ -78,6 +78,7 @@ namespace visualizer
       void start();
 
       void requestUpdate( UpdateNeeded* requester );
+      void removeRequest( UpdateNeeded* requester );
 
       // @NOTE These five will probably have their names changed
       void setTurn( const int& turn );

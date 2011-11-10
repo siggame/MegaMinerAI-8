@@ -158,6 +158,7 @@ class _GUI : public QMainWindow, public IGUI
     void setFullScreen(bool);
 
   private slots:
+    void closeEvent( QCloseEvent* event );
     void helpContents();
     void fileOpen();
     void toggleFullScreen();

@@ -10,6 +10,60 @@
 #include <stdio.h>
 #include <iostream>
 
+#include <map>
+
+
+typedef struct {
+  long int address;
+  long int size;
+  char  file[64];
+  long int line;
+} ALLOC_INFO;
+
+extern map<long int, ALLOC_INFO> allocMap;
+
+void DumpUnfreed();
+
+#ifdef __DEBUG_NEW__
+
+void AddTrack(long int addr,  long int asize,  const char *fname, long int lnum);
+void RemoveTrack( long int addr );
+
+inline void *operator new( size_t size, const char *file, int line )
+{
+  void *ptr = (void*)malloc( size );
+  AddTrack( (unsigned long)ptr, size, file, line );
+  return ptr;
+
+}
+
+inline void *operator new [] ( size_t size, const char *file, int line )
+{
+  void *ptr = (void*)malloc( size );
+  AddTrack( (unsigned long)ptr, size, file, line );
+  return ptr;
+
+}
+
+inline void operator delete( void *p )
+{
+  RemoveTrack( (long int)p );
+  free( p );
+  
+}
+
+inline void operator delete [] ( void *p )
+{
+  RemoveTrack( (long int)p );
+  free( p );
+  
+}
+
+#define DEBUG_NEW new( __FILE__, __LINE__ )
+
+#define new DEBUG_NEW
+
+#endif
 //void * operator new( size_t size )
 //{
   //cout << file << ": " << line << endl;

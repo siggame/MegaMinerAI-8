@@ -89,6 +89,30 @@ namespace visualizer
 
   } // _TimeManager::requestUpdate()
 
+  void _TimeManager::removeRequest( UpdateNeeded* requester )
+  {
+    for
+      ( 
+      std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin(); 
+      i != m_updateRequesters.end();
+      i++ 
+      )
+    {
+      if( requester == *i )
+      {
+        m_updateRequesters.erase( i );
+        return;
+      }
+    }
+
+#ifdef __DEBUG__
+  WARNING( "Could not find the requester." );
+
+#endif
+
+  } // _TimeManager::requestUpdate()
+
+
   void _TimeManager::updateChildren()
   {
     for(

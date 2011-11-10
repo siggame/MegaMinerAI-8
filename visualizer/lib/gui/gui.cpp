@@ -313,9 +313,16 @@ namespace visualizer
 
   }
 
+  void _GUI::closeEvent( QCloseEvent* event )
+  {
+    Renderer->destroy();
+  }
+
 
   bool _GUI::doSetup()
   {
+
+    connect( this, SIGNAL( close() ), this, SLOT( onClose() ) );
 
     if( OptionsMan->getBool( "server" ) )
     {

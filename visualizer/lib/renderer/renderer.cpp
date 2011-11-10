@@ -106,9 +106,13 @@ namespace visualizer
 
   void _Renderer::destroy()
   {
+    if( !Renderer )
+      return;
 
     if (!Renderer->clear())
       THROW( Exception, "FILL IN EXCEPTION DETAILS HERE" );
+
+    TimeManager->removeRequest( Renderer );
 
     delete Renderer;
     Renderer = 0;
