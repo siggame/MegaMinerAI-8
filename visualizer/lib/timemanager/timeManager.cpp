@@ -158,7 +158,7 @@ namespace visualizer
       m_turn++;
     }
 
-    m_turnCompletion = 0;
+    m_turnCompletion = 0.99999f;
 
   } // _TimeManager::pause()
 
