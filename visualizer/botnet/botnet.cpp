@@ -14,6 +14,7 @@ namespace visualizer
   {
     m_game = 0;
     m_timeline = 0;
+    setTerminationEnabled();
   } // BotNet::BotNet()
 
   BotNet::~BotNet()
@@ -36,11 +37,16 @@ namespace visualizer
 
   void BotNet::loadGamelog( std::string gamelog )
   {
+#ifdef __DEBUG__
     cout << "Load BotNet Gamelog" << endl;
+#endif
 
-    // Make sure we're not still loading a previous gamelog
-    terminate();
-    wait();
+    if( isRunning() )
+    {
+      m_suicide = true;
+      wait();
+    }
+
 
     // Reset the animation engine.  
     animationEngine->registerFrameContainer( 0 );
@@ -187,7 +193,7 @@ namespace visualizer
     for
       (
       size_t state = 0; 
-      state < m_game->states.size();
+      state < m_game->states.size() && !m_suicide;
       state++
       )
     {
@@ -509,6 +515,8 @@ namespace visualizer
 #ifdef __DEBUG__
     cout << "Done Loading That Gamelog..." << endl;
 #endif
+
+    m_suicide = false;
 
   } // BotNet::run() 
 

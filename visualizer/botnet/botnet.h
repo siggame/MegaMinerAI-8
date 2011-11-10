@@ -28,6 +28,8 @@ namespace visualizer
     private:
       Game *m_game;
       AnimSequence *m_timeline;
+
+      bool m_suicide;
   }; 
 
 } // visualizer
