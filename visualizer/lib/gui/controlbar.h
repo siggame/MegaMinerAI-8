@@ -35,6 +35,7 @@ class ControlBar : public QWidget, public UpdateNeeded
     QPushButton* playButton;
     QPushButton* fastForwardButton;
     float originalTimeManagerSpeed;
+
 };
 
 } //visualizer

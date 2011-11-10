@@ -61,8 +61,8 @@ namespace visualizer
     /// .5 would mean 1 turn / 2 seconds
     /// 1.5 would mean 3 turns / 2 seconds
     /// etc. etc.
+    m_speed = speed;
     
-    OptionsMan->setFloat( "speed", speed );
 
   } // _TimeManager::setSpeed()
 
