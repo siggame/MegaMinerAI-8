@@ -390,14 +390,14 @@ namespace visualizer
 
       for
         ( 
-        std::map<int, vector<Animation*> >::iterator i = m_game->states[ state ].animations.begin();
+        std::map<int, vector< SmartPointer< Animation> > >::iterator i = m_game->states[ state ].animations.begin();
         i != m_game->states[ state ].animations.end();
         i++ 
         )
       {
         for
           (
-          std::vector<Animation*>::iterator j = i->second.begin();
+          std::vector< SmartPointer< Animation > >::iterator j = i->second.begin();
           j != i->second.end();
           j++
           )
@@ -451,7 +451,7 @@ namespace visualizer
 
         for
           (
-          std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
+          std::vector< SmartPointer< Animation > >::iterator j = m_game->states[ state ].animations[ v->id ].begin();
           j != m_game->states[ state ].animations[ v->id ].end();
           j++
           )

@@ -271,8 +271,6 @@ namespace visualizer
         m_turn = m_maxTurns-1;
       }
 
-      cout << m_numTurns << endl;
-
       if( m_turn >= m_numTurns-1 )
       {
         pause();

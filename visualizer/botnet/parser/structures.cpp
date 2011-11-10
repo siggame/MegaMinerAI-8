@@ -161,29 +161,29 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
   stream << "\nAnimation\n";
   for
     (
-    std::map< int, std::vector<Animation*> >::iterator j = ob.animations.begin(); 
+    std::map< int, std::vector< SmartPointer< Animation > > >::iterator j = ob.animations.begin(); 
     j != ob.animations.end(); 
     j++ 
     )
   {
-  for(std::vector<Animation*>::iterator i = j->second.begin(); i != j->second.end(); i++)
+  for(std::vector< SmartPointer< Animation > >::iterator i = j->second.begin(); i != j->second.end(); i++)
   {
-    if((**i).type == COMBAT)
-      stream << *((Combat*)*i) << "\n";
-    if((**i).type == COMBINE)
-      stream << *((Combine*)*i) << "\n";
-    if((**i).type == CRASH)
-      stream << *((Crash*)*i) << "\n";
-    if((**i).type == CREATE)
-      stream << *((Create*)*i) << "\n";
-    if((**i).type == MOVE)
-      stream << *((Move*)*i) << "\n";
-    if((**i).type == PLAYERTALK)
-      stream << *((PlayerTalk*)*i) << "\n";
-    if((**i).type == RECYCLE)
-      stream << *((Recycle*)*i) << "\n";
-    if((**i).type == VIRUSTALK)
-      stream << *((VirusTalk*)*i) << "\n";
+//    if((*(*i)).type == COMBAT)
+//      stream << *((Combat*)*i) << "\n";
+//    if((*(*i)).type == COMBINE)
+//      stream << *((Combine*)*i) << "\n";
+//    if((*(*i)).type == CRASH)
+//      stream << *((Crash*)*i) << "\n";
+//    if((*(*i)).type == CREATE)
+//      stream << *((Create*)*i) << "\n";
+//    if((*(*i)).type == MOVE)
+//      stream << *((Move*)*i) << "\n";
+//    if((*(*i)).type == PLAYERTALK)
+//      stream << *((PlayerTalk*)*i) << "\n";
+//    if((*(*i)).type == RECYCLE)
+//      stream << *((Recycle*)*i) << "\n";
+//    if((*(*i)).type == VIRUSTALK)
+//      stream << *((VirusTalk*)*i) << "\n";
   }
   
 

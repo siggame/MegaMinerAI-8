@@ -473,7 +473,7 @@ static bool parseSexp(Game& game, sexp_t* expression)
   }
   else if(string(expression->val) == "animations")
   {
-    std::map< int, std::vector<Animation*> > animations;
+    std::map< int, std::vector< SmartPointer< Animation > > > animations;
     while(expression->next)
     {
       expression = expression->next;
