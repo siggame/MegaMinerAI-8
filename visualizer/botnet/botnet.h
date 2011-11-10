@@ -2,6 +2,7 @@
 #define BLOOM_H
 
 #include <QThread>
+#include "common.h"
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "igame.h"

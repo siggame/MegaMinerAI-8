@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+#include "smartpointer.h"
+
 const int COMBAT = 0;
 const int COMBINE = 1;
 const int CRASH = 2;
@@ -156,7 +158,7 @@ struct GameState
   int width;
   int height;
 
-  std::map< int, std::vector<Animation*> > animations;
+  std::map< int, std::vector< SmartPointer< Animation > > > animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);
 };
 

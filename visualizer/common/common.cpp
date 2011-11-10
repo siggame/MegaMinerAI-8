@@ -17,6 +17,7 @@ void AddTrack(long int addr,  long int asize,  const char *fname, long int lnum)
 
 void RemoveTrack( long int addr )
 {
+  cout << allocMap.size() << endl;
   for
     ( 
     list< ALLOC_INFO >::iterator i = allocMap.begin();
@@ -30,6 +31,7 @@ void RemoveTrack( long int addr )
       return;
     }
   }
+
 
 };
 
