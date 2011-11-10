@@ -18,6 +18,7 @@ typedef struct {
   long int size;
   char  file[64];
   long int line;
+
 } ALLOC_INFO;
 
 extern map<long int, ALLOC_INFO> allocMap;
