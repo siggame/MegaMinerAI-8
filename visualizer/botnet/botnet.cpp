@@ -192,9 +192,6 @@ namespace visualizer
       )
     {
       Frame turn;
-
-      Connectivity p1;
-      Connectivity p2;
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );
@@ -202,7 +199,12 @@ namespace visualizer
       
       
       // BEGIN: Draw Tiles
-      int numNeutralTiles = 0;
+      int tileCounts[] = { 0, 0, 0, 0 };
+      
+      tile ***tiles = new tile**[(int)m_game->states[0].width];
+      for(int x = 0; x < m_game->states[0].width; x++)
+        tiles[x] = new tile*[(int)m_game->states[0].height];
+      
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -216,19 +218,83 @@ namespace visualizer
         t->x = i->second.x;
         t->y = i->second.y;
         t->owner = i->second.owner;
-
-        if( t->owner == 0 )
-          p1.addNode( t->x, t->y, t );
-        else if( t->owner == 1 )
-          p2.addNode( t->x, t->y, t );
-        else if( t->owner == 2 )
-          numNeutralTiles++;
-
+        
+        tiles[(int)t->x][(int)t->y] = t;
+        
+        tileCounts[(int)t->owner]++;
+          
         t->addKeyFrame( new Appear );
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
       }
+      
+      tile* mainBlob[2];
+      vector<tile*> mainBlobs[2];
+      for(int x = 0; x < m_game->states[0].width; x++)
+        for(int y = 0; y < m_game->states[0].height; y++)
+          if(tiles[x][y]->owner < 2 && tiles[x][y]->connectedTo == NULL && tiles[x][y]->numConnectedTiles == 0) // if the owner is player 1 or 2 and they havn't been connected to a blob we need to flood fill it to see how large that blob is
+          {
+            stack<tile*> currentBlob;
+            vector<tile*> completeBlob;
+            tile *parentTile = tiles[x][y];
+            
+            if(mainBlob[parentTile->owner] == NULL)
+              mainBlob[parentTile->owner] = parentTile;
+              
+            currentBlob.push(parentTile);
+            
+            int loopCount = 0;
+            
+            while(!currentBlob.empty() && loopCount < 10000)
+            {
+              loopCount++;
+              // if the current tile we are looking at is ours it is connected to the blob, so add
+              tile *currentTile = currentBlob.top();
+              currentBlob.pop();
+              
+              // if the tile we are looking at is owned bu the parent's owner and is not connected to another blog is it part of the blob, so add it to the blob...
+              if(currentTile->owner == parentTile->owner && currentTile->connectedTo == NULL)
+              {
+                parentTile->numConnectedTiles++;
+                //if(*currentTile != *parentTile)
+                currentTile->connectedTo = parentTile;
+                completeBlob.push_back(currentTile);
+                
+                // ... and seed more positions (not off the map).
+                if(currentTile->x + 1 < m_game->states[0].width)
+                  currentBlob.push(tiles[(int)currentTile->x + 1][(int)currentTile->y]);
+                if(currentTile->y + 1 < m_game->states[0].height)
+                  currentBlob.push(tiles[(int)currentTile->x][(int)currentTile->y + 1]);
+                if(currentTile->x - 1 >= 0)
+                  currentBlob.push(tiles[(int)currentTile->x - 1][(int)currentTile->y]);
+                if(currentTile->y - 1 >= 0)
+                  currentBlob.push(tiles[(int)currentTile->x][(int)currentTile->y - 1]);
+              }
+            }
+            
+            if(mainBlob[parentTile->owner]->numConnectedTiles < parentTile->numConnectedTiles)
+              mainBlob[parentTile->owner] = parentTile;
+            
+            
+            if(completeBlob.size() > mainBlobs[parentTile->owner].size())
+              mainBlobs[parentTile->owner] = completeBlob;
+            
+            //if(loopCount >= 9999)
+              //cout << "WTF: loopCount hit with currentBlob size:" << currentBlob.size() << endl;
+          }
+      
+      int connectedTiles[] = {0, 0};
+      
+      for(int owner = 0; owner < 2; owner++)
+        for (int i = 0; i < mainBlobs[owner].size(); i++)
+        {
+          if(!tiles[(int)mainBlobs[owner][i]->x][(int)mainBlobs[owner][i]->y]->mainBlob)
+          {
+            tiles[(int)mainBlobs[owner][i]->x][(int)mainBlobs[owner][i]->y]->mainBlob = true;
+            connectedTiles[owner]++;
+          }
+        }
       // END: Draw Tiles
       
       
@@ -242,13 +308,7 @@ namespace visualizer
         )
       {
         base* b = new base( renderer );
-        if( i->second.owner == 0 )
-        {
-          p1.addBase( i->second.x, i->second.y );
-        } else
-        {
-          p2.addBase( i->second.x, i->second.y );
-        }
+
         b->addKeyFrame( new StartAnim );
         b->id = i->second.id;
         b->x = i->second.x;
@@ -260,11 +320,6 @@ namespace visualizer
         turn.addAnimatable( b );
       }
       // END: Draw Bases
-
-     
-      p1.generateConnectivity();
-      p2.generateConnectivity();
-      
       
 
       // BEGIN: Draw Scoreboard
@@ -273,20 +328,20 @@ namespace visualizer
 
       score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
       score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
-      score1->connectedTiles = p1.numConnectedNodes;
-      score1->unconnectedTiles = p1.numUnconnectedNodes;
+      score1->connectedTiles = connectedTiles[0];
+      score1->unconnectedTiles = tileCounts[0] - connectedTiles[0];
       score1->player = 0;
       score1->x = 1.0f;
       score1->y = 0.2f;
       score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
       score1->mapWidth  = m_game->states[0].width;
       score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
-      score1->neutralTiles = numNeutralTiles;
+      score1->neutralTiles = tileCounts[2];
       
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
-      score2->connectedTiles = p2.numConnectedNodes;
-      score2->unconnectedTiles = p2.numUnconnectedNodes;
+      score2->connectedTiles = connectedTiles[1];
+      score2->unconnectedTiles = tileCounts[1] - connectedTiles[1];
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width-1;

@@ -80,15 +80,19 @@ namespace visualizer
 
   }; // base
 
-  struct tile: public Animatable, public ConnectivityNode
+  struct tile: public Animatable
   {
     tile( IRenderer *renderer ) : Animatable( renderer )
-    { owner = id = x = y = 0; }
+    { owner = id = x = y = numConnectedTiles = 0; connectedTo = NULL; mainBlob = false; }
 
     int id;
     int owner;
     float x;
     float y;
+    bool mainBlob;
+    
+    tile *connectedTo;
+    int numConnectedTiles;
 
     AnimData* getData()
     {

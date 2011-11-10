@@ -104,7 +104,7 @@ namespace visualizer
     // Player 1 owned Tile
     if( q.owner == 0 )
     {
-      if( q.connected() )
+      if( q.mainBlob )
       {
         q.renderer().setColor( Color( 0.65, 0, 0, 0.6 ) );
         q.renderer().drawQuad( q.x, q.y, 1, 1 );
@@ -121,7 +121,7 @@ namespace visualizer
     }// PLayer 2 owned Tile
     else if( q.owner == 1 )
     {
-      if( q.connected() )
+      if( q.mainBlob )
       {
         q.renderer().setColor( Color( 0, 0, 0.65, 0.6 ) );
         q.renderer().drawQuad( q.x, q.y, 1, 1 );
