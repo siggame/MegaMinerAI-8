@@ -225,7 +225,13 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
-    
+ 
+    if( m_turn < 0 )
+    {
+      m_turn = 0;
+    }
+
+   
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );
