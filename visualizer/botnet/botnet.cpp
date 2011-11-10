@@ -229,7 +229,6 @@ namespace visualizer
         turn.addAnimatable( t );
       }
       
-      tile* mainBlob[2];
       vector<tile*> mainBlobs[2];
       for(int x = 0; x < m_game->states[0].width; x++)
         for(int y = 0; y < m_game->states[0].height; y++)
@@ -238,9 +237,6 @@ namespace visualizer
             stack<tile*> currentBlob;
             vector<tile*> completeBlob;
             tile *parentTile = tiles[x][y];
-            
-            if(mainBlob[parentTile->owner] == NULL)
-              mainBlob[parentTile->owner] = parentTile;
               
             currentBlob.push(parentTile);
             
@@ -272,10 +268,6 @@ namespace visualizer
                   currentBlob.push(tiles[(int)currentTile->x][(int)currentTile->y - 1]);
               }
             }
-            
-            if(mainBlob[parentTile->owner]->numConnectedTiles < parentTile->numConnectedTiles)
-              mainBlob[parentTile->owner] = parentTile;
-            
             
             if(completeBlob.size() > mainBlobs[parentTile->owner].size())
               mainBlobs[parentTile->owner] = completeBlob;
