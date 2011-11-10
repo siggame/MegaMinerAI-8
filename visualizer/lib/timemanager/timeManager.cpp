@@ -153,10 +153,6 @@ namespace visualizer
   void _TimeManager::pause()
   {
     m_speed = 0;
-    if( m_turnCompletion > 0.5 )
-    {
-      m_turn++;
-    }
 
     m_turnCompletion = 0.99999f;
 
