@@ -245,11 +245,6 @@ class Virus(Mappable):
     self.validify()
     return library.virusMove(self.ptr, x, y)
 
-  ##Allows a Virus to display a message to the screen.
-  def talk(self, message):
-    self.validify()
-    return library.virusTalk(self.ptr, message)
-
   ##Unique Identifier
   def getId(self):
     self.validify()

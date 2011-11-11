@@ -209,7 +209,4 @@ class Virus(Mappable):
     self.game.grid[dx][dy].owner = self.owner
     self.movesLeft-=1
     return True
-  
-  def talk(self, message):
-    self.game.animations.append(['VirusTalk',self.id,message])
-    return True
+
