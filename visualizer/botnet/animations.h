@@ -3,6 +3,7 @@
 
 #include "viruses.h"
 #include "irenderer.h"
+#include "igame.h"
 
 namespace visualizer
 {
@@ -208,6 +209,26 @@ namespace visualizer
       { return 1; }
 
   }; // ScoreAnim
+  
+  class ArenaWinnerAnim: public Anim
+  {
+    public:
+      ArenaWinnerAnim(ITimeManager *t)
+      {
+        tm = t;
+      }
+      
+      void animate( const float& t, AnimData *d );
+      
+      ITimeManager *tm;
+      
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // ScoreAnim
+
 
   class DrawTile: public Anim
   {
@@ -268,6 +289,26 @@ namespace visualizer
     private:
       grid* m_grid;
   }; // DrawGrid
+  
+  class DrawArenaWinner: public Anim
+  {
+    public: 
+      DrawArenaWinner( ArenaWinner* aw)
+      {
+        m_aw = aw;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      ArenaWinner* m_aw;
+  }; // DrawArenaWinner
 
   class UpCollide : public Anim
   {
@@ -305,7 +346,7 @@ namespace visualizer
 
   class RightCollide : public Anim
   {
-    public: 
+    public:
       void animate(const float& t, AnimData *d);
       
       float controlDuration() const

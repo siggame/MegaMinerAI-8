@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 
+#include "smartpointer.h"
+
 % for i, animation in enumerate(animations):
 const int ${animation.name.upper()} = ${i};
 % endfor
@@ -71,7 +73,7 @@ struct GameState
   ${conversions[datum.type]} ${datum.name};
 % endfor
 
-  std::map< int, std::vector<Animation*> > animations;
+  std::map< int, std::vector< SmartPointer< Animation > > > animations;
   friend std::ostream& operator<<(std::ostream& stream, GameState obj);
 };
 

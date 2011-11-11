@@ -2,6 +2,7 @@
 #define BLOOM_H
 
 #include <QThread>
+#include "common.h"
 #include "parser/parser.h"
 #include "parser/structures.h"
 #include "igame.h"
@@ -28,6 +29,9 @@ namespace visualizer
     private:
       Game *m_game;
       AnimSequence *m_timeline;
+
+      QMutex m_suicideMutex;
+      bool m_suicide;
   }; 
 
 } // visualizer

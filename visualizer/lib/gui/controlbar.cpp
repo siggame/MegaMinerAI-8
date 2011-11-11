@@ -71,14 +71,14 @@ namespace visualizer
 
   void ControlBar::sliderDrag()
   {
+    originalTimeManagerSpeed = TimeManager->getSpeed();
     TimeManager->pause();
   }
 
 
   void ControlBar::sliderRelease()
   {
-
-    TimeManager->play();
+    TimeManager->setSpeed( originalTimeManagerSpeed );
   }
 
 

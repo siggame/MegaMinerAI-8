@@ -4,6 +4,7 @@
 #include "animatable.h"
 #include "irenderer.h"
 #include "connectivity.h"
+#include "igame.h"
 
 namespace visualizer
 { 
@@ -23,6 +24,11 @@ namespace visualizer
   {
     double drawnOffset;
     double blueOffset;
+  };
+  
+  struct ArenaWinnerData: public GeneralAnim
+  {
+    float **fadeInBoard;
   };
 
   struct moveBoard: public Animatable
@@ -80,15 +86,19 @@ namespace visualizer
 
   }; // base
 
-  struct tile: public Animatable, public ConnectivityNode
+  struct tile: public Animatable
   {
     tile( IRenderer *renderer ) : Animatable( renderer )
-    { owner = id = x = y = 0; }
+    { owner = id = x = y = numConnectedTiles = 0; connectedTo = NULL; mainBlob = false; }
 
     int id;
     int owner;
     float x;
     float y;
+    bool mainBlob;
+    
+    tile *connectedTo;
+    int numConnectedTiles;
 
     AnimData* getData()
     {
@@ -157,6 +167,34 @@ namespace visualizer
     }
 
     ScoreData m_scoreData;
+
+  };
+  
+  struct ArenaWinner: public Animatable
+  {
+    ArenaWinner( IRenderer* renderer, ITimeManager *tm, int num, string winner, string reason, int w, int h ) : Animatable( renderer )
+    {
+      m_tm = tm;
+      winnersName = winner;
+      winningReason = reason;
+      winnersIndex = num;
+      mapWidth = w;
+      mapHeight = h;
+    }
+    
+    string winnersName;
+    string winningReason;
+    int winnersIndex, mapHeight, mapWidth;
+    
+    AnimData* getData()
+    {
+      return &m_arenaWinnerData;
+    }
+    
+    ITimeManager* timeManager() { return m_tm; }
+
+    ArenaWinnerData m_arenaWinnerData;
+    ITimeManager *m_tm;
 
   };
 

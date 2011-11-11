@@ -14,6 +14,7 @@ namespace visualizer
   {
     m_game = 0;
     m_timeline = 0;
+    setTerminationEnabled();
   } // BotNet::BotNet()
 
   BotNet::~BotNet()
@@ -36,11 +37,18 @@ namespace visualizer
 
   void BotNet::loadGamelog( std::string gamelog )
   {
+#ifdef __DEBUG__
     cout << "Load BotNet Gamelog" << endl;
+#endif
 
-    // Make sure we're not still loading a previous gamelog
-    terminate();
-    wait();
+    if( isRunning() )
+    {
+      m_suicideMutex.lock();
+        m_suicide = true;
+      m_suicideMutex.unlock();
+      wait();
+    }
+
 
     // Reset the animation engine.  
     animationEngine->registerFrameContainer( 0 );
@@ -142,6 +150,12 @@ namespace visualizer
     
       renderer->setColor( ( playerid == 0 ? Color( 0.6f, 0, 0) : Color(0, 0, 0.6f ) ) );
       renderer->endList(displayListId.str());
+      
+      // free up memory from creatings the viruses pixels
+      for(int i = 0; i < 16; i++)
+        delete pixels[i];
+      
+      delete pixels;
     }
     
     start();
@@ -183,18 +197,27 @@ namespace visualizer
     
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
- 
+    
+    bool isArenaMode = (strcmp(options->getStr("gameMode").c_str(),"arena") == 0);
+    
+    // Go through the game and build everything to draw!
     for
       (
       size_t state = 0; 
-      state < m_game->states.size();
+      state < m_game->states.size() + isArenaMode && !m_suicide;
       state++
       )
     {
+      bool drawArenaWinner;
+      size_t originalState = state;
+      
+      if(state >= m_game->states.size())
+      {
+        state = m_game->states.size() - 1;
+        drawArenaWinner = true;
+      }
+      
       Frame turn;
-
-      Connectivity p1;
-      Connectivity p2;
       
       turn.addAnimatable( mb );
       turn.addAnimatable( b );
@@ -202,7 +225,12 @@ namespace visualizer
       
       
       // BEGIN: Draw Tiles
-      int numNeutralTiles = 0;
+      int tileCounts[] = { 0, 0, 0, 0 };
+      
+      tile ***tiles = new tile**[(int)m_game->states[0].width];
+      for(int x = 0; x < m_game->states[0].width; x++)
+        tiles[x] = new tile*[(int)m_game->states[0].height];
+      
       for
         (
         std::map<int, Tile>::iterator i = m_game->states[ state ].tiles.begin();
@@ -216,19 +244,75 @@ namespace visualizer
         t->x = i->second.x;
         t->y = i->second.y;
         t->owner = i->second.owner;
-
-        if( t->owner == 0 )
-          p1.addNode( t->x, t->y, t );
-        else if( t->owner == 1 )
-          p2.addNode( t->x, t->y, t );
-        else if( t->owner == 2 )
-          numNeutralTiles++;
-
+        
+        tiles[(int)t->x][(int)t->y] = t;
+        
+        tileCounts[(int)t->owner]++;
+          
         t->addKeyFrame( new Appear );
         t->addKeyFrame( new DrawTile( t ) );
 
         turn.addAnimatable( t );
       }
+      
+      vector<tile*> mainBlobs[2];
+      for(int x = 0; x < m_game->states[0].width; x++)
+        for(int y = 0; y < m_game->states[0].height; y++)
+          if(tiles[x][y]->owner < 2 && tiles[x][y]->connectedTo == NULL && tiles[x][y]->numConnectedTiles == 0) // if the owner is player 1 or 2 and they havn't been connected to a blob we need to flood fill it to see how large that blob is
+          {
+            stack<tile*> currentBlob;
+            vector<tile*> completeBlob;
+            tile *parentTile = tiles[x][y];
+              
+            currentBlob.push(parentTile);
+            
+            int loopCount = 0;
+            
+            while(!currentBlob.empty() && loopCount < 10000)
+            {
+              loopCount++;
+              // if the current tile we are looking at is ours it is connected to the blob, so add
+              tile *currentTile = currentBlob.top();
+              currentBlob.pop();
+              
+              // if the tile we are looking at is owned bu the parent's owner and is not connected to another blog is it part of the blob, so add it to the blob...
+              if(currentTile->owner == parentTile->owner && currentTile->connectedTo == NULL)
+              {
+                parentTile->numConnectedTiles++;
+                //if(*currentTile != *parentTile)
+                currentTile->connectedTo = parentTile;
+                completeBlob.push_back(currentTile);
+                
+                // ... and seed more positions (not off the map).
+                if(currentTile->x + 1 < m_game->states[0].width)
+                  currentBlob.push(tiles[(int)currentTile->x + 1][(int)currentTile->y]);
+                if(currentTile->y + 1 < m_game->states[0].height)
+                  currentBlob.push(tiles[(int)currentTile->x][(int)currentTile->y + 1]);
+                if(currentTile->x - 1 >= 0)
+                  currentBlob.push(tiles[(int)currentTile->x - 1][(int)currentTile->y]);
+                if(currentTile->y - 1 >= 0)
+                  currentBlob.push(tiles[(int)currentTile->x][(int)currentTile->y - 1]);
+              }
+            }
+            
+            if(completeBlob.size() > mainBlobs[parentTile->owner].size())
+              mainBlobs[parentTile->owner] = completeBlob;
+            
+            //if(loopCount >= 9999)
+              //cout << "WTF: loopCount hit with currentBlob size:" << currentBlob.size() << endl;
+          }
+      
+      int connectedTiles[] = {0, 0};
+      
+      for(int owner = 0; owner < 2; owner++)
+        for (int i = 0; i < mainBlobs[owner].size(); i++)
+        {
+          if(!tiles[(int)mainBlobs[owner][i]->x][(int)mainBlobs[owner][i]->y]->mainBlob)
+          {
+            tiles[(int)mainBlobs[owner][i]->x][(int)mainBlobs[owner][i]->y]->mainBlob = true;
+            connectedTiles[owner]++;
+          }
+        }
       // END: Draw Tiles
       
       
@@ -241,14 +325,8 @@ namespace visualizer
         i++
         )
       {
-        base* b = new base( renderer );
-        if( i->second.owner == 0 )
-        {
-          p1.addBase( i->second.x, i->second.y );
-        } else
-        {
-          p2.addBase( i->second.x, i->second.y );
-        }
+        SmartPointer< base > b = new base( renderer );
+
         b->addKeyFrame( new StartAnim );
         b->id = i->second.id;
         b->x = i->second.x;
@@ -260,33 +338,28 @@ namespace visualizer
         turn.addAnimatable( b );
       }
       // END: Draw Bases
-
-     
-      p1.generateConnectivity();
-      p2.generateConnectivity();
-      
       
 
       // BEGIN: Draw Scoreboard
-      scoreboard* score1 = new scoreboard( renderer );
-      scoreboard* score2 = new scoreboard( renderer );
+      SmartPointer< scoreboard >  score1 = new scoreboard( renderer );
+      SmartPointer< scoreboard > score2 = new scoreboard( renderer );
 
       score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
       score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
-      score1->connectedTiles = p1.numConnectedNodes;
-      score1->unconnectedTiles = p1.numUnconnectedNodes;
+      score1->connectedTiles = connectedTiles[0];
+      score1->unconnectedTiles = tileCounts[0] - connectedTiles[0];
       score1->player = 0;
       score1->x = 1.0f;
       score1->y = 0.2f;
       score1->teamName = m_game->states[ state ].players[ 0 ].playerName;
       score1->mapWidth  = m_game->states[0].width;
       score1->enemyScore = m_game->states[ state ].players[ 1 ].byteDollars;
-      score1->neutralTiles = numNeutralTiles;
+      score1->neutralTiles = tileCounts[2];
       
       score2->score = m_game->states[ state ].players[ 1 ].byteDollars;
       score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
-      score2->connectedTiles = p2.numConnectedNodes;
-      score2->unconnectedTiles = p2.numUnconnectedNodes;
+      score2->connectedTiles = connectedTiles[1];
+      score2->unconnectedTiles = tileCounts[1] - connectedTiles[1];
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width-1;
@@ -319,14 +392,14 @@ namespace visualizer
 
       for
         ( 
-        std::map<int, vector<Animation*> >::iterator i = m_game->states[ state ].animations.begin();
+        std::map<int, vector< SmartPointer< Animation> > >::iterator i = m_game->states[ state ].animations.begin();
         i != m_game->states[ state ].animations.end();
         i++ 
         )
       {
         for
           (
-          std::vector<Animation*>::iterator j = i->second.begin();
+          std::vector< SmartPointer< Animation > >::iterator j = i->second.begin();
           j != i->second.end();
           j++
           )
@@ -337,7 +410,7 @@ namespace visualizer
             {
               Animation& a = (Animation&)*(*j);
               Combine &c = (Combine&)*(*j);
-              virus* v = new virus( renderer );
+              SmartPointer< virus > v = new virus( renderer );
               v->addKeyFrame( new StartVirus( v ) );
               Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
               Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
@@ -370,7 +443,7 @@ namespace visualizer
         i++ 
         )
       {
-        virus* v = new virus( renderer );
+        SmartPointer< virus > v = new virus( renderer );
 
         v->addKeyFrame( new StartVirus( v ) );
         v->id = i->second.id;
@@ -380,7 +453,7 @@ namespace visualizer
 
         for
           (
-          std::vector<Animation*>::iterator j = m_game->states[ state ].animations[ v->id ].begin();
+          std::vector< SmartPointer< Animation > >::iterator j = m_game->states[ state ].animations[ v->id ].begin();
           j != m_game->states[ state ].animations[ v->id ].end();
           j++
           )
@@ -441,6 +514,29 @@ namespace visualizer
 
       }
       
+      // BEGIN: Draw the Arena Winner
+      if(drawArenaWinner)
+      {
+        ArenaWinner *aw = new ArenaWinner
+        ( 
+            renderer,
+            timeManager,
+            m_game->winner,
+            m_game->states[0].players[ m_game->winner ].playerName,
+            m_game->winReason,
+            (int)m_game->states[0].width,
+            (int)m_game->states[0].height
+        );
+        
+        aw->addKeyFrame( new StartAnim );
+        aw->addKeyFrame( new ArenaWinnerAnim(timeManager) );
+        aw->addKeyFrame( new DrawArenaWinner( aw ) );
+        turn.addAnimatable( aw );
+        
+        state = originalState;
+      }
+      // END: Draw the Arena Winner
+      
       animationEngine->buildAnimations( turn );
 
       m_timeline->addFrame( turn );
@@ -454,7 +550,7 @@ namespace visualizer
         timeManager->setTurn( 0 );
         animationEngine->registerFrameContainer( m_timeline );
         timeManager->play();
-        timeManager->setNumTurns( m_game->states.size() );
+        timeManager->setNumTurns( m_game->states.size() + isArenaMode );
       }
 
     }
@@ -462,6 +558,10 @@ namespace visualizer
 #ifdef __DEBUG__
     cout << "Done Loading That Gamelog..." << endl;
 #endif
+
+    m_suicideMutex.lock();
+      m_suicide = false;
+    m_suicideMutex.unlock();
 
   } // BotNet::run() 
 

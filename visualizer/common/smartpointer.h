@@ -6,6 +6,8 @@
 #ifndef SMARTPOINTER_H
 #define SMARTPOINTER_H
 
+#include "common.h"
+
 //////////////////////////////////////////////////////////////////////////////
 /// @class SmartPointer
 /// @brief This class is the smart pointer class, created to mimic the 

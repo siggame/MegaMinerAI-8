@@ -104,7 +104,7 @@ namespace visualizer
     // Player 1 owned Tile
     if( q.owner == 0 )
     {
-      if( q.connected() )
+      if( q.mainBlob )
       {
         q.renderer().setColor( Color( 0.65, 0, 0, 0.6 ) );
         q.renderer().drawQuad( q.x, q.y, 1, 1 );
@@ -121,7 +121,7 @@ namespace visualizer
     }// PLayer 2 owned Tile
     else if( q.owner == 1 )
     {
-      if( q.connected() )
+      if( q.mainBlob )
       {
         q.renderer().setColor( Color( 0, 0, 0.65, 0.6 ) );
         q.renderer().drawQuad( q.x, q.y, 1, 1 );
@@ -351,9 +351,12 @@ namespace visualizer
         }
     }
     
-    // set the team's color and then draw thier text
+    // set the team's color and then draw thier team's name
     m_sb->renderer().setColor( team ); 
-    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y - 0.125, "mainFont", m_sb->teamName, 4.5, a );
+    float textSize = 4.5;
+    if(m_sb->teamName.length() > 17)
+        textSize = 4.5 * (17 / ((float)m_sb->teamName.length()));
+    m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y + (textSize - ((float)textSize * 1.045f)) , "mainFont", m_sb->teamName, textSize, a );
     
     //draw their score too
     m_sb->renderer().drawTexturedQuad(scoreOffset, m_sb->y, 1, 1, scoreFileName);
@@ -468,6 +471,37 @@ namespace visualizer
       s->drawnOffset = 0;
       s->blueOffset = curBlueOffset;
     }
+    
+  } // ScoreAnim::animate() 
+  
+  void DrawArenaWinner::animate( const float& t, AnimData *d )
+  {
+    IRenderer::Alignment align = IRenderer::Center;
+    stringstream ss;
+    
+    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7): Color(0.7,0,0);
+    Color blackColor = Color(0.12,0.12,0.12);
+    m_aw->timeManager()->setSpeed(0.1);
+    m_aw->renderer().setColor( Color(1, 1, 1, 0.7) );
+    m_aw->renderer().drawQuad(0, 0, 40, 20);
+    
+    // Draw the Winner's Name
+    m_aw->renderer().setColor( blackColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4 - 1, "mainFont", "Winner:", 4, align );
+    m_aw->renderer().setColor( teamColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4, "mainFont", m_aw->winnersName, 7, align );
+    
+    // Draw the Winning reason
+    m_aw->renderer().setColor( blackColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2, "mainFont", m_aw->winningReason, 4.5, align );
+    
+  } // DrawArenaWinner::animate()
+  
+  void ArenaWinnerAnim::animate( const float& t, AnimData *d )
+  {
+    ArenaWinnerData *a = (ArenaWinnerData*)d;
+    
+    tm->setSpeed(0.1);
     
   } // ScoreAnim::animate() 
 

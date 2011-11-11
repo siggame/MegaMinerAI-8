@@ -36,8 +36,8 @@ namespace visualizer
       Animatable( IRenderer *renderer = 0 );
       virtual AnimData* getData() = 0; 
 
-      void addKeyFrame( Anim* anim );
-      void addSubFrame( const size_t& subFrame, Anim* anim );
+      void addKeyFrame( SmartPointer< Anim > anim );
+      void addSubFrame( const size_t& subFrame, SmartPointer< Anim > anim );
 
       const size_t& numKeyFrames() const;
       const size_t& numFrames() const;

@@ -61,8 +61,8 @@ namespace visualizer
     /// .5 would mean 1 turn / 2 seconds
     /// 1.5 would mean 3 turns / 2 seconds
     /// etc. etc.
+    m_speed = speed;
     
-    OptionsMan->setFloat( "speed", speed );
 
   } // _TimeManager::setSpeed()
 
@@ -88,6 +88,30 @@ namespace visualizer
     m_updateRequesters.push_back( requester );
 
   } // _TimeManager::requestUpdate()
+
+  void _TimeManager::removeRequest( UpdateNeeded* requester )
+  {
+    for
+      ( 
+      std::list< UpdateNeeded* >::iterator i = m_updateRequesters.begin(); 
+      i != m_updateRequesters.end();
+      i++ 
+      )
+    {
+      if( requester == *i )
+      {
+        m_updateRequesters.erase( i );
+        return;
+      }
+    }
+
+#ifdef __DEBUG__
+  WARNING( "Could not find the requester." );
+
+#endif
+
+  } // _TimeManager::requestUpdate()
+
 
   void _TimeManager::updateChildren()
   {
@@ -153,12 +177,8 @@ namespace visualizer
   void _TimeManager::pause()
   {
     m_speed = 0;
-    if( m_turnCompletion > 0.5 )
-    {
-      m_turn++;
-    }
 
-    m_turnCompletion = 0;
+    m_turnCompletion = 0.99999f;
 
   } // _TimeManager::pause()
 
@@ -229,7 +249,13 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
-    
+ 
+    if( m_turn < 0 )
+    {
+      m_turn = 0;
+    }
+
+   
     if( m_turnCompletion > 1 )
     {
       m_turn += floor( m_turnCompletion );
@@ -240,12 +266,12 @@ namespace visualizer
         setTurn(loop_start);
       }
 
-      if( m_turn > m_maxTurns )
+      if( m_turn >= m_maxTurns )
       {
-        m_turn = m_maxTurns;
+        m_turn = m_maxTurns-1;
       }
 
-      if( m_turn >= m_numTurns )
+      if( m_turn >= m_numTurns-1 )
       {
         pause();
 

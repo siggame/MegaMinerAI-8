@@ -26,6 +26,6 @@ CONFIG += debug plugin
 CONFIG += dll
 QT += opengl
 
-debug:DEFINES += __DEBUG__
+debug:DEFINES += __DEBUG__ 
 DEFINES += YY_NO_UNISTD_H
 DESTDIR = ../plugins/

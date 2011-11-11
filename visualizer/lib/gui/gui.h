@@ -16,6 +16,10 @@
 #include <QStringList>
 #include <map>
 
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QDataStream>
+
 #include "igui.h"
 
 using namespace std;
@@ -138,6 +142,7 @@ class _GUI : public QMainWindow, public IGUI
 
     /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
     void loadGamelog( std::string gamelog );
+    void loadGamestring( char *log, const size_t& length );
 
     void update();
     void closeGUI();
@@ -153,6 +158,7 @@ class _GUI : public QMainWindow, public IGUI
     void setFullScreen(bool);
 
   private slots:
+    void closeEvent( QCloseEvent* event );
     void helpContents();
     void fileOpen();
     void toggleFullScreen();
@@ -175,6 +181,8 @@ class _GUI : public QMainWindow, public IGUI
     void turnPercentageShortcut9();
     void turnPercentageShortcut0();
 
+    void newConnect();
+
   public:
 
     /// @TODO This will probably have to change.
@@ -183,6 +191,8 @@ class _GUI : public QMainWindow, public IGUI
     QTableWidget* getIndividualStats();
 
   private:
+
+    QTcpServer* m_server;
 
     QTableWidget * m_globalStats;
     QTableWidget * m_selectionStats;

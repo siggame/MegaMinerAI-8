@@ -112,6 +112,10 @@ int main(int argc, char *argv[])
   TimeManager->destroy();
 	OptionsMan->destroy();
 
+#ifdef __DEBUG__
+  DumpUnfreed();
+#endif
+
 	return retval;
 
 }

@@ -23,7 +23,7 @@ namespace visualizer
     return *m_renderer;
   }
 
-  void Animatable::addKeyFrame( Anim* anim )
+  void Animatable::addKeyFrame( SmartPointer< Anim > anim )
   {
     m_frames.push_back( SmartPointer<Anim>( anim ) );
     std::list<SmartPointer<Anim> >::iterator i = m_frames.end();
@@ -32,7 +32,7 @@ namespace visualizer
 
   } // Animatable::addKeyFrame()
 
-  void Animatable::addSubFrame( const size_t& subFrame, Anim* anim )
+  void Animatable::addSubFrame( const size_t& subFrame, SmartPointer< Anim > anim )
   {
     m_frames.insert( m_keyFrames[ subFrame ], SmartPointer<Anim>( anim ) );
 
