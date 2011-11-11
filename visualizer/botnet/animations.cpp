@@ -473,6 +473,37 @@ namespace visualizer
     }
     
   } // ScoreAnim::animate() 
+  
+  void DrawArenaWinner::animate( const float& t, AnimData *d )
+  {
+    IRenderer::Alignment align = IRenderer::Center;
+    stringstream ss;
+    
+    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7): Color(0.7,0,0);
+    Color blackColor = Color(0.12,0.12,0.12);
+    m_aw->timeManager()->setSpeed(0.1);
+    m_aw->renderer().setColor( Color(1, 1, 1, 0.7) );
+    m_aw->renderer().drawQuad(0, 0, 40, 20);
+    
+    // Draw the Winner's Name
+    m_aw->renderer().setColor( blackColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4 - 1, "mainFont", "Winner:", 4, align );
+    m_aw->renderer().setColor( teamColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4, "mainFont", m_aw->winnersName, 7, align );
+    
+    // Draw the Winning reason
+    m_aw->renderer().setColor( blackColor );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2, "mainFont", m_aw->winningReason, 4.5, align );
+    
+  } // DrawArenaWinner::animate()
+  
+  void ArenaWinnerAnim::animate( const float& t, AnimData *d )
+  {
+    ArenaWinnerData *a = (ArenaWinnerData*)d;
+    
+    tm->setSpeed(0.1);
+    
+  } // ScoreAnim::animate() 
 
 } // visualizer
 

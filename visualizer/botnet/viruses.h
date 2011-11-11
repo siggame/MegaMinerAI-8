@@ -4,6 +4,7 @@
 #include "animatable.h"
 #include "irenderer.h"
 #include "connectivity.h"
+#include "igame.h"
 
 namespace visualizer
 { 
@@ -23,6 +24,11 @@ namespace visualizer
   {
     double drawnOffset;
     double blueOffset;
+  };
+  
+  struct ArenaWinnerData: public GeneralAnim
+  {
+    float **fadeInBoard;
   };
 
   struct moveBoard: public Animatable
@@ -161,6 +167,34 @@ namespace visualizer
     }
 
     ScoreData m_scoreData;
+
+  };
+  
+  struct ArenaWinner: public Animatable
+  {
+    ArenaWinner( IRenderer* renderer, ITimeManager *tm, int num, string winner, string reason, int w, int h ) : Animatable( renderer )
+    {
+      m_tm = tm;
+      winnersName = winner;
+      winningReason = reason;
+      winnersIndex = num;
+      mapWidth = w;
+      mapHeight = h;
+    }
+    
+    string winnersName;
+    string winningReason;
+    int winnersIndex, mapHeight, mapWidth;
+    
+    AnimData* getData()
+    {
+      return &m_arenaWinnerData;
+    }
+    
+    ITimeManager* timeManager() { return m_tm; }
+
+    ArenaWinnerData m_arenaWinnerData;
+    ITimeManager *m_tm;
 
   };
 
