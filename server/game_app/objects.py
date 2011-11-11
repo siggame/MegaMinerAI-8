@@ -188,6 +188,7 @@ class Virus(Mappable):
            self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
            self.game.removeObject(virus)
            self.game.removeObject(self)
+#           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
            return True
        #moving a virus onto an enemy virus, conflict!!
        else:

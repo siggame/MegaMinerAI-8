@@ -1,15 +1,24 @@
-Welcome to Piracy!
+Welcome to BotNet!
 
-Avast! You be in charge of a bunch of pirates. With them you will commandeer ships, attack unassuming merchant vessels, and try to become the RICHEST pirate that ever sailed the Seven Seas!
+What?! Someone's trying to hack the computer you're trying to hack! The only way
+to gain control is to make sure that your largest network of machines is
+greater than theirs! 
+
+It is your job to hack into machines and turn them to your side. 
+You will spawn viruses at your root machine, and they
+will move to other machines and convert them to work for you. Adjacent
+machines will group together into a network, your largest network will
+reward you with ByteDollars, and the player with the most ByteDollars wins.
+You can't spawn Viruses under level 0, and higher level Viruses take more
+MachineCycles to spawn. If two of your Viruses have the same level, they can
+combine and make a stronger Virues. Move your Virus onto a Enemy Virus to
+kill it, and you can have your Virus hack machines in your opponents
+network to gain control of his mahines. 
 
 BASIC STEPS TO GET YOUR TEAM STARTED
 1) Point your browser to http://r99acm.device.mst.edu
 1a) Register youself if you have not already
 1b) Create or join a team if you have not already
-
-###
-1c) TODO: where is the documentation?
-###
 
 2) Open PuTTY with your given account username and password. You will want at least 3 instances open to run the clients and server for local testing.
 
