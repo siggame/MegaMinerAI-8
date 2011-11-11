@@ -43,7 +43,9 @@ namespace visualizer
 
     if( isRunning() )
     {
-      m_suicide = true;
+      m_suicideMutex.lock();
+        m_suicide = true;
+      m_suicideMutex.unlock();
       wait();
     }
 
@@ -305,7 +307,7 @@ namespace visualizer
         i++
         )
       {
-        base* b = new base( renderer );
+        SmartPointer< base > b = new base( renderer );
 
         b->addKeyFrame( new StartAnim );
         b->id = i->second.id;
@@ -321,8 +323,8 @@ namespace visualizer
       
 
       // BEGIN: Draw Scoreboard
-      scoreboard* score1 = new scoreboard( renderer );
-      scoreboard* score2 = new scoreboard( renderer );
+      SmartPointer< scoreboard >  score1 = new scoreboard( renderer );
+      SmartPointer< scoreboard > score2 = new scoreboard( renderer );
 
       score1->score = m_game->states[ state ].players[ 0 ].byteDollars;
       score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
@@ -390,7 +392,7 @@ namespace visualizer
             {
               Animation& a = (Animation&)*(*j);
               Combine &c = (Combine&)*(*j);
-              virus* v = new virus( renderer );
+              SmartPointer< virus > v = new virus( renderer );
               v->addKeyFrame( new StartVirus( v ) );
               Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
               Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
@@ -423,7 +425,7 @@ namespace visualizer
         i++ 
         )
       {
-        virus* v = new virus( renderer );
+        SmartPointer< virus > v = new virus( renderer );
 
         v->addKeyFrame( new StartVirus( v ) );
         v->id = i->second.id;
@@ -516,7 +518,9 @@ namespace visualizer
     cout << "Done Loading That Gamelog..." << endl;
 #endif
 
-    m_suicide = false;
+    m_suicideMutex.lock();
+      m_suicide = false;
+    m_suicideMutex.unlock();
 
   } // BotNet::run() 
 
