@@ -30,6 +30,7 @@ namespace visualizer
       Game *m_game;
       AnimSequence *m_timeline;
 
+      QMutex m_suicideMutex;
       bool m_suicide;
   }; 
 
