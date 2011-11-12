@@ -141,6 +141,8 @@ class _GUI : public QMainWindow, public IGUI
     void dropEvent( QDropEvent* evt );
     void resizeEvent( QResizeEvent* evt );
 
+    void requestGamelog();
+
     /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
     void loadGamelog( std::string gamelog );
     void loadGamestring( char *log, const size_t& length );

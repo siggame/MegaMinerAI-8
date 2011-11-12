@@ -358,6 +358,22 @@ namespace visualizer
     }
   }
 
+  void _GUI::requestGamelog()
+  {
+    BeanStalker b( "r09mannr4.device.mst.edu", 11300 );
+
+    b.sendCommand( "watch visualizer-requests" );
+
+    string glogPath = b.reserve();
+    QUrl url( glogPath.c_str() );
+    cout << url.encodedHost().constData() << endl;
+    cout << url.encodedPath().constData() << endl;
+    
+    m_http->setHost( url.host() );
+    m_http->get( url.path() );
+
+  }
+
   bool _GUI::doSetup()
   {
 
@@ -365,87 +381,6 @@ namespace visualizer
     connect( m_http, SIGNAL( done( bool) ), this, SLOT( loadThatShit(bool) ) );
 
     connect( this, SIGNAL( close() ), this, SLOT( onClose() ) );
-
-    if( OptionsMan->getBool( "server" ) )
-    {
-      BeanStalker b( "r09mannr4.device.mst.edu", 11300 );
-
-      b.sendCommand( "watch visualizer-requests" );
-
-      string glogPath = b.reserve();
-      QUrl url( glogPath.c_str() );
-      cout << url.encodedHost().constData() << endl;
-      cout << url.encodedPath().constData() << endl;
-      
-      m_http->setHost( url.host() );
-      m_http->get( url.path() );
-      
-
-#if 0
-      cout << "Connecting..."  << endl;
-      QTcpSocket *s = m_sock = new QTcpSocket( this );
-      connect( s, SIGNAL( readyRead() ), this, SLOT( readyToGame() ) );
-      connect(s, SIGNAL(error(QAbstractSocket::SocketError)),
-              this, SLOT(displayError(QAbstractSocket::SocketError)));
-
-      s->connectToHost( "r09mannr4.device.mst.edu", 11300 );
-
-      if( !s->waitForConnected( 5000 ) )
-      {
-        cout << "Could Not Connect!" << endl;
-      }
-
-      cout << "Connected, I guess." << endl;
-
-      QDataStream inout( s );
-      inout.setVersion( QDataStream::Qt_4_0 );
-      string cmd = "reserve-with-timeout 2\r\n";
-      inout.writeRawData( cmd.c_str(), cmd.size() );
-
-      cout << "DLKFLFKJD" << endl;
-
-#endif
-
-#if 0
-      while( s->bytesAvailable() < (int)sizeof(quint16) )
-      {
-        if( !s->waitForReadyRead( 5000 ) )
-        {
-          cout << "NOT READY" << endl;
-          return false;
-        }
-      }
-#endif
-
-#if 0
-      m_server = new QTcpServer( this );
-      if( !m_server->listen( QHostAddress::Any, OptionsMan->getInt( "serverPort" ) ) )
-      {
-        THROW
-          (
-          Exception, 
-          "Could Not Start The Visualizer Server"
-          );
-      }
-
-      m_visReadyServer = new QTcpServer( this );
-      if( !m_visReadyServer->listen( QHostAddress::Any, OptionsMan->getInt( "visReadinessServerPort" ) ) )
-      {
-        THROW
-          (
-          Exception, 
-          "Could Not Start The Visualizer Readiness Server"
-          );
-      }
-
-      cout << "File Server Port: " << m_server->serverPort() << endl;
-      cout << "Readiness Server Port: " << m_visReadyServer->serverPort() << endl;
-
-      connect( m_server, SIGNAL( newConnection() ), this, SLOT( newConnect() ) );
-      connect( m_visReadyServer, SIGNAL( newConnection() ), this, SLOT( newReadyConnect() ) );
-#endif
-
-    }
 
     setAcceptDrops( true );
 
@@ -468,6 +403,7 @@ namespace visualizer
       menuBar()->hide();
       setFullScreen(true);
       m_dockWidget->hide();
+      requestGamelog();
     }
 
     //If we're in demonstrationMode, change different settings
