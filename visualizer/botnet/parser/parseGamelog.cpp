@@ -481,67 +481,67 @@ static bool parseSexp(Game& game, sexp_t* expression)
       if ( !sub ) return false;
       if(string(ToLower( sub->val ) ) == "combat")
       {
-        Combat* animation = new Combat;
+        SmartPointer<Combat> animation = new Combat;
         if ( !parseCombat(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "combine")
       {
-        Combine* animation = new Combine;
+        SmartPointer<Combine> animation = new Combine;
         if ( !parseCombine(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "crash")
       {
-        Crash* animation = new Crash;
+        SmartPointer<Crash> animation = new Crash;
         if ( !parseCrash(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "create")
       {
-        Create* animation = new Create;
+        SmartPointer<Create> animation = new Create;
         if ( !parseCreate(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "move")
       {
-        Move* animation = new Move;
+        SmartPointer<Move> animation = new Move;
         if ( !parseMove(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "player-talk")
       {
-        PlayerTalk* animation = new PlayerTalk;
+        SmartPointer<PlayerTalk> animation = new PlayerTalk;
         if ( !parsePlayerTalk(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "recycle")
       {
-        Recycle* animation = new Recycle;
+        SmartPointer<Recycle> animation = new Recycle;
         if ( !parseRecycle(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
       if(string(ToLower( sub->val ) ) == "virus-talk")
       {
-        VirusTalk* animation = new VirusTalk;
+        SmartPointer<VirusTalk> animation = new VirusTalk;
         if ( !parseVirusTalk(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
     }
     game.states[game.states.size()-1].animations = animations;

@@ -141,11 +141,11 @@ static bool parseSexp(Game& game, sexp_t* expression)
 % for animation in animations:
       if(string(ToLower( sub->val ) ) == "${dashify(animation.name)}")
       {
-        ${animation.name}* animation = new ${animation.name};
+        SmartPointer<${animation.name}> animation = new ${animation.name};
         if ( !parse${capitalize(animation.name)}(*animation, expression) )
           return false;
 
-        animations[ ((AnimOwner*)animation)->owner ].push_back( animation );
+        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
       }
 % endfor
     }

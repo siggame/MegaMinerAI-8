@@ -22,7 +22,7 @@ HEADERS += *.h \
 #QMAKE_CXXFLAGS_DEBUG += -pg
 QMAKE_LFLAGS_DEBUG += -shared
 QMAKE_LFLAGS_RELEASE += -shared
-CONFIG += debug plugin
+CONFIG += release plugin
 CONFIG += dll
 QT += opengl
 

@@ -126,7 +126,7 @@ namespace visualizer
       output[ size ] = 0;
       fullLog = output;
 
-      delete output;     
+      delete [] output;     
     }
     else
     {
@@ -178,7 +178,7 @@ namespace visualizer
 
       loadGamestring( input, length );
 
-      delete input;
+      delete [] input;
     }
 
   }
@@ -432,7 +432,7 @@ namespace visualizer
 
     loadGamestring( gamelog, fileSize );
 
-    delete gamelog;
+    delete [] gamelog;
 
   }
 
