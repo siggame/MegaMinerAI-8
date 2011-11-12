@@ -124,15 +124,6 @@ std::ostream& operator<<(std::ostream& stream, Recycle ob)
 }
 
 
-std::ostream& operator<<(std::ostream& stream, VirusTalk ob)
-{
-  stream << "VirusTalk" << "\n";
-  stream << "speaker: " << ob.speaker  <<'\n';
-  stream << "message: " << ob.message  <<'\n';
-  return stream;
-}
-
-
 std::ostream& operator<<(std::ostream& stream, GameState ob)
 {
   stream << "turnNumber: " << ob.turnNumber  <<'\n';
@@ -182,8 +173,6 @@ std::ostream& operator<<(std::ostream& stream, GameState ob)
 //      stream << *((PlayerTalk*)*i) << "\n";
 //    if((*(*i)).type == RECYCLE)
 //      stream << *((Recycle*)*i) << "\n";
-//    if((*(*i)).type == VIRUSTALK)
-//      stream << *((VirusTalk*)*i) << "\n";
   }
   
 

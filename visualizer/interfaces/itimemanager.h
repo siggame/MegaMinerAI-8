@@ -12,6 +12,7 @@ namespace visualizer
   {    
     public:
       virtual const int& getTurn() const = 0;
+      virtual void setTurnPercent( const float& perc ) = 0;
       virtual const float& getTurnPercent() const = 0;
       virtual const int& getNumTurns() const = 0;
 

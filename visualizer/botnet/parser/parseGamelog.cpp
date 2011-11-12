@@ -27,26 +27,35 @@ static bool parseMappable(Mappable& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.x = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.y = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parseMappable.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseBase(Base& object, sexp_t* expression)
 {
@@ -54,36 +63,53 @@ static bool parseBase(Base& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.x = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.y = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.owner = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.spawnsLeft = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parseBase.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parsePlayer(Player& object, sexp_t* expression)
 {
@@ -91,38 +117,55 @@ static bool parsePlayer(Player& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.playerName = new char[strlen(sub->val)+1];
   strncpy(object.playerName, sub->val, strlen(sub->val));
   object.playerName[strlen(sub->val)] = 0;
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.byteDollars = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.cycles = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.time = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parsePlayer.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseTile(Tile& object, sexp_t* expression)
 {
@@ -130,31 +173,44 @@ static bool parseTile(Tile& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.x = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.y = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.owner = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parseTile.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseVirus(Virus& object, sexp_t* expression)
 {
@@ -162,46 +218,71 @@ static bool parseVirus(Virus& object, sexp_t* expression)
   if ( !expression ) return false;
   sub = expression->list;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.id = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.x = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.y = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.owner = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.level = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.movesLeft = atoi(sub->val);
   sub = sub->next;
 
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
   object.living = atoi(sub->val);
   sub = sub->next;
 
   return true;
 
-  ERROR:
-  cerr << "Error in parseVirus.\n Parsing: " << *expression << endl;
-  return false;
 }
 
 static bool parseCombat(Combat& object, sexp_t* expression)
@@ -210,18 +291,22 @@ static bool parseCombat(Combat& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = COMBAT;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCombat.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.moving = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCombat.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.stationary = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseCombat.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseCombine(Combine& object, sexp_t* expression)
 {
@@ -229,18 +314,22 @@ static bool parseCombine(Combine& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = COMBINE;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCombine.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.moving = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCombine.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.stationary = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseCombine.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseCrash(Crash& object, sexp_t* expression)
 {
@@ -248,21 +337,29 @@ static bool parseCrash(Crash& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = CRASH;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCrash.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.crashing = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCrash.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.dx = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCrash.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.dy = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseCrash.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseCreate(Create& object, sexp_t* expression)
 {
@@ -270,15 +367,15 @@ static bool parseCreate(Create& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = CREATE;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseCreate.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.creating = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseCreate.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseMove(Move& object, sexp_t* expression)
 {
@@ -286,21 +383,29 @@ static bool parseMove(Move& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = MOVE;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.moving = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.dx = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.dy = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseMove.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parsePlayerTalk(PlayerTalk& object, sexp_t* expression)
 {
@@ -308,20 +413,24 @@ static bool parsePlayerTalk(PlayerTalk& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = PLAYERTALK;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsePlayerTalk.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.speaker = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parsePlayerTalk.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.message = new char[strlen(sub->val)+1];
   strncpy(object.message, sub->val, strlen(sub->val));
   object.message[strlen(sub->val)] = 0;
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parsePlayerTalk.\n Parsing: " << *expression << endl;
-  return false;
 }
 static bool parseRecycle(Recycle& object, sexp_t* expression)
 {
@@ -329,39 +438,22 @@ static bool parseRecycle(Recycle& object, sexp_t* expression)
   if ( !expression ) return false;
   object.type = RECYCLE;
   sub = expression->list->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseRecycle.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.recycling = atoi(sub->val);
   sub = sub->next;
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parseRecycle.\n Parsing: " << *expression << endl;
+    return false;
+  }
   object.base = atoi(sub->val);
   sub = sub->next;
   return true;
 
-
-  ERROR:
-  cerr << "Error in parseRecycle.\n Parsing: " << *expression << endl;
-  return false;
-}
-static bool parseVirusTalk(VirusTalk& object, sexp_t* expression)
-{
-  sexp_t* sub;
-  if ( !expression ) return false;
-  object.type = VIRUSTALK;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.speaker = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.message = new char[strlen(sub->val)+1];
-  strncpy(object.message, sub->val, strlen(sub->val));
-  object.message[strlen(sub->val)] = 0;
-  sub = sub->next;
-  return true;
-
-
-  ERROR:
-  cerr << "Error in parseVirusTalk.\n Parsing: " << *expression << endl;
-  return false;
 }
 
 static bool parseSexp(Game& game, sexp_t* expression)
@@ -531,14 +623,6 @@ static bool parseSexp(Game& game, sexp_t* expression)
       {
         SmartPointer<Recycle> animation = new Recycle;
         if ( !parseRecycle(*animation, expression) )
-          return false;
-
-        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
-      }
-      if(string(ToLower( sub->val ) ) == "virus-talk")
-      {
-        SmartPointer<VirusTalk> animation = new VirusTalk;
-        if ( !parseVirusTalk(*animation, expression) )
           return false;
 
         animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );

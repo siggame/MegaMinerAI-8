@@ -83,6 +83,8 @@ namespace visualizer
       // @NOTE These five will probably have their names changed
       void setTurn( const int& turn );
       const int& getTurn() const;
+
+      void setTurnPercent( const float& perc );
       const float& getTurnPercent() const;
 
       const int& nextTurn();
@@ -100,6 +102,8 @@ namespace visualizer
       const int& getNumTurns() const;
       void setNumTurns( const int& numTurns );
       void setMaxTurns( const size_t& maxTurns );
+
+      char readyForGamelog();
 
     private slots:
       void timerUpdate();

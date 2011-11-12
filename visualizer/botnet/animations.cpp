@@ -315,13 +315,20 @@ namespace visualizer
     m_sb->renderer().translate(0, -2.5);
     IRenderer::Alignment a = IRenderer::Left;
     Color team = Color( 1, 0, 0 );
-    Color darkTeam = Color( 0.6, 0, 0 );
+    Color darkTeam = Color (0.6, 0, 0);
+    
+    Color red  = Color (1, 0, 0);
+    Color blue = Color (0, 0, 1);
+    Color darkRed  = Color (0.5, 0, 0);
+    Color darkBlue = Color (0, 0, 0.5);
+    Color neutral = Color ( 0.667, 0.669, 0.667);
+    
     double startX = 0;
     double endX   = m_sb->mapWidth;
     double xTextOffset = 1.5;
     double xBottomInfoOffset = 2.875;
     double xVirusOffset = -0.75;
-    double scoreOffset = 13.75;
+    double scoreOffset = 13.25;
     string scoreFileName = "scoreboard-bytedollar-red";
     ScoreData *sd = (ScoreData*)d;
     
@@ -330,7 +337,7 @@ namespace visualizer
       a = IRenderer::Right;
       team = Color( 0, 0, 1 );
       darkTeam = Color( 0, 0, 0.6 );
-      scoreOffset = 23.25;
+      scoreOffset = 23.75;
       scoreFileName = "scoreboard-bytedollar-blue";
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
       endX   =  m_sb->mapWidth * (1 - (sd->blueOffset + sd->drawnOffset));
@@ -357,10 +364,19 @@ namespace visualizer
     if(m_sb->teamName.length() > 17)
         textSize = 4.5 * (17 / ((float)m_sb->teamName.length()));
     m_sb->renderer().drawText( m_sb->x + xTextOffset, m_sb->y + (textSize - ((float)textSize * 1.045f)) , "mainFont", m_sb->teamName, textSize, a );
+
+    // cycles
+    stringstream bottomInfo;
+    bottomInfo << "scoreboard-cycles-" << (m_sb->player ? "blue" : "red");
+    m_sb->renderer().drawTexturedQuad(scoreOffset, m_sb->y, 1, 1, bottomInfo.str());
+    bottomInfo.str("");
+    bottomInfo.clear();
+    bottomInfo << ":" << m_sb->cycles;
+    m_sb->renderer().drawText(scoreOffset + 0.76, m_sb->y - 0.1, "mainFont", bottomInfo.str(), 4.5);
     
     //draw their score too
-    m_sb->renderer().drawTexturedQuad(scoreOffset, m_sb->y, 1, 1, scoreFileName);
-    m_sb->renderer().drawText( scoreOffset + 0.46, m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
+    m_sb->renderer().drawTexturedQuad(scoreOffset + (m_sb->player ? -3.4 : 3.5), m_sb->y, 1, 1, scoreFileName);
+    m_sb->renderer().drawText( scoreOffset + (m_sb->player ? -3 : 3.9), m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
 #if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
@@ -369,7 +385,6 @@ namespace visualizer
           m_sb->renderer().drawQuad( m_sb->x + (x * 0.0625) + xVirusOffset, m_sb->y + (y * 0.0625), 0.0625, 0.0625);
 
 #else
-    // NEW BUT WEIRD: Colors bars become gray...
     // draw the virus
     // Create the Display List's String ID
     stringstream displayListId;
@@ -383,7 +398,7 @@ namespace visualizer
     m_sb->renderer().pop();
 #endif
     
-    // draw the bottom info
+    /*// draw the bottom info
     stringstream bottomInfo;
     m_sb->renderer().setColor( team );
     string stringColor = (m_sb->player ? "blue" : "red");
@@ -449,8 +464,43 @@ namespace visualizer
     
     // draw the center marker
     m_sb->renderer().setColor( Color( 0.667, 0.667, 0.667) );
-    m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 2.25, 2);
-  
+    m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 2.25, 2);*/
+    
+    if( m_sb->player == 0 )
+    {
+      float allTiles = m_sb->unconnectedTiles + m_sb->connectedTiles + m_sb->neutralTiles + m_sb->enemyUnconnectedTiles + m_sb->enemyConnectedTiles;
+      
+      float redConnectedTilesWidth = m_sb->mapWidth * ((float)m_sb->connectedTiles / allTiles);
+      float redUnconnectedTilesWidth = m_sb->mapWidth * ((float)m_sb->unconnectedTiles / allTiles);
+      float neutralTilesWidth = m_sb->mapWidth * ((float)m_sb->neutralTiles / allTiles);
+      float blueConnectedTilesWidth = m_sb->mapWidth * ((float)m_sb->enemyConnectedTiles / allTiles);
+      float blueUnconnectedTilesWidth = m_sb->mapWidth * ((float)m_sb->enemyUnconnectedTiles / allTiles);
+      
+      // draw the red team connected bar
+      m_sb->renderer().setColor( red );
+      m_sb->renderer().drawQuad(0, m_sb->y + 2, redConnectedTilesWidth, 0.25);
+      
+      // draw the red team unconnected bar
+      m_sb->renderer().setColor( darkRed );
+      m_sb->renderer().drawQuad(redConnectedTilesWidth, m_sb->y + 2, redUnconnectedTilesWidth, 0.25);
+      
+      // draw the neutral bar
+      m_sb->renderer().setColor( neutral );
+      m_sb->renderer().drawQuad(redConnectedTilesWidth + redUnconnectedTilesWidth, m_sb->y + 2, neutralTilesWidth, 0.25);
+      
+      // draw the blue team connected bar
+      m_sb->renderer().setColor( darkBlue );
+      m_sb->renderer().drawQuad(redConnectedTilesWidth + redUnconnectedTilesWidth + neutralTilesWidth, m_sb->y + 2, blueUnconnectedTilesWidth, 0.25);
+      
+      // draw the blue team unconnected bar
+      m_sb->renderer().setColor( blue );
+      m_sb->renderer().drawQuad(redConnectedTilesWidth + redUnconnectedTilesWidth + neutralTilesWidth + blueUnconnectedTilesWidth, m_sb->y + 2, blueConnectedTilesWidth, 0.25);
+      
+      // draw the center marker
+      m_sb->renderer().setColor( Color( 0.333, 0.33, 0.333) );
+      m_sb->renderer().drawLine(m_sb->mapWidth/2, m_sb->y + 1.75, m_sb->mapWidth/2, m_sb->y + 2.25, 2);
+    }
+    
     m_sb->renderer().translate(0, 2.5);
   }
   
@@ -476,6 +526,16 @@ namespace visualizer
   
   void DrawArenaWinner::animate( const float& t, AnimData *d )
   {
+    static bool firstRun = true;
+    cout << "DRAWING: " << t  << endl;
+    if( firstRun )
+    {
+      cout << "FIRST" << endl;
+      m_aw->timeManager()->setTurnPercent( 0 );
+      firstRun = false;
+
+    }
+
     IRenderer::Alignment align = IRenderer::Center;
     stringstream ss;
     
