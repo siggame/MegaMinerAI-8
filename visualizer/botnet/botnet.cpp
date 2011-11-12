@@ -485,8 +485,17 @@ namespace visualizer
         i++ 
         )
       {
-        if( i->second.id == 0 )
+        if( i->second.id <= 1 )
+        {
+          PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ i->second.id ][ 0 ];
+
+          if( t->type == PLAYERTALK )
+          {
+            cout << t->message << endl;
+
+          }
           continue;
+        }
 
         SmartPointer< virus > v = new virus( renderer );
 
@@ -503,7 +512,6 @@ namespace visualizer
           j++
           )
         {
-          //cout << "ANIMATION" << endl;
 #if 1
           switch( (*j)->type )
           {
@@ -535,8 +543,11 @@ namespace visualizer
               //cout << "Create" << endl;
             break;
             case PLAYERTALK:
-              //cout << "Playertalk" << endl;
-            break;
+            {
+              PlayerTalk* t = (PlayerTalk*)&*(*j);
+              cout << t->message << endl;
+
+            } break;
             case RECYCLE:
               //cout << "Recycle" << endl;
             break;
