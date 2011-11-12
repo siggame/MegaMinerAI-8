@@ -400,10 +400,11 @@ namespace visualizer
   class DrawArenaWinner: public Anim
   {
     public: 
-      DrawArenaWinner( ArenaWinner* aw)
+      DrawArenaWinner( ArenaWinner* aw, const float& winSpeed )
       {
         m_aw = aw;
         firstRun = true;
+        m_winSpeed = winSpeed;
       }
 
       void animate( const float& t, AnimData* d );
@@ -416,6 +417,7 @@ namespace visualizer
 
     private:
       ArenaWinner* m_aw;
+      float m_winSpeed;
       bool firstRun;
   }; // DrawArenaWinner
 

@@ -7,10 +7,6 @@ namespace visualizer
   {
     s = new QTcpSocket( this );
 
-    //connect( s, SIGNAL( readyRead() ), this, SLOT( readyToWork() ) );
-    connect(s, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(displayError(QAbstractSocket::SocketError)));
-
     s->connectToHost( host.c_str(), port );
 
     if( !s->waitForConnected( 5000 ) )

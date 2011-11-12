@@ -605,7 +605,7 @@ namespace visualizer
   {
     if( firstRun )
     {
-      m_aw->timeManager()->setSpeed(0.1);
+      m_aw->timeManager()->setSpeed(m_winSpeed);
       m_aw->timeManager()->setTurnPercent( 0 );
       firstRun = false;
 
@@ -642,8 +642,6 @@ namespace visualizer
   void ArenaWinnerAnim::animate( const float& t, AnimData *d )
   {
     ArenaWinnerData *a = (ArenaWinnerData*)d;
-    
-    //tm->setSpeed(0.1);
     
   } // ScoreAnim::animate() 
 

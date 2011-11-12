@@ -613,7 +613,7 @@ namespace visualizer
         
         aw->addKeyFrame( new StartAnim );
         aw->addKeyFrame( new ArenaWinnerAnim(timeManager) );
-        aw->addKeyFrame( new DrawArenaWinner( aw ) );
+        aw->addKeyFrame( new DrawArenaWinner( aw, options->getFloat( "winSpeed" ) ) );
         turn.addAnimatable( aw );
         
         state = originalState;
