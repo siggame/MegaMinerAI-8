@@ -57,4 +57,4 @@ macx:CONFIG -= app_bundle
 QT += opengl network
 SUBDIRS += botnet piracy lightRevelation
 OTHER_FILES += 
-debug:DEFINES += __DEBUG__ GLIBCXX_FORCE_NEW
+#debug:DEFINES += __DEBUG__ GLIBCXX_FORCE_NEW
