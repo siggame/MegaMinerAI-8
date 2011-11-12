@@ -178,32 +178,31 @@ class Virus(Mappable):
         return True
 
     for virus in self.game.objects.viruses:
-     if virus.x == dx and virus.y == dy:
-       if virus.owner == self.owner: 
-         if virus.level != self.level:
-           self.game.animations.append(['Crash', self.id, dx, dy])
-           return("You cannot combine units of different levels")
-         else:
-           newVirus = self.game.addObject(Virus,[dx, dy, self.owner, self.level+1, 0])
-           self.game.animations.append(['Combine', self.id, virus.id, newVirus.id])
-           self.game.removeObject(virus)
-           self.game.removeObject(self)
-#           print("When our powers combine!...we kill ourselves to make a slightly stronger virus",dx,dy) ###
-           return True
-       #moving a virus onto an enemy virus, conflict!!
-       else:
-         self.game.animations.append(['Combat',self.id,virus.id])
-         if virus.level > self.level:
-           self.game.removeObject(self)
-           return True
-         elif self.level > virus.level:
-           self.game.removeObject(virus)
-           # NO return because the move should still happen
-        #if you're evenly matched, a great battle ensues, and you both die
-         elif virus.level == self.level:
-           self.game.removeObject(virus)
-           self.game.removeObject(self)
-           return True
+      if virus.x == dx and virus.y == dy:
+        if virus.owner == self.owner: 
+          if virus.level != self.level:
+            self.game.animations.append(['Crash', self.id, dx, dy])
+            return "You cannot combine units of different levels"
+          else:
+            virus.level += 1
+            virus.movesLeft = 0
+            self.game.animations.append(['Combine', self.id, virus.id])
+            self.game.removeObject(self)
+            return True
+        #moving a virus onto an enemy virus, conflict!!
+        else:
+          self.game.animations.append(['Combat',self.id,virus.id])
+          if virus.level > self.level:
+            self.game.removeObject(self)
+            return True
+          elif self.level > virus.level:
+            self.game.removeObject(virus)
+            # NO return because the move should still happen
+          #if you're evenly matched, a great battle ensues, and you both die
+          elif virus.level == self.level:
+            self.game.removeObject(virus)
+            self.game.removeObject(self)
+            return True
     self.x = dx
     self.y = dy
     self.game.grid[dx][dy].owner = self.owner
