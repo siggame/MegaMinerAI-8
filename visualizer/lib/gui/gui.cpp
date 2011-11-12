@@ -352,11 +352,14 @@ namespace visualizer
     {
       BeanStalker b( "r09mannr4.device.mst.edu", 11300 );
 
-      cout << b.sendCommand( "use visualizer-requests" ) << endl;;
-      cout << b.sendCommand( "peek-ready" ) << endl;;
+      b.sendCommand( "watch visualizer-requests" );
 
-      cout << b.reserve() << endl;
-      cout << "BITCHIN" << endl;
+      string glogPath = b.reserve();
+      
+      cout << glogPath << endl;
+
+      loadGamelog( glogPath );
+
 #if 0
       cout << "Connecting..."  << endl;
       QTcpSocket *s = m_sock = new QTcpSocket( this );

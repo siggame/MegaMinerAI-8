@@ -44,7 +44,7 @@ namespace visualizer
     {
       while( !s->bytesAvailable() )
       {
-        if( s->waitForReadyRead() )
+        if( !s->waitForReadyRead() )
         {
           WARNING
             (
@@ -106,9 +106,21 @@ namespace visualizer
   {
     cmdSend( "reserve" );
 
-    cout << pullWord() << endl;
-    cout << pullWord() << endl;
-    cout << pullWord() << endl;
+    string response = pullWord();
+    if( response.compare( "RESERVED" ) )
+    {
+      WARNING
+        (
+        "Could not get gamelog."
+        );
+
+      return "";
+
+    }
+
+    pullLine(); // discard rest of the line
+
+    return pullLine();
 
   }
 
