@@ -214,6 +214,12 @@ namespace visualizer
 
   } // _TimeManager::rewind()
 
+  char _TimeManager::readyForGamelog()
+  {
+    return (m_speed == 0);
+
+  } // _TimeManager::readyForGamelog()
+
   const int& _TimeManager::getNumTurns() const
   {
     return m_numTurns;

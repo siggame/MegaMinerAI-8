@@ -336,10 +336,21 @@ namespace visualizer
           );
       }
 
-      cout << "Address: " << m_server->serverAddress().toString().toAscii().constData() << endl;
-      cout << "Port: " << m_server->serverPort() << endl;
+      m_visReadyServer = new QTcpServer( this );
+      if( !m_visReadyServer->listen( QHostAddress::Any, OptionsMan->getInt( "visReadinessServerPort" ) ) )
+      {
+        THROW
+          (
+          Exception, 
+          "Could Not Start The Visualizer Readiness Server"
+          );
+      }
+
+      cout << "File Server Port: " << m_server->serverPort() << endl;
+      cout << "Readiness Server Port: " << m_visReadyServer->serverPort() << endl;
 
       connect( m_server, SIGNAL( newConnection() ), this, SLOT( newConnect() ) );
+      connect( m_visReadyServer, SIGNAL( newConnection() ), this, SLOT( newReadyConnect() ) );
 
     }
 
@@ -390,6 +401,19 @@ namespace visualizer
     return true;
   }
 
+  void _GUI::newReadyConnect()
+  {
+    QTcpSocket *client = m_visReadyServer->nextPendingConnection();
+
+    QDataStream inout( (QIODevice*)client );
+    inout.setVersion( QDataStream::Qt_4_0 );
+
+    inout << TimeManager->readyForGamelog();
+
+    client->disconnectFromHost();
+
+  }
+
   void _GUI::newConnect()
   {
     QTcpSocket *client = m_server->nextPendingConnection();
@@ -433,6 +457,8 @@ namespace visualizer
     loadGamestring( gamelog, fileSize );
 
     delete [] gamelog;
+
+    client->disconnectFromHost();
 
   }
 
