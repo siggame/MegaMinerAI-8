@@ -625,13 +625,25 @@ namespace visualizer
 
   void _GUI::stepTurnForwardShortcut()
   {
-    TimeManager->nextTurn();
+    TimeManager->setSpeed(0);
+    if( TimeManager->getTurnPercent() != 1-0.99999f && TimeManager->getTurnPercent() != 0.99999f && TimeManager->getTurnPercent() != 0.99999f-0.5f )
+    {
+      TimeManager->setTurnPercent( 0.99999f );
+    }
+
+    TimeManager->setTurnPercent( TimeManager->getTurnPercent() + 0.5f );
   }
 
 
   void _GUI::stepTurnBackShortcut()
   {
-    TimeManager->prevTurn();
+    TimeManager->setSpeed(0);
+    if( TimeManager->getTurnPercent() != 0 && TimeManager->getTurnPercent() != 1 && TimeManager->getTurnPercent() != 0.5f )
+    {
+      TimeManager->setTurnPercent( 0.0f );
+    }
+
+    TimeManager->setTurnPercent( TimeManager->getTurnPercent() - 0.5f );
   }
 
 

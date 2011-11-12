@@ -81,14 +81,18 @@ inline void operator delete [] ( void *p )
 
 namespace visualizer 
 {
-#if __DEBUG__
-#define SETUP(x) std::cout << x << " initialized at line " << __LINE__ << "." << endl;
+
 #define THROW( x, y, ... ) \
   { \
   char message[512]; \
   sprintf( message, y, ##__VA_ARGS__ ); \
   throw x( message, __FILE__, __LINE__ ); \
   } 
+
+
+#if __DEBUG__
+
+#define SETUP(x) std::cout << x << " initialized at line " << __LINE__ << "." << endl;
 
 inline void printStackTrace() 
 {
@@ -158,7 +162,6 @@ inline void openglErrorCheck()
 #else
 
 #define SETUP(x)
-#define THROW( x, y )
 #define DBG_MSG( x )
 
 #endif                           /* __DEBUG__ */

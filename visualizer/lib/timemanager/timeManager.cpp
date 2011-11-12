@@ -126,20 +126,53 @@ namespace visualizer
 
   } // _TimeManager::updateChildren()
 
-  const int& _TimeManager::getTurn() const
+  const int& _TimeManager::getTurn() 
   {
     if( m_turnCompletion < 0 )
     {
-      return m_turn -1;
+      m_turn--;
     }
+
+    if( m_turn < 0 )
+      m_turn = 0;
+
+    if( m_turn >= m_maxTurns )
+    {
+      m_turn = m_maxTurns-1;
+    }
+
     return m_turn;
 
   } // _TimeManager::getTurn()
 
-  const float& _TimeManager::getTurnPercent() const
+  void _TimeManager::setTurnPercent( const float& perc ) 
+  {
+    m_turnCompletion = perc;
+    if( m_turnCompletion < 0 )
+    {
+      m_turnCompletion += 1;
+      m_turn--;
+    } else if( m_turnCompletion >= 1 )
+    {
+      m_turnCompletion -= 1;
+      m_turn++;
+    }
+
+
+  } // _TimeManager::setTurnPercent()
+
+  const float& _TimeManager::getTurnPercent() 
   {
     if( m_turnCompletion < 0 )
-      return 1+m_turnCompletion;
+    {
+      m_turnCompletion += 1;
+      m_turn--;
+    } else if( m_turnCompletion >= 1 )
+    {
+      m_turnCompletion -= 1;
+      m_turn++;
+    }
+
     return m_turnCompletion;
 
   } // _TimeManager::getTurnPercent()
@@ -287,8 +320,6 @@ namespace visualizer
 
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
-          // CHANGE ME THIS IS BAD
-          GUI->close();
 
         }
       }

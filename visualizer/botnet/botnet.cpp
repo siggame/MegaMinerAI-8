@@ -14,6 +14,7 @@ namespace visualizer
   {
     m_game = 0;
     m_timeline = 0;
+    m_suicide = false;
     setTerminationEnabled();
   } // BotNet::BotNet()
 
@@ -82,6 +83,31 @@ namespace visualizer
     renderer->setUnitSize( w, h );
 
     resourceManager->loadResourceFile( "./plugins/botnet/textures.r" );
+
+    renderer->beginList( "drawHeader" );
+      for(int x = 0; x < m_game->states[ 0 ].width * 2; x++)
+        for(int y = 0; y < 5; y++)
+        {
+            double num = (rand()%5)/40.0f;
+            renderer->setColor( Color( num, num, num) );
+            renderer->drawQuad( x/2.0, y/2.0, 0.5, 0.5);
+        }
+    renderer->endList( "drawHeader" );
+
+    renderer->beginList( "backgroundDraw" );
+      renderer->setColor( Color( 0.05f, 0.05f, 0.05f ) );
+      renderer->drawQuad( 0, 0, m_game->states[ 0 ].width, m_game->states[ 0 ].height );
+
+      renderer->setColor( Color( 1.0, 1.0, 1.0 ) );
+      for ( int x = 0; x < m_game->states[ 0 ].width; x += 4 )
+      {
+        for ( int y = 0; y < m_game->states[ 0 ].height; y+= 4 )
+        {
+          renderer->drawTexturedQuad( x, y, 4, 4 , "nodeBackground" );
+
+        }
+      }
+    renderer->endList( "backgroundDraw" );
     
     // build the two player viruses
     for(int playerid = 0; playerid < 2; playerid++)

@@ -1,8 +1,10 @@
 #include "common.h"
 
+#if __DEBUG_NEW__
 #include <list>
 using namespace std;
 list< ALLOC_INFO > allocMap;
+
 
 void AddTrack(long int addr,  long int asize,  const char *fname, long int lnum)
 {
@@ -35,6 +37,9 @@ void RemoveTrack( long int addr )
 
 };
 
+#endif
+
+#if __DEBUG__
 void DumpUnfreed()
 {
   long int totalSize = 0;
@@ -55,3 +60,4 @@ void DumpUnfreed()
   cout << "Total Unfreed: " << totalSize << " bytes." << endl;
 
 };
+#endif
