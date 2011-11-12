@@ -14,9 +14,8 @@ class waters:
  shark1 = 0
  shark2 = 0
  shark3 = 0
- count = 0
  fishing = 0
- size = 0
+ shiver = 0
   
 class AI(BaseAI):
   """The class implementing gameplay logic."""
@@ -131,7 +130,7 @@ class AI(BaseAI):
         BaseAI.__init__(self, conn)
 """        
   def check(self,viruso,x,y):
-   print("calling check")
+   print("calling check!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
    if viruso.getOwner() != self.playerID():
     return False
     
@@ -139,7 +138,7 @@ class AI(BaseAI):
     return False
     
    for tile in self.tiles:
-    if tile.getOwner == 3 and tile.getX() == x and tile.getY() == y:
+    if tile.getX() == x and tile.getY() == y and tile.getOwner == 3:
       return False
    
    if x<0 or x>40:
@@ -159,10 +158,10 @@ class AI(BaseAI):
      if virus.getOwner() == self.playerID():
       if virus.getLevel() != viruso.getLevel():
         return False
-     elif virus.getOwner() != self.playerID():
-      if virus.getLevel() >= viruso.getLevel():
+    elif virus.getOwner() != self.playerID() and  virus.getLevel() >= viruso.getLevel():
+     if abs(virus.getX() - viruso.getX()) + abs(virus.getY() - viruso.getY()) == 2:
        return False
-    
+         
    return True
           
   def circle(self,virus, base):
@@ -299,43 +298,30 @@ class AI(BaseAI):
 
    for base in self.bases:
     if base.getOwner() == self.playerID() and base.getSpawnsLeft() == 1:
-     if waters.size < 3:
-      if waters.shark1 == 0:
-       print("shark1")
-       base.spawn(toplevel)
-       waters.shark1 = 1
-       waters.count+=1
-       waters.size+=1
-      elif waters.shark2 == 0:
-       print("shark2")
-       base.spawn(toplevel)
-       waters.shark2 = 1
-       waters.count+=1
-       waters.size+=1
-      elif waters.shark3 == 0:
-       print("shark3")
-       base.spawn(toplevel)
-       waters.shark3 = 1
-       waters.count+=1
-       waters.size+=1
-     else:
-       for virus in self.viruses:
-        if virus.getX() != base.getX() or virus.getY() != base.getY():
-         base.spawn(0)
+     print("1")
+     for shark in self.viruses:
+      if shark.getX() != base.getX() or shark.getY() != base.getY():
+       print("2")
+       if waters.shiver < 3:
+        #print("shark")
+        base.spawn(toplevel)
+        waters.shiver+=1
+       else:
+        base.spawn(0)
         #elif virus.getX() == base.getX() and virus.getY() == base.getY():
          #print("Ha! no spawn for you")
 
    for shark in self.viruses:
     if shark.getOwner() == self.playerID():# and shark.getMovesLeft == 1 and shark.getLiving == 1:
-     print("toplevel"self.toplevel,"shark level",shark.level)
      if shark.getLevel() == toplevel:
       for base in self.bases:
-       if path.count == 0:
-        self.circle(shark,base)
-       elif path.count == 1:
-        self.circle(shark,base)
-       elif path.count == 2:
-        self.circle(shark,base)
+       if base.getOwner() != self.playerID(): 
+        if path.count == 0:
+         self.circle(shark,base)
+        elif path.count == 1:
+         self.circle(shark,base)
+        elif path.count == 2:
+         self.circle(shark,base)
 
    for virus in self.viruses:
 #    print("printing something")
