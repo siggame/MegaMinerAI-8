@@ -443,17 +443,23 @@ namespace visualizer
             case COMBINE:
             {
               Animation& a = (Animation&)*(*j);
+
               Combine &c = (Combine&)*(*j);
+
               SmartPointer< virus > v = new virus( renderer );
+
               v->addKeyFrame( new StartVirus( v ) );
+
               Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
-              Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
+              Coord curCoord( m_game->states[ state ].viruses[ c.stationary ].x, m_game->states[ state ].viruses[ c.stationary ].y );
+              
               v->id = c.moving;
 
               v->x = prevCoord.x;
               v->y = prevCoord.y;
-              v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level;
+              v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level + 1;
               v->owner = m_game->states[ state - 1 ].viruses[ c.moving ].owner;
+
               if( curCoord.x > prevCoord.x )
                 v->addKeyFrame( new RightAnim );
               else if( curCoord.x < prevCoord.x )
@@ -462,7 +468,9 @@ namespace visualizer
                 v->addKeyFrame( new UpAnim );
               else
                 v->addKeyFrame( new DownAnim );
+
               v->addKeyFrame( new DrawVirus( v ) );
+
               turn.addAnimatable( v );
  
             } break;
@@ -477,6 +485,18 @@ namespace visualizer
         i++ 
         )
       {
+        if( i->second.id <= 1 )
+        {
+          PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ i->second.id ][ 0 ];
+
+          if( t->type == PLAYERTALK )
+          {
+            cout << t->message << endl;
+
+          }
+          continue;
+        }
+
         SmartPointer< virus > v = new virus( renderer );
 
         v->addKeyFrame( new StartVirus( v ) );
@@ -492,7 +512,6 @@ namespace visualizer
           j++
           )
         {
-          //cout << "ANIMATION" << endl;
 #if 1
           switch( (*j)->type )
           {
@@ -500,16 +519,35 @@ namespace visualizer
               //cout << "Combat" << endl;
             break;
             case CRASH:
-             // Crash* thing = &(*j);
-             // v.
-             // cout << "Crash" << endl;
-            break;
+            {
+              Crash* c = (Crash*)&*(*j);
+              if( c->dx-v->x > 0 )
+              {
+                v->addKeyFrame( new CrashRight( timeManager->getSpeed() ) );
+              }
+              else if( c->dx-v->x < 0 )
+              {
+                v->addKeyFrame( new CrashLeft( timeManager->getSpeed() ) );
+              } 
+              else if( c->dy-v->y > 0 )
+              {
+                v->addKeyFrame( new CrashDown( timeManager->getSpeed() ) );
+              }
+              else
+              {
+                v->addKeyFrame( new CrashUp( timeManager->getSpeed() ) );
+              }
+
+            } break;
             case CREATE:
               //cout << "Create" << endl;
             break;
             case PLAYERTALK:
-              //cout << "Playertalk" << endl;
-            break;
+            {
+              PlayerTalk* t = (PlayerTalk*)&*(*j);
+              cout << t->message << endl;
+
+            } break;
             case RECYCLE:
               //cout << "Recycle" << endl;
             break;

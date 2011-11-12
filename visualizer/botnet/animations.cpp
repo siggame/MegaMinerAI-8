@@ -1,5 +1,4 @@
 #include "animations.h"
-#include "easing_equations.h"
 
 #include <sstream>
 #include <stdio.h>
@@ -156,6 +155,85 @@ namespace visualizer
     }
 
   } // DrawTile::animate()
+
+  void CrashLeft::animate( const float& t, AnimData *d )
+  {
+    VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
+    if( t > startTime && t < endTime )
+    {
+      if( t < (startTime+endTime)/2 )
+      {
+        v->x = easeOutCubic( t-startTime, v->x, -offset, (endTime-startTime)/2 );
+      }
+      else
+      {
+        v->x = easeInCubic( t-((startTime+endTime)/2), v->x-offset, offset, (endTime-startTime)/2 );
+      }
+
+    } 
+
+  }
+
+  void CrashRight::animate( const float& t, AnimData *d )
+  {
+    VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
+    if( t > startTime && t < endTime )
+    {
+      if( t < (startTime+endTime)/2 )
+      {
+        v->x = easeOutCubic( t-startTime, v->x, offset, (endTime-startTime)/2 );
+      }
+      else
+      {
+        v->x = easeInCubic( t-((startTime+endTime)/2), v->x+offset, -offset, (endTime-startTime)/2 );
+      }
+
+    } 
+
+  }
+
+  void CrashUp::animate( const float& t, AnimData *d )
+  {
+    VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
+    if( t > startTime && t < endTime )
+    {
+      if( t < (startTime+endTime)/2 )
+      {
+        v->y = easeOutCubic( t-startTime, v->y, -offset, (endTime-startTime)/2 );
+      }
+      else
+      {
+        v->y = easeInCubic( t-((startTime+endTime)/2), v->y-offset, offset, (endTime-startTime)/2 );
+      }
+
+    } 
+
+  }
+
+  void CrashDown::animate( const float& t, AnimData *d )
+  {
+    VirusData *v = (VirusData*)d;
+
+    float offset = 0.5f * (m_dampner);
+    if( t > startTime && t < endTime )
+    {
+      if( t < (startTime+endTime)/2 )
+      {
+        v->y = easeOutCubic( t-startTime, v->y, offset, (endTime-startTime)/2 );
+      }
+      else
+      {
+        v->y = easeInCubic( t-((startTime+endTime)/2), v->y+offset, -offset, (endTime-startTime)/2 );
+      }
+
+    } 
+
+  }
+
+
 
   void LeftAnim::animate( const float& t, AnimData *d )
   {
@@ -523,6 +601,7 @@ namespace visualizer
     static bool firstRun = true;
     if( firstRun )
     {
+      m_aw->timeManager()->setSpeed(0.1);
       m_aw->timeManager()->setTurnPercent( 0 );
       firstRun = false;
 
@@ -530,11 +609,18 @@ namespace visualizer
 
     IRenderer::Alignment align = IRenderer::Center;
     stringstream ss;
+
+    float alpha = 1;
+
+    if( t < 0.3 )
+    {
+      alpha = easeInCubic( t, 0, 1, 0.3 );
+
+    }
     
-    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7): Color(0.7,0,0);
-    Color blackColor = Color(0.12,0.12,0.12);
-    m_aw->timeManager()->setSpeed(0.1);
-    m_aw->renderer().setColor( Color(1, 1, 1, 0.7) );
+    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7, alpha): Color(0.7,0,0, alpha);
+    Color blackColor = Color(0.12,0.12,0.12, alpha);
+    m_aw->renderer().setColor( Color(1, 1, 1, alpha*0.7 ) );
     m_aw->renderer().drawQuad(0, 0, 40, 20);
     
     // Draw the Winner's Name
@@ -553,7 +639,7 @@ namespace visualizer
   {
     ArenaWinnerData *a = (ArenaWinnerData*)d;
     
-    tm->setSpeed(0.1);
+    //tm->setSpeed(0.1);
     
   } // ScoreAnim::animate() 
 
