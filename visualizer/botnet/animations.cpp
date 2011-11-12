@@ -397,7 +397,7 @@ namespace visualizer
     double xTextOffset = 1.5;
     double xBottomInfoOffset = 2.875;
     double xVirusOffset = -0.75;
-    double scoreOffset = 13.25;
+    double scoreOffset = 12.75;
     string scoreFileName = "scoreboard-bytedollar-red";
     ScoreData *sd = (ScoreData*)d;
     
@@ -437,8 +437,8 @@ namespace visualizer
     m_sb->renderer().drawText(scoreOffset + 0.76, m_sb->y - 0.1, "mainFont", bottomInfo.str(), 4.5);
     
     //draw their score too
-    m_sb->renderer().drawTexturedQuad(scoreOffset + (m_sb->player ? -3.4 : 3.5), m_sb->y, 1, 1, scoreFileName);
-    m_sb->renderer().drawText( scoreOffset + (m_sb->player ? -3 : 3.9), m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
+    m_sb->renderer().drawTexturedQuad(scoreOffset + (m_sb->player ? -3.4 : 4), m_sb->y, 1, 1, scoreFileName);
+    m_sb->renderer().drawText( scoreOffset + (m_sb->player ? -3 : 4.4), m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
 #if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
@@ -629,13 +629,22 @@ namespace visualizer
     
     // Draw the Winner's Name
     m_aw->renderer().setColor( blackColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4 - 1, "mainFont", "Winner:", 4, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 - 9, "mainFont", "Winner:", 4, align );
     m_aw->renderer().setColor( teamColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4, "mainFont", m_aw->winnersName, 7, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 - 8, "mainFont", m_aw->winnersName, 7, align );
+    
+    // Draw tyhe winner's Virus
+    stringstream displayListId;
+    displayListId << "PlayerVirus-" << m_aw->winnersIndex;
+    m_aw->renderer().push();
+    m_aw->renderer().translate(m_aw->mapWidth/2 - 6.0, m_aw->mapHeight/2 -6.0);
+    m_aw->renderer().scale(12.0, 12.0);
+    m_aw->renderer().drawList(displayListId.str());
+    m_aw->renderer().pop();
     
     // Draw the Winning reason
     m_aw->renderer().setColor( blackColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2, "mainFont", m_aw->winningReason, 4.5, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 + 7, "mainFont", m_aw->winningReason, 4.5, align );
     
   } // DrawArenaWinner::animate()
   
