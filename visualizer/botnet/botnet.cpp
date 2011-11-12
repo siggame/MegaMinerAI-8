@@ -482,9 +482,6 @@ namespace visualizer
             case RECYCLE:
               //cout << "Recycle" << endl;
             break;
-            case VIRUSTALK:
-              //cout << "Virus Talk" << endl;
-            break;
           }
 #endif
         }
