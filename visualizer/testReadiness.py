@@ -4,20 +4,25 @@ import time
 import os
 import random
 
-READY_PORT = 12346
-FILE_PORT = 12345
-IPs = [ '127.0.0.1' ]
-
-while 1:
+READY_PORT = 49205
+FILE_PORT = 49235
+IPs = [ '131.151.115.150' ] 
+while 1: 
   for i in IPs:
     s = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+    print "connecting"
     s.connect( (i, READY_PORT) )
+    
+    print "connected"
 
     ready = s.recv( 1 )
 
     ready = unpack( 'b', ready )[ 0 ] 
 
     s.close()
+
+    print "ready" 
+
 
     time.sleep( 5 )
 

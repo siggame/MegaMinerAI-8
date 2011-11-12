@@ -14,6 +14,7 @@ namespace visualizer
   {
     m_game = 0;
     m_timeline = 0;
+    m_suicide = false;
     setTerminationEnabled();
   } // BotNet::BotNet()
 
@@ -550,8 +551,11 @@ namespace visualizer
       
       timeManager->setMaxTurns( frameNum );
 
+      cout << frameNum << endl;
+
       if( frameNum <= 1 )
       {
+        cout << "Playing..." << endl;
         timeManager->setTurn( 0 );
         animationEngine->registerFrameContainer( m_timeline );
         timeManager->play();
