@@ -272,7 +272,7 @@ class Match(DefaultGameWorld):
   def spawn(self, object, Level):
     return object.spawn(Level, )
 
-  @derefArgs((Player, Virus), None)
+  @derefArgs(Player, None)
   def talk(self, object, message):
     return object.talk(message, )
 

@@ -69,10 +69,6 @@ Virus = Model('Virus',
                    Variable('y',int,'The y coordinate to move to')],
       doc = "Moves a unit to the given (x,y) position"
       ),
-    Function('talk',
-      arguments = [Variable('message', str, 'The message that the Virus should say')],
-      doc = 'Allows a Virus to display a message to the screen.'
-      ),
     ],
   plural = 'Viruses'
   )
@@ -105,13 +101,6 @@ playerTalk = Animation("PlayerTalk",
   data = [
     Variable("speaker", Player),
     Variable("message", str),
-    ]
-  )
-
-virusTalk = Animation("VirusTalk",
-  data = [
-    Variable("speaker",Virus),
-    Variable("message",str)
     ]
   )
 

@@ -14,7 +14,7 @@ accounts = file(sys.argv[2])
 command = sys.argv[3]
 
 for line in accounts:
-  name, password, hint = line.split(' ')
-  print name
+  name, password = line.strip().split(' ')
   session = ssh_session(name, host, password, 1)
   session.ssh(command)
+

@@ -4,7 +4,7 @@
 
 # Some magic to get a standalone python program hooked in to django
 import sys
-sys.path = ['/home/mies/mysite', '/home/mies/mysite/mysite/'] + sys.path
+sys.path = ['/srv/', '/srv/uard/'] + sys.path
 
 from django.core.management import setup_environ
 import settings
@@ -12,12 +12,11 @@ import settings
 setup_environ(settings)
 
 # Non-Django 3rd Party Imports
-from time import sleep
 import beanstalkc
 import random
 
 # My Imports
-from thunderdome.models import Client, Game, GameData, Match
+from thunderdome.models import Game, GameData, Match
 
 def main():
     stalk = beanstalkc.Connection()
@@ -28,21 +27,19 @@ def main():
             maintain_bracket(championship)
         if stalk.stats_tube('game-requests')['current-jobs-ready'] < 1:
             generate_speculative_game(random.choice(championships))
-        sleep(2)
     
 
 def generate_speculative_game(match):
-    print "looking for a game"
     traverse = [match]
-    clients = list()
+    closed = set([match.id])
     needy_matches = list()
     ### concept here is that we're going to find matches who are waiting, and
     ### whos parents are either running or complete.
     while len(traverse) > 0:
         match = traverse.pop(0)
         if match.status == 'Waiting':
-            zeros = None
-            ones = None
+            zeros = list()
+            ones = list()
             if match.p0:
                 zeros = [match.p0]
             else: # match.father is not None. this is a fact.
@@ -54,7 +51,9 @@ def generate_speculative_game(match):
                 if match.father.status == 'Running':
                     zeros = [match.father.p0, match.father.p1]
                 if match.father.status == 'Waiting':
-                    traverse.append(match.father)
+                    if match.father.id not in closed:
+                        traverse.append(match.father)
+                        closed.add(match.father.id)
             if match.p1:
                 ones = [match.p1]
             else: # match.mother is not None. this is a fact.
@@ -66,15 +65,22 @@ def generate_speculative_game(match):
                 if match.mother.status == 'Running':
                     ones = [match.mother.p0, match.mother.p1]
                 if match.mother.status == 'Waiting':
-                    traverse.append(match.mother)
+                    if match.mother.id not in closed:
+                        traverse.append(match.mother)
+                        closed.add(match.mother.id)
+            while 'bye' in zeros:
+                zeros.remove('bye')
+            while 'bye' in ones:
+                ones.remove('bye')
             if all([zeros, ones]):
                 match.zeros = zeros
                 match.ones = ones
                 needy_matches.append(match)
                 
     if len(needy_matches)>0:
-        match = random.choice(needy_matches)
-        print len(needy_matches), " needy, chose", match.id
+      for match in needy_matches:
+#        match = random.choice(needy_matches)
+#        print len(needy_matches), " needy, chose", match.id
         if match.father_type == 'win':
             fit = lambda x: x.fitness()
         else:
@@ -84,7 +90,9 @@ def generate_speculative_game(match):
             fit = lambda x: x.fitness()
         else:
             fit = lambda x: 1 - x.fitness()            
-        p1 = SUS(match.ones,  1, fit)[0] 
+        p1 = SUS(match.ones,  1, fit)[0]
+        if p0.name == 'bye' or p1.name == 'bye':
+            continue
         game = Game.objects.create()
         GameData(game=game, client=p0).save()
         GameData(game=game, client=p1).save()
@@ -101,14 +109,19 @@ def maintain_bracket(match):
     ### for solvable dependencies. except it's not a dependency tree.
     ### it's a tournament bracket. which is jock-speak for dependency tree.
     matchlist = list()
+    closed = set()
     matchlist.append(match)
     while len(matchlist) > 0:
         match = matchlist.pop(0)
         if match.status != 'Complete':
             if match.p0 is None:
-                matchlist.append(match.father)
+                if match.father.id not in closed:
+                    matchlist.append(match.father)
+                    closed.add(match.father.id)
             if match.p1 is None:
-                matchlist.append(match.mother)
+                if match.mother.id not in closed:
+                    matchlist.append(match.mother)
+                    closed.add(match.mother.id)
             maintain_match(match)
             
             
@@ -129,10 +142,26 @@ def maintain_match(match):
             match.p1 = match.mother.winner
         if match.mother_type == 'lose' and match.mother.loser is not None:
             match.p1 = match.mother.loser
-
+                
     #  might have gotten one but not the other
     if match.p0 is None or match.p1 is None:
         match.save()
+        return
+    
+    # handle the byes
+    if match.p0.name == 'bye':
+        match.winner = match.p1
+        match.loser = match.p0
+        match.status = 'Complete'
+        match.save()
+        print "********", match.winner.name, "gets a bye"
+        return
+    elif match.p1.name == 'bye':
+        match.winner = match.p0
+        match.loser = match.p1
+        match.status = 'Complete'
+        match.save()
+        print "********", match.winner.name, "gets a bye"
         return
     
     # handle the "maybe" matches.
@@ -152,9 +181,10 @@ def maintain_match(match):
         return
     
     match.status = 'Running'
-    p0wins = len(match.games.filter(winner=match.p0).filter(loser=match.p1))
-    p1wins = len(match.games.filter(winner=match.p1).filter(loser=match.p0))
+    p0wins = match.games.filter(winner=match.p0).count()
+    p1wins = match.games.filter(winner=match.p1).count()
     ### there will be speculative games in the list. gotta check both winner and loser.
+    ### actually no there won't.
     if p0wins >= match.wins_to_win:
         match.winner = match.p0
         match.loser  = match.p1
@@ -173,6 +203,7 @@ def maintain_match(match):
     # if we made it to here, we're making games. but, how many?
     # how about "enough to possibly finish, if the loser would
     # kindly stop winning"
+    # cancel that. schedule 7 games, you cheap bastard.
     real_games = list()
     for game in list(match.games.all()):
         p0found = False
@@ -189,7 +220,8 @@ def maintain_match(match):
             game.save()
             match.games.remove(game)
             
-    count = match.wins_to_win + min([p0wins,p1wins]) - len(real_games)
+#    count = match.wins_to_win + min([p0wins,p1wins]) - len(real_games)
+    count = (match.wins_to_win * 2) - 1 - len(real_games)
     for i in xrange(count):
         game = get_game_from_pool(match)
         if game is None:
@@ -202,13 +234,13 @@ def maintain_match(match):
         else:
             print "Got", match.p0.name, "vs", match.p1.name, "from pool"
             game.claimed = True
-            same.save()
+            game.save()
         match.games.add(game)
     match.save()
 
     
 def get_game_from_pool(match):
-    for game in list(Game.objects.filter(claimed=False)):
+    for game in list(Game.objects.filter(claimed=False).order_by('id')):
         gd = list(game.gamedata_set.all())
         if gd[0].client == match.p0 and gd[1].client == match.p1:
             return game

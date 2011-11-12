@@ -4,7 +4,7 @@
 
 # Some magic to get a standalone python program hooked in to django
 import sys
-sys.path = ['/home/mies/mysite', '/home/mies/mysite/mysite/'] + sys.path
+sys.path = ['/srv/', '/srv/uard/'] + sys.path
 
 from django.core.management import setup_environ
 import settings
@@ -29,12 +29,18 @@ for client in clients:
     i += 1
 
 ### clear old stuff
+print "clearing old matches"
 for match in Match.objects.all():
     match.delete()
     
+print "clearing old tournament games"
 for game in Game.objects.filter(tournament=True):
     game.delete()
-                                    
+
+print "clearing old unclaimed games"
+for game in Game.objects.filter(claimed=False):
+    game.delete()
+
     
 ### build brackets
 a = Match.objects.create()
