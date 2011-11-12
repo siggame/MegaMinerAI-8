@@ -212,6 +212,27 @@ namespace visualizer
     { return 1; }
   }; // DownAnim
 
+  class DrawTalk: public Anim
+  {
+    public:
+      DrawTalk( talker* t )
+      {
+        m_talker = t;
+      }
+
+      void animate( const float& t, AnimData* d );
+
+      float controlDuration() const
+      { return 0; }
+
+      float totalDuration() const
+      { return 0; }
+
+    private:
+      talker* m_talker;
+
+  };
+
   class DrawVirus: public Anim
   {
     public:

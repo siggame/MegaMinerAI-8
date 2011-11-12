@@ -67,6 +67,19 @@ namespace visualizer
     
   }; // Virus
 
+  struct talker: public Animatable
+  {
+    talker( IRenderer *renderer ) : Animatable( renderer )
+    { player = 0; }
+
+    AnimData* getData()
+    { return 0; }
+
+    char player;
+    string message;
+
+  };
+
   struct base: public Animatable
   {
     base( IRenderer *renderer ) : Animatable( renderer )

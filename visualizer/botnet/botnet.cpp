@@ -477,7 +477,31 @@ namespace visualizer
           }
         }
       }
-      
+
+
+      for( size_t p = 0; p < 2; p++ )
+      {
+        
+        if( !m_game->states[ state ].animations[ p ].size() )
+          continue;
+
+        PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ p ][ 0 ]; 
+        if( t->type == PLAYERTALK )
+        {
+          SmartPointer< talker > b = new talker( renderer );
+
+          b->addKeyFrame( new StartAnim );
+          b->player = p;
+          b->message = t->message;
+
+          b->addKeyFrame( new DrawTalk( b ) );
+
+          turn.addAnimatable( b );
+
+        }
+      }
+
+     
       for
         (
         std::map<int, Virus>::iterator i = m_game->states[ state ].viruses.begin();
@@ -485,18 +509,8 @@ namespace visualizer
         i++ 
         )
       {
-        if( i->second.id <= 1 )
-        {
-          PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ i->second.id ][ 0 ];
-
-          if( t->type == PLAYERTALK )
-          {
-            cout << t->message << endl;
-
-          }
+        if( i->second.id == 0 )
           continue;
-        }
-
         SmartPointer< virus > v = new virus( renderer );
 
         v->addKeyFrame( new StartVirus( v ) );

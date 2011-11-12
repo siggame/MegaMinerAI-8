@@ -416,18 +416,8 @@ namespace visualizer
     }
     else
     {
-      srand(m_sb->teamName.length());
-      
       m_sb->renderer().drawList( "drawHeader" );
-#if 0
-      for(int x = 0; x < m_sb->mapWidth * 2; x++)
-        for(int y = 0; y < 5; y++)
-        {
-            double num = (rand()%5)/40.0f;
-            m_sb->renderer().setColor( Color( num, num, num) );
-            m_sb->renderer().drawQuad( x/2.0, y/2.0, 0.5, 0.5);
-        }
-#endif
+
     }
     
     // set the team's color and then draw thier team's name
@@ -595,6 +585,21 @@ namespace visualizer
     }
     
   } // ScoreAnim::animate() 
+
+  void DrawTalk::animate( const float& t, AnimData *d )
+  {
+    if( m_talker->player == 0 )
+    {
+      m_talker->renderer().setColor( Color( 1, 0, 0 ) );
+    }
+    else
+    {
+      m_talker->renderer().setColor( Color( 0, 0, 1 ) );
+    }
+
+    m_talker->renderer().drawText( 2.5, -1.25, "mainFont", m_talker->message, 2.75 );
+
+  } // DrawTalk::animate()
   
   void DrawArenaWinner::animate( const float& t, AnimData *d )
   {
