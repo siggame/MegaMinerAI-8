@@ -209,17 +209,8 @@ namespace visualizer
 
   void DrawBackground::animate( const float& t, AnimData *d )
   {
-    for ( int x = 0; x < m_background->mapWidth; x += 4 )
-    {
-      for ( int y = 0; y < m_background->mapHeight; y+= 4 )
-      {
-        m_background->renderer().setColor( Color( 0.05, 0.05, 0.05 ) );
-        m_background->renderer().drawQuad( x, y, 4, 4 );
-        
-        m_background->renderer().setColor( Color( 1.0, 1.0, 1.0 ) );
-        m_background->renderer().drawTexturedQuad( x, y, 4, 4 , "nodeBackground" );
-      }
-    }
+    m_background->renderer().drawList( "backgroundDraw" );
+
   } // DrawBackground::animate
   
   void DrawGrid::animate( const float& t, AnimData *d )
@@ -527,10 +518,8 @@ namespace visualizer
   void DrawArenaWinner::animate( const float& t, AnimData *d )
   {
     static bool firstRun = true;
-    cout << "DRAWING: " << t  << endl;
     if( firstRun )
     {
-      cout << "FIRST" << endl;
       m_aw->timeManager()->setTurnPercent( 0 );
       firstRun = false;
 
