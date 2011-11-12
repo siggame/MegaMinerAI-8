@@ -98,7 +98,7 @@ class Player:
     #New way handled by match
 
   def talk(self, message):
-    self.game.animations.append(['PlayerTalk', self.id, message])
+    self.game.animations.append(['Player-Talk', self.id, message])
     return True
 
 class Tile(Mappable):
