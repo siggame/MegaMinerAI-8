@@ -513,22 +513,21 @@ namespace visualizer
             case CRASH:
             {
               Crash* c = (Crash*)&*(*j);
-              cout << c->dx << ", " << v->x << endl;
               if( c->dx-v->x > 0 )
               {
-                v->addKeyFrame( new CrashRight );
+                v->addKeyFrame( new CrashRight( timeManager->getSpeed() ) );
               }
               else if( c->dx-v->x < 0 )
               {
-                v->addKeyFrame( new CrashLeft );
+                v->addKeyFrame( new CrashLeft( timeManager->getSpeed() ) );
               } 
               else if( c->dy-v->y > 0 )
               {
-                v->addKeyFrame( new CrashDown );
+                v->addKeyFrame( new CrashDown( timeManager->getSpeed() ) );
               }
               else
               {
-                v->addKeyFrame( new CrashUp );
+                v->addKeyFrame( new CrashUp( timeManager->getSpeed() ) );
               }
 
             } break;

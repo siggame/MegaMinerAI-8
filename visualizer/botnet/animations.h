@@ -82,48 +82,76 @@ namespace visualizer
   class CrashLeft: public Anim
   {
     public:
+      CrashLeft( const float& d )
+      {
+        m_dampner = d;
+      }
+
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
       float totalDuration() const
       { return 1; }
+
+    private:
+      float m_dampner;
 
   }; // CrashLeft
 
   class CrashRight: public Anim
   {
     public:
+      CrashRight( const float& d )
+      {
+        m_dampner = d;
+      }
+
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
       float totalDuration() const
       { return 1; }
+    private:
+      float m_dampner;
 
   }; // CrashRight
 
   class CrashUp: public Anim
   {
     public:
+      CrashUp( const float& d )
+      {
+        m_dampner = d;
+      }
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
       float totalDuration() const
       { return 1; }
+
+    private:
+      float m_dampner;
 
   }; // CrashUp
 
   class CrashDown: public Anim
   {
     public:
+      CrashDown( const float& d )
+      {
+        m_dampner = d;
+      }
       void animate( const float& t, AnimData *d );
 
       float controlDuration() const
       { return 1; }
       float totalDuration() const
       { return 1; }
+    private:
+      float m_dampner;
 
   }; // CrashDown
 
