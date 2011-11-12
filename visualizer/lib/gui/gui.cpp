@@ -1,6 +1,7 @@
 #include "gui.h"
 #include "../games/games.h"
 #include "../renderer/renderer.h"
+#include "../beanstalker/beanstalker.h"
 #include <QDesktopServices>
 #include <Qt>
 
@@ -318,6 +319,29 @@ namespace visualizer
     Renderer->destroy();
   }
 
+  void _GUI::readyToGame()
+  {
+
+    QDataStream inout( m_sock );
+    inout.setVersion( QDataStream::Qt_4_0 );
+
+    cout << "AVAIL: " << m_sock->bytesAvailable() << endl;
+
+    char *buff = new char[ m_sock->bytesAvailable() ];
+    inout.readRawData( buff, m_sock->bytesAvailable() );
+
+    cout << buff << endl;
+
+    delete [] buff;
+
+
+    cout << "READY YO" << endl;
+  }
+
+  void _GUI::displayError( const QAbstractSocket::SocketError& err )
+  {
+    cout << err << endl;
+  }
 
   bool _GUI::doSetup()
   {
@@ -326,6 +350,50 @@ namespace visualizer
 
     if( OptionsMan->getBool( "server" ) )
     {
+      BeanStalker b( "r09mannr4.device.mst.edu", 11300 );
+
+      cout << b.sendCommand( "use visualizer-requests" ) << endl;;
+      cout << b.sendCommand( "peek-ready" ) << endl;;
+
+      cout << b.reserve() << endl;
+      cout << "BITCHIN" << endl;
+#if 0
+      cout << "Connecting..."  << endl;
+      QTcpSocket *s = m_sock = new QTcpSocket( this );
+      connect( s, SIGNAL( readyRead() ), this, SLOT( readyToGame() ) );
+      connect(s, SIGNAL(error(QAbstractSocket::SocketError)),
+              this, SLOT(displayError(QAbstractSocket::SocketError)));
+
+      s->connectToHost( "r09mannr4.device.mst.edu", 11300 );
+
+      if( !s->waitForConnected( 5000 ) )
+      {
+        cout << "Could Not Connect!" << endl;
+      }
+
+      cout << "Connected, I guess." << endl;
+
+      QDataStream inout( s );
+      inout.setVersion( QDataStream::Qt_4_0 );
+      string cmd = "reserve-with-timeout 2\r\n";
+      inout.writeRawData( cmd.c_str(), cmd.size() );
+
+      cout << "DLKFLFKJD" << endl;
+
+#endif
+
+#if 0
+      while( s->bytesAvailable() < (int)sizeof(quint16) )
+      {
+        if( !s->waitForReadyRead( 5000 ) )
+        {
+          cout << "NOT READY" << endl;
+          return false;
+        }
+      }
+#endif
+
+#if 0
       m_server = new QTcpServer( this );
       if( !m_server->listen( QHostAddress::Any, OptionsMan->getInt( "serverPort" ) ) )
       {
@@ -351,6 +419,7 @@ namespace visualizer
 
       connect( m_server, SIGNAL( newConnection() ), this, SLOT( newConnect() ) );
       connect( m_visReadyServer, SIGNAL( newConnection() ), this, SLOT( newReadyConnect() ) );
+#endif
 
     }
 
@@ -403,6 +472,7 @@ namespace visualizer
 
   void _GUI::newReadyConnect()
   {
+#if 0
     QTcpSocket *client = m_visReadyServer->nextPendingConnection();
 
     QDataStream inout( (QIODevice*)client );
@@ -414,10 +484,12 @@ namespace visualizer
 
     client->disconnectFromHost();
 
+#endif
   }
 
   void _GUI::newConnect()
   {
+#if 0
     QTcpSocket *client = m_server->nextPendingConnection();
 
     QDataStream inout( (QIODevice*)client );
@@ -461,6 +533,7 @@ namespace visualizer
     delete [] gamelog;
 
     client->disconnectFromHost();
+#endif
 
   }
 

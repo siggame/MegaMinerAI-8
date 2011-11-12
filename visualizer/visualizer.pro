@@ -11,12 +11,14 @@ PPATHS += ./lib/gameobject/ \
     ./lib/timemanager/ \
     ./lib/gameobject/ \
     ./lib/gui/ \
+    ./lib/beanstalker/ \
     ./common/
 SOURCES += main.cpp \
     ./lib/gameobject/*.cpp \
     ./lib/optionsmanager/*.cpp \
     ./lib/gui/*.cpp \
     ./lib/games/*.cpp \
+    ./lib/beanstalker/*.cpp \
     ./lib/timemanager/*.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
@@ -31,7 +33,8 @@ HEADERS += ./lib/manager/*.h \
     ./lib/timemanager/*.h \
     ./lib/gameobject/*.h \
     ./lib/optionsmanager/*.h \
-    ./lib/renderer/*.h* \
+    ./lib/renderer/*.h \
+    ./lib/beanstalker/*.h \
     ./lib/gui/*.h \
     ./lib/objectmanager/*.h \
     ./lib/goc_controlbar.h \

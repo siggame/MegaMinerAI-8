@@ -158,6 +158,11 @@ class _GUI : public QMainWindow, public IGUI
     void setFullScreen(bool);
 
   private slots:
+
+    void displayError( const QAbstractSocket::SocketError& err );
+
+    void readyToGame();
+
     void closeEvent( QCloseEvent* event );
     void helpContents();
     void fileOpen();
@@ -193,8 +198,11 @@ class _GUI : public QMainWindow, public IGUI
 
   private:
 
+#if 0
     QTcpServer* m_server;
     QTcpServer* m_visReadyServer;
+#endif
+    QTcpSocket* m_sock;
 
     QTableWidget * m_globalStats;
     QTableWidget * m_selectionStats;

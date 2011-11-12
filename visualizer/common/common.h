@@ -89,6 +89,12 @@ namespace visualizer
   throw x( message, __FILE__, __LINE__ ); \
   } 
 
+#define WARNING( y, ... ) \
+  { \
+  char message[512]; \
+  sprintf( message, y, ##__VA_ARGS__ ); \
+  cerr << "WARNING: " << message << endl; \
+  } 
 
 #if __DEBUG__
 
@@ -105,15 +111,6 @@ inline void printStackTrace()
   backtrace_symbols_fd( array, size, 2 );
 #endif
 }
-
-#define WARNING( y, ... ) \
-  { \
-  char message[512]; \
-  sprintf( message, y, ##__VA_ARGS__ ); \
-  cerr << "WARNING: " << message << endl; \
-  printStackTrace(); \
-  } 
-
 inline void openglErrorCheck()
 {
   unsigned int err;
