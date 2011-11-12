@@ -119,6 +119,7 @@ namespace visualizer
       int loop_start;
       int loop_end;
 
+      bool m_breakout;
       /// @TODO Rename this variable.  It's not a good name at all
 
       /// This is the amount of the current turn that has been 
