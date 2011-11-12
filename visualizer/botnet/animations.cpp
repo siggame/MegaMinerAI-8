@@ -340,6 +340,8 @@ namespace visualizer
     {
       srand(m_sb->teamName.length());
       
+      m_sb->renderer().drawList( "drawHeader" );
+#if 0
       for(int x = 0; x < m_sb->mapWidth * 2; x++)
         for(int y = 0; y < 5; y++)
         {
@@ -347,6 +349,7 @@ namespace visualizer
             m_sb->renderer().setColor( Color( num, num, num) );
             m_sb->renderer().drawQuad( x/2.0, y/2.0, 0.5, 0.5);
         }
+#endif
     }
     
     // set the team's color and then draw thier team's name
