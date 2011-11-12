@@ -208,7 +208,7 @@ namespace visualizer
       state++
       )
     {
-      bool drawArenaWinner;
+      bool drawArenaWinner = false;
       size_t originalState = state;
       
       if(state >= m_game->states.size())
