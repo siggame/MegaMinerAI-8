@@ -29,7 +29,11 @@ static bool parse${model.name}(${model.name}& object, sexp_t* expression)
   sub = expression->list;
 
 %   for datum in model.data:
-  if ( !sub ) goto ERROR;
+  if ( !sub ) 
+  {
+    cerr << "Error in parse${model.name}.\n Parsing: " << *expression << endl;
+    return false;
+  }
 
 %     if datum.type == int:
   object.${datum.name} = atoi(sub->val);
@@ -45,9 +49,6 @@ static bool parse${model.name}(${model.name}& object, sexp_t* expression)
 %  endfor
   return true;
 
-  ERROR:
-  cerr << "Error in parse${model.name}.\n Parsing: " << *expression << endl;
-  return false;
 }
 % endfor
 
@@ -59,7 +60,11 @@ static bool parse${capitalize(animation.name)}(${animation.name}& object, sexp_t
   object.type = ${animation.name.upper()};
   sub = expression->list->next;
 %   for datum in animation.data:
-  if( !sub ) goto ERROR;
+  if( !sub ) 
+  {
+    cerr << "Error in parse${animation.name}.\n Parsing: " << *expression << endl;
+    return false;
+  }
 %     if datum.type == int or isinstance(datum.type, Model):
   object.${datum.name} = atoi(sub->val);
 %     elif datum.type == float:
@@ -73,10 +78,6 @@ static bool parse${capitalize(animation.name)}(${animation.name}& object, sexp_t
 %  endfor
   return true;
 
-
-  ERROR:
-  cerr << "Error in parse${animation.name}.\n Parsing: " << *expression << endl;
-  return false;
 }
 % endfor
 
