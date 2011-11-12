@@ -625,13 +625,15 @@ namespace visualizer
 
   void _GUI::stepTurnForwardShortcut()
   {
-    TimeManager->nextTurn();
+    TimeManager->pause();
+    TimeManager->setTurnPercent( TimeManager->getTurnPercent() + 0.5 );
   }
 
 
   void _GUI::stepTurnBackShortcut()
   {
-    TimeManager->prevTurn();
+    TimeManager->pause();
+    TimeManager->setTurnPercent( TimeManager->getTurnPercent() - 0.5 );
   }
 
 

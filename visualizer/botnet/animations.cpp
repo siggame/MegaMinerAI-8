@@ -25,8 +25,8 @@ namespace visualizer
     
     // draw the virus's display list!
     v.renderer().push();
-    v.renderer().translate(vd->x, vd->y);
-    v.renderer().drawList(displayListId.str());
+      v.renderer().translate(vd->x, vd->y);
+      v.renderer().drawList(displayListId.str());
     v.renderer().pop();
     
     // draw the virus's level
@@ -162,7 +162,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = easeOutCubic( t-startTime, v->x, -1, endTime-startTime );
+      v->x = easeInOutCubic( t-startTime, v->x, -1, endTime-startTime );
     } else if ( t >= endTime )
     {
       v->x--;
@@ -174,7 +174,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->x = easeOutCubic( t-startTime, v->x, 1, endTime-startTime );
+      v->x = easeInOutCubic( t-startTime, v->x, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->x++;
@@ -186,7 +186,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = easeOutCubic( t-startTime, v->y, 1, endTime-startTime );
+      v->y = easeInOutCubic( t-startTime, v->y, 1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y++;
@@ -199,7 +199,7 @@ namespace visualizer
     VirusData *v = (VirusData*)d;
     if( t > startTime && t < endTime )
     {
-      v->y = easeOutCubic( t-startTime, v->y, -1, endTime-startTime );
+      v->y = easeInOutCubic( t-startTime, v->y, -1, endTime-startTime );
     } else if( t >= endTime )
     {
       v->y--;
