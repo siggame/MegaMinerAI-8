@@ -18,7 +18,6 @@ const int CREATE = 3;
 const int MOVE = 4;
 const int PLAYERTALK = 5;
 const int RECYCLE = 6;
-const int VIRUSTALK = 7;
 
 struct Mappable
 {
@@ -126,14 +125,6 @@ struct Recycle : public Animation
   int base;
 
   friend std::ostream& operator<<(std::ostream& stream, Recycle obj);
-};
-
-struct VirusTalk : public Animation
-{
-  int speaker;
-  char* message;
-
-  friend std::ostream& operator<<(std::ostream& stream, VirusTalk obj);
 };
 
 

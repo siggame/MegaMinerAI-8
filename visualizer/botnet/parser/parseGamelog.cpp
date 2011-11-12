@@ -342,27 +342,6 @@ static bool parseRecycle(Recycle& object, sexp_t* expression)
   cerr << "Error in parseRecycle.\n Parsing: " << *expression << endl;
   return false;
 }
-static bool parseVirusTalk(VirusTalk& object, sexp_t* expression)
-{
-  sexp_t* sub;
-  if ( !expression ) return false;
-  object.type = VIRUSTALK;
-  sub = expression->list->next;
-  if( !sub ) goto ERROR;
-  object.speaker = atoi(sub->val);
-  sub = sub->next;
-  if( !sub ) goto ERROR;
-  object.message = new char[strlen(sub->val)+1];
-  strncpy(object.message, sub->val, strlen(sub->val));
-  object.message[strlen(sub->val)] = 0;
-  sub = sub->next;
-  return true;
-
-
-  ERROR:
-  cerr << "Error in parseVirusTalk.\n Parsing: " << *expression << endl;
-  return false;
-}
 
 static bool parseSexp(Game& game, sexp_t* expression)
 {
@@ -531,14 +510,6 @@ static bool parseSexp(Game& game, sexp_t* expression)
       {
         SmartPointer<Recycle> animation = new Recycle;
         if ( !parseRecycle(*animation, expression) )
-          return false;
-
-        animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
-      }
-      if(string(ToLower( sub->val ) ) == "virus-talk")
-      {
-        SmartPointer<VirusTalk> animation = new VirusTalk;
-        if ( !parseVirusTalk(*animation, expression) )
           return false;
 
         animations[ ((AnimOwner*)&*animation)->owner ].push_back( animation );
