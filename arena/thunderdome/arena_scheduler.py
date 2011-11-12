@@ -4,7 +4,7 @@
 
 # Some magic to get a standalone python program hooked in to django
 import sys
-sys.path = ['/home/mies/mysite', '/home/mies/mysite/mysite/'] + sys.path
+sys.path = ['/srv/uard', '/srv'] + sys.path
 
 from django.core.management import setup_environ
 import settings
@@ -26,12 +26,12 @@ def main():
     while True:
         if stalk.stats_tube('game-requests')['current-jobs-ready'] < 1:
             schedule_a_game()
-        sleep(1)
+        sleep(0.2)
     stalk.close()
     
     
 def schedule_a_game():
-    clients = list(Client.objects.all()) # list so I can .remove()
+    clients = list(Client.objects.exclude(name='bye')) # list so I can .remove
     worst_client = min(clients, key = lambda x: x.last_game())
     clients.remove(worst_client)
     partner = random.choice(clients)

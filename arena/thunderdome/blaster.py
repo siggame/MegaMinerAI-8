@@ -17,7 +17,8 @@ import time
 
 def main():
     start_server()
-    start_referee("%s/server" % os.getcwd())
+    start_referee(1, "%s/server" % os.getcwd())
+    start_referee(2, "%s/server" % os.getcwd())
     while True:
         time.sleep(1)
 
@@ -28,9 +29,16 @@ def start_server():
                             stdout=file("/dev/null", "w"),
                             stderr=subprocess.STDOUT)
 
-
-def start_referee(server_path):
+        
+def start_referee(ref_id, server_path):
+    subprocess.call(['rm', '-rf', str(ref_id)])
+    subprocess.call(['mkdir', str(ref_id)])
+    subprocess.call(['ln', '../referee.py'], cwd='%s/' % ref_id)
     command = ['./referee.py', server_path]
-    return subprocess.Popen(command)
+    return subprocess.Popen(command, cwd=str(ref_id))
+
+#def start_referee(server_path):
+#    command = ['./referee.py', server_path]
+#    return subprocess.Popen(command)
 
 main()

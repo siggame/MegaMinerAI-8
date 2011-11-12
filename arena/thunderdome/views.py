@@ -38,7 +38,8 @@ def health(request):
     p['sanity'] = p['ready_requests']  == p['scheduled_games'] \
               and p['running_games'] == p['running_requests']
     
-    p['matches'] = Match.objects.all()
+    p['matches'] = list(Match.objects.order_by('-id'))
+    p['matches'].sort(key=lambda x: x.status, reverse=True)
 
     return render_to_response('thunderdome/health.html', p)
 
