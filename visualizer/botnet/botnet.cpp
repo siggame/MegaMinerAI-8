@@ -353,6 +353,8 @@ namespace visualizer
       score1->cycles = m_game->states[ state ].players[ 0 ].cycles;
       score1->connectedTiles = connectedTiles[0];
       score1->unconnectedTiles = tileCounts[0] - connectedTiles[0];
+      score1->enemyConnectedTiles = connectedTiles[1];
+      score1->enemyUnconnectedTiles = tileCounts[1] - connectedTiles[1];
       score1->player = 0;
       score1->x = 1.0f;
       score1->y = 0.2f;
@@ -365,12 +367,15 @@ namespace visualizer
       score2->cycles = m_game->states[ state ].players[ 1 ].cycles;
       score2->connectedTiles = connectedTiles[1];
       score2->unconnectedTiles = tileCounts[1] - connectedTiles[1];
+      score2->enemyConnectedTiles = connectedTiles[0];
+      score2->enemyUnconnectedTiles = tileCounts[0] - connectedTiles[0];
       score2->player = 1;
       score2->y = 0.2f;
       score2->x = m_game->states[ 0 ].width-1;
       score2->teamName = m_game->states[ state ].players[ 1 ].playerName;
       score2->mapWidth  = m_game->states[0].width;
       score2->enemyScore = m_game->states[ state ].players[ 0 ].byteDollars;
+      score2->neutralTiles = tileCounts[2];
       if(state > 0)
         score2->addKeyFrame
         (

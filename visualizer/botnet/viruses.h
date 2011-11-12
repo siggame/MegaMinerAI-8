@@ -156,6 +156,8 @@ namespace visualizer
     int connectedTiles;
     int unconnectedTiles;
     int neutralTiles;
+    int enemyConnectedTiles;
+    int enemyUnconnectedTiles;
     int enemyScore;
     
     string teamName;
