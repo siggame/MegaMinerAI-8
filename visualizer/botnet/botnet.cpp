@@ -443,17 +443,48 @@ namespace visualizer
             case COMBINE:
             {
               Animation& a = (Animation&)*(*j);
+
               Combine &c = (Combine&)*(*j);
+
               SmartPointer< virus > v = new virus( renderer );
+
               v->addKeyFrame( new StartVirus( v ) );
-              Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
-              Coord curCoord( m_game->states[ state - 1 ].viruses[ c.stationary ].x, m_game->states[ state - 1 ].viruses[ c.stationary ].y );
+
+              cout << i->first << endl;
+              cout << c.moving << endl;
+              cout << c.stationary << endl;
+
+              for
+                (
+                std::vector< SmartPointer< Animation > >::iterator k = m_game->states[ state ].animations[ c.stationary ].begin();
+                k != m_game->states[ state ].animations[ c.stationary ].end();
+                k++
+                )
+              {
+                if( (*k)->type == MOVE )
+                {
+                  cout << "MOVE" << endl;
+                  Move* m = (Move*)&*j;
+                  cout << *m << endl;
+                }
+
+              }
+ 
+              Coord prevCoord( m_game->states[ state ].viruses[ c.moving ].x, m_game->states[ state ].viruses[ c.moving ].y );
+              Coord curCoord( m_game->states[ state ].viruses[ c.stationary ].x, m_game->states[ state ].viruses[ c.stationary ].y );
+              
+              cout << m_game->states[ state ].viruses[ c.stationary ].id << endl;
+              cout << m_game->states[ state ].viruses[ c.moving ].id << endl;;
+              cout << "P: " << prevCoord.x << ", " << prevCoord.y << endl;
+              cout << "C: " << curCoord.x << ", " << curCoord.y << endl;
+
               v->id = c.moving;
 
               v->x = prevCoord.x;
               v->y = prevCoord.y;
               v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level;
               v->owner = m_game->states[ state - 1 ].viruses[ c.moving ].owner;
+
               if( curCoord.x > prevCoord.x )
                 v->addKeyFrame( new RightAnim );
               else if( curCoord.x < prevCoord.x )
@@ -462,7 +493,9 @@ namespace visualizer
                 v->addKeyFrame( new UpAnim );
               else
                 v->addKeyFrame( new DownAnim );
+
               v->addKeyFrame( new DrawVirus( v ) );
+
               turn.addAnimatable( v );
  
             } break;

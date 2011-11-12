@@ -523,6 +523,7 @@ namespace visualizer
     static bool firstRun = true;
     if( firstRun )
     {
+      m_aw->timeManager()->setSpeed(0.1);
       m_aw->timeManager()->setTurnPercent( 0 );
       firstRun = false;
 
@@ -530,11 +531,18 @@ namespace visualizer
 
     IRenderer::Alignment align = IRenderer::Center;
     stringstream ss;
+
+    float alpha = 1;
+
+    if( t < 0.3 )
+    {
+      alpha = easeInCubic( t, 0, 1, 0.3 );
+
+    }
     
-    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7): Color(0.7,0,0);
-    Color blackColor = Color(0.12,0.12,0.12);
-    m_aw->timeManager()->setSpeed(0.1);
-    m_aw->renderer().setColor( Color(1, 1, 1, 0.7) );
+    Color teamColor = m_aw->winnersIndex ? Color(0,0,0.7, alpha): Color(0.7,0,0, alpha);
+    Color blackColor = Color(0.12,0.12,0.12, alpha);
+    m_aw->renderer().setColor( Color(1, 1, 1, alpha*0.7 ) );
     m_aw->renderer().drawQuad(0, 0, 40, 20);
     
     // Draw the Winner's Name
@@ -553,7 +561,7 @@ namespace visualizer
   {
     ArenaWinnerData *a = (ArenaWinnerData*)d;
     
-    tm->setSpeed(0.1);
+    //tm->setSpeed(0.1);
     
   } // ScoreAnim::animate() 
 

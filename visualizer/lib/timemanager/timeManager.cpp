@@ -56,13 +56,7 @@ namespace visualizer
 
   void _TimeManager::setSpeed( const float& speed )
   {
-    /// Speed will be measured in turns / time (s).
-    /// Setting the speed to 1 would mean 1 turn / second
-    /// .5 would mean 1 turn / 2 seconds
-    /// 1.5 would mean 3 turns / 2 seconds
-    /// etc. etc.
     m_speed = speed;
-    
 
   } // _TimeManager::setSpeed()
 
@@ -294,6 +288,7 @@ namespace visualizer
       m_turn = 0;
     }
 
+
    
     if( m_turnCompletion > 1 )
     {
@@ -316,12 +311,7 @@ namespace visualizer
 
         m_turn = m_numTurns-1;
         // Very close to the next turn, but not quite
-        m_turnCompletion = 0.99999999;
-
-        if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
-        {
-
-        }
+        m_turnCompletion = 0.99999f;
       }
 
     }
