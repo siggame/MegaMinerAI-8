@@ -37,7 +37,7 @@ def grab_game_number(url):
 
 def get_next_gamelog_url():
     subprocess.call(['wget', '-N',
-                     'http://r09mannr4.device.mst.edu:8080/uard/thunderdome/get_next_game_url_to_visualize'])
+                     'http://mnuck.com/mies/thunderdome/get_next_game_url_to_visualize'])
     f = open('get_next_game_url_to_visualize', 'r')
     line = f.readline()
     f.close()
@@ -48,7 +48,7 @@ def get_next_gamelog_url():
 def mark_game_visualized(game_url):
     number = grab_game_number(game_url)
     subprocess.call(['wget', '-N',
-                     'http://r09mannr4.device.mst.edu:8080/uard/thunderdome/game_visualized/%s' % number])
+                     'http://mnuck.com/mies/thunderdome/game_visualized/%s' % number])
     os.remove(number)
 
 main()

@@ -126,7 +126,7 @@ class Match(models.Model):
     mother = models.ForeignKey('self', null=True, blank=True,
                                related_name='matches_mothered')
     games  = models.ManyToManyField(Game)
-    losses_to_eliminate = models.IntegerField(default=2)
+    losses_to_eliminate = models.IntegerField(default=3)
     wins_to_win = models.IntegerField(default=4)
     father_type = models.TextField(default='win')
     mother_type = models.TextField(default='win')

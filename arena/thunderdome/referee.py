@@ -188,6 +188,8 @@ def parse_gamelog(game_number):
         return match.groups()[1]
     return None
 
+
+import md5
     
 def push_gamelog(game, game_number):
     ### Push the gamelog to S3
@@ -197,7 +199,10 @@ def push_gamelog(game, game_number):
     c = boto.connect_s3(access_cred, secret_cred)
     b = c.get_bucket(bucket_name)
     k = boto.s3.key.Key(b)
-    k.key = "%s.glog" % game.pk
+
+    salt = md5.md5(str(random.random())).hexdigest()[:5]
+    k.key = "%s-%s.glog" % (game.pk, salt)
+    
     k.set_contents_from_filename("%s/logs/%s.glog" % \
                                      (server_path, game_number))
     k.set_acl('public-read')
