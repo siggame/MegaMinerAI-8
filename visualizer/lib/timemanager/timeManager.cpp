@@ -126,12 +126,21 @@ namespace visualizer
 
   } // _TimeManager::updateChildren()
 
-  const int& _TimeManager::getTurn() const
+  const int& _TimeManager::getTurn() 
   {
     if( m_turnCompletion < 0 )
     {
-      return m_turn -1;
+      m_turn--;
     }
+
+    if( m_turn < 0 )
+      m_turn = 0;
+
+    if( m_turn >= m_maxTurns )
+    {
+      m_turn = m_maxTurns-1;
+    }
+
     return m_turn;
 
   } // _TimeManager::getTurn()

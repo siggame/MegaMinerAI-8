@@ -82,7 +82,7 @@ namespace visualizer
 
       // @NOTE These five will probably have their names changed
       void setTurn( const int& turn );
-      const int& getTurn() const;
+      const int& getTurn();
 
       void setTurnPercent( const float& perc );
       const float& getTurnPercent() const;
