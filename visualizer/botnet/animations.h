@@ -4,6 +4,8 @@
 #include "viruses.h"
 #include "irenderer.h"
 #include "igame.h"
+#include "easing_equations.h"
+
 
 namespace visualizer
 {
@@ -79,12 +81,20 @@ namespace visualizer
       virus* m_virus;
   };
 
+  inline float dampen( const float& d )
+  {
+    if( d > 12 )
+      return 0;
+
+    return easeOutCubic( d-1, 1, -1, 11 );
+  }
+
   class CrashLeft: public Anim
   {
     public:
       CrashLeft( const float& d )
       {
-        m_dampner = d;
+        m_dampner = dampen(d);
       }
 
       void animate( const float& t, AnimData *d );
@@ -104,7 +114,7 @@ namespace visualizer
     public:
       CrashRight( const float& d )
       {
-        m_dampner = d;
+        m_dampner = dampen(d);
       }
 
       void animate( const float& t, AnimData *d );
@@ -123,7 +133,7 @@ namespace visualizer
     public:
       CrashUp( const float& d )
       {
-        m_dampner = d;
+        m_dampner = dampen(d);
       }
       void animate( const float& t, AnimData *d );
 
@@ -142,7 +152,7 @@ namespace visualizer
     public:
       CrashDown( const float& d )
       {
-        m_dampner = d;
+        m_dampner = dampen(d);
       }
       void animate( const float& t, AnimData *d );
 

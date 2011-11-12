@@ -1,5 +1,4 @@
 #include "animations.h"
-#include "easing_equations.h"
 
 #include <sstream>
 #include <stdio.h>
@@ -160,15 +159,16 @@ namespace visualizer
   void CrashLeft::animate( const float& t, AnimData *d )
   {
     VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
     if( t > startTime && t < endTime )
     {
       if( t < (startTime+endTime)/2 )
       {
-        v->x = easeOutCubic( t-startTime, v->x, -0.5f, (endTime-startTime)/2 );
+        v->x = easeOutCubic( t-startTime, v->x, -offset, (endTime-startTime)/2 );
       }
       else
       {
-        v->x = easeInCubic( t-((startTime+endTime)/2), v->x-0.5f, 0.5f, (endTime-startTime)/2 );
+        v->x = easeInCubic( t-((startTime+endTime)/2), v->x-offset, offset, (endTime-startTime)/2 );
       }
 
     } 
@@ -178,15 +178,16 @@ namespace visualizer
   void CrashRight::animate( const float& t, AnimData *d )
   {
     VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
     if( t > startTime && t < endTime )
     {
       if( t < (startTime+endTime)/2 )
       {
-        v->x = easeOutCubic( t-startTime, v->x, 0.5f, (endTime-startTime)/2 );
+        v->x = easeOutCubic( t-startTime, v->x, offset, (endTime-startTime)/2 );
       }
       else
       {
-        v->x = easeInCubic( t-((startTime+endTime)/2), v->x+0.5f, -0.5f, (endTime-startTime)/2 );
+        v->x = easeInCubic( t-((startTime+endTime)/2), v->x+offset, -offset, (endTime-startTime)/2 );
       }
 
     } 
@@ -196,15 +197,16 @@ namespace visualizer
   void CrashUp::animate( const float& t, AnimData *d )
   {
     VirusData *v = (VirusData*)d;
+    float offset = 0.5f * (m_dampner);
     if( t > startTime && t < endTime )
     {
       if( t < (startTime+endTime)/2 )
       {
-        v->y = easeOutCubic( t-startTime, v->y, -0.5, (endTime-startTime)/2 );
+        v->y = easeOutCubic( t-startTime, v->y, -offset, (endTime-startTime)/2 );
       }
       else
       {
-        v->y = easeInCubic( t-((startTime+endTime)/2), v->y-0.5, 1, (endTime-startTime)/2 );
+        v->y = easeInCubic( t-((startTime+endTime)/2), v->y-offset, offset, (endTime-startTime)/2 );
       }
 
     } 
@@ -214,15 +216,17 @@ namespace visualizer
   void CrashDown::animate( const float& t, AnimData *d )
   {
     VirusData *v = (VirusData*)d;
+
+    float offset = 0.5f * (m_dampner);
     if( t > startTime && t < endTime )
     {
       if( t < (startTime+endTime)/2 )
       {
-        v->y = easeOutCubic( t-startTime, v->y, 1, (endTime-startTime)/2 );
+        v->y = easeOutCubic( t-startTime, v->y, offset, (endTime-startTime)/2 );
       }
       else
       {
-        v->y = easeInCubic( t-((startTime+endTime)/2), v->y+1, -1, (endTime-startTime)/2 );
+        v->y = easeInCubic( t-((startTime+endTime)/2), v->y+offset, -offset, (endTime-startTime)/2 );
       }
 
     } 
