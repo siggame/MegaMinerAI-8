@@ -148,13 +148,31 @@ namespace visualizer
   void _TimeManager::setTurnPercent( const float& perc ) 
   {
     m_turnCompletion = perc;
+    if( m_turnCompletion < 0 )
+    {
+      m_turnCompletion += 1;
+      m_turn--;
+    } else if( m_turnCompletion >= 1 )
+    {
+      m_turnCompletion -= 1;
+      m_turn++;
+    }
+
 
   } // _TimeManager::setTurnPercent()
 
-  const float& _TimeManager::getTurnPercent() const
+  const float& _TimeManager::getTurnPercent() 
   {
     if( m_turnCompletion < 0 )
-      return 1+m_turnCompletion;
+    {
+      m_turnCompletion += 1;
+      m_turn--;
+    } else if( m_turnCompletion >= 1 )
+    {
+      m_turnCompletion -= 1;
+      m_turn++;
+    }
+
     return m_turnCompletion;
 
   } // _TimeManager::getTurnPercent()

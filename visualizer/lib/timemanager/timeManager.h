@@ -85,7 +85,7 @@ namespace visualizer
       const int& getTurn();
 
       void setTurnPercent( const float& perc );
-      const float& getTurnPercent() const;
+      const float& getTurnPercent();
 
       const int& nextTurn();
       const int& prevTurn();
