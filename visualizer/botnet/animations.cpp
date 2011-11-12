@@ -514,6 +514,16 @@ namespace visualizer
   
   void DrawArenaWinner::animate( const float& t, AnimData *d )
   {
+    static bool firstRun = true;
+    cout << "DRAWING: " << t  << endl;
+    if( firstRun )
+    {
+      cout << "FIRST" << endl;
+      m_aw->timeManager()->setTurnPercent( 0 );
+      firstRun = false;
+
+    }
+
     IRenderer::Alignment align = IRenderer::Center;
     stringstream ss;
     

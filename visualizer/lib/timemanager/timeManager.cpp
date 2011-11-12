@@ -136,6 +136,12 @@ namespace visualizer
 
   } // _TimeManager::getTurn()
 
+  void _TimeManager::setTurnPercent( const float& perc ) 
+  {
+    m_turnCompletion = perc;
+
+  } // _TimeManager::setTurnPercent()
+
   const float& _TimeManager::getTurnPercent() const
   {
     if( m_turnCompletion < 0 )
@@ -287,8 +293,6 @@ namespace visualizer
 
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
-          // CHANGE ME THIS IS BAD
-          GUI->close();
 
         }
       }
