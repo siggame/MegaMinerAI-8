@@ -182,6 +182,7 @@ class _GUI : public QMainWindow, public IGUI
     void turnPercentageShortcut0();
 
     void newConnect();
+    void newReadyConnect();
 
   public:
 
@@ -193,6 +194,7 @@ class _GUI : public QMainWindow, public IGUI
   private:
 
     QTcpServer* m_server;
+    QTcpServer* m_visReadyServer;
 
     QTableWidget * m_globalStats;
     QTableWidget * m_selectionStats;

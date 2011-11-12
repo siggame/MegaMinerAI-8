@@ -101,6 +101,8 @@ namespace visualizer
       void setNumTurns( const int& numTurns );
       void setMaxTurns( const size_t& maxTurns );
 
+      char readyForGamelog();
+
     private slots:
       void timerUpdate();
 

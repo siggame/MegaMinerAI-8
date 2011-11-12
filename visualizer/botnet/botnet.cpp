@@ -157,7 +157,7 @@ namespace visualizer
       
       delete pixels;
     }
-    
+
     start();
 
   }
@@ -208,7 +208,7 @@ namespace visualizer
       state++
       )
     {
-      bool drawArenaWinner;
+      bool drawArenaWinner = false;
       size_t originalState = state;
       
       if(state >= m_game->states.size())
@@ -218,11 +218,9 @@ namespace visualizer
       }
       
       Frame turn;
-      
+
       turn.addAnimatable( mb );
       turn.addAnimatable( b );
-      
-      
       
       // BEGIN: Draw Tiles
       int tileCounts[] = { 0, 0, 0, 0 };
@@ -254,10 +252,13 @@ namespace visualizer
 
         turn.addAnimatable( t );
       }
+
       
       vector<tile*> mainBlobs[2];
       for(int x = 0; x < m_game->states[0].width; x++)
+      {
         for(int y = 0; y < m_game->states[0].height; y++)
+        {
           if(tiles[x][y]->owner < 2 && tiles[x][y]->connectedTo == NULL && tiles[x][y]->numConnectedTiles == 0) // if the owner is player 1 or 2 and they havn't been connected to a blob we need to flood fill it to see how large that blob is
           {
             stack<tile*> currentBlob;
@@ -298,13 +299,14 @@ namespace visualizer
             if(completeBlob.size() > mainBlobs[parentTile->owner].size())
               mainBlobs[parentTile->owner] = completeBlob;
             
-            //if(loopCount >= 9999)
-              //cout << "WTF: loopCount hit with currentBlob size:" << currentBlob.size() << endl;
           }
+        }
+      }
       
       int connectedTiles[] = {0, 0};
       
       for(int owner = 0; owner < 2; owner++)
+      {
         for (int i = 0; i < mainBlobs[owner].size(); i++)
         {
           if(!tiles[(int)mainBlobs[owner][i]->x][(int)mainBlobs[owner][i]->y]->mainBlob)
@@ -313,9 +315,12 @@ namespace visualizer
             connectedTiles[owner]++;
           }
         }
+      }
       // END: Draw Tiles
-      
-      
+
+      for(int x = 0; x < m_game->states[0].width; x++)
+        delete [] tiles[x];
+      delete [] tiles;
       
       // BEGIN: Draw Bases
       for
@@ -390,8 +395,6 @@ namespace visualizer
       turn.addAnimatable( score2 );
       // END: Draw Scoreboard
 
-
-      
       // Draw Grid
       turn.addAnimatable( g );
 
@@ -483,9 +486,6 @@ namespace visualizer
             break;
             case RECYCLE:
               //cout << "Recycle" << endl;
-            break;
-            case VIRUSTALK:
-              //cout << "Virus Talk" << endl;
             break;
           }
 #endif
