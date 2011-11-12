@@ -79,6 +79,54 @@ namespace visualizer
       virus* m_virus;
   };
 
+  class CrashLeft: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // CrashLeft
+
+  class CrashRight: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // CrashRight
+
+  class CrashUp: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // CrashUp
+
+  class CrashDown: public Anim
+  {
+    public:
+      void animate( const float& t, AnimData *d );
+
+      float controlDuration() const
+      { return 1; }
+      float totalDuration() const
+      { return 1; }
+
+  }; // CrashDown
+
   class LeftAnim: public Anim
   {
     public:

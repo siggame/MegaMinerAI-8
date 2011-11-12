@@ -450,39 +450,14 @@ namespace visualizer
 
               v->addKeyFrame( new StartVirus( v ) );
 
-              cout << i->first << endl;
-              cout << c.moving << endl;
-              cout << c.stationary << endl;
-
-              for
-                (
-                std::vector< SmartPointer< Animation > >::iterator k = m_game->states[ state ].animations[ c.stationary ].begin();
-                k != m_game->states[ state ].animations[ c.stationary ].end();
-                k++
-                )
-              {
-                if( (*k)->type == MOVE )
-                {
-                  cout << "MOVE" << endl;
-                  Move* m = (Move*)&*j;
-                  cout << *m << endl;
-                }
-
-              }
- 
-              Coord prevCoord( m_game->states[ state ].viruses[ c.moving ].x, m_game->states[ state ].viruses[ c.moving ].y );
+              Coord prevCoord( m_game->states[ state - 1 ].viruses[ c.moving ].x, m_game->states[ state - 1 ].viruses[ c.moving ].y );
               Coord curCoord( m_game->states[ state ].viruses[ c.stationary ].x, m_game->states[ state ].viruses[ c.stationary ].y );
               
-              cout << m_game->states[ state ].viruses[ c.stationary ].id << endl;
-              cout << m_game->states[ state ].viruses[ c.moving ].id << endl;;
-              cout << "P: " << prevCoord.x << ", " << prevCoord.y << endl;
-              cout << "C: " << curCoord.x << ", " << curCoord.y << endl;
-
               v->id = c.moving;
 
               v->x = prevCoord.x;
               v->y = prevCoord.y;
-              v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level;
+              v->level = m_game->states[ state - 1 ].viruses[ c.moving ].level + 1;
               v->owner = m_game->states[ state - 1 ].viruses[ c.moving ].owner;
 
               if( curCoord.x > prevCoord.x )
@@ -510,6 +485,9 @@ namespace visualizer
         i++ 
         )
       {
+        if( i->second.id == 0 )
+          continue;
+
         SmartPointer< virus > v = new virus( renderer );
 
         v->addKeyFrame( new StartVirus( v ) );
@@ -533,10 +511,27 @@ namespace visualizer
               //cout << "Combat" << endl;
             break;
             case CRASH:
-             // Crash* thing = &(*j);
-             // v.
-             // cout << "Crash" << endl;
-            break;
+            {
+              Crash* c = (Crash*)&*(*j);
+              cout << c->dx << ", " << v->x << endl;
+              if( c->dx-v->x > 0 )
+              {
+                v->addKeyFrame( new CrashRight );
+              }
+              else if( c->dx-v->x < 0 )
+              {
+                v->addKeyFrame( new CrashLeft );
+              } 
+              else if( c->dy-v->y > 0 )
+              {
+                v->addKeyFrame( new CrashDown );
+              }
+              else
+              {
+                v->addKeyFrame( new CrashUp );
+              }
+
+            } break;
             case CREATE:
               //cout << "Create" << endl;
             break;
