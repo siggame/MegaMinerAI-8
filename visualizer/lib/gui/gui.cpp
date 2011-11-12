@@ -408,7 +408,9 @@ namespace visualizer
     QDataStream inout( (QIODevice*)client );
     inout.setVersion( QDataStream::Qt_4_0 );
 
-    inout << TimeManager->readyForGamelog();
+    char rfg = TimeManager->readyForGamelog();
+
+    inout.writeRawData( (char*)&rfg, 1 );
 
     client->disconnectFromHost();
 
