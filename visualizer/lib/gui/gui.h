@@ -142,6 +142,7 @@ class _GUI : public QMainWindow, public IGUI
     void resizeEvent( QResizeEvent* evt );
 
     void requestGamelog();
+    bool loadInProgress() const;
 
     /// GAME SPECIFIC.  NEED TO BE MOVED ELSEWHERE
     void loadGamelog( std::string gamelog );
@@ -164,8 +165,6 @@ class _GUI : public QMainWindow, public IGUI
 
     void displayError( const QAbstractSocket::SocketError& err );
     void loadThatShit( bool err );
-
-    void readyToGame();
 
     void closeEvent( QCloseEvent* event );
     void helpContents();
@@ -202,6 +201,8 @@ class _GUI : public QMainWindow, public IGUI
 
   private:
     QHttp* m_http;
+
+    bool m_loadInProgress;
 
 #if 0
     QTcpServer* m_server;

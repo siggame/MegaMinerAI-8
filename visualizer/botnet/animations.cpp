@@ -603,7 +603,6 @@ namespace visualizer
   
   void DrawArenaWinner::animate( const float& t, AnimData *d )
   {
-    static bool firstRun = true;
     if( firstRun )
     {
       m_aw->timeManager()->setSpeed(0.1);

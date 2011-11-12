@@ -403,6 +403,7 @@ namespace visualizer
       DrawArenaWinner( ArenaWinner* aw)
       {
         m_aw = aw;
+        firstRun = true;
       }
 
       void animate( const float& t, AnimData* d );
@@ -415,6 +416,7 @@ namespace visualizer
 
     private:
       ArenaWinner* m_aw;
+      bool firstRun;
   }; // DrawArenaWinner
 
   class UpCollide : public Anim

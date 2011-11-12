@@ -23,11 +23,19 @@ namespace visualizer
 
       string sendCommand( string cmd );
 
+
+      const string& lastJob() const
+      {
+        return m_lastJob;
+      }
+
     private:
       void cmdSend( string cmd );
       string pullWord();
       string pullLine();
       QTcpSocket* s;
+
+      string m_lastJob;
 
   };
 

@@ -282,18 +282,26 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
+    bool breakout = false;
  
     if( m_turn < 0 )
     {
       m_turn = 0;
     }
 
-
-   
     if( m_turnCompletion > 1 )
     {
-      m_turn += floor( m_turnCompletion );
-      m_turnCompletion -= floor( m_turnCompletion );
+      size_t skip = floor( m_turnCompletion );
+      m_turn += skip;
+      m_turnCompletion -= skip;
+
+      if( skip > 1 && m_turn >= m_numTurns-1 )
+      {
+        m_turn = m_numTurns - 1;
+        m_turnCompletion = 0.01f;
+        breakout = true;
+
+      }
 
       if(loop_on && m_turn >= loop_end)
       {
@@ -305,7 +313,7 @@ namespace visualizer
         m_turn = m_maxTurns-1;
       }
 
-      if( m_turn >= m_numTurns-1 )
+      if( m_turn >= m_numTurns-1 && !breakout )
       {
         pause();
 
@@ -315,6 +323,10 @@ namespace visualizer
 
         if( !strcmp( OptionsMan->getStr( "gameMode" ).c_str(), "arena" ) )
         {
+          if( !GUI->loadInProgress() )
+          {
+            GUI->requestGamelog();
+          }
 
         }
       }

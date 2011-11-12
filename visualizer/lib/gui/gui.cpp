@@ -120,7 +120,6 @@ namespace visualizer
     {
       const int megs = 25;
       unsigned int size = megs * 1024*1024;
-      cout << endl;
       char *output = new char[ size-1 ];
 
       BZ2_bzBuffToBuffDecompress( output, &size, log, length, 0, 0 );
@@ -197,7 +196,6 @@ namespace visualizer
     
     if( mimeData->hasUrls() )
     {
-      cout << "HAS URLS!!" << endl;
       QStringList pathList;
       QList<QUrl> urlList = mimeData->urls();
 
@@ -308,7 +306,6 @@ namespace visualizer
       dirinfoOUT.open("dirinfo.txt");
       dirinfoOUT << m_previousDirectory.toStdString();
       dirinfoOUT.close();
-      cout << filename.toStdString() << endl;
       loadGamelog( filename.toStdString() );
     }
 
@@ -319,27 +316,14 @@ namespace visualizer
     Renderer->destroy();
   }
 
-  void _GUI::readyToGame()
-  {
-
-    QDataStream inout( m_sock );
-    inout.setVersion( QDataStream::Qt_4_0 );
-
-    cout << "AVAIL: " << m_sock->bytesAvailable() << endl;
-
-    char *buff = new char[ m_sock->bytesAvailable() ];
-    inout.readRawData( buff, m_sock->bytesAvailable() );
-
-    cout << buff << endl;
-
-    delete [] buff;
-
-    cout << "READY YO" << endl;
-  }
-
   void _GUI::displayError( const QAbstractSocket::SocketError& err )
   {
     cout << err << endl;
+  }
+
+  bool _GUI::loadInProgress() const
+  {
+    return m_loadInProgress;
   }
 
   void _GUI::loadThatShit( bool err )
@@ -349,11 +333,10 @@ namespace visualizer
       QByteArray arr = m_http->readAll();
       if( arr.size() == 0 )
         return;
-      cout << arr.size() << endl;
-      cout << arr.constData() << endl;
       char *temp = new char[ arr.size() ];
       memcpy( temp, arr.constData(), arr.size() );
       loadGamestring( temp, arr.size() );
+      m_loadInProgress = false;
       delete [] temp;
     }
   }
@@ -365,17 +348,21 @@ namespace visualizer
     b.sendCommand( "watch visualizer-requests" );
 
     string glogPath = b.reserve();
+    b.sendCommand( string( "delete ") + b.lastJob() );
     QUrl url( glogPath.c_str() );
-    cout << url.encodedHost().constData() << endl;
-    cout << url.encodedPath().constData() << endl;
     
+    m_loadInProgress = true;
+
     m_http->setHost( url.host() );
     m_http->get( url.path() );
+    
 
   }
 
   bool _GUI::doSetup()
   {
+
+    m_loadInProgress = false;
 
     m_http = new QHttp( this );
     connect( m_http, SIGNAL( done( bool) ), this, SLOT( loadThatShit(bool) ) );
@@ -397,7 +384,9 @@ namespace visualizer
     // If we're in arenaMode, change some settings
     if(
       !OptionsMan->exists( "arenaMode" ) ||
-      OptionsMan->getBool( "arenaMode" )
+      OptionsMan->getBool( "arenaMode" ) ||
+      !OptionsMan->getStr( "gameMode" ).compare( "arena" )
+
       )
     {
       menuBar()->hide();

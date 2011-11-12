@@ -118,6 +118,8 @@ namespace visualizer
 
     }
 
+    m_lastJob = pullWord();
+
     pullLine(); // discard rest of the line
 
     return pullLine();
