@@ -334,7 +334,6 @@ namespace visualizer
 
     delete [] buff;
 
-
     cout << "READY YO" << endl;
   }
 
@@ -343,8 +342,27 @@ namespace visualizer
     cout << err << endl;
   }
 
+  void _GUI::loadThatShit( bool err )
+  {
+    if( !err )
+    {
+      QByteArray arr = m_http->readAll();
+      if( arr.size() == 0 )
+        return;
+      cout << arr.size() << endl;
+      cout << arr.constData() << endl;
+      char *temp = new char[ arr.size() ];
+      memcpy( temp, arr.constData(), arr.size() );
+      loadGamestring( temp, arr.size() );
+      delete [] temp;
+    }
+  }
+
   bool _GUI::doSetup()
   {
+
+    m_http = new QHttp( this );
+    connect( m_http, SIGNAL( done( bool) ), this, SLOT( loadThatShit(bool) ) );
 
     connect( this, SIGNAL( close() ), this, SLOT( onClose() ) );
 
@@ -355,10 +373,13 @@ namespace visualizer
       b.sendCommand( "watch visualizer-requests" );
 
       string glogPath = b.reserve();
+      QUrl url( glogPath.c_str() );
+      cout << url.encodedHost().constData() << endl;
+      cout << url.encodedPath().constData() << endl;
       
-      cout << glogPath << endl;
-
-      loadGamelog( glogPath );
+      m_http->setHost( url.host() );
+      m_http->get( url.path() );
+      
 
 #if 0
       cout << "Connecting..."  << endl;

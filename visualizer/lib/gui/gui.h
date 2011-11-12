@@ -15,6 +15,7 @@
 #include <QTextEdit>
 #include <QStringList>
 #include <map>
+#include <QHttp>
 
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -160,6 +161,7 @@ class _GUI : public QMainWindow, public IGUI
   private slots:
 
     void displayError( const QAbstractSocket::SocketError& err );
+    void loadThatShit( bool err );
 
     void readyToGame();
 
@@ -197,6 +199,7 @@ class _GUI : public QMainWindow, public IGUI
     QTableWidget* getIndividualStats();
 
   private:
+    QHttp* m_http;
 
 #if 0
     QTcpServer* m_server;
