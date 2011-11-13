@@ -51,3 +51,4 @@ texture scoreboard-cycles-blue textures/scoreboard/cycles-blue.png
 texture scoreboard-unconnected-nodes-red textures/scoreboard/unconnected-nodes-red.png
 texture scoreboard-unconnected-nodes-blue textures/scoreboard/unconnected-nodes-blue.png
 texture scoreboard-neutral-nodes textures/scoreboard/neutral-tiles.png
+texture wooly-willy textures/wooly-willy.png

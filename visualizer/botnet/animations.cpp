@@ -642,6 +642,10 @@ namespace visualizer
     m_aw->renderer().drawList(displayListId.str());
     m_aw->renderer().pop();
     
+    // easter egg: draw wooly willy
+    if(m_aw->woolyTime)
+      m_aw->renderer().drawTexturedQuad( m_aw->mapWidth/2 - 6.0, m_aw->mapHeight/2 -6.0, 12, 12, "wooly-willy" );
+    
     // Draw the Winning reason
     m_aw->renderer().setColor( blackColor );
     m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 + 7, "mainFont", m_aw->winningReason, 4.5, align );
