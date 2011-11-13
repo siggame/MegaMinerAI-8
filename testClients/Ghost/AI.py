@@ -2,6 +2,7 @@
 from BaseAI import BaseAI
 from GameObject import *
 offsets = [(0,1), (1,0), (0,-1), (-1,0)]
+diagonals = [(1,1), (1,-1),(-1,1),(-1,-1)]
 import random
 from collections import deque
 def makeDict(mappable, test = lambda X: True):
@@ -34,6 +35,19 @@ class AI(BaseAI):
   def password():
     return "aegoaf5Y"
 
+  def enemyTile(self, X): return X in self.valid and self.valid[X].getOwner() == self.enemyID
+  
+  def isCut(self, position):
+    near = offsets+diagonals
+    near = set(filter(lambda X: self.enemyTile((X[0]+position[0], X[1]+position[1])), near))
+    brown = set([(1,1), (-1,-1)])
+    yellow = set([(1, -1), (-1, 1)])
+    green = set([(0, 1), (0, -1)])
+    blue = set([(1, 0), (-1, 0)])
+    return self.enemyTile(position) and ((bool(blue <= near) ^ bool(green<=near)) and not (bool(brown & near) and bool(yellow & near)))
+    
+      
+      
   def biggestArea(self):
     p1, p2 = set(), set()
     # Builds a dictionary of all controlled tiles for both players
@@ -107,7 +121,7 @@ class AI(BaseAI):
     return False
 
   def run(self):
-    print self.turnNumber()
+    print self.turnNumber(), [player.getByteDollars() for player in self.players]
     self.units = makeDict(self.viruses)
     self.myblob, self.enemyblob = self.biggestArea()
     self.myunconnected, self.enemyunconnected = set(), set()
@@ -135,37 +149,48 @@ class AI(BaseAI):
         kills = filter(lambda move: move in self.units and self.units[move].getOwner() != self.playerID(), moves)
         if len(kills) > 0:
           moves = kills
+      
+        cut = filter(lambda move: self.isCut(move), moves)
+        if len(cut) > 0:
+          moves = cut
         
         enemySpace = filter(lambda move: self.valid[move].getOwner() == self.enemyID, moves)
         if len(enemySpace) > 0:
           moves = enemySpace
+        bigblob = filter(lambda move: move in self.enemyblob, moves)
+        if len(bigblob) > 0:
+          moves = bigblob
+        
         neutralSpace = filter(lambda move: self.valid[move].getOwner() == 2, moves)
         if len(neutralSpace) > 0:
           moves = neutralSpace
         
         if len(moves) > 1 and (virus.getX(), virus.getY()) not in self.myblob:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.myblob)
-        elif len(self.myunconnected) > 0:
+        elif len(moves) > 1 and len(self.myunconnected) > 0:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.myunconnected)
-        
-        if len(moves) > 1:
-          # Part 6
-          moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.valid and self.valid[X].getOwner() != self.playerID())
-        
+        # Part 6
+        if self.playerID() == 0:
+          if len(moves) > 1:
+            moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
+                                      goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID() or self.isCut(X)))
+        else:          
+          if len(moves) > 1:
+            moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
+                                      goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
-        
-    
+    level = 0
     # loop through all of the bases
     for base in sorted(self.bases, key=lambda base: 
                        sum(abs(virus.getX()-base.getX())+abs(virus.getY()-base.getY()) for virus in self.viruses if virus.getOwner()==self.playerID()), reverse=True):
       # check if you own that base
       if base.getOwner() == self.playerID():
         # check to see if you have enough cycles to spawn a level 0 virus
-        if self.baseCost() <= self.players[self.playerID()].getCycles():
+        if self.baseCost()*self.scaleCost()**level <= self.players[self.playerID()].getCycles() and (base.getX(), base.getY()) not in self.units:
           # spawn a level 0 virus at that base
-          base.spawn(0)
+          base.spawn(level)
 
     # End your turn
     return True;
