@@ -103,7 +103,10 @@ class AI : BaseAI
                )
                 my_base.spawn(0);
         
-        players[playerID()].talk("Wooly Willy!");
+        if(turnNumber()%10 < 2)
+        {
+          players[playerID()].talk("Wooly Willy!");
+        }
         
         // for each of my viruses find a point to go to, then go there!
         foreach(var virus in viruses)
