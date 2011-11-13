@@ -397,15 +397,15 @@ namespace visualizer
     double xTextOffset = 1.5;
     double xBottomInfoOffset = 2.875;
     double xVirusOffset = -0.75;
-    double scoreOffset = 13.25;
+    double scoreOffset = 12.75;
     string scoreFileName = "scoreboard-bytedollar-red";
     ScoreData *sd = (ScoreData*)d;
     
     if( m_sb->player == 1 )
     {
       a = IRenderer::Right;
-      team = Color( 0, 0, 1 );
-      darkTeam = Color( 0, 0, 0.6 );
+      team = Color( 0, 1, 1 );
+      darkTeam = Color( 0, 0.6, 0.6 );
       scoreOffset = 23.75;
       scoreFileName = "scoreboard-bytedollar-blue";
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
@@ -437,8 +437,8 @@ namespace visualizer
     m_sb->renderer().drawText(scoreOffset + 0.76, m_sb->y - 0.1, "mainFont", bottomInfo.str(), 4.5);
     
     //draw their score too
-    m_sb->renderer().drawTexturedQuad(scoreOffset + (m_sb->player ? -3.4 : 3.5), m_sb->y, 1, 1, scoreFileName);
-    m_sb->renderer().drawText( scoreOffset + (m_sb->player ? -3 : 3.9), m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
+    m_sb->renderer().drawTexturedQuad(scoreOffset + (m_sb->player ? -3.4 : 4), m_sb->y, 1, 1, scoreFileName);
+    m_sb->renderer().drawText( scoreOffset + (m_sb->player ? -3 : 4.4), m_sb->y - 0.1, "mainFont", ss.str(), 4.5 );
 #if 0
     // draw the virus (OLD NEEDS TO BE REMOVED)
     for(int x = 0; x < 16; x++)
@@ -588,16 +588,21 @@ namespace visualizer
 
   void DrawTalk::animate( const float& t, AnimData *d )
   {
+    IRenderer::Alignment align = IRenderer::Left;
+    float xPos = 2.5;
+    
     if( m_talker->player == 0 )
     {
       m_talker->renderer().setColor( Color( 1, 0, 0 ) );
     }
     else
     {
-      m_talker->renderer().setColor( Color( 0, 0, 1 ) );
+      m_talker->renderer().setColor( Color( 0, 1, 1 ) );
+      align = IRenderer::Right;
+      xPos = 37.5;
     }
 
-    m_talker->renderer().drawText( 2.5, -1.25, "mainFont", m_talker->message, 2.75 );
+    m_talker->renderer().drawText( xPos, -1.25, "mainFont", m_talker->message, 2.75, align );
 
   } // DrawTalk::animate()
   
@@ -629,13 +634,26 @@ namespace visualizer
     
     // Draw the Winner's Name
     m_aw->renderer().setColor( blackColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4 - 1, "mainFont", "Winner:", 4, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 - 9, "mainFont", "Winner:", 4, align );
     m_aw->renderer().setColor( teamColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/4, "mainFont", m_aw->winnersName, 7, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 - 8, "mainFont", m_aw->winnersName, 7, align );
+    
+    // Draw tyhe winner's Virus
+    stringstream displayListId;
+    displayListId << "PlayerVirus-" << m_aw->winnersIndex;
+    m_aw->renderer().push();
+    m_aw->renderer().translate(m_aw->mapWidth/2 - 6.0, m_aw->mapHeight/2 -6.0);
+    m_aw->renderer().scale(12.0, 12.0);
+    m_aw->renderer().drawList(displayListId.str());
+    m_aw->renderer().pop();
+    
+    // easter egg: draw wooly willy
+    if(m_aw->woolyTime)
+      m_aw->renderer().drawTexturedQuad( m_aw->mapWidth/2 - 6.0, m_aw->mapHeight/2 -6.0, 12, 12, "wooly-willy" );
     
     // Draw the Winning reason
     m_aw->renderer().setColor( blackColor );
-    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2, "mainFont", m_aw->winningReason, 4.5, align );
+    m_aw->renderer().drawText( m_aw->mapWidth/2, m_aw->mapHeight/2 + 7, "mainFont", m_aw->winningReason, 4.5, align );
     
   } // DrawArenaWinner::animate()
   

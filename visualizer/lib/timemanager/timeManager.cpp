@@ -42,6 +42,7 @@ namespace visualizer
     m_turnCompletion = 0;
     m_numTurns = 1;
     m_maxTurns = -1;
+    m_breakout = true;
     loop_on = false;
     loop_start = m_turn;
     loop_end = m_numTurns;
@@ -282,7 +283,6 @@ namespace visualizer
 
     float secElapsed = (float)m_time.restart()/1000;
     m_turnCompletion += getSpeed() * secElapsed;
-    bool breakout = false;
  
     if( m_turn < 0 )
     {
@@ -295,14 +295,6 @@ namespace visualizer
       m_turn += skip;
       m_turnCompletion -= skip;
 
-      if( skip > 1 && m_turn >= m_numTurns-1 )
-      {
-        m_turn = m_numTurns - 1;
-        m_turnCompletion = 0.01f;
-        breakout = true;
-
-      }
-
       if(loop_on && m_turn >= loop_end)
       {
         setTurn(loop_start);
@@ -313,8 +305,9 @@ namespace visualizer
         m_turn = m_maxTurns-1;
       }
 
-      if( m_turn >= m_numTurns-1 && !breakout )
+      if( m_turn >= m_numTurns-1 && !m_breakout )
       {
+        cout << "BREAKON" << endl;
         pause();
 
         m_turn = m_numTurns-1;
@@ -325,9 +318,20 @@ namespace visualizer
         {
           if( !GUI->loadInProgress() )
           {
+            m_breakout = true;
             GUI->requestGamelog();
           }
 
+        }
+      }
+      else
+      {
+        cout << "BREAKOFF" << endl;
+        m_breakout = false;
+        if( m_turn >= m_numTurns-1 )
+        {
+          m_turn = m_numTurns - 1;
+          m_turnCompletion = 0.01f;
         }
       }
 

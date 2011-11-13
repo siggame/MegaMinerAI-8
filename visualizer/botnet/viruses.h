@@ -187,7 +187,7 @@ namespace visualizer
   
   struct ArenaWinner: public Animatable
   {
-    ArenaWinner( IRenderer* renderer, ITimeManager *tm, int num, string winner, string reason, int w, int h ) : Animatable( renderer )
+    ArenaWinner( IRenderer* renderer, ITimeManager *tm, int num, string winner, string reason, int w, int h, bool wooly ) : Animatable( renderer )
     {
       m_tm = tm;
       winnersName = winner;
@@ -195,11 +195,13 @@ namespace visualizer
       winnersIndex = num;
       mapWidth = w;
       mapHeight = h;
+      woolyTime = wooly;
     }
     
     string winnersName;
     string winningReason;
     int winnersIndex, mapHeight, mapWidth;
+    bool woolyTime;
     
     AnimData* getData()
     {
