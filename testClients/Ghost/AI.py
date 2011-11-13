@@ -36,6 +36,20 @@ class AI(BaseAI):
     return "aegoaf5Y"
 
   def enemyTile(self, X): return X in self.valid and self.valid[X].getOwner() == self.enemyID
+  def filterOffest(self, near, position): return filter(lambda X: self.enemyTile((X[0]+position[0], X[1]+position[1])), near)
+  #'''
+  def isCut(self, position):
+    if not self.enemyTile(position): return False
+    
+    adj = self.filterOffest(offsets, position)+diagonals
+    near = adj + self.filterOffest(diagonals, position)
+    if len(adj) < 2: return False
+    
+    left = set(adj)
+    while len(left) > 1:
+      connect([left.pop()], near)
+    return len(left) != 0
+  '''
   
   def isCut(self, position):
     near = offsets+diagonals
@@ -45,7 +59,7 @@ class AI(BaseAI):
     green = set([(0, 1), (0, -1)])
     blue = set([(1, 0), (-1, 0)])
     return self.enemyTile(position) and ((bool(blue <= near) ^ bool(green<=near)) and not (bool(brown & near) and bool(yellow & near)))
-    
+  #'''  
       
       
   def biggestArea(self):
@@ -170,14 +184,9 @@ class AI(BaseAI):
         elif len(moves) > 1 and len(self.myunconnected) > 0:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.myunconnected)
         # Part 6
-        if self.playerID() == 0:
-          if len(moves) > 1:
-            moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
-                                      goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID() or self.isCut(X)))
-        else:          
-          if len(moves) > 1:
-            moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
-                                      goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
+        if len(moves) > 1:
+          moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
+                                    goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
