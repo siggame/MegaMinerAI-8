@@ -307,7 +307,6 @@ namespace visualizer
 
       if( m_turn >= m_numTurns-1 && !m_breakout )
       {
-        cout << "BREAKON" << endl;
         pause();
 
         m_turn = m_numTurns-1;
@@ -326,10 +325,9 @@ namespace visualizer
       }
       else
       {
-        cout << "BREAKOFF" << endl;
-        m_breakout = false;
         if( m_turn >= m_numTurns-1 )
         {
+          m_breakout = false;
           m_turn = m_numTurns - 1;
           m_turnCompletion = 0.01f;
         }
