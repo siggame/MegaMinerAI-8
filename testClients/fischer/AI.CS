@@ -117,8 +117,12 @@ class AI : BaseAI
                 my_bases.Add(my_base, path != null ? path.Count : int.MaxValue);
             }
         
-        foreach(var base_pair in (from entry in my_bases orderby entry.Value ascending select entry).ToDictionary(pair => pair.Key, pair => pair.Value))
-            base_pair.Key.spawn(0);
+        var sortedBases = from key in my_bases.Keys
+                          orderby my_bases[key] ascending
+                          select key;
+                          
+        foreach(var my_base in sortedBases)
+            my_base.spawn(0);
             
         // check to see if we will loose soon
         if(players[enemyID()].getByteDollars() >= 118)
