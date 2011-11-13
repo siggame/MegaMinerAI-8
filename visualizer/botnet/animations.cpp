@@ -404,8 +404,8 @@ namespace visualizer
     if( m_sb->player == 1 )
     {
       a = IRenderer::Right;
-      team = Color( 0, 0, 1 );
-      darkTeam = Color( 0, 0, 0.6 );
+      team = Color( 0, 1, 1 );
+      darkTeam = Color( 0, 0.6, 0.6 );
       scoreOffset = 23.75;
       scoreFileName = "scoreboard-bytedollar-blue";
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
