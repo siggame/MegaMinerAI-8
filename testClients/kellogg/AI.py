@@ -307,6 +307,16 @@ class AI(BaseAI):
      for shark in shiver:
       if shark.getLevel() < self.toplevel:
        self.shiver.remove(shark)
+ 
+ def lonelyBase(self,base):
+  if base.getX() != 0 or base.getX() != 40:
+   if base.getY() != 0 or base.getY() != 20:
+    if BaseAI.getTileAtLocation(base.getX()+1,base.getY()).owner != self.playerID() and BaseAI.getTileAtLocation(base.getX()-1,base.getY()).owner != self.playerID() and BaseAI.getTileAtLocation(base.getX(),base.getY()+1).owner != self.playerID() and BaseAI.getTileAtLocation(base.getX(),base.getY()-1).owner != self.playerID():
+     return True
+    else:
+      for virus in self.viruses:
+       if abs(tile.getX() - base.getX())+abs(tile.getY()-base.getY()) > 4:
+        return True
              
  def run(self):     
    aqua = waters()
@@ -319,27 +329,22 @@ class AI(BaseAI):
        toplevel = rival.getLevel()+1
 
    for player in self.players:
-    if player.getId() == self.playerID():         
+    if player.getId() == self.playerID():
+      string = "TopLevel: {0}".format(toplevel)
+      player.talk(string)
       self.updateSharks(self.sharks())
       for base in self.bases:
-      # print("going through bases",self.turnNumber())
-       if base.getOwner() == self.playerID() and base.getSpawnsLeft() >0:
-         sharks = self.sharks()
-         if len(sharks)< 4 and player.getByteDollars() >= self.cost(toplevel):
-          base.spawn(toplevel)
-         else:
-       #for fish in self.viruses: 
-        #if not (fish.getX() == base.getX() and fish.getY() == base.getY()):
-      #   for player in self.players:
-          #if player.getId() == self.playerID() and player.getByteDollars() >= self.cost(toplevel):
-         #  if aqua.checkwater(toplevel) == 1:
- #           print("shark")
-       #     shark = base.spawn(toplevel)
-        # sealife.append(shark)
-          if player.getId() == self.playerID():# and player.getByteDollars() >= self.cost(0):
- #         print("spawning shrimp")
-           shrimp = base.spawn(0)
-           self.sealife().add(shrimp)
+       if self.lonelyBase(base) == True:
+       # print("going through bases",self.turnNumber())
+        if base.getOwner() == self.playerID() and base.getSpawnsLeft() >0:
+          sharks = self.sharks()
+          if len(sharks)< 4:
+           if player.getByteDollars() >= self.cost(toplevel):
+            base.spawn(toplevel)
+           else:
+            if player.getByteDollars() >= self.cost(0):
+             shrimp = base.spawn(0)
+             self.sealife().add(shrimp)
         
    seaLife = self.sealife()
    Sharks =self.sharks()
