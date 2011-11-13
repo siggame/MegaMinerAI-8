@@ -499,6 +499,9 @@ bool ** buildVirus(string teamName)
     for(int i = 0; i < 16; i++)
     {
         virus[i] = new bool[16];
+        
+        for(int j = 0; j < 16; j++)
+          virus[i][j] = false;
     }
     
     // check for easter eggs
@@ -507,6 +510,10 @@ bool ** buildVirus(string teamName)
         for(int x = 0; x < 8; x++)
             for(int y = 0; y < 16; y++)
                 virus[x][y] = virusBuilder::androidEasterEgg[y][x];
+    }
+    else if(strcmp(teamName.c_str(), "Staff Ghost") == 0)
+    {
+      return virus;
     }
     else
     {

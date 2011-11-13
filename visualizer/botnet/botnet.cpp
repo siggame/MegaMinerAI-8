@@ -224,7 +224,10 @@ namespace visualizer
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
     
-    bool isArenaMode = (strcmp(options->getStr("gameMode").c_str(),"arena") == 0);
+    bool isArenaMode = true;
+    bool willyTime = false;
+    
+    string talkStrings[] = {"", ""};
     
     // Go through the game and build everything to draw!
     for
@@ -482,23 +485,35 @@ namespace visualizer
       for( size_t p = 0; p < 2; p++ )
       {
         
-        if( !m_game->states[ state ].animations[ p ].size() )
-          continue;
-
-        PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ p ][ 0 ]; 
-        if( t->type == PLAYERTALK )
+        //if( !m_game->states[ state ].animations[ p ].size() )
+          //continue;
+        
+        if( m_game->states[ state ].animations[ p ].size() )
         {
-          SmartPointer< talker > b = new talker( renderer );
-
-          b->addKeyFrame( new StartAnim );
-          b->player = p;
-          b->message = t->message;
-
-          b->addKeyFrame( new DrawTalk( b ) );
-
-          turn.addAnimatable( b );
-
+          // BEGIN: Draw Talk
+          PlayerTalk* t = (PlayerTalk*)&*m_game->states[ state ].animations[ p ][ 0 ]; 
+          if( t->type == PLAYERTALK )
+          {
+            stringstream ssTalk;
+            ssTalk << "(" << state << "): " << t->message;
+            
+            if(string(t->message).length() > 0)
+              talkStrings[p] = ssTalk.str();
+            
+            if(string(t->message).find("Wooly Willy") != string::npos)
+              willyTime = true;
+          }
         }
+        
+        SmartPointer< talker > b = new talker( renderer );
+
+        b->addKeyFrame( new StartAnim );
+        b->player = p;
+        b->message = talkStrings[p];
+        b->addKeyFrame( new DrawTalk( b ) );
+
+        turn.addAnimatable( b );
+        // END: Draw TALK
       }
 
      
@@ -608,7 +623,8 @@ namespace visualizer
             m_game->states[0].players[ m_game->winner ].playerName,
             m_game->winReason,
             (int)m_game->states[0].width,
-            (int)m_game->states[0].height
+            (int)m_game->states[0].height,
+            willyTime
         );
         
         aw->addKeyFrame( new StartAnim );

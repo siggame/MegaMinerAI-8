@@ -404,8 +404,8 @@ namespace visualizer
     if( m_sb->player == 1 )
     {
       a = IRenderer::Right;
-      team = Color( 0, 0, 1 );
-      darkTeam = Color( 0, 0, 0.6 );
+      team = Color( 0, 1, 1 );
+      darkTeam = Color( 0, 0.6, 0.6 );
       scoreOffset = 23.75;
       scoreFileName = "scoreboard-bytedollar-blue";
       startX = m_sb->mapWidth * (sd->blueOffset + sd->drawnOffset);
@@ -588,16 +588,21 @@ namespace visualizer
 
   void DrawTalk::animate( const float& t, AnimData *d )
   {
+    IRenderer::Alignment align = IRenderer::Left;
+    float xPos = 2.5;
+    
     if( m_talker->player == 0 )
     {
       m_talker->renderer().setColor( Color( 1, 0, 0 ) );
     }
     else
     {
-      m_talker->renderer().setColor( Color( 0, 0, 1 ) );
+      m_talker->renderer().setColor( Color( 0, 1, 1 ) );
+      align = IRenderer::Right;
+      xPos = 37.5;
     }
 
-    m_talker->renderer().drawText( 2.5, -1.25, "mainFont", m_talker->message, 2.75 );
+    m_talker->renderer().drawText( xPos, -1.25, "mainFont", m_talker->message, 2.75, align );
 
   } // DrawTalk::animate()
   
@@ -641,6 +646,10 @@ namespace visualizer
     m_aw->renderer().scale(12.0, 12.0);
     m_aw->renderer().drawList(displayListId.str());
     m_aw->renderer().pop();
+    
+    // easter egg: draw wooly willy
+    if(m_aw->woolyTime)
+      m_aw->renderer().drawTexturedQuad( m_aw->mapWidth/2 - 6.0, m_aw->mapHeight/2 -6.0, 12, 12, "wooly-willy" );
     
     // Draw the Winning reason
     m_aw->renderer().setColor( blackColor );
