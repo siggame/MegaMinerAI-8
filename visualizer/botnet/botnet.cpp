@@ -224,7 +224,7 @@ namespace visualizer
     b->addKeyFrame( new DrawBackground( b ) );
     g->addKeyFrame( new DrawGrid( g ) );
     
-    bool isArenaMode = (strcmp(options->getStr("gameMode").c_str(),"arena") == 0);
+    bool isArenaMode = true;
     bool willyTime = false;
     
     // Go through the game and build everything to draw!
