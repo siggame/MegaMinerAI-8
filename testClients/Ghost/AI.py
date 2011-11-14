@@ -90,32 +90,38 @@ class AI(BaseAI):
       return p2blob, p1blob
 
   def shortestNext(self, moves, virus, closest, test = lambda X: True, goal = lambda X: True):
+    start = len(moves)
     searched = set(moves)
     openList = deque([])
     for move in moves:
-      openList.append(move+(move,))
+      openList.append(move+(move, 0))
     count = 0
+    goalDepth = 800
+    goalFound = False
     while len(openList) > 0:
       count+=1
-      if count == 200:
+      x, y, move, depth = openList.pop()
+      if count >= 200 or depth > goalDepth:
         break
-      x, y, move = openList.pop()
+      
       if goal((x, y)):
-        if move is None:
-          if closest:
-            self.shortestNext(moves, virus, False, test, goal)
-          else:
-            return moves
-        else:
-          return [move]
+        if move is not None:
+          if not goalFound:
+            goalFound = True
+            goalDepth = depth
+            moves = []
+          if move not in moves:
+            moves.append(move)
       for offset in offsets:
         next = x+offset[0], y+offset[1]
         if test(next) and next not in searched:
           if closest and next in self.units and self.units[next].getLevel() >= virus.getLevel():
-            openList.appendleft(next + (None,))
+            openList.appendleft(next + (None,depth+1))
           else:
-            openList.appendleft(next + (move,))
+            openList.appendleft(next + (move,depth+1))
           searched.add(next)
+    if len(moves) != start and len(moves) != 1:
+      print "Multi:", start, len(moves)
     return moves
 
 
@@ -190,6 +196,7 @@ class AI(BaseAI):
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
+    
     level = 0
     # loop through all of the bases
     for base in sorted(self.bases, key=lambda base: 
