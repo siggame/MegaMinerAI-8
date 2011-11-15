@@ -4,6 +4,7 @@ from GameObject import *
 offsets = [(0,1), (1,0), (0,-1), (-1,0)]
 diagonals = [(1,1), (1,-1),(-1,1),(-1,-1)]
 import random
+import math
 from collections import deque
 def makeDict(mappable, test = lambda X: True):
   ret = {}
@@ -25,6 +26,8 @@ def connect(openList, available):
         openList.append(next)
   return connected
 
+class FakeVirus(object):
+  def getLevel(self): return 0
 class AI(BaseAI):
   """The class implementing gameplay logic."""
   @staticmethod
@@ -34,7 +37,13 @@ class AI(BaseAI):
   @staticmethod
   def password():
     return "aegoaf5Y"
-
+  #'''
+  def baseChoice(self):
+    basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
+    available = [(tile.getX(), tile.getY()) for tile in self.tiles if tile.getOwner() != self.enemyID]
+    blobs = [self.connect([base], available) for base in basePos]
+    self.blob = max(blobs, key = lambda X: len(X))
+  #''' 
   def enemyTile(self, X): return X in self.valid and self.valid[X].getOwner() == self.enemyID
   def filterOffest(self, near, position): return filter(lambda X: self.enemyTile((X[0]+position[0], X[1]+position[1])), near)
   #'''
@@ -196,17 +205,24 @@ class AI(BaseAI):
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
-    
+    basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
     level = 0
-    # loop through all of the bases
-    for base in sorted(self.bases, key=lambda base: 
-                       sum(abs(virus.getX()-base.getX())+abs(virus.getY()-base.getY()) for virus in self.viruses if virus.getOwner()==self.playerID()), reverse=True):
-      # check if you own that base
-      if base.getOwner() == self.playerID():
-        # check to see if you have enough cycles to spawn a level 0 virus
-        if self.baseCost()*self.scaleCost()**level <= self.players[self.playerID()].getCycles() and (base.getX(), base.getY()) not in self.units:
-          # spawn a level 0 virus at that base
-          base.spawn(level)
+    while len(basePos) > 0:
+      best = self.shortestNext(basePos, FakeVirus(), True, test = lambda X: X in self.valid, 
+                                      goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
+      
+      for pos in best:
+        basePos.remove(pos)
+        base = self.blocked[pos]
+  #    # loop through all of the bases
+  #    for base in sorted(self.bases, key=lambda base: 
+  #                       sum(abs(virus.getX()-base.getX())+abs(virus.getY()-base.getY()) for virus in self.viruses if virus.getOwner()==self.playerID()), reverse=True):
+        # check if you own that base
+        if base.getOwner() == self.playerID():
+          # check to see if you have enough cycles to spawn a level 0 virus
+          if self.baseCost()*self.scaleCost()**level <= self.players[self.playerID()].getCycles() and (base.getX(), base.getY()) not in self.units:
+            # spawn a level 0 virus at that base
+            base.spawn(level)
 
     # End your turn
     return True;
