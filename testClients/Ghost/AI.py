@@ -40,9 +40,16 @@ class AI(BaseAI):
   #'''
   def baseChoice(self):
     basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
-    available = [(tile.getX(), tile.getY()) for tile in self.tiles if tile.getOwner() != self.enemyID]
-    blobs = [self.connect([base], available) for base in basePos]
+    available = [(tile.getX(), tile.getY()) for tile in self.tiles if tile.getOwner() == self.playerID() or tile.getOwner() == 2]
+    blobs = [connect([base], available) for base in basePos]
+    while len(blobs) > 1:
+      if len(blobs[-1]) != 1 and len(blobs[-1]) * 4 < len(blobs[-2]):
+        break
+      blobs.pop()
     self.blob = max(blobs, key = lambda X: len(X))
+    if len([True for base in basePos if base in self.blob]) == 3:
+      print "FUCK THIS MAP"
+    
   #''' 
   def enemyTile(self, X): return X in self.valid and self.valid[X].getOwner() == self.enemyID
   def filterOffest(self, near, position): return filter(lambda X: self.enemyTile((X[0]+position[0], X[1]+position[1])), near)
@@ -129,8 +136,6 @@ class AI(BaseAI):
           else:
             openList.appendleft(next + (move,depth+1))
           searched.add(next)
-    if len(moves) != start and len(moves) != 1:
-      print "Multi:", start, len(moves)
     return moves
 
 
@@ -138,6 +143,7 @@ class AI(BaseAI):
     self.blocked = makeDict(self.bases)    
     self.valid = makeDict(self.tiles, lambda tile: (tile.getX(), tile.getY()) not in self.blocked and tile.getOwner()!=3)
     self.enemyID = 0 if self.playerID() == 1 else 1
+    self.baseChoice()
 
   def end(self):
     pass
@@ -150,7 +156,7 @@ class AI(BaseAI):
     return False
 
   def run(self):
-    print self.turnNumber(), [player.getByteDollars() for player in self.players]
+    print self.turnNumber(), [player.getByteDollars() for player in self.players], [player.getTime() for player in self.players]
     self.units = makeDict(self.viruses)
     self.myblob, self.enemyblob = self.biggestArea()
     self.myunconnected, self.enemyunconnected = set(), set()
@@ -205,7 +211,7 @@ class AI(BaseAI):
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
-    basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
+    basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID() and (base.getX(), base.getY()) in self.blob]
     level = 0
     while len(basePos) > 0:
       best = self.shortestNext(basePos, FakeVirus(), True, test = lambda X: X in self.valid, 
