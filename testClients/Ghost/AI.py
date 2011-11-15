@@ -41,14 +41,14 @@ class AI(BaseAI):
   def baseChoice(self):
     basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
     available = [(tile.getX(), tile.getY()) for tile in self.tiles if tile.getOwner() == self.playerID() or tile.getOwner() == 2]
-    blobs = [connect([base], available) for base in basePos]
+    blobs = sorted([connect([base], available) for base in basePos], key=len, reverse=True)
     while len(blobs) > 1:
-      if len(blobs[-1]) != 1 and len(blobs[-1]) * 4 < len(blobs[-2]):
+      if len(blobs[-1]) != 1 and len(blobs[-2]) < len(blobs[-1]) * 2:
         break
       blobs.pop()
-    self.blob = max(blobs, key = lambda X: len(X))
-    if len([True for base in basePos if base in self.blob]) == 3:
-      print "FUCK THIS MAP"
+    self.blob = reduce(lambda X, Y: X|Y, blobs)
+    #if len([True for base in basePos if base in self.blob]) == 3:
+    #  print "FUCK THIS MAP"
     
   #''' 
   def enemyTile(self, X): return X in self.valid and self.valid[X].getOwner() == self.enemyID
@@ -117,7 +117,7 @@ class AI(BaseAI):
     while len(openList) > 0:
       count+=1
       x, y, move, depth = openList.pop()
-      if count >= 200 or depth > goalDepth:
+      if depth > goalDepth:
         break
       
       if goal((x, y)):
@@ -136,6 +136,8 @@ class AI(BaseAI):
           else:
             openList.appendleft(next + (move,depth+1))
           searched.add(next)
+    if not goalFound and closest:
+      return self.shortestNext(moves, virus, False, test, goal)
     return moves
 
 
@@ -156,7 +158,7 @@ class AI(BaseAI):
     return False
 
   def run(self):
-    print self.turnNumber(), [player.getByteDollars() for player in self.players], [player.getTime() for player in self.players]
+    #print self.turnNumber(), [player.getByteDollars() for player in self.players], [player.getCycles() for player in self.players]
     self.units = makeDict(self.viruses)
     self.myblob, self.enemyblob = self.biggestArea()
     self.myunconnected, self.enemyunconnected = set(), set()
@@ -200,19 +202,24 @@ class AI(BaseAI):
         if len(neutralSpace) > 0:
           moves = neutralSpace
         
+        if len(moves) > 1:
+          moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
+                                    goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
+        
         if len(moves) > 1 and (virus.getX(), virus.getY()) not in self.myblob:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.myblob)
         elif len(moves) > 1 and len(self.myunconnected) > 0:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, goal = lambda X: X in self.myunconnected)
         # Part 6
-        if len(moves) > 1:
+        if len(moves) > 1 and virus.getLevel() > 0:
           moves = self.shortestNext(moves, virus, True, test = lambda X: X in self.valid, 
-                                    goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
+                                    goal = lambda X: X in self.units and self.units[X].getOwner() == self.enemyID and self.units[X].getLevel() <= virus.getLevel())
         if len(moves) > 0:
           action = random.choice(moves)
           self.updateMove(virus, action)
     basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID() and (base.getX(), base.getY()) in self.blob]
-    level = 0
+    minLevel = int(max(math.ceil(math.log((self.players[self.playerID()].getCycles()/ float(len(basePos)*10)), 1.8)), 0))
+
     while len(basePos) > 0:
       best = self.shortestNext(basePos, FakeVirus(), True, test = lambda X: X in self.valid, 
                                       goal = lambda X: X in self.valid and (self.valid[X].getOwner() != self.playerID()))
@@ -225,11 +232,16 @@ class AI(BaseAI):
   #                       sum(abs(virus.getX()-base.getX())+abs(virus.getY()-base.getY()) for virus in self.viruses if virus.getOwner()==self.playerID()), reverse=True):
         # check if you own that base
         if base.getOwner() == self.playerID():
+          near = [(base.getX()+offset[0], base.getY()+offset[1]) for offset in offsets]
+          suggest = [minLevel if X not in self.units else self.units[X].getLevel()+1 for X in near if X in self.valid and (X not in self.units or self.units[X].getOwner() == self.playerID())]
+          if len(suggest) > 0:
+            level = max(min(suggest), minLevel)
+          else:
+            level = minLevel
           # check to see if you have enough cycles to spawn a level 0 virus
-          if self.baseCost()*self.scaleCost()**level <= self.players[self.playerID()].getCycles() and (base.getX(), base.getY()) not in self.units:
+          if int(self.baseCost()*self.scaleCost()**level) <= self.players[self.playerID()].getCycles() and (base.getX(), base.getY()) not in self.units:
             # spawn a level 0 virus at that base
             base.spawn(level)
-
     # End your turn
     return True;
   
