@@ -1,0 +1,8 @@
+libclient.so
+*.so
+*.pyc
+*.o
+*.a
+*.class
+*.jar
+*.pyc
