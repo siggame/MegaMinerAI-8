@@ -32,11 +32,11 @@ class AI(BaseAI):
   """The class implementing gameplay logic."""
   @staticmethod
   def username():
-    return "mst00120"
+    return "siggame"
 
   @staticmethod
   def password():
-    return "aegoaf5Y"
+    return "MSeiggagMaimnee1r"
   #'''
   def baseChoice(self):
     basePos = [(base.getX(), base.getY()) for base in self.bases if base.getOwner() == self.playerID()]
