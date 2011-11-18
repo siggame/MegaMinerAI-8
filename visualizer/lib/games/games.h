@@ -12,7 +12,6 @@
 #include "igame.h"
 #include "../animationengine/animationengine.h"
 #include "../gui/gui.h"
-#include "../objectmanager/objectmanager.h"
 #include "../optionsmanager/optionsman.h"
 #include "../renderer/renderer.h"
 #include "../resourcemanager/resourceman.h"

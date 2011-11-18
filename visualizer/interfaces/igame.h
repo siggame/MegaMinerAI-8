@@ -2,7 +2,6 @@
 #define IGAME_H
 
 #include "ianimationengine.h"
-#include "iobjectmanager.h"
 #include "irenderer.h"
 #include "iresourceman.h"
 #include "icentralwidget.h"
@@ -30,7 +29,6 @@ namespace visualizer
     
       IAnimationEngine *animationEngine;
       IGUI *gui;
-      IObjectManager *objectManager;
       IOptionsMan *options;
       IRenderer *renderer;
       IResourceMan *resourceManager;

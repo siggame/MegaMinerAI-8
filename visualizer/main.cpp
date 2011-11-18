@@ -4,7 +4,6 @@
 #include "lib/optionsmanager/optionsman.h"
 #include "lib/timemanager/timeManager.h"
 #include "lib/resourcemanager/resourceman.h"
-#include "lib/objectmanager/objectmanager.h"
 #include "lib/renderer/renderer.h"
 #include "lib/games/games.h"
 #include "lib/resourcemanager/textureloader.h"
@@ -48,7 +47,7 @@ int main(int argc, char *argv[])
   ///////////////////////////////////////////////////////////////////
   // ObjectManager depends on OptionsManager 
   ///////////////////////////////////////////////////////////////////
-  ObjectManager->setup();
+  //ObjectManager->setup();
 
   ///////////////////////////////////////////////////////////////////
   // GUI Depends On This Runing, but it doens't depend on anything.
@@ -108,7 +107,6 @@ int main(int argc, char *argv[])
 
   GUI->destroy();
 	Renderer->destroy();
-  ObjectManager->destroy();
   TimeManager->destroy();
 	OptionsMan->destroy();
 

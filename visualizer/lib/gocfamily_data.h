@@ -3,7 +3,6 @@
 
 #include "gameobject/gameobject.h"
 #include "gameobject/gocomponent.h"
-#include "timeline/timeline.h"
 
 namespace visualizer
 {

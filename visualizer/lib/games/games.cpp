@@ -54,7 +54,6 @@ namespace visualizer
           m_gameList.push_back( game );
           game->gui = GUI;
           game->animationEngine = AnimationEngine;
-          game->objectManager = ObjectManager;
           game->options = OptionsMan;
           game->renderer = Renderer;
           game->resourceManager = ResourceMan;

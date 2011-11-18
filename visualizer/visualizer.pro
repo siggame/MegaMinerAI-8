@@ -22,7 +22,6 @@ SOURCES += main.cpp \
     ./lib/timemanager/*.cpp \
     ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
-    ./lib/objectmanager/*.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/decompress/*.c \
     ./lib/renderer/*.cpp \
@@ -36,7 +35,6 @@ HEADERS += ./lib/manager/*.h \
     ./lib/renderer/*.h \
     ./lib/beanstalker/*.h \
     ./lib/gui/*.h \
-    ./lib/objectmanager/*.h \
     ./lib/goc_controlbar.h \
     ./lib/*.h \
     ./lib/selectionrender/*.h \

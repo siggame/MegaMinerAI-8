@@ -3,8 +3,9 @@
 
 #include <QtPlugin>
 #include "animsequence.h"
-#include "iobjectmanager.h"
 #include "models.h"
+
+#include "../lib/gameobject/gameobject.h"
 
 namespace visualizer
 {

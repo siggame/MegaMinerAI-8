@@ -9,7 +9,6 @@
 #include <string>
 #include "textRenderer/drawGLFont.h"
 #include "../optionsmanager/optionsman.h"
-#include "../objectmanager/objectmanager.h"
 #include "../gui/renderwidget.h"
 #include "../animationengine/animationengine.h"
 #include "../resourcemanager/resourceman.h"
