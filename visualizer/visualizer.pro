@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     ./lib/games/*.cpp \
     ./lib/beanstalker/*.cpp \
     ./lib/timemanager/*.cpp \
-    ./lib/*.cpp \
     ./lib/resourcemanager/*.cpp \
     ./lib/selectionrender/*.cpp \
     ./lib/decompress/*.c \
@@ -35,8 +34,6 @@ HEADERS += ./lib/manager/*.h \
     ./lib/renderer/*.h \
     ./lib/beanstalker/*.h \
     ./lib/gui/*.h \
-    ./lib/goc_controlbar.h \
-    ./lib/*.h \
     ./lib/selectionrender/*.h \
     ./lib/resourcemanager/*.h \
     ./lib/animationengine/*.h \

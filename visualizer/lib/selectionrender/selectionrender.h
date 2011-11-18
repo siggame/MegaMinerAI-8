@@ -1,6 +1,5 @@
 #ifndef SELECTIONRENDER_H
 #define SELECTIONRENDER_H
-#include "../gocfamily_render.h"
 #include "common.h"
 
 namespace visualizer
@@ -10,7 +9,7 @@ namespace visualizer
  * appears when clicking and dragging to highlight interesting units.
  */
 
-class _SelectionRender : public GOCFamily_Render
+class _SelectionRender 
 {
   public:
     _SelectionRender()
@@ -32,11 +31,6 @@ class _SelectionRender : public GOCFamily_Render
 
     bool getDragging();
     void setDragging(bool);
-
-    const GOC_IDType componentID() const
-    {
-      return GOC_IDType( "SelectionRender" );
-    }
     void update() {};
 
     static void setup();

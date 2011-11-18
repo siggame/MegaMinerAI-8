@@ -116,22 +116,15 @@ class _GUI : public QMainWindow, public IGUI
   public:
     _GUI() : m_isSetup(false) {};
     ~_GUI();
-    /// @TODO  Remove these or revise these
-    bool reg( const std::string& id, guiObj *obj );
-    bool del( const std::string& id );
 
     /// @TODO Revise
     static bool setup();
     /// @NOTE Why does this return a boolean?  
     bool clear();
 
-    /// @TODO Remove or revise
-    guiObj *getGUIObject( const std::string& id );
-
     /// @TODO Revise
     bool create();
     bool destroy();
-    unsigned int numObjects();
 
     /// @TODO Remove
     bool isSetup();
@@ -214,8 +207,6 @@ class _GUI : public QMainWindow, public IGUI
     QTableWidget * m_selectionStats;
     QTableWidget * m_individualStats;
 
-    /// Container for the objects in the GUI
-    std::map<std::string, guiObj*> m_objects;
     /// Setup?
     bool m_isSetup;
 
@@ -251,9 +242,6 @@ class _GUI : public QMainWindow, public IGUI
 
     /// Control Bar
     ControlBar *m_controlBar;
-
-    /// Debugging Toolset Widget Within the Dock
-    GOCFamily_GUIToolSet *m_toolSetWidget;
 
     bool doSetup();
     void buildControlBar();

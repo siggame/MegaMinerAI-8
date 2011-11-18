@@ -25,27 +25,6 @@ namespace visualizer
     delete m_centralWidget;
   }
 
-
-  bool _GUI::reg( const std::string& id, guiObj *obj )
-  {
-    if( m_objects.find( id ) != m_objects.end() )
-      return false;
-
-    m_objects[id] = obj;
-    return true;
-  }
-
-
-  bool _GUI::del( const std::string& id )
-  {
-    if( m_objects.find(id) == m_objects.end() )
-      return false;
-
-    m_objects.erase( id );
-    return true;
-  }
-
-
   bool _GUI::setup()
   {
     if( !GUI )
@@ -63,19 +42,8 @@ namespace visualizer
 
   bool _GUI::clear()
   {
-    m_objects.clear();
     return true;
   }
-
-
-  guiObj* _GUI::getGUIObject( const std::string& id )
-  {
-    if( m_objects.find(id) == m_objects.end() )
-      return NULL;
-
-    return m_objects[id];
-  }
-
 
   bool _GUI::create()
   {
@@ -91,13 +59,6 @@ namespace visualizer
 
     return true;
   }
-
-
-  unsigned int _GUI::numObjects()
-  {
-    return m_objects.size();
-  }
-
 
   bool _GUI::isSetup()
   {
@@ -567,10 +528,6 @@ namespace visualizer
 
   void _GUI::buildToolSet()
   {
-    // Get the toolset widget if it exists
-    m_toolSetWidget =
-      (GOCFamily_GUIToolSet*)getGUIObject( "ToolSet" );
-
     // Create the dock
     m_dockWidget = new QDockWidget( this );
     // Give it a frame to hold a layout
@@ -590,15 +547,6 @@ namespace visualizer
 
     // Add the console to the layout
     m_dockLayout->addWidget( m_consoleArea );
-
-    //Add Unit Stats to the layout
-    //initUnitStats();
-
-    // If we have our tools for this game, add those bitches
-    if( m_toolSetWidget )
-    {
-      m_dockLayout->addWidget( m_toolSetWidget );
-    }
 
     // Add the frame to the actual dock
     m_dockWidget->setWidget( m_dockLayoutFrame );

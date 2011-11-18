@@ -1,8 +1,6 @@
 #include "renderer.h"
 #include "../selectionrender/selectionrender.h"
-#include "../goc_owner.h"
 #include <sstream>
-#include "../gocfamily_talk.h"
 using namespace std;
 
 namespace visualizer
