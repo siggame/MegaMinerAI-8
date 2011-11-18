@@ -76,7 +76,7 @@ class SmartPointer
       (*m_ref)++;
     }
 
-    ~SmartPointer()
+    virtual ~SmartPointer()
     {
       (*m_ref)--;
       if( *m_ref == 0 )

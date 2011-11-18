@@ -168,6 +168,7 @@ class Module
   public:
     static void setup();
     static void destroy();
+    virtual ~Module() {};
 };
 
 } // visualizer

@@ -18,6 +18,8 @@ namespace visualizer
     float endTime;
 
     virtual void animate( const float& t, AnimData *d ) = 0;
+
+    virtual ~Anim() {}
   }; // Anim
 
 } // visualizer

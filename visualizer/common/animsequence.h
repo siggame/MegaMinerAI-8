@@ -32,6 +32,8 @@ namespace visualizer
         return *j;
       } 
 
+      virtual ~AnimSequence() {}
+
      private:
 
       std::list<Frame> m_frames;

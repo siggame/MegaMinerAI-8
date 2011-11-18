@@ -54,6 +54,8 @@ namespace visualizer
         printException( e, fileName, lineNum, "General Exception" );
       }
 
+      virtual ~Exception() {}
+
       void printException
         ( 
         std::string e, 

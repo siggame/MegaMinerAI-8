@@ -19,6 +19,8 @@ namespace visualizer
       OptionBase(const OptionType & ot):m_type(ot){}
       OptionType type(){return m_type;}
 
+      virtual ~OptionBase() {}
+
     protected:
       OptionType m_type;           //!< Member variable "m_type"
     private:
@@ -33,6 +35,7 @@ namespace visualizer
       Option():OptionBase(ot){}
       const T& get(){return m_data;}
       void set(const T & data){m_data = data;}
+      virtual ~Option() {}
     protected:
       T m_data;
   };

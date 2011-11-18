@@ -22,6 +22,8 @@ namespace visualizer
 
       }
 
+      virtual ~Frame() {}
+
       void addAnimatable( const SmartPointer<Animatable>& animatable );
       void addAnimatableFront( const SmartPointer<Animatable>& animatable );
 

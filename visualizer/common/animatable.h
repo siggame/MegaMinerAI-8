@@ -34,6 +34,7 @@ namespace visualizer
   {
     public:
       Animatable( IRenderer *renderer = 0 );
+      virtual ~Animatable() {};
       virtual AnimData* getData() = 0; 
 
       void addKeyFrame( SmartPointer< Anim > anim );
