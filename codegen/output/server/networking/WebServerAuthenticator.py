@@ -7,6 +7,7 @@
 import httplib
 import urllib
 import json
+import hashlib
 
 class WebServerException(Exception):
     def __init__(self, message):
@@ -27,13 +28,16 @@ class WebServerAuthenticator(object):
         login - the team's login
         passwd - the team's password
         """
+        print "Warning, webserver login turned off, remove line 32 in networking/WebServerAuthenticator.py"
+        return login
         # Make a connection to the specified URL
         conn = httplib.HTTPConnection(self.url)
         # Create a GET query string and send it...
-        params = urllib.urlencode({'login': login, 
-                                   'passwd': passwd})
+        params = urllib.urlencode({'l': login, 
+                                   'c': 'megaminer-8-botnet',
+                                   'p': hashlib.sha1(passwd).hexdigest()})
         try:
-            conn.request("GET", "/api/auth_team?"+params)
+            conn.request("GET", "/api/competition/team/auth?"+params)
         except:
             m = "Couldn't connect to server at %s" % (self.url,)
             raise WebServerException(m)
@@ -47,15 +51,20 @@ class WebServerAuthenticator(object):
         # Get the data out and check the responses.
         data = json.loads(response.read())
         conn.close()
-        if data['error']:
-            print "WebServerAuthenticator error:",data['error']
+        try:
+            return data['name']
+        except KeyError:
             return False
-        if data['authenticated']:
-            return data['authenticated']
-        else:
+        except TypeError:
             return False
 
     
 if __name__ == '__main__':
-    w = WebServerAuthenticator('localhost:8000')
-    print w.auth_team('coollogin', 'blarp')
+    w = WebServerAuthenticator('r99acm.device.mst.edu:9999')
+    if w.auth_team('derp', 'ecBQfAvQ') == 'derp':
+        print "PASSED: got derp"
+    if  w.auth_team('derp', 'ecBQfAvQ______'):
+        print "FAILED: got name: %s"%name
+    else:
+        print "PASSED: login was wrong"
+        

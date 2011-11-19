@@ -19,7 +19,6 @@ class SexpProtocol(Int32StringReceiver):
     self.app = self.__class__.app(self)
 
   def connectionLost(self, reason):
-    print reason
     self.app.disconnect(reason)
       
   def stringReceived(self, string):

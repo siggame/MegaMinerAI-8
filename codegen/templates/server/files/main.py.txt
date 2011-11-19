@@ -105,7 +105,11 @@ class GameApp(AccountsAppMixin, BaseApp):
   def endTurn(self):
     """ Attempts to end your turn """
     return self.game.nextTurn()
-
+  
+  # TODO Determine if this should have decorators
+  def disconnect(self, reason):
+    self.leaveGame()
+   
 % for model in models:
 %   for func in model.functions:
 %     if not model.parent or func not in model.parent.functions:
