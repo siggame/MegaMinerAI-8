@@ -46,7 +46,7 @@ class Match(DefaultGameWorld):
     if connection in self.players:
       if self.turn is not None:
         winner = self.players[1 - self.getPlayerIndex(connection)]
-        self.declareWinner(winner)
+        self.declareWinner(winner, 'Opponent Disconnected')
       self.players.remove(connection)
     else:
       self.spectators.remove(connection)
@@ -93,6 +93,7 @@ class Match(DefaultGameWorld):
     pass
 
   def declareWinner(self, winner, reason=''):
+    print "Player", self.getPlayerIndex(self.winner), "wins game", self.id
     self.winner = winner
 
     msg = ["game-winner", self.id, self.winner.user, self.getPlayerIndex(self.winner), reason]

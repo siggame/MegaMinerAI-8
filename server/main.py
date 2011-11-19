@@ -16,7 +16,9 @@ import sys
 class GameApp(AccountsAppMixin, BaseApp):
   games = {}
   nextid = 1
-
+  def disconnect(self, reason):
+    self.leaveGame()
+    
   def __init__(self, protocol):
     BaseApp.__init__(self, protocol)
     AccountsAppMixin.__init__(self)

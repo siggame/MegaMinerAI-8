@@ -22,18 +22,17 @@ def install():
   def tick():
     for i in games:
       p = i.objects.players
-      if i.turn == i.players[0]:
-        p[0].time -= 1
-        if p[0].time < 0:
-          print "2 Wins!"
-          i.declareWinner(i.players[1], 'Player 1 Lagged Out, Player 2 Wins')
-      elif i.turn == i.players[1]:
-        p[1].time -= 1
-        if p[1].time < 0:
-          print "1 Wins!"
-          i.declareWinner(i.players[0], 'Player 2 Lagged Out, Player 1 Wins')
-      else:
-        games.remove(i)
+      if len(i.players) > 1:
+        if i.turn == i.players[0]:
+          p[0].time -= 1
+          if p[0].time < 0:
+            i.declareWinner(i.players[1], 'Player 1 Lagged Out, Player 2 Wins')
+        elif i.turn == i.players[1]:
+          p[1].time -= 1
+          if p[1].time < 0:
+            i.declareWinner(i.players[0], 'Player 2 Lagged Out, Player 1 Wins')
+        else:
+          games.remove(i)
 
     reactor.callLater(1, tick)
 

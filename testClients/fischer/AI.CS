@@ -31,10 +31,9 @@ class AI : BaseAI
     private const int UNSET = -1;
     public bool goingAfterEnemy = false;
     
-    public override string username() { return "Geordi's Visor"; }
-    public override string password() { return "TNG"; }
+    public override string username() { return "mst00140"; }
+    public override string password() { return "raDei6oo"; }
     public AI(IntPtr c) : base(c) {}
-    public override void end() {}
     public int wall() { return 3; }
     public int neutral_tile() { return 2; }
     public int enemyID() { return (playerID() == 0 ? 1 : 0 ); }
@@ -71,6 +70,13 @@ class AI : BaseAI
                 }
         
         Console.WriteLine("Desired Point: " + desiredX + "," + desiredY);
+        players[playerID()].talk("Bolting for: (" + desiredX + "," + desiredY + ")");
+    }
+    
+    public override void end()
+    {
+        if(players[enemyID()].getByteDollars() > players[playerID()].getByteDollars())
+          players[playerID()].talk("I curse Wooly Willy on you, " + players[enemyID()].getPlayerName());
     }
 
     public override bool run()
@@ -93,20 +99,34 @@ class AI : BaseAI
             desired_virus_level = (int)Math.Ceiling((double)desired_virus_level/(double)enemy_virus_count) + 1;
         
         // for each of my bases try to spawn a virus
+        var my_bases = new Dictionary<Base, int>();
         foreach(var my_base in bases)
             if(
                 my_base.getOwner() == playerID() && 
-                map[my_base.getX(),my_base.getY()].VirusLevel == -1/* &&
-                players[playerID()].getByteDollars() > (int)(baseCost() * scaleCost()) &&
-                my_base.getSpawnsLeft() > 0 &&
-                players[playerID()].getCycles() > 0*/
+                map[my_base.getX(),my_base.getY()].VirusLevel == -1 &&
+                players[playerID()].getCycles() >= 10
                )
-                my_base.spawn(0);
+            {
+                
+                var grid = get_pathnode_map(my_base.getX(), my_base.getY(), -1, false);
+                var aStar = new SettlersEngine.SpatialAStar<GamePathNode, Object>(grid);
+                var path = aStar.Search(new Point(my_base.getX(), my_base.getY()), new Point(desiredX, desiredY), null);
+                
+                //Console.WriteLine("Base at: " + my_base.getX() + "," + my_base.getY() + " has a path of length " + (path != null ? Convert.ToString(path.Count) : "NULL") );
+                
+                my_bases.Add(my_base, path != null ? path.Count : int.MaxValue);
+            }
         
-        if(turnNumber()%10 < 2)
-        {
-          players[playerID()].talk("Wooly Willy!");
-        }
+        var sortedBases = from key in my_bases.Keys
+                          orderby my_bases[key] ascending
+                          select key;
+                          
+        foreach(var my_base in sortedBases)
+            my_base.spawn(0);
+            
+        // check to see if we will loose soon
+        if(players[enemyID()].getByteDollars() >= 118)
+            players[playerID()].talk("I curse Wooly Willy on you, " + players[enemyID()].getPlayerName());
         
         // for each of my viruses find a point to go to, then go there!
         foreach(var virus in viruses)
@@ -579,6 +599,8 @@ class AI : BaseAI
                     }
                 }
                 
+                if(start_virus_level == -1 && startX == x && startY == y)
+                    isWall = false;
                 
                 pathNodeMap[x, y] = new GamePathNode()
                 {
@@ -603,6 +625,7 @@ class AI : BaseAI
                         {
                             desiredX = enemy_base.getX();
                             desiredY = enemy_base.getY();
+                            players[playerID()].talk("Spawn Camp: (" + desiredX + "," + desiredY + ")");
                             break;
                         }
                     
@@ -611,6 +634,7 @@ class AI : BaseAI
                         {
                             desiredX = enemy_base.getX();
                             desiredY = enemy_base.getY();
+                            players[playerID()].talk("Spawn Camp: (" + desiredX + "," + desiredY + ")");
                             break;
                         }
                     
@@ -619,6 +643,7 @@ class AI : BaseAI
                         {
                             desiredX = enemy_base.getX();
                             desiredY = enemy_base.getY();
+                            players[playerID()].talk("Spawn Camp: (" + desiredX + "," + desiredY + ")");
                             break;
                         }
                     
@@ -627,6 +652,7 @@ class AI : BaseAI
                         {
                             desiredX = enemy_base.getX();
                             desiredY = enemy_base.getY();
+                            players[playerID()].talk("Spawn Camp: (" + desiredX + "," + desiredY + ")");
                             break;
                         }
                 }
