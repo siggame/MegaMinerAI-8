@@ -56,19 +56,6 @@ namespace visualizer
    */
   bool _OptionsMan::loadOptionFile(const std::string & filename)
   {
-    #if 0
-    if (!isInit())
-    {
-      return false;
-    }
-    #endif
-
-    /* if we allow multiple loading we can combine files easily
-    if (m_options.size())
-    {
-      //obviously this is the second time you are loading the damn thing
-      return false;
-    }*/
 
     std::ifstream input(filename.c_str());
 
@@ -87,9 +74,23 @@ namespace visualizer
 
       if (buffer.size())
       {
-        //2 different line carriages because windows is strange
-        if (buffer.c_str()[0] != '#' && buffer.c_str()[0] != '\n' && buffer.c_str()[0] != (char)13)
+        if( buffer[ 0 ] == '#' )
         {
+          // Store comment
+        }
+
+        //2 different line carriages because windows is strange
+        else if( buffer[0] != '\n' && buffer[0] != (char)13)
+        {
+          ss << buffer;
+          string n;
+          ss >> n;
+          cout << n << endl;
+          ss >> n;
+          cout << n << endl;
+
+          
+#if 0
           ss << buffer;
           std::string typebuff;
           std::string namebuff;
@@ -141,6 +142,7 @@ namespace visualizer
                 "Option Load Error Line %d: Name buff read error.", lineNum
               )
           }
+#endif
         }
       }
 
