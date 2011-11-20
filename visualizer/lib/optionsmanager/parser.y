@@ -3,16 +3,19 @@
 %skeleton "lalr1.cc"
 %defines 
 %locations
-%define namespace "Visualizer"
+%define namespace "visualizer"
 %define parser_class_name "OptionsParser"
-%parse-param { Visualizer::_OptionsMan &options }
+
+%parse-param { visualizer::OptionsMan &options }
 
 %code requires
 {
-  namespace Visualizer
+  #include "optionsman.h"
+  namespace visualizer
   {
     // Need to forward declare the Scanner Class
     class OptionsScanner;
+
   } // Visualizer
 
 }

@@ -1,5 +1,5 @@
 %{
-  #include "Scanner.h"
+  #include "scanner.h"
   #define YY_USER_ACTION yylloc->columns( yyleng );
 %}
 
