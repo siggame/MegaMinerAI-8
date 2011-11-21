@@ -2,6 +2,7 @@
 #define OPTIONSMAN_H
 
 #include <fstream>
+using namespace std;
 
 namespace visualizer
 {
@@ -9,10 +10,10 @@ namespace visualizer
   class OptionsMan
   {
     public:
-      inline explicit OptionsMan( const char* const fileName );
-      
+      OptionsMan( const std::string& fileName );
 
     private:
+
     
   };
 

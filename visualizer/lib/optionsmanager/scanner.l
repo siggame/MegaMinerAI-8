@@ -16,9 +16,9 @@ WHITESPACE [ \n\t]+
   yylloc->step();
 %}
 
-COMMENT { return Visualizer::OptionsParser::token::COMMENT; }
-IDENTIFIER { return Visualizer::OptionsParser::token::IDENTIFIER; }
-STRING  { return Visualizer::OptionsParser::token::STRING; }
+COMMENT { return visualizer::OptionsParser::token::COMMENT; }
+IDENTIFIER { return visualizer::OptionsParser::token::IDENTIFIER; }
+STRING  { return visualizer::OptionsParser::token::STRING; }
 . { yylloc->step(); }
 "\n"+   { yylloc->lines( yyleng ); yylloc->step(); }
 
