@@ -77,18 +77,8 @@ class AccountsAppMixin(object):
         self.name = str(val)
         return ["login-accepted"]
       else:
-        print "Web Server Log In Failed, allowing unchecked user login - Revert Before Competition"
-        #TODO Remove next 3 lines before competition
-        self.logged_in = True
-        self.name = name
-        return ["login-accepted"]
         return ["login-denied"]
     except WebServerAuthenticator.WebServerException:
-      print "Web Server Log In Failed, allowing unchecked user login - Revert Before Competition"
-      #TODO Remove next 3 lines before competition
-      self.logged_in = True
-      self.name = name
-      return ["login-accepted"]
       return ["login-denied"]
 
   @protocolmethod
