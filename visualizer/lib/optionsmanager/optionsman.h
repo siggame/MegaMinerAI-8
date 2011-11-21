@@ -11,6 +11,8 @@ namespace visualizer
   {
     public:
       OptionsMan( const std::string& fileName );
+      void addComment( const std::string& comment );
+      void addOption( const std::string& option );
 
     private:
 

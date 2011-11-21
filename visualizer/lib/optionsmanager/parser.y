@@ -7,6 +7,7 @@
 %define parser_class_name "OptionsParser"
 
 %parse-param { visualizer::OptionsMan &options }
+%lex-param { visualizer::OptionsScanner &scanner }
 
 %code requires
 {
@@ -17,6 +18,16 @@
     class OptionsScanner;
 
   } // Visualizer
+
+}
+
+%code
+{
+  static int yylex( 
+    visualizer::OptionsParser::semantic_type* yylval, 
+    visualizer::OptionsParser::location_type* yylloc,
+    visualizer::OptionsScanner& scanner
+    );
 
 }
 
@@ -51,4 +62,18 @@ Options
 Option
   : STRING { options.addOption( $1 ); }
   ;
+
+%%
+
+#include "scanner.h"
+static int yylex
+  ( 
+  visualizer::OptionsParser::semantic_type* yylval,
+  visualizer::OptionsParser::location_type* yylloc,
+  visualizer::OptionsScanner& scanner
+  )
+  {
+    return scanner.yylex( yylval, yylloc );
+
+  }
 
