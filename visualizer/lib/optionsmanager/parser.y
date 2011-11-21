@@ -12,6 +12,7 @@
 
 %code requires
 {
+  #include <sstream>
   #include "optionsman.h"
   namespace visualizer
   {
@@ -72,6 +73,18 @@ Option
   ;
 
 %%
+
+void visualizer::OptionsParser::error
+  ( 
+  const visualizer::OptionsParser::location_type &loc, const std::string& msg
+  )
+{
+  ostringstream ret;
+  ret << "Parser Error at " << loc << ": " << msg;
+  throw ret.str();
+
+
+}
 
 #include "scanner.h"
 static int yylex

@@ -1,7 +1,10 @@
 #ifndef OPTIONSMAN_H
 #define OPTIONSMAN_H
 
+#include <iostream>
 #include <fstream>
+#include <map>
+#include "option.h"
 using namespace std;
 
 namespace visualizer
@@ -10,13 +13,16 @@ namespace visualizer
   class OptionsMan
   {
     public:
-      OptionsMan( const std::string& fileName );
-      void addComment( const std::string& comment );
-      void addOption( const std::string& option );
+      OptionsMan( const string& fileName );
 
-      int& operator [] ( const std::string& str );
+      void addComment( const string& comment );
+      void addOption( const string& option );
+
+      Option& operator [] ( const string& key );
 
     private:
+      map< string, Option > m_options;
+      
 
     
   };
