@@ -9,7 +9,7 @@ namespace visualizer
     std::ifstream inFile( fileName.c_str() );
 
     OptionsScanner* scanner = new OptionsScanner( &inFile );
-    OptionsParser* parser = new OptionsParser( *this );
+    OptionsParser* parser = new OptionsParser( *scanner, *this );
 
     parser->parse( );
 

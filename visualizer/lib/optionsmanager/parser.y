@@ -6,8 +6,9 @@
 %define namespace "visualizer"
 %define parser_class_name "OptionsParser"
 
-%parse-param { visualizer::OptionsMan &options }
-%lex-param { visualizer::OptionsScanner &scanner }
+%parse-param { visualizer::OptionsScanner& scanner }
+%parse-param { visualizer::OptionsMan& options }
+%lex-param { visualizer::OptionsScanner& scanner }
 
 %code requires
 {
@@ -31,7 +32,14 @@
 
 }
 
-%token COMMENT STRING IDENTIFIER
+%union {
+  char* string; 
+}
+
+
+%token <string> COMMENT 
+%token <string> STRING 
+%token <string> IDENTIFIER
 
 %%
 
@@ -50,8 +58,8 @@ Comment
   ;
 
 Assignment
-  : IDENTIFIER '=' STRING { options[ $1 ] = $2; }
-  | IDENTIFIER '(' Options ')' '=' STRING { options[ $1 ] = $2; }
+  : IDENTIFIER '=' STRING { options[ $1 ] = $3; }
+  | IDENTIFIER '(' Options ')' '=' STRING { options[ $1 ] = $6; }
   ;
 
 Options

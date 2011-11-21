@@ -14,6 +14,8 @@ namespace visualizer
       void addComment( const std::string& comment );
       void addOption( const std::string& option );
 
+      int& operator [] ( const std::string& str );
+
     private:
 
     
