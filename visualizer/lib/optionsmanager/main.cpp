@@ -1,6 +1,6 @@
 #include "optionsman.h"
 
-using namespace OptionsMan;
+using namespace visualizer;
 
 int main( int argc, char* argv[] )
 {

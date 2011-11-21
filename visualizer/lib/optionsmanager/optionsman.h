@@ -2,7 +2,6 @@
 #define OPTIONSMAN_H
 
 #include <fstream>
-#include "scanner.h"
 
 namespace visualizer
 {
@@ -16,17 +15,6 @@ namespace visualizer
     private:
     
   };
-
-  OptionsMan::OptionsMan( const char* const fileName )
-  {
-    std::ifstream inFile( fileName );
-
-    OptionsScanner scanner( &inFile );
-    OptionsParser parser();
-
-    parser.parse( &this );
-
-  }
 
 }
 
